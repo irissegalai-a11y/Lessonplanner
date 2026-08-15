@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>איריס לומדת קלוד קוד</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 40px;
+    font-family: "Segoe UI", "Arial Hebrew", Arial, sans-serif;
+    background-color: #cdeafc;
+    transition: background-color 0.4s ease;
+    direction: rtl;
+    text-align: right;
+  }
+
+  h1 {
+    font-size: 3rem;
+    color: #2c2c54;
+    margin-bottom: 30px;
+  }
+
+  button {
+    font-size: 1.3rem;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 12px;
+    background-color: #2c2c54;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.15s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  button:active {
+    transform: scale(0.97);
+  }
+</style>
+</head>
+<body>
+  <h1>איריס לומדת קלוד קוד</h1>
+  <button onclick="changeBackground()">שנה צבע רקע</button>
+
+  <script>
+    function changeBackground() {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    }
+  </script>
+</body>
+</html>
