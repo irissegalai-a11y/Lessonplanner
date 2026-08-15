@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מחלק קבוצות לכיתה</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg: #cdeafc;
+    --ink: #2c2c54;
+    --card-bg: #ffffff;
+    --accent: #2c2c54;
+    --accent-2: #4a5aa8;
+    --pool-bg: #eef1fb;
+    --danger: #c0392b;
+    --success: #1e7d4f;
+  }
+
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", "Arial Hebrew", Arial, sans-serif;
+    background-color: var(--bg);
+    direction: rtl;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  body {
+    padding: 24px;
+    padding-bottom: 60px;
+  }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+    color: var(--ink);
+    margin: 0 0 8px;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--accent-2);
+    margin-bottom: 28px;
+  }
+
+  button {
+    font-size: 1.15rem;
+    padding: 14px 26px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    font-family: inherit;
+    font-weight: 600;
+  }
+
+  button:hover {
+    transform: scale(1.04);
+  }
+
+  button:active {
+    transform: scale(0.97);
+  }
+
+  button.secondary {
+    background-color: #fff;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    box-shadow: none;
+  }
+
+  button.danger {
+    background-color: var(--danger);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* ---------- Cards / panels ---------- */
+  .panel {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(44, 44, 84, 0.12);
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+
+  /* ---------- Screen 1: name editor ---------- */
+  #screen-names textarea {
+    width: 100%;
+    min-height: 320px;
+    font-size: 1.4rem;
+    padding: 18px;
+    border-radius: 14px;
+    border: 2px solid #d3d9f0;
+    resize: vertical;
+    font-family: inherit;
+    direction: rtl;
+    line-height: 1.6;
+  }
+
+  #screen-names textarea:focus {
+    outline: none;
+    border-color: var(--accent-2);
+  }
+
+  .names-hint {
+    font-size: 1.05rem;
+    color: #666;
+    margin: 10px 0 20px;
+  }
+
+  .names-count {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    margin-bottom: 14px;
+  }
+
+  .names-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  /* ---------- Top bar on main screen ---------- */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .mode-toggle {
+    display: inline-flex;
+    background: #e4e9fb;
+    border-radius: 14px;
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .mode-toggle button {
+    background: transparent;
+    color: var(--accent);
+    box-shadow: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+  }
+
+  .mode-toggle button.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ---------- Controls panel ---------- */
+  .controls-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .field label {
+    font-size: 1.15rem;
+    white-space: nowrap;
+  }
+
+  .field input[type="number"] {
+    width: 90px;
+    font-size: 1.3rem;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 2px solid #d3d9f0;
+    text-align: center;
+    font-family: inherit;
+  }
+
+  .field input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-2);
+  }
+
+  .radio-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .radio-field input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .actions-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+
+  .error-msg {
+    color: var(--danger);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* ---------- Pool (manual mode) ---------- */
+  #pool-panel h2 {
+    margin-top: 0;
+    font-size: 1.4rem;
+  }
+
+  #pool {
+    min-height: 90px;
+    background: var(--pool-bg);
+    border: 2px dashed #b7c0e8;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-content: flex-start;
+    transition: background-color 0.15s ease;
+  }
+
+  #pool.drag-over {
+    background-color: #dbe2fa;
+  }
+
+  #pool.empty::before {
+    content: "כל התלמידים שובצו לקבוצות 🎉";
+    color: #7a819c;
+    font-size: 1.1rem;
+  }
+
+  .chip {
+    background: #fff;
+    border: 2px solid var(--accent-2);
+    color: var(--accent);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.1s ease, background-color 0.15s ease;
+  }
+
+  .chip:hover {
+    transform: scale(1.04);
+  }
+
+  .chip.selected {
+    background-color: var(--accent-2);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(74, 90, 168, 0.3);
+  }
+
+  .chip.dragging {
+    opacity: 0.4;
+  }
+
+  /* ---------- Groups grid ---------- */
+  #groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .group-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    box-shadow: 0 6px 16px rgba(44, 44, 84, 0.12);
+    padding: 20px;
+    min-height: 160px;
+    transition: box-shadow 0.15s ease, background-color 0.15s ease;
+    border: 2px solid transparent;
+  }
+
+  .group-card.drop-target {
+    border-color: var(--accent-2);
+    background-color: #f3f5fd;
+  }
+
+  .group-card.clickable {
+    cursor: pointer;
+  }
+
+  .group-card h3 {
+    margin: 0 0 14px;
+    font-size: 1.5rem;
+    color: var(--accent);
+    border-bottom: 3px solid #e4e9fb;
+    padding-bottom: 10px;
+  }
+
+  .group-members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-height: 40px;
+  }
+
+  .group-members:empty::before {
+    content: "אין תלמידים בקבוצה זו";
+    color: #a3a9c4;
+    font-size: 1rem;
+  }
+
+  .group-card.random-mode .chip {
+    cursor: default;
+  }
+
+  /* ---------- Utility ---------- */
+  .hidden {
+    display: none !important;
+  }
+
+  footer.hint-bar {
+    text-align: center;
+    color: #6a7196;
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 2rem; }
+    .panel { padding: 18px; border-radius: 16px; }
+    #screen-names textarea { min-height: 240px; font-size: 1.2rem; }
+    .topbar { flex-direction: column; align-items: stretch; }
+    .mode-toggle { justify-content: center; }
+    .mode-toggle button { flex: 1; }
+    button { width: 100%; }
+    .actions-row, .names-actions { flex-direction: column; }
+    .field { width: 100%; justify-content: space-between; }
+    #groups-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>מחלק קבוצות לכיתה</h1>
+  <div class="subtitle">כלי מהיר לחלוקת תלמידים לקבוצות – אקראית או ידנית</div>
+
+  <!-- ===================== SCREEN 1: NAMES EDITOR ===================== -->
+  <div id="screen-names" class="panel">
+    <div class="names-count" id="names-count">0 תלמידים ברשימה</div>
+    <div class="names-hint">הקלידו שם תלמיד/ה בכל שורה. הרשימה נשמרת אוטומטית בדפדפן, כך שלא תצטרכו להקליד אותה שוב.</div>
+    <textarea id="names-textarea" placeholder="לדוגמה:&#10;דנה כהן&#10;יוסי לוי&#10;מאיה אברהם&#10;..."></textarea>
+    <div class="names-actions" style="margin-top:18px;">
+      <button id="save-names-btn">שמירה והמשך לחלוקה</button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 2: MAIN TOOL ===================== -->
+  <div id="screen-main" class="hidden">
+    <div class="topbar">
+      <button class="secondary" id="edit-names-btn">✎ ערוך רשימת שמות</button>
+      <div class="mode-toggle">
+        <button id="mode-random-btn" class="active">חלוקה אקראית</button>
+        <button id="mode-manual-btn">חלוקה ידנית</button>
+      </div>
+    </div>
+
+    <!-- Random mode controls -->
+    <div id="random-controls" class="panel">
+      <div class="controls-row">
+        <label class="radio-field">
+          <input type="radio" name="random-method" value="groups" checked>
+          מספר קבוצות
+        </label>
+        <label class="radio-field">
+          <input type="radio" name="random-method" value="size">
+          תלמידים בכל קבוצה
+        </label>
+        <div class="field">
+          <label for="random-number">כמות:</label>
+          <input type="number" id="random-number" min="1" value="4">
+        </div>
+      </div>
+      <div class="actions-row">
+        <button id="split-random-btn">חלק לקבוצות</button>
+        <button id="reshuffle-btn" class="secondary hidden">🔀 ערבב שוב</button>
+      </div>
+      <div class="error-msg hidden" id="random-error"></div>
+    </div>
+
+    <!-- Manual mode controls -->
+    <div id="manual-controls" class="panel hidden">
+      <div class="controls-row">
+        <div class="field">
+          <label for="manual-number">מספר קבוצות:</label>
+          <input type="number" id="manual-number" min="1" value="4">
+        </div>
+        <button id="create-manual-btn">צור קבוצות ריקות</button>
+      </div>
+      <div class="error-msg hidden" id="manual-error"></div>
+      <div id="pool-panel" style="margin-top:18px;">
+        <h2>תלמידים שטרם שובצו</h2>
+        <div class="names-hint">לחצו על תלמיד/ה כדי לבחור, ואז לחצו על הקבוצה הרצויה – או גררו את הכרטיסייה לקבוצה. לחיצה על תלמיד/ה בתוך קבוצה מחזירה אותו/ה לבריכה.</div>
+        <div id="pool"></div>
+      </div>
+    </div>
+
+    <div id="groups-grid"></div>
+  </div>
+
+  <footer class="hint-bar">הנתונים נשמרים רק בדפדפן שלכם ואינם נשלחים לשום מקום.</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_NAMES = "groupDivider_studentNames";
+  var STORAGE_STATE = "groupDivider_state"; // { mode, groups: [[names...]], pool: [names...] }
+
+  var els = {
+    screenNames: document.getElementById("screen-names"),
+    screenMain: document.getElementById("screen-main"),
+    namesTextarea: document.getElementById("names-textarea"),
+    namesCount: document.getElementById("names-count"),
+    saveNamesBtn: document.getElementById("save-names-btn"),
+    editNamesBtn: document.getElementById("edit-names-btn"),
+
+    modeRandomBtn: document.getElementById("mode-random-btn"),
+    modeManualBtn: document.getElementById("mode-manual-btn"),
+    randomControls: document.getElementById("random-controls"),
+    manualControls: document.getElementById("manual-controls"),
+
+    randomNumber: document.getElementById("random-number"),
+    splitRandomBtn: document.getElementById("split-random-btn"),
+    reshuffleBtn: document.getElementById("reshuffle-btn"),
+    randomError: document.getElementById("random-error"),
+
+    manualNumber: document.getElementById("manual-number"),
+    createManualBtn: document.getElementById("create-manual-btn"),
+    manualError: document.getElementById("manual-error"),
+    poolPanel: document.getElementById("pool-panel"),
+    pool: document.getElementById("pool"),
+
+    groupsGrid: document.getElementById("groups-grid")
+  };
+
+  var state = {
+    mode: "random", // 'random' | 'manual'
+    groups: [],      // array of arrays of names
+    pool: []         // manual mode only: unassigned names
+  };
+
+  var selectedChip = null; // { name, source: 'pool' | groupIndex }
+  var dragData = null;     // same shape, used during native drag/drop
+
+  // ---------------- Persistence ----------------
+
+  function loadNames() {
+    try {
+      return localStorage.getItem(STORAGE_NAMES) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function saveNames(text) {
+    try {
+      localStorage.setItem(STORAGE_NAMES, text);
+    } catch (e) { /* ignore */ }
+  }
+
+  function getStudentList() {
+    return loadNames()
+      .split("\n")
+      .map(function (s) { return s.trim(); })
+      .filter(function (s) { return s.length > 0; });
+  }
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_STATE);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function persistState() {
+    try {
+      localStorage.setItem(STORAGE_STATE, JSON.stringify(state));
+    } catch (e) { /* ignore */ }
+  }
+
+  // ---------------- Utility ----------------
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function showError(el, msg) {
+    el.textContent = msg;
+    el.classList.remove("hidden");
+  }
+
+  function hideError(el) {
+    el.classList.add("hidden");
+  }
+
+  // ---------------- Screen 1: names editor ----------------
+
+  function updateNamesCount() {
+    var list = els.namesTextarea.value
+      .split("\n")
+      .map(function (s) { return s.trim(); })
+      .filter(function (s) { return s.length > 0; });
+    els.namesCount.textContent = list.length + " תלמידים ברשימה";
+  }
+
+  els.namesTextarea.addEventListener("input", updateNamesCount);
+
+  els.saveNamesBtn.addEventListener("click", function () {
+    saveNames(els.namesTextarea.value);
+    var list = getStudentList();
+    if (list.length === 0) {
+      alert("נא להקליד לפחות שם תלמיד אחד לפני שממשיכים.");
+      return;
+    }
+    goToMainScreen();
+  });
+
+  els.editNamesBtn.addEventListener("click", function () {
+    els.namesTextarea.value = loadNames();
+    updateNamesCount();
+    els.screenMain.classList.add("hidden");
+    els.screenNames.classList.remove("hidden");
+  });
+
+  function goToMainScreen() {
+    els.screenNames.classList.add("hidden");
+    els.screenMain.classList.remove("hidden");
+    renderGroupsForCurrentMode();
+  }
+
+  // ---------------- Mode switching ----------------
+
+  els.modeRandomBtn.addEventListener("click", function () { switchMode("random"); });
+  els.modeManualBtn.addEventListener("click", function () { switchMode("manual"); });
+
+  function switchMode(mode) {
+    if (state.mode === mode) return;
+    state.mode = mode;
+    selectedChip = null;
+    state.groups = [];
+    state.pool = [];
+    persistState();
+    updateModeUI();
+    renderGroupsForCurrentMode();
+  }
+
+  function updateModeUI() {
+    var isRandom = state.mode === "random";
+    els.modeRandomBtn.classList.toggle("active", isRandom);
+    els.modeManualBtn.classList.toggle("active", !isRandom);
+    els.randomControls.classList.toggle("hidden", !isRandom);
+    els.manualControls.classList.toggle("hidden", isRandom);
+    els.reshuffleBtn.classList.add("hidden");
+  }
+
+  // ---------------- Random mode ----------------
+
+  els.splitRandomBtn.addEventListener("click", function () {
+    hideError(els.randomError);
+    var list = getStudentList();
+    if (list.length < 2) {
+      showError(els.randomError, "צריך לפחות שני תלמידים ברשימה כדי לחלק לקבוצות.");
+      return;
+    }
+    var method = document.querySelector('input[name="random-method"]:checked').value;
+    var n = parseInt(els.randomNumber.value, 10);
+    if (!n || n < 1) {
+      showError(els.randomError, "נא להזין מספר תקין.");
+      return;
+    }
+
+    var numGroups;
+    if (method === "groups") {
+      numGroups = n;
+    } else {
+      numGroups = Math.max(1, Math.ceil(list.length / n));
+    }
+    if (numGroups > list.length) {
+      showError(els.randomError, "אי אפשר ליצור יותר קבוצות ממספר התלמידים.");
+      return;
+    }
+
+    doRandomSplit(list, numGroups);
+    els.reshuffleBtn.classList.remove("hidden");
+  });
+
+  els.reshuffleBtn.addEventListener("click", function () {
+    var list = getStudentList();
+    var numGroups = state.groups.length || 1;
+    doRandomSplit(list, numGroups);
+  });
+
+  function doRandomSplit(list, numGroups) {
+    var shuffled = shuffle(list);
+    var groups = [];
+    for (var i = 0; i < numGroups; i++) groups.push([]);
+    for (var idx = 0; idx < shuffled.length; idx++) {
+      groups[idx % numGroups].push(shuffled[idx]);
+    }
+    state.groups = groups;
+    state.pool = [];
+    persistState();
+    renderGroups();
+  }
+
+  // ---------------- Manual mode ----------------
+
+  els.createManualBtn.addEventListener("click", function () {
+    hideError(els.manualError);
+    var list = getStudentList();
+    if (list.length < 2) {
+      showError(els.manualError, "צריך לפחות שני תלמידים ברשימה כדי ליצור קבוצות.");
+      return;
+    }
+    var n = parseInt(els.manualNumber.value, 10);
+    if (!n || n < 1) {
+      showError(els.manualError, "נא להזין מספר תקין.");
+      return;
+    }
+    if (n > list.length) {
+      showError(els.manualError, "אי אפשר ליצור יותר קבוצות ממספר התלמידים.");
+      return;
+    }
+
+    var groups = [];
+    for (var i = 0; i < n; i++) groups.push([]);
+    state.groups = groups;
+    state.pool = list.slice();
+    selectedChip = null;
+    persistState();
+    renderGroups();
+  });
+
+  // ---------------- Rendering ----------------
+
+  function renderGroupsForCurrentMode() {
+    updateModeUI();
+
+    var saved = loadState();
+    var currentList = getStudentList();
+
+    if (saved && saved.mode === state.mode && Array.isArray(saved.groups)) {
+      // Restore, but drop any names that are no longer in the master list
+      var validSet = {};
+      currentList.forEach(function (nm) { validSet[nm] = true; });
+
+      state.groups = saved.groups.map(function (g) {
+        return g.filter(function (nm) { return validSet[nm]; });
+      });
+      state.pool = (saved.pool || []).filter(function (nm) { return validSet[nm]; });
+
+      if (state.mode === "manual") {
+        // Any student in currentList not accounted for -> add to pool
+        var accounted = {};
+        state.groups.forEach(function (g) { g.forEach(function (nm) { accounted[nm] = true; }); });
+        state.pool.forEach(function (nm) { accounted[nm] = true; });
+        currentList.forEach(function (nm) {
+          if (!accounted[nm]) state.pool.push(nm);
+        });
+      }
+
+      if (state.groups.length > 0) {
+        els.reshuffleBtn.classList.toggle("hidden", state.mode !== "random");
+      }
+    } else {
+      state.groups = [];
+      state.pool = state.mode === "manual" ? [] : [];
+    }
+
+    renderGroups();
+  }
+
+  function renderGroups() {
+    persistState();
+
+    // Pool (manual mode only)
+    if (state.mode === "manual") {
+      els.pool.innerHTML = "";
+      els.pool.classList.toggle("empty", state.pool.length === 0);
+      state.pool.forEach(function (name) {
+        els.pool.appendChild(makeChip(name, "pool"));
+      });
+    }
+
+    // Groups grid
+    els.groupsGrid.innerHTML = "";
+    state.groups.forEach(function (members, gIdx) {
+      var card = document.createElement("div");
+      card.className = "group-card" + (state.mode === "manual" ? " clickable" : " random-mode");
+      card.dataset.groupIndex = gIdx;
+
+      var title = document.createElement("h3");
+      title.textContent = "קבוצה " + (gIdx + 1) + " (" + members.length + ")";
+      card.appendChild(title);
+
+      var memberWrap = document.createElement("div");
+      memberWrap.className = "group-members";
+      members.forEach(function (name) {
+        memberWrap.appendChild(makeChip(name, gIdx));
+      });
+      card.appendChild(memberWrap);
+
+      if (state.mode === "manual") {
+        attachDropTarget(card, gIdx);
+        card.addEventListener("click", function (evt) {
+          if (evt.target.classList.contains("chip")) return; // handled by chip click
+          if (selectedChip) {
+            moveStudent(selectedChip, gIdx);
+            selectedChip = null;
+            renderGroups();
+          }
+        });
+      }
+
+      els.groupsGrid.appendChild(card);
+    });
+  }
+
+  function makeChip(name, source) {
+    var chip = document.createElement("div");
+    chip.className = "chip";
+    chip.textContent = name;
+    chip.dataset.name = name;
+
+    if (state.mode === "manual") {
+      chip.draggable = true;
+
+      chip.addEventListener("click", function (evt) {
+        evt.stopPropagation();
+        if (selectedChip && selectedChip.name === name && selectedChip.source === source) {
+          selectedChip = null;
+          renderGroups();
+          return;
+        }
+        selectedChip = { name: name, source: source };
+        renderGroups();
+        highlightSelected();
+      });
+
+      chip.addEventListener("dragstart", function (evt) {
+        dragData = { name: name, source: source };
+        chip.classList.add("dragging");
+        evt.dataTransfer.effectAllowed = "move";
+        evt.dataTransfer.setData("text/plain", name);
+      });
+      chip.addEventListener("dragend", function () {
+        chip.classList.remove("dragging");
+        dragData = null;
+      });
+
+      if (selectedChip && selectedChip.name === name && selectedChip.source === source) {
+        chip.classList.add("selected");
+      }
+    }
+
+    return chip;
+  }
+
+  function highlightSelected() {
+    if (!selectedChip) return;
+    var chips = els.groupsGrid.querySelectorAll(".chip");
+    var poolChips = els.pool.querySelectorAll(".chip");
+    [].concat([].slice.call(chips), [].slice.call(poolChips)).forEach(function (c) {
+      if (c.dataset.name === selectedChip.name) {
+        c.classList.add("selected");
+      }
+    });
+  }
+
+  function attachDropTarget(el, destination) {
+    el.addEventListener("dragover", function (evt) {
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = "move";
+      el.classList.add("drop-target");
+    });
+    el.addEventListener("dragleave", function () {
+      el.classList.remove("drop-target");
+    });
+    el.addEventListener("drop", function (evt) {
+      evt.preventDefault();
+      el.classList.remove("drop-target");
+      if (dragData) {
+        moveStudent(dragData, destination);
+        dragData = null;
+        selectedChip = null;
+        renderGroups();
+      }
+    });
+  }
+
+  // Pool as drop target too (to allow returning students from a group)
+  els.pool.addEventListener("dragover", function (evt) {
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = "move";
+    els.pool.classList.add("drag-over");
+  });
+  els.pool.addEventListener("dragleave", function () {
+    els.pool.classList.remove("drag-over");
+  });
+  els.pool.addEventListener("drop", function (evt) {
+    evt.preventDefault();
+    els.pool.classList.remove("drag-over");
+    if (dragData) {
+      moveStudent(dragData, "pool");
+      dragData = null;
+      selectedChip = null;
+      renderGroups();
+    }
+  });
+  els.pool.addEventListener("click", function (evt) {
+    if (evt.target.classList.contains("chip")) return;
+    if (selectedChip) {
+      moveStudent(selectedChip, "pool");
+      selectedChip = null;
+      renderGroups();
+    }
+  });
+
+  function moveStudent(source, destination) {
+    if (source.source === destination) return; // no-op, same place
+
+    // remove from source
+    if (source.source === "pool") {
+      var pi = state.pool.indexOf(source.name);
+      if (pi !== -1) state.pool.splice(pi, 1);
+    } else {
+      var g = state.groups[source.source];
+      if (g) {
+        var mi = g.indexOf(source.name);
+        if (mi !== -1) g.splice(mi, 1);
+      }
+    }
+
+    // add to destination
+    if (destination === "pool") {
+      state.pool.push(source.name);
+    } else {
+      state.groups[destination].push(source.name);
+    }
+
+    persistState();
+  }
+
+  // ---------------- Init ----------------
+
+  function init() {
+    var names = loadNames();
+    els.namesTextarea.value = names;
+    updateNamesCount();
+
+    var saved = loadState();
+    if (saved && saved.mode) {
+      state.mode = saved.mode;
+    }
+
+    if (names.trim().length > 0) {
+      goToMainScreen();
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
