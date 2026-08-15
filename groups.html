@@ -447,6 +447,15 @@
   var STORAGE_NAMES = "groupDivider_studentNames";
   var STORAGE_STATE = "groupDivider_state"; // { mode, groups: [[names...]], pool: [names...] }
 
+  // רשימת ברירת המחדל של תלמידי הכיתה. הרשימה נטענת אוטומטית בפעם
+  // הראשונה בלבד — אחרי עריכה היא נשמרת ב-localStorage ומחליפה אותה.
+  var DEFAULT_NAMES = [
+    "רוני", "איתי", "שקד", "פאולין", "אמילי", "ליבי", "יונתן", "מור",
+    "מאיה", "ים", "ירדן זיג'", "אלון ט", "נעמה", "יעל", "ניר", "אלון מ",
+    "אדל", "אלון נ", "איתן", "נויה", "כליל", "ירדן ק", "דריה", "אריאל",
+    "עלמה", "תומר", "רות"
+  ].join("\n");
+
   var els = {
     screenNames: document.getElementById("screen-names"),
     screenMain: document.getElementById("screen-main"),
@@ -487,9 +496,14 @@
 
   function loadNames() {
     try {
-      return localStorage.getItem(STORAGE_NAMES) || "";
+      var stored = localStorage.getItem(STORAGE_NAMES);
+      if (stored !== null) return stored;
+      // אין עדיין רשימה שמורה: משתמשים ברשימת ברירת המחדל ושומרים אותה,
+      // כך שהיא תישאר קבועה מכאן ואילך (ותהיה ניתנת לעריכה).
+      localStorage.setItem(STORAGE_NAMES, DEFAULT_NAMES);
+      return DEFAULT_NAMES;
     } catch (e) {
-      return "";
+      return DEFAULT_NAMES;
     }
   }
 
