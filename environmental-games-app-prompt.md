@@ -1,199 +1,206 @@
-# פרומפט לאפליקציה — "המסע הירוק בשביל ישראל" (שם זמני, אפשר לשנות)
+# App Prompt — "The Green Trail Across Israel" (working title, change as you like)
 
-מסמך זה הוא פרומפט מפורט שאפשר להעביר הלאה — למפתח/ת, לסטודיו, או לכלי בינה מלאכותית שבונה אפליקציות — כדי לפתח את האפליקציה בפועל. הוא מכסה קונספט, מבנה, מכניקות משחק, התקדמות ולולאת המשוב החינוכית. הוא **לא** נוגע בעיצוב האמנותי בפועל: בכל מקום שנדרש נכס גרפי, המסמך מציין רק *מה* צריך (רשימת פריטים), לא *איך* זה אמור להיראות.
+This document is a detailed prompt that can be handed off — to a developer, a studio, or an AI coding tool — to actually build the app. It covers concept, structure, game mechanics, progression, the educational feedback loop, and the required tech stack. It does **not** touch actual art direction: wherever a graphic asset is needed, the document only states *what* is needed (an item list), never *how* it should look.
 
-> **הערה קריטית למי שמיישם את הפרומפט הזה (מפתח/ת או כלי AI):**
-> אין ליצור, לייצר או להציע איורים, דמויות, רקעים, פלטת צבעים, פונטים או כל נכס אמנותי אחר. בכל מקום שדורש נכס חזותי — יש להשתמש ב-placeholder ניטרלי בלבד (למשל מלבן אפור עם התווית "[איור: קליפת בננה]") ולהשאיר את המקום פנוי. כל הגרפיקה, האיורים והאנימציות ייוצרו ויתווספו בנפרד, ידנית, על ידי יוצרת האפליקציה.
-
----
-
-## הפרומפט בתמצית (גרסה קצרה להעתקה מהירה)
-
-> בנה/י אפליקציית מובייל חינוכית לילדים (גילאי כ-5 עד 10), שמלמדת ערכים של שמירה על הסביבה ומחזור דרך משחקים קצרים וכיפיים, סביב רעיון-על אחד: **נקי = נעים, מלוכלך = לא נעים**. האפליקציה בנויה כמסע לאורך שביל ישראל, על גבי מפה מאוירת של הארץ (מהחרמון בצפון ועד אילת בדרום), כשכל תחנה על המפה היא "שלב" במקום אמיתי ומוכר, עם אווירה חזותית ייחודית משלו. כל שלב כולל 10 מיני-משחקים קצרים (כ-30–60 שניות כל אחד) שעוסקים בניקוי, איסוף ומיון פסולת: 6 מהם הם מכניקות-מסגרת קבועות שחוזרות בכל שלב ורק מתקשות בהדרגה, ו-4 מהם ייחודיים למקום הספציפי על המפה (עם תפאורה, מכשולים ותרחישים שמתאימים לאזור). בהמשך המסמך מפורטים 10 קונספטי המשחקים, המכניקות, תנאי הסיום וקנה-המידה לעליית קושי. **חשוב: אין להוסיף שום איור, דמות, רקע או נכס גרפי — רק placeholder טקסטואלי בכל מקום שנדרש נכס חזותי, כי כל העיצוב האמנותי ייווצר בנפרד על ידי היוצרת.**
+> **Critical note for whoever implements this prompt (developer or AI tool):**
+> Do not create, generate, or suggest any illustrations, characters, backgrounds, color palettes, fonts, or other art assets. Wherever a visual asset is required, use a plain neutral placeholder only (e.g., a gray rectangle/shape labeled "[art: banana peel]") and leave the slot empty. All graphics, illustrations, and animations will be created and added separately, by hand, by the app's creator.
 
 ---
 
-## 1. קהל יעד ומטרת-העל החינוכית
+## Short Version (quick-copy prompt)
 
-- **קהל יעד:** ילדים בגילי כ-5–10 (מתאים גם לגן חובה בליווי מבוגר, ועד כיתות יסוד נמוכות). טווח הגילאים ניתן לכיוונון.
-- **מטרת-העל:** להטמיע אצל ילדים, מגיל צעיר, תפיסה אינטואיטיבית וחווייתית (לא רק ידע יבש על מיחזור) שבבסיסה המשוואה: **נקי = נעים, מלוכלך = לא נעים**.
-- **העיקרון המנחה:** המסר חוזר שוב ושוב בהקשרים שונים (10 מכניקות משחק שונות, בכל שלב מחדש) כדי שהילד יפנים אותו כעיקרון כללי על הסביבה — לא רק כ"חוק" הקשור למשחק ספציפי אחד.
-
-## 2. השראה וקונספט
-
-- **השראה מבנית:** תוכנית הילדים "חדר וחצי" — עולם אחד המורכב מ"פינות"/יחידות תוכן קטנות ומגוונות בתוך מסגרת אחודה.
-- **השראת מכניקות:** Among Us (משימת ניקוי), משחקי הטיית מכשיר, Crossy Road, Temple Run / Subway Surfers, ספרי "איפה וולי/איפה אפי", Whac-a-Mole, ומשחקי "מצא את ההבדלים".
-- **הרעיון המארגן המרכזי:** מסע גיאוגרפי-חווייתי לאורך שביל ישראל, מהצפון (החרמון) ועד הדרום (אילת), כשכל תחנה מוכרת "מארחת" שלב במשחק.
-
-## 3. מבנה מפת השלבים
-
-מסך הבית הוא מפה מאוירת של ישראל (האיור עצמו בעשייתך) עם מסלול מפותל המחבר בין נקודות-שלב, בדומה למסכי-רמות של משחקי מובייל נפוצים. כל נקודת שלב היא מיקום אמיתי ומוכר בישראל, שמעביר "אווירה" (וייב, גוונים, יסודות טבע מקומיים) התואמת את המקום.
-
-להלן **הצעת מסלול לדוגמה** (ניתנת לשינוי מלא — גם סדר, גם מספר השלבים, גם שמות התחנות):
-
-| # | תחנה | תחושה/אווירה כללית (לכיוון בלבד — לא הנחיה עיצובית) |
-|---|------|--------------------------------------------------------|
-| 1 | הר החרמון ורמת הגולן | הרים, שלג, סלעים, מעיינות |
-| 2 | הכנרת וצפת | מים, סירות, נוף כפרי-הררי |
-| 3 | עמק יזרעאל והכרמל (חיפה) | שדות ירוקים, יער, נוף ים מהכרמל |
-| 4 | השרון וקיסריה | חוף ים, שרידים עתיקים |
-| 5 | תל אביב–יפו | עירוני, טיילת, חוף עירוני |
-| 6 | ירושלים והרי יהודה | הרים מדורגים, יערות אורנים |
-| 7 | מדבר יהודה וים המלח | מצוקים, מלח, ואדיות |
-| 8 | הנגב ומכתש רמון | מדבר, מכתשים, בעלי חיים מדבריים |
-| 9 | הערבה | נחלים יבשים, צמחיית מדבר |
-| 10 | אילת וים סוף | שונית אלמוגים, חוף טרופי |
-
-שלב חדש נפתח לאחר השלמת השלב הקודם (או צבירת מספיק כוכבים ממנו — ראו סעיף 7).
-
-## 4. מבנה כל שלב: 10 משחקים = 6 קבועים + 4 ייעודיים למקום
-
-בכל שלב יש 10 מיני-משחקים, אבל כל האפליקציה נשענת בפועל על **10 "מנועי משחק" בלבד** (המכניקות שברשימה המקורית) — כך שלא צריך לעצב 100 משחקים שונים, אלא 10 מכניקות שמקבלות פרמטרים שונים (קושי) ותפאורה שונה (מיקום) בכל שלב.
-
-**6 משחקים קבועים** — אותה מכניקה בדיוק בכל שלב, רק מתקשה בהדרגה:
-1. ניקוי-משימה בהשראת Among Us
-2. קליפת בננה נודדת (הטיית מכשיר)
-4. חיפושית שחורה מגלגלת זבל
-6. צץ מהר (חפרפרות)
-9. מרוץ ניקיון בהשראת Temple Run
-10. מיון למחזור
-
-*הגיון הבחירה:* אלו משחקי מיומנות שיכולים "לקבל" תפאורה חדשה (רקע, צבעים) מבלי לדרוש עיצוב תרחיש חדש לגמרי, ולכן אפשר לשמור אותם זהים מבנית ולהעלות את הקושי בצורה נקייה. משחק המיון (#10) חשוב שיישאר עקבי גם מבחינה חינוכית — כדי שהילד ילמד כלל קבוע (איזה פח לאיזה סוג פסולת) ולא יתבלבל מגרסה לגרסה.
-
-**4 משחקים ייעודיים למקום** — אותה מכניקת-בסיס, אך עם תרחיש/תפאורה/מכשולים שמותאמים ספציפית לכל תחנה:
-3. קרוסי-רואד ירוק (הליכה בטבע ואיסוף פסולת)
-5. איפה הפסולת? (איתור פסולת בתמונה גדולה של המקום)
-7. תתנהג טבעי (זיהוי מי מזהם בתוך קבוצת דמויות)
-8. מצא את ההבדל בתיק (סריקת תיק לפני/אחרי ביקור באתר)
-
-*הגיון הבחירה:* אלו משחקים שגם ככה דורשים "סצנה" חדשה בכל מקרה (רקע מלא, קבוצת דמויות, תמונת-תיק) — לכן הגיוני לתפור אותם למקום הספציפי, כדי שכל שלב ירגיש קשור לתחנה שלו על המפה.
-
-**חשוב:** השיוך הזה (איזה משחק קבוע/ייעודי) הוא המלצת ברירת-מחדל, לא כלל נוקשה — אפשר לשנות בהתאם לשיקול דעת או ליכולות הציור בפועל.
-
-**עליית קושי בין שלבים:** בכל שלב מומלץ להעלות בהדרגה 2–3 מהפרמטרים הבאים (בכל 10 המשחקים כאחד): מהירות, כמות מכשולים/פריטים, זמן זמין (פוחת), אורך/גודל המסלול, כמות "מסיחים" (למשל פרחים/בעלי חיים במשחקים המתאימים). מומלץ לשמור על עלייה מתונה (כ-10%–15% בכל שלב) כדי לא לתסכל ילדים צעירים.
-
-## 5. לולאת המשוב החינוכי (הלב של המשחק)
-
-כל מיני-משחק, ללא קשר למכניקה שלו, צריך לסגור מעגל ברור של **"לפני" מלוכלך ולא-נעים → "אחרי" נקי ונעים**: רגע קצר וברור בסיום כל משחק שבו המסך/הסצנה עובר ממצב מלוכלך למצב נקי, מלווה במשוב חיובי. כך המסר "נקי=נעים" חוזר על עצמו בכל אחד מ-10 המשחקים, ולא רק במשחק אחד ספציפי.
-
-## 6. פירוט 10 המשחקים
-
-### 1. ניקוי-משימה (בהשראת Among Us)
-- **מטרה:** לנקות פינה מוצפת בפסולת מפוזרת.
-- **שליטה:** הקשה/גרירה של כל פריט פסולת אל שקית/פח.
-- **סיום:** כל (או רוב) הפסולת נאספה בזמן הנתון.
-- **עליית קושי:** יותר פריטי פסולת, פיזור רחב יותר, פחות זמן, אפשר גם פריטים ש"זזים" קלות.
-- **נכסים נדרשים (רשימה בלבד):** כמה סוגי פריטי פסולת, פח/שקית יעד, גרסת רקע "מלוכלך" וגרסת רקע "נקי".
-
-### 2. קליפת הבננה הנודדת
-- **מטרה:** להוביל קליפת בננה לאורך מסלול עד לפח, תוך התחמקות ממכשולים.
-- **שליטה:** הטיית המכשיר ימינה/שמאלה (ואפשר גם קדימה/אחורה).
-- **סיום:** הגעה לפח בסוף המסלול.
-- **עליית קושי:** מסלול צר יותר, יותר מכשולים ומהירים יותר, מסלול ארוך יותר.
-- **נכסים:** דמות קליפת בננה, 3–4 סוגי מכשולים, פח, רקע מסלול.
-
-### 3. קרוסי-רואד ירוק — ייעודי למקום
-- **מטרה:** לנוע בין "שורות" בטבע (בהשראת Crossy Road) ולאסוף פריטי פסולת בדרך (במקום מטבעות), עד סוף קטע-המשנה.
-- **שליטה:** הקשה/החלקה בארבעה כיוונים — קדימה, אחורה, ימינה, שמאלה — צעד בכל פעם.
-- **סיום:** הגעה לסוף המסלול עם כמות פסולת מינימלית שנאספה (לניקוד מלא).
-- **עליית קושי:** יותר "שורות" מכשולים, מכשולים נעים מהר יותר, מכסת פסולת גבוהה יותר.
-- **נכסים:** דמות מטייל/ת, מכשולים ייחודיים למקום, קרקע/רצפת מסלול ייחודית למקום, פריטי פסולת.
-
-### 4. החיפושית השחורה
-- **מטרה:** לנוע על משטח, לאסוף פסולת ולגלגל אותה לכדור הולך וגדל, ולהימנע מנגיעה בפרחים.
-- **שליטה:** ג'ויסטיק וירטואלי / גרירה, או הטיה.
-- **סיום:** הגעה לפח וזריקת כדור הזבל בסופו.
-- **עליית קושי:** יותר פרחים (מכשולים), שטח גדול יותר, יותר פסולת נדרשת לכדור.
-- **נכסים:** דמות חיפושית, 2–3 מצבי-גודל לכדור הזבל, פרחים, פריטי פסולת, פח.
-
-### 5. איפה הפסולת? — ייעודי למקום
-- **מטרה:** לאתר פריטי פסולת מוסתרים בתוך תמונה גדולה ועמוסה של המקום הספציפי (בהשראת "איפה וולי/אפי").
-- **שליטה:** הקשה על כל פריט פסולת שנמצא.
-- **סיום:** איתור כל/רוב הפריטים בזמן הנתון.
-- **עליית קושי:** פריטים קטנים/מוסווים יותר, יותר מסיחים ויזואליים, פחות זמן.
-- **נכסים:** תמונת-סצנה גדולה ומפורטת אחת לכל מקום, 6–10 פריטי פסולת "מוסתרים" בתוכה.
-
-### 6. צץ מהר!
-- **מטרה:** ללחוץ אך ורק על פסולת שקופצת מתוך חורים, ולא לפגוע בפרחים/בעלי חיים שקופצים גם הם.
-- **שליטה:** הקשה מהירה על החור הנכון ברגע הנכון.
-- **סיום:** תום הזמן, או הגעה למכסת פסולת.
-- **עליית קושי:** קצב קפיצות מהיר יותר, יותר חורים פעילים בו-זמנית, יחס גבוה יותר של "מסיחים" לעומת פסולת.
-- **נכסים:** בסיס-חורים, כמה סוגי פרחים/בעלי חיים, כמה סוגי פסולת.
-
-### 7. תתנהג טבעי — ייעודי למקום
-- **מטרה:** לצפות בקבוצת דמויות בטבע ולזהות מי מתחיל "ללכלך", ואז לגרור אותו/ה החוצה מהשטח.
-- **שליטה:** תצפית (ללא קלט), ואז הקשה + גרירה על הדמות המזהמת אל מחוץ למסגרת.
-- **סיום:** הוצאת הדמות/ות המזהמות לפני שמספיקות "לסיים ללכלך".
-- **עליית קושי:** יותר דמויות על המסך, האות המזהה מהיר/עדין יותר, יותר מדמות מזהמת אחת בו-זמנית.
-- **נכסים:** כמה דמויות אנוש (עם רמז חזותי לזיהום), רקע-סצנה טבעית ייחודי למקום.
-
-### 8. מצא את ההבדל בתיק — ייעודי למקום
-- **מטרה:** להשוות בין איור תיק "לפני" ל"אחרי" ולסמן פריטים חסרים (למשל עטיפות שנשארו בטבע ולא חזרו בתיק).
-- **שליטה:** הקשה על ההבדלים/הפריטים החסרים.
-- **סיום:** סימון נכון של כל ההבדלים בזמן הנתון.
-- **עליית קושי:** יותר פריטים בתיק, הבדלים עדינים יותר, זמן קצר יותר.
-- **נכסים:** זוג איורים (לפני/אחרי) של תוכן תיק, לכל מקום בנפרד; מסגרת/רקע "סורק".
-
-### 9. מרוץ הניקיון (בהשראת Temple Run)
-- **מטרה:** ריצה קדימה תוך איסוף פסולת והתחמקות ממכשולים, עד לפח בסיום.
-- **שליטה:** החלקה לשינוי מסלול / קפיצה / שכיבה.
-- **סיום:** הגעה לפח בסוף המסלול (מסלול סופי, לא אינסופי כמו המקור).
-- **עליית קושי:** מהירות ריצה גבוהה יותר, יותר מכשולים, יותר פסולת נדרשת, תזמון מעברי-מסלול צפוף יותר.
-- **נכסים:** דמות רץ/ה, רקע-מסלול ייחודי למקום, מכשולים, פריטי פסולת, פח/קו-סיום.
-
-### 10. מיון למחזור
-- **מטרה:** למיין פריטים לפי סוגם לפח הנכון. לפי הסטנדרט המקובל בישראל: ירוק = זכוכית, כחול = נייר, כתום = אריזות — כדאי לוודא מול ההנחיות המקומיות העדכניות, כי יש הבדלים בין רשויות.
-- **שליטה:** גרירת פריט לפח המתאים (או הקשה על פריט ואז על פח).
-- **סיום:** מיון כל הפריטים שהופיעו.
-- **עליית קושי:** קצב הופעה מהיר יותר, יותר פריטים על המסך בו-זמנית, פריטים "מבלבלים" יותר (למשל בקבוק זכוכית מול בקבוק פלסטיק), פחות זמן להחלטה.
-- **נכסים:** שלושה פחים (ירוק/כחול/כתום), מגוון פריטי-מוצר (בקבוק זכוכית, בקבוק פלסטיק, קופסת קרטון, עיתון וכו').
-
-## 7. התקדמות, ניקוד ותגמול
-
-- כל מיני-משחק מסתיים בציון של 1–3 כוכבים (למשל לפי זמן, דיוק, ומספר טעויות).
-- צבירת כוכבים מכל 10 המשחקים בשלב פותחת את השלב הבא על המפה.
-- בסיום כל שלב (כל 10 המשחקים) — רגע חגיגי קצר: מעבר "לפני/אחרי" של המקום כולו (מלוכלך → נקי ונעים), כדי לחתום את המסר גם ברמת השלב, לא רק ברמת המשחק הבודד.
-- **רעיון אופציונלי:** "דרכון המנקים/ות" — חותמת אחת לכל אזור שהושלם, כמזכרת מסע (כמו דרכון טיולים אמיתי), שמחזקת את תחושת המסע לאורך הארץ.
-
-## 8. עקרונות עיצוב לילדים צעירים
-
-- משך משחק קצר לכל מיני-משחק (כ-30–60 שניות).
-- הנחיות מינימליות בטקסט — עדיף הדגמה קצרה / אנימציה / סמלים על פני טקסט כתוב (חלק מקהל היעד טרם קורא שוטף).
-- בלי מסכי "כישלון" מפחידים או מענישים — עידוד לניסיון חוזר, בטון חיובי ותומך.
-- משוב חיובי דומיננטי בהרבה מהמשוב השלילי; גם טעות מוצגת ברוך (למשל "כמעט! ננסה שוב?").
-- יעדי-מגע גדולים מספיק לאצבעות קטנות, וניגודיות צבעים ברורה (רלוונטי כשתעצבי את הגרפיקה בעצמך).
-
-## 9. הצעות אופציונליות להעשרה (לא חלק מהדרישה המקורית — לשיקול דעתך בלבד)
-
-- דמות-מלווה קבועה לאורך המסע (למשל בעל חיים ארץ-ישראלי) שנותנת עידוד קצר בסוף כל משחק.
-- "דרכון המנקים" כמתואר בסעיף 7.
-- מסך הורה/מורה פשוט המרכז התקדמות — רלוונטי אם האפליקציה תשמש גם במסגרת כיתתית.
-- שכבת סאונד: אפקטים קצרים ל"נקי" מול "מלוכלך" (לא חלק מהגרפיקה, אך שווה לתכנן כמו האיורים — בנפרד).
-- מצב "הורה/מורה" לבחירת שלב ידנית, לצורך הוראה בכיתה.
-
-## 10. הערות טכניות קלות (אופציונלי)
-
-- פלטפורמת יעד: מובייל (iOS ואנדרואיד), ככל הנראה כיוון לאורך (portrait).
-- משחק #2 דורש גישה לחיישן הטיה (accelerometer/gyroscope) של המכשיר.
-- מומלץ לבנות כל אחת מ-10 המכניקות כמודול עצמאי עם "קובץ קונפיגורציה" לכל שלב (מהירות, כמות מכשולים, זמן, תפאורה) — כך יהיה קל להוסיף שלבים/מקומות חדשים בעתיד בלי לכתוב קוד חדש לכל משחק.
-- בחירת מנוע/טכנולוגיה (Unity, Godot, Flutter+Flame, React Native וכו') פתוחה ותלויה בכלים שבהם תבחרי לעבוד.
-
-## נספח — רשימת נכסים גרפיים מרוכזת (לתכנון הציור שלך בלבד, לא לביצוע)
-
-| משחק | נכסים עיקריים נדרשים |
-|------|------------------------|
-| 1. ניקוי-משימה | פריטי פסולת (כמה סוגים), פח/שקית, רקע מלוכלך + רקע נקי |
-| 2. קליפת בננה | דמות קליפה, מכשולים, פח, רקע מסלול |
-| 3. קרוסי-רואד | דמות מטייל/ת, מכשולים לפי מקום, קרקע לפי מקום, פסולת |
-| 4. חיפושית | דמות חיפושית, כדור-זבל (2–3 גדלים), פרחים, פסולת, פח |
-| 5. איפה הפסולת | סצנת-רקע גדולה לפי מקום, פריטי פסולת מוסתרים |
-| 6. צץ מהר | חורים/בסיס, פרחים/בעלי חיים, פסולת |
-| 7. תתנהג טבעי | כמה דמויות אדם, רקע טבעי לפי מקום |
-| 8. מצא הבדל בתיק | זוג איורי תיק (לפני/אחרי) לפי מקום, מסגרת סורק |
-| 9. מרוץ ניקיון | דמות רץ/ה, רקע מסלול לפי מקום, מכשולים, פסולת, פח |
-| 10. מיון מחזור | 3 פחים (ירוק/כחול/כתום), מגוון מוצרים |
-| מפת השלבים | רקע מפת ישראל, קו/מסלול שביל, אייקוני נקודת-שלב (נעול/פתוח/עם כוכבים) |
+> Build a native Android educational game app for children (roughly ages 5–10) that teaches environmental and recycling values through short, fun mini-games, built around one core idea: **clean = pleasant, dirty = unpleasant**. The app is structured as a journey along the Israel National Trail, on an illustrated map of Israel (from Mount Hermon in the north to Eilat in the south), where each stop on the map is a "level" set in a real, recognizable place, with its own visual atmosphere. Each level contains 10 short mini-games (about 30–60 seconds each) about cleaning up, collecting, and sorting litter: 6 of them are fixed core mechanics that repeat in every level and only get harder over time, and 4 of them are location-specific, with scenery, obstacles, and scenarios tailored to that spot. The rest of this document details all 10 game concepts, their mechanics, end conditions, and difficulty-scaling rules.
+>
+> **Build it natively in Java using Android Studio (standard Android SDK) — no cross-platform framework (no Flutter, React Native, Unity, etc.). Do not add any illustration, character, background, or graphic asset — use text-only placeholders wherever a visual asset is needed, since all artwork will be created separately by the app's creator.**
 
 ---
 
-זהו טיוטת פרומפט ראשונית — כל פרט בו (שמות, מסלול הדוגמה, החלוקה ל-6/4, אחוזי עליית הקושי, ההצעות האופציונליות) פתוח לשינוי חופשי לפי מה שמתאים לך.
+## 1. Target Audience & Core Educational Goal
+
+- **Target audience:** children roughly ages 5–10 (also usable at kindergarten age with an adult nearby, up through the lower elementary grades). The age range can be tuned.
+- **Core goal:** to instill in young children an intuitive, felt sense — not just dry recycling facts — built on one equation: **clean = pleasant, dirty = unpleasant**.
+- **Guiding principle:** the message repeats across many different contexts (10 different game mechanics, a fresh set in every level) so the child internalizes it as a general principle about the environment, not a rule tied to one specific game.
+
+## 2. Inspiration & Concept
+
+- **Structural inspiration:** the kids' show "Room and a Half" (Cheder VaChetzi) — one world made of small, varied content "corners" inside a single unifying frame.
+- **Mechanic inspiration:** Among Us (cleaning tasks), phone-tilt games, Crossy Road, Temple Run / Subway Surfers, "Where's Wally/Waldo" search-and-find books, Whac-a-Mole, and spot-the-difference games.
+- **Central organizing idea:** a geographic, atmospheric journey along the Israel National Trail, from the north (Mount Hermon) to the south (Eilat), where each recognizable stop "hosts" one level.
+
+## 3. Level Map Structure
+
+The home screen is an illustrated map of Israel (the illustration itself is yours to create) with a winding path connecting level nodes, similar to level-select screens in common mobile games. Each level node is a real, recognizable place in Israel that conveys an atmosphere (vibe, tones, local natural elements) matching that place.
+
+Here is an **example route** (fully open to change — order, number of levels, and station names all included):
+
+| # | Stop | General mood/atmosphere (direction only, not an art brief) |
+|---|------|--------------------------------------------------------------|
+| 1 | Mount Hermon & the Golan Heights | mountains, snow, rocks, springs |
+| 2 | The Sea of Galilee & Tzfat | water, boats, rural-mountain scenery |
+| 3 | Jezreel Valley & the Carmel (Haifa) | green fields, forest, sea view from the Carmel |
+| 4 | The Sharon & Caesarea | seashore, ancient ruins |
+| 5 | Tel Aviv–Jaffa | urban, boardwalk, city beach |
+| 6 | Jerusalem & the Judean Hills | terraced mountains, pine forests |
+| 7 | The Judean Desert & the Dead Sea | cliffs, salt, wadis |
+| 8 | The Negev & Ramon Crater | desert, craters, desert wildlife |
+| 9 | The Arava | dry riverbeds, desert vegetation |
+| 10 | Eilat & the Red Sea | coral reef, tropical coastline |
+
+A new level unlocks after the previous one is completed (or after collecting enough stars from it — see section 7).
+
+## 4. Level Structure: 10 Games = 6 Recurring + 4 Location-Specific
+
+Every level contains 10 mini-games, but the whole app really only needs **10 "game engines"** (the mechanics from the original list) — so instead of designing 100 different games, you build 10 mechanics that each take different parameters (difficulty) and different dressing (location) per level.
+
+**6 recurring games** — the exact same mechanic in every level, only getting harder over time:
+1. Trash Cleanup Task (Among Us–inspired)
+2. Rolling Banana Peel (device tilt)
+4. Black Beetle Trash Roller
+6. Pop-Up Sort (whack-a-mole style)
+9. Cleanup Runner (Temple Run–inspired)
+10. Recycling Sort
+
+*Why these:* these are skill-based mechanics that can "accept" new dressing (background, colors) without needing a whole new scenario designed each time, so they can stay structurally identical while difficulty ramps up cleanly. It matters that the sorting game (#10) stays consistent for educational reasons too — the child should learn one fixed rule (which bin takes which kind of trash) without it changing from version to version.
+
+**4 location-specific games** — same base mechanic, but with a scenario/scenery/obstacles tailored to each specific stop:
+3. Green Crossy Trail (walking through nature, collecting litter)
+5. Where's the Litter? (spotting litter in a large scene of the place)
+7. Act Natural (spotting who's littering among a group of characters)
+8. Spot the Difference in the Backpack (scanning a bag before/after a site visit)
+
+*Why these:* these already require a brand-new "scene" every time anyway (a full background, a group of characters, a backpack illustration) — so it makes sense to tailor them to each specific place, making every level feel tied to its spot on the map.
+
+**Important:** this recurring/location-specific assignment is a default recommendation, not a hard rule — feel free to change it based on judgment or on what's practical to illustrate.
+
+**Difficulty scaling between levels:** in each level, gradually raise 2–3 of the following parameters (across all 10 games): speed, number of obstacles/items, available time (decreasing), track length/area size, number of "distractors" (e.g., flowers/animals in the games where that applies). A moderate increase (roughly 10–15% per level) is recommended so young children don't get frustrated.
+
+## 5. The Educational Feedback Loop (the heart of the game)
+
+Every mini-game, regardless of its mechanic, should close a clear loop: **"before" — dirty and unpleasant → "after" — clean and pleasant.** A short, clear moment at the end of each mini-game where the screen/scene transitions from a dirty state to a clean state, paired with positive feedback. This way the "clean = pleasant" message repeats across all 10 games, not just in one specific one.
+
+## 6. Detailed Breakdown of the 10 Games
+
+### 1. Trash Cleanup Task (Among Us–inspired)
+- **Goal:** clean up a spot littered with scattered trash.
+- **Controls:** tap/drag each trash item into a bag/bin.
+- **End condition:** all (or most) trash collected within the given time.
+- **Difficulty scaling:** more trash items, wider spread, less time, items that drift slightly.
+- **Assets needed (list only):** a few trash item types, a target bag/bin, a "dirty" background state and a "clean" background state.
+
+### 2. Rolling Banana Peel
+- **Goal:** guide a banana peel along a path to a trash can, dodging obstacles.
+- **Controls:** tilt the device left/right (optionally forward/back too).
+- **End condition:** reaching the trash can at the end of the path.
+- **Difficulty scaling:** narrower path, more/faster obstacles, longer path.
+- **Assets:** banana peel character, 3–4 obstacle types, trash can, path background.
+
+### 3. Green Crossy Trail — location-specific
+- **Goal:** move between "lanes" in nature (Crossy Road–style), collecting litter along the way (instead of coins), until the end of the sub-level.
+- **Controls:** tap/swipe in four directions — forward, back, left, right — one step at a time.
+- **End condition:** reaching the end of the path with at least the minimum litter collected (for a full score).
+- **Difficulty scaling:** more obstacle "lanes," faster-moving obstacles, higher litter quota.
+- **Assets:** a hiker character, obstacles specific to the location, ground/path art specific to the location, litter items.
+
+### 4. Black Beetle
+- **Goal:** move across a surface, collect litter and roll it into a growing ball, while avoiding touching flowers.
+- **Controls:** virtual joystick/drag, or tilt.
+- **End condition:** reaching a trash can and dropping the litter ball at the end.
+- **Difficulty scaling:** more flowers (obstacles), a larger area, more litter required to fill the ball.
+- **Assets:** beetle character, 2–3 ball-size states, flowers, litter items, trash can.
+
+### 5. Where's the Litter? — location-specific
+- **Goal:** find litter items hidden inside one large, busy scene of the specific place (inspired by "Where's Wally/Waldo").
+- **Controls:** tap each litter item found.
+- **End condition:** finding all/most items within the given time.
+- **Difficulty scaling:** smaller/more camouflaged items, more visual distractors, less time.
+- **Assets:** one large, detailed background scene per location, 6–10 "hidden" litter items within it.
+
+### 6. Pop-Up Sort (whack-a-mole style)
+- **Goal:** tap only the litter popping out of holes, without hitting the flowers/animals that pop up too.
+- **Controls:** quick taps on the right hole at the right moment.
+- **End condition:** time runs out, or a litter quota is reached.
+- **Difficulty scaling:** faster pop-up rate, more holes active at once, a higher ratio of distractors to litter.
+- **Assets:** hole/ground base art, a few flower/animal types, a few litter types.
+
+### 7. Act Natural — location-specific
+- **Goal:** watch a group of characters in a natural setting, spot who starts littering, then drag them out of the area.
+- **Controls:** observation (no input), then tap + drag the littering character off-screen.
+- **End condition:** removing the littering character(s) before they finish littering.
+- **Difficulty scaling:** more characters on screen, a faster/subtler tell, more than one littering character at once.
+- **Assets:** a handful of human characters (with a visual littering cue), a natural background scene specific to the location.
+
+### 8. Spot the Difference in the Backpack — location-specific
+- **Goal:** compare a "before" and "after" illustration of a backpack's contents and mark missing items (e.g., wrappers left behind in nature instead of packed back out).
+- **Controls:** tap the differences/missing items.
+- **End condition:** correctly marking all differences within the given time.
+- **Difficulty scaling:** more items in the bag, subtler differences, less time.
+- **Assets:** a matched pair of illustrations (before/after) of bag contents, per location; a scanner-style frame/background.
+
+### 9. Cleanup Runner (Temple Run–inspired)
+- **Goal:** run forward, collecting litter and dodging obstacles, ending at a trash can.
+- **Controls:** swipe to change lanes / jump / duck.
+- **End condition:** reaching the trash can at the end of the track (a finite track, not endless like the original).
+- **Difficulty scaling:** faster run speed, more obstacles, more litter required, tighter lane-switch timing.
+- **Assets:** a runner character, a track background specific to the location, obstacles, litter items, a trash can/finish marker.
+
+### 10. Recycling Sort
+- **Goal:** sort items by type into the correct bin. Based on Israel's standard system: green = glass, blue = paper, orange = packaging — worth double-checking against current local guidelines, since municipalities vary.
+- **Controls:** drag an item to the matching bin (or tap an item, then tap a bin).
+- **End condition:** all items that appeared have been sorted.
+- **Difficulty scaling:** faster appearance rate, more items on screen at once, more "confusing" item pairs (e.g., a glass bottle vs. a plastic bottle), less decision time.
+- **Assets:** three bins (green/blue/orange), a variety of product items (glass bottle, plastic bottle, cardboard box, newspaper, etc.).
+
+## 7. Progression, Scoring & Rewards
+
+- Each mini-game ends with a 1–3 star score (e.g., based on time, accuracy, and mistake count).
+- Stars collected across all 10 games in a level unlock the next level on the map.
+- At the end of each full level (all 10 games) — a short celebratory moment: a "before/after" transition of the whole location (dirty → clean and pleasant), sealing the message at the level level, not just per mini-game.
+- **Optional idea:** a "Cleaner's Passport" — one stamp per completed region, as a travel souvenir, reinforcing the sense of a journey across the country.
+
+## 8. Design Principles for Young Children
+
+- Short play sessions per mini-game (roughly 30–60 seconds).
+- Minimal text instructions — prefer a short demo/animation/icons over written explanation (part of the audience isn't reading fluently yet).
+- No scary or punishing "failure" screens — encourage retrying, always in a positive, supportive tone.
+- Positive feedback should dominate over negative feedback; even a mistake is shown gently (e.g., "Almost! Try again?").
+- Touch targets large enough for small fingers, and clear color contrast (relevant once you design the actual graphics).
+
+## 9. Optional Enrichment Ideas (not part of the original requirements — entirely your call)
+
+- A recurring companion character throughout the journey (e.g., a native Israeli animal) that gives brief encouragement at the end of each game.
+- The "Cleaner's Passport" described in section 7.
+- A simple parent/teacher progress-overview screen — relevant if the app is also used in a classroom setting.
+- A sound layer: short "clean" vs. "dirty" audio cues (not part of the graphics, but worth planning separately, the same way as the illustrations).
+- A "parent/teacher" mode to manually pick a level, for classroom teaching purposes.
+
+## 10. Technical Requirements (mandatory)
+
+- **Language & platform:** native Android, written in **Java**, built and run in **Android Studio** with a standard Gradle build. No cross-platform framework (no Flutter, React Native, Unity, Cocos, etc.) and no Kotlin.
+- **Orientation:** portrait, most likely.
+- **Sensors:** game #2 needs `SensorManager` with `TYPE_ACCELEROMETER` (or the game rotation vector sensor) for tilt control.
+- **Rendering approach:** these are simple 2D arcade mechanics, so a lightweight `SurfaceView`/custom `View` with a `Canvas`-based game loop is enough for the arcade-style games (banana peel, beetle, pop-up sort, runner, crossy trail) — no external game-engine dependency is needed. This also keeps placeholders trivial: draw plain shapes (`drawRect`/`drawCircle`/`drawText`) or a plain `Drawable`/`Bitmap` reference that can be swapped for real art later without touching game logic.
+- **Suggested architecture:** one `Activity`/`Fragment` for the map screen, one that hosts a level's sequence of 10 mini-games, and a small base class/interface that each of the 10 mechanics implements, each configurable through a simple difficulty-parameters object (speed, obstacle count, time limit, litter quota, etc.) passed in per level — so the same mechanic class serves every level and every location without duplicating code.
+- **Level/location config:** store each level's difficulty parameters and which 4 games are the location-specific ones for that level as simple config data (e.g., POJOs or a bundled JSON asset), so adding a new level later is a config + art change, not new game logic.
+- **Progress storage:** `SharedPreferences` is enough for star ratings and level-unlock state — no database needed given how little data this is.
+- **SDK versions:** a reasonable modern default (e.g., `minSdk` 24+, latest `targetSdk`) — not prescribed further here.
+- **Placeholder convention:** wherever art is required, draw a plain shape/color via `Canvas` or use a plain colored `View`/`ImageView` with a text label naming the asset (e.g., "[art: banana peel]"), so real drawable resources can be dropped in later with no logic changes.
+
+## Appendix — Consolidated Graphic Asset Checklist (for planning your illustration work only, not for implementation)
+
+| Game | Key assets needed |
+|------|--------------------|
+| 1. Trash Cleanup Task | a few trash item types, bag/bin, dirty background + clean background |
+| 2. Rolling Banana Peel | peel character, obstacles, trash can, path background |
+| 3. Green Crossy Trail | hiker character, location-specific obstacles, location-specific ground, litter |
+| 4. Black Beetle | beetle character, 2–3 litter-ball sizes, flowers, litter, trash can |
+| 5. Where's the Litter? | one large location-specific background scene, hidden litter items |
+| 6. Pop-Up Sort | holes/base art, a few flower/animal types, litter types |
+| 7. Act Natural | a few human characters, location-specific natural background |
+| 8. Spot the Difference in the Backpack | a before/after pair of bag-contents illustrations per location, scanner frame |
+| 9. Cleanup Runner | runner character, location-specific track background, obstacles, litter, trash can |
+| 10. Recycling Sort | 3 bins (green/blue/orange), a variety of product items |
+| Level map | Israel map background, trail/route line, level-node icons (locked/unlocked/starred) |
+
+---
+
+This is a first-draft prompt — every detail in it (names, the example route, the 6/4 split, the difficulty percentages, the optional ideas) is fully open for you to change.
