@@ -633,7 +633,7 @@
   // ---------- evaluation ----------
   function evaluate() {
     var a = state.assign, L = state.lessons.length, cls = classList(), b = bounds();
-    var res = { ranks: [], sizes: [], clsCounts: [], issues: [], bothTop2: 0, worst: 0, waiting: 0 };
+    var res = { ranks: [], sizes: [], clsCounts: [], issues: [], bothTop2: 0, worst: 0, waiting: 0, choosers: 0, gotChoice: 0 };
     state.lessons.forEach(function (Ls, l) {
       var r = [0, 0, 0, 0, 0], sz = new Array(Ls.courses.length).fill(0), cc = Ls.courses.map(function () { return cls.map(function () { return 0; }); });
       students.forEach(function (s) {
@@ -658,6 +658,10 @@
       var rs = state.lessons.map(function (Ls, l) { return rankOf(s, l, a[l][s.id]); });
       if (rs.every(function (r) { return r <= 1; })) res.bothTop2++;
       if (rs.some(function (r) { return r === 4; })) res.waiting++;
+      if (rs.some(function (r) { return r !== 4; })) {
+        res.choosers++;
+        if (rs.every(function (r) { return r <= 2 || r === 4; })) res.gotChoice++;
+      }
       if (rs.filter(function (r) { return r >= 2; }).length >= 2) res.worst++;
       if (state.opts.noRepeat) {
         for (var l = 0; l < L; l++) for (var m = l + 1; m < L; m++)
@@ -696,8 +700,8 @@
     var noneCount = ev.ranks.reduce(function (t, r) { return t + r[3]; }, 0);
 
     $("tiles").innerHTML =
-      tile(Math.round(100 * totalFirst / placements) + "%", "מהשיבוצים הם בחירה ראשונה") +
-      tile(ev.bothTop2 + "/" + S, "קיבלו בחירה 1 או 2 בכל השיעורים") +
+      tile(ev.gotChoice + "/" + ev.choosers, ev.gotChoice === ev.choosers ? "✓ כל מי שבחר/ה קיבל/ה בכל שיעור אחת משלוש הבחירות" : "קיבלו אחת מהבחירות – השאר ברשימה למטה", ev.gotChoice === ev.choosers ? "ok" : "bad") +
+      tile(Math.round(100 * totalFirst / placements) + "%", "מהשיבוצים הם בחירה ראשונה · " + ev.bothTop2 + " קיבלו 1 או 2 בכל השיעורים") +
       tile(ev.waiting, "עוד לא בחרו (לא שובצו)", ev.waiting ? "" : "ok") +
       tile(ev.issues.length || "אין", ev.issues.length ? "חריגות מהכללים" : "חריגות מהכללים", ev.issues.length ? "bad" : "ok");
 
