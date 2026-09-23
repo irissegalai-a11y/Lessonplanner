@@ -235,11 +235,11 @@
     </div>
     <div class="format">
       <h3>מבנה מומלץ לקובץ</h3>
-      <p class="muted" style="margin:4px 0">שורה לכל תלמיד/ה. שמות הקורסים יכולים להיות כתובים בקיצור (״אמנות״, ״פיננסי״, ״דורית״) – המערכת מזהה אותם. אם העמודות בקובץ שלכם שונות, תוכלו להתאים אותן ידנית אחרי הטעינה.</p>
+      <p class="muted" style="margin:4px 0">שורה לכל תלמיד/ה. שמות הקורסים יכולים להיות כתובים בקיצור (״אמנות״, ״פיננסי״, ״בלשים״ או ״שרי״) – המערכת מזהה אותם. אם העמודות בקובץ שלכם שונות, תוכלו להתאים אותן ידנית אחרי הטעינה.</p>
       <div class="scroll-x">
         <table>
           <tr><th>שם</th><th>כיתה</th><th>שיעור 6 – בחירה 1</th><th>…2</th><th>…3</th><th>שיעור 7 – בחירה 1</th><th>…2</th><th>…3</th></tr>
-          <tr><td>נועה כהן</td><td>ו1</td><td>אומנות</td><td>דורית</td><td>שרי</td><td>כתיבה</td><td>אומנות</td><td>חינוך פיננסי</td></tr>
+          <tr><td>נועה כהן</td><td>ו1</td><td>אומנות</td><td>כלי תחבורה</td><td>בלשים</td><td>כתיבה</td><td>אומנות</td><td>חינוך פיננסי</td></tr>
         </table>
       </div>
     </div>
@@ -308,8 +308,8 @@
   "use strict";
 
   var DEFAULT_LESSONS = [
-    { title: "שיעור 6", courses: ["חינוך פיננסי", "חברים מעבר לים (הדס)", "אומנות", "דורית", "שרי"] },
-    { title: "שיעור 7", courses: ["חינוך פיננסי", "כתיבה (הדס)", "אומנות", "דורית", "שרי"] }
+    { title: "שיעור 6", courses: ["חינוך פיננסי", "חברים מעבר לים (הדס)", "אומנות", "כלי תחבורה (דורית)", "בלשים (שרי)"] },
+    { title: "שיעור 7", courses: ["חינוך פיננסי", "כתיבה (הדס)", "אומנות", "כלי תחבורה (דורית)", "בלשים (שרי)"] }
   ];
   var STORE = "courseAssign_v1";
   var CHOICES = 3;
@@ -335,6 +335,8 @@
       .filter(function (t) { return t.length >= 2 && !STOP[t]; })
       .map(stripH).filter(function (t) { return t.length >= 2; });
   }
+  // "הבלשים" = "בלשים": ignore a leading ה when comparing words
+  function tokEq(a, b) { return a === b || (a.replace(/^ה/, "") === b.replace(/^ה/, "") && a.length > 2 && b.length > 2); }
   function norm(s) { return stripH(String(s).toLowerCase().replace(/[()\[\]\-–,.:;\/\\|\s]+/g, "")); }
   function matchCourse(l, text) {
     var t = String(text || "").trim();
@@ -344,7 +346,7 @@
     var tt = tokens(t), best = -1, bestScore = 0, tie = false;
     for (i = 0; i < courses.length; i++) {
       var ct = tokens(courses[i]), sc = 0;
-      tt.forEach(function (x) { if (ct.indexOf(x) >= 0) sc++; });
+      tt.forEach(function (x) { if (ct.some(function (y) { return tokEq(x, y); })) sc++; });
       if (sc > bestScore) { bestScore = sc; best = i; tie = false; } else if (sc && sc === bestScore) tie = true;
     }
     return bestScore > 0 && !tie ? best : -1;
@@ -871,7 +873,7 @@
       }
       return out;
     }
-    var c6 = ["חינוך פיננסי", "חברים מעבר לים", "אומנות", "דורית", "שרי"], c7 = ["חינוך פיננסי", "כתיבה", "אומנות", "דורית", "שרי"];
+    var c6 = ["חינוך פיננסי", "חברים מעבר לים", "אומנות", "כלי תחבורה", "הבלשים"], c7 = ["חינוך פיננסי", "כתיבה", "אומנות", "כלי תחבורה", "בלשים"];
     var rows = [["שם התלמיד/ה", "כיתה", "שיעור 6 – בחירה ראשונה", "שיעור 6 – בחירה שנייה", "שיעור 6 – בחירה שלישית", "שיעור 7 – בחירה ראשונה", "שיעור 7 – בחירה שנייה", "שיעור 7 – בחירה שלישית"]];
     first.forEach(function (f, i) {
       rows.push([f + " " + last[(i * 7) % last.length], i < 26 ? "ו1" : "ו2"].concat(pick3(c6, W6), pick3(c7, W7)));
@@ -901,7 +903,7 @@
   function save() {
     try {
       localStorage.setItem(STORE, JSON.stringify({
-        v: 3, headers: state.headers, rows: state.rows, mapping: state.mapping, isSample: state.isSample,
+        v: 4, headers: state.headers, rows: state.rows, mapping: state.mapping, isSample: state.isSample,
         lessons: state.lessons, opts: state.opts, assign: state.assign, locks: state.locks
       }));
     } catch (e) { /* storage unavailable */ }
@@ -911,6 +913,9 @@
       var d = JSON.parse(localStorage.getItem(STORE) || "null");
       if (!d || !d.rows || !d.rows.length) return false;
       if ((d.v || 0) < 2 && d.opts) d.opts.clsTol = 0; // new default: strict class balance
+      if ((d.v || 0) < 4 && d.lessons) d.lessons.forEach(function (L) { // course topics added to teacher names
+        L.courses = L.courses.map(function (c) { return c === "דורית" ? "כלי תחבורה (דורית)" : c === "שרי" ? "בלשים (שרי)" : c; });
+      });
       if ((d.v || 0) < 3) { d.assign = null; d.locks = [[], []]; if (d.opts) d.opts.priority = "דורית, שרי"; } // only-own-choices rule
       Object.assign(state, d);
       return true;
