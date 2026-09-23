@@ -266,9 +266,9 @@
         <strong>כללים</strong>
         <div class="opt" style="margin-top:8px"><input id="optNoRepeat" type="checkbox" checked><label for="optNoRepeat">לא לשבץ לאותו קורס בשני השיעורים</label></div>
         <div class="opt"><input id="optBalance" type="checkbox" checked><label for="optBalance">איזון בין ו1 ל-ו2 בכל קורס</label></div>
-        <div class="opt"><label for="optClsTol">סטייה מותרת באיזון הכיתות:</label><input id="optClsTol" type="number" min="0" max="10" value="1"></div>
+        <div class="opt"><label for="optClsTol">סטייה מותרת באיזון הכיתות:</label><input id="optClsTol" type="number" min="0" max="10" value="0"></div>
         <div class="opt"><label for="optSizeTol">סטייה מותרת בגודל קבוצה:</label><input id="optSizeTol" type="number" min="0" max="10" value="0"></div>
-        <p class="muted small" style="margin:4px 0 0">סטייה 0 בגודל = כל הקבוצות בשיעור שוות (הפרש של תלמיד/ה אחד/ת לכל היותר).</p>
+        <p class="muted small" style="margin:4px 0 0">סטייה 0 = חלוקה הכי שווה שאפשר. למשל 27 תלמידים מכיתה בחמישה קורסים: 5 או 6 מהכיתה בכל קורס. אותו דבר בגודל הקבוצה: 10 או 11.</p>
       </div>
     </div>
   </details>
@@ -315,7 +315,7 @@
   var state = {
     headers: [], rows: [], mapping: {}, isSample: false,
     lessons: clone(DEFAULT_LESSONS),
-    opts: { noRepeat: true, balance: true, clsTol: 1, sizeTol: 0 },
+    opts: { noRepeat: true, balance: true, clsTol: 0, sizeTol: 0 },
     assign: null, locks: [[], []], tab: "l0", filterCls: "", search: ""
   };
   var students = [];   // built from rows + mapping
@@ -802,7 +802,7 @@
   function save() {
     try {
       localStorage.setItem(STORE, JSON.stringify({
-        headers: state.headers, rows: state.rows, mapping: state.mapping, isSample: state.isSample,
+        v: 2, headers: state.headers, rows: state.rows, mapping: state.mapping, isSample: state.isSample,
         lessons: state.lessons, opts: state.opts, assign: state.assign, locks: state.locks
       }));
     } catch (e) { /* storage unavailable */ }
@@ -811,6 +811,7 @@
     try {
       var d = JSON.parse(localStorage.getItem(STORE) || "null");
       if (!d || !d.rows || !d.rows.length) return false;
+      if (d.v !== 2 && d.opts) d.opts.clsTol = 0; // new default: strict class balance
       Object.assign(state, d);
       return true;
     } catch (e) { return false; }
