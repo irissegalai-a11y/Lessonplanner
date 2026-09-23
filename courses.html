@@ -214,7 +214,7 @@
 <div class="wrap">
   <header>
     <h1>שיבוץ קורסי בחירה – שכבת ו׳</h1>
-    <p class="lede">העלו את קובץ הבחירות של התלמידים. המערכת משבצת כל תלמיד/ה לקורס אחד בכל שיעור: הקבוצות שוות בגודלן, ו1 ו-ו2 מעורבבות באופן שווה, אף אחד לא מקבל אותו קורס פעמיים, ומי שקיבל/ה בחירה נמוכה בשיעור אחד מקבל/ת עדיפות בשני.</p>
+    <p class="lede">העלו את קובץ הבחירות של התלמידים. המערכת משבצת כל תלמיד/ה לקורס אחד בכל שיעור, רק מתוך שלוש הבחירות שלו/ה. הקבוצות שוות בגודלן, דורית ושרי מתמלאים ראשונים, ו1 ו-ו2 מעורבבות באופן שווה, אף אחד לא מקבל אותו קורס פעמיים, ומי שקיבל/ה בחירה נמוכה בשיעור אחד מקבל/ת עדיפות בשני.</p>
   </header>
 
   <section class="panel load-grid" aria-label="טעינת נתונים">
@@ -268,6 +268,7 @@
         <div class="opt" style="margin-top:8px"><input id="optNoRepeat" type="checkbox" checked><label for="optNoRepeat">לא לשבץ לאותו קורס בשני השיעורים</label></div>
         <div class="opt"><input id="optBalance" type="checkbox" checked><label for="optBalance">איזון בין ו1 ל-ו2 בכל קורס</label></div>
         <div class="opt"><label for="optClsTol">סטייה מותרת באיזון הכיתות:</label><input id="optClsTol" type="number" min="0" max="10" value="0"></div>
+        <div class="opt"><label for="optPriority">ממלאים ראשון:</label><input id="optPriority" type="text" value="דורית, שרי" style="flex:1;min-width:0"></div>
         <div class="opt"><label for="optSizeTol">סטייה מותרת בגודל קבוצה:</label><input id="optSizeTol" type="number" min="0" max="10" value="0"></div>
         <p class="muted small" style="margin:4px 0 0">סטייה 0 = חלוקה הכי שווה שאפשר. למשל 27 תלמידים מכיתה בחמישה קורסים: 5 או 6 מהכיתה בכל קורס. אותו דבר בגודל הקבוצה: 10 או 11.</p>
       </div>
@@ -316,7 +317,7 @@
   var state = {
     headers: [], rows: [], mapping: {}, isSample: false,
     lessons: clone(DEFAULT_LESSONS),
-    opts: { noRepeat: true, balance: true, clsTol: 0, sizeTol: 0 },
+    opts: { noRepeat: true, balance: true, clsTol: 0, sizeTol: 0, priority: "דורית, שרי" },
     assign: null, locks: [[], []], tab: "l0", filterCls: "", search: ""
   };
   var students = [];   // built from rows + mapping
@@ -501,17 +502,31 @@
   var RANK_COST = [0, 2, 5, 1000, 0];
   var W = 100;
 
+  // Maximums use the whole grade (room is kept for students who haven't chosen yet);
+  // minimums use only the students who already chose.
   function bounds() {
     var S = students.length, cls = classList();
     var nCls = cls.map(function (c) { return students.filter(function (s) { return s.cls === c; }).length; });
-    return state.lessons.map(function (L) {
+    return state.lessons.map(function (L, l) {
       var K = L.courses.length;
+      var ch = students.filter(function (s) { return s.prefs[l].length; });
+      var nClsC = cls.map(function (c) { return ch.filter(function (s) { return s.cls === c; }).length; });
       return {
-        min: Math.max(0, Math.floor(S / K) - state.opts.sizeTol), max: Math.ceil(S / K) + state.opts.sizeTol,
-        cmin: nCls.map(function (n) { return Math.max(0, Math.floor(n / K) - state.opts.clsTol); }),
+        min: Math.max(0, Math.floor(ch.length / K) - state.opts.sizeTol), max: Math.ceil(S / K) + state.opts.sizeTol,
+        cmin: nClsC.map(function (n) { return Math.max(0, Math.floor(n / K) - state.opts.clsTol); }),
         cmax: nCls.map(function (n) { return Math.ceil(n / K) + state.opts.clsTol; })
       };
     });
+  }
+
+  // Courses that are harder to fill: filled first, i.e. never left short when something has to give.
+  function priorityOf(l) {
+    var set = {};
+    String(state.opts.priority || "").split(/[,،;\n]/).forEach(function (t) {
+      var k = matchCourse(l, t);
+      if (k >= 0) set[k] = 1;
+    });
+    return set;
   }
 
   function rankOf(s, l, k) { if (!s.prefs[l].length) return 4; var i = s.prefs[l].indexOf(k); return i < 0 ? 3 : i; }
@@ -520,16 +535,17 @@
     var S = students.length, L = state.lessons.length, cls = classList();
     var cIdx = students.map(function (s) { return s.cls ? cls.indexOf(s.cls) : -1; });
     var keys = state.lessons.map(function (Ls) { return Ls.courses.map(norm); });
-    return { S: S, L: L, K: state.lessons.map(function (x) { return x.courses.length; }), nC: cls.length, cIdx: cIdx, keys: keys, b: bounds() };
+    return { S: S, L: L, K: state.lessons.map(function (x) { return x.courses.length; }), nC: cls.length, cIdx: cIdx, keys: keys, b: bounds(),
+      prio: state.lessons.map(function (Ls, l) { return priorityOf(l); }) };
   }
 
+  // Each student is only ever placed in one of their own choices; students with no
+  // choices in a lesson stay unplaced (-1) until they choose.
   function solve() {
     var M = makeModel(), S = M.S, L = M.L;
     if (!S) return null;
     var locked = state.locks.map(function (arr) { var o = {}; arr.forEach(function (id) { o[id] = 1; }); return o; });
-    var cost = students.map(function (s) {
-      return state.lessons.map(function (Ls, l) { var r = []; for (var k = 0; k < M.K[l]; k++) r.push(RANK_COST[rankOf(s, l, k)]); return r; });
-    });
+    var allowed = students.map(function (st) { return st.prefs.map(function (p) { return p.slice(); }); });
 
     var best = null, bestCost = Infinity;
     for (var restart = 0; restart < 4; restart++) {
@@ -538,23 +554,26 @@
         a.push(new Array(S)); cnt.push(new Array(M.K[l]).fill(0)); ccnt.push([]);
         for (var k = 0; k < M.K[l]; k++) ccnt[l].push(new Array(M.nC).fill(0));
         for (var s = 0; s < S; s++) {
-          var v;
-          if (locked[l] && locked[l][s] && state.assign) v = state.assign[l][s];
-          else { var p = students[s].prefs[l]; v = p.length && Math.random() < 0.7 ? p[Math.floor(Math.random() * p.length)] : Math.floor(Math.random() * M.K[l]); }
-          a[l][s] = v; cnt[l][v]++; if (M.cIdx[s] >= 0) ccnt[l][v][M.cIdx[s]]++;
+          var p = allowed[s][l], v = -1;
+          if (locked[l][s] && state.assign && state.assign[l] && state.assign[l][s] >= 0) v = state.assign[l][s];
+          else if (p.length) v = Math.random() < 0.6 ? p[0] : p[Math.floor(Math.random() * p.length)];
+          a[l][s] = v;
+          if (v >= 0) { cnt[l][v]++; if (M.cIdx[s] >= 0) ccnt[l][v][M.cIdx[s]]++; }
         }
       }
       var sCost = function (s) {
         var tot = 0, cs = [], l, m;
-        for (l = 0; l < L; l++) { cs.push(cost[s][l][a[l][s]]); tot += cs[l]; }
+        for (l = 0; l < L; l++) { cs.push(a[l][s] >= 0 ? RANK_COST[rankOf(students[s], l, a[l][s])] : 0); tot += cs[l]; }
         for (l = 0; l < L; l++) for (m = l + 1; m < L; m++) {
+          if (a[l][s] < 0 || a[m][s] < 0) continue;
           tot += 0.3 * Math.min(cs[l], 5) * Math.min(cs[m], 5);
           if (state.opts.noRepeat && M.keys[l][a[l][s]] === M.keys[m][a[m][s]]) tot += W;
         }
         return tot;
       };
       var cTerm = function (l, k) {
-        var b = M.b[l], n = cnt[l][k], v = Math.max(0, b.min - n) + Math.max(0, n - b.max);
+        var b = M.b[l], n = cnt[l][k];
+        var v = Math.max(0, b.min - n) * (M.prio[l][k] ? 4 : 1) + Math.max(0, n - b.max);
         if (state.opts.balance) for (var c = 0; c < M.nC; c++) { var x = ccnt[l][k][c]; v += Math.max(0, b.cmin[c] - x) + Math.max(0, x - b.cmax[c]); }
         return v * W;
       };
@@ -573,10 +592,11 @@
         var T = T0 * Math.pow(T1 / T0, it / ITER);
         var l2 = Math.floor(Math.random() * L);
         var s1 = Math.floor(Math.random() * S);
-        if (locked[l2][s1]) continue;
         var k1 = a[l2][s1], before, after, delta;
+        if (k1 < 0 || locked[l2][s1]) continue;
         if (Math.random() < 0.5) {
-          var k2 = Math.floor(Math.random() * M.K[l2]);
+          var opts1 = allowed[s1][l2];
+          var k2 = opts1[Math.floor(Math.random() * opts1.length)];
           if (k2 === k1) continue;
           before = cTerm(l2, k1) + cTerm(l2, k2) + sCost(s1);
           setA(l2, s1, k2);
@@ -585,9 +605,9 @@
           if (delta <= 0 || Math.random() < Math.exp(-delta / T)) cur += delta; else setA(l2, s1, k1);
         } else {
           var s2 = Math.floor(Math.random() * S);
-          if (locked[l2][s2]) continue;
           var kb = a[l2][s2];
-          if (kb === k1) continue;
+          if (kb < 0 || kb === k1 || locked[l2][s2]) continue;
+          if (allowed[s1][l2].indexOf(kb) < 0 || allowed[s2][l2].indexOf(k1) < 0) continue;
           before = cTerm(l2, k1) + cTerm(l2, kb) + sCost(s1) + sCost(s2);
           setA(l2, s1, kb); setA(l2, s2, k1);
           after = cTerm(l2, k1) + cTerm(l2, kb) + sCost(s1) + sCost(s2);
@@ -604,11 +624,13 @@
   // ---------- evaluation ----------
   function evaluate() {
     var a = state.assign, L = state.lessons.length, cls = classList(), b = bounds();
-    var res = { ranks: [], sizes: [], clsCounts: [], issues: [], bothTop2: 0, worst: 0 };
+    var res = { ranks: [], sizes: [], clsCounts: [], issues: [], bothTop2: 0, worst: 0, waiting: 0 };
     state.lessons.forEach(function (Ls, l) {
       var r = [0, 0, 0, 0, 0], sz = new Array(Ls.courses.length).fill(0), cc = Ls.courses.map(function () { return cls.map(function () { return 0; }); });
       students.forEach(function (s) {
-        var k = a[l][s.id], rk = rankOf(s, l, k); sz[k]++; r[rk]++;
+        var k = a[l][s.id], rk = rankOf(s, l, k); r[rk]++;
+        if (k < 0) return;
+        sz[k]++;
         if (rk === 3) res.issues.push(s.name + " – " + Ls.title + ": שובץ/ה ל״" + Ls.courses[k] + "״, שלא היה באף אחת מהבחירות");
         if (s.cls) cc[k][cls.indexOf(s.cls)]++;
       });
@@ -625,10 +647,11 @@
     students.forEach(function (s) {
       var rs = state.lessons.map(function (Ls, l) { return rankOf(s, l, a[l][s.id]); });
       if (rs.every(function (r) { return r <= 1; })) res.bothTop2++;
+      if (rs.some(function (r) { return r === 4; })) res.waiting++;
       if (rs.filter(function (r) { return r >= 2; }).length >= 2) res.worst++;
       if (state.opts.noRepeat) {
         for (var l = 0; l < L; l++) for (var m = l + 1; m < L; m++)
-          if (norm(state.lessons[l].courses[a[l][s.id]]) === norm(state.lessons[m].courses[a[m][s.id]]))
+          if (a[l][s.id] >= 0 && a[m][s.id] >= 0 && norm(state.lessons[l].courses[a[l][s.id]]) === norm(state.lessons[m].courses[a[m][s.id]]))
             res.issues.push(s.name + " שובץ/ה ל״" + state.lessons[l].courses[a[l][s.id]] + "״ בשני השיעורים");
       }
     });
@@ -659,13 +682,13 @@
     $("results").hidden = false;
     var ev = evaluate(), S = students.length, cls = classList();
     var totalFirst = ev.ranks.reduce(function (t, r) { return t + r[0]; }, 0);
-    var placements = S * state.lessons.length;
+    var placements = ev.ranks.reduce(function (t, r) { return t + S - r[4]; }, 0) || 1;
     var noneCount = ev.ranks.reduce(function (t, r) { return t + r[3]; }, 0);
 
     $("tiles").innerHTML =
       tile(Math.round(100 * totalFirst / placements) + "%", "מהשיבוצים הם בחירה ראשונה") +
       tile(ev.bothTop2 + "/" + S, "קיבלו בחירה 1 או 2 בכל השיעורים") +
-      tile(noneCount, "קיבלו קורס שלא בחרו", noneCount ? "bad" : "ok") +
+      tile(ev.waiting, "עוד לא בחרו (לא שובצו)", ev.waiting ? "" : "ok") +
       tile(ev.issues.length || "אין", ev.issues.length ? "חריגות מהכללים" : "חריגות מהכללים", ev.issues.length ? "bad" : "ok");
 
     $("bars").innerHTML = state.lessons.map(function (Ls, l) {
@@ -680,7 +703,7 @@
     if (ev.issues.length) w += '<div class="warn-box"><strong>חריגות מהכללים</strong> – אפשר ללחוץ ״שיבוץ״ שוב, להגדיל את הסטייה המותרת, או לתקן ידנית:<ul>' + ev.issues.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>";
     if (unmatched.length) w += '<div class="warn-box" style="margin-top:10px"><strong>בחירות שלא זוהו</strong> – הטקסט בקובץ לא תאם לאף קורס. בדקו את שמות הקורסים ב״קורסים וכללי שיבוץ״:<ul>' + unmatched.map(function (u) { return "<li>" + esc(state.lessons[u.lesson].title) + ": ״" + esc(u.text) + "״</li>"; }).join("") + "</ul></div>";
     var noPrefs = students.filter(function (s) { return s.prefs.some(function (p) { return !p.length; }); });
-    if (noPrefs.length) w += '<div class="warn-box" style="margin-top:10px"><strong>תלמידים בלי בחירות באחד השיעורים</strong> – שובצו למקומות הפנויים (מסומנים ב-?). אחרי שיבחרו, העלו את הקובץ המעודכן: ' + noPrefs.map(function (s) { return esc(s.name); }).join(", ") + "</div>";
+    if (noPrefs.length) w += '<div class="warn-box" style="margin-top:10px"><strong>תלמידים שעוד לא בחרו</strong> – לא שובצו, ונשאר להם מקום בקורסים. אחרי שיבחרו, העלו את הקובץ המעודכן: ' + noPrefs.map(function (s) { return esc(s.name); }).join(", ") + "</div>";
     $("warnings").innerHTML = w;
 
     var tabs = state.lessons.map(function (Ls, l) { return ["l" + l, Ls.title]; }).concat([["st", "לפי תלמיד"]]);
@@ -694,16 +717,25 @@
   function tile(big, lbl, cls) { return '<div class="tile ' + (cls || "") + '"><div class="big num">' + big + '</div><div class="lbl">' + lbl + "</div></div>"; }
 
   function renderLesson(l, ev, cls) {
-    var Ls = state.lessons[l], b = bounds()[l];
-    $("view").innerHTML = '<div class="courses">' + Ls.courses.map(function (c, k) {
+    var Ls = state.lessons[l], b = bounds()[l], prio = priorityOf(l);
+    var order = Ls.courses.map(function (c, k) { return k; }).sort(function (x, y) { return (prio[y] ? 1 : 0) - (prio[x] ? 1 : 0) || x - y; });
+    var html = order.map(function (k) {
+      var c = Ls.courses[k];
       var list = sortStudents(students.filter(function (s) { return state.assign[l][s.id] === k; }));
       var n = list.length, bad = n < b.min || n > b.max;
       var split = cls.map(function (cn, ci) { return esc(cn) + ": " + ev.clsCounts[l][k][ci]; }).join(" · ");
-      return '<article class="course"><header><h3>' + esc(c) + '</h3><span class="meta num' + (bad ? " bad" : "") + '">' + n + " תלמידים" + (split ? " · " + split : "") + "</span></header><ul>" +
+      var dem = [0, 0, 0];
+      students.forEach(function (s) { var i = s.prefs[l].indexOf(k); if (i >= 0 && i < 3) dem[i]++; });
+      return '<article class="course"><header><h3>' + esc(c) + (prio[k] ? ' <span class="pin">ממלאים ראשון</span>' : "") + '</h3><span class="meta num' + (bad ? " bad" : "") + '">' + n + " תלמידים" + (split ? " · " + split : "") + '</span>' +
+        '<span class="meta num">בחרו: ' + dem[0] + " כראשונה · " + dem[1] + " כשנייה · " + dem[2] + " כשלישית</span></header><ul>" +
         list.map(function (s) {
           return "<li>" + rankBadge(rankOf(s, l, k)) + '<span class="nm">' + esc(s.name) + "</span>" + (isLocked(l, s.id) ? '<span class="pin" title="שובץ ידנית">ידני</span>' : "") + clsBadge(s.cls, cls) + "</li>";
         }).join("") + "</ul></article>";
-    }).join("") + "</div>";
+    }).join("");
+    var waiting = sortStudents(students.filter(function (s) { return state.assign[l][s.id] < 0; }));
+    if (waiting.length) html += '<article class="course"><header><h3>עוד לא בחרו</h3><span class="meta num">' + waiting.length + " תלמידים – לא שובצו</span></header><ul>" +
+      waiting.map(function (s) { return '<li><span class="rk r4">?</span><span class="nm">' + esc(s.name) + "</span>" + clsBadge(s.cls, cls) + "</li>"; }).join("") + "</ul></article>";
+    $("view").innerHTML = '<div class="courses">' + html + "</div>";
   }
 
   function renderStudents(cls) {
@@ -720,9 +752,12 @@
       list.map(function (s) {
         return "<tr><td>" + esc(s.name) + "</td><td>" + clsBadge(s.cls, cls) + "</td>" + state.lessons.map(function (Ls, l) {
           var k = state.assign[l][s.id];
-          var opts = Ls.courses.map(function (c, j) {
+          if (!s.prefs[l].length) return '<td class="cell muted">' + rankBadge(4) + " עוד לא בחר/ה</td><td></td>";
+          var choices = s.prefs[l].slice();
+          if (k >= 0 && choices.indexOf(k) < 0) choices.push(k);
+          var opts = choices.map(function (j) {
             var r = rankOf(s, l, j);
-            return '<option value="' + j + '"' + (j === k ? " selected" : "") + ">" + esc(c) + (r < 3 ? " · בחירה " + (r + 1) : "") + "</option>";
+            return '<option value="' + j + '"' + (j === k ? " selected" : "") + ">" + (r < 3 ? "בחירה " + (r + 1) + " · " : "") + esc(Ls.courses[j]) + "</option>";
           }).join("");
           var prefs = s.prefs[l].map(function (j) { return esc(Ls.courses[j]); }).join(" ← ") || '<span class="muted">—</span>';
           return '<td class="cell">' + rankBadge(rankOf(s, l, k)) + ' <select data-l="' + l + '" data-id="' + s.id + '" aria-label="' + esc(Ls.title + " – " + s.name) + '">' + opts + "</select>" +
@@ -757,6 +792,7 @@
     $("optBalance").checked = state.opts.balance;
     $("optClsTol").value = state.opts.clsTol;
     $("optSizeTol").value = state.opts.sizeTol;
+    $("optPriority").value = state.opts.priority || "";
   }
   function readSettings() {
     [0, 1].forEach(function (l) {
@@ -767,6 +803,7 @@
     state.opts.balance = $("optBalance").checked;
     state.opts.clsTol = Math.max(0, parseInt($("optClsTol").value, 10) || 0);
     state.opts.sizeTol = Math.max(0, parseInt($("optSizeTol").value, 10) || 0);
+    state.opts.priority = $("optPriority").value;
     Array.prototype.forEach.call($("mapGrid").querySelectorAll("select"), function (sel) {
       state.mapping[sel.getAttribute("data-map")] = parseInt(sel.value, 10);
     });
@@ -864,7 +901,7 @@
   function save() {
     try {
       localStorage.setItem(STORE, JSON.stringify({
-        v: 2, headers: state.headers, rows: state.rows, mapping: state.mapping, isSample: state.isSample,
+        v: 3, headers: state.headers, rows: state.rows, mapping: state.mapping, isSample: state.isSample,
         lessons: state.lessons, opts: state.opts, assign: state.assign, locks: state.locks
       }));
     } catch (e) { /* storage unavailable */ }
@@ -873,7 +910,8 @@
     try {
       var d = JSON.parse(localStorage.getItem(STORE) || "null");
       if (!d || !d.rows || !d.rows.length) return false;
-      if (d.v !== 2 && d.opts) d.opts.clsTol = 0; // new default: strict class balance
+      if ((d.v || 0) < 2 && d.opts) d.opts.clsTol = 0; // new default: strict class balance
+      if ((d.v || 0) < 3) { d.assign = null; d.locks = [[], []]; if (d.opts) d.opts.priority = "דורית, שרי"; } // only-own-choices rule
       Object.assign(state, d);
       return true;
     } catch (e) { return false; }
@@ -888,7 +926,7 @@
       var r = [s.name, s.cls];
       state.lessons.forEach(function (Ls, l) {
         var k = state.assign[l][s.id], rk = rankOf(s, l, k);
-        r.push(Ls.courses[k], rk === 4 ? "עוד לא בחר/ה" : rk === 3 ? "לא מהבחירות" : "בחירה " + (rk + 1));
+        r.push(k >= 0 ? Ls.courses[k] : "", rk === 4 ? "עוד לא בחר/ה" : rk === 3 ? "לא מהבחירות" : "בחירה " + (rk + 1));
       });
       out.push(r);
     });
@@ -899,8 +937,11 @@
     var cols = Ls.courses.map(function (c, k) {
       return sortStudents(students.filter(function (s) { return state.assign[l][s.id] === k; })).map(function (s) { return s.name + (s.cls ? " (" + s.cls + ")" : ""); });
     });
+    var head = Ls.courses.slice();
+    var waiting = sortStudents(students.filter(function (s) { return state.assign[l][s.id] < 0; })).map(function (s) { return s.name + (s.cls ? " (" + s.cls + ")" : ""); });
+    if (waiting.length) { cols.push(waiting); head.push("עוד לא בחרו"); }
     var max = Math.max.apply(null, cols.map(function (c) { return c.length; }));
-    var out = [Ls.courses.slice()];
+    var out = [head];
     for (var i = 0; i < max; i++) out.push(cols.map(function (c) { return c[i] || ""; }));
     return out;
   }
