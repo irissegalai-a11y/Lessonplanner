@@ -286,7 +286,7 @@
     <div class="panel" style="margin-top:16px">
       <div class="row" style="justify-content:space-between">
         <h2>איך יצא</h2>
-        <div class="legend"><span><i class="b1"></i>בחירה 1</span><span><i class="b2"></i>בחירה 2</span><span><i class="b3"></i>בחירה 3</span><span><i class="b0"></i>לא מהבחירות</span><span><i class="b4"></i>עוד לא בחרו</span></div>
+        <div class="legend"><span><i class="b1"></i>בחירה 1</span><span><i class="b2"></i>בחירה 2</span><span><i class="b3"></i>בחירה 3</span><span><i class="b0"></i>אין מקום בבחירות</span><span><i class="b4"></i>עוד לא בחרו</span></div>
       </div>
       <div class="bars" id="bars" style="margin-top:10px"></div>
     </div>
@@ -503,6 +503,9 @@
   // 1st, 2nd, 3rd, not one of the choices (must never happen: outweighs every other rule), no choices given yet
   var RANK_COST = [0, 2, 5, 1000, 0];
   var W = 100;
+  var OVER = 20;       // a course above its maximum is never acceptable
+  var NO_ROOM = 300;   // leaving a student without a place (for a manual decision) is the last resort
+  // assignment values: course index, -1 = hasn't chosen yet, -2 = no room in any of their choices
 
   // Maximums use the whole grade (room is kept for students who haven't chosen yet);
   // minimums use only the students who already chose.
@@ -557,15 +560,16 @@
         for (var k = 0; k < M.K[l]; k++) ccnt[l].push(new Array(M.nC).fill(0));
         for (var s = 0; s < S; s++) {
           var p = allowed[s][l], v = -1;
-          if (locked[l][s] && state.assign && state.assign[l] && state.assign[l][s] >= 0) v = state.assign[l][s];
+          if (locked[l][s] && state.assign && state.assign[l] && state.assign[l][s] != null && state.assign[l][s] !== -1) v = state.assign[l][s];
           else if (p.length) v = Math.random() < 0.6 ? p[0] : p[Math.floor(Math.random() * p.length)];
           a[l][s] = v;
           if (v >= 0) { cnt[l][v]++; if (M.cIdx[s] >= 0) ccnt[l][v][M.cIdx[s]]++; }
+          else if (p.length) a[l][s] = v = -2;
         }
       }
       var sCost = function (s) {
         var tot = 0, cs = [], l, m;
-        for (l = 0; l < L; l++) { cs.push(a[l][s] >= 0 ? RANK_COST[rankOf(students[s], l, a[l][s])] : 0); tot += cs[l]; }
+        for (l = 0; l < L; l++) { cs.push(a[l][s] >= 0 ? RANK_COST[rankOf(students[s], l, a[l][s])] : a[l][s] === -2 ? NO_ROOM : 0); tot += cs[l]; }
         for (l = 0; l < L; l++) for (m = l + 1; m < L; m++) {
           if (a[l][s] < 0 || a[m][s] < 0) continue;
           tot += 0.3 * Math.min(cs[l], 5) * Math.min(cs[m], 5);
@@ -574,14 +578,16 @@
         return tot;
       };
       var cTerm = function (l, k) {
+        if (k < 0) return 0;
         var b = M.b[l], n = cnt[l][k];
-        var v = Math.max(0, b.min - n) * (M.prio[l][k] ? 4 : 1) + Math.max(0, n - b.max);
+        var v = Math.max(0, b.min - n) * (M.prio[l][k] ? 4 : 1) + Math.max(0, n - b.max) * OVER;
         if (state.opts.balance) for (var c = 0; c < M.nC; c++) { var x = ccnt[l][k][c]; v += Math.max(0, b.cmin[c] - x) + Math.max(0, x - b.cmax[c]); }
         return v * W;
       };
       var setA = function (l, s, k) {
-        var o = a[l][s]; cnt[l][o]--; cnt[l][k]++;
-        if (M.cIdx[s] >= 0) { ccnt[l][o][M.cIdx[s]]--; ccnt[l][k][M.cIdx[s]]++; }
+        var o = a[l][s], c = M.cIdx[s];
+        if (o >= 0) { cnt[l][o]--; if (c >= 0) ccnt[l][o][c]--; }
+        if (k >= 0) { cnt[l][k]++; if (c >= 0) ccnt[l][k][c]++; }
         a[l][s] = k;
       };
       var total = 0, ss, ll, kk;
@@ -595,10 +601,11 @@
         var l2 = Math.floor(Math.random() * L);
         var s1 = Math.floor(Math.random() * S);
         var k1 = a[l2][s1], before, after, delta;
-        if (k1 < 0 || locked[l2][s1]) continue;
+        if (k1 === -1 || locked[l2][s1]) continue;
         if (Math.random() < 0.5) {
           var opts1 = allowed[s1][l2];
-          var k2 = opts1[Math.floor(Math.random() * opts1.length)];
+          var pick = Math.floor(Math.random() * (opts1.length + 1));
+          var k2 = pick < opts1.length ? opts1[pick] : -2;
           if (k2 === k1) continue;
           before = cTerm(l2, k1) + cTerm(l2, k2) + sCost(s1);
           setA(l2, s1, k2);
@@ -608,8 +615,8 @@
         } else {
           var s2 = Math.floor(Math.random() * S);
           var kb = a[l2][s2];
-          if (kb < 0 || kb === k1 || locked[l2][s2]) continue;
-          if (allowed[s1][l2].indexOf(kb) < 0 || allowed[s2][l2].indexOf(k1) < 0) continue;
+          if (kb === -1 || kb === k1 || locked[l2][s2]) continue;
+          if ((kb >= 0 && allowed[s1][l2].indexOf(kb) < 0) || (k1 >= 0 && allowed[s2][l2].indexOf(k1) < 0)) continue;
           before = cTerm(l2, k1) + cTerm(l2, kb) + sCost(s1) + sCost(s2);
           setA(l2, s1, kb); setA(l2, s2, k1);
           after = cTerm(l2, k1) + cTerm(l2, kb) + sCost(s1) + sCost(s2);
@@ -631,6 +638,7 @@
       var r = [0, 0, 0, 0, 0], sz = new Array(Ls.courses.length).fill(0), cc = Ls.courses.map(function () { return cls.map(function () { return 0; }); });
       students.forEach(function (s) {
         var k = a[l][s.id], rk = rankOf(s, l, k); r[rk]++;
+        if (k === -2) res.issues.push(s.name + " – " + Ls.title + ": אין מקום באף אחת מהבחירות (" + s.prefs[l].map(function (j) { return Ls.courses[j]; }).join(", ") + "). צריך להחליט ידנית.");
         if (k < 0) return;
         sz[k]++;
         if (rk === 3) res.issues.push(s.name + " – " + Ls.title + ": שובץ/ה ל״" + Ls.courses[k] + "״, שלא היה באף אחת מהבחירות");
@@ -664,7 +672,7 @@
   function rankBadge(r) {
     if (r === 4) return '<span class="rk r4" title="עוד לא בחר/ה">?</span>';
     var lbl = r === 3 ? "✕" : String(r + 1);
-    var title = r === 3 ? "לא מהבחירות" : "בחירה " + (r + 1);
+    var title = r === 3 ? "לא באחת מהבחירות" : "בחירה " + (r + 1);
     return '<span class="rk r' + (r === 3 ? 0 : r + 1) + '" title="' + title + '">' + lbl + "</span>";
   }
   function clsBadge(c, cls) {
@@ -729,12 +737,15 @@
       var dem = [0, 0, 0];
       students.forEach(function (s) { var i = s.prefs[l].indexOf(k); if (i >= 0 && i < 3) dem[i]++; });
       return '<article class="course"><header><h3>' + esc(c) + (prio[k] ? ' <span class="pin">ממלאים ראשון</span>' : "") + '</h3><span class="meta num' + (bad ? " bad" : "") + '">' + n + " תלמידים" + (split ? " · " + split : "") + '</span>' +
-        '<span class="meta num">בחרו: ' + dem[0] + " כראשונה · " + dem[1] + " כשנייה · " + dem[2] + " כשלישית</span></header><ul>" +
+        '<span class="meta num">ביקוש (כמה בחרו בקורס): בחירה 1 – ' + dem[0] + " · בחירה 2 – " + dem[1] + " · בחירה 3 – " + dem[2] + "</span></header><ul>" +
         list.map(function (s) {
           return "<li>" + rankBadge(rankOf(s, l, k)) + '<span class="nm">' + esc(s.name) + "</span>" + (isLocked(l, s.id) ? '<span class="pin" title="שובץ ידנית">ידני</span>' : "") + clsBadge(s.cls, cls) + "</li>";
         }).join("") + "</ul></article>";
     }).join("");
-    var waiting = sortStudents(students.filter(function (s) { return state.assign[l][s.id] < 0; }));
+    var noRoom = sortStudents(students.filter(function (s) { return state.assign[l][s.id] === -2; }));
+    if (noRoom.length) html += '<article class="course"><header><h3>אין מקום בבחירות</h3><span class="meta bad num">' + noRoom.length + " תלמידים – להחליט ידנית בלשונית ״לפי תלמיד״</span></header><ul>" +
+      noRoom.map(function (s) { return '<li><span class="rk r0">!</span><span class="nm">' + esc(s.name) + '<br><span class="muted small">' + s.prefs[l].map(function (j) { return esc(Ls.courses[j]); }).join(" ← ") + "</span></span>" + clsBadge(s.cls, cls) + "</li>"; }).join("") + "</ul></article>";
+    var waiting = sortStudents(students.filter(function (s) { return state.assign[l][s.id] === -1; }));
     if (waiting.length) html += '<article class="course"><header><h3>עוד לא בחרו</h3><span class="meta num">' + waiting.length + " תלמידים – לא שובצו</span></header><ul>" +
       waiting.map(function (s) { return '<li><span class="rk r4">?</span><span class="nm">' + esc(s.name) + "</span>" + clsBadge(s.cls, cls) + "</li>"; }).join("") + "</ul></article>";
     $("view").innerHTML = '<div class="courses">' + html + "</div>";
@@ -757,10 +768,12 @@
           if (!s.prefs[l].length) return '<td class="cell muted">' + rankBadge(4) + " עוד לא בחר/ה</td><td></td>";
           var choices = s.prefs[l].slice();
           if (k >= 0 && choices.indexOf(k) < 0) choices.push(k);
+          var noRoomOpt = k === -2 ? '<option value="-2" selected>— אין מקום, לבחור —</option>' : "";
           var opts = choices.map(function (j) {
             var r = rankOf(s, l, j);
             return '<option value="' + j + '"' + (j === k ? " selected" : "") + ">" + (r < 3 ? "בחירה " + (r + 1) + " · " : "") + esc(Ls.courses[j]) + "</option>";
           }).join("");
+          opts = noRoomOpt + opts;
           var prefs = s.prefs[l].map(function (j) { return esc(Ls.courses[j]); }).join(" ← ") || '<span class="muted">—</span>';
           return '<td class="cell">' + rankBadge(rankOf(s, l, k)) + ' <select data-l="' + l + '" data-id="' + s.id + '" aria-label="' + esc(Ls.title + " – " + s.name) + '">' + opts + "</select>" +
             (isLocked(l, s.id) ? '<button type="button" class="unlock" data-unlock="' + l + ":" + s.id + '" title="החזרה לשיבוץ אוטומטי">ביטול ידני</button>' : "") +
@@ -931,7 +944,7 @@
       var r = [s.name, s.cls];
       state.lessons.forEach(function (Ls, l) {
         var k = state.assign[l][s.id], rk = rankOf(s, l, k);
-        r.push(k >= 0 ? Ls.courses[k] : "", rk === 4 ? "עוד לא בחר/ה" : rk === 3 ? "לא מהבחירות" : "בחירה " + (rk + 1));
+        r.push(k >= 0 ? Ls.courses[k] : "", rk === 4 ? "עוד לא בחר/ה" : k === -2 ? "אין מקום – להחליט" : rk === 3 ? "לא מהבחירות" : "בחירה " + (rk + 1));
       });
       out.push(r);
     });
@@ -943,7 +956,10 @@
       return sortStudents(students.filter(function (s) { return state.assign[l][s.id] === k; })).map(function (s) { return s.name + (s.cls ? " (" + s.cls + ")" : ""); });
     });
     var head = Ls.courses.slice();
-    var waiting = sortStudents(students.filter(function (s) { return state.assign[l][s.id] < 0; })).map(function (s) { return s.name + (s.cls ? " (" + s.cls + ")" : ""); });
+    var label = function (s) { return s.name + (s.cls ? " (" + s.cls + ")" : ""); };
+    var noRoom = sortStudents(students.filter(function (s) { return state.assign[l][s.id] === -2; })).map(label);
+    if (noRoom.length) { cols.push(noRoom); head.push("אין מקום – להחליט"); }
+    var waiting = sortStudents(students.filter(function (s) { return state.assign[l][s.id] === -1; })).map(label);
     if (waiting.length) { cols.push(waiting); head.push("עוד לא בחרו"); }
     var max = Math.max.apply(null, cols.map(function (c) { return c.length; }));
     var out = [head];
