@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>שיבוץ קורסי בחירה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Secular+One&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --ground: #eaf3fb;
+    --surface: #ffffff;
+    --surface-2: #f3f6fd;
+    --ink: #23264a;
+    --muted: #5d6388;
+    --line: #d5dcef;
+    --accent: #3448a8;
+    --accent-ink: #ffffff;
+    --accent-soft: #e2e7fa;
+    --r1: #1d8656;
+    --r2: #2f6fc6;
+    --r3: #b87a0a;
+    --r0: #c0392b;
+    --cls-a: #7646c4;
+    --cls-b: #0d7f82;
+    --warn-bg: #fff4dc;
+    --warn-ink: #7a5200;
+    --shadow: 0 4px 14px rgba(35, 38, 74, 0.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #13152a;
+      --surface: #1c1f3a;
+      --surface-2: #232748;
+      --ink: #e7e9fa;
+      --muted: #a2a7ca;
+      --line: #313660;
+      --accent: #8d9cff;
+      --accent-ink: #13152a;
+      --accent-soft: #272d5a;
+      --r1: #4cc98d;
+      --r2: #6ea8ff;
+      --r3: #f0b64a;
+      --r0: #ff7b6b;
+      --cls-a: #b995ff;
+      --cls-b: #4fd1d4;
+      --warn-bg: #3a2f14;
+      --warn-ink: #f5d48a;
+      --shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #13152a;
+    --surface: #1c1f3a;
+    --surface-2: #232748;
+    --ink: #e7e9fa;
+    --muted: #a2a7ca;
+    --line: #313660;
+    --accent: #8d9cff;
+    --accent-ink: #13152a;
+    --accent-soft: #272d5a;
+    --r1: #4cc98d;
+    --r2: #6ea8ff;
+    --r3: #f0b64a;
+    --r0: #ff7b6b;
+    --cls-a: #b995ff;
+    --cls-b: #4fd1d4;
+    --warn-bg: #3a2f14;
+    --warn-ink: #f5d48a;
+    --shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Assistant", "Segoe UI", "Arial Hebrew", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    direction: rtl;
+    text-align: right;
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 28px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  h1, h2, h3 { font-family: "Secular One", "Assistant", sans-serif; font-weight: 400; margin: 0; text-wrap: balance; }
+  h1 { font-size: 2.2rem; line-height: 1.15; }
+  h2 { font-size: 1.35rem; }
+  h3 { font-size: 1.1rem; }
+  .lede { color: var(--muted); font-size: 1.08rem; margin: 6px 0 0; max-width: 62ch; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  button, select, input, textarea { font-family: inherit; font-size: 1rem; color: var(--ink); }
+  button {
+    border: none; border-radius: 10px; padding: 10px 18px; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); font-weight: 700;
+    transition: transform .12s ease, filter .12s ease;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:active { transform: scale(0.97); }
+  button.ghost { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 2px var(--accent); }
+  button.quiet { background: var(--accent-soft); color: var(--accent); }
+  button:disabled { opacity: .5; cursor: progress; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  select, input[type="text"], input[type="number"], input[type="search"], textarea {
+    background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; padding: 7px 10px;
+  }
+
+  .panel { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .muted { color: var(--muted); }
+  .small { font-size: .9rem; }
+
+  /* Load area */
+  .load-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+  .drop {
+    border: 2px dashed var(--line); border-radius: 14px; padding: 22px; background: var(--surface-2);
+    display: flex; flex-direction: column; gap: 10px; align-items: flex-start; transition: border-color .15s, background .15s;
+  }
+  .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+  .format { font-size: .92rem; }
+  .format table { border-collapse: collapse; margin-top: 6px; }
+  .format td, .format th { border: 1px solid var(--line); padding: 3px 7px; white-space: nowrap; }
+  .format th { background: var(--surface-2); font-weight: 600; }
+  .scroll-x { overflow-x: auto; max-width: 100%; }
+  .banner {
+    background: var(--warn-bg); color: var(--warn-ink); border-radius: 10px; padding: 10px 14px; font-weight: 600;
+  }
+
+  details.panel > summary { cursor: pointer; font-family: "Secular One", sans-serif; font-size: 1.15rem; list-style: none; }
+  details.panel > summary::before { content: "◂ "; color: var(--accent); }
+  details.panel[open] > summary::before { content: "▾ "; }
+  details.panel[open] > summary { margin-bottom: 14px; }
+  .map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px 18px; }
+  .map-grid label { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: .95rem; }
+  .map-grid select { width: 100%; }
+  .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .settings-grid textarea { width: 100%; min-height: 150px; line-height: 1.7; resize: vertical; }
+  .opt { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .opt input[type="number"] { width: 64px; text-align: center; }
+
+  /* Summary */
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .tile { background: var(--surface); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .tile .big { font-family: "Secular One", sans-serif; font-size: 1.9rem; line-height: 1.1; }
+  .tile .lbl { color: var(--muted); font-size: .92rem; }
+  .tile.ok .big { color: var(--r1); }
+  .tile.bad .big { color: var(--r0); }
+  .bars { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+  .bar-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; align-items: center; }
+  .bar { display: flex; height: 24px; border-radius: 6px; overflow: hidden; background: var(--surface-2); }
+  .bar span { display: flex; align-items: center; justify-content: center; color: #fff; font-size: .82rem; font-weight: 700; min-width: 0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .9rem; color: var(--muted); }
+  .legend i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-inline-end: 5px; vertical-align: -1px; }
+  .b1 { background: var(--r1); } .b2 { background: var(--r2); } .b3 { background: var(--r3); } .b0 { background: var(--r0); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; background: var(--accent-soft); padding: 5px; border-radius: 12px; width: fit-content; max-width: 100%; }
+  .tabs button { background: transparent; color: var(--accent); padding: 8px 16px; }
+  .tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+
+  /* Course cards */
+  .courses { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; align-items: start; }
+  .course { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .course header { display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .course .meta { font-size: .88rem; color: var(--muted); }
+  .course .meta.bad { color: var(--r0); font-weight: 700; }
+  .course ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
+  .course li { display: flex; align-items: center; gap: 6px; font-size: .96rem; }
+  .course li .nm { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .rk { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 6px; color: #fff; font-size: .78rem; font-weight: 700; flex: none; }
+  .rk.r1 { background: var(--r1); } .rk.r2 { background: var(--r2); } .rk.r3 { background: var(--r3); } .rk.r0 { background: var(--r0); }
+  .cl { font-size: .78rem; font-weight: 700; padding: 0 6px; border-radius: 5px; border: 1.5px solid currentColor; flex: none; }
+  .cl.ca { color: var(--cls-a); } .cl.cb { color: var(--cls-b); } .cl.cx { color: var(--muted); }
+  .pin { font-size: .75rem; color: var(--accent); font-weight: 700; flex: none; }
+
+  /* Student table */
+  .tbl-tools { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; align-items: center; }
+  table.students { border-collapse: collapse; width: 100%; min-width: 640px; }
+  table.students th, table.students td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: right; vertical-align: middle; }
+  table.students th { font-size: .9rem; color: var(--muted); font-weight: 600; }
+  table.students td.cell { white-space: nowrap; }
+  table.students select { max-width: 230px; }
+  .unlock { background: none; color: var(--accent); padding: 2px 6px; font-size: .8rem; box-shadow: none; }
+
+  .warnings { display: flex; flex-direction: column; gap: 6px; }
+  .warnings li { color: var(--warn-ink); }
+  .warn-box { background: var(--warn-bg); border-radius: 12px; padding: 12px 16px; }
+  .warn-box ul { margin: 6px 0 0; padding-inline-start: 20px; }
+  .ok-box { color: var(--r1); font-weight: 700; }
+  .toast { position: fixed; inset-inline-start: 50%; transform: translateX(50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--ground); padding: 10px 18px; border-radius: 10px; font-weight: 600; z-index: 10; }
+
+  @media (max-width: 760px) {
+    .load-grid { grid-template-columns: 1fr; }
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+    h1 { font-size: 1.75rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>שיבוץ קורסי בחירה – שכבת ו׳</h1>
+    <p class="lede">העלו את קובץ הבחירות של התלמידים. המערכת משבצת כל תלמיד/ה לקורס אחד בכל שיעור: הקבוצות שוות בגודלן, ו1 ו-ו2 מעורבבות באופן שווה, אף אחד לא מקבל אותו קורס פעמיים, ומי שקיבל/ה בחירה נמוכה בשיעור אחד מקבל/ת עדיפות בשני.</p>
+  </header>
+
+  <section class="panel load-grid" aria-label="טעינת נתונים">
+    <div id="drop" class="drop">
+      <h2>קובץ הבחירות</h2>
+      <p class="muted small" style="margin:0">קובץ Excel ‏(xlsx) או CSV – למשל ייצוא מ-Google Forms. אפשר לגרור את הקובץ לכאן.</p>
+      <div class="row">
+        <button id="pickBtn" type="button">בחירת קובץ</button>
+        <input id="fileInput" type="file" accept=".xlsx,.xls,.csv,.tsv,.txt" hidden>
+        <button id="sampleBtn" type="button" class="ghost">טעינת נתוני דוגמה</button>
+      </div>
+      <details style="width:100%">
+        <summary class="small" style="cursor:pointer">או הדביקו טבלה מ-Excel</summary>
+        <textarea id="pasteArea" rows="5" style="width:100%;margin-top:8px" placeholder="העתיקו את הטבלה כולל שורת הכותרות והדביקו כאן"></textarea>
+        <button id="pasteBtn" type="button" class="quiet" style="margin-top:6px">טעינה מההדבקה</button>
+      </details>
+      <div id="fileStatus" class="small muted"></div>
+    </div>
+    <div class="format">
+      <h3>מבנה מומלץ לקובץ</h3>
+      <p class="muted" style="margin:4px 0">שורה לכל תלמיד/ה. שמות הקורסים יכולים להיות כתובים בקיצור (״אמנות״, ״פיננסי״, ״דורית״) – המערכת מזהה אותם. אם העמודות בקובץ שלכם שונות, תוכלו להתאים אותן ידנית אחרי הטעינה.</p>
+      <div class="scroll-x">
+        <table>
+          <tr><th>שם</th><th>כיתה</th><th>שיעור 6 – בחירה 1</th><th>…2</th><th>…3</th><th>שיעור 7 – בחירה 1</th><th>…2</th><th>…3</th></tr>
+          <tr><td>נועה כהן</td><td>ו1</td><td>אומנות</td><td>דורית</td><td>שרי</td><td>כתיבה</td><td>אומנות</td><td>חינוך פיננסי</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div id="sampleBanner" class="banner" hidden>מוצגים כרגע נתוני דוגמה (54 תלמידים מומצאים). העלו את הקובץ שלכם כדי לשבץ את התלמידים האמיתיים.</div>
+
+  <details id="mappingPanel" class="panel">
+    <summary>התאמת עמודות</summary>
+    <p class="muted small" style="margin-top:0">המערכת ניחשה איזו עמודה היא מה. אם משהו לא נכון – תקנו כאן ולחצו ״שיבוץ״.</p>
+    <div id="mapGrid" class="map-grid"></div>
+  </details>
+
+  <details id="settingsPanel" class="panel">
+    <summary>קורסים וכללי שיבוץ</summary>
+    <div class="settings-grid">
+      <label><strong>שיעור 6</strong> – קורס בכל שורה
+        <textarea id="courses0"></textarea>
+      </label>
+      <label><strong>שיעור 7</strong> – קורס בכל שורה
+        <textarea id="courses1"></textarea>
+      </label>
+      <div>
+        <strong>כללים</strong>
+        <div class="opt" style="margin-top:8px"><input id="optNoRepeat" type="checkbox" checked><label for="optNoRepeat">לא לשבץ לאותו קורס בשני השיעורים</label></div>
+        <div class="opt"><input id="optBalance" type="checkbox" checked><label for="optBalance">איזון בין ו1 ל-ו2 בכל קורס</label></div>
+        <div class="opt"><label for="optClsTol">סטייה מותרת באיזון הכיתות:</label><input id="optClsTol" type="number" min="0" max="10" value="1"></div>
+        <div class="opt"><label for="optSizeTol">סטייה מותרת בגודל קבוצה:</label><input id="optSizeTol" type="number" min="0" max="10" value="0"></div>
+        <p class="muted small" style="margin:4px 0 0">סטייה 0 בגודל = כל הקבוצות בשיעור שוות (הפרש של תלמיד/ה אחד/ת לכל היותר).</p>
+      </div>
+    </div>
+  </details>
+
+  <div class="row">
+    <button id="runBtn" type="button">שיבוץ</button>
+    <button id="clearLocksBtn" type="button" class="ghost" hidden>ביטול שינויים ידניים</button>
+    <span id="runStatus" class="muted"></span>
+  </div>
+
+  <section id="results" hidden>
+    <div class="tiles" id="tiles"></div>
+    <div class="panel" style="margin-top:16px">
+      <div class="row" style="justify-content:space-between">
+        <h2>איך יצא</h2>
+        <div class="legend"><span><i class="b1"></i>בחירה 1</span><span><i class="b2"></i>בחירה 2</span><span><i class="b3"></i>בחירה 3</span><span><i class="b0"></i>לא מהבחירות</span></div>
+      </div>
+      <div class="bars" id="bars" style="margin-top:10px"></div>
+    </div>
+    <div id="warnings" style="margin-top:16px"></div>
+
+    <div class="row" style="justify-content:space-between;margin-top:22px">
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="row">
+        <button id="copyBtn" type="button" class="quiet">העתקה ל-Excel</button>
+        <button id="xlsxBtn" type="button" class="quiet">הורדת קובץ Excel</button>
+      </div>
+    </div>
+    <div id="view" style="margin-top:14px"></div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DEFAULT_LESSONS = [
+    { title: "שיעור 6", courses: ["חינוך פיננסי", "חברים מעבר לים (הדס)", "אומנות", "דורית", "שרי"] },
+    { title: "שיעור 7", courses: ["חינוך פיננסי", "כתיבה (הדס)", "אומנות", "דורית", "שרי"] }
+  ];
+  var STORE = "courseAssign_v1";
+  var CHOICES = 3;
+
+  var state = {
+    headers: [], rows: [], mapping: {}, isSample: false,
+    lessons: clone(DEFAULT_LESSONS),
+    opts: { noRepeat: true, balance: true, clsTol: 1, sizeTol: 0 },
+    assign: null, locks: [[], []], tab: "l0", filterCls: "", search: ""
+  };
+  var students = [];   // built from rows + mapping
+  var unmatched = [];  // [{lesson, text}]
+
+  function $(id) { return document.getElementById(id); }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+
+  // ---------- course-name matching ----------
+  var STOP = { "של": 1, "עם": 1, "את": 1, "קורס": 1, "חוג": 1 };
+  function stripH(t) { return t.replace(/[֑-ׇ]/g, "").replace(/[׳״'"]/g, "").replace(/[וי]/g, ""); }
+  function tokens(s) {
+    return String(s).toLowerCase().replace(/[()\[\]\-–,.:;\/\\|]/g, " ").split(/\s+/)
+      .filter(function (t) { return t.length >= 2 && !STOP[t]; })
+      .map(stripH).filter(function (t) { return t.length >= 2; });
+  }
+  function norm(s) { return stripH(String(s).toLowerCase().replace(/[()\[\]\-–,.:;\/\\|\s]+/g, "")); }
+  function matchCourse(l, text) {
+    var t = String(text || "").trim();
+    if (!t) return -2; // empty
+    var courses = state.lessons[l].courses, n = norm(t), i;
+    for (i = 0; i < courses.length; i++) if (norm(courses[i]) === n) return i;
+    var tt = tokens(t), best = -1, bestScore = 0, tie = false;
+    for (i = 0; i < courses.length; i++) {
+      var ct = tokens(courses[i]), sc = 0;
+      tt.forEach(function (x) { if (ct.indexOf(x) >= 0) sc++; });
+      if (sc > bestScore) { bestScore = sc; best = i; tie = false; } else if (sc && sc === bestScore) tie = true;
+    }
+    return bestScore > 0 && !tie ? best : -1;
+  }
+  function normClass(c) {
+    var s = String(c || "").trim();
+    if (!s) return "";
+    var d = s.match(/\d+/);
+    return d ? "ו" + d[0] : s;
+  }
+
+  // ---------- column detection ----------
+  var ORD_WORD = { 6: "שישי", 7: "שביעי", 5: "חמישי", 8: "שמיני" };
+  var CHOICE_RX = [/ראשונ|(^|\D)1(\D|$)|עדיפות א|בחירה א/, /שני|(^|\D)2(\D|$)|עדיפות ב|בחירה ב/, /שליש|(^|\D)3(\D|$)|עדיפות ג|בחירה ג/];
+  var JUNK_RX = /חותמת|זמן|timestamp|mail|מייל|דוא/i;
+
+  function fieldList() {
+    var f = [{ key: "name", label: "שם תלמיד/ה" }, { key: "last", label: "שם משפחה (אם בעמודה נפרדת)", optional: true }, { key: "cls", label: "כיתה" }];
+    state.lessons.forEach(function (L, l) {
+      for (var i = 0; i < CHOICES; i++) f.push({ key: "l" + l + "c" + i, label: L.title + " – בחירה " + (i + 1), optional: i > 0 });
+    });
+    return f;
+  }
+
+  function autodetect(headers) {
+    var H = headers.map(function (h) { return String(h == null ? "" : h).trim(); });
+    var used = {}, m = {};
+    function take(pred) {
+      for (var i = 0; i < H.length; i++) if (!used[i] && H[i] && pred(H[i])) { used[i] = 1; return i; }
+      return -1;
+    }
+    H.forEach(function (h, i) { if (JUNK_RX.test(h)) used[i] = 1; });
+    m.cls = take(function (h) { return /כית/.test(h); });
+    m.last = take(function (h) { return /משפח/.test(h); });
+    m.name = take(function (h) { return /שם/.test(h) && !/קורס|בחיר|שיעור/.test(h); });
+    state.lessons.forEach(function (L, l) {
+      var num = (L.title.match(/\d+/) || [""])[0];
+      var ord = ORD_WORD[num] || "@@";
+      var lessonRx = new RegExp(ord + "|(^|\\D)" + (num || "@@") + "(\\D|$)");
+      for (var c = 0; c < CHOICES; c++) {
+        m["l" + l + "c" + c] = take(function (h) {
+          if (!lessonRx.test(h)) return false;
+          var rest = h.replace(new RegExp(ord, "g"), " ").replace(new RegExp("(^|\\D)" + (num || "@@") + "(?=\\D|$)", "g"), "$1 ");
+          return CHOICE_RX[c].test(rest);
+        });
+      }
+    });
+    // Positional fallback for anything still missing
+    var free = [];
+    H.forEach(function (h, i) { if (!used[i] && h) free.push(i); });
+    if (m.name < 0 && free.length) { m.name = free.shift(); }
+    if (m.cls < 0) { var ci = free.findIndex(function (i) { return /כית/.test(H[i]); }); if (ci >= 0) m.cls = free.splice(ci, 1)[0]; }
+    state.lessons.forEach(function (L, l) {
+      for (var c = 0; c < CHOICES; c++) if (m["l" + l + "c" + c] < 0 && free.length) m["l" + l + "c" + c] = free.shift();
+    });
+    return m;
+  }
+
+  // ---------- build students ----------
+  function cell(row, idx) { return idx == null || idx < 0 ? "" : String(row[idx] == null ? "" : row[idx]).trim(); }
+  function buildStudents() {
+    var m = state.mapping;
+    unmatched = [];
+    var seenUnmatched = {};
+    students = [];
+    state.rows.forEach(function (row) {
+      var name = cell(row, m.name);
+      var last = cell(row, m.last);
+      if (last) name = name + " " + last;
+      if (!name) return;
+      var s = { id: students.length, name: name, cls: normClass(cell(row, m.cls)), prefs: [], raw: [] };
+      state.lessons.forEach(function (L, l) {
+        var texts = [];
+        for (var c = 0; c < CHOICES; c++) texts.push(cell(row, m["l" + l + "c" + c]));
+        // single cell containing all choices separated by commas
+        if (texts[0] && !texts[1] && !texts[2] && /[,;]/.test(texts[0])) texts = texts[0].split(/[,;]/).map(function (x) { return x.trim(); });
+        var pr = [];
+        texts.slice(0, CHOICES).forEach(function (t) {
+          var k = matchCourse(l, t);
+          if (k >= 0) { if (pr.indexOf(k) < 0) pr.push(k); }
+          else if (k === -1) {
+            var key = l + "|" + t;
+            if (!seenUnmatched[key]) { seenUnmatched[key] = 1; unmatched.push({ lesson: l, text: t }); }
+          }
+        });
+        s.prefs.push(pr);
+        s.raw.push(texts);
+      });
+      students.push(s);
+    });
+  }
+
+  function classList() {
+    var set = {};
+    students.forEach(function (s) { if (s.cls) set[s.cls] = 1; });
+    return Object.keys(set).sort();
+  }
+
+  // ---------- solver (simulated annealing) ----------
+  var RANK_COST = [0, 2, 5, 25]; // 1st, 2nd, 3rd, not chosen
+  var W = 100;
+
+  function bounds() {
+    var S = students.length, cls = classList();
+    var nCls = cls.map(function (c) { return students.filter(function (s) { return s.cls === c; }).length; });
+    return state.lessons.map(function (L) {
+      var K = L.courses.length;
+      return {
+        min: Math.max(0, Math.floor(S / K) - state.opts.sizeTol), max: Math.ceil(S / K) + state.opts.sizeTol,
+        cmin: nCls.map(function (n) { return Math.max(0, Math.floor(n / K) - state.opts.clsTol); }),
+        cmax: nCls.map(function (n) { return Math.ceil(n / K) + state.opts.clsTol; })
+      };
+    });
+  }
+
+  function rankOf(s, l, k) { var i = s.prefs[l].indexOf(k); return i < 0 ? 3 : i; }
+
+  function makeModel() {
+    var S = students.length, L = state.lessons.length, cls = classList();
+    var cIdx = students.map(function (s) { return s.cls ? cls.indexOf(s.cls) : -1; });
+    var keys = state.lessons.map(function (Ls) { return Ls.courses.map(norm); });
+    return { S: S, L: L, K: state.lessons.map(function (x) { return x.courses.length; }), nC: cls.length, cIdx: cIdx, keys: keys, b: bounds() };
+  }
+
+  function solve() {
+    var M = makeModel(), S = M.S, L = M.L;
+    if (!S) return null;
+    var locked = state.locks.map(function (arr) { var o = {}; arr.forEach(function (id) { o[id] = 1; }); return o; });
+    var cost = students.map(function (s) {
+      return state.lessons.map(function (Ls, l) { var r = []; for (var k = 0; k < M.K[l]; k++) r.push(RANK_COST[rankOf(s, l, k)]); return r; });
+    });
+
+    var best = null, bestCost = Infinity;
+    for (var restart = 0; restart < 4; restart++) {
+      var a = [], cnt = [], ccnt = [];
+      for (var l = 0; l < L; l++) {
+        a.push(new Array(S)); cnt.push(new Array(M.K[l]).fill(0)); ccnt.push([]);
+        for (var k = 0; k < M.K[l]; k++) ccnt[l].push(new Array(M.nC).fill(0));
+        for (var s = 0; s < S; s++) {
+          var v;
+          if (locked[l] && locked[l][s] && state.assign) v = state.assign[l][s];
+          else { var p = students[s].prefs[l]; v = p.length && Math.random() < 0.7 ? p[Math.floor(Math.random() * p.length)] : Math.floor(Math.random() * M.K[l]); }
+          a[l][s] = v; cnt[l][v]++; if (M.cIdx[s] >= 0) ccnt[l][v][M.cIdx[s]]++;
+        }
+      }
+      var sCost = function (s) {
+        var tot = 0, cs = [], l, m;
+        for (l = 0; l < L; l++) { cs.push(cost[s][l][a[l][s]]); tot += cs[l]; }
+        for (l = 0; l < L; l++) for (m = l + 1; m < L; m++) {
+          tot += 0.3 * cs[l] * cs[m];
+          if (state.opts.noRepeat && M.keys[l][a[l][s]] === M.keys[m][a[m][s]]) tot += W;
+        }
+        return tot;
+      };
+      var cTerm = function (l, k) {
+        var b = M.b[l], n = cnt[l][k], v = Math.max(0, b.min - n) + Math.max(0, n - b.max);
+        if (state.opts.balance) for (var c = 0; c < M.nC; c++) { var x = ccnt[l][k][c]; v += Math.max(0, b.cmin[c] - x) + Math.max(0, x - b.cmax[c]); }
+        return v * W;
+      };
+      var setA = function (l, s, k) {
+        var o = a[l][s]; cnt[l][o]--; cnt[l][k]++;
+        if (M.cIdx[s] >= 0) { ccnt[l][o][M.cIdx[s]]--; ccnt[l][k][M.cIdx[s]]++; }
+        a[l][s] = k;
+      };
+      var total = 0, ss, ll, kk;
+      for (ss = 0; ss < S; ss++) total += sCost(ss);
+      for (ll = 0; ll < L; ll++) for (kk = 0; kk < M.K[ll]; kk++) total += cTerm(ll, kk);
+      var cur = total, localBest = cur, localA = a.map(function (r) { return r.slice(); });
+
+      var ITER = 120000, T0 = 30, T1 = 0.05;
+      for (var it = 0; it < ITER; it++) {
+        var T = T0 * Math.pow(T1 / T0, it / ITER);
+        var l2 = Math.floor(Math.random() * L);
+        var s1 = Math.floor(Math.random() * S);
+        if (locked[l2][s1]) continue;
+        var k1 = a[l2][s1], before, after, delta;
+        if (Math.random() < 0.5) {
+          var k2 = Math.floor(Math.random() * M.K[l2]);
+          if (k2 === k1) continue;
+          before = cTerm(l2, k1) + cTerm(l2, k2) + sCost(s1);
+          setA(l2, s1, k2);
+          after = cTerm(l2, k1) + cTerm(l2, k2) + sCost(s1);
+          delta = after - before;
+          if (delta <= 0 || Math.random() < Math.exp(-delta / T)) cur += delta; else setA(l2, s1, k1);
+        } else {
+          var s2 = Math.floor(Math.random() * S);
+          if (locked[l2][s2]) continue;
+          var kb = a[l2][s2];
+          if (kb === k1) continue;
+          before = cTerm(l2, k1) + cTerm(l2, kb) + sCost(s1) + sCost(s2);
+          setA(l2, s1, kb); setA(l2, s2, k1);
+          after = cTerm(l2, k1) + cTerm(l2, kb) + sCost(s1) + sCost(s2);
+          delta = after - before;
+          if (delta <= 0 || Math.random() < Math.exp(-delta / T)) cur += delta; else { setA(l2, s1, k1); setA(l2, s2, kb); }
+        }
+        if (cur < localBest - 1e-9) { localBest = cur; localA = a.map(function (r) { return r.slice(); }); }
+      }
+      if (localBest < bestCost) { bestCost = localBest; best = localA; }
+    }
+    return best;
+  }
+
+  // ---------- evaluation ----------
+  function evaluate() {
+    var a = state.assign, L = state.lessons.length, cls = classList(), b = bounds();
+    var res = { ranks: [], sizes: [], clsCounts: [], issues: [], bothTop2: 0, worst: 0 };
+    state.lessons.forEach(function (Ls, l) {
+      var r = [0, 0, 0, 0], sz = new Array(Ls.courses.length).fill(0), cc = Ls.courses.map(function () { return cls.map(function () { return 0; }); });
+      students.forEach(function (s) {
+        var k = a[l][s.id]; sz[k]++; r[rankOf(s, l, k)]++;
+        if (s.cls) cc[k][cls.indexOf(s.cls)]++;
+      });
+      res.ranks.push(r); res.sizes.push(sz); res.clsCounts.push(cc);
+      Ls.courses.forEach(function (c, k) {
+        if (sz[k] < b[l].min || sz[k] > b[l].max)
+          res.issues.push(Ls.title + ", " + c + ": " + sz[k] + " תלמידים (צריך " + (b[l].min === b[l].max ? b[l].min : b[l].min + "–" + b[l].max) + ")");
+        if (state.opts.balance) cls.forEach(function (cn, ci) {
+          if (cc[k][ci] < b[l].cmin[ci] || cc[k][ci] > b[l].cmax[ci])
+            res.issues.push(Ls.title + ", " + c + ": " + cc[k][ci] + " תלמידים מ-" + cn + " (צריך " + b[l].cmin[ci] + "–" + b[l].cmax[ci] + ")");
+        });
+      });
+    });
+    students.forEach(function (s) {
+      var rs = state.lessons.map(function (Ls, l) { return rankOf(s, l, a[l][s.id]); });
+      if (rs.every(function (r) { return r <= 1; })) res.bothTop2++;
+      if (rs.filter(function (r) { return r >= 2; }).length >= 2) res.worst++;
+      if (state.opts.noRepeat) {
+        for (var l = 0; l < L; l++) for (var m = l + 1; m < L; m++)
+          if (norm(state.lessons[l].courses[a[l][s.id]]) === norm(state.lessons[m].courses[a[m][s.id]]))
+            res.issues.push(s.name + " שובץ/ה ל״" + state.lessons[l].courses[a[l][s.id]] + "״ בשני השיעורים");
+      }
+    });
+    return res;
+  }
+
+  // ---------- rendering ----------
+  function rankBadge(r) {
+    var lbl = r === 3 ? "✕" : String(r + 1);
+    var title = r === 3 ? "לא מהבחירות" : "בחירה " + (r + 1);
+    return '<span class="rk r' + (r === 3 ? 0 : r + 1) + '" title="' + title + '">' + lbl + "</span>";
+  }
+  function clsBadge(c, cls) {
+    if (!c) return '<span class="cl cx">?</span>';
+    var i = cls.indexOf(c);
+    return '<span class="cl ' + (i === 0 ? "ca" : i === 1 ? "cb" : "cx") + '">' + esc(c) + "</span>";
+  }
+  function isLocked(l, id) { return state.locks[l].indexOf(id) >= 0; }
+  function sortStudents(list) {
+    return list.slice().sort(function (x, y) { return (x.cls || "").localeCompare(y.cls || "", "he") || x.name.localeCompare(y.name, "he"); });
+  }
+
+  function render() {
+    $("sampleBanner").hidden = !state.isSample;
+    $("clearLocksBtn").hidden = !state.locks.some(function (a) { return a.length; });
+    if (!state.assign || !students.length) { $("results").hidden = true; return; }
+    $("results").hidden = false;
+    var ev = evaluate(), S = students.length, cls = classList();
+    var totalFirst = ev.ranks.reduce(function (t, r) { return t + r[0]; }, 0);
+    var placements = S * state.lessons.length;
+    var noneCount = ev.ranks.reduce(function (t, r) { return t + r[3]; }, 0);
+
+    $("tiles").innerHTML =
+      tile(Math.round(100 * totalFirst / placements) + "%", "מהשיבוצים הם בחירה ראשונה") +
+      tile(ev.bothTop2 + "/" + S, "קיבלו בחירה 1 או 2 בכל השיעורים") +
+      tile(noneCount, "שיבוצים מחוץ לבחירות", noneCount ? "bad" : "ok") +
+      tile(ev.issues.length || "אין", ev.issues.length ? "חריגות מהכללים" : "חריגות מהכללים", ev.issues.length ? "bad" : "ok");
+
+    $("bars").innerHTML = state.lessons.map(function (Ls, l) {
+      var r = ev.ranks[l];
+      var seg = [[r[0], "b1"], [r[1], "b2"], [r[2], "b3"], [r[3], "b0"]].map(function (p) {
+        return p[0] ? '<span class="' + p[1] + ' num" style="width:' + (100 * p[0] / S) + '%">' + p[0] + "</span>" : "";
+      }).join("");
+      return '<div class="bar-row"><strong>' + esc(Ls.title) + '</strong><div class="bar">' + seg + "</div></div>";
+    }).join("");
+
+    var w = "";
+    if (ev.issues.length) w += '<div class="warn-box"><strong>חריגות מהכללים</strong> – אפשר ללחוץ ״שיבוץ״ שוב, להגדיל את הסטייה המותרת, או לתקן ידנית:<ul>' + ev.issues.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>";
+    if (unmatched.length) w += '<div class="warn-box" style="margin-top:10px"><strong>בחירות שלא זוהו</strong> – הטקסט בקובץ לא תאם לאף קורס. בדקו את שמות הקורסים ב״קורסים וכללי שיבוץ״:<ul>' + unmatched.map(function (u) { return "<li>" + esc(state.lessons[u.lesson].title) + ": ״" + esc(u.text) + "״</li>"; }).join("") + "</ul></div>";
+    var noPrefs = students.filter(function (s) { return s.prefs.some(function (p) { return !p.length; }); });
+    if (noPrefs.length) w += '<div class="warn-box" style="margin-top:10px"><strong>תלמידים בלי בחירות באחד השיעורים</strong> (שובצו לפי מקום פנוי): ' + noPrefs.map(function (s) { return esc(s.name); }).join(", ") + "</div>";
+    $("warnings").innerHTML = w;
+
+    var tabs = state.lessons.map(function (Ls, l) { return ["l" + l, Ls.title]; }).concat([["st", "לפי תלמיד"]]);
+    $("tabs").innerHTML = tabs.map(function (t) {
+      return '<button type="button" role="tab" data-tab="' + t[0] + '" aria-selected="' + (state.tab === t[0]) + '">' + esc(t[1]) + "</button>";
+    }).join("");
+
+    if (state.tab === "st") renderStudents(cls); else renderLesson(+state.tab.slice(1), ev, cls);
+  }
+
+  function tile(big, lbl, cls) { return '<div class="tile ' + (cls || "") + '"><div class="big num">' + big + '</div><div class="lbl">' + lbl + "</div></div>"; }
+
+  function renderLesson(l, ev, cls) {
+    var Ls = state.lessons[l], b = bounds()[l];
+    $("view").innerHTML = '<div class="courses">' + Ls.courses.map(function (c, k) {
+      var list = sortStudents(students.filter(function (s) { return state.assign[l][s.id] === k; }));
+      var n = list.length, bad = n < b.min || n > b.max;
+      var split = cls.map(function (cn, ci) { return esc(cn) + ": " + ev.clsCounts[l][k][ci]; }).join(" · ");
+      return '<article class="course"><header><h3>' + esc(c) + '</h3><span class="meta num' + (bad ? " bad" : "") + '">' + n + " תלמידים" + (split ? " · " + split : "") + "</span></header><ul>" +
+        list.map(function (s) {
+          return "<li>" + rankBadge(rankOf(s, l, k)) + '<span class="nm">' + esc(s.name) + "</span>" + (isLocked(l, s.id) ? '<span class="pin" title="שובץ ידנית">ידני</span>' : "") + clsBadge(s.cls, cls) + "</li>";
+        }).join("") + "</ul></article>";
+    }).join("") + "</div>";
+  }
+
+  function renderStudents(cls) {
+    var q = state.search.trim();
+    var list = sortStudents(students).filter(function (s) {
+      return (!state.filterCls || s.cls === state.filterCls) && (!q || s.name.indexOf(q) >= 0);
+    });
+    var html = '<div class="panel"><div class="tbl-tools">' +
+      '<label for="fCls">כיתה:</label><select id="fCls"><option value="">הכל</option>' + cls.map(function (c) { return '<option' + (c === state.filterCls ? " selected" : "") + ">" + esc(c) + "</option>"; }).join("") + "</select>" +
+      '<input id="fSearch" type="search" placeholder="חיפוש שם" value="' + esc(state.search) + '">' +
+      '<span class="muted small">שינוי קורס כאן נשמר כשיבוץ ידני, ונשאר גם כשמריצים ״שיבוץ״ שוב.</span></div>' +
+      '<div class="scroll-x"><table class="students"><thead><tr><th>שם</th><th>כיתה</th>' +
+      state.lessons.map(function (Ls) { return "<th>" + esc(Ls.title) + "</th><th>בחירות</th>"; }).join("") + "</tr></thead><tbody>" +
+      list.map(function (s) {
+        return "<tr><td>" + esc(s.name) + "</td><td>" + clsBadge(s.cls, cls) + "</td>" + state.lessons.map(function (Ls, l) {
+          var k = state.assign[l][s.id];
+          var opts = Ls.courses.map(function (c, j) {
+            var r = rankOf(s, l, j);
+            return '<option value="' + j + '"' + (j === k ? " selected" : "") + ">" + esc(c) + (r < 3 ? " · בחירה " + (r + 1) : "") + "</option>";
+          }).join("");
+          var prefs = s.prefs[l].map(function (j) { return esc(Ls.courses[j]); }).join(" ← ") || '<span class="muted">—</span>';
+          return '<td class="cell">' + rankBadge(rankOf(s, l, k)) + ' <select data-l="' + l + '" data-id="' + s.id + '" aria-label="' + esc(Ls.title + " – " + s.name) + '">' + opts + "</select>" +
+            (isLocked(l, s.id) ? '<button type="button" class="unlock" data-unlock="' + l + ":" + s.id + '" title="החזרה לשיבוץ אוטומטי">ביטול ידני</button>' : "") +
+            '</td><td class="small muted">' + prefs + "</td>";
+        }).join("") + "</tr>";
+      }).join("") + "</tbody></table></div></div>";
+    $("view").innerHTML = html;
+  }
+
+  // ---------- mapping / settings UI ----------
+  function renderMapping() {
+    var opts = '<option value="-1">— ללא —</option>' + state.headers.map(function (h, i) {
+      return '<option value="' + i + '">' + esc(h || "עמודה " + (i + 1)) + "</option>";
+    }).join("");
+    $("mapGrid").innerHTML = fieldList().map(function (f) {
+      return '<label>' + esc(f.label) + '<select data-map="' + f.key + '">' + opts + "</select></label>";
+    }).join("");
+    Array.prototype.forEach.call($("mapGrid").querySelectorAll("select"), function (sel) {
+      var v = state.mapping[sel.getAttribute("data-map")];
+      sel.value = v == null ? "-1" : String(v);
+    });
+  }
+  function renderSettings() {
+    $("courses0").value = state.lessons[0].courses.join("\n");
+    $("courses1").value = state.lessons[1].courses.join("\n");
+    $("optNoRepeat").checked = state.opts.noRepeat;
+    $("optBalance").checked = state.opts.balance;
+    $("optClsTol").value = state.opts.clsTol;
+    $("optSizeTol").value = state.opts.sizeTol;
+  }
+  function readSettings() {
+    [0, 1].forEach(function (l) {
+      var list = $("courses" + l).value.split(/\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+      if (list.length) state.lessons[l].courses = list;
+    });
+    state.opts.noRepeat = $("optNoRepeat").checked;
+    state.opts.balance = $("optBalance").checked;
+    state.opts.clsTol = Math.max(0, parseInt($("optClsTol").value, 10) || 0);
+    state.opts.sizeTol = Math.max(0, parseInt($("optSizeTol").value, 10) || 0);
+    Array.prototype.forEach.call($("mapGrid").querySelectorAll("select"), function (sel) {
+      state.mapping[sel.getAttribute("data-map")] = parseInt(sel.value, 10);
+    });
+  }
+
+  // ---------- data loading ----------
+  function loadTable(aoa, isSample, label) {
+    var rows = aoa.filter(function (r) { return r && r.some(function (c) { return String(c == null ? "" : c).trim(); }); });
+    if (rows.length < 2) { $("fileStatus").textContent = "לא נמצאו שורות בקובץ. ודאו שיש שורת כותרות ומתחתיה שורה לכל תלמיד/ה."; return; }
+    state.headers = rows[0].map(function (h) { return String(h == null ? "" : h).trim(); });
+    state.rows = rows.slice(1);
+    state.isSample = !!isSample;
+    state.mapping = autodetect(state.headers);
+    state.assign = null;
+    state.locks = state.lessons.map(function () { return []; });
+    renderMapping();
+    buildStudents();
+    $("fileStatus").textContent = (label ? label + " – " : "") + "נטענו " + students.length + " תלמידים.";
+    run();
+  }
+
+  function readFile(file) {
+    var reader = new FileReader();
+    var isText = /\.(csv|tsv|txt)$/i.test(file.name);
+    reader.onload = function (e) {
+      try {
+        var wb;
+        if (isText) {
+          var buf = new Uint8Array(e.target.result);
+          var text = new TextDecoder("utf-8").decode(buf);
+          if (text.indexOf("�") >= 0) text = new TextDecoder("windows-1255").decode(buf);
+          wb = XLSX.read(text.replace(/^﻿/, ""), { type: "string" });
+        } else {
+          wb = XLSX.read(e.target.result, { type: "array" });
+        }
+        var ws = wb.Sheets[wb.SheetNames[0]];
+        loadTable(XLSX.utils.sheet_to_json(ws, { header: 1, defval: "", raw: false }), false, file.name);
+      } catch (err) {
+        $("fileStatus").textContent = "לא הצלחתי לקרוא את הקובץ (" + err.message + "). נסו לשמור אותו כ-xlsx או להדביק את הטבלה.";
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function parsePasted(text) {
+    var lines = text.replace(/\r/g, "").split("\n");
+    var sep = text.indexOf("\t") >= 0 ? "\t" : ",";
+    return lines.map(function (l) { return l.split(sep); });
+  }
+
+  // ---------- sample data ----------
+  function sampleTable() {
+    var seed = 20260923;
+    function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+    var first = ["נועה", "איתי", "מאיה", "יונתן", "תמר", "אורי", "שירה", "דניאל", "רוני", "עומר", "הילה", "נדב", "יעל", "איתמר", "ליה", "גיא", "עדי", "אלון", "מיכל", "רועי", "אביגיל", "עידו", "נויה", "יואב", "טליה", "אריאל", "שקד",
+      "אלה", "בן", "הדר", "אדם", "מעיין", "נועם", "רותם", "אסף", "ליאור", "יהלי", "אגם", "עמית", "זוהר", "אביב", "שחר", "לביא", "ענבר", "תום", "גלי", "אופיר", "סהר", "ים", "קשת", "ארבל", "דור", "ניצן", "עלמה"];
+    var last = ["כהן", "לוי", "מזרחי", "פרץ", "ביטון", "אברהם", "פרידמן", "שפירא", "דהן", "אזולאי", "גולן", "כץ", "רוזן", "חדד", "מלכה", "סלע", "בר", "אוחיון"];
+    var W6 = [3, 2, 4, 2.5, 2], W7 = [3, 2.5, 4, 2, 2];
+    function pick3(courses, w) {
+      var idx = courses.map(function (_, i) { return i; }), out = [], ww = w.slice();
+      for (var n = 0; n < 3; n++) {
+        var tot = ww.reduce(function (t, x) { return t + x; }, 0), r = rnd() * tot, j = 0;
+        while (r > ww[j]) { r -= ww[j]; j++; }
+        out.push(courses[idx[j]]); idx.splice(j, 1); ww.splice(j, 1);
+      }
+      return out;
+    }
+    var c6 = ["חינוך פיננסי", "חברים מעבר לים", "אומנות", "דורית", "שרי"], c7 = ["חינוך פיננסי", "כתיבה", "אומנות", "דורית", "שרי"];
+    var rows = [["שם התלמיד/ה", "כיתה", "שיעור 6 – בחירה ראשונה", "שיעור 6 – בחירה שנייה", "שיעור 6 – בחירה שלישית", "שיעור 7 – בחירה ראשונה", "שיעור 7 – בחירה שנייה", "שיעור 7 – בחירה שלישית"]];
+    first.forEach(function (f, i) {
+      rows.push([f + " " + last[(i * 7) % last.length], i < 27 ? "ו1" : "ו2"].concat(pick3(c6, W6), pick3(c7, W7)));
+    });
+    return rows;
+  }
+
+  // ---------- run ----------
+  function run() {
+    readSettings();
+    buildStudents();
+    if (!students.length) { $("runStatus").textContent = "אין תלמידים לשבץ. בדקו את התאמת העמודות."; render(); return; }
+    // drop locks that no longer point to valid courses
+    state.locks = state.locks.map(function (arr, l) {
+      return arr.filter(function (id) { return state.assign && state.assign[l] && id < students.length && state.assign[l][id] < state.lessons[l].courses.length; });
+    });
+    $("runBtn").disabled = true;
+    $("runStatus").textContent = "משבץ…";
+    setTimeout(function () {
+      state.assign = solve();
+      $("runBtn").disabled = false;
+      $("runStatus").textContent = "שובצו " + students.length + " תלמידים. לחיצה נוספת על ״שיבוץ״ תנסה חלוקה חלופית.";
+      save(); render();
+    }, 30);
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORE, JSON.stringify({
+        headers: state.headers, rows: state.rows, mapping: state.mapping, isSample: state.isSample,
+        lessons: state.lessons, opts: state.opts, assign: state.assign, locks: state.locks
+      }));
+    } catch (e) { /* storage unavailable */ }
+  }
+  function restore() {
+    try {
+      var d = JSON.parse(localStorage.getItem(STORE) || "null");
+      if (!d || !d.rows || !d.rows.length) return false;
+      Object.assign(state, d);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  // ---------- export ----------
+  function studentAoa() {
+    var head = ["שם", "כיתה"];
+    state.lessons.forEach(function (Ls) { head.push(Ls.title, Ls.title + " – מקום בבחירות"); });
+    var out = [head];
+    sortStudents(students).forEach(function (s) {
+      var r = [s.name, s.cls];
+      state.lessons.forEach(function (Ls, l) {
+        var k = state.assign[l][s.id], rk = rankOf(s, l, k);
+        r.push(Ls.courses[k], rk === 3 ? "לא מהבחירות" : "בחירה " + (rk + 1));
+      });
+      out.push(r);
+    });
+    return out;
+  }
+  function lessonAoa(l) {
+    var Ls = state.lessons[l];
+    var cols = Ls.courses.map(function (c, k) {
+      return sortStudents(students.filter(function (s) { return state.assign[l][s.id] === k; })).map(function (s) { return s.name + (s.cls ? " (" + s.cls + ")" : ""); });
+    });
+    var max = Math.max.apply(null, cols.map(function (c) { return c.length; }));
+    var out = [Ls.courses.slice()];
+    for (var i = 0; i < max; i++) out.push(cols.map(function (c) { return c[i] || ""; }));
+    return out;
+  }
+  function toTsv(aoa) { return aoa.map(function (r) { return r.join("\t"); }).join("\n"); }
+
+  function toast(msg) {
+    var t = document.createElement("div");
+    t.className = "toast"; t.textContent = msg; t.setAttribute("role", "status");
+    document.body.appendChild(t);
+    setTimeout(function () { t.remove(); }, 2600);
+  }
+
+  function copyText(text) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      ta.remove();
+      toast(ok ? "הועתק – הדביקו ב-Excel" : "ההעתקה נחסמה בדפדפן הזה");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast("הועתק – הדביקו ב-Excel"); }, fallback);
+    } else fallback();
+  }
+
+  // ---------- events ----------
+  $("pickBtn").addEventListener("click", function () { $("fileInput").click(); });
+  $("fileInput").addEventListener("change", function (e) { if (e.target.files[0]) readFile(e.target.files[0]); e.target.value = ""; });
+  var drop = $("drop");
+  ["dragenter", "dragover"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function (e) { var f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) readFile(f); });
+  $("sampleBtn").addEventListener("click", function () { state.lessons = clone(DEFAULT_LESSONS); renderSettings(); loadTable(sampleTable(), true, "נתוני דוגמה"); });
+  $("pasteBtn").addEventListener("click", function () {
+    var t = $("pasteArea").value.trim();
+    if (!t) { $("fileStatus").textContent = "תיבת ההדבקה ריקה."; return; }
+    loadTable(parsePasted(t), false, "טבלה מודבקת");
+  });
+  $("runBtn").addEventListener("click", run);
+  $("clearLocksBtn").addEventListener("click", function () { state.locks = state.lessons.map(function () { return []; }); run(); });
+
+  $("tabs").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-tab]");
+    if (b) { state.tab = b.getAttribute("data-tab"); render(); }
+  });
+  $("view").addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.matches("select[data-l]")) {
+      var l = +t.getAttribute("data-l"), id = +t.getAttribute("data-id");
+      state.assign[l][id] = +t.value;
+      if (!isLocked(l, id)) state.locks[l].push(id);
+      save(); render();
+    } else if (t.id === "fCls") { state.filterCls = t.value; render(); }
+  });
+  $("view").addEventListener("input", function (e) {
+    if (e.target.id === "fSearch") {
+      state.search = e.target.value;
+      var pos = e.target.selectionStart;
+      render();
+      var inp = $("fSearch"); if (inp) { inp.focus(); inp.setSelectionRange(pos, pos); }
+    }
+  });
+  $("view").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-unlock]");
+    if (!b) return;
+    var p = b.getAttribute("data-unlock").split(":"), l = +p[0], id = +p[1];
+    state.locks[l] = state.locks[l].filter(function (x) { return x !== id; });
+    save(); render();
+  });
+  $("copyBtn").addEventListener("click", function () {
+    var parts = [toTsv(studentAoa())];
+    state.lessons.forEach(function (Ls, l) { parts.push(Ls.title + "\n" + toTsv(lessonAoa(l))); });
+    copyText(parts.join("\n\n"));
+  });
+  $("xlsxBtn").addEventListener("click", function () {
+    try {
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(studentAoa()), "לפי תלמיד");
+      state.lessons.forEach(function (Ls, l) { XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(lessonAoa(l)), Ls.title.slice(0, 31)); });
+      wb.Workbook = { Views: [{ RTL: true }] };
+      XLSX.writeFile(wb, "שיבוץ קורסים.xlsx");
+    } catch (err) { toast("ההורדה נחסמה כאן – השתמשו ב״העתקה ל-Excel״"); }
+  });
+
+  // ---------- boot ----------
+  if (restore()) {
+    renderSettings(); renderMapping(); buildStudents();
+    if (!state.assign || state.assign[0].length !== students.length) run(); else render();
+    $("fileStatus").textContent = "נטענו " + students.length + " תלמידים מהפעם הקודמת.";
+  } else {
+    renderSettings();
+    loadTable(sampleTable(), true, "נתוני דוגמה");
+  }
+})();
+</script>
+</body>
+</html>
