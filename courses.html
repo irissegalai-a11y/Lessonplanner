@@ -735,7 +735,7 @@
         if (isText) {
           var buf = new Uint8Array(e.target.result);
           var text = new TextDecoder("utf-8").decode(buf);
-          if (text.indexOf("�") >= 0) text = new TextDecoder("windows-1255").decode(buf);
+          if (text.indexOf("\uFFFD") >= 0) text = new TextDecoder("windows-1255").decode(buf);
           wb = XLSX.read(text.replace(/^﻿/, ""), { type: "string" });
         } else {
           wb = XLSX.read(e.target.result, { type: "array" });
