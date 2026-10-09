@@ -316,6 +316,26 @@
   .vcalc { font-family: "Courier New", monospace; font-size: 1.6rem; line-height: 1.4; background: #f7f8ff; border-radius: 10px; padding: 10px 20px; width: fit-content; margin: 8px auto; text-align: left; }
   .vcalc .z { color: #e0703a; font-weight: 700; }
 
+  .lvl { cursor: pointer; box-shadow: none; }
+  .lvl:hover { background: #fff8e0; transform: none; }
+  .lvlwrap { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .lvlpick { display: inline-flex; gap: 4px; }
+  .lvlpick button { background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: none; padding: 4px 10px; font-size: 0.9rem; }
+  .lvlpick button.sel { border-color: #e0a800; background: #fff8e0; }
+  .lvlnote { font-size: 0.9rem; color: var(--ok); font-weight: 600; }
+  .picker { max-width: 560px; margin-top: 8vh; padding: 18px; }
+  .lvlchoices { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+  .lvlchoice { background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: none; text-align: right; display: grid; grid-template-columns: auto 1fr; grid-template-areas: "s n" "s d" "s t"; column-gap: 12px; align-items: center; padding: 12px 16px; }
+  .lvlchoice:hover { background: #f3f5ff; border-color: var(--accent); }
+  .lvlchoice.cur { border-color: #e0a800; background: #fffaf0; }
+  .stars3 { grid-area: s; font-size: 1.2rem; min-width: 4.2em; text-align: center; }
+  .lname { grid-area: n; font-weight: 700; font-size: 1.15rem; }
+  .ldesc { grid-area: d; font-size: 0.95rem; color: var(--muted); }
+  .ltag { grid-area: t; font-size: 0.85rem; font-weight: 700; color: #8a6500; }
+  .lockrow { display: flex; gap: 8px; align-items: flex-start; font-size: 1rem; margin-top: 6px; }
+  .lockrow input { margin-top: 6px; }
+  .small { font-size: 0.9rem; }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
@@ -3361,13 +3381,85 @@ function home() {
     store.roundLen = Number(b.dataset.len); saveStore(store);
     app.querySelectorAll('.seg button').forEach(x => x.classList.toggle('sel', x === b));
   });
-  app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => startPractice(b.dataset.t));
+  app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => showLevelPicker(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
-  $('mix').onclick = () => startPractice('mix');
+  $('mix').onclick = () => showLevelPicker('mix');
   $('test').onclick = () => startTest(false);
   $('testfb').onclick = () => startTest(true);
   if (PRESET) $('presetGo').onclick = startPreset;
 }
+
+
+/* ---------- בחירת רמה ---------- */
+const LEVEL_DESC = {
+  place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'ספרות אחרי הנקודה העשרונית'],
+  ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן', 'בעיות מילוליות ותרגילים מאתגרים'],
+  frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
+  dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
+  geo: ['מלבן וריבוע, תכונות של צורות', 'מקבילית, משולש, מציאת צלע חסרה', 'מצולעים מורכבים והשוואות'],
+  data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
+  mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
+};
+const LEVEL_TAG = { 1: 'בסיסית', 2: 'בינונית', 3: 'מאתגרת' };
+
+function currentLevel(topicId) {
+  if (topicId === 'mix') {
+    const lv = TOPICS.map(t => (store.topics[t.id] || {}).level || 1);
+    return Math.max(1, Math.min(3, Math.round(lv.reduce((a, b) => a + b, 0) / lv.length)));
+  }
+  return (store.topics[topicId] || {}).level || 1;
+}
+
+function showLevelPicker(topicId) {
+  const t = TOPIC[topicId];
+  const title = t ? `${t.icon} ${t.name}` : '🔀 תרגול מעורב';
+  const known = topicId === 'mix' ? TOPICS.some(x => store.topics[x.id]) : !!store.topics[topicId];
+  const cur = currentLevel(topicId);
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = `<div class="modal picker" role="dialog" aria-modal="true">
+    <div class="mtop"><button class="ghost" data-close>✖ ביטול</button></div>
+    <h2 class="center">${title}</h2>
+    <p class="center">באיזו רמה תרצו להתחיל?</p>
+    <div class="lvlchoices">
+      ${[1, 2, 3].map(n => `<button class="lvlchoice${n === cur ? ' cur' : ''}" data-pick="${n}">
+        <span class="stars3">${'⭐'.repeat(n)}</span>
+        <span class="lname">${LEVEL_NAME[n]} – ${LEVEL_TAG[n]}</span>
+        <span class="ldesc">${LEVEL_DESC[topicId][n - 1]}</span>
+        ${n === cur ? `<span class="ltag">${known ? '📍 הרמה שלך' : '👍 מומלץ להתחלה'}</span>` : ''}
+      </button>`).join('')}
+    </div>
+    <label class="lockrow"><input type="checkbox" data-lock> 🔒 להישאר ברמה שבחרתי לאורך כל הסבב (בלי עלייה או ירידה אוטומטית)</label>
+    <p class="muted center small">בלי הסימון – האפליקציה תעלה אתכם רמה כשתצליחו, ותוריד כשיהיה קשה.</p>
+  </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  ov.querySelector('[data-close]').onclick = close;
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  ov.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => {
+    const level = Number(b.dataset.pick), lock = ov.querySelector('[data-lock]').checked;
+    close();
+    if (TOPIC[topicId]) { tstat(topicId).level = level; saveStore(store); }
+    startPractice(topicId, { level, fixed: lock });
+  });
+  ov.querySelector('[data-pick="' + cur + '"]').focus();
+}
+
+function bindLevelBadge() {
+  const btn = $('lvlBtn');
+  if (!btn) return;
+  btn.onclick = () => $('lvlPick').classList.toggle('hidden');
+  app.querySelectorAll('#lvlPick [data-lv]').forEach(b => b.onclick = () => {
+    const n = Number(b.dataset.lv);
+    state.level = n; state.run = 0;
+    if (TOPIC[state.topicId]) { tstat(state.topicId).level = n; saveStore(store); }
+    btn.innerHTML = levelBadgeText();
+    app.querySelectorAll('#lvlPick [data-lv]').forEach(x => x.classList.toggle('sel', x === b));
+    $('lvlPick').classList.add('hidden');
+    $('lvlNote').textContent = `✔ מהשאלה הבאה: ${LEVEL_NAME[n]}`;
+  });
+}
+const levelBadgeText = () => `${state.fixed ? '🔒 ' : ''}${LEVEL_NAME[state.level]} ${'⭐'.repeat(state.level)} ▾`;
 
 function startPreset() {
   const p = PRESET;
@@ -3469,7 +3561,7 @@ function renderQ() {
     </div>
     <div class="progress"><div style="width:${state.i / total * 100}%"></div></div>
     ${practice ? `<div class="statusrow">
-      ${showLevel ? `<span class="lvl">${LEVEL_NAME[state.level]} ${'⭐'.repeat(state.level)}</span>` : '<span></span>'}
+      ${showLevel ? `<span class="lvlwrap"><button class="lvl" id="lvlBtn" title="שינוי רמה" aria-label="שינוי רמה">${levelBadgeText()}</button><span class="lvlpick hidden" id="lvlPick">${[1, 2, 3].map(n => `<button class="${n === state.level ? 'sel' : ''}" data-lv="${n}">${'⭐'.repeat(n)} ${LEVEL_NAME[n]}</button>`).join('')}</span><span class="lvlnote" id="lvlNote"></span></span>` : '<span></span>'}
       <span class="streak">${state.streak >= 2 ? `🔥 ${state.streak} ברצף!` : ''}</span>
     </div>` : ''}
     ${tips}
@@ -3494,6 +3586,7 @@ function renderQ() {
     </div>`;
 
   $('fontBtn').onclick = cycleFont;
+  bindLevelBadge();
   $('quit').onclick = () => { if (confirm('לצאת לתפריט הראשי? ההתקדמות בסבב הזה לא תישמר.')) home(); };
   if ($('speakBtn')) $('speakBtn').onclick = () => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.join('. ') : ''));
   if ($('go')) $('go').onclick = submit;
