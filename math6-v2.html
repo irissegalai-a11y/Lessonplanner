@@ -225,11 +225,48 @@
   a.btnlink { display: inline-block; text-decoration: none; padding: 12px 22px; border-radius: 12px; border: 2px solid var(--accent); color: var(--accent); font-size: 1.1rem; }
   .howto { line-height: 2.1; padding-right: 22px; }
 
+  .topic.soon { opacity: 0.5; cursor: default; border-top-color: #c9cfdf; }
+  .topic.soon:hover { transform: none; background: var(--card); }
+  .dots { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .dot { width: 36px; height: 36px; padding: 0; border-radius: 50%; background: #fff; color: var(--muted); border: 2px solid var(--line); box-shadow: none; font-size: 0.95rem; }
+  .dot.ok { border-color: var(--ok); color: var(--ok); background: var(--ok-bg); }
+  .dot.cur { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .ltitle { margin: 0; font-size: 1.6rem; }
+  .lbody { font-size: 1.2rem; line-height: 2.1; }
+  .lbody p { margin: 6px 0 10px; }
+  .rule { background: #f5f0ff; border-right: 5px solid #8a5cd1; border-radius: 10px; padding: 8px 14px; margin: 10px 0; }
+  .rule.big { font-size: 1.35rem; text-align: center; border-right: none; border: 2px solid #8a5cd1; }
+  .explain { background: var(--ok-bg); border-radius: 10px; padding: 8px 14px; margin: 10px 0; }
+  .lsteps { padding-right: 24px; margin: 8px 0; }
+  .lbtns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 8px 0; }
+  .lbtns button { font-size: 1rem; padding: 10px 16px; }
+  .live { text-align: center; font-size: 1.15rem; }
+  .recap { list-style: none; padding: 0; line-height: 2.3; font-size: 1.2rem; }
+  .ltry { margin-top: 18px; border-top: 2px dashed var(--line); padding-top: 14px; }
+  .ltryhead { font-weight: 700; color: #e0703a; font-size: 1.2rem; margin-bottom: 4px; }
+  .lnav { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .lend { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hchart { max-width: 440px; margin: 34px auto 8px; direction: rtl; }
+  .hplot { position: relative; height: 180px; display: flex; align-items: flex-end; justify-content: space-around; gap: 8px; border-bottom: 2px solid var(--ink); padding: 0 8px 0 84px; }
+  .hbar { width: 46px; background: #8a5cd1; border-radius: 6px 6px 0 0; transition: height 0.9s ease; position: relative; }
+  .hbar span { position: absolute; top: -26px; left: -10px; right: -10px; text-align: center; font-weight: 700; font-size: 1rem; }
+  .hbar.miss { background: repeating-linear-gradient(45deg, #f1ebff, #f1ebff 6px, #fff 6px, #fff 12px); border: 2px dashed #8a5cd1; border-bottom: none; }
+  .hmean { position: absolute; left: 0; right: 0; border-top: 3px dashed #e0703a; transition: bottom 0.9s ease; pointer-events: none; }
+  .hmean span { position: absolute; left: 0; top: -13px; color: #c4511a; font-weight: 700; font-size: 0.9rem; background: rgba(255,255,255,0.85); padding: 0 4px; border-radius: 4px; }
+  .hlabels { display: flex; justify-content: space-around; gap: 8px; padding: 4px 8px 0 84px; font-size: 0.9rem; color: var(--muted); }
+  .hlabels div { width: 46px; text-align: center; }
+  button.linkish { background: #f5f0ff; color: #6b3fb8; border: 2px solid #c9b3f0; box-shadow: none; font-size: 1rem; padding: 6px 14px; margin-top: 8px; }
+  .overlay { position: fixed; inset: 0; background: rgba(35, 38, 74, 0.55); z-index: 50; overflow-y: auto; padding: 20px 12px; }
+  .modal { max-width: 820px; margin: 0 auto; background: var(--bg); border-radius: 18px; padding: 14px; }
+  .mtop { display: flex; justify-content: flex-start; margin-bottom: 4px; }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
     .qtext { font-size: 1.15rem; }
     .grow { grid-template-columns: 1fr; gap: 2px; }
+    .hbar, .hlabels div { width: 34px; }
+    .lbody { font-size: 1.1rem; }
     input.ans { width: 140px; }
   }
 
@@ -1487,7 +1524,7 @@ function genBarRead(kk) {
     exp: `${M(vals.join(' + ') + ' = ' + sum)}`
   };
   return {
-    type: 'num', unit: ds.noun, text: intro + 'מהו <b>הממוצע</b> של הערכים בדיאגרמה?', fig, ans: sum / vals.length,
+    type: 'num', unit: ds.noun, text: intro + 'מהו <b>הממוצע</b> של הערכים בדיאגרמה?', fig, ans: sum / vals.length, learn: { lesson: 'mean', card: 1 },
     traps: [{ v: sum, m: 'זה הסכום. כדי למצוא ממוצע צריך עוד לחלק במספר הערכים.' }],
     steps: [{ p: `מה הסכום של כל הערכים? ${M(vals.join(' + ') + ' =')}`, a: sum }, { p: `כמה עמודות יש בדיאגרמה?`, a: vals.length }, { p: `ממוצע = סכום : מספר הערכים: ${M(`${sum} : ${vals.length} =`)}`, a: sum / vals.length }],
     hint: 'ממוצע = סכום כל הערכים : מספר הערכים.',
@@ -1544,17 +1581,20 @@ function genBakery(kk) {
     exp: `${M(sold.join(' + ') + ' = ' + tot)}`
   };
 }
-function genMeanList() {
-  const name = pick(['שירה', 'אורי', 'תמר', 'אלון', 'הילה']);
+const NAMES = ['שירה', 'אורי', 'תמר', 'אלון', 'הילה', 'נועם', 'מאיה'];
+
+function genMeanList(kind) {
+  const name = pick(NAMES);
   const n = R(3, 5);
+  const k = kind || R(1, 2);
   for (;;) {
     const vals = Array.from({ length: n }, () => R(14, 20) * 5);
     const sum = vals.reduce((a, b) => a + b, 0);
     if (sum % n) continue;
-    if (Math.random() < 0.55) return {
+    if (k === 1) return {
       type: 'num',
       text: `אלה הציונים של ${name} במבחנים: ${M(vals.join(' ,  '))}.<br>מהו <b>הממוצע</b> של הציונים?`,
-      ans: sum / n,
+      ans: sum / n, learn: { lesson: 'mean', card: 1 },
       traps: [{ v: sum, m: 'זה הסכום. כדי למצוא ממוצע צריך עוד לחלק במספר המבחנים.' }],
       steps: [{ p: `מה הסכום של כל הציונים? ${M(vals.join(' + ') + ' =')}`, a: sum }, { p: `בכמה מבחנים נבחן/ה ${name}?`, a: n }, { p: M(`${sum} : ${n} =`), a: sum / n }],
       hint: 'ממוצע = סכום הציונים : מספר המבחנים.',
@@ -1566,12 +1606,86 @@ function genMeanList() {
     return {
       type: 'num',
       text: `${name} נבחן/ה ב-${n} מבחנים. הממוצע של כל הציונים הוא ${target}.<br>הציונים ב-${n - 1} המבחנים הראשונים: ${M(known.join(' ,  '))}.<br>מה הציון במבחן האחרון?`,
-      ans: missing,
+      ans: missing, learn: { lesson: 'mean', card: 5 },
+      traps: missing !== target ? [{ v: target, m: `הממוצע הוא לא הציון החסר. קודם חשבו את הסכום של כל ${n} הציונים: ${target} × ${n}.` }].concat(
+        [{ v: ks, m: 'זה הסכום של הציונים הידועים. כמה חסר עד הסכום של כולם?' }, { v: sum, m: 'זה הסכום של כל הציונים. כמה מזה חסר?' }])
+        : [{ v: ks, m: 'זה הסכום של הציונים הידועים. כמה חסר עד הסכום של כולם?' }, { v: sum, m: 'זה הסכום של כל הציונים. כמה מזה חסר?' }],
       steps: [{ p: `מה צריך להיות הסכום של כל ${n} הציונים? ${M(`${target} × ${n} =`)}`, a: sum },
         { p: `מה הסכום של הציונים הידועים? ${M(known.join(' + ') + ' =')}`, a: ks },
         { p: `כמה חסר? ${M(`${sum} - ${ks} =`)}`, a: missing }],
       hint: `מה צריך להיות הסכום של כל ${n} הציונים כדי שהממוצע יהיה ${target}?`,
       exp: `סכום כל הציונים: ${M(`${target} × ${n} = ${sum}`)}. סכום הידועים: ${M(ks)}. ${M(`${sum} - ${ks} = ${missing}`)}`
+    };
+  }
+}
+
+function genMeanChange(kind) {
+  const name = pick(NAMES), n = R(3, 6), k = kind || R(1, 3);
+  const up = k === 1 ? true : k === 2 ? false : Math.random() < 0.5;
+  const per = R(1, 4), change = n * per;
+  const mean = up ? R(13, 18) * 5 : R(14, 19) * 5;
+  const sum = mean * n, newSum = up ? sum + change : sum - change, newMean = newSum / n;
+  const verb = up ? 'עלה' : 'ירד';
+  const intro = `${name} נבחן/ה ב-${n} מבחנים, והממוצע של הציונים הוא ${mean}.<br>המורה בדקה שוב מבחן אחד, והציון בו <b>${verb} ב-${change} נקודות</b>.<br>`;
+  const learn = { lesson: 'mean', card: up ? 2 : 3 };
+  if (k === 3) return {
+    type: 'num', text: intro + `<b>בכמה נקודות ${verb} הממוצע?</b>`, ans: per, learn,
+    traps: [{ v: change, m: `הציון ${verb} ב-${change}, אבל השינוי "מתחלק" בין כל ${n} המבחנים – הממוצע משתנה פחות!` }],
+    steps: [{ p: `השינוי מתחלק בין כל ${n} המבחנים: ${M(`${change} : ${n} =`)}`, a: per }],
+    hint: 'השינוי בממוצע = השינוי בציון : מספר הציונים.',
+    exp: `${M(`${change} : ${n} = ${per}`)}. הממוצע ${verb} ב-${per} נקודות.`
+  };
+  return {
+    type: 'num', text: intro + '<b>מהו הממוצע החדש?</b>', ans: newMean, learn,
+    traps: [{ v: up ? mean + change : mean - change, m: `הממוצע לא ${up ? 'עולה' : 'יורד'} ב-${change}! השינוי מתחלק בין כל ${n} המבחנים.` },
+      { v: mean, m: 'הסכום של הציונים השתנה, ולכן גם הממוצע משתנה!' },
+      { v: up ? mean - per : mean + per, m: `שימו לב לכיוון: הציון ${verb}, אז גם הממוצע ${up ? 'עולה' : 'יורד'}.` },
+      { v: per, m: `${per} זה בכמה הממוצע ${verb}. מה הממוצע החדש?` }],
+    steps: [{ p: `מה היה סכום הציונים? ${M(`${mean} × ${n} =`)}`, a: sum },
+      { p: `הציון ${verb} ב-${change}, אז הסכום החדש: ${M(`${sum} ${up ? '+' : '-'} ${change} =`)}`, a: newSum },
+      { p: `הממוצע החדש: ${M(`${newSum} : ${n} =`)}`, a: newMean }],
+    hint: 'מה היה הסכום? מה הסכום עכשיו? או בקיצור: השינוי בממוצע = השינוי בציון : מספר הציונים.',
+    exp: `בקיצור: ${M(`${change} : ${n} = ${per}`)}, והממוצע ${verb} ב-${per}: ${M(`${mean} ${up ? '+' : '-'} ${per} = ${newMean}`)}. (או: סכום חדש ${M(fmt(newSum))}, ו-${M(`${newSum} : ${n} = ${newMean}`)})`
+  };
+}
+
+function genMeanAdd() {
+  const name = pick(NAMES), n = R(3, 5), mean = R(14, 18) * 5;
+  const rel = R(0, 2); // 0 גבוה מהממוצע, 1 נמוך, 2 שווה
+  const v = rel === 2 ? mean : rel === 0 ? Math.min(100, mean + R(1, 3) * 5) : mean - R(1, 3) * 5;
+  const opts = ['הממוצע יעלה', 'הממוצע ירד', 'הממוצע לא ישתנה'];
+  const correct = opts[rel];
+  const newMean = (mean * n + v) / (n + 1);
+  const q = choiceQ({
+    text: `הממוצע של ${n} הציונים של ${name} הוא ${mean}.<br>${name} נבחן/ה במבחן נוסף וקיבל/ה ${v}.<br><b>מה יקרה לממוצע של כל הציונים?</b>`,
+    hint: 'השוו את הציון החדש לממוצע: האם הוא גבוה ממנו, נמוך ממנו או שווה לו?',
+    exp: `הציון החדש (${v}) ${rel === 0 ? 'גבוה מהממוצע – הוא "מושך" את הממוצע למעלה' : rel === 1 ? 'נמוך מהממוצע – הוא "מושך" את הממוצע למטה' : 'שווה לממוצע – ולכן הממוצע לא משתנה'}.${Number.isInteger(newMean) ? ` הממוצע החדש: ${M(`(${mean * n} + ${v}) : ${n + 1} = ${newMean}`)}` : ''}`
+  }, correct, opts.filter(o => o !== correct), true);
+  q.learn = { lesson: 'mean', card: 4 };
+  if (rel === 1) q.traps = [{ c: opts[0], m: `${v} הוא ציון טוב – אבל הוא <b>נמוך מהממוצע</b> (${mean}), ולכן הוא מוריד את הממוצע.` }];
+  if (rel === 0) q.traps = [{ c: opts[2], m: 'ציון חדש שגבוה מהממוצע משנה אותו – הוא מעלה אותו.' }];
+  if (rel === 2) q.traps = [{ c: opts[0], m: `הציון החדש שווה בדיוק לממוצע (${mean}). האם הוא "מושך" למעלה או למטה?` }];
+  return q;
+}
+
+function genMeanTarget() {
+  const name = pick(NAMES);
+  for (;;) {
+    const n = R(2, 4), mean = R(14, 18) * 5, d = R(1, 4), target = mean + d;
+    const need = target * (n + 1) - mean * n;
+    if (need > 100) continue;
+    return {
+      type: 'num',
+      text: `${name} נבחן/ה ב-${n} מבחנים, והממוצע של הציונים הוא ${mean}.<br><b>כמה ${name} צריך/ה לקבל במבחן הבא, כדי שהממוצע של כל ${n + 1} המבחנים יהיה ${target}?</b>`,
+      ans: need, learn: { lesson: 'mean', card: 6 },
+      traps: [{ v: target, m: `${target} הוא הממוצע שרוצים – אבל ציון ${target} לא יספיק כדי "למשוך" למעלה גם את כל הציונים הקודמים. חשבו בעזרת הסכומים.` },
+        { v: target * (n + 1), m: 'זה הסכום שצריך להגיע אליו. כמה מזה כבר יש?' },
+        { v: mean + d, m: 'חשבו בעזרת הסכומים: כמה יש עכשיו, וכמה צריך.' }].filter((t, i, arr) => arr.findIndex(x => x.v === t.v) === i),
+      steps: [{ p: `מה סכום הציונים עכשיו? ${M(`${mean} × ${n} =`)}`, a: mean * n },
+        { p: `מה צריך להיות הסכום של ${n + 1} מבחנים, כדי שהממוצע יהיה ${target}? ${M(`${target} × ${n + 1} =`)}`, a: target * (n + 1) },
+        { p: `כמה חסר? ${M(`${target * (n + 1)} - ${mean * n} =`)}`, a: need }],
+      hint: `סכום עכשיו: ${mean} × ${n}. סכום שצריך: ${target} × ${n + 1}. ההפרש הוא הציון שצריך.`,
+      exp: `סכום עכשיו: ${M(`${mean} × ${n} = ${mean * n}`)}. סכום שצריך: ${M(`${target} × ${n + 1} = ${target * (n + 1)}`)}. ${M(`${target * (n + 1)} - ${mean * n} = ${need}`)}`
     };
   }
 }
@@ -1634,10 +1748,10 @@ const TOPICS = [
     desc: 'קריאת דיאגרמות, הפרשים, סכום וממוצע',
     levels: {
       1: [() => genBarRead(0), () => genBarRead(1)],
-      2: [() => genBarRead(2), () => genBarRead(3), () => genBakery()],
-      3: [() => genBarRead(4), genMeanList, () => genBakery()]
+      2: [() => genBarRead(2), () => genBarRead(3), () => genBakery(), () => genMeanList(1)],
+      3: [() => genBarRead(4), () => genMeanList(2), () => genMeanChange(), genMeanAdd, genMeanTarget, () => genBakery()]
     },
-    tips: ['קוראים את הכותרת, את הצירים ואת המקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.', 'ממוצע = סכום הערכים : מספר הערכים.']
+    tips: ['קוראים את הכותרת, את הצירים ואת המקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.', 'ממוצע = סכום הערכים : מספר הערכים.', 'ציון אחד משתנה ← הממוצע משתנה ב: השינוי : מספר הציונים.', 'איבר חסר: (ממוצע × מספר הערכים) פחות סכום הידועים.']
   }
 ];
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
@@ -1667,6 +1781,356 @@ function buildTest() {
 }
 
 /* =========================================================
+   לימוד – כרטיסיות הדרכה
+   ========================================================= */
+// דיאגרמת עמודות פשוטה (HTML) עם קו ממוצע, לכרטיסיות
+function barsHTML(vals, labels, max, mean, missing) {
+  return `<div class="hchart">
+    <div class="hplot">
+      ${vals.map((v, i) => `<div class="hbar${i === missing ? ' miss' : ''}" style="height:${v / max * 100}%"><span>${i === missing ? '?' : fmt(v)}</span></div>`).join('')}
+      <div class="hmean${mean == null ? ' hidden' : ''}" style="bottom:${(mean || 0) / max * 100}%"><span>ממוצע ${mean == null ? '' : fmt(mean)}</span></div>
+    </div>
+    <div class="hlabels">${labels.map(l => `<div>${l}</div>`).join('')}</div>
+  </div>`;
+}
+function setBars(root, vals, max, mean) {
+  root.querySelectorAll('.hbar').forEach((b, i) => {
+    b.style.height = vals[i] / max * 100 + '%';
+    b.classList.remove('miss');
+    b.querySelector('span').textContent = fmt(vals[i]);
+  });
+  const ml = root.querySelector('.hmean');
+  if (mean != null) {
+    ml.classList.remove('hidden');
+    ml.style.bottom = mean / max * 100 + '%';
+    ml.querySelector('span').textContent = 'ממוצע ' + fmt(mean);
+  }
+}
+const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+const reveal = root => root.querySelectorAll('.reveal').forEach(r => r.classList.remove('hidden'));
+
+const LESSONS = {
+  mean: {
+    id: 'mean', name: 'ממוצע', icon: '⚖️', color: '#8a5cd1', topic: 'data',
+    desc: 'מה זה ממוצע, איך מחשבים, מה קורה כשציון משתנה, ואיבר חסר',
+    practice: [() => genMeanList(1), () => genBarRead(4), () => genMeanChange(1), () => genMeanChange(2), genMeanAdd, () => genMeanList(2), genMeanTarget, () => genMeanChange(3)],
+    cards: [
+      {
+        title: 'מה זה ממוצע?',
+        html: `<p>לדנה יש 2 סוכריות, ליואב 7 ולמאיה 6.<br>הם מחליטים <b>לחלק את כל הסוכריות שווה בשווה</b>. כמה סוכריות יקבל כל אחד?</p>
+          <div class="chartwrap">${barsHTML([2, 7, 6], ['דנה', 'יואב', 'מאיה'], 8)}</div>
+          <div class="lbtns"><button class="secondary" data-act="share">⚖️ חלקו שווה בשווה</button></div>
+          <div class="reveal hidden explain">יש בסך הכול ${M('2 + 7 + 6 = 15')} סוכריות, ו-3 ילדים.<br>${M('15 : 3 = 5')} – כל אחד מקבל 5. <b>5 הוא הממוצע.</b></div>
+          <div class="rule">💡 <b>ממוצע</b> = כמה היה לכל אחד, אם היינו מחלקים הכול שווה בשווה.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="share"]').onclick = () => { setBars(root, [5, 5, 5], 8, 5); reveal(root); };
+        },
+        try: {
+          type: 'num', q: 'לשלושה ילדים יש 4, 9 ו-5 גולות. הם מחלקים את הגולות שווה בשווה. כמה גולות יהיו לכל אחד?', ans: 6,
+          hint: 'כמה גולות יש בסך הכול? בין כמה ילדים מחלקים?',
+          exp: `${M('4 + 9 + 5 = 18')}, ו-${M('18 : 3 = 6')}`,
+          traps: [{ v: 18, m: 'זה מספר הגולות של כולם יחד. עכשיו חלקו בין 3 הילדים.' }]
+        }
+      },
+      {
+        title: 'איך מחשבים ממוצע?',
+        html: `<div class="rule big">ממוצע = <b>סכום כל הערכים</b> : <b>מספר הערכים</b></div>
+          <p>הציונים של תמר: 80, 95, 70, 75</p>
+          <ol class="lsteps">
+            <li>מחברים את כל הציונים: ${M('80 + 95 + 70 + 75 = 320')}</li>
+            <li>סופרים כמה ציונים יש: <b>4</b></li>
+            <li>מחלקים: ${M('320 : 4 = 80')} ← <b>הממוצע הוא 80</b></li>
+          </ol>
+          <div class="chartwrap">${barsHTML([80, 95, 70, 75], ['מבחן 1', 'מבחן 2', 'מבחן 3', 'מבחן 4'], 100)}</div>
+          <div class="lbtns"><button class="secondary" data-act="show">📏 הראו את הממוצע על הדיאגרמה</button></div>
+          <div class="reveal hidden explain">רואים? חלק מהעמודות מעל קו הממוצע וחלק מתחתיו – הממוצע נמצא "באמצע".</div>
+          <div class="rule">⚠️ גם <b>0</b> הוא ערך! הוא לא מוסיף לסכום, אבל <b>כן נספר</b> במספר הערכים.</div>
+          <div class="rule">✔ בדיקה: הממוצע תמיד נמצא בין הערך הקטן ביותר לערך הגדול ביותר.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="show"]').onclick = () => { setBars(root, [80, 95, 70, 75], 100, 80); reveal(root); };
+        },
+        try: {
+          type: 'num', q: `מה הממוצע של המספרים: 6, 0, 9, 5?`, ans: 5,
+          hint: 'חברו את כל המספרים, וחלקו במספר הערכים. כמה ערכים יש כאן?',
+          exp: `${M('6 + 0 + 9 + 5 = 20')}, ויש 4 מספרים: ${M('20 : 4 = 5')}`,
+          traps: [{ v: 20 / 3, m: 'שכחתם לספור את ה-0! יש כאן 4 מספרים.' }, { v: 20, m: 'זה הסכום. עכשיו חלקו במספר הערכים.' }]
+        }
+      },
+      {
+        title: 'מה קורה לממוצע כשציון עולה?',
+        html: `<p>לנועה 4 ציונים: 70, 80, 90, 60. הסכום הוא 300, והממוצע ${M('300 : 4 = 75')}.</p>
+          <p>לחצו על הכפתורים ושנו את <b>הציון האחרון</b>. שימו לב מה קורה לסכום ולממוצע:</p>
+          <div class="chartwrap">${barsHTML([70, 80, 90, 60], ['מבחן 1', 'מבחן 2', 'מבחן 3', 'מבחן 4'], 100, 75)}</div>
+          <div class="lbtns"><button class="secondary" data-act="up">⬆ הציון האחרון עולה ב-4</button><button class="secondary" data-act="down">⬇ יורד ב-4</button></div>
+          <div class="live" data-live>סכום: <b>300</b> · ממוצע: <b>75</b></div>
+          <div class="reveal hidden explain">כל 4 נקודות שמוסיפים לציון אחד ← הסכום עולה ב-4 ← הממוצע עולה ב-1 (כי ${M('4 : 4 = 1')}).</div>
+          <div class="rule">💡 כשציון אחד עולה, הממוצע עולה ב: <b>(כמה הציון עלה) : (מספר הציונים)</b>.<br>הממוצע עולה <b>פחות</b> מהציון – כי העלייה "מתחלקת" בין כל הציונים.</div>`,
+        setup(root) {
+          const vals = [70, 80, 90, 60];
+          const upd = d => {
+            vals[3] = Math.max(0, Math.min(100, vals[3] + d));
+            const s = vals.reduce((a, b) => a + b, 0);
+            setBars(root, vals, 100, s / 4);
+            root.querySelector('[data-live]').innerHTML = `הציון האחרון: <b>${vals[3]}</b> · סכום: <b>${s}</b> · ממוצע: <b>${fmt(s / 4)}</b>`;
+            reveal(root);
+          };
+          root.querySelector('[data-act="up"]').onclick = () => upd(4);
+          root.querySelector('[data-act="down"]').onclick = () => upd(-4);
+        },
+        try: {
+          type: 'num', q: 'הממוצע של 5 ציונים הוא 80. ציון אחד <b>עלה</b> ב-10 נקודות. מה הממוצע החדש?', ans: 82,
+          hint: `בכמה עולה הממוצע? ${M('10 : 5 = ?')}`,
+          exp: `${M('10 : 5 = 2')}, ולכן הממוצע עולה ב-2: ${M('80 + 2 = 82')}. (או: סכום ישן 400, סכום חדש 410, ${M('410 : 5 = 82')})`,
+          traps: [{ v: 90, m: 'הממוצע לא עולה ב-10! העלייה מתחלקת בין כל 5 הציונים.' }, { v: 2, m: '2 זה בכמה הממוצע עלה. מה הממוצע החדש?' }]
+        }
+      },
+      {
+        title: 'ומה קורה כשציון יורד?',
+        html: `<p>לאורי 3 ציונים: 95, 90, 85. הסכום 270, והממוצע ${M('270 : 3 = 90')}.</p>
+          <div class="chartwrap">${barsHTML([95, 90, 85], ['מבחן 1', 'מבחן 2', 'מבחן 3'], 100, 90)}</div>
+          <div class="lbtns"><button class="secondary" data-act="drop">📉 הציון הראשון יורד ב-15</button></div>
+          <div class="reveal hidden explain">הציון ירד מ-95 ל-80. הסכום ירד ב-15 (מ-270 ל-255), והממוצע: ${M('255 : 3 = 85')}.<br>בקיצור: ${M('15 : 3 = 5')} – הממוצע ירד ב-5.</div>
+          <div class="rule">💡 אותו כלל בדיוק: כשציון יורד, הממוצע יורד ב: <b>(כמה הציון ירד) : (מספר הציונים)</b>.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="drop"]').onclick = () => { setBars(root, [80, 90, 85], 100, 85); reveal(root); };
+        },
+        try: {
+          type: 'num', q: 'הממוצע של 4 ציונים הוא 85. ציון אחד <b>ירד</b> ב-12 נקודות. מה הממוצע החדש?', ans: 82,
+          hint: `בכמה יורד הממוצע? ${M('12 : 4 = ?')}`,
+          exp: `${M('12 : 4 = 3')}, ולכן הממוצע יורד ב-3: ${M('85 - 3 = 82')}`,
+          traps: [{ v: 73, m: 'הממוצע לא יורד ב-12! הירידה מתחלקת בין כל 4 הציונים.' }, { v: 88, m: 'הציון ירד – אז גם הממוצע יורד, לא עולה.' }, { v: 3, m: '3 זה בכמה הממוצע ירד. מה הממוצע החדש?' }]
+        }
+      },
+      {
+        title: 'מוסיפים ציון חדש – מה יקרה לממוצע?',
+        html: `<p>לשירה 4 ציונים: 90, 70, 85, 75. הממוצע הוא 80.<br>נסו להוסיף ציון חמישי, וראו מה קורה לממוצע:</p>
+          <div class="chartwrap" data-chart>${barsHTML([90, 70, 85, 75], ['1', '2', '3', '4'], 100, 80)}</div>
+          <div class="lbtns"><button class="secondary" data-add="95">➕ ציון 95</button><button class="secondary" data-add="60">➕ ציון 60</button><button class="secondary" data-add="80">➕ ציון 80</button><button class="ghost" data-add="0">↩ התחלה</button></div>
+          <div class="live" data-live>הממוצע עכשיו: <b>80</b></div>
+          <div class="rule">💡 ציון חדש <b>גבוה</b> מהממוצע ← הממוצע <b>עולה</b>.<br>ציון חדש <b>נמוך</b> מהממוצע ← הממוצע <b>יורד</b>.<br>ציון חדש <b>שווה</b> לממוצע ← הממוצע <b>לא משתנה</b>.</div>
+          <div class="rule">⚠️ גם ציון טוב (למשל 75) <b>מוריד</b> את הממוצע, אם הממוצע גבוה ממנו!</div>`,
+        setup(root) {
+          const base = [90, 70, 85, 75];
+          root.querySelectorAll('[data-add]').forEach(b => b.onclick = () => {
+            const v = Number(b.dataset.add);
+            const vals = v ? base.concat(v) : base;
+            const m = avg(vals);
+            root.querySelector('[data-chart]').innerHTML = barsHTML(vals, vals.map((_, i) => String(i + 1)), 100, m);
+            root.querySelector('[data-live]').innerHTML = v
+              ? `הוספנו ${v}. הממוצע היה 80, ועכשיו <b>${fmt(m)}</b> – ${m > 80 ? '⬆ עלה' : m < 80 ? '⬇ ירד' : '= לא השתנה'}`
+              : 'הממוצע עכשיו: <b>80</b>';
+          });
+        },
+        try: {
+          type: 'choice', q: 'הממוצע של 4 ציונים הוא 88. נוסף ציון חמישי: <b>85</b>. מה יקרה לממוצע?',
+          choices: ['הממוצע יעלה', 'הממוצע ירד', 'הממוצע לא ישתנה'], ans: 1,
+          hint: 'האם 85 גבוה מהממוצע (88) או נמוך ממנו?',
+          exp: '85 נמוך מהממוצע 88, ולכן הוא "מושך" את הממוצע למטה – הממוצע יורד.',
+          traps: [{ c: 'הממוצע יעלה', m: '85 הוא ציון טוב – אבל הוא נמוך מהממוצע 88, ולכן מוריד אותו.' }]
+        }
+      },
+      {
+        title: 'איבר חסר: הממוצע ידוע – מה חסר?',
+        html: `<p>לתלמיד 3 ציונים, והממוצע שלהם <b>85</b>. שני ציונים ידועים: 80 ו-90. <b>מה הציון השלישי?</b></p>
+          <div class="chartwrap">${barsHTML([80, 90, 60], ['מבחן 1', 'מבחן 2', 'מבחן 3'], 100, 85, 2)}</div>
+          <ol class="lsteps">
+            <li>אם הממוצע 85 ויש 3 ציונים – הסכום של כולם: ${M('85 × 3 = 255')}</li>
+            <li>הסכום של הציונים הידועים: ${M('80 + 90 = 170')}</li>
+            <li>מה שחסר: ${M('255 - 170 = 85')}</li>
+          </ol>
+          <div class="lbtns"><button class="secondary" data-act="fill">🔍 גלו את הציון החסר</button></div>
+          <div class="rule">💡 <b>סכום = ממוצע × מספר הערכים.</b><br>מהסכום מורידים את מה שידוע – ומקבלים את מה שחסר.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="fill"]').onclick = () => setBars(root, [80, 90, 85], 100, 85);
+        },
+        try: {
+          type: 'num', q: `הממוצע של 4 מספרים הוא 7. שלושה מהם: 5, 9, 6. מה המספר הרביעי?`, ans: 8,
+          hint: `קודם חשבו את הסכום של כל 4 המספרים: ${M('7 × 4')}.`,
+          exp: `סכום כולם: ${M('7 × 4 = 28')}. סכום הידועים: ${M('5 + 9 + 6 = 20')}. חסר: ${M('28 - 20 = 8')}`,
+          traps: [{ v: 7, m: 'הממוצע הוא לא המספר החסר. קודם חשבו את הסכום של כל 4 המספרים: 7 × 4.' }, { v: 20, m: 'זה הסכום של שלושת המספרים הידועים. כמה חסר עד הסכום של כולם?' }, { v: 28, m: 'זה הסכום של כל 4 המספרים. כמה מזה חסר?' }]
+        }
+      },
+      {
+        title: 'כמה צריך לקבל כדי להגיע לממוצע?',
+        html: `<p>לאורי 3 ציונים, והממוצע שלהם <b>80</b>.<br><b>כמה הוא צריך לקבל במבחן הרביעי, כדי שהממוצע יעלה ל-82?</b></p>
+          <ol class="lsteps">
+            <li>הסכום עכשיו: ${M('80 × 3 = 240')}</li>
+            <li>הסכום שצריך, עם 4 מבחנים: ${M('82 × 4 = 328')}</li>
+            <li>מה שחסר: ${M('328 - 240 = 88')} ← <b>צריך לקבל 88</b></li>
+          </ol>
+          <div class="rule">💡 שימו לב: כדי שהממוצע יעלה ל-82, הציון החדש צריך להיות <b>גבוה מ-82</b> – הוא צריך "למשוך" למעלה גם את כל הציונים הקודמים.</div>`,
+        try: {
+          type: 'num', q: 'הממוצע של 2 ציונים הוא 70. כמה צריך לקבל בציון השלישי, כדי שהממוצע של 3 הציונים יהיה 75?', ans: 85,
+          hint: `סכום עכשיו: ${M('70 × 2')}. סכום שצריך: ${M('75 × 3')}.`,
+          exp: `סכום עכשיו: ${M('70 × 2 = 140')}. סכום שצריך: ${M('75 × 3 = 225')}. ${M('225 - 140 = 85')}`,
+          traps: [{ v: 75, m: '75 הוא הממוצע שרוצים – אבל ציון 75 לא יספיק כדי למשוך את כל הממוצע למעלה. חשבו בעזרת הסכומים.' }, { v: 225, m: 'זה הסכום שצריך. כמה מזה כבר יש (70 × 2)?' }, { v: 80, m: 'חשבו בעזרת הסכומים: 75 × 3 פחות 70 × 2.' }]
+        }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+            <li>⚖️ <b>ממוצע</b> = מה היה לכל אחד אם מחלקים שווה בשווה.</li>
+            <li>🧮 <b>ממוצע = סכום : מספר הערכים.</b> (גם 0 נספר!)</li>
+            <li>🔁 <b>סכום = ממוצע × מספר הערכים.</b></li>
+            <li>⬆⬇ ציון אחד משתנה ← הממוצע משתנה ב: <b>השינוי : מספר הציונים</b>.</li>
+            <li>➕ ציון חדש גבוה מהממוצע ← הממוצע עולה; נמוך ← יורד; שווה ← לא משתנה.</li>
+            <li>❓ <b>איבר חסר:</b> סכום כולם (ממוצע × מספר) פחות סכום הידועים.</li>
+          </ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות הממוצע 🎉</b></p>`
+      }
+    ]
+  }
+};
+const LESSON_SOON = [
+  { icon: '🔢', name: 'סדר פעולות חשבון' },
+  { icon: '🍕', name: 'שברים' },
+  { icon: '📐', name: 'שטח והיקף' }
+];
+
+function learnedSet(id) {
+  store.learned = store.learned || {};
+  return new Set(store.learned[id] || []);
+}
+function markLearned(id, k) {
+  const s = learnedSet(id);
+  if (s.has(k)) return;
+  s.add(k);
+  store.learned[id] = [...s];
+  saveStore(store);
+}
+
+let lessonView = null;
+
+function startLesson(id, k = 0) {
+  state = null;
+  if (canSpeak) speechSynthesis.cancel();
+  lessonView = { id, k, modal: false, box: app };
+  renderLesson();
+}
+
+function openLessonModal(id, k) {
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = '<div class="modal" role="dialog" aria-modal="true"><div class="mtop"><button class="ghost" data-close>✖ חזרה לשאלה</button></div><div class="lessonbox"></div></div>';
+  document.body.appendChild(ov);
+  const close = () => { ov.remove(); lessonView = null; if (canSpeak) speechSynthesis.cancel(); };
+  ov.querySelector('[data-close]').onclick = close;
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  lessonView = { id, k, modal: true, box: ov.querySelector('.lessonbox'), close };
+  renderLesson();
+}
+
+function renderLesson() {
+  const lv = lessonView, L = LESSONS[lv.id], c = L.cards[lv.k], N = L.cards.length;
+  const learned = learnedSet(lv.id);
+  if (!c.try) markLearned(lv.id, lv.k);
+  const last = lv.k === N - 1;
+  lv.tries = 0; lv.done = false;
+  const tr = c.try;
+  lv.box.innerHTML = `
+    ${lv.modal ? '' : `<div class="topbar">
+      <span class="title">📚 ${L.name}</span>
+      <span>כרטיסייה ${lv.k + 1} מתוך ${N}</span>
+      <span><button class="ghost" data-font>א+</button><button class="ghost" data-home>✖ יציאה</button></span>
+    </div>`}
+    <div class="dots">${L.cards.map((_, i) => `<button class="dot${i === lv.k ? ' cur' : ''}${learned.has(i) ? ' ok' : ''}" data-go="${i}" aria-label="כרטיסייה ${i + 1}">${learned.has(i) ? '✔' : i + 1}</button>`).join('')}</div>
+    <div class="card lcard" style="border-top:6px solid ${L.color}">
+      <div class="qhead">
+        <h2 class="ltitle">${c.title}</h2>
+        ${canSpeak ? '<button class="ghost speak" data-speak aria-label="הקראה">🔊</button>' : ''}
+      </div>
+      <div class="lbody">${c.html}</div>
+      ${tr ? `<div class="ltry">
+        <div class="ltryhead">✋ נסו בעצמכם</div>
+        <div class="qtext">${tr.q}</div>
+        <div class="answer-area">
+          ${tr.type === 'choice'
+            ? `<div class="choices">${tr.choices.map((x, i) => `<button data-c="${i}">${x}</button>`).join('')}</div>`
+            : `<span class="lbl">תשובה:</span><input class="ans" data-ans inputmode="decimal" autocomplete="off" aria-label="תשובה"><button data-check>בדיקה ✓</button>`}
+        </div>
+        <div class="fb" data-fb aria-live="polite"></div>
+      </div>` : ''}
+    </div>
+    <div class="lnav">
+      ${lv.k > 0 ? '<button class="secondary" data-prev>→ הקודם</button>' : '<span></span>'}
+      ${last
+        ? (lv.modal ? '<button data-closeend>✔ חזרה לשאלה</button>' : `<span class="lend"><button data-practice>✏️ בואו נתרגל ${L.name}!</button><button class="secondary" data-home2>🏠 לתפריט</button></span>`)
+        : '<button data-next>הבא ←</button>'}
+    </div>`;
+  const q = s => lv.box.querySelector(s);
+  if (c.setup) c.setup(lv.box.querySelector('.lbody'));
+  lv.box.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { lv.k = Number(b.dataset.go); renderLesson(); });
+  if (q('[data-prev]')) q('[data-prev]').onclick = () => { lv.k--; renderLesson(); scrollTop(); };
+  if (q('[data-next]')) q('[data-next]').onclick = () => { if (!c.try) markLearned(lv.id, lv.k); lv.k++; renderLesson(); scrollTop(); };
+  if (q('[data-home]')) q('[data-home]').onclick = home;
+  if (q('[data-home2]')) q('[data-home2]').onclick = home;
+  if (q('[data-font]')) q('[data-font]').onclick = cycleFont;
+  if (q('[data-closeend]')) q('[data-closeend]').onclick = lv.close;
+  if (q('[data-practice]')) q('[data-practice]').onclick = () => startLessonPractice(lv.id);
+  if (q('[data-speak]')) q('[data-speak]').onclick = () => {
+    const body = q('.lbody').cloneNode(true);
+    body.querySelectorAll('.chartwrap, .lbtns, .live, .reveal.hidden').forEach(x => x.remove());
+    speak(c.title + '. ' + body.innerHTML + (tr ? '. נסו בעצמכם: ' + tr.q : ''));
+  };
+  if (tr) {
+    if (tr.type === 'choice') lv.box.querySelectorAll('.ltry .choices button').forEach(b => b.onclick = () => lessonCheck(Number(b.dataset.c)));
+    else {
+      q('[data-check]').onclick = () => lessonCheck(parseNum(q('[data-ans]').value));
+      q('[data-ans]').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); lessonCheck(parseNum(q('[data-ans]').value)); } });
+    }
+  }
+}
+
+function scrollTop() {
+  if (lessonView && lessonView.modal) lessonView.box.parentElement.scrollTop = 0;
+  else window.scrollTo(0, 0);
+}
+
+function lessonCheck(v) {
+  const lv = lessonView, c = LESSONS[lv.id].cards[lv.k], tr = c.try;
+  if (lv.done) return;
+  const fb = lv.box.querySelector('[data-fb]');
+  const show = (kind, html) => { fb.className = `fb show ${kind}`; fb.innerHTML = html; };
+  if (v == null || (typeof v === 'number' && Number.isNaN(v))) { show('hint', 'כתבו מספר ואז לחצו "בדיקה" 🙂'); return; }
+  const ok = tr.type === 'choice' ? v === tr.ans : Math.abs(v - tr.ans) < 1e-9;
+  const btn = tr.type === 'choice' ? lv.box.querySelector(`.ltry .choices button[data-c="${v}"]`) : null;
+  if (ok) {
+    lv.done = true;
+    if (btn) btn.classList.add('right');
+    markLearned(lv.id, lv.k);
+    lv.box.querySelectorAll('.dot')[lv.k].classList.add('ok');
+    show('ok', `<div class="head">${pick(CHEERS)}</div>${tr.exp}`);
+    return;
+  }
+  lv.tries++;
+  const trap = (tr.traps || []).find(t => tr.type === 'choice' ? t.c === tr.choices[v] : Math.abs(t.v - v) < 1e-9);
+  if (btn) { btn.classList.add('wrong'); btn.disabled = true; }
+  if (lv.tries < 2) {
+    show('bad', trap ? `<div class="head">🤔 כמעט! ${trap.m}</div>נסו שוב 💪` : `<div class="head">לא בדיוק... נסו שוב 💪</div>💡 ${tr.hint}`);
+    return;
+  }
+  lv.done = true;
+  markLearned(lv.id, lv.k);
+  show('info', `<div class="head">לא נורא – ככה לומדים! 💙</div>${trap ? `🤔 ${trap.m}<br>` : ''}התשובה: <b>${tr.type === 'choice' ? tr.choices[tr.ans] : M(fmt(tr.ans))}</b><br>${tr.exp}`);
+}
+
+function startLessonPractice(id) {
+  const L = LESSONS[id];
+  lessonView = null;
+  startPractice(L.topic, { retry: L.practice.map(g => ({ topic: L.topic, gen: g, lv: 3 })), label: `✏️ תרגול: ${L.name}`, lessonId: id });
+}
+
+function learnLink(q) {
+  if (!q.learn || !LESSONS[q.learn.lesson]) return '';
+  const L = LESSONS[q.learn.lesson], c = L.cards[q.learn.card];
+  return `<div><button class="linkish" data-learn="${q.learn.lesson}" data-card="${q.learn.card}">📚 לכרטיסיית הלימוד: ${c.title}</button></div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-learn]');
+  if (b) openLessonModal(b.dataset.learn, Number(b.dataset.card));
+});
+
+/* =========================================================
    שמירה מקומית (בדפדפן של התלמיד/ה בלבד)
    ========================================================= */
 const STORE_KEY = 'math6-practice-v2';
@@ -1690,6 +2154,8 @@ function masteryLabel(m) {
    ========================================================= */
 const URLP = new URLSearchParams(location.search);
 const PRESET = (() => {
+  const ln = URLP.get('learn');
+  if (ln && LESSONS[ln]) return { learn: ln };
   const t = URLP.get('topic');
   if (!t || !(TOPIC[t] || ['mix', 'test', 'testfb'].includes(t))) return null;
   const lv = Number(URLP.get('level')), cnt = Number(URLP.get('count'));
@@ -1701,6 +2167,7 @@ const PRESET = (() => {
   };
 })();
 function presetLabel(p) {
+  if (p.learn) return `📚 לימוד: ${LESSONS[p.learn].name}`;
   if (p.topic === 'test') return 'מבדק לדוגמה';
   if (p.topic === 'testfb') return 'מבדק לדוגמה עם משוב';
   return p.topic === 'mix' ? 'תרגול מעורב' : TOPIC[p.topic].name;
@@ -1863,6 +2330,7 @@ const $ = id => document.getElementById(id);
 
 function home() {
   state = null;
+  lessonView = null;
   if (canSpeak) speechSynthesis.cancel();
   const name = store.name || '';
   const len = store.roundLen || 10;
@@ -1871,7 +2339,7 @@ function home() {
     <h1>מתרגלים מתמטיקה 🎯</h1>
     <div class="subtitle">כיתה ו' · הכנה למבדק</div>
     ${PRESET ? `<div class="card banner">
-      <div>✨ <b>תרגול שהוכן בשבילך:</b> ${presetLabel(PRESET)}${PRESET.count && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div>
+      <div>✨ <b>הוכן בשבילך:</b> ${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div>
       <button id="presetGo">התחילו ←</button>
     </div>` : ''}
     <div class="card">
@@ -1885,7 +2353,21 @@ function home() {
       </div>
       ${store.solved ? `<div class="center muted" style="margin-top:12px">🏅 עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
     </div>
-    <h2>בחרו נושא לתרגול</h2>
+    <h2>📚 ללמוד</h2>
+    <div class="topics">
+      ${Object.values(LESSONS).map(L => {
+        const n = learnedSet(L.id).size;
+        return `<button class="topic" style="--c:${L.color}" data-lesson="${L.id}">
+          <span class="ic">${L.icon}</span>
+          <span class="nm">${L.name}</span>
+          <span class="ds">${L.desc}</span>
+          <span class="mbar"><span style="width:${n / L.cards.length * 100}%"></span></span>
+          <span class="best">${n ? `✔ ${n} מתוך ${L.cards.length} כרטיסיות` : `${L.cards.length} כרטיסיות`}</span>
+        </button>`;
+      }).join('')}
+      ${LESSON_SOON.map(x => `<div class="topic soon"><span class="ic">${x.icon}</span><span class="nm">${x.name}</span><span class="ds">בקרוב...</span></div>`).join('')}
+    </div>
+    <h2 style="margin-top:22px">✏️ בחרו נושא לתרגול</h2>
     <div class="topics">
       ${TOPICS.map(t => {
         const s = store.topics[t.id];
@@ -1913,7 +2395,8 @@ function home() {
     store.roundLen = Number(b.dataset.len); saveStore(store);
     app.querySelectorAll('.seg button').forEach(x => x.classList.toggle('sel', x === b));
   });
-  app.querySelectorAll('.topic').forEach(b => b.onclick = () => startPractice(b.dataset.t));
+  app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => startPractice(b.dataset.t));
+  app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   $('mix').onclick = () => startPractice('mix');
   $('test').onclick = () => startTest(false);
   $('testfb').onclick = () => startTest(true);
@@ -1922,6 +2405,7 @@ function home() {
 
 function startPreset() {
   const p = PRESET;
+  if (p.learn) return startLesson(p.learn);
   if (p.topic === 'test') return startTest(false);
   if (p.topic === 'testfb') return startTest(true);
   startPractice(p.topic, { level: p.level, count: p.count, fixed: p.fixed, hideLevel: p.fixed });
@@ -1943,7 +2427,7 @@ function startPractice(topicId, opt = {}) {
     mode: 'practice', topicId, level,
     count: opt.list ? opt.list.length : opt.retry ? opt.retry.length : (opt.count || store.roundLen || 10),
     fixed: !!(opt.fixed || opt.list || opt.retry), hideLevel: !!opt.hideLevel,
-    retry: opt.retry || null, list: opt.list || null, label: opt.label || null,
+    retry: opt.retry || null, list: opt.list || null, label: opt.label || null, lessonId: opt.lessonId || null,
     mixOrder: shuffle(TOPICS.map(t => t.id)),
     qs: [], i: 0, results: [], run: 0, streak: 0, prevGen: null, m0: masterySnapshot()
   };
@@ -2069,6 +2553,7 @@ function renderQ() {
 
 function showFb(kind, html) {
   const fb = $('fb');
+  if (state && state.mode === 'practice' && ['bad', 'info', 'hint'].includes(kind)) html += learnLink(state.qs[state.i]);
   fb.className = `fb show ${kind}`;
   fb.innerHTML = html;
 }
@@ -2348,6 +2833,7 @@ function summary() {
   $('again').onclick = () => {
     if (s.mode === 'test') return startTest(false);
     if (s.list) return startTest(true);
+    if (s.lessonId) return startLessonPractice(s.lessonId);
     if (s.retry) return startPractice(s.topicId);
     startPractice(s.topicId, { fixed: s.fixed, hideLevel: s.hideLevel, level: s.fixed ? s.level : null, count: s.count });
   };
@@ -2378,6 +2864,7 @@ function teacher() {
           <option value="mix">🔀 תרגול מעורב</option>
           <option value="testfb">📝 מבדק עם משוב</option>
           <option value="test">📝 מבדק לדוגמה (בלי משוב)</option>
+          ${Object.values(LESSONS).map(L => `<option value="learn:${L.id}">📚 לימוד: ${L.name} (כרטיסיות הדרכה)</option>`).join('')}
         </select>
       </label>
       <label>רמת התחלה:
@@ -2415,11 +2902,12 @@ function teacher() {
     <p class="center"><a href="${location.pathname}">← חזרה לאפליקציה</a></p>`;
   const upd = () => {
     const t = $('tt').value, l = $('tl').value, c = $('tc').value;
-    const isTest = t.startsWith('test');
+    const isLearn = t.startsWith('learn:');
+    const isTest = t.startsWith('test') || isLearn;
     $('tl').disabled = $('tc').disabled = isTest;
     $('tf').disabled = isTest || !l;
     if (!l) $('tf').checked = false;
-    const p = new URLSearchParams({ topic: t });
+    const p = isLearn ? new URLSearchParams({ learn: t.slice(6) }) : new URLSearchParams({ topic: t });
     if (!isTest && l) p.set('level', l);
     if (!isTest && l && $('tf').checked) p.set('fixed', '1');
     if (!isTest && c) p.set('count', c);
@@ -2436,7 +2924,7 @@ function teacher() {
 }
 
 // חשיפה לבדיקות אוטומטיות
-window.__math6 = { TOPICS, check, correctHTML, findTrap, speechText };
+window.__math6 = { TOPICS, LESSONS, check, correctHTML, findTrap, speechText };
 
 if (URLP.has('teacher')) teacher(); else home();
 </script>
