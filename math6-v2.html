@@ -260,6 +260,38 @@
   .modal { max-width: 820px; margin: 0 auto; background: var(--bg); border-radius: 18px; padding: 14px; }
   .mtop { display: flex; justify-content: flex-start; margin-bottom: 4px; }
 
+  .hl { background: #ffe08a; border-radius: 6px; padding: 0 4px; box-shadow: 0 0 0 2px #e0a800; }
+  .stepper { background: #fff8ec; border: 2px solid #f3d29a; border-radius: 12px; padding: 12px; margin: 10px 0; text-align: center; }
+  .sexpr { font-size: 2rem; font-weight: 700; margin: 6px 0; min-height: 1.6em; }
+  .snote2 { min-height: 2em; }
+  .kids { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kid { background: #f3f5ff; border-radius: 10px; padding: 8px 12px; }
+  .warn { background: #fff1e6; border-right: 5px solid #e0703a; border-radius: 10px; padding: 8px 14px; margin: 10px 0; }
+  .compare2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; margin: 10px 0; }
+  .compare2 > div { background: #f7f8ff; border-radius: 10px; padding: 8px; }
+  .fview { text-align: center; margin: 8px 0; }
+  .fbig { font-size: 2rem; margin: 6px 0; }
+  .fbar { max-width: 100%; height: auto; display: inline-block; vertical-align: middle; direction: ltr; }
+  .frow { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 6px 0; flex-wrap: wrap; }
+  .ways { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .way { background: #fdf0f6; border-radius: 10px; padding: 8px 12px; line-height: 2.3; }
+  .fig .walk { fill: none; stroke: #e0703a; stroke-width: 6; stroke-dasharray: 100; stroke-dashoffset: 100; stroke-linecap: round; }
+  .fig .walk.go { animation: walk 2.5s linear forwards; }
+  @keyframes walk { to { stroke-dashoffset: 0; } }
+  .fig .cell { fill: #fff; stroke: #2f6f55; stroke-width: 1.5; transition: fill 0.2s; }
+  .fig .cell.on { fill: #bfe3cf; }
+  .fig .cut { fill: #9fd3b8; stroke: #2f6f55; stroke-width: 2; transition: transform 1.2s ease; }
+  .fig .ghostrect { fill: transparent; stroke: transparent; stroke-dasharray: 6 4; stroke-width: 2; transition: fill 0.6s; }
+  .fig .ghostrect.on { fill: #eef7f1; stroke: #2f6f55; }
+  .fig .missrect { fill: #fdecea; stroke: #c0392b; stroke-dasharray: 6 4; stroke-width: 2; }
+  .fig .part1 { fill: rgba(76, 95, 213, 0.35); stroke: #4c5fd5; stroke-width: 2; }
+  .fig .part2 { fill: rgba(224, 112, 58, 0.4); stroke: #e0703a; stroke-width: 2; }
+  .fig .hidden { display: none; }
+  .ftable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+  .ftable th, .ftable td { border: 1px solid var(--line); padding: 8px; text-align: center; }
+  .ftable th { background: #eef7f1; }
+  ol.recap.order { list-style: decimal; padding-right: 26px; }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
@@ -267,6 +299,8 @@
     .grow { grid-template-columns: 1fr; gap: 2px; }
     .hbar, .hlabels div { width: 34px; }
     .lbody { font-size: 1.1rem; }
+    .kids, .compare2, .ways { grid-template-columns: 1fr; }
+    .sexpr { font-size: 1.5rem; }
     input.ans { width: 140px; }
   }
 
@@ -315,7 +349,7 @@ const M = s => `<span class="m">${s}</span>`;
 const F = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
 const BOX = '<span class="box">?</span>';
 
-// שבר מצומצם, כמספר מעורב אם צריך
+// שבר מצומצם, כשבר מעורב אם צריך
 function FX(n, d, mixed = true) {
   const g = gcd(n, d); n /= g; d /= g;
   if (d === 1) return M(fmt(n));
@@ -778,7 +812,7 @@ function genImproperToMixed() {
   const n = w * d + r;
   return {
     type: 'frac', form: 'mixed',
-    text: `כתבו את השבר המדומה כמספר מעורב: ${M(`${F(n, d)} =`)}`,
+    text: `כתבו את השבר המדומה כשבר מעורב: ${M(`${F(n, d)} =`)}`,
     ans: { n, d },
     steps: [
       { p: `כמה פעמים ${d} נכנס <b>בשלמות</b> ב-${n}? (זה החלק השלם)`, a: w },
@@ -795,7 +829,7 @@ function genMixedToImproper() {
   const n = w * d + r;
   return {
     type: 'frac', form: 'improper', noWhole: true,
-    text: `כתבו את המספר המעורב כשבר מדומה: ${MIX(w, r, d)} =`,
+    text: `כתבו את השבר המעורב כשבר מדומה: ${MIX(w, r, d)} =`,
     ans: { n, d },
     traps: [{ f: { n: w + r, d }, m: 'חיברתם את השלם למונה. צריך קודם לכפול את השלם במכנה!' },
       { f: { n: w * r, d }, m: 'כפלתם את השלם במונה. צריך לכפול את השלם ב<b>מכנה</b> ולהוסיף את המונה.' }],
@@ -890,7 +924,7 @@ function genMixedAddSub() {
       type: 'frac', form: 'any',
       text: `פתרו: ${M(`${w1}${F(r1, d1)} ${op} ${w2}${F(r2, d2)} =`)}`,
       ans: { n: res, d: L }, steps,
-      hint: op === '+' ? 'חברו את השלמים לחוד ואת השברים לחוד (עם מכנה משותף).' : 'אפשר להפוך את שני המספרים לשברים מדומים, או לחסר שלמים ושברים לחוד (אם השבר הראשון קטן – "פורטים" שלם).',
+      hint: op === '+' ? 'חברו את השלמים לחוד ואת השברים לחוד (עם מכנה משותף).' : 'אפשר להפוך את שני המספרים לשברים מדומים, או לחסר שלמים ושברים לחוד (אם השבר הראשון קטן – ממירים שלם לשבר).',
       exp: `שברים מדומים עם מכנה ${L}: ${M(`${F(a, L)} ${op} ${F(b, L)} = ${F(res, L)}`)} = ${FX(res, L)}`
     };
   }
@@ -1689,6 +1723,67 @@ function genMeanTarget() {
     };
   }
 }
+
+function genOrderSame(kind) {
+  const k = kind || R(1, 4);
+  const pm = k <= 2;
+  let expr, ans, trap, steps;
+  if (k === 1) {
+    const a = R(15, 60), b = R(3, a - 5), c = R(2, 20);
+    expr = `${a} - ${b} + ${c}`; ans = a - b + c; trap = a - (b + c);
+    steps = [{ p: `קודם (משמאל): ${M(`${a} - ${b} =`)}`, a: a - b }, { p: M(`${a - b} + ${c} =`), a: ans }];
+  } else if (k === 2) {
+    const c = R(2, 15), b = R(c + 1, 30), a = R(b + c + 2, 80);
+    expr = `${a} - ${b} - ${c}`; ans = a - b - c; trap = a - (b - c);
+    steps = [{ p: `קודם (משמאל): ${M(`${a} - ${b} =`)}`, a: a - b }, { p: M(`${a - b} - ${c} =`), a: ans }];
+  } else if (k === 3) {
+    const b = R(2, 9), q = R(2, 9), c = R(2, 6), a = b * q;
+    expr = `${a} : ${b} × ${c}`; ans = q * c; trap = a / (b * c);
+    steps = [{ p: `קודם (משמאל): ${M(`${a} : ${b} =`)}`, a: q }, { p: M(`${q} × ${c} =`), a: ans }];
+  } else {
+    const c = R(2, 5), m = R(2, 4), b = c * m, q = R(2, 9), a = b * c * q;
+    expr = `${a} : ${b} : ${c}`; ans = q; trap = a / m;
+    steps = [{ p: `קודם (משמאל): ${M(`${a} : ${b} =`)}`, a: a / b }, { p: M(`${a / b} : ${c} =`), a: ans }];
+  }
+  return {
+    type: 'num', text: `פתרו: ${M(expr + ' =')}`, ans, steps,
+    learn: { lesson: 'order', card: pm ? 3 : 4 },
+    traps: [{ v: trap, m: pm ? 'פתרתם קודם את הפעולה שמימין. כשיש רק חיבור וחיסור – פותרים לפי הסדר, משמאל לימין!' : 'פתרתם קודם את הפעולה שמימין. כשיש רק כפל וחילוק – פותרים לפי הסדר, משמאל לימין!' }],
+    hint: pm ? 'כשיש רק חיבור וחיסור – פותרים לפי הסדר, משמאל לימין.' : 'כשיש רק כפל וחילוק – פותרים לפי הסדר, משמאל לימין.',
+    exp: `לפי הסדר משמאל לימין: ${steps.map(s => s.p.replace('קודם (משמאל): ', '') + ' ' + M(fmt(s.a))).join(' ← ')}`
+  };
+}
+
+// קישור משאלות התרגול לכרטיסיות הלימוד המתאימות
+function tagLearn(fn, f) {
+  return function (...args) {
+    const q = fn(...args);
+    if (!q.learn) { const l = f(q); if (l) q.learn = l; }
+    return q;
+  };
+}
+const LL = (lesson, card) => () => ({ lesson, card });
+genOrder = tagLearn(genOrder, q => ({ lesson: 'order', card: q.text.includes('(') ? 2 : 1 }));
+genExpand = tagLearn(genExpand, LL('frac', 1));
+genReduce = tagLearn(genReduce, LL('frac', 1));
+genImproperToMixed = tagLearn(genImproperToMixed, LL('frac', 2));
+genMixedToImproper = tagLearn(genMixedToImproper, LL('frac', 2));
+genCompareFrac = tagLearn(genCompareFrac, LL('frac', 3));
+genAddSame = tagLearn(genAddSame, LL('frac', 4));
+genAddDiff = tagLearn(genAddDiff, LL('frac', 4));
+genSubDiff = tagLearn(genSubDiff, LL('frac', 4));
+genFracWord = tagLearn(genFracWord, LL('frac', 4));
+genMixedAddSub = tagLearn(genMixedAddSub, LL('frac', 5));
+genFromWhole = tagLearn(genFromWhole, LL('frac', 5));
+genRect = tagLearn(genRect, q => ({ lesson: 'geo', card: q.unit === SQ ? 1 : 0 }));
+genRectReverse = tagLearn(genRectReverse, q => ({ lesson: 'geo', card: q.text.includes('שטח') ? 1 : 0 }));
+genSquare = tagLearn(genSquare, LL('geo', 2));
+genSamePerimeter = tagLearn(genSamePerimeter, LL('geo', 2));
+genParallelogram = tagLearn(genParallelogram, LL('geo', 3));
+genTriangleArea = tagLearn(genTriangleArea, LL('geo', 4));
+genTrianglePerim = tagLearn(genTrianglePerim, LL('geo', 0));
+genLShape = tagLearn(genLShape, LL('geo', 5));
+
 /* =========================================================
    נושאים ורמות
    ========================================================= */
@@ -1707,11 +1802,11 @@ const TOPICS = [
     id: 'ops', name: '4 פעולות חשבון', icon: '➗', color: '#e0703a',
     desc: 'כפל, חילוק, סדר פעולות, בעיות מילוליות, אומדן',
     levels: {
-      1: [() => genMul(1), () => genDiv(1), () => genOrder(1)],
-      2: [() => genMul(2), () => genDiv(2), () => genOrder(2), () => genMissing(2), genEstimate],
+      1: [() => genMul(1), () => genDiv(1), () => genOrder(1), () => genOrderSame(1)],
+      2: [() => genMul(2), () => genDiv(2), () => genOrder(2), () => genOrderSame(), () => genMissing(2), genEstimate],
       3: [() => genMissing(3), genWord, genBuildings, genEstimate, genWord]
     },
-    tips: ['סדר פעולות: סוגריים ← כפל וחילוק ← חיבור וחיסור.', 'בודקים חילוק בעזרת כפל.', 'בבעיה מילולית: מה ידוע? מה שואלים? מה מחשבים קודם?', 'אומדן: מעגלים את המספרים ואז מחשבים.']
+    tips: ['סדר פעולות: סוגריים ← כפל וחילוק ← חיבור וחיסור.', 'רק חיבור וחיסור, או רק כפל וחילוק – פותרים לפי הסדר, משמאל לימין.', 'בודקים חילוק בעזרת כפל.', 'בבעיה מילולית: מה ידוע? מה שואלים? מה מחשבים קודם?', 'אומדן: מעגלים את המספרים ואז מחשבים.']
   },
   {
     id: 'frac', name: 'שברים פשוטים', icon: '🍕', color: '#d94a8c',
@@ -1981,11 +2076,505 @@ const LESSONS = {
     ]
   }
 };
-const LESSON_SOON = [
-  { icon: '🔢', name: 'סדר פעולות חשבון' },
-  { icon: '🍕', name: 'שברים' },
-  { icon: '📐', name: 'שטח והיקף' }
+/* ---------- כלים לכרטיסיות ---------- */
+const HL = s => `<span class="hl">${s}</span>`;
+function stepperHTML(frames) {
+  return `<div class="stepper">
+    <div class="sexpr" data-sexpr>${frames[0].e}</div>
+    <div class="snote2" data-snote>${frames[0].n || ''}</div>
+    <div class="lbtns"><button class="secondary" data-snext>▶ הצעד הבא</button><button class="ghost" data-sreset>↺ מההתחלה</button></div>
+  </div>`;
+}
+function setupStepper(root, frames) {
+  let i = 0;
+  const ex = root.querySelector('[data-sexpr]'), nt = root.querySelector('[data-snote]'), nb = root.querySelector('[data-snext]');
+  const show = () => { ex.innerHTML = frames[i].e; nt.innerHTML = frames[i].n || ''; nb.disabled = i === frames.length - 1; };
+  nb.onclick = () => { if (i < frames.length - 1) { i++; show(); } };
+  root.querySelector('[data-sreset]').onclick = () => { i = 0; show(); };
+  show();
+}
+function fracBarSVG(n, d, color = '#d94a8c', w = 300, h = 44) {
+  let g = '';
+  const pw = w / d;
+  for (let i = 0; i < d; i++) g += `<rect x="${2 + i * pw}" y="2" width="${pw}" height="${h}" fill="${i < n ? color : '#fff'}" stroke="#23264a" stroke-width="1.5"/>`;
+  return `<svg class="fbar" viewBox="0 0 ${w + 4} ${h + 4}" width="${w + 4}" height="${h + 4}">${g}</svg>`;
+}
+
+/* ---------- סדר פעולות ---------- */
+const ORDER_F1 = [
+  { e: M(`20 - ${HL('12 : 4')}`), n: 'יש כאן חיסור וחילוק. <b>קודם החילוק</b>: 12 : 4 = 3' },
+  { e: M(HL('20 - 3')), n: 'עכשיו החיסור: 20 − 3' },
+  { e: M('17'), n: '✔ התשובה: 17' }
 ];
+const ORDER_F2 = [
+  { e: M(`${HL('(2 + 3)')} × 4`), n: '<b>קודם הסוגריים</b>: 2 + 3 = 5' },
+  { e: M(HL('5 × 4')), n: 'עכשיו הכפל: 5 × 4' },
+  { e: M('20'), n: '✔ התשובה: 20 (ובלי סוגריים: 2 + 3 × 4 = 14)' }
+];
+const ORDER_F3 = [
+  { e: M(`${HL('10 - 4')} + 3`), n: 'יש רק חיבור וחיסור – פותרים <b>לפי הסדר, משמאל לימין</b>. קודם 10 − 4 = 6' },
+  { e: M(HL('6 + 3')), n: 'ועכשיו 6 + 3' },
+  { e: M('9'), n: '✔ התשובה: 9' }
+];
+const ORDER_F4 = [
+  { e: M(`${HL('24 : 4')} × 2`), n: 'יש רק כפל וחילוק – פותרים <b>לפי הסדר, משמאל לימין</b>. קודם 24 : 4 = 6' },
+  { e: M(HL('6 × 2')), n: 'ועכשיו 6 × 2' },
+  { e: M('12'), n: '✔ התשובה: 12' }
+];
+const ORDER_F5 = [
+  { e: M(`30 - ${HL('(4 + 2)')} × 3 + 8 : 2`), n: 'שלב 1 – <b>סוגריים</b>: 4 + 2 = 6' },
+  { e: M(`30 - ${HL('6 × 3')} + ${HL('8 : 2')}`), n: 'שלב 2 – <b>כפל וחילוק</b>: 6 × 3 = 18, 8 : 2 = 4' },
+  { e: M(`${HL('30 - 18')} + 4`), n: 'שלב 3 – <b>חיבור וחיסור, משמאל לימין</b>: קודם 30 − 18 = 12' },
+  { e: M(HL('12 + 4')), n: 'ועכשיו 12 + 4' },
+  { e: M('16'), n: '✔ התשובה: 16' }
+];
+
+/* ---------- שטח והיקף – ציורים ---------- */
+function perimFig() {
+  const sc = 36, w = 6 * sc, h = 4 * sc, x0 = 52, y0 = 28;
+  return `<svg class="fig" viewBox="0 0 320 210" width="320" height="210">
+    <rect x="${x0}" y="${y0}" width="${w}" height="${h}" class="shape"/>
+    <rect x="${x0}" y="${y0}" width="${w}" height="${h}" pathLength="100" class="walk" data-walk/>
+    ${T(x0 + w / 2, y0 - 8, '6 ס"מ')}${T(x0 + w / 2, y0 + h + 22, '6 ס"מ')}
+    ${T(x0 - 8, y0 + h / 2 + 5, '4 ס"מ', 'end')}${T(x0 + w + 8, y0 + h / 2 + 5, '4 ס"מ', 'start')}
+  </svg>`;
+}
+function areaGrid(cols, rows) {
+  const s = 44, x0 = 30, y0 = 10;
+  let g = '';
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++)
+    g += `<rect x="${x0 + c * s}" y="${y0 + r * s}" width="${s}" height="${s}" class="cell" data-cell="${r * cols + c}"/><text x="${x0 + c * s + s / 2}" y="${y0 + r * s + s / 2 + 6}" text-anchor="middle" class="lb celln" data-celln="${r * cols + c}"></text>`;
+  g += T(x0 + cols * s / 2, y0 + rows * s + 22, `${cols} ס"מ`) + T(x0 - 6, y0 + rows * s / 2 + 5, `${rows}`, 'end');
+  return `<svg class="fig" viewBox="0 0 ${cols * s + 60} ${rows * s + 40}" width="${cols * s + 60}" height="${rows * s + 40}">${g}</svg>`;
+}
+function parCutFig() {
+  const b = 6, h = 3, o = 2, sc = 40, x0 = 30, y0 = 20;
+  const X = v => x0 + v * sc, Y = v => y0 + v * sc;
+  return `<svg class="fig" viewBox="0 0 380 190" width="380" height="190">
+    <polygon points="${X(o)},${Y(0)} ${X(b + o)},${Y(0)} ${X(b)},${Y(h)} ${X(o)},${Y(h)}" class="shape"/>
+    <polygon points="${X(0)},${Y(h)} ${X(o)},${Y(0)} ${X(o)},${Y(h)}" class="cut" data-cut/>
+    <line x1="${X(o)}" y1="${Y(0)}" x2="${X(o)}" y2="${Y(h)}" class="dash"/>
+    ${T(X(b / 2), Y(h) + 22, '6 ס"מ')}${T(X(o) + 8, Y(h / 2) + 5, '3 ס"מ', 'start')}
+  </svg>`;
+}
+function triRectFig() {
+  const b = 8, h = 4, sc = 34, x0 = 30, y0 = 18, ax = 0.35 * b;
+  const X = v => x0 + v * sc, Y = v => y0 + v * sc;
+  return `<svg class="fig" viewBox="0 0 340 190" width="340" height="190">
+    <rect x="${X(0)}" y="${Y(0)}" width="${b * sc}" height="${h * sc}" class="ghostrect" data-ghost/>
+    <polygon points="${X(0)},${Y(h)} ${X(b)},${Y(h)} ${X(ax)},${Y(0)}" class="shape"/>
+    <line x1="${X(ax)}" y1="${Y(0)}" x2="${X(ax)}" y2="${Y(h)}" class="dash"/>
+    ${T(X(b / 2), Y(h) + 22, '8 ס"מ')}${T(X(ax) + 8, Y(h / 2) + 5, '4 ס"מ', 'start')}
+  </svg>`;
+}
+function lShapeFig() {
+  const Wd = 8, Ht = 6, w = 3, h = 2, sc = 30, x0 = 40, y0 = 24;
+  const X = v => x0 + v * sc, Y = v => y0 + v * sc;
+  const pts = [[0, 0], [Wd - w, 0], [Wd - w, h], [Wd, h], [Wd, Ht], [0, Ht]];
+  return `<svg class="fig" viewBox="0 0 330 250" width="330" height="250">
+    <rect x="${X(Wd - w)}" y="${Y(0)}" width="${w * sc}" height="${h * sc}" class="missrect hidden" data-miss/>
+    <polygon points="${pts.map(p => `${X(p[0])},${Y(p[1])}`).join(' ')}" class="shape"/>
+    <rect x="${X(0)}" y="${Y(0)}" width="${(Wd - w) * sc}" height="${Ht * sc}" class="part1 hidden" data-p1/>
+    <rect x="${X(Wd - w)}" y="${Y(h)}" width="${w * sc}" height="${(Ht - h) * sc}" class="part2 hidden" data-p2/>
+    ${T(X((Wd - w) / 2), Y(0) - 8, '5')}${T(X(Wd - w) - 6, Y(h / 2) + 5, '2', 'end')}${T(X(Wd - w / 2), Y(h) - 8, '3')}
+    ${T(X(Wd) + 8, Y((h + Ht) / 2) + 5, '4', 'start')}${T(X(Wd / 2), Y(Ht) + 22, '8')}${T(X(0) - 8, Y(Ht / 2) + 5, '6', 'end')}
+  </svg>`;
+}
+
+Object.assign(LESSONS, {
+  order: {
+    id: 'order', name: 'סדר פעולות חשבון', icon: '🔢', color: '#e0703a', topic: 'ops',
+    desc: 'סוגריים, כפל וחילוק, חיבור וחיסור – ומה עושים כשיש רק חיבור וחיסור, או רק כפל וחילוק',
+    practice: [() => genOrder(1), () => genOrderSame(1), () => genOrderSame(3), () => genOrder(2), () => genOrderSame(2), () => genOrderSame(4), () => genOrder(2), () => genOrder(2)],
+    cards: [
+      {
+        title: 'למה צריך סדר?',
+        html: `<p>דני ורוני פתרו את אותו תרגיל: ${M('2 + 3 × 4')}</p>
+          <div class="kids">
+            <div class="kid"><b>דני:</b> "פתרתי לפי הסדר: ${M('2 + 3 = 5')}, ואז ${M('5 × 4 = 20')}"</div>
+            <div class="kid"><b>רוני:</b> "קודם הכפל: ${M('3 × 4 = 12')}, ואז ${M('2 + 12 = 14')}"</div>
+          </div>
+          <div class="lbtns"><button class="secondary" data-act="who">🤔 מי צודק?</button></div>
+          <div class="reveal hidden explain"><b>רוני צודק – התשובה 14.</b><br>כדי שכולם יקבלו אותה תשובה, במתמטיקה הסכימו על <b>סדר קבוע</b> לפתרון תרגילים.</div>
+          <div class="rule big">1️⃣ סוגריים ← 2️⃣ כפל וחילוק ← 3️⃣ חיבור וחיסור</div>`,
+        setup(root) { root.querySelector('[data-act="who"]').onclick = () => reveal(root); },
+        try: {
+          type: 'num', q: `פתרו: ${M('5 + 2 × 3 =')}`, ans: 11,
+          hint: 'מה עושים קודם – את החיבור או את הכפל?', exp: `קודם הכפל: ${M('2 × 3 = 6')}, ואז ${M('5 + 6 = 11')}`,
+          traps: [{ v: 21, m: 'פתרתם משמאל לימין. אבל כפל קודם לחיבור!' }]
+        }
+      },
+      {
+        title: 'כפל וחילוק – לפני חיבור וחיסור',
+        html: `<p>כשבתרגיל יש גם כפל או חילוק וגם חיבור או חיסור – <b>קודם פותרים את הכפל והחילוק</b>.</p>
+          <p>לחצו "הצעד הבא" ועקבו אחרי הפתרון:</p>
+          ${stepperHTML(ORDER_F1)}
+          <div class="rule">💡 כפל וחילוק "חזקים" יותר מחיבור וחיסור – הם תמיד באים קודם, גם אם הם נמצאים בסוף התרגיל.</div>`,
+        setup(root) { setupStepper(root, ORDER_F1); },
+        try: {
+          type: 'num', q: `פתרו: ${M('18 - 6 × 2 =')}`, ans: 6,
+          hint: 'קודם הכפל: 6 × 2.', exp: `${M('6 × 2 = 12')}, ואז ${M('18 - 12 = 6')}`,
+          traps: [{ v: 24, m: 'פתרתם קודם את החיסור. כפל קודם לחיסור!' }]
+        }
+      },
+      {
+        title: 'סוגריים – הכי קודם!',
+        html: `<p>סוגריים אומרים: <b>"תפתרו אותי ראשון!"</b> – גם אם בתוכם יש חיבור או חיסור.</p>
+          ${stepperHTML(ORDER_F2)}
+          <div class="compare2">
+            <div>${M('2 + 3 × 4 = 14')}<br><span class="small muted">בלי סוגריים – קודם כפל</span></div>
+            <div>${M('(2 + 3) × 4 = 20')}<br><span class="small muted">עם סוגריים – קודם הסוגריים</span></div>
+          </div>
+          <div class="rule">💡 הסוגריים משנים את הסדר – ולכן גם את התשובה!</div>`,
+        setup(root) { setupStepper(root, ORDER_F2); },
+        try: {
+          type: 'num', q: `פתרו: ${M('(10 - 4) × 3 =')}`, ans: 18,
+          hint: 'מה בתוך הסוגריים?', exp: `קודם הסוגריים: ${M('10 - 4 = 6')}, ואז ${M('6 × 3 = 18')}`,
+          traps: [{ v: -2, m: 'שכחתם את הסוגריים! מה שבתוך הסוגריים פותרים ראשון.' }]
+        }
+      },
+      {
+        title: 'רק חיבור וחיסור? משמאל לימין!',
+        html: `<p>כשבתרגיל יש <b>רק חיבור וחיסור</b> – הם שווים בחשיבותם.<br>לכן פותרים <b>לפי הסדר, משמאל לימין</b> (בכיוון שבו כתוב התרגיל).</p>
+          ${stepperHTML(ORDER_F3)}
+          <div class="warn">⚠️ טעות נפוצה: לחבר קודם ${M('4 + 3 = 7')} ואז ${M('10 - 7 = 3')}. זה <b>לא נכון</b>! החיבור לא "חזק" יותר מהחיסור.</div>
+          <div class="rule">💡 רק חיבור וחיסור ← פותרים לפי הסדר, משמאל לימין.</div>`,
+        setup(root) { setupStepper(root, ORDER_F3); },
+        try: {
+          type: 'num', q: `פתרו: ${M('20 - 5 + 3 =')}`, ans: 18,
+          hint: 'פותרים לפי הסדר משמאל לימין: קודם 20 − 5.', exp: `${M('20 - 5 = 15')}, ואז ${M('15 + 3 = 18')}`,
+          traps: [{ v: 12, m: 'חיברתם קודם 5 + 3. כשיש רק חיבור וחיסור – פותרים לפי הסדר, משמאל לימין!' }]
+        }
+      },
+      {
+        title: 'רק כפל וחילוק? גם משמאל לימין!',
+        html: `<p>כשבתרגיל יש <b>רק כפל וחילוק</b> – גם הם שווים בחשיבותם.<br>לכן גם כאן פותרים <b>לפי הסדר, משמאל לימין</b>.</p>
+          ${stepperHTML(ORDER_F4)}
+          <div class="warn">⚠️ טעות נפוצה: לכפול קודם ${M('4 × 2 = 8')} ואז ${M('24 : 8 = 3')}. זה <b>לא נכון</b>! הכפל לא "חזק" יותר מהחילוק.</div>
+          <div class="rule">💡 רק כפל וחילוק ← פותרים לפי הסדר, משמאל לימין.</div>`,
+        setup(root) { setupStepper(root, ORDER_F4); },
+        try: {
+          type: 'num', q: `פתרו: ${M('36 : 6 × 3 =')}`, ans: 18,
+          hint: 'פותרים לפי הסדר משמאל לימין: קודם 36 : 6.', exp: `${M('36 : 6 = 6')}, ואז ${M('6 × 3 = 18')}`,
+          traps: [{ v: 2, m: 'כפלתם קודם 6 × 3. כשיש רק כפל וחילוק – פותרים לפי הסדר, משמאל לימין!' }]
+        }
+      },
+      {
+        title: 'הכול ביחד',
+        html: `<p>תרגיל עם הכול: סוגריים, כפל, חילוק, חיבור וחיסור. פותרים שלב אחרי שלב:</p>
+          ${stepperHTML(ORDER_F5)}
+          <div class="rule">💡 טיפ: לפני שמתחילים – <b>סמנו</b> בעיפרון מה פותרים קודם.</div>`,
+        setup(root) { setupStepper(root, ORDER_F5); },
+        try: {
+          type: 'num', q: `פתרו: ${M('40 - 3 × (2 + 4) =')}`, ans: 22,
+          hint: 'סדר: סוגריים, אחר כך כפל, ובסוף חיסור.', exp: `סוגריים: ${M('2 + 4 = 6')}. כפל: ${M('3 × 6 = 18')}. חיסור: ${M('40 - 18 = 22')}`,
+          traps: [{ v: 222, m: 'פתרתם קודם את החיסור (40 − 3). כפל קודם לחיסור!' }, { v: 38, m: 'שכחתם את הסוגריים! קודם 2 + 4.' }]
+        }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ol class="recap order">
+            <li><b>סוגריים</b> – תמיד ראשונים.</li>
+            <li><b>כפל וחילוק</b> – לפי הסדר, משמאל לימין.</li>
+            <li><b>חיבור וחיסור</b> – לפי הסדר, משמאל לימין.</li>
+          </ol>
+          <ul class="recap">
+            <li>➕➖ רק חיבור וחיסור ← משמאל לימין.</li>
+            <li>✖️➗ רק כפל וחילוק ← משמאל לימין.</li>
+          </ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות סדר הפעולות 🎉</b></p>`
+      }
+    ]
+  },
+
+  frac: {
+    id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c', topic: 'frac',
+    desc: 'מה זה שבר, הרחבה וצמצום, מדומה ומעורב, מכנה משותף, חיבור וחיסור',
+    practice: [genExpand, genReduce, genImproperToMixed, genMixedToImproper, genAddDiff, genSubDiff, genMixedAddSub, genFromWhole],
+    cards: [
+      {
+        title: 'מה זה שבר?',
+        html: `<p>שבר מתאר <b>חלק משלם</b>. נסו לשנות את המונה ואת המכנה:</p>
+          <div data-fview class="fview"></div>
+          <div class="lbtns">
+            <button class="secondary" data-fd="1">מכנה +1</button><button class="secondary" data-fd="-1">מכנה −1</button>
+            <button class="secondary" data-fn="1">מונה +1</button><button class="secondary" data-fn="-1">מונה −1</button>
+          </div>
+          <div class="rule">💡 <b>המכנה</b> (למטה) = לכמה חלקים <b>שווים</b> חילקנו את השלם.<br><b>המונה</b> (למעלה) = כמה חלקים לקחנו.</div>`,
+        setup(root) {
+          let n = 3, d = 5;
+          const show = () => {
+            root.querySelector('[data-fview]').innerHTML = `<div class="fbig">${M(F(n, d))}</div>${fracBarSVG(n, d)}
+              <div>חילקנו את השלם ל-<b>${d}</b> חלקים שווים, וצבענו <b>${n}</b> מהם.</div>`;
+          };
+          root.querySelectorAll('[data-fd]').forEach(b => b.onclick = () => { d = Math.max(2, Math.min(12, d + Number(b.dataset.fd))); n = Math.min(n, d); show(); });
+          root.querySelectorAll('[data-fn]').forEach(b => b.onclick = () => { n = Math.max(0, Math.min(d, n + Number(b.dataset.fn))); show(); });
+          show();
+        },
+        try: {
+          type: 'choice', q: `איזה שבר מתאר את החלק הצבוע?<div class="center">${fracBarSVG(3, 8)}</div>`,
+          choices: [M(F(3, 8)), M(F(5, 8)), M(F(3, 5)), M(F(8, 3))], ans: 0,
+          hint: 'לכמה חלקים שווים מחולק הפס? כמה מהם צבועים?', exp: `הפס מחולק ל-8 חלקים שווים (מכנה), ו-3 צבועים (מונה): ${M(F(3, 8))}`,
+          traps: [{ c: M(F(5, 8)), m: 'ספרתם את החלקים הלבנים. המונה הוא מספר החלקים הצבועים.' }, { c: M(F(3, 5)), m: 'המכנה הוא מספר <b>כל</b> החלקים – גם הצבועים וגם הלבנים.' }]
+        }
+      },
+      {
+        title: 'הרחבה וצמצום – אותו שבר, כתיבה אחרת',
+        html: `<p>לחצו "חתכו" – כל חלק נחתך לשניים. מה קורה לשטח הצבוע?</p>
+          <div data-fview class="fview"></div>
+          <div class="lbtns"><button class="secondary" data-cut>✂️ חתכו כל חלק לשניים (הרחבה)</button><button class="secondary" data-join>🔗 חברו כל שני חלקים (צמצום)</button></div>
+          <div class="rule">💡 <b>הרחבה:</b> כופלים את המונה ואת המכנה <b>באותו מספר</b>.<br><b>צמצום:</b> מחלקים את המונה ואת המכנה <b>באותו מספר</b>.<br>השבר נשאר <b>אותו שבר</b> – רק נכתב אחרת.</div>
+          <div class="warn">⚠️ בהרחבה <b>כופלים</b> – לא מוסיפים! ${M(`${F(1, 2)} ≠ ${F(2, 3)}`)}</div>`,
+        setup(root) {
+          let k = 1;
+          const show = () => {
+            root.querySelector('[data-fview]').innerHTML = `<div class="fbig">${M(`${F(1, 2)} = ${F(k, 2 * k)}`)}</div>${fracBarSVG(k, 2 * k)}
+              <div>${k > 1 ? `כפלנו את המונה ואת המכנה ב-${k}. <b>השטח הצבוע לא השתנה!</b>` : 'חצי מהפס צבוע.'}</div>`;
+          };
+          root.querySelector('[data-cut]').onclick = () => { if (k < 8) k *= 2; show(); };
+          root.querySelector('[data-join]').onclick = () => { if (k > 1) k /= 2; show(); };
+          show();
+        },
+        try: {
+          type: 'num', q: `השלימו: ${M(`${F(3, 4)} = ${F(BOX, 12)}`)}`, ans: 9,
+          hint: 'פי כמה גדל המכנה (מ-4 ל-12)? כפלו גם את המונה באותו מספר.', exp: `המכנה גדל פי 3, לכן ${M('3 × 3 = 9')}: ${M(`${F(3, 4)} = ${F(9, 12)}`)}`,
+          traps: [{ v: 11, m: 'הוספתם 8 למונה. בהרחבה <b>כופלים</b> – פי כמה גדל המכנה?' }]
+        }
+      },
+      {
+        title: 'שבר מדומה ושבר מעורב',
+        html: `<p><b>שבר מדומה</b> – המונה גדול מהמכנה (או שווה לו), למשל ${M(F(7, 4))}.<br>יש לנו 7 רבעים. כמה שלמים אפשר להרכיב מהם?</p>
+          <div data-fview class="fview"></div>
+          <div class="lbtns"><button class="secondary" data-arrange>🧩 סדרו לשלמים</button></div>
+          <div class="rule">💡 <b>מדומה ← מעורב:</b> מחלקים את המונה במכנה. התוצאה = השלמים, השארית = המונה החדש.<br>${M(`7 : 4 = 1`)} ושארית 3 ← ${MIX(1, 3, 4)}</div>
+          <div class="rule">💡 <b>מעורב ← מדומה:</b> שלם × מכנה + מונה.<br>${MIX(2, 1, 3)} ← ${M('2 × 3 + 1 = 7')} ← ${M(F(7, 3))}</div>`,
+        setup(root) {
+          const v = root.querySelector('[data-fview]');
+          const pieces = () => {
+            let g = '';
+            for (let i = 0; i < 7; i++) g += `<rect x="${2 + i * 44}" y="2" width="40" height="44" fill="#d94a8c" stroke="#23264a" stroke-width="1.5"/>`;
+            return `<svg class="fbar" viewBox="0 0 312 48" width="312" height="48">${g}</svg>`;
+          };
+          v.innerHTML = `<div class="fbig">${M(F(7, 4))}</div>${pieces()}<div>7 חלקים, כל אחד הוא ${M(F(1, 4))}</div>`;
+          root.querySelector('[data-arrange]').onclick = () => {
+            v.innerHTML = `<div class="fbig">${M(F(7, 4))} = ${MIX(1, 3, 4)}</div>
+              <div class="frow">${fracBarSVG(4, 4, '#d94a8c', 176)}<span>שלם אחד</span></div>
+              <div class="frow">${fracBarSVG(3, 4, '#d94a8c', 176)}<span>ועוד ${M(F(3, 4))}</span></div>`;
+          };
+        },
+        try: {
+          type: 'choice', q: `כתבו כשבר מעורב: ${M(`${F(11, 3)} =`)}`,
+          choices: [MIX(3, 2, 3), MIX(2, 5, 3), MIX(3, 1, 3), MIX(1, 8, 3)], ans: 0,
+          hint: 'כמה פעמים 3 נכנס ב-11? מה השארית?', exp: `${M('11 : 3 = 3')} ושארית 2, לכן ${MIX(3, 2, 3)}`,
+          traps: [{ c: MIX(2, 5, 3), m: `${M(F(5, 3))} גדול מ-1 – אפשר להוציא ממנו עוד שלם.` }]
+        }
+      },
+      {
+        title: 'מכנה משותף – למה צריך אותו?',
+        html: `<p>רוצים לחבר ${M(`${F(1, 2)} + ${F(1, 3)}`)}. אבל החלקים <b>בגדלים שונים</b> – חצאים ושלישים! אי אפשר לחבר אותם ככה.</p>
+          <div data-fview class="fview"></div>
+          <div class="lbtns"><button class="secondary" data-six>✂️ חתכו את שניהם לשישיות</button></div>
+          <div class="rule">💡 <b>מכנה משותף</b> = מספר שמתחלק גם במכנה הראשון וגם בשני. בוחרים את <b>הקטן ביותר</b>.<br>איך מוצאים? עוברים על הכפולות של המכנה הגדול: 3, 6 – ו-6 מתחלק גם ב-2!</div>`,
+        setup(root) {
+          const v = root.querySelector('[data-fview]');
+          v.innerHTML = `<div class="frow">${fracBarSVG(1, 2)}<span>${M(F(1, 2))}</span></div><div class="frow">${fracBarSVG(1, 3, '#4c5fd5')}<span>${M(F(1, 3))}</span></div>`;
+          root.querySelector('[data-six]').onclick = () => {
+            v.innerHTML = `<div class="frow">${fracBarSVG(3, 6)}<span>${M(`${F(1, 2)} = ${F(3, 6)}`)}</span></div>
+              <div class="frow">${fracBarSVG(2, 6, '#4c5fd5')}<span>${M(`${F(1, 3)} = ${F(2, 6)}`)}</span></div>
+              <div class="explain">עכשיו כל החלקים באותו גודל (שישיות), ואפשר לחבר: ${M(`${F(3, 6)} + ${F(2, 6)} = ${F(5, 6)}`)}</div>`;
+          };
+        },
+        try: {
+          type: 'num', q: 'מהו המכנה המשותף <b>הקטן ביותר</b> של 4 ושל 6?', ans: 12,
+          hint: 'עברו על הכפולות של 6: 6, 12, 18... איזו מהן מתחלקת גם ב-4?', exp: '12 מתחלק גם ב-4 וגם ב-6, והוא הקטן ביותר.',
+          traps: [{ v: 24, m: 'גם 24 הוא מכנה משותף – אבל יש אחד קטן יותר.' }, { v: 10, m: 'מכנה משותף צריך להתחלק גם ב-4 וגם ב-6. האם 10 מתחלק ב-4?' }, { v: 2, m: '2 מחלק את 4 ואת 6, אבל אנחנו צריכים מספר <b>שמתחלק</b> בשניהם (כפולה משותפת).' }]
+        }
+      },
+      {
+        title: 'חיבור וחיסור שברים',
+        html: `<p>פותרים: ${M(`${F(2, 3)} + ${F(1, 4)}`)}</p>
+          <ol class="lsteps">
+            <li>מוצאים מכנה משותף ל-3 ול-4: <b>12</b></li>
+            <li>מרחיבים: ${M(`${F(2, 3)} = ${F(8, 12)}`)} , ${M(`${F(1, 4)} = ${F(3, 12)}`)}</li>
+            <li>מחברים <b>רק את המונים</b>: ${M(`${F(8, 12)} + ${F(3, 12)} = ${F(11, 12)}`)}</li>
+            <li>בודקים אם אפשר לצמצם או להוציא שלמים.</li>
+          </ol>
+          <div class="warn">⚠️ <b>לא מחברים מכנים!</b> ${M(`${F(1, 2)} + ${F(1, 2)}`)} זה שלם אחד – לא ${M(F(2, 4))}.</div>
+          <div class="rule">💡 בחיסור – בדיוק אותו דבר, רק מחסרים את המונים.</div>`,
+        try: {
+          type: 'num', q: `${M(`${F(1, 2)} + ${F(1, 5)} = ${F(BOX, 10)}`)} – מה המונה?`, ans: 7,
+          hint: `הרחיבו כל שבר למכנה 10: ${M(`${F(1, 2)} = ${F('?', 10)}`)} , ${M(`${F(1, 5)} = ${F('?', 10)}`)}`,
+          exp: `${M(`${F(5, 10)} + ${F(2, 10)} = ${F(7, 10)}`)}`,
+          traps: [{ v: 2, m: 'חיברתם את המונים בלי להרחיב. קודם מרחיבים כל שבר למכנה 10!' }]
+        }
+      },
+      {
+        title: 'חיבור וחיסור שברים מעורבים',
+        html: `<p><b>חיבור:</b> מחברים שלמים לחוד ושברים לחוד.<br>${M(`2${F(1, 4)} + 1${F(2, 4)} = 3${F(3, 4)}`)}</p>
+          <p><b>חיסור כשהשבר הראשון קטן יותר:</b> ${M(`3${F(1, 4)} - 1${F(3, 4)}`)}<br>אי אפשר לחסר ${M(F(3, 4))} מ-${M(F(1, 4))}... מה עושים?</p>
+          <div class="ways">
+            <div class="way"><b>דרך א – המרה של שלם:</b><br>${M(`3${F(1, 4)} = 2${F(5, 4)}`)}<br>${M(`2${F(5, 4)} - 1${F(3, 4)} = 1${F(2, 4)} = 1${F(1, 2)}`)}</div>
+            <div class="way"><b>דרך ב – שברים מדומים:</b><br>${M(`${F(13, 4)} - ${F(7, 4)} = ${F(6, 4)}`)}<br>${M(`${F(6, 4)} = 1${F(2, 4)} = 1${F(1, 2)}`)}</div>
+          </div>
+          <div class="rule">💡 בחרו את הדרך שנוחה לכם – שתיהן נותנות אותה תשובה.</div>`,
+        try: {
+          type: 'choice', q: `פתרו: ${M(`4${F(1, 5)} - 1${F(3, 5)} =`)}`,
+          choices: [MIX(2, 3, 5), MIX(3, 2, 5), MIX(2, 2, 5), MIX(3, 3, 5)], ans: 0,
+          hint: `${M(F(1, 5))} קטן מ-${M(F(3, 5))} – המירו שלם לשבר: ${M(`4${F(1, 5)} = 3${F(6, 5)}`)}`,
+          exp: `${M(`3${F(6, 5)} - 1${F(3, 5)} = 2${F(3, 5)}`)}`,
+          traps: [{ c: MIX(3, 2, 5), m: `חיסרתם ${M(F(1, 5))} מ-${M(F(3, 5))} – הפוך! כשהשבר הראשון קטן יותר, ממירים שלם.` }]
+        }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+            <li>🍕 <b>מכנה</b> = לכמה חלקים שווים חילקנו. <b>מונה</b> = כמה חלקים לקחנו.</li>
+            <li>✂️ <b>הרחבה/צמצום:</b> כופלים/מחלקים מונה ומכנה <b>באותו מספר</b>.</li>
+            <li>🧩 <b>מדומה ← מעורב:</b> מונה : מכנה. <b>מעורב ← מדומה:</b> שלם × מכנה + מונה.</li>
+            <li>🤝 <b>חיבור וחיסור:</b> קודם מכנה משותף, ואז רק המונים. <b>לא מחברים מכנים!</b></li>
+            <li>🔄 <b>שברים מעורבים:</b> שלמים לחוד ושברים לחוד. אם צריך – ממירים שלם.</li>
+          </ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות השברים 🎉</b></p>`
+      }
+    ]
+  },
+
+  geo: {
+    id: 'geo', name: 'שטח והיקף', icon: '📐', color: '#2f8f55', topic: 'geo',
+    desc: 'היקף ושטח של מלבן, ריבוע, מקבילית, משולש ומצולע מורכב',
+    practice: [genRect, genRect, () => genSquare(2), genParallelogram, genTriangleArea, genLShape, genRectReverse, genTrianglePerim],
+    cards: [
+      {
+        title: 'מה זה היקף?',
+        html: `<p><b>היקף</b> = האורך של הדרך <b>מסביב</b> לצורה. דמיינו נמלה שהולכת על כל הצלעות עד שהיא חוזרת להתחלה:</p>
+          ${perimFig()}
+          <div class="lbtns"><button class="secondary" data-act="walk">🐜 הנמלה יוצאת לדרך</button></div>
+          <div class="reveal hidden explain">הנמלה הלכה: ${M('6 + 4 + 6 + 4 = 20')} – ההיקף הוא <b>20 ס"מ</b>.</div>
+          <div class="rule">💡 <b>היקף = סכום כל הצלעות.</b> מודדים אותו ביחידות אורך: ס"מ, מ'.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="walk"]').onclick = () => {
+            const w = root.querySelector('[data-walk]');
+            w.classList.remove('go'); void w.getBoundingClientRect(); w.classList.add('go');
+            setTimeout(() => reveal(root), 2600);
+          };
+        },
+        try: {
+          type: 'num', q: 'מה ההיקף של מלבן שאורכו 7 ס"מ ורוחבו 3 ס"מ? (בס"מ)', ans: 20,
+          hint: 'למלבן 4 צלעות: 2 באורך 7 ו-2 באורך 3.', exp: `${M('7 + 3 + 7 + 3 = 20')} ס"מ`,
+          traps: [{ v: 21, m: 'חישבתם שטח (7 × 3). היקף = <b>סכום</b> הצלעות.' }, { v: 10, m: 'חיברתם רק שתי צלעות. למלבן יש 4 צלעות!' }]
+        }
+      },
+      {
+        title: 'מה זה שטח?',
+        html: `<p><b>שטח</b> = כמה מקום הצורה תופסת. מודדים אותו ב<b>משבצות</b>: כל משבצת היא ריבוע של 1 ס"מ על 1 ס"מ = <b>1 סמ"ר</b>.</p>
+          ${areaGrid(5, 3)}
+          <div class="lbtns"><button class="secondary" data-act="count">🔢 ספרו את המשבצות</button></div>
+          <div class="reveal hidden explain">15 משבצות = <b>15 סמ"ר</b>. ובקיצור: 3 שורות, בכל שורה 5 משבצות: ${M('5 × 3 = 15')}</div>
+          <div class="rule">💡 <b>שטח מלבן = אורך × רוחב.</b> מודדים ביחידות שטח: סמ"ר, מ"ר.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="count"]').onclick = () => {
+            const cells = root.querySelectorAll('[data-cell]'), nums = root.querySelectorAll('[data-celln]');
+            cells.forEach(c => c.classList.remove('on')); nums.forEach(n => { n.textContent = ''; });
+            cells.forEach((c, i) => setTimeout(() => { c.classList.add('on'); nums[i].textContent = i + 1; if (i === cells.length - 1) reveal(root); }, 140 * i));
+          };
+        },
+        try: {
+          type: 'num', q: 'מלבן שאורכו 8 ס"מ ורוחבו 4 ס"מ. מה השטח שלו? (בסמ"ר)', ans: 32,
+          hint: 'שטח = אורך × רוחב.', exp: `${M('8 × 4 = 32')} סמ"ר`,
+          traps: [{ v: 24, m: 'חישבתם היקף. שטח = אורך <b>×</b> רוחב.' }, { v: 12, m: 'חיברתם. שטח = אורך <b>×</b> רוחב.' }]
+        }
+      },
+      {
+        title: 'ריבוע',
+        html: `<p><b>ריבוע</b> הוא מלבן שכל ארבע הצלעות שלו שוות.</p>
+          ${areaGrid(4, 4)}
+          <ul class="lsteps">
+            <li><b>היקף ריבוע</b> = 4 × צלע ← ${M('4 × 4 = 16')} ס"מ</li>
+            <li><b>שטח ריבוע</b> = צלע × צלע ← ${M('4 × 4 = 16')} סמ"ר</li>
+          </ul>
+          <div class="rule">💡 <b>מההיקף לצלע:</b> היקף : 4. <b>מהשטח לצלע:</b> איזה מספר כפול עצמו נותן את השטח?</div>
+          <div class="warn">⚠️ כאן יצא במקרה אותו מספר (16) – אבל היקף ושטח הם דברים שונים, עם יחידות שונות!</div>`,
+        try: {
+          type: 'num', q: 'ההיקף של ריבוע הוא 28 ס"מ. מה השטח שלו? (בסמ"ר)', ans: 49,
+          hint: 'קודם מצאו את הצלע: 28 : 4.', exp: `צלע: ${M('28 : 4 = 7')}. שטח: ${M('7 × 7 = 49')} סמ"ר`,
+          traps: [{ v: 7, m: '7 היא הצלע – נכון! עכשיו חשבו את השטח.' }, { v: 784, m: 'כפלתם את ההיקף בעצמו. קודם מוצאים את הצלע (היקף : 4).' }]
+        }
+      },
+      {
+        title: 'מקבילית',
+        html: `<p>איך מחשבים שטח של מקבילית? <b>חותכים משולש מצד אחד ומעבירים לצד השני:</b></p>
+          ${parCutFig()}
+          <div class="lbtns"><button class="secondary" data-act="cut">✂️ חתכו והזיזו</button><button class="ghost" data-act="back">↺ החזירו</button></div>
+          <div class="reveal hidden explain">קיבלנו <b>מלבן</b> של 6 על 3 – עם אותו שטח! ${M('6 × 3 = 18')} סמ"ר.</div>
+          <div class="rule">💡 <b>שטח מקבילית = צלע × הגובה לצלע.</b><br>הגובה הוא הקו המקווקו – <b>ניצב</b> לצלע (יוצר זווית ישרה).</div>
+          <div class="warn">⚠️ לא כופלים בצלע המשופעת! הצלע המשופעת חשובה רק ל<b>היקף</b>.</div>`,
+        setup(root) {
+          const t = root.querySelector('[data-cut]');
+          root.querySelector('[data-act="cut"]').onclick = () => { t.style.transform = 'translate(240px, 0)'; setTimeout(() => reveal(root), 1200); };
+          root.querySelector('[data-act="back"]').onclick = () => { t.style.transform = ''; };
+        },
+        try: {
+          type: 'num', q: 'למקבילית יש צלע של 9 ס"מ, והגובה לצלע הזאת הוא 4 ס"מ. הצלע המשופעת היא 5 ס"מ. מה השטח? (בסמ"ר)', ans: 36,
+          hint: 'שטח = צלע × הגובה לצלע. איזה מספר לא צריך כאן?', exp: `${M('9 × 4 = 36')} סמ"ר. הצלע המשופעת (5) לא משתתפת בחישוב השטח.`,
+          traps: [{ v: 45, m: 'כפלתם בצלע המשופעת. צריך את <b>הגובה</b> (4).' }, { v: 18, m: 'חילקתם ב-2 – זה במשולש. במקבילית לא מחלקים!' }]
+        }
+      },
+      {
+        title: 'משולש',
+        html: `<p>משולש הוא בדיוק <b>חצי</b> ממלבן (או ממקבילית) עם אותה צלע ואותו גובה:</p>
+          ${triRectFig()}
+          <div class="lbtns"><button class="secondary" data-act="rect">⬜ הראו את המלבן</button></div>
+          <div class="reveal hidden explain">שני החלקים הבהירים ביחד שווים בדיוק למשולש. לכן המשולש הוא חצי מהמלבן: ${M('8 × 4 : 2 = 16')} סמ"ר.</div>
+          <div class="rule">💡 <b>שטח משולש = (צלע × הגובה לצלע) : 2</b></div>`,
+        setup(root) {
+          root.querySelector('[data-act="rect"]').onclick = () => { root.querySelector('[data-ghost]').classList.add('on'); reveal(root); };
+        },
+        try: {
+          type: 'num', q: 'במשולש יש צלע של 10 ס"מ, והגובה לצלע הזאת הוא 7 ס"מ. מה השטח? (בסמ"ר)', ans: 35,
+          hint: 'צלע × גובה, ואז : 2.', exp: `${M('10 × 7 : 2 = 35')} סמ"ר`,
+          traps: [{ v: 70, m: 'כמעט! שכחתם לחלק ב-2. משולש הוא חצי ממלבן.' }]
+        }
+      },
+      {
+        title: 'מצולע מורכב',
+        html: `<p>איך מחשבים שטח של צורה כזו? (כל הזוויות ישרות, המידות בס"מ) יש <b>שתי דרכים</b>:</p>
+          ${lShapeFig()}
+          <div class="lbtns"><button class="secondary" data-act="split">✂️ דרך א: שני מלבנים</button><button class="secondary" data-act="minus">⬛ דרך ב: מלבן גדול פחות פינה</button></div>
+          <div class="explain hidden" data-w1><b>דרך א:</b> מחלקים לשני מלבנים: ${M('5 × 6 = 30')} ועוד ${M('3 × 4 = 12')}. ביחד: ${M('30 + 12 = 42')} סמ"ר.</div>
+          <div class="explain hidden" data-w2><b>דרך ב:</b> משלימים למלבן גדול: ${M('8 × 6 = 48')}, ומורידים את הפינה החסרה: ${M('3 × 2 = 6')}. ${M('48 - 6 = 42')} סמ"ר.</div>
+          <div class="rule">💡 <b>היקף</b> של מצולע כזה: מחברים את <b>כל</b> הצלעות (כאן 6 צלעות): ${M('5 + 2 + 3 + 4 + 8 + 6 = 28')} ס"מ.</div>`,
+        setup(root) {
+          const on = (sel, v) => root.querySelector(sel).classList.toggle('hidden', !v);
+          root.querySelector('[data-act="split"]').onclick = () => { on('[data-p1]', 1); on('[data-p2]', 1); on('[data-miss]', 0); on('[data-w1]', 1); on('[data-w2]', 0); };
+          root.querySelector('[data-act="minus"]').onclick = () => { on('[data-p1]', 0); on('[data-p2]', 0); on('[data-miss]', 1); on('[data-w1]', 0); on('[data-w2]', 1); };
+        },
+        try: {
+          type: 'num', q: 'למלבן של 10 ס"מ על 7 ס"מ חסרה פינה בצורת מלבן של 4 ס"מ על 3 ס"מ. מה השטח של הצורה שנשארה? (בסמ"ר)', ans: 58,
+          hint: 'מלבן גדול פחות הפינה.', exp: `${M('10 × 7 = 70')}, ${M('4 × 3 = 12')}, ${M('70 - 12 = 58')} סמ"ר`,
+          traps: [{ v: 70, m: 'זה השטח של המלבן השלם. שכחתם להוריד את הפינה!' }, { v: 82, m: 'הפינה <b>חסרה</b> – מורידים אותה, לא מוסיפים.' }]
+        }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<table class="ftable">
+            <tr><th>צורה</th><th>היקף (ס"מ)</th><th>שטח (סמ"ר)</th></tr>
+            <tr><td>מלבן</td><td>סכום 4 הצלעות</td><td>אורך × רוחב</td></tr>
+            <tr><td>ריבוע</td><td>4 × צלע</td><td>צלע × צלע</td></tr>
+            <tr><td>מקבילית</td><td>סכום 4 הצלעות</td><td>צלע × גובה</td></tr>
+            <tr><td>משולש</td><td>סכום 3 הצלעות</td><td>(צלע × גובה) : 2</td></tr>
+          </table>
+          <ul class="recap">
+            <li>📏 <b>היקף</b> – אורך הדרך מסביב. <b>שטח</b> – כמה משבצות בפנים.</li>
+            <li>📐 <b>הגובה</b> ניצב לצלע – הוא לא הצלע המשופעת!</li>
+            <li>🧩 <b>מצולע מורכב:</b> מחלקים למלבנים, או מלבן גדול פחות מה שחסר.</li>
+          </ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות השטח וההיקף 🎉</b></p>`
+      }
+    ]
+  }
+});
+const LESSON_ORDER = ['order', 'frac', 'geo', 'mean'];
+const LESSON_SOON = [];
 
 function learnedSet(id) {
   store.learned = store.learned || {};
@@ -2308,7 +2897,7 @@ function check(q, a) {
     return { ok: true };
   }
   if (q.form === 'mixed') {
-    if (!properPart || (isFrac && w === 0 && N > D)) return { ok: false, retry: true, msg: 'הערך נכון, אבל ביקשו לכתוב כמספר מעורב (שלם + שבר קטן מ-1).' };
+    if (!properPart || (isFrac && w === 0 && N > D)) return { ok: false, retry: true, msg: 'הערך נכון, אבל ביקשו לכתוב כשבר מעורב (שלם + שבר קטן מ-1).' };
     return { ok: true, note: simplest ? '' : 'אפשר גם לצמצם את השבר.' };
   }
   if (q.form === 'improper') {
@@ -2355,7 +2944,7 @@ function home() {
     </div>
     <h2>📚 ללמוד</h2>
     <div class="topics">
-      ${Object.values(LESSONS).map(L => {
+      ${LESSON_ORDER.map(id => LESSONS[id]).map(L => {
         const n = learnedSet(L.id).size;
         return `<button class="topic" style="--c:${L.color}" data-lesson="${L.id}">
           <span class="ic">${L.icon}</span>
@@ -2468,7 +3057,7 @@ function inputHTML(q) {
         <input id="fd" inputmode="numeric" aria-label="מכנה" placeholder="מכנה">
       </span>
     </span>
-    <span class="fracin-note">${q.noWhole ? 'כתבו מונה ומכנה.' : 'אם התשובה גדולה מ-1, כתבו אותה כמספר מעורב (שלם + שבר). אם התשובה מספר שלם – כתבו רק בתיבה "שלם".'}</span>`;
+    <span class="fracin-note">${q.noWhole ? 'כתבו מונה ומכנה.' : 'אם התשובה גדולה מ-1, כתבו אותה כשבר מעורב (שלם + שבר). אם התשובה מספר שלם – כתבו רק בתיבה "שלם".'}</span>`;
   return `<div class="choices">${q.choices.map((c, i) => `<button data-c="${i}">${c}</button>`).join('')}</div>`;
 }
 
@@ -2864,7 +3453,7 @@ function teacher() {
           <option value="mix">🔀 תרגול מעורב</option>
           <option value="testfb">📝 מבדק עם משוב</option>
           <option value="test">📝 מבדק לדוגמה (בלי משוב)</option>
-          ${Object.values(LESSONS).map(L => `<option value="learn:${L.id}">📚 לימוד: ${L.name} (כרטיסיות הדרכה)</option>`).join('')}
+          ${LESSON_ORDER.map(id => LESSONS[id]).map(L => `<option value="learn:${L.id}">📚 לימוד: ${L.name} (כרטיסיות הדרכה)</option>`).join('')}
         </select>
       </label>
       <label>רמת התחלה:
