@@ -292,6 +292,30 @@
   .ftable th { background: #eef7f1; }
   ol.recap.order { list-style: decimal; padding-right: 26px; }
 
+  .pvt { border-collapse: collapse; margin: 10px auto; direction: ltr; font-size: 0.95rem; }
+  .pvt th { background: #eef1fb; padding: 6px 8px; border: 1px solid var(--line); font-size: 0.85rem; }
+  .pvt td { border: 1px solid var(--line); padding: 6px 10px; text-align: center; min-width: 54px; }
+  .pvt .pvd td { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
+  .pvt .pvd td.off { background: #f7f7f7; }
+  .pvt .pvv td { color: var(--muted); font-size: 0.9rem; }
+  .same5 { display: flex; justify-content: center; gap: 18px; direction: ltr; flex-wrap: wrap; }
+  .same5 > div { display: flex; flex-direction: column; align-items: center; direction: rtl; }
+  .big5 { font-size: 3rem; font-weight: 800; line-height: 1.2; }
+  .big5.c1 { color: #4c5fd5; } .big5.c2 { color: #e0703a; } .big5.c3 { color: #2f8f55; }
+  .bcols { display: flex; justify-content: center; gap: 8px; direction: ltr; flex-wrap: nowrap; }
+  .builder { text-align: center; }
+  .bcol { display: flex; flex-direction: column; align-items: center; gap: 4px; background: #f7f8ff; border-radius: 10px; padding: 6px; min-width: 70px; }
+  .bcol button { padding: 4px 14px; font-size: 1.1rem; }
+  .bname { font-size: 0.8rem; color: var(--muted); text-align: center; }
+  .bdig { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+  .bdig.zero { color: #e0703a; }
+  .digits { direction: ltr; text-align: center; letter-spacing: 6px; }
+  .digits span { display: inline-block; transition: all 0.4s; }
+  .digits span.covered { background: #23264a; color: #23264a; border-radius: 6px; }
+  .dval { text-align: center; min-width: 140px; }
+  .vcalc { font-family: "Courier New", monospace; font-size: 1.6rem; line-height: 1.4; background: #f7f8ff; border-radius: 10px; padding: 10px 20px; width: fit-content; margin: 8px auto; text-align: left; }
+  .vcalc .z { color: #e0703a; font-weight: 700; }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
@@ -301,6 +325,11 @@
     .lbody { font-size: 1.1rem; }
     .kids, .compare2, .ways { grid-template-columns: 1fr; }
     .sexpr { font-size: 1.5rem; }
+    .pvt td { min-width: 0; padding: 4px; } .pvt th { font-size: 0.7rem; padding: 3px; } .pvt .pvd td { font-size: 1.2rem; }
+    .bcols { gap: 4px; }
+    .bcol { min-width: 0; flex: 1 1 0; padding: 4px 2px; }
+    .bcol button { padding: 4px 8px; }
+    .bname { font-size: 0.68rem; }
     input.ans { width: 140px; }
   }
 
@@ -1855,6 +1884,7 @@ const LEVEL_NAME = { 1: 'רמה 1', 2: 'רמה 2', 3: 'רמה 3' };
 
 function mk(topic, gen, lv) {
   const q = gen();
+  if (!q.learn && gen.__learn) q.learn = gen.__learn;
   q.topic = topic; q.gen = gen; q.lv = lv;
   return q;
 }
@@ -2574,6 +2604,353 @@ Object.assign(LESSONS, {
   }
 });
 const LESSON_ORDER = ['order', 'frac', 'geo', 'mean'];
+/* ---------- מבנה עשרוני ומספרים עשרוניים – רכיבים ---------- */
+const PV_NAMES = ['מאות אלפים', 'עשרות אלפים', 'אלפים', 'מאות', 'עשרות', 'יחידות'];
+function pvTable(num) {
+  const s = String(num).padStart(6, ' ');
+  const first = s.search(/\S/);
+  const cells = s.split('').map((ch, i) => ({ d: ch.trim(), v: ch.trim() ? Number(ch) * 10 ** (5 - i) : null, on: i >= first }));
+  return `<table class="pvt"><tr>${PV_NAMES.map(n => `<th>${n}</th>`).join('')}</tr>
+    <tr class="pvd">${cells.map(c => `<td class="${c.on ? '' : 'off'}">${c.d}</td>`).join('')}</tr>
+    <tr class="pvv">${cells.map(c => `<td>${c.v == null ? '' : fmt(c.v)}</td>`).join('')}</tr></table>`;
+}
+function expanded(num) {
+  const s = String(num);
+  return s.split('').map((ch, i) => Number(ch) * 10 ** (s.length - 1 - i)).filter(v => v).map(fmt).join(' + ') || '0';
+}
+function roundLineSVG() {
+  const x0 = 30, x1 = 330, y = 60, val = 4385, a = 4300, b = 4400;
+  const X = v => x0 + (v - a) / (b - a) * (x1 - x0);
+  let g = `<line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" class="axis"/>`;
+  for (let v = a; v <= b; v += 10) g += `<line x1="${X(v)}" y1="${y - (v % 50 ? 6 : 12)}" x2="${X(v)}" y2="${y + (v % 50 ? 6 : 12)}" class="axis"/>`;
+  g += T(X(a), y + 32, '4,300') + T(X(b), y + 32, '4,400') + T(X(4350), y + 32, '4,350', 'middle', 'lbs');
+  g += `<circle cx="${X(val)}" cy="${y}" r="7" fill="#e0703a"/>` + T(X(val), y - 18, '4,385');
+  g += `<g class="hidden" data-arrow><line x1="${X(val)}" y1="${y + 46}" x2="${X(b) - 4}" y2="${y + 46}" stroke="#1e8a52" stroke-width="3"/><polygon points="${X(b)},${y + 46} ${X(b) - 10},${y + 40} ${X(b) - 10},${y + 52}" fill="#1e8a52"/>${T((X(val) + X(b)) / 2, y + 66, 'רק 15', 'middle', 'lbs')}
+    <line x1="${X(val)}" y1="${y + 46}" x2="${X(a) + 4}" y2="${y + 46}" stroke="#c0392b" stroke-width="2" stroke-dasharray="4 4"/>${T((X(val) + X(a)) / 2, y + 66, '85', 'middle', 'lbs')}</g>`;
+  return `<svg class="fig" viewBox="0 0 360 140" width="360" height="140">${g}</svg>`;
+}
+function gridSVG(k, color = '#1e8a8a', size = 200) {
+  const c = size / 10;
+  let g = '';
+  for (let col = 0; col < 10; col++) for (let r = 0; r < 10; r++) {
+    const on = col * 10 + r < k;
+    g += `<rect x="${2 + col * c}" y="${2 + r * c}" width="${c}" height="${c}" fill="${on ? color : '#fff'}" stroke="#9aa3c2" stroke-width="0.8"/>`;
+  }
+  g += `<rect x="2" y="2" width="${size}" height="${size}" fill="none" stroke="#23264a" stroke-width="2"/>`;
+  return `<svg class="fbar" viewBox="0 0 ${size + 4} ${size + 4}" width="${size + 4}" height="${size + 4}">${g}</svg>`;
+}
+function nlineSVG(a, b, parts, pos, showAll) {
+  const x0 = 30, x1 = 320, y = 46;
+  let g = `<line x1="${x0 - 10}" y1="${y}" x2="${x1 + 25}" y2="${y}" class="axis"/><polygon points="${x1 + 25},${y} ${x1 + 15},${y - 5} ${x1 + 15},${y + 5}" fill="#23264a"/>`;
+  for (let i = 0; i <= parts; i++) {
+    const x = x0 + (x1 - x0) * i / parts, big = i === 0 || i === parts;
+    g += `<line x1="${x}" y1="${y - (big ? 10 : 6)}" x2="${x}" y2="${y + (big ? 10 : 6)}" class="axis"/>`;
+    if (showAll && !big && i !== pos) g += T(x, y - 16, fmt(rnd(a + (b - a) * i / parts)), 'middle', 'lbs');
+  }
+  g += T(x0, y + 28, fmt(a)) + T(x1, y + 28, fmt(b));
+  if (pos != null) {
+    const bx = x0 + (x1 - x0) * pos / parts;
+    g += `<rect x="${bx - 22}" y="${y + 12}" width="44" height="26" fill="#fff" stroke="#23264a" stroke-width="1.5"/>` + T(bx, y + 31, showAll ? fmt(rnd(a + (b - a) * pos / parts)) : '?');
+  }
+  return `<svg class="fig" viewBox="0 0 360 96" width="360" height="96">${g}</svg>`;
+}
+
+Object.assign(LESSONS, {
+  place: {
+    id: 'place', name: 'מבנה עשרוני', icon: '🏛️', color: '#4c5fd5', topic: 'place',
+    desc: 'טבלת המקומות, ערך הספרה, 0 שומר מקום, כמה מאות יש, עיגול והשוואה',
+    practice: [genDigitValue, genCompose, genHowMany, genRound, genCompare, genDigitValue, genRound, genHowMany],
+    cards: [
+      {
+        title: 'טבלת המקומות',
+        html: `<p>לכל ספרה במספר יש <b>מקום</b>. כתבו מספר (עד 6 ספרות) וראו איפה כל ספרה נמצאת:</p>
+          <div class="center"><input class="ans" data-pvin value="4385" inputmode="numeric" maxlength="6" aria-label="מספר"></div>
+          <div data-pvt>${pvTable(4385)}</div>
+          <div class="explain center" data-pvx>${M(`4,385 = ${expanded(4385)}`)}</div>
+          <div class="rule">💡 כל מקום שווה <b>פי 10</b> מהמקום שמימינו: 10 יחידות = עשרת אחת, 10 עשרות = מאה אחת, 10 מאות = אלף אחד...</div>`,
+        setup(root) {
+          const inp = root.querySelector('[data-pvin]');
+          inp.addEventListener('input', () => {
+            const s = inp.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '').slice(0, 6);
+            inp.value = s;
+            if (!s) return;
+            root.querySelector('[data-pvt]').innerHTML = pvTable(Number(s));
+            root.querySelector('[data-pvx]').innerHTML = M(`${fmt(Number(s))} = ${expanded(Number(s))}`);
+          });
+        },
+        try: {
+          type: 'num', q: `מה <b>הערך</b> של הספרה 7 במספר ${M('37,402')}?`, ans: 7000,
+          hint: 'באיזה מקום נמצאת הספרה 7? יחידות, עשרות, מאות, אלפים...', exp: 'הספרה 7 נמצאת במקום האלפים, לכן ערכה 7,000.',
+          traps: [{ v: 7, m: 'כתבתם רק את הספרה. מה הערך שלה לפי המקום שבו היא נמצאת?' }, { v: 700, m: 'ספרו שוב את המקומות מימין: יחידות, עשרות, מאות, <b>אלפים</b>.' }]
+        }
+      },
+      {
+        title: 'אותה ספרה – ערך שונה',
+        html: `<p>במספר ${M('555')} יש שלוש ספרות זהות – אבל לכל אחת <b>ערך אחר</b>:</p>
+          <div class="same5">
+            <div><span class="big5 c1">5</span><span>5 מאות = <b>500</b></span></div>
+            <div><span class="big5 c2">5</span><span>5 עשרות = <b>50</b></span></div>
+            <div><span class="big5 c3">5</span><span>5 יחידות = <b>5</b></span></div>
+          </div>
+          <div class="rule">💡 <b>הספרה</b> אומרת "כמה", <b>המקום</b> אומר "מה". הערך = ספרה × המקום.</div>
+          <div class="rule">💡 כל מקום שמאלה ← הערך גדל <b>פי 10</b>. שני מקומות שמאלה ← <b>פי 100</b>.</div>`,
+        try: {
+          type: 'num', q: `במספר ${M('6,060')}: פי כמה גדול ערך ה-6 השמאלי מערך ה-6 הימני?`, ans: 100,
+          hint: 'מה הערך של כל אחד מה-6? (6,000 ו-60)', exp: `ה-6 השמאלי שווה 6,000 והימני 60. ${M('6,000 : 60 = 100')} – פי 100.`,
+          traps: [{ v: 10, m: 'בין ה-6-ים יש שני מקומות, לא אחד. 6,000 ו-60 – פי כמה?' }, { v: 5940, m: 'חישבתם את ההפרש. השאלה היא "פי כמה" – חילוק.' }]
+        }
+      },
+      {
+        title: 'האפס שומר מקום',
+        html: `<p>בנו מספר! לחצו + ו−, ושימו לב מה קורה כשבמקום מסוים אין כלום:</p>
+          <div class="builder" data-builder></div>
+          <div class="rule">💡 כשאין ספרות במקום מסוים – כותבים <b>0</b>. האפס "שומר" על המקום, כדי שהספרות האחרות יישארו במקום הנכון.</div>
+          <div class="warn">⚠️ 4 אלפים ו-3 עשרות זה ${M('4,030')} – לא ${M('43')}!</div>`,
+        setup(root) {
+          const names = ['עשרות אלפים', 'אלפים', 'מאות', 'עשרות', 'יחידות'];
+          const d = [0, 4, 0, 3, 0];
+          const show = () => {
+            const n = d.reduce((s, x, i) => s + x * 10 ** (4 - i), 0);
+            root.querySelector('[data-builder]').innerHTML = `
+              <div class="bcols">${names.map((nm, i) => `<div class="bcol"><div class="bname">${nm}</div>
+                <button class="secondary" data-bi="${i}" data-bd="1">+</button><div class="bdig ${d[i] ? '' : 'zero'}">${d[i]}</div><button class="secondary" data-bi="${i}" data-bd="-1">−</button></div>`).join('')}</div>
+              <div class="fbig">${M(fmt(n))}</div>
+              <div class="muted">${d.map((x, i) => x ? `${x} ${names[i]}` : '').filter(Boolean).join(' + ') || 'אפס'}</div>`;
+            root.querySelectorAll('[data-bi]').forEach(b => b.onclick = () => {
+              const i = Number(b.dataset.bi);
+              d[i] = Math.max(0, Math.min(9, d[i] + Number(b.dataset.bd)));
+              show();
+            });
+          };
+          show();
+        },
+        try: {
+          type: 'num', q: 'כתבו את המספר: 5 עשרות אלפים + 2 מאות + 8 יחידות', ans: 50208,
+          hint: 'אין אלפים ואין עשרות – מה כותבים במקומות האלה?', exp: `${M('50,000 + 200 + 8 = 50,208')}`,
+          traps: [{ v: 528, m: 'שכחתם את האפסים! במקום האלפים ובמקום העשרות צריך לכתוב 0.' }, { v: 5208, m: 'חסר 0 במקום האלפים. ספרו: 5 צריך להיות במקום עשרות האלפים.' }]
+        }
+      },
+      {
+        title: 'כמה מאות שלמות יש במספר?',
+        html: `<p>כמה <b>מאות שלמות</b> יש במספר ${M('4,385')}?</p>
+          <div class="fbig digits" dir="ltr"><span>4</span><span>3</span><span data-cov>8</span><span data-cov>5</span></div>
+          <div class="lbtns"><button class="secondary" data-act="cover">🙈 כסו את 2 הספרות הימניות</button></div>
+          <div class="reveal hidden explain">נשאר ${M('43')} – <b>יש 43 מאות שלמות</b>. (${M('43 × 100 = 4,300')}, ועוד 85 שלא משלימים מאה.)</div>
+          <div class="warn">⚠️ <b>ספרת המאות</b> היא 3 – אבל <b>מאות שלמות</b> יש 43! אלה שתי שאלות שונות.</div>
+          <div class="rule">💡 כמה <b>עשרות</b> שלמות? מכסים ספרה אחת מימין. כמה <b>מאות</b>? מכסים שתיים. כמה <b>אלפים</b>? מכסים שלוש.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="cover"]').onclick = () => { root.querySelectorAll('[data-cov]').forEach(s => s.classList.add('covered')); reveal(root); };
+        },
+        try: {
+          type: 'num', q: `כמה <b>עשרות שלמות</b> יש במספר ${M('2,746')}?`, ans: 274,
+          hint: 'כסו את ספרת היחידות. מה נשאר?', exp: 'מכסים את ה-6: נשאר 274 – יש 274 עשרות שלמות.',
+          traps: [{ v: 4, m: 'זו רק ספרת העשרות. כמה עשרות יש <b>בכל</b> המספר?' }, { v: 27, m: 'כיסיתם שתי ספרות – זה מאות. לעשרות מכסים רק את ספרת היחידות.' }]
+        }
+      },
+      {
+        title: 'עיגול מספרים',
+        html: `<p>עגלו את ${M('4,385')} <b>למאות</b> הקרובות: האם הוא קרוב יותר ל-4,300 או ל-4,400?</p>
+          ${roundLineSVG()}
+          <div class="lbtns"><button class="secondary" data-act="near">📍 לאן קרוב יותר?</button></div>
+          <div class="reveal hidden explain">מ-4,385 עד 4,400 – רק 15. עד 4,300 – 85. לכן ${M('4,385 ≈ 4,400')}.</div>
+          <div class="rule">💡 <b>הכלל המהיר:</b> מסתכלים על הספרה <b>שמימין</b> למקום העיגול.<br>5, 6, 7, 8, 9 ← מעגלים <b>למעלה</b>. 0, 1, 2, 3, 4 ← מעגלים <b>למטה</b>.<br>כאן: מעגלים למאות, הספרה שמימין היא <b>8</b> ← למעלה.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="near"]').onclick = () => { root.querySelector('[data-arrow]').classList.remove('hidden'); reveal(root); };
+        },
+        try: {
+          type: 'num', q: `עגלו את ${M('27,451')} <b>לאלפים</b> הקרובים.`, ans: 27000,
+          hint: 'מעגלים לאלפים – מה הספרה שמימין לספרת האלפים?', exp: 'הספרה שמימין לאלפים היא 4 ← מעגלים למטה: 27,000.',
+          traps: [{ v: 28000, m: 'הספרה שמימין לאלפים היא 4 (לא 5). 4 ומטה – מעגלים למטה.' }, { v: 27500, m: 'עיגלתם למאות. ביקשו לעגל <b>לאלפים</b>.' }]
+        }
+      },
+      {
+        title: 'השוואת מספרים',
+        html: `<ol class="lsteps">
+            <li><b>סופרים ספרות:</b> למספר עם יותר ספרות יש ערך גדול יותר.<br>${M('102,345 > 99,999')} (6 ספרות מול 5)</li>
+            <li><b>אותו מספר ספרות?</b> משווים ספרה אחר ספרה <b>משמאל</b> (מהמקום הגבוה).<br>${M('48,372 > 48,327')} – שווים עד המאות, ובעשרות 7 > 2.</li>
+          </ol>
+          <div class="rule">💡 הסימן <b>&gt;</b> "פותח פה" למספר הגדול. ${M('8 > 3')} ו-${M('3 < 8')}.</div>`,
+        try: {
+          type: 'choice', q: 'איזה מספר הוא <b>הגדול ביותר</b>?',
+          choices: [M('102,345'), M('99,999'), M('98,765'), M('100,001')], ans: 0,
+          hint: 'קודם סופרים ספרות. אחר כך משווים משמאל.', exp: 'ל-102,345 ול-100,001 יש 6 ספרות. משווים משמאל: 1=1, 0=0, 2>0 – לכן 102,345 הגדול ביותר.',
+          traps: [{ c: M('99,999'), m: 'הרבה 9-ים לא אומרים שהמספר גדול! כמה ספרות יש לו? (5 – ולאחרים 6)' }, { c: M('100,001'), m: 'נכון שיש לו 6 ספרות – אבל השוו אותו ל-102,345 ספרה אחר ספרה משמאל.' }]
+        }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+            <li>🏛️ כל מקום שווה <b>פי 10</b> מהמקום שמימינו.</li>
+            <li>🔢 <b>ערך הספרה</b> = הספרה × המקום שלה (ב-37,402 ערך ה-7 הוא 7,000).</li>
+            <li>0️⃣ <b>אפס שומר מקום</b> – 4 אלפים ו-3 עשרות = 4,030.</li>
+            <li>🙈 <b>כמה מאות שלמות?</b> מכסים 2 ספרות מימין (ב-4,385 יש 43 מאות).</li>
+            <li>📍 <b>עיגול:</b> הספרה שמימין למקום העיגול – 5 ומעלה למעלה, 4 ומטה למטה.</li>
+            <li>⚖️ <b>השוואה:</b> קודם מספר הספרות, אחר כך ספרה אחר ספרה משמאל.</li>
+          </ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות המבנה העשרוני 🎉</b></p>`
+      }
+    ]
+  },
+
+  dec: {
+    id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a', topic: 'dec',
+    desc: 'עשיריות ומאיות, שבר ↔ עשרוני, השוואה, ישר מספרים, חיבור וחיסור, כפל ב-10 ויחידות מידה',
+    practice: [genFracToDec, genDecToFrac, genDecCompare, genNumberLine, genDecAddSub, genMul10, genUnits, genSequence],
+    cards: [
+      {
+        title: 'מה זה מספר עשרוני?',
+        html: `<p>הריבוע הגדול הוא <b>שלם אחד</b>. הוא מחולק ל-100 משבצות. עמודה אחת = <b>עשירית</b> (0.1), משבצת אחת = <b>מאית</b> (0.01).</p>
+          <div class="frow"><div data-grid></div><div class="dval" data-dval></div></div>
+          <div class="lbtns"><button class="secondary" data-g="10">+ עשירית (0.1)</button><button class="secondary" data-g="1">+ מאית (0.01)</button><button class="secondary" data-g="-10">− 0.1</button><button class="secondary" data-g="-1">− 0.01</button><button class="ghost" data-g="0">↺ איפוס</button></div>
+          <div class="rule">💡 אחרי הנקודה: ספרה ראשונה = <b>עשיריות</b>, שנייה = <b>מאיות</b>, שלישית = <b>אלפיות</b>.<br>${M('0.35')} = 3 עשיריות ו-5 מאיות = ${M(F(35, 100))}</div>`,
+        setup(root) {
+          let k = 35;
+          const show = () => {
+            root.querySelector('[data-grid]').innerHTML = gridSVG(k);
+            root.querySelector('[data-dval]').innerHTML = `<div class="fbig">${M(k === 100 ? '1' : fmt(k / 100))}</div><div>${M(F(k, 100))}</div><div class="muted">${Math.floor(k / 10)} עשיריות ו-${k % 10} מאיות</div>`;
+          };
+          root.querySelectorAll('[data-g]').forEach(b => b.onclick = () => { const v = Number(b.dataset.g); k = v ? Math.max(0, Math.min(100, k + v)) : 0; show(); });
+          show();
+        },
+        try: {
+          type: 'num', q: 'בריבוע של 100 משבצות צבעו 47 משבצות. איזה מספר עשרוני מתאר את החלק הצבוע?', ans: 0.47,
+          hint: '47 מתוך 100 = 47 מאיות.', exp: `${M(`${F(47, 100)} = 0.47`)}`,
+          traps: [{ v: 4.7, m: '4.7 זה יותר מ-4 שלמים! 47 מאיות זה פחות משלם אחד.' }, { v: 47, m: 'צבעו 47 משבצות מתוך 100 – זה חלק משלם, כלומר פחות מ-1.' }]
+        }
+      },
+      {
+        title: 'שבר ↔ מספר עשרוני',
+        html: `<p>כשהמכנה הוא 10, 100 או 1000 – קל לכתוב כמספר עשרוני: <b>כמה אפסים במכנה = כמה ספרות אחרי הנקודה</b>.</p>
+          <table class="ftable">
+            <tr><td>${M(F(3, 10))}</td><td>${M('0.3')}</td><td>ספרה אחת אחרי הנקודה</td></tr>
+            <tr><td>${M(F(6, 100))}</td><td>${M('0.06')}</td><td>שתי ספרות – לכן 0 לפני ה-6</td></tr>
+            <tr><td>${M(F(45, 1000))}</td><td>${M('0.045')}</td><td>שלוש ספרות</td></tr>
+          </table>
+          <p>מכנה אחר? <b>מרחיבים</b> קודם למכנה 10 או 100:</p>
+          <div class="center">${M(`${F(1, 2)} = ${F(5, 10)} = 0.5`)} &nbsp; · &nbsp; ${M(`${F(1, 4)} = ${F(25, 100)} = 0.25`)} &nbsp; · &nbsp; ${M(`${F(3, 4)} = ${F(75, 100)} = 0.75`)} &nbsp; · &nbsp; ${M(`${F(1, 5)} = ${F(2, 10)} = 0.2`)}</div>
+          <div class="warn">⚠️ ${M(F(3, 5))} הוא <b>לא</b> ${M('0.3')}! ${M(`${F(3, 5)} = ${F(6, 10)} = 0.6`)}</div>`,
+        try: {
+          type: 'num', q: `כתבו כמספר עשרוני: ${M(`${F(6, 100)} =`)}`, ans: 0.06,
+          hint: 'במכנה 100 יש שני אפסים – כמה ספרות אחרי הנקודה?', exp: `שתי ספרות אחרי הנקודה: ${M('0.06')}`,
+          traps: [{ v: 0.6, m: '0.6 זה 6 עשיריות. כאן יש 6 <b>מאיות</b> – שתי ספרות אחרי הנקודה.' }, { v: 0.006, m: 'שלוש ספרות זה אלפיות. במכנה 100 יש רק שני אפסים.' }]
+        }
+      },
+      {
+        title: 'השוואת מספרים עשרוניים',
+        html: `<p>מה גדול יותר: ${M('0.5')} או ${M('0.45')}? נראה בריבועים:</p>
+          <div class="frow"><div class="center">${gridSVG(50, '#1e8a8a', 150)}<div>${M('0.5 = 0.50')}</div></div><div class="center">${gridSVG(45, '#4c5fd5', 150)}<div>${M('0.45')}</div></div></div>
+          <div class="explain">${M('0.5')} = 50 מאיות, ו-${M('0.45')} = 45 מאיות. לכן ${M('0.5 > 0.45')}!</div>
+          <div class="rule">💡 <b>טריק:</b> מוסיפים אפסים בסוף כדי שיהיה אותו מספר ספרות אחרי הנקודה: ${M('0.50')} מול ${M('0.45')} – ועכשיו משווים כמו מספרים רגילים.</div>
+          <div class="warn">⚠️ מספר עם <b>יותר ספרות</b> אחרי הנקודה הוא <b>לא</b> בהכרח גדול יותר!</div>`,
+        try: {
+          type: 'choice', q: 'איזה מספר הוא <b>הגדול ביותר</b>?',
+          choices: [M('0.7'), M('0.65'), M('0.069'), M('0.6')], ans: 0,
+          hint: 'הוסיפו אפסים: 0.700, 0.650, 0.069, 0.600 – והשוו.', exp: 'עם אפסים: 0.700 > 0.650 > 0.600 > 0.069. הגדול ביותר: 0.7.',
+          traps: [{ c: M('0.65'), m: 'ל-0.65 יש יותר ספרות – אבל השוו קודם את העשיריות: 7 מול 6.' }, { c: M('0.069'), m: 'הרבה ספרות לא אומר גדול! ב-0.069 יש 0 עשיריות.' }]
+        }
+      },
+      {
+        title: 'מספרים עשרוניים על ישר המספרים',
+        html: `<p>הקטע בין 0.1 ל-0.2 מחולק ל-<b>10 חלקים שווים</b>. כמה שווה כל חלק? איזה מספר במלבן?</p>
+          <div data-nl>${nlineSVG(0.1, 0.2, 10, 4, false)}</div>
+          <div class="lbtns"><button class="secondary" data-act="labels">🏷️ הראו את כל הערכים</button></div>
+          <div class="reveal hidden explain">${M('0.2 - 0.1 = 0.1')}, מחולק ל-10 ← כל חלק = ${M('0.01')}. המלבן נמצא 4 חלקים אחרי 0.1: ${M('0.14')}</div>
+          <div class="rule">💡 <b>שלושה צעדים:</b> 1. כמה חלקים יש? 2. כמה שווה כל חלק? (הקטע : מספר החלקים) 3. סופרים מההתחלה.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="labels"]').onclick = () => { root.querySelector('[data-nl]').innerHTML = nlineSVG(0.1, 0.2, 10, 4, true); reveal(root); };
+        },
+        try: {
+          type: 'num', q: `איזה מספר צריך להיות במלבן?<div class="center">${nlineSVG(2, 3, 10, 7, false)}</div>`, ans: 2.7,
+          hint: 'בין 2 ל-3 יש 10 חלקים – כל חלק שווה 0.1.', exp: `כל חלק = ${M('0.1')}, והמלבן 7 חלקים אחרי 2: ${M('2.7')}`,
+          traps: [{ v: 2.07, m: 'כל חלק שווה 0.1 (עשירית), לא 0.01 – כי הקטע הוא שלם אחד מחולק ל-10.' }, { v: 7, m: 'המלבן נמצא בין 2 ל-3. מתחילים לספור מ-2.' }]
+        }
+      },
+      {
+        title: 'חיבור וחיסור – נקודה מתחת לנקודה',
+        html: `<p>פותרים ${M('3.7 + 2.45')} במאונך. <b>הנקודה מתחת לנקודה</b>, ומוסיפים 0 במקום ריק:</p>
+          <pre class="vcalc" dir="ltr">  3.7<span class="z">0</span>
++ 2.45
+──────
+  6.15</pre>
+          <div class="rule">💡 עשיריות מתחת לעשיריות, מאיות מתחת למאיות. הנקודה בתשובה – <b>באותו מקום</b>.</div>
+          <div class="rule">💡 חיסור משלם: ${M('5 - 1.75')} ← כותבים ${M('5.00 - 1.75 = 3.25')}</div>
+          <div class="warn">⚠️ טעות נפוצה: ליישר לימין (${M('3.7 + 2.45 = 2.82')}) – זה לא נכון!</div>`,
+        try: {
+          type: 'num', q: `פתרו: ${M('6.4 + 2.35 =')}`, ans: 8.75,
+          hint: 'כתבו 6.40 ומתחתיו 2.35 – נקודה מתחת לנקודה.', exp: `${M('6.40 + 2.35 = 8.75')}`,
+          traps: [{ v: 8.39, m: 'יישרתם לימין. 6.4 זה 6.40 – ה-4 הוא עשיריות! נקודה מתחת לנקודה.' }, { v: 2.99, m: 'יישרתם לימין. נקודה מתחת לנקודה!' }, { v: 8.39, m: '' }].filter(t => t.m)
+        }
+      },
+      {
+        title: 'כפל וחילוק ב-10, 100, 1000',
+        html: `<p>לחצו וראו איך <b>הנקודה זזה</b>:</p>
+          <div class="fbig" data-num></div>
+          <div class="center muted" data-move>&nbsp;</div>
+          <div class="lbtns"><button class="secondary" data-m="10">× 10</button><button class="secondary" data-m="100">× 100</button><button class="secondary" data-m="0.1">: 10</button><button class="secondary" data-m="0.01">: 100</button><button class="ghost" data-m="0">↺ חזרה ל-3.45</button></div>
+          <div class="rule">💡 <b>כפל</b> ב-10/100/1000 ← הנקודה זזה <b>ימינה</b> 1/2/3 מקומות (המספר <b>גדל</b>).<br><b>חילוק</b> ב-10/100/1000 ← הנקודה זזה <b>שמאלה</b> 1/2/3 מקומות (המספר <b>קטן</b>).<br>כמה אפסים יש ב-10/100/1000 = כמה מקומות זזים.</div>`,
+        setup(root) {
+          let x = 3.45;
+          const show = msg => {
+            root.querySelector('[data-num]').innerHTML = M(fmt(x));
+            root.querySelector('[data-move]').innerHTML = msg || '&nbsp;';
+          };
+          root.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
+            const f = Number(b.dataset.m);
+            if (!f) { x = 3.45; show(); return; }
+            const nx = rnd(x * f);
+            if (nx > 100000 || nx < 0.00001) return;
+            x = nx;
+            const z = Math.round(Math.abs(Math.log10(f)));
+            show(f > 1 ? `הנקודה זזה ${z} ${z === 1 ? 'מקום' : 'מקומות'} ימינה ← המספר גדל` : `הנקודה זזה ${z} ${z === 1 ? 'מקום' : 'מקומות'} שמאלה ← המספר קטן`);
+          });
+          show();
+        },
+        try: {
+          type: 'num', q: `פתרו: ${M('0.38 × 100 =')}`, ans: 38,
+          hint: 'ב-100 יש שני אפסים – הנקודה זזה 2 מקומות ימינה.', exp: `הנקודה זזה 2 מקומות ימינה: ${M('0.38 × 100 = 38')}`,
+          traps: [{ v: 3.8, m: 'הנקודה זזה רק מקום אחד. ב-100 יש <b>שני</b> אפסים.' }, { v: 0.0038, m: 'בכפל המספר <b>גדל</b> – הנקודה זזה ימינה.' }]
+        }
+      },
+      {
+        title: 'יחידות מידה ומספרים עשרוניים',
+        html: `<table class="ftable">
+            <tr><th>יחידה גדולה</th><th>יחידה קטנה</th><th>דוגמה</th></tr>
+            <tr><td>1 ק"ג</td><td>1,000 גרם</td><td>0.2 ק"ג = 200 גרם</td></tr>
+            <tr><td>1 מ'</td><td>100 ס"מ</td><td>1.5 מ' = 150 ס"מ</td></tr>
+            <tr><td>1 ק"מ</td><td>1,000 מ'</td><td>0.4 ק"מ = 400 מ'</td></tr>
+            <tr><td>1 ליטר</td><td>1,000 מ"ל</td><td>0.25 ליטר = 250 מ"ל</td></tr>
+          </table>
+          <div class="rule">💡 <b>מיחידה גדולה לקטנה</b> ← כופלים (המספר גדל). ${M("1.5 × 100 = 150")}<br><b>מיחידה קטנה לגדולה</b> ← מחלקים (המספר קטן). ${M('350 : 1,000 = 0.35')}</div>
+          <div class="rule">✔ בדיקת היגיון: ביחידה קטנה צריך <b>יותר</b> ממנה – לכן המספר גדול יותר.</div>`,
+        try: {
+          type: 'num', q: `השלימו: 1.5 מ' = ${BOX} ס"מ`, ans: 150,
+          hint: "1 מ' = 100 ס\"מ. ממטרים לסנטימטרים – כופלים ב-100.", exp: `${M('1.5 × 100 = 150')} ס"מ`,
+          traps: [{ v: 15, m: "1 מ' = <b>100</b> ס\"מ – הנקודה זזה 2 מקומות." }, { v: 1500, m: "1 מ' = 100 ס\"מ (לא 1,000). הנקודה זזה 2 מקומות." }, { v: 0.015, m: 'עוברים ליחידה קטנה יותר – המספר צריך לגדול!' }]
+        }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+            <li>📏 אחרי הנקודה: <b>עשיריות, מאיות, אלפיות</b>.</li>
+            <li>🔄 <b>שבר ← עשרוני:</b> כמה אפסים במכנה = כמה ספרות אחרי הנקודה. מכנה אחר? מרחיבים ל-10 או 100.</li>
+            <li>⚖️ <b>השוואה:</b> מוסיפים אפסים בסוף ומשווים. יותר ספרות ≠ גדול יותר!</li>
+            <li>📍 <b>ישר מספרים:</b> כמה חלקים? כמה שווה כל חלק? סופרים מההתחלה.</li>
+            <li>➕ <b>חיבור וחיסור:</b> נקודה מתחת לנקודה.</li>
+            <li>✖️ <b>כפל ב-10/100/1000:</b> הנקודה ימינה. <b>חילוק:</b> הנקודה שמאלה.</li>
+            <li>⚖️ <b>יחידות:</b> מגדולה לקטנה – כופלים; מקטנה לגדולה – מחלקים.</li>
+          </ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות המספרים העשרוניים 🎉</b></p>`
+      }
+    ]
+  }
+});
+LESSON_ORDER.splice(0, LESSON_ORDER.length, 'place', 'order', 'frac', 'dec', 'geo', 'mean');
+
+// קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
+[[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
+ [genDecimalPlace, 'dec', 0], [genExpandedDecimal, 'dec', 0], [genFracToDec, 'dec', 1], [genDecToFrac, 'dec', 1], [genFracPlusDec, 'dec', 1],
+ [genDecCompare, 'dec', 2], [genNumberLine, 'dec', 3], [genSequence, 'dec', 4], [genDecAddSub, 'dec', 4], [genMul10, 'dec', 5],
+ [genUnits, 'dec', 6], [genEstimateLength, 'dec', 6]].forEach(([g, l, c]) => { g.__learn = { lesson: l, card: c }; });
 const LESSON_SOON = [];
 
 function learnedSet(id) {
