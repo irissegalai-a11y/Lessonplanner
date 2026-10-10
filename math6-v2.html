@@ -3357,6 +3357,125 @@ const LEVEL_DESC2 = {
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 
+/* =========================================================
+   אחוזים (כיתה ו')
+   ========================================================= */
+const P = x => M(`${fmt(x)}%`);
+function pctGridSVG(k, size = 150) {
+  const c = size / 10;
+  let g = '';
+  for (let i = 0; i < 100; i++) {
+    const r = Math.floor(i / 10), col = i % 10;
+    g += `<rect x="${size - (col + 1) * c}" y="${r * c}" width="${c}" height="${c}" fill="${i < k ? '#d94a8c' : '#fff'}" stroke="#555" stroke-width="0.8"/>`;
+  }
+  return `<svg class="fig" style="max-width:230px" viewBox="-2 -2 ${size + 4} ${size + 4}" width="${size}" height="${size}" role="img" aria-label="ריבוע מחולק ל-100 משבצות, ${k} צבועות">${g}</svg>`;
+}
+
+function genPctGrid() {
+  const k = R(3, 97);
+  return {
+    type: 'num', unit: '%', text: 'הריבוע מחולק ל-100 משבצות שוות. איזה אחוז מהריבוע <b>צבוע</b>?', fig: `<div class="center">${pctGridSVG(k)}</div>`, ans: k,
+    traps: [{ v: 100 - k, m: 'ספרתם את המשבצות הלבנות. שואלים על החלק <b>הצבוע</b>.' }],
+    hint: 'אחוז = כמה מתוך 100. ספרו שורות שלמות (כל שורה = 10 משבצות) ועוד המשבצות הבודדות.',
+    exp: `צבועות ${k} משבצות מתוך 100, כלומר ${P(k)}.`
+  };
+}
+
+const PCT_EQ = [[50, 1, 2, 0.5], [25, 1, 4, 0.25], [75, 3, 4, 0.75], [10, 1, 10, 0.1], [20, 1, 5, 0.2], [1, 1, 100, 0.01], [40, 2, 5, 0.4], [5, 1, 20, 0.05], [30, 3, 10, 0.3], [60, 3, 5, 0.6]];
+function genPctConvert() {
+  const k = R(0, 2);
+  if (k === 0) {
+    const [p, n, d] = pick(PCT_EQ);
+    const others = shuffle(PCT_EQ.filter(e => e[0] !== p)).slice(0, 3).map(e => M(F(e[1], e[2])));
+    const q = choiceQ({
+      text: `איזה שבר שווה ל-${P(p)}?`,
+      hint: `${p}% = ${p} מתוך 100. צמצמו את השבר ${p}/100.`,
+      exp: `${P(p)} = ${M(`${F(p, 100)} = ${F(n, d)}`)}`
+    }, M(F(n, d)), others);
+    return q;
+  }
+  if (k === 1) {
+    const p = pick([R(1, 99), R(1, 9) * 10, R(1, 99)]);
+    return {
+      type: 'num', text: `כתבו את ${P(p)} כמספר עשרוני.`, ans: rnd(p / 100),
+      traps: [{ v: p / 10, m: `${p}% = ${p} מתוך <b>100</b> – מחלקים ב-100, לא ב-10.` }, { v: p, m: 'מספר עשרוני: מחלקים ב-100. למשל 35% = 0.35.' }].filter(t => t.v !== rnd(p / 100)),
+      hint: 'אחוז = מתוך 100. מחלקים ב-100: הנקודה זזה שתי ספרות שמאלה.',
+      exp: `${P(p)} = ${M(`${F(p, 100)} = ${fmt(rnd(p / 100))}`)}`
+    };
+  }
+  const v = pick([R(1, 99) / 100, R(1, 9) / 10, R(1, 99) / 100]);
+  return {
+    type: 'num', unit: '%', text: `כתבו את ${M(fmt(v))} באחוזים.`, ans: Math.round(v * 100),
+    traps: [{ v: Math.round(v * 10), m: 'כופלים ב-100 (שתי ספרות), לא ב-10.' }].filter(t => t.v !== Math.round(v * 100)),
+    hint: 'כופלים ב-100: הנקודה זזה שתי ספרות ימינה.',
+    exp: `${M(`${fmt(v)} = ${F(Math.round(v * 100), 100)}`)} = ${P(Math.round(v * 100))}`
+  };
+}
+
+function genPctOf(lv = 1) {
+  const opts = lv === 1 ? [[50, () => R(2, 60) * 2], [25, () => R(2, 30) * 4], [10, () => R(2, 50) * 10], [100, () => R(10, 300)]]
+    : [[20, () => R(2, 40) * 5], [30, () => R(2, 30) * 10], [75, () => R(2, 30) * 4], [5, () => R(2, 30) * 20], [15, () => R(2, 20) * 20], [40, () => R(2, 30) * 5], [60, () => R(2, 30) * 5], [12, () => R(1, 9) * 25]];
+  const [p, f] = pick(opts), N = f(), ans = rnd(N * p / 100);
+  if (ans % 1) return genPctOf(lv);
+  const ten = N / 10;
+  const steps = p === 50 ? [{ p: `50% זה חצי: ${M(`${N} : 2 =`)}`, a: ans }]
+    : p === 25 ? [{ p: `25% זה רבע: ${M(`${N} : 4 =`)}`, a: ans }]
+    : p === 100 ? undefined
+    : [{ p: `קודם 10%: ${M(`${N} : 10 =`)}`, a: ten }].concat(p === 10 ? [] : p % 10 === 0 ? [{ p: `${P(p)} = ${p / 10} פעמים 10%: ${M(`${fmt(ten)} × ${p / 10} =`)}`, a: ans }] : [{ p: `ועכשיו ${P(p)}: ${M(`${N} × ${p} : 100 =`)}`, a: ans }]);
+  return {
+    type: 'num', text: `כמה הם ${P(p)} מ-${M(fmt(N))}?`, ans, learn: { lesson: 'pct', card: 2 },
+    traps: [{ v: N * p, m: 'שכחתם לחלק ב-100. אחוז = חלק מתוך 100.' }, { v: N - ans, m: `זה מה שנשאר אחרי שמורידים ${p}%. שואלים כמה הם ${p}% עצמם.` }].filter(t => t.v !== ans),
+    steps,
+    hint: p === 50 ? '50% = חצי.' : p === 25 ? '25% = רבע.' : '10% = מחלקים ב-10. משם אפשר לחשב אחוזים אחרים.',
+    exp: `${M(`${fmt(N)} × ${p} : 100 = ${fmt(ans)}`)}`
+  };
+}
+
+function genPctWhat() {
+  const [Y, step] = pick([[20, 1], [25, 1], [50, 1], [200, 2], [400, 4], [10, 1], [40, 2], [80, 4]]);
+  const X = R(1, Y / step - 1) * step;
+  const ans = rnd(X / Y * 100);
+  if (ans % 1) return genPctWhat();
+  const thing = pick([{ a: 'בכיתה', b: 'תלמידים', c: 'מהם בנות' }, { a: 'בסל', b: 'פירות', c: 'מהם תפוחים' }, { a: 'במבחן', b: 'שאלות', c: 'מהן ענה נכון דני' }]);
+  return {
+    type: 'num', unit: '%', text: `${thing.a} יש ${Y} ${thing.b}, ו-${X} ${thing.c}.<br>איזה אחוז זה?`, ans,
+    traps: [{ v: X, m: `${X} זה המספר, לא האחוז. כמה זה מתוך 100?` }, { v: rnd(Y / X * 100), m: 'חילקתם הפוך. החלק חלקי השלם: ' + X + ' : ' + Y + '.' }].filter(t => t.v !== ans),
+    steps: [{ p: `כתבו כשבר: ${M(F(X, Y))}. הרחיבו למכנה 100 – מה המונה?`, a: ans }],
+    hint: `כתבו שבר (${X} מתוך ${Y}) והרחיבו אותו למכנה 100.`,
+    exp: `${M(`${F(X, Y)} = ${F(ans, 100)}`)} = ${P(ans)}`
+  };
+}
+
+function genPctDiscount() {
+  const p = pick([10, 20, 25, 50, 30]), price = pick([40, 60, 80, 100, 120, 150, 200, 240, 300]);
+  const off = price * p / 100;
+  if (off % 1) return genPctDiscount();
+  const askNew = Math.random() < 0.6;
+  const item = pick(['חולצה', 'משחק', 'זוג נעליים', 'תיק']);
+  return {
+    type: 'num', unit: '₪', text: `${item} עולה ${price} ₪. יש הנחה של ${P(p)}.<br>${askNew ? 'כמה צריך לשלם אחרי ההנחה?' : 'בכמה שקלים ההנחה?'}`, ans: askNew ? price - off : off,
+    traps: askNew ? [{ v: off, m: `זה גובה ההנחה. כמה צריך <b>לשלם</b>? ${price} פחות ההנחה.` }, { v: price - p, m: `הורדתם ${p} שקלים. ההנחה היא ${p}% מהמחיר, לא ${p} ₪.` }].filter(t => t.v !== price - off)
+      : [{ v: price - off, m: 'זה המחיר אחרי ההנחה. שואלים מה גובה ההנחה עצמה.' }],
+    steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: off }].concat(askNew ? [{ p: M(`${price} - ${off} =`), a: price - off }] : []),
+    hint: `קודם חשבו כמה שקלים הם ${p}% מ-${price}.`,
+    exp: `ההנחה: ${M(`${price} × ${p} : 100 = ${off}`)} ₪.${askNew ? ` משלמים: ${M(`${price} - ${off} = ${price - off}`)} ₪.` : ''}`
+  };
+}
+
+function genPctWhole() {
+  const p = pick([10, 20, 25, 50, 5]), whole = p === 5 ? R(2, 10) * 20 : p === 25 ? R(3, 15) * 4 : p === 20 ? R(3, 20) * 5 : p === 50 ? R(5, 40) * 2 : R(3, 30) * 10;
+  const part = whole * p / 100;
+  return {
+    type: 'num', unit: 'תלמידים', text: `${P(p)} מתלמידי השכבה הם ${part} תלמידים.<br>כמה תלמידים יש בשכבה?`, ans: whole,
+    traps: [{ v: part * p / 100, m: 'חישבתם אחוז מ-' + part + '. כאן ' + part + ' הוא החלק – מחפשים את השלם.' }, { v: part + p, m: 'חיברתם. חשבו: כמה פעמים ' + p + '% נכנס ב-100%?' }].filter(t => t.v !== whole),
+    steps: [{ p: `כמה פעמים ${P(p)} נכנס ב-100%?`, a: 100 / p }, { p: M(`${part} × ${100 / p} =`), a: whole }],
+    hint: `${p}% הם ${part}. כמה פעמים ${p}% נכנס ב-100%?`,
+    exp: `${P(p)} → ${part}, ולכן 100% → ${M(`${part} × ${100 / p} = ${whole}`)}`
+  };
+}
+
+[[genPctGrid, 0], [genPctConvert, 1], [genPctOf, 2], [genPctDiscount, 3], [genPctWhat, 4], [genPctWhole, 4]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
+
 const TOPICS3 = [
   {
     id: 'place', name: 'מספרים עד 10,000', icon: '🔢', color: '#4c5fd5',
@@ -3503,6 +3622,16 @@ const TOPICS6 = [
       3: [() => genBarRead(4), () => genMeanList(2), () => genMeanChange(), genMeanAdd, genMeanTarget, () => genBakery()]
     },
     tips: ['קוראים את הכותרת, את הצירים ואת המקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.', 'ממוצע = סכום הערכים : מספר הערכים.', 'ציון אחד משתנה ← הממוצע משתנה ב: השינוי : מספר הציונים.', 'איבר חסר: (ממוצע × מספר הערכים) פחות סכום הידועים.']
+  }
+  ,{
+    id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b',
+    desc: 'אחוז כחלק מ-100, אחוז ↔ שבר ועשרוני, אחוז מכמות, הנחה',
+    levels: {
+      1: [genPctGrid, genPctConvert, () => genPctOf(1)],
+      2: [() => genPctOf(2), genPctConvert, genPctWhat, genPctDiscount],
+      3: [genPctDiscount, genPctWhat, genPctWhole, () => genPctOf(2)]
+    },
+    tips: ['אחוז = חלק מתוך 100: 35% = 35 מתוך 100 = 0.35.', '50% = חצי · 25% = רבע · 75% = שלושה רבעים · 10% = עשירית.', '10% מכמות = מחלקים ב-10. 20% = פעמיים 10%.', 'הנחה: מחשבים כמה שקלים הם האחוז, ומורידים מהמחיר.']
   }
 ];
 const TOPICS = GRADE === 2 ? TOPICS2 : GRADE === 3 ? TOPICS3 : GRADE === 4 ? TOPICS4 : GRADE === 5 ? TOPICS5 : TOPICS6;
@@ -4577,7 +4706,7 @@ Object.assign(LESSONS, {
     ]
   }
 });
-LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 2 ? ['place2', 'addsub2', 'times', 'shapes2', 'timemoney'] : GRADE === 3 ? ['place', 'times', 'divis', 'timemoney', 'angles', 'order'] : GRADE === 4 ? ['place', 'times', 'divis', 'order', 'frac', 'angles', 'geo'] : GRADE === 5 ? ['divis', 'order', 'frac', 'dec', 'angles', 'geo', 'mean'] : ['place', 'order', 'divis', 'frac', 'dec', 'geo', 'mean']));
+LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 2 ? ['place2', 'addsub2', 'times', 'shapes2', 'timemoney'] : GRADE === 3 ? ['place', 'times', 'divis', 'timemoney', 'angles', 'order'] : GRADE === 4 ? ['place', 'times', 'divis', 'order', 'frac', 'angles', 'geo'] : GRADE === 5 ? ['divis', 'order', 'frac', 'dec', 'angles', 'geo', 'mean'] : ['place', 'order', 'divis', 'frac', 'dec', 'pct', 'geo', 'mean']));
 
 // קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
 [[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
@@ -5130,6 +5259,68 @@ Object.assign(LESSONS, {
         html: `<p>לריבוע ולמלבן יש 4 צלעות ו-<b>4 זוויות ישרות</b>.</p>
           <p>בריבוע – <b>כל</b> הצלעות שוות. במלבן – כל שתי צלעות נגדיות שוות.</p>`,
         try: { type: 'choice', q: 'באיזו צורה כל 4 הצלעות שוות וכל הזוויות ישרות?', choices: ['ריבוע', 'משולש', 'מחומש'], ans: 0, hint: 'יש לה 4 צלעות שוות.', exp: 'ריבוע.' }
+      }
+    ]
+  }
+});
+
+Object.assign(LESSONS, {
+  pct: {
+    id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b', topic: 'pct',
+    desc: 'מה זה אחוז, אחוז ↔ שבר ועשרוני, אחוז מכמות, הנחה, איזה אחוז זה',
+    practice: [genPctGrid, genPctConvert, () => genPctOf(1), () => genPctOf(2), genPctWhat, genPctDiscount, genPctWhole, () => genPctOf(2)],
+    cards: [
+      {
+        title: 'מה זה אחוז?',
+        html: `<p><b>אחוז</b> פירושו "מתוך 100". הסימן הוא <b>%</b>.</p>
+          <div class="center">${pctGridSVG(35)}</div>
+          <p class="center">35 משבצות צבועות מתוך 100 = ${P(35)}</p>
+          <div class="rule">💡 ${P(100)} = השלם כולו.</div>`,
+        try: { type: 'num', q: `ריבוע מחולק ל-100 משבצות, ו-62 מהן צבועות. איזה אחוז מהריבוע צבוע?`, ans: 62, hint: 'כמה מתוך 100?', exp: `62 מתוך 100 = ${P(62)}`, traps: [{ v: 38, m: 'זה החלק שלא צבוע.' }] }
+      },
+      {
+        title: 'אחוזים, שברים ועשרוניים',
+        html: `<table class="ftable">
+            <tr><td><b>אחוז</b></td><td><b>שבר</b></td><td><b>עשרוני</b></td></tr>
+            <tr><td>${P(50)}</td><td>${M(F(1, 2))}</td><td>${M('0.5')}</td></tr>
+            <tr><td>${P(25)}</td><td>${M(F(1, 4))}</td><td>${M('0.25')}</td></tr>
+            <tr><td>${P(75)}</td><td>${M(F(3, 4))}</td><td>${M('0.75')}</td></tr>
+            <tr><td>${P(10)}</td><td>${M(F(1, 10))}</td><td>${M('0.1')}</td></tr>
+            <tr><td>${P(20)}</td><td>${M(F(1, 5))}</td><td>${M('0.2')}</td></tr>
+            <tr><td>${P(1)}</td><td>${M(F(1, 100))}</td><td>${M('0.01')}</td></tr></table>
+          <div class="rule">💡 אחוז → עשרוני: מחלקים ב-100. עשרוני → אחוז: כופלים ב-100.</div>`,
+        try: { type: 'num', q: `כתבו את ${P(7)} כמספר עשרוני.`, ans: 0.07, hint: '7 מתוך 100 – שתי ספרות אחרי הנקודה.', exp: `${P(7)} = ${M(`${F(7, 100)} = 0.07`)}`, traps: [{ v: 0.7, m: '0.7 = 70%. אחוז אחד = 0.01, לכן 7% = 0.07.' }] }
+      },
+      {
+        title: 'אחוז מכמות',
+        html: `<p>כמה הם ${P(30)} מ-${M('240')}?</p>
+          <ol class="lsteps"><li>${P(10)} = מחלקים ב-10: ${M('240 : 10 = 24')}</li><li>${P(30)} = שלוש פעמים ${P(10)}: ${M('24 × 3 = 72')}</li></ol>
+          <div class="rule">💡 קיצורי דרך: ${P(50)} – חצי · ${P(25)} – רבע · ${P(10)} – מחלקים ב-10 · ${P(1)} – מחלקים ב-100.</div>
+          <p class="small">ובאופן כללי: ${M('240 × 30 : 100 = 72')}</p>`,
+        try: { type: 'num', q: `כמה הם ${P(20)} מ-${M('150')}?`, ans: 30, hint: '10% = 15. 20% = פעמיים.', exp: `${M('150 : 10 = 15')}, ${M('15 × 2 = 30')}`, traps: [{ v: 3000, m: 'שכחתם לחלק ב-100.' }, { v: 120, m: 'זה מה שנשאר אחרי שמורידים 20%.' }] }
+      },
+      {
+        title: 'הנחה',
+        html: `<p>מחיר משחק <b>80 ₪</b>, והנחה של <b>${P(25)}</b>. כמה משלמים?</p>
+          <ol class="lsteps"><li>גובה ההנחה: ${P(25)} = רבע: ${M('80 : 4 = 20')} ₪</li><li>המחיר אחרי ההנחה: ${M('80 - 20 = 60')} ₪</li></ol>
+          <div class="warn">⚠️ הנחה של 25% היא לא 25 ₪! מחשבים 25% <b>מהמחיר</b>.</div>`,
+        try: { type: 'num', q: `חולצה עולה 120 ₪, והנחה של ${P(10)}. כמה משלמים אחרי ההנחה?`, ans: 108, hint: '10% מ-120 = 12.', exp: `${M('120 - 12 = 108')} ₪`, traps: [{ v: 12, m: 'זו ההנחה. כמה <b>משלמים</b>?' }, { v: 110, m: 'הורדתם 10 ₪. ההנחה היא 10% מהמחיר = 12 ₪.' }] }
+      },
+      {
+        title: 'איזה אחוז זה?',
+        html: `<p>בכיתה 25 תלמידים, ו-15 מהם בנות. איזה אחוז הן הבנות?</p>
+          <ol class="lsteps"><li>כותבים שבר – החלק מתוך השלם: ${M(F(15, 25))}</li><li>מרחיבים למכנה 100 (כפול 4): ${M(`${F(15, 25)} = ${F(60, 100)}`)}</li><li>${P(60)}</li></ol>`,
+        try: { type: 'num', q: 'במבחן היו 20 שאלות, ונועה ענתה נכון על 17. איזה אחוז מהשאלות היא ענתה נכון?', ans: 85, hint: '17/20 – הרחיבו למכנה 100 (כפול 5).', exp: `${M(`${F(17, 20)} = ${F(85, 100)}`)} = ${P(85)}`, traps: [{ v: 17, m: '17 זה מספר השאלות. כמה זה מתוך 100?' }] }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+          <li>💯 <b>אחוז</b> = מתוך 100. ${P(100)} = השלם.</li>
+          <li>🔄 אחוז ↔ עשרוני: מחלקים או כופלים ב-100. ${P(50)} = ${M(F(1, 2))} · ${P(25)} = ${M(F(1, 4))} · ${P(10)} = ${M(F(1, 10))}.</li>
+          <li>🧮 <b>אחוז מכמות:</b> מתחילים מ-${P(10)} (מחלקים ב-10) או משתמשים בחצי ורבע.</li>
+          <li>🏷️ <b>הנחה:</b> מחשבים את גובה ההנחה ומורידים מהמחיר.</li>
+          <li>❓ <b>איזה אחוז זה?</b> כותבים שבר (חלק מתוך שלם) ומרחיבים למכנה 100.</li>
+        </ul><p class="center"><b>כל הכבוד! סיימתם את כרטיסיות האחוזים 🎉</b></p>`
       }
     ]
   }
@@ -5738,6 +5929,7 @@ const LEVEL_DESC6 = {
   dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
   geo: ['מלבן וריבוע, תכונות של צורות', 'מקבילית, משולש, מציאת צלע חסרה', 'מצולעים מורכבים והשוואות'],
   data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
+  pct: ['מה זה אחוז, אחוז ↔ שבר ועשרוני, 50%, 25% ו-10% מכמות', 'אחוז מכמות, איזה אחוז זה, הנחה', 'הנחה, מציאת השלם לפי אחוז'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 const LEVEL_DESC = GRADE === 2 ? LEVEL_DESC2 : GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
@@ -6672,8 +6864,10 @@ function bookDecode(code) {
   const m = /^([2-6])-([0-7]+)-([2-9A-HJ-NP-Z]{5})$/.exec(code || '');
   if (!m) return null;
   const grade = Number(m[1]);
-  if (grade === GRADE && m[2].length !== TOPICS.length) return null;
-  return { grade, counts: m[2].split('').map(c => BOOK_COUNTS[Number(c)]), seed: m[3] };
+  if (grade === GRADE && m[2].length > TOPICS.length) return null;
+  // קודים ישנים (לפני שנוסף נושא) – הנושא החדש פשוט לא נכלל
+  const cs = m[2].padEnd(grade === GRADE ? TOPICS.length : m[2].length, '0');
+  return { grade, counts: cs.split('').map(c => BOOK_COUNTS[Number(c)]), seed: m[3] };
 }
 // מחולל מספרים "אקראיים" קבוע לפי הקוד – אותו קוד, אותה חוברת
 function withSeed(seed, fn) {
