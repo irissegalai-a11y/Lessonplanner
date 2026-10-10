@@ -5948,13 +5948,13 @@ function printBuilder() {
           <select id="wv"><option>1</option><option>2</option><option>3</option></select>
         </label>
         <label>כותרת הדף:
-          <input id="wt" class="tinput" placeholder="דף עבודה במתמטיקה">
+          <input id="wt" class="tinput" placeholder="דף תרגול במתמטיקה">
         </label>
         <label class="chk"><input type="checkbox" id="wtips" checked> תיבת "תזכורת" עם הכללים בראש הדף</label>
         <label class="chk"><input type="checkbox" id="wkey" checked> דף תשובות למורה (בסוף)</label>
         <label class="chk"><input type="checkbox" id="wexp"> לכלול דרך פתרון בדף התשובות</label>
         <div class="actions">
-          <button id="wgo">✨ יצירת דף עבודה</button>
+          <button id="wgo">✨ יצירת דף תרגול</button>
           <button class="secondary" id="wexam">📝 מבחן מודפס בסגנון מבדק</button>
           <button class="secondary hidden" id="wprint">🖨️ הדפסה / שמירה כ-PDF</button>
         </div>
@@ -5972,7 +5972,7 @@ function printBuilder() {
     const topics = [...app.querySelectorAll('.wstopics input:checked')].map(x => x.value);
     if (!topics.length) { $('wmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
     const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
-    const title = $('wt').value.trim() || (topics.length === 1 ? `דף עבודה – ${TOPIC[topics[0]].name}` : 'דף עבודה במתמטיקה');
+    const title = $('wt').value.trim() || (topics.length === 1 ? `דף תרגול – ${TOPIC[topics[0]].name}` : 'דף תרגול במתמטיקה');
     const tips = $('wtips').checked ? `<div class="wstips"><b>📘 תזכורת</b><ul>${topics.flatMap(t => TOPIC[t].tips.slice(0, topics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
     const sheets = Array.from({ length: versions }, () => buildWorksheet(topics, level, count));
     const vname = v => versions > 1 ? ` – נוסח ${letters[v]}` : '';
