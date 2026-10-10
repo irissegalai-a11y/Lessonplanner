@@ -658,6 +658,21 @@
     html.calm .fb.ok, html.calm .fb.bad, html.calm .fb.hint, html.calm .fb.info, html.calm details.tips, html.calm .rule,
     html.calm .warn, html.calm .stepper, html.calm .kf-banner, html.calm .way, html.calm .explain { background: var(--card); }
   }
+  .qlayout { display: flex; gap: 22px; align-items: flex-start; }
+  .qmain { flex: 1; min-width: 0; }
+  .qmargin { width: 270px; flex-shrink: 0; padding: 6px 16px 6px 0; border-right: 2px solid #e3a6a6; display: flex; flex-direction: column; gap: 12px; }
+  .mnote { position: relative; isolation: isolate; padding: 14px 16px; font-size: 1.05rem; line-height: 1.9; }
+  .mnote::before { content: ''; position: absolute; inset: 0; background: rgba(239, 201, 106, 0.38); border-radius: 44% 56% 52% 48% / 38% 46% 54% 62%; filter: url(#wcwash); z-index: -1; }
+  .mtitle { font-family: var(--hand, inherit); font-weight: 700; font-size: 1.15rem; display: flex; align-items: center; gap: 6px; }
+  .qmargin .example { margin-top: 0; font-size: 1rem; line-height: 1.9; }
+  .qmargin .example .qtext { font-size: 1.05rem; line-height: 1.9; }
+  .qmargin .fig { max-width: 100%; }
+  @media (max-width: 760px) {
+    .qlayout { flex-direction: column; }
+    .qmargin { width: auto; align-self: stretch; border-right: none; border-top: 2px dashed #e3a6a6; padding: 12px 0 0; }
+  }
+  html.calm .mnote::before { display: none; }
+  html.calm .mnote { border: 1.5px dashed var(--ink, #222); border-radius: 12px; }
   .navhome { border: 2px solid var(--ink) !important; border-radius: var(--sk1, 12px) !important; background: var(--card, #fff) !important; padding: 6px 14px !important; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   /* איורים בקו יד */
   .ico { width: 1.15em; height: 1.15em; vertical-align: -0.2em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
@@ -6528,6 +6543,8 @@ function renderQ() {
     </div>` : ''}
     ${tips}
     <div class="card">
+     <div class="qlayout">
+      <div class="qmain">
       <div class="qtag"><span class="qdot" style="--c:${t.color}"></span>${t.name}</div>
       <div class="qhead">
         <span class="qnum" style="background:${t.color}">${state.i + 1}</span>
@@ -6546,7 +6563,12 @@ function renderQ() {
       </div>
       <div class="fb" id="fb" aria-live="polite"></div>
       <div id="guide" aria-live="polite"></div>
-      <div class="example hidden" id="example"></div>
+      </div>
+      <aside class="qmargin hidden" id="qmargin" aria-label="הערות בשוליים" aria-live="polite">
+        <div id="mhint"></div>
+        <div class="example hidden" id="example"></div>
+      </aside>
+     </div>
     </div>`;
 
   $('fontBtn').onclick = cycleFont;
@@ -6560,7 +6582,7 @@ function renderQ() {
   }
   if ($('speakBtn')) $('speakBtn').onclick = e => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.join('. ') : ''), e.currentTarget);
   if ($('go')) $('go').onclick = submit;
-  if ($('hintBtn')) $('hintBtn').onclick = () => showFb('hint', `${ic('bulb')} <span class="head">רמז:</span> ${q.hint}`);
+  if ($('hintBtn')) $('hintBtn').onclick = showHint;
   if ($('exBtn')) $('exBtn').onclick = showExample;
   $('next').onclick = nextQ;
 
@@ -6601,10 +6623,21 @@ function lockInputs() {
   nx.focus();
 }
 
+// רמז ודוגמה פתורה – "בשוליים" של הדף, כמו הערה של המורה
+function showHint() {
+  const q = state.qs[state.i];
+  $('mhint').innerHTML = `<div class="mnote"><div class="mtitle">${ic('bulb')} רמז</div><div>${q.hint}</div>${learnLink(q)}</div>`;
+  updMargin();
+}
+function updMargin() {
+  const m = $('qmargin');
+  if (!m) return;
+  m.classList.toggle('hidden', !($('mhint').innerHTML.trim() || !$('example').classList.contains('hidden')));
+}
 function showExample() {
   const q = state.qs[state.i];
   const box = $('example');
-  if (!box.classList.contains('hidden')) { box.classList.add('hidden'); return; }
+  if (!box.classList.contains('hidden')) { box.classList.add('hidden'); updMargin(); return; }
   const ex = q.gen();
   box.innerHTML = `
     <div class="exhead">${ic('example')} דוגמה פתורה – שאלה דומה עם מספרים אחרים</div>
@@ -6613,8 +6646,9 @@ function showExample() {
     ${ex.steps ? `<ol class="exsteps">${ex.steps.map(s => `<li>${s.p} <b class="m">${fmt(s.a)}</b></li>`).join('')}</ol>` : ''}
     <div><b>התשובה:</b> ${correctHTML(ex)}</div>
     <div class="muted">${ex.exp}</div>
-    <div class="muted" style="margin-top:6px">עכשיו נסו לפתור את השאלה שלכם באותה דרך 💪</div>`;
+    <div class="muted" style="margin-top:6px">עכשיו נסו לפתור את השאלה שלכם באותה דרך.</div>`;
   box.classList.remove('hidden');
+  updMargin();
 }
 
 const CHEERS = ['כל הכבוד! 🎉', 'מצוין! 🌟', 'נכון מאוד! 👏', 'יפה מאוד! 💪', 'בדיוק! ✅'];
