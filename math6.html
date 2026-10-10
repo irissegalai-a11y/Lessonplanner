@@ -341,6 +341,46 @@
   .toast ul { margin: 6px 0 0; padding-right: 20px; }
   .toast .tclose { float: left; padding: 2px 8px; }
 
+  .wstopics { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 4px 12px; margin-bottom: 12px; }
+  .tinput { font: inherit; font-size: 1.05rem; padding: 8px; border-radius: 8px; border: 2px solid var(--line); }
+  .ws-page { background: #fff; color: #000; max-width: 820px; margin: 0 auto 24px; padding: 28px 32px; border-radius: 6px; box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+  .wshead h1 { font-size: 1.6rem; margin: 0 0 10px; text-align: center; }
+  .wsmeta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 1rem; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 12px; }
+  .wsline { display: inline-block; min-width: 90px; border-bottom: 1.5px solid #000; height: 1.1em; vertical-align: bottom; }
+  .wsline.long { min-width: 180px; }
+  .wstips { border: 1.5px dashed #666; border-radius: 8px; padding: 6px 12px; margin-bottom: 14px; font-size: 0.92rem; }
+  .wstips ul { margin: 4px 0 0; padding-right: 20px; line-height: 1.7; }
+  .wsq { padding: 10px 0 14px; border-bottom: 1px solid #ddd; }
+  .wsqhead { display: flex; gap: 10px; align-items: flex-start; }
+  .wsnum { flex-shrink: 0; width: 30px; height: 30px; border: 2px solid #000; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
+  .ws-page .qtext { font-size: 1.08rem; line-height: 1.95; }
+  .ws-page .fig { max-width: 250px; margin: 2px auto; }
+  .wsans { margin-top: 8px; font-size: 1.05rem; padding-right: 40px; }
+  .wsans .wsline { min-width: 120px; }
+  .wsfrac { display: inline-flex; align-items: center; gap: 6px; direction: ltr; vertical-align: middle; }
+  .wsstack { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; }
+  .wsbox { display: inline-block; width: 34px; height: 28px; border: 1.5px solid #000; border-radius: 3px; }
+  .wsbox.big { height: 44px; }
+  .wsbar { width: 40px; height: 2px; background: #000; }
+  .wschoices { padding-right: 40px; margin-top: 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 4px 16px; line-height: 2; }
+  .wscheck { font-size: 1.2rem; }
+  .wsspace { padding-right: 40px; margin-top: 6px; color: #555; font-size: 0.9rem; }
+  .wsspace div { border-bottom: 1px dashed #aaa; height: 1.9em; }
+  .wsfoot { text-align: center; margin-top: 14px; font-weight: 700; }
+  .wskey h2 { font-size: 1.3rem; }
+  .wskey ol { line-height: 2.1; padding-right: 38px; }
+  .wsexp { font-size: 0.88rem; color: #444; }
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    .noprint, .toast, .overlay { display: none !important; }
+    html, body { background: #fff !important; padding: 0 !important; }
+    .wrap { max-width: none; }
+    .ws-page { box-shadow: none; padding: 0; margin: 0; max-width: none; border-radius: 0; break-after: page; }
+    .ws-page:last-child { break-after: auto; }
+    .wsq { break-inside: avoid; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
@@ -3467,7 +3507,7 @@ function home() {
       <button id="test" class="secondary">📝 מבדק לדוגמה<span class="desc">20 שאלות כמו במבדק – הציון והפתרונות בסוף</span></button>
     </div>
     ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>המבדקים האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
-    <p class="center muted small-link"><a href="?teacher">🧑‍🏫 למורה: יצירת קישור מותאם</a></p>
+    <p class="center muted small-link"><a href="?teacher">🧑‍🏫 למורה: יצירת קישור מותאם</a> · <a href="?print">🖨️ דפי עבודה להדפסה</a></p>
   `;
   $('fontBtn').onclick = cycleFont;
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
@@ -4053,6 +4093,11 @@ function teacher() {
       <p class="muted">טיפ: לתלמידים שמתקשים כדאי לתת "רמה 1", 5 שאלות, ולהשאיר את ההתאמה האוטומטית פעילה – כך יתחילו בהצלחה ויעלו רמה בעצמם.</p>
     </div>
     <div class="card">
+      <h2>🖨️ דפי עבודה להדפסה</h2>
+      <p>יצירת דפי עבודה מודפסים מאותן שאלות של האפליקציה – לפי נושא ורמה, עם כמה נוסחים ודף תשובות.</p>
+      <div class="actions"><a class="btnlink" href="${location.pathname}?print">🖨️ למחולל דפי העבודה</a></div>
+    </div>
+    <div class="card">
       <h2>🔊 בדיקת הקראה במכשיר הזה</h2>
       <p>ההקראה משתמשת בקול שמותקן במכשיר. כאן אפשר לבדוק אם במכשיר יש קול בעברית.</p>
       <div class="actions"><button id="ttsTest">▶ השמיעו משפט לדוגמה</button></div>
@@ -4093,10 +4138,107 @@ function teacher() {
   };
 }
 
+
+/* =========================================================
+   דפי עבודה להדפסה
+   ========================================================= */
+function wsQuestionHTML(q, n) {
+  let ans;
+  if (q.type === 'num') ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
+  else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
+  else ans = `<div class="wschoices">${q.choices.map(c => `<div><span class="wscheck">☐</span> ${c}</div>`).join('')}</div>`;
+  const space = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70 ? '<div class="wsspace"><span>דרך הפתרון:</span><div></div><div></div><div></div></div>' : '';
+  return `<div class="wsq"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${space}${ans}</div>`;
+}
+
+function buildWorksheet(topics, level, count) {
+  const qs = [], prev = {};
+  for (let i = 0; i < count; i++) {
+    const t = topics[i % topics.length];
+    const lv = level === 'mix' ? Math.min(3, 1 + Math.floor(3 * i / count)) : Number(level);
+    const pool = TOPIC[t].levels[lv];
+    let g = pick(pool), guard = 0;
+    while (pool.length > 1 && g === prev[t] && guard++ < 10) g = pick(pool);
+    prev[t] = g;
+    qs.push(mk(t, g, lv));
+  }
+  return qs;
+}
+
+function printBuilder() {
+  document.title = 'דפי עבודה – מתרגלים מתמטיקה';
+  app.innerHTML = `
+    <div class="noprint">
+      <h1>🖨️ דפי עבודה להדפסה</h1>
+      <div class="subtitle">בחרו נושאים ורמה – בכל לחיצה נוצר דף חדש עם מספרים אחרים</div>
+      <div class="card tform">
+        <div class="lbl2">נושאים:</div>
+        <div class="wstopics">${TOPICS.map((t, i) => `<label class="chk"><input type="checkbox" value="${t.id}" ${i === 0 ? 'checked' : ''}> ${t.icon} ${t.name}</label>`).join('')}</div>
+        <label>רמה:
+          <select id="wl">
+            <option value="mix">מדורגת – מהקל אל הקשה</option>
+            <option value="1">רמה 1 – בסיסית</option>
+            <option value="2">רמה 2 – בינונית</option>
+            <option value="3">רמה 3 – מאתגרת</option>
+          </select>
+        </label>
+        <label>מספר שאלות:
+          <select id="wc">${[6, 8, 10, 12, 15, 20].map(n => `<option ${n === 10 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+        </label>
+        <label>מספר נוסחים (כל נוסח עם מספרים אחרים – למשל לשכנים בשולחן):
+          <select id="wv"><option>1</option><option>2</option><option>3</option></select>
+        </label>
+        <label>כותרת הדף:
+          <input id="wt" class="tinput" placeholder="דף עבודה במתמטיקה">
+        </label>
+        <label class="chk"><input type="checkbox" id="wtips" checked> תיבת "תזכורת" עם הכללים בראש הדף</label>
+        <label class="chk"><input type="checkbox" id="wkey" checked> דף תשובות למורה (בסוף)</label>
+        <label class="chk"><input type="checkbox" id="wexp"> לכלול דרך פתרון בדף התשובות</label>
+        <div class="actions">
+          <button id="wgo">✨ יצירת דף עבודה</button>
+          <button class="secondary hidden" id="wprint">🖨️ הדפסה / שמירה כ-PDF</button>
+        </div>
+        <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
+      </div>
+      <p class="center"><a href="${location.pathname}?teacher">← למסך המורה</a> · <a href="${location.pathname}">לאפליקציה</a></p>
+    </div>
+    <div id="wsout"></div>`;
+  const letters = 'אבג';
+  $('wgo').onclick = () => {
+    const topics = [...app.querySelectorAll('.wstopics input:checked')].map(x => x.value);
+    if (!topics.length) { $('wmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
+    const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
+    const title = $('wt').value.trim() || (topics.length === 1 ? `דף עבודה – ${TOPIC[topics[0]].name}` : 'דף עבודה במתמטיקה');
+    const tips = $('wtips').checked ? `<div class="wstips"><b>📘 תזכורת</b><ul>${topics.flatMap(t => TOPIC[t].tips.slice(0, topics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
+    const sheets = Array.from({ length: versions }, () => buildWorksheet(topics, level, count));
+    const vname = v => versions > 1 ? ` – נוסח ${letters[v]}` : '';
+    let out = sheets.map((qs, v) => `
+      <section class="ws-page">
+        <div class="wshead">
+          <h1>${esc(title)}${vname(v)}</h1>
+          <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
+        </div>
+        ${tips}
+        <div class="wsqs">${qs.map((q, i) => wsQuestionHTML(q, i + 1)).join('')}</div>
+        <div class="wsfoot">בהצלחה! 🌟</div>
+      </section>`).join('');
+    if ($('wkey').checked) out += sheets.map((qs, v) => `
+      <section class="ws-page wskey">
+        <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>
+        <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
+      </section>`).join('');
+    $('wsout').innerHTML = out;
+    $('wprint').classList.remove('hidden');
+    $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
+    $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".';
+  };
+  $('wprint').onclick = () => window.print();
+}
+
 // חשיפה לבדיקות אוטומטיות
 window.__math6 = { TOPICS, LESSONS, check, correctHTML, findTrap, speechText };
 
-if (URLP.has('teacher')) teacher(); else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacher(); else home();
 </script>
 </body>
 </html>
