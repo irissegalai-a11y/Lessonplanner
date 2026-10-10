@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מתרגלים מתמטיקה – כיתה ו'</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@400;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<script>try { if (localStorage.getItem('math-calm') === '1') document.documentElement.classList.add('calm'); } catch (e) {}</script>
 <style>
   * { box-sizing: border-box; }
 
@@ -520,9 +524,147 @@
     body { background: #fff; }
     .actions, .topbar button { display: none; }
   }
+
+  /* =========================================================
+     עיצוב "דיו וצבעי מים" – רק במסך (ההדפסה נשארת נקייה)
+     ========================================================= */
+  @media screen {
+    :root {
+      --bg: #fbf8f1; --card: #fffdf8; --ink: #1f1e1c; --muted: #5f5a50; --accent: #1f1e1c; --accent-dark: #000;
+      --hot: #d9482b; --hot-dark: #b93a20;
+      --ok: #2c7a5b; --ok-bg: rgba(157, 178, 122, 0.30); --bad: #9a4b14; --bad-bg: rgba(226, 179, 87, 0.28); --warn-bg: rgba(239, 201, 106, 0.30);
+      --line: #cfc6b4; --shadow: none;
+      --sk1: 255px 16px 225px 16px / 16px 225px 16px 255px; --sk2: 16px 225px 16px 255px / 255px 16px 225px 16px;
+      --hand: 'Playpen Sans Hebrew', 'Assistant', cursive;
+    }
+    html, body {
+      font-family: 'Assistant', 'Segoe UI', 'Arial Hebrew', sans-serif;
+      background-color: var(--bg);
+      background-image: linear-gradient(#ece6d9 1px, transparent 1px), linear-gradient(90deg, #ece6d9 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+    body::before { content: ''; position: fixed; top: 0; bottom: 0; right: max(10px, calc(50% - 470px)); width: 2px; background: #e3a6a6; pointer-events: none; z-index: 0; }
+    .wrap { position: relative; z-index: 1; }
+    h1, h2, .topbar .title, .ltitle, .topic .nm, .score-big, .exhead, .ltryhead, .kf-q .kf-ex, .kf-stats b, .lvl, .streak { font-family: var(--hand); }
+    h1, h2 { font-weight: 700; }
+    .subtitle { font-family: var(--hand); color: var(--muted); }
+
+    .card { background: var(--card); border: 2px solid var(--ink); border-radius: var(--sk1); box-shadow: none; }
+    .modal { background-color: var(--bg); background-image: linear-gradient(#ece6d9 1px, transparent 1px), linear-gradient(90deg, #ece6d9 1px, transparent 1px); background-size: 26px 26px; border: 2px solid var(--ink); }
+    .overlay { background: rgba(31, 30, 28, 0.55); }
+
+    button { font-family: var(--hand); font-weight: 600; background: var(--hot); color: #fff; border: 2px solid var(--ink); border-radius: var(--sk2); box-shadow: 3px 4px 0 var(--ink); min-height: 44px; }
+    button:hover { background: var(--hot-dark); transform: translate(-1px, -1px); box-shadow: 4px 5px 0 var(--ink); }
+    button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    button.secondary { background: var(--card); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--sk1); box-shadow: none; }
+    button.secondary:hover { background: #fff; box-shadow: 2px 3px 0 var(--ink); }
+    button.ghost { background: transparent; color: var(--ink); border: none; box-shadow: none; min-height: 40px; }
+    button.ghost:hover { background: rgba(31, 30, 28, 0.06); transform: none; box-shadow: none; }
+    button.linkish { background: transparent; color: var(--ink); border: 1.5px dashed var(--ink); box-shadow: none; }
+    a.btnlink { color: var(--ink); border: 2px solid var(--ink); border-radius: var(--sk1); background: var(--card); font-family: var(--hand); }
+    a.btnlink.printlink { background: var(--card); }
+    a.btnlink.printlink:hover { background: #fff; }
+
+    input.ans, .fracin input, .name-row input, .tinput, .tform select {
+      background: var(--card); border: 2px solid var(--ink); border-radius: 12px 4px 12px 4px; color: var(--ink);
+    }
+    input.ans:focus, .fracin input:focus { outline: 3px solid rgba(217, 72, 43, 0.35); border-color: var(--ink); }
+
+    .progress { background: transparent; border: 1.5px solid var(--ink); height: 12px; border-radius: var(--sk1); }
+    .progress > div { background: var(--ok); }
+    .qnum { background: var(--ink); color: var(--bg); font-family: var(--hand); }
+    .qtag { font-family: var(--hand); }
+
+    .choices button { background: var(--card); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--sk1); box-shadow: none; font-family: 'Assistant', sans-serif; font-weight: 400; }
+    .choices button:hover { background: #fff; box-shadow: 2px 3px 0 var(--ink); }
+    .choices button.sel { background: rgba(127, 168, 214, 0.30); border-color: var(--ink); }
+    .choices button.right { background: var(--ok-bg); border-color: var(--ok); }
+    .choices button.wrong { background: var(--bad-bg); border-color: var(--bad); }
+
+    .fb { border: 2px solid var(--ink); border-radius: var(--sk1); }
+    .fb.ok { background: var(--ok-bg); border-right-width: 2px; border-color: var(--ink); }
+    .fb.bad { background: var(--bad-bg); border-right-width: 2px; border-color: var(--ink); }
+    .fb.hint { background: var(--warn-bg); border-right-width: 2px; border-color: var(--ink); }
+    .fb.info { background: rgba(127, 168, 214, 0.25); border-right-width: 2px; border-color: var(--ink); }
+    details.tips { background: var(--warn-bg); border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    details.tips summary { color: var(--ink); font-family: var(--hand); }
+    .example { background: var(--card); border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    .exhead { color: var(--ink); }
+    .step.cur { border: 2px dashed var(--ink); background: var(--card); }
+    .step .sn { color: var(--ink); }
+    .rule { background: rgba(164, 140, 201, 0.18); border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    .rule.big { border: 2px solid var(--ink); }
+    .warn { background: var(--bad-bg); border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    .explain { background: var(--ok-bg); border-radius: var(--sk1); }
+    .stepper { background: var(--warn-bg); border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    .hl { background: rgba(239, 201, 106, 0.65); box-shadow: none; border-radius: 4px 10px 6px 12px; }
+    .ltryhead { color: var(--hot); }
+    .banner { border: 2px solid var(--ink); border-right-width: 2px; background: var(--card); }
+    .kf-banner { border-color: var(--ink); background: var(--warn-bg); }
+    .seg button { background: var(--card); color: var(--ink); border: 2px solid var(--ink); box-shadow: none; }
+    .seg button.sel { background: var(--ink); color: var(--bg); }
+    .lvl { background: var(--card); border: 2px solid var(--ink); color: var(--ink); }
+    .levelup { background: var(--warn-bg); color: var(--ink); }
+    .streak { color: var(--hot); }
+    .dot { background: var(--card); border: 2px solid var(--ink); color: var(--ink); }
+    .dot.ok { background: var(--ok-bg); border-color: var(--ink); color: var(--ink); }
+    .dot.cur { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .simnav button { background: var(--card); color: var(--ink); border: 1.5px solid var(--ink); box-shadow: none; min-height: 34px; }
+    .simnav button.done { background: var(--ink); color: var(--bg); }
+    .simnav button.cur { outline-color: var(--hot); }
+    .timer { background: var(--card); color: var(--ink); border: 2px solid var(--ink); box-shadow: none; }
+    .timer.warn { background: var(--bad-bg); color: var(--bad); border-color: var(--ink); }
+    .kf-stats div { background: var(--card); border: 2px solid var(--ink); border-radius: var(--sk1); }
+    .kf-new { background: var(--warn-bg); border-color: var(--ink); }
+    .kf-c3 { background: rgba(157, 178, 122, 0.55); } .kf-c1 { background: rgba(239, 201, 106, 0.55); } .kf-c0 { background: rgba(31, 30, 28, 0.06); }
+    .mbar { height: 6px; background: rgba(31, 30, 28, 0.10); }
+    .compare2 > div, .kid { background: var(--card); border: 1.5px dashed var(--ink); }
+    .way { background: rgba(217, 138, 154, 0.18); }
+
+    /* דף הבית – כותרת עם חתימה, ותוכן עניינים במקום כרטיסים */
+    .hero-wrap { text-align: center; position: relative; isolation: isolate; }
+    .hero-wrap::before { content: ''; position: absolute; top: -4px; left: 50%; width: 360px; max-width: 90%; height: 92px; transform: translateX(-50%); background: rgba(127, 168, 214, 0.34); border-radius: 48% 52% 44% 56% / 58% 42% 60% 40%; filter: url(#wcwash); z-index: -1; }
+    .hero { display: inline-block; margin: 10px auto 0; font-size: 2.6rem; }
+    .doodle-line { display: block; margin: 0 auto; }
+    .sig { font-family: var(--hand); font-size: 1.15rem; display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 4px; }
+    .topics { display: flex; flex-direction: column; gap: 0; }
+    .topic {
+      background: transparent; box-shadow: none; border: none; border-bottom: 1.5px dashed #c9c1b1; border-radius: 0;
+      display: grid; grid-template-columns: 56px minmax(0, auto) 1fr auto; grid-template-areas: "ic nm bar best" "ic ds ds ds";
+      align-items: center; column-gap: 14px; row-gap: 0; padding: 10px 6px; min-height: 60px;
+      font-family: 'Assistant', sans-serif; font-weight: 400; color: var(--ink); transform: none;
+    }
+    .topic:hover { background: rgba(255, 253, 248, 0.85); transform: none; box-shadow: none; }
+    .topic .ic { grid-area: ic; position: relative; isolation: isolate; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-family: var(--hand); font-weight: 700; font-size: 1.45rem; }
+    .topic .ic::before { content: ''; position: absolute; inset: 0; background: var(--c); opacity: 0.38; border-radius: 48% 52% 45% 55% / 55% 45% 52% 48%; filter: url(#wcwash); z-index: -1; }
+    .topic .nm { grid-area: nm; font-size: 1.3rem; }
+    .topic .ds { grid-area: ds; font-size: 1rem; color: var(--muted); }
+    .topic .mbar { grid-area: bar; margin: 0 6px; align-self: center; }
+    .topic .mbar > span { background: var(--c); }
+    .topic .best { grid-area: best; color: var(--ink); font-family: var(--hand); font-size: 0.95rem; white-space: nowrap; }
+    .topic.soon { border-bottom-color: #c9c1b1; }
+    .big-actions button { text-align: center; }
+    .big-actions .desc { font-family: 'Assistant', sans-serif; }
+    @media (max-width: 640px) {
+      body::before { display: none; }
+      .topic { grid-template-columns: 50px 1fr; grid-template-areas: "ic nm" "ic ds" "ic best" "ic bar"; }
+      .topic .mbar { margin: 4px 0 0; }
+      .hero { font-size: 2rem; }
+    }
+
+    /* מצב רגוע – בלי כתמי צבע ובלי קישוטים */
+    html.calm, html.calm body { background-image: none; }
+    html.calm body::before, html.calm .hero-wrap::before, html.calm .doodle-line, html.calm .topic .ic::before { display: none; }
+    html.calm .fb.ok, html.calm .fb.bad, html.calm .fb.hint, html.calm .fb.info, html.calm details.tips, html.calm .rule,
+    html.calm .warn, html.calm .stepper, html.calm .kf-banner, html.calm .way, html.calm .explain { background: var(--card); }
+  }
+  /* דפי ההדפסה: אותו גופן במסך ובהדפסה, כדי שהחלוקה לעמודים תהיה מדויקת */
+  #wsout { font-family: "Segoe UI", "Arial Hebrew", Arial, sans-serif; }
+  #wsout * { font-family: inherit; }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <footer class="credit noprint">© איריס סגל</footer>
 
@@ -5877,8 +6019,12 @@ function home() {
   const name = store.name || '';
   const len = store.roundLen || 10;
   app.innerHTML = `
-    <div class="tools"><span class="toollinks"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><a class="btnlink printlink" href="${gq('print')}#book">📚 חוברות</a></span><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></div>
-    <h1>מתרגלים מתמטיקה 🎯</h1>
+    <div class="tools"><span class="toollinks"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><a class="btnlink printlink" href="${gq('print')}#book">📚 חוברות</a></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${document.documentElement.classList.contains('calm')}">${document.documentElement.classList.contains('calm') ? 'מצב צבעוני' : 'מצב רגוע'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
+    <div class="hero-wrap">
+      <h1 class="hero">מתרגלים מתמטיקה</h1>
+      <svg class="doodle-line" aria-hidden="true" width="300" height="14" viewBox="0 0 300 14"><path d="M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"></path></svg>
+      <div class="sig"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l3.5-1L18 8.5 15.5 6 5 16.5z"></path><path d="M13.5 8l2.5 2.5"></path></svg><span>מאת <b>איריס סגל</b></span></div>
+    </div>
     <div class="subtitle">${SUBTITLE}</div>
     ${PRESET ? `<div class="card banner">
       <div>✨ <b>הוכן בשבילך:</b> ${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div>
@@ -5899,12 +6045,12 @@ function home() {
       <div>⚡ <b>אימון לוח הכפל</b> – 5 דקות ביום. ${kf.placed ? `בשליטה: <b>${kfMastered()}</b> מתוך 36 עובדות.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
       <button id="kfGoHome">לאימון ←</button>
     </div>` : ''}
-    <h2>📚 ללמוד</h2>
+    <h2>ללמוד – כרטיסיות הסבר</h2>
     <div class="topics">
-      ${LESSON_ORDER.map(id => LESSONS[id]).map(L => {
+      ${LESSON_ORDER.map(id => LESSONS[id]).map((L, i) => {
         const n = learnedSet(L.id).size;
         return `<button class="topic" style="--c:${L.color}" data-lesson="${L.id}">
-          <span class="ic">${L.icon}</span>
+          <span class="ic">${i + 1}</span>
           <span class="nm">${L.name}</span>
           <span class="ds">${L.desc}</span>
           <span class="mbar"><span style="width:${n / cardsOf(L.id).length * 100}%"></span></span>
@@ -5913,13 +6059,13 @@ function home() {
       }).join('')}
       ${LESSON_SOON.map(x => `<div class="topic soon"><span class="ic">${x.icon}</span><span class="nm">${x.name}</span><span class="ds">בקרוב...</span></div>`).join('')}
     </div>
-    <h2 style="margin-top:22px">✏️ בחרו נושא לתרגול</h2>
+    <h2 style="margin-top:22px">לתרגל – בחרו נושא</h2>
     <div class="topics">
-      ${TOPICS.map(t => {
+      ${TOPICS.map((t, i) => {
         const s = store.topics[t.id];
         const m = s ? s.mastery : 0;
         return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
-          <span class="ic">${t.icon}</span>
+          <span class="ic">${i + 1}</span>
           <span class="nm">${t.name}</span>
           <span class="ds">${t.desc}</span>
           <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
@@ -5936,6 +6082,11 @@ function home() {
     ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
   `;
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
+  $('calmBtn').onclick = () => {
+    const on = document.documentElement.classList.toggle('calm');
+    try { localStorage.setItem('math-calm', on ? '1' : '0'); } catch (e) {}
+    home();
+  };
   $('fontBtn').onclick = cycleFont;
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
   app.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
