@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מתרגלים מתמטיקה – כיתה ה'</title>
+<script>
+  // מעבר לאתר של כיתה ה' (שומר פרמטרים נוספים, למשל ?topic=sim או ?print)
+  (function () {
+    var p = new URLSearchParams(location.search);
+    p.set('grade', '5');
+    var s = p.toString();
+    location.replace('math6.html' + (s ? '?' + s.replace(/=(&|$)/g, '$1') : '') + location.hash);
+  })();
+</script>
+<meta http-equiv="refresh" content="0; url=math6.html?grade=5">
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; padding: 40px;">
+<p><a href="math6.html?grade=5">לאתר התרגול – כיתה ה'</a></p>
+</body>
+</html>
