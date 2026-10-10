@@ -658,6 +658,42 @@
     html.calm .fb.ok, html.calm .fb.bad, html.calm .fb.hint, html.calm .fb.info, html.calm details.tips, html.calm .rule,
     html.calm .warn, html.calm .stepper, html.calm .kf-banner, html.calm .way, html.calm .explain { background: var(--card); }
   }
+  /* איורים בקו יד */
+  .ico { width: 1.15em; height: 1.15em; vertical-align: -0.2em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .speak .ico { width: 1.4em; height: 1.4em; }
+  .qdot { display: inline-block; width: 0.8em; height: 0.8em; border-radius: 48% 52% 45% 55% / 55% 45% 52% 48%; background: var(--c); opacity: 0.7; margin-left: 6px; vertical-align: -0.05em; }
+
+  /* דף הבית: "מה עושים היום?" + מחברת עם לשוניות */
+  .today { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 22px 26px; }
+  .today-k { font-family: var(--hand, inherit); color: var(--muted); font-size: 1.05rem; }
+  .today-t { font-family: var(--hand, inherit); font-weight: 700; font-size: 1.7rem; margin: 2px 0; }
+  .today-d { color: var(--muted); font-size: 1.05rem; }
+  .today button { font-size: 1.3rem; padding: 12px 28px; }
+  .name-mini { justify-content: flex-start; margin: -4px 4px 18px; font-size: 1rem; }
+  .name-mini input { min-width: 180px; padding: 6px 12px; font-size: 1rem; }
+  .nb { display: flex; gap: 22px; align-items: flex-start; }
+  .tabs { order: 2; display: flex; flex-direction: column; gap: 10px; width: 150px; flex-shrink: 0; position: sticky; top: 12px; }
+  .panels { order: 1; flex: 1; min-width: 0; }
+  .tab { display: flex; align-items: center; gap: 8px; justify-content: flex-start; text-align: right; background: var(--w, #fff); color: var(--ink); border: 2px solid var(--ink); border-radius: 22px 6px 6px 22px; box-shadow: none; padding: 10px 14px; font-size: 1.08rem; }
+  .tab:hover { background: var(--w, #fff); box-shadow: 2px 3px 0 var(--ink); transform: none; }
+  .tab.on { box-shadow: 4px 4px 0 var(--ink); transform: translateX(-6px); font-weight: 700; }
+  .tab .ico { width: 1.3em; height: 1.3em; }
+  .panel h2 { margin-top: 4px; }
+  .practice-more { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; align-items: flex-start; }
+  .practice-more > button { align-self: stretch; padding: 16px; font-size: 1.15rem; text-align: center; }
+  .practice-more .desc, .print-links .desc { display: block; font-size: 0.9rem; font-weight: normal; margin-top: 2px; }
+  .print-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .print-links a { padding: 16px 18px; font-size: 1.15rem; }
+  @media (max-width: 700px) {
+    .nb { flex-direction: column; gap: 14px; }
+    .tabs { order: 0; flex-direction: row; flex-wrap: wrap; width: auto; position: static; gap: 6px; }
+    .tab { border-radius: 14px 14px 4px 4px; padding: 8px 12px; font-size: 1rem; }
+    .tab.on { transform: translateY(-3px); }
+    .today-t { font-size: 1.4rem; }
+  }
+  html.calm .tab { background: var(--card, #fff); }
+  html.calm .tab.on { background: #fff; text-decoration: underline; text-underline-offset: 4px; }
+
   /* דפי ההדפסה: אותו גופן במסך ובהדפסה, כדי שהחלוקה לעמודים תהיה מדויקת */
   #wsout { font-family: "Segoe UI", "Arial Hebrew", Arial, sans-serif; }
   #wsout * { font-family: inherit; }
@@ -679,6 +715,30 @@ const GRADE_NAME = { 2: "כיתה ב'", 3: "כיתה ג'", 4: "כיתה ד'", 5:
 const TEST_NAME = GRADE === 6 ? 'מבדק לדוגמה' : 'מבחן תרגול';
 const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : GRADE === 6 ? "כיתה ו' · הכנה למבדק" : `${GRADE_NAME[GRADE]} · תרגול`;
 document.title = NEUTRAL ? 'מתרגלים מתמטיקה' : `מתרגלים מתמטיקה – ${GRADE_NAME[GRADE]}`;
+
+/* ---------- איורים בקו יד (במקום אימוג'ים) ---------- */
+const ICONS = {
+  book: '<path d="M4 5c3-1 6-1 8 1 2-2 5-2 8-1v13c-3-1-6-1-8 1-2-2-5-2-8-1z"/><path d="M12 6v13"/>',
+  pencil: '<path d="M4 20l3-1 11-11-2-2L5 17z"/><path d="M14 6l2 2"/>',
+  pen: '<path d="M4 20l3.5-1L18 8.5 15.5 6 5 16.5z"/><path d="M13.5 8l2.5 2.5"/>',
+  times: '<path d="M6 6l12 12M18 6L6 18"/>',
+  clipboard: '<path d="M9 3.5h6v3H9z"/><path d="M8 5H5.5v15.5h13V5H16"/><path d="M8.5 13l2.5 2.5 4.5-5"/>',
+  printer: '<path d="M7 9V4h10v5"/><path d="M4 9h16v7H4z"/><path d="M7 14h10v6H7z"/>',
+  booklet: '<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/>',
+  bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/>',
+  speaker: '<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a8 8 0 0 1 0 11"/>',
+  stop: '<path d="M7 7h10v10H7z"/>',
+  example: '<path d="M4 5c3-1 6-1 8 1v13c-2-2-5-2-8-1z"/><path d="M12 6c2-2 5-2 8-1v13c-3-1-6-1-8 1"/><path d="M14.5 11l1.5 1.5 3-3"/>',
+  shuffle: '<path d="M4 7h4l8 10h4"/><path d="M4 17h4l2.2-2.7"/><path d="M13.8 9.7L16 7h4"/><path d="M18 5l2 2-2 2"/><path d="M18 15l2 2-2 2"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  star: '<path d="M12 3.5l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.9l-5 2.8 1.2-5.6L4 9.3l5.6-.6z"/>',
+  home: '<path d="M4 11.5l8-7 8 7"/><path d="M6.5 10v10h11V10"/>',
+  note: '<path d="M5 4h14v11l-5 5H5z"/><path d="M14 20v-5h5"/><path d="M8 9h8M8 12.5h5"/>',
+  close: '<path d="M7 7l10 10M17 7L7 17"/>',
+  retry: '<path d="M5 12a7 7 0 1 0 2-5"/><path d="M5 4v4h4"/>',
+  copy: '<path d="M8 8h11v12H8z"/><path d="M5 16V4h11"/>'
+};
+const ic = name => `<svg class="ico" aria-hidden="true" viewBox="0 0 24 24">${ICONS[name] || ''}</svg>`;
 // שומר על הכיתה ועל הכותרת הניטרלית בקישורים פנימיים
 function gq(first) {
   const parts = [];
@@ -5553,15 +5613,15 @@ function renderLesson() {
   const tr = c.try;
   lv.box.innerHTML = `
     ${lv.modal ? '' : `<div class="topbar">
-      <span class="title">📚 ${L.name}</span>
+      <span class="title">${L.name}</span>
       <span>כרטיסייה ${lv.k + 1} מתוך ${N}</span>
-      <span><button class="ghost" data-font>א+</button><button class="ghost" data-home>✖ יציאה</button></span>
+      <span><button class="ghost" data-font>א+</button><button class="ghost" data-home>${ic('close')} יציאה</button></span>
     </div>`}
     <div class="dots">${CARDS.map((_, i) => `<button class="dot${i === lv.k ? ' cur' : ''}${learned.has(i) ? ' ok' : ''}" data-go="${i}" aria-label="כרטיסייה ${i + 1}">${learned.has(i) ? '✔' : i + 1}</button>`).join('')}</div>
     <div class="card lcard" style="border-top:6px solid ${L.color}">
       <div class="qhead">
         <h2 class="ltitle">${c.title}</h2>
-        ${canSpeak ? '<button class="ghost speak" data-speak aria-label="הקראה">🔊</button>' : ''}
+        ${canSpeak ? `<button class="ghost speak" data-speak aria-label="הקראה">${ic('speaker')}</button>` : ''}
       </div>
       <div class="lbody">${c.html}</div>
       ${tr ? `<div class="ltry">
@@ -5643,14 +5703,14 @@ function startLessonPractice(id) {
   const L = LESSONS[id];
   lessonView = null;
   const topic = lessonTopic(L);
-  startPractice(topic, { retry: lessonPractice(L).map(g => ({ topic, gen: g, lv: 3 })), label: `✏️ תרגול: ${L.name}`, lessonId: id });
+  startPractice(topic, { retry: lessonPractice(L).map(g => ({ topic, gen: g, lv: 3 })), label: `תרגול: ${L.name}`, lessonId: id });
 }
 
 function learnLink(q) {
   if (!q.learn || !LESSONS[q.learn.lesson]) return '';
   const L = LESSONS[q.learn.lesson], c = L.cards[q.learn.card];
   if (!c || !cardsOf(L.id).includes(c) || !LESSON_ORDER.includes(L.id)) return '';
-  return `<div><button class="linkish" data-learn="${q.learn.lesson}" data-card="${q.learn.card}">📚 לכרטיסיית הלימוד: ${c.title}</button></div>`;
+  return `<div><button class="linkish" data-learn="${q.learn.lesson}" data-card="${q.learn.card}">${ic('book')} לכרטיסיית הלימוד: ${c.title}</button></div>`;
 }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-learn]');
@@ -5673,7 +5733,7 @@ function tstat(id) {
   return store.topics[id] = store.topics[id] || { mastery: 0, level: 1 };
 }
 function masteryLabel(m) {
-  return m >= 80 ? '🌳 שולטים' : m >= 40 ? '🌿 מתקדמים' : m > 0 ? '🌱 בדרך' : '✨ עוד לא התחלנו';
+  return m >= 80 ? '●●● שולטים' : m >= 40 ? '●●○ מתקדמים' : m > 0 ? '●○○ בדרך' : 'עוד לא התחלנו';
 }
 
 /* =========================================================
@@ -5745,9 +5805,9 @@ function speechChunks(text) {
   return out;
 }
 function setSpeakBtn(btn) {
-  if (speakingBtn) { speakingBtn.textContent = '🔊'; speakingBtn.classList.remove('on'); }
+  if (speakingBtn) { speakingBtn.innerHTML = ic('speaker'); speakingBtn.classList.remove('on'); }
   speakingBtn = btn || null;
-  if (speakingBtn) { speakingBtn.textContent = '⏹'; speakingBtn.classList.add('on'); }
+  if (speakingBtn) { speakingBtn.innerHTML = ic('stop'); speakingBtn.classList.add('on'); }
 }
 function stopSpeak() {
   if (canSpeak) speechSynthesis.cancel();
@@ -6018,70 +6078,108 @@ function home() {
   stopSpeak();
   const name = store.name || '';
   const len = store.roundLen || 10;
+  const calm = document.documentElement.classList.contains('calm');
+  const tabs = [
+    { id: 'learn', label: 'ללמוד', icon: 'book', wash: 'rgba(127,168,214,0.32)' },
+    { id: 'practice', label: 'לתרגל', icon: 'pencil', wash: 'rgba(217,138,154,0.28)' },
+    ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
+    { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
+    { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
+  ];
+  if (!tabs.some(t => t.id === homeTab)) homeTab = 'practice';
+  const sug = PRESET ? null : todaySuggestion();
   app.innerHTML = `
-    <div class="tools"><span class="toollinks"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><a class="btnlink printlink" href="${gq('print')}#book">📚 חוברות</a></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${document.documentElement.classList.contains('calm')}">${document.documentElement.classList.contains('calm') ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
+    <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
     <div class="hero-wrap">
       <h1 class="hero">מתרגלים מתמטיקה</h1>
       <svg class="doodle-line" aria-hidden="true" width="300" height="14" viewBox="0 0 300 14"><path d="M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"></path></svg>
-      <div class="sig"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l3.5-1L18 8.5 15.5 6 5 16.5z"></path><path d="M13.5 8l2.5 2.5"></path></svg><span>מאת <b>איריס סגל</b></span></div>
+      <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
     <div class="subtitle">${SUBTITLE}</div>
-    ${PRESET ? `<div class="card banner">
-      <div>✨ <b>הוכן בשבילך:</b> ${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div>
+    ${PRESET ? `<div class="card banner today">
+      <div><div class="today-k">הוכן בשבילך</div><div class="today-t">${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div></div>
       <button id="presetGo">התחילו ←</button>
-    </div>` : ''}
-    <div class="card">
-      <div class="name-row">
-        <label for="nm">השם שלי:</label>
-        <input id="nm" value="${esc(name)}" placeholder="כתבו את השם שלכם" autocomplete="off">
+    </div>` : `<div class="card today">
+      <div><div class="today-k">מה עושים היום?</div><div class="today-t">${sug.t}</div><div class="today-d">${sug.d}</div></div>
+      <button id="todayGo">${sug.btn} ←</button>
+    </div>`}
+    <div class="name-row name-mini"><label for="nm">השם שלי:</label><input id="nm" value="${esc(name)}" placeholder="כתבו את השם שלכם" autocomplete="off"></div>
+    <div class="nb">
+      <nav class="tabs" role="tablist" aria-label="חלקי האתר">
+        ${tabs.map(t => `<button role="tab" class="tab${t.id === homeTab ? ' on' : ''}" data-tab="${t.id}" aria-selected="${t.id === homeTab}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>`).join('')}
+      </nav>
+      <div class="panels">
+        <section class="panel" data-panel="learn" ${homeTab === 'learn' ? '' : 'hidden'}>
+          <h2>ללמוד – כרטיסיות הסבר</h2>
+          <div class="topics">
+            ${LESSON_ORDER.map(id => LESSONS[id]).map((L, i) => {
+              const n = learnedSet(L.id).size;
+              return `<button class="topic" style="--c:${L.color}" data-lesson="${L.id}">
+                <span class="ic">${i + 1}</span>
+                <span class="nm">${L.name}</span>
+                <span class="ds">${L.desc}</span>
+                <span class="mbar"><span style="width:${n / cardsOf(L.id).length * 100}%"></span></span>
+                <span class="best">${n ? `✔ ${n} מתוך ${cardsOf(L.id).length}` : `${cardsOf(L.id).length} כרטיסיות`}</span>
+              </button>`;
+            }).join('')}
+          </div>
+        </section>
+        <section class="panel" data-panel="practice" ${homeTab === 'practice' ? '' : 'hidden'}>
+          <h2>לתרגל – בחרו נושא</h2>
+          <div class="topics">
+            ${TOPICS.map((t, i) => {
+              const s = store.topics[t.id];
+              const m = s ? s.mastery : 0;
+              return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
+                <span class="ic">${i + 1}</span>
+                <span class="nm">${t.name}</span>
+                <span class="ds">${t.desc}</span>
+                <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
+                <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}</span>
+              </button>`;
+            }).join('')}
+          </div>
+          <div class="practice-more">
+            <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
+            <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
+            ${store.solved ? `<div class="muted">${ic('star')} עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
+          </div>
+        </section>
+        ${GRADE >= 3 ? `<section class="panel" data-panel="kefel" ${homeTab === 'kefel' ? '' : 'hidden'}>
+          <h2>אימון לוח הכפל</h2>
+          <div class="card kf-banner banner">
+            <div>5 דקות ביום. ${kf.placed ? `בשליטה: <b>${kfMastered()}</b> מתוך 36 עובדות.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
+            <button id="kfGoHome">לאימון ←</button>
+          </div>
+          <p class="muted">באימון: מפה אישית של לוח הכפל, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
+        </section>` : ''}
+        <section class="panel" data-panel="tests" ${homeTab === 'tests' ? '' : 'hidden'}>
+          <h2>${GRADE === 6 ? 'מבדקים' : 'מבחנים'}</h2>
+          <div class="big-actions">
+            <button id="testfb" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב<span class="desc">20 שאלות מכל הנושאים, עם רמזים ועזרה תוך כדי</span></button>
+            <button id="test" class="secondary">${ic('clipboard')} ${TEST_NAME}<span class="desc">20 שאלות מכל הנושאים – הציון והפתרונות בסוף</span></button>
+            <button id="sim" class="secondary">${ic('clock')} סימולציה עם שעון<span class="desc">כמו ${GRADE === 6 ? 'במבדק' : 'במבחן'} אמיתי: זמן מוגבל, אפשר לדלג ולחזור לשאלות</span></button>
+          </div>
+          ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
+        </section>
+        <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
+          <h2>הדפסה</h2>
+          <div class="print-links">
+            <a class="btnlink printlink" href="${gq('print')}">${ic('printer')} דפי תרגול ומבחנים<span class="desc">לפי נושאים ורמה, עם דף תשובות</span></a>
+            <a class="btnlink printlink" href="${gq('print')}#book">${ic('booklet')} חוברות לפי נושאים<span class="desc">עם תוכן עניינים, דף תשובות וקוד חוברת</span></a>
+          </div>
+        </section>
       </div>
-      <div class="name-row" style="margin-top:12px">
-        <span class="lbl2">כמה שאלות בכל סבב?</span>
-        <span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span>
-      </div>
-      ${store.solved ? `<div class="center muted" style="margin-top:12px">🏅 עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
     </div>
-    ${GRADE >= 3 ? `<div class="card banner kf-banner">
-      <div>⚡ <b>אימון לוח הכפל</b> – 5 דקות ביום. ${kf.placed ? `בשליטה: <b>${kfMastered()}</b> מתוך 36 עובדות.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
-      <button id="kfGoHome">לאימון ←</button>
-    </div>` : ''}
-    <h2>ללמוד – כרטיסיות הסבר</h2>
-    <div class="topics">
-      ${LESSON_ORDER.map(id => LESSONS[id]).map((L, i) => {
-        const n = learnedSet(L.id).size;
-        return `<button class="topic" style="--c:${L.color}" data-lesson="${L.id}">
-          <span class="ic">${i + 1}</span>
-          <span class="nm">${L.name}</span>
-          <span class="ds">${L.desc}</span>
-          <span class="mbar"><span style="width:${n / cardsOf(L.id).length * 100}%"></span></span>
-          <span class="best">${n ? `✔ ${n} מתוך ${cardsOf(L.id).length} כרטיסיות` : `${cardsOf(L.id).length} כרטיסיות`}</span>
-        </button>`;
-      }).join('')}
-      ${LESSON_SOON.map(x => `<div class="topic soon"><span class="ic">${x.icon}</span><span class="nm">${x.name}</span><span class="ds">בקרוב...</span></div>`).join('')}
-    </div>
-    <h2 style="margin-top:22px">לתרגל – בחרו נושא</h2>
-    <div class="topics">
-      ${TOPICS.map((t, i) => {
-        const s = store.topics[t.id];
-        const m = s ? s.mastery : 0;
-        return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
-          <span class="ic">${i + 1}</span>
-          <span class="nm">${t.name}</span>
-          <span class="ds">${t.desc}</span>
-          <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
-          <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}</span>
-        </button>`;
-      }).join('')}
-    </div>
-    <div class="big-actions">
-      <button id="mix">🔀 תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
-      <button id="testfb" class="secondary">📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב<span class="desc">20 שאלות מכל הנושאים, עם רמזים ועזרה תוך כדי</span></button>
-      <button id="test" class="secondary">📝 ${TEST_NAME}<span class="desc">20 שאלות מכל הנושאים – הציון והפתרונות בסוף</span></button>
-      <button id="sim" class="secondary">⏱️ סימולציה עם שעון<span class="desc">כמו ${GRADE === 6 ? 'במבדק' : 'במבחן'} אמיתי: זמן מוגבל, אפשר לדלג ולחזור לשאלות</span></button>
-    </div>
-    ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
   `;
+  app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+    homeTab = b.dataset.tab;
+    try { sessionStorage.setItem('math-tab', homeTab); } catch (e) {}
+    app.querySelectorAll('[data-tab]').forEach(x => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-selected', on); });
+    app.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== homeTab; });
+  });
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
+  if ($('todayGo')) $('todayGo').onclick = sug.go;
   $('calmBtn').onclick = () => {
     const on = document.documentElement.classList.toggle('calm');
     try { localStorage.setItem('math-calm', on ? '1' : '0'); } catch (e) {}
@@ -6100,6 +6198,23 @@ function home() {
   $('testfb').onclick = () => startTest(true);
   $('sim').onclick = showSimPicker;
   if (PRESET) $('presetGo').onclick = startPreset;
+}
+let homeTab = (() => { try { return sessionStorage.getItem('math-tab') || 'practice'; } catch (e) { return 'practice'; } })();
+
+// "מה עושים היום?" – הצעה אחת ברורה לצעד הבא
+function todaySuggestion() {
+  if (GRADE >= 3 && kf.placed && kf.lastDay !== kfToday()) return { t: 'אימון כפל – 5 דקות', d: 'עובדות חדשות, וחזרה על מה שעוד קשה', btn: 'לאימון', go: kfHome };
+  const started = TOPICS.filter(t => store.topics[t.id]);
+  const learned = LESSON_ORDER.some(id => learnedSet(id).size);
+  if (!started.length && !learned) {
+    const L = LESSONS[LESSON_ORDER[0]];
+    return { t: `מתחילים: ${L.name}`, d: 'כמה כרטיסיות הסבר קצרות, ואחר כך תרגול', btn: 'להתחיל', go: () => startLesson(L.id) };
+  }
+  const weak = started.map(t => ({ t, m: store.topics[t.id].mastery || 0 })).filter(x => x.m < 80).sort((a, b) => a.m - b.m)[0];
+  if (weak) return { t: `ממשיכים: ${weak.t.name}`, d: `${masteryLabel(weak.m)} · ${LEVEL_NAME[store.topics[weak.t.id].level || 1]}`, btn: 'להמשיך', go: () => showLevelPicker(weak.t.id) };
+  const next = TOPICS.find(t => !store.topics[t.id]);
+  if (next) return { t: `נושא חדש: ${next.name}`, d: next.desc, btn: 'להתחיל', go: () => showLevelPicker(next.id) };
+  return { t: 'תרגול מעורב', d: 'שאלות מכל הנושאים', btn: 'להתחיל', go: () => showLevelPicker('mix') };
 }
 
 
@@ -6210,7 +6325,7 @@ function startPractice(topicId, opt = {}) {
 
 function startTest(withFeedback) {
   const qs = buildTest();
-  if (withFeedback) return startPractice('test', { list: qs, label: `📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב` });
+  if (withFeedback) return startPractice('test', { list: qs, label: `${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב` });
   state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0 };
   renderQ();
 }
@@ -6351,13 +6466,13 @@ function inputHTML(q) {
 }
 
 function titleText() {
-  if (state.sim) return '⏱️ סימולציה עם שעון';
-  if (state.mode === 'test') return '📝 ' + TEST_NAME;
+  if (state.sim) return 'סימולציה עם שעון';
+  if (state.mode === 'test') return TEST_NAME;
   if (state.label) return state.label;
-  if (state.retry) return '🔁 תרגול הטעויות שלי';
-  if (state.topicId === 'mix') return '🔀 תרגול מעורב';
+  if (state.retry) return 'תרגול הטעויות שלי';
+  if (state.topicId === 'mix') return 'תרגול מעורב';
   const t = TOPIC[state.topicId];
-  return `${t.icon} ${t.name}`;
+  return t.name;
 }
 
 function renderQ() {
@@ -6369,7 +6484,7 @@ function renderQ() {
   Object.assign(state, { tries: 0, selected: null, done: false, guide: null });
   stopSpeak();
   const tips = practice && TOPIC[state.topicId]
-    ? `<details class="tips"><summary>📘 תזכורת – מה חשוב לזכור בנושא</summary><ul>${t.tips.map(x => `<li>${x}</li>`).join('')}</ul></details>` : '';
+    ? `<details class="tips"><summary>${ic('note')} תזכורת – מה חשוב לזכור בנושא</summary><ul>${t.tips.map(x => `<li>${x}</li>`).join('')}</ul></details>` : '';
   const showLevel = practice && !state.hideLevel && !state.list && !state.retry;
   app.innerHTML = `
     <div class="topbar">
@@ -6378,7 +6493,7 @@ function renderQ() {
       ${state.sim ? `<button class="timer" id="timer" title="הסתרה/הצגה של השעון">${simClockText()}</button>` : ''}
       <span>
         <button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+</button>
-        <button class="ghost" id="quit">✖ יציאה</button>
+        <button class="ghost" id="quit">${ic('close')} יציאה</button>
       </span>
     </div>
     <div class="progress"><div style="width:${state.i / total * 100}%"></div></div>
@@ -6390,11 +6505,11 @@ function renderQ() {
     </div>` : ''}
     ${tips}
     <div class="card">
-      <div class="qtag" style="color:${t.color}">${t.icon} ${t.name}</div>
+      <div class="qtag"><span class="qdot" style="--c:${t.color}"></span>${t.name}</div>
       <div class="qhead">
         <span class="qnum" style="background:${t.color}">${state.i + 1}</span>
         <div class="qtext">${q.text}</div>
-        ${canSpeak ? '<button class="ghost speak" id="speakBtn" title="הקראת השאלה" aria-label="הקראת השאלה">🔊</button>' : ''}
+        ${canSpeak ? `<button class="ghost speak" id="speakBtn" title="הקראת השאלה" aria-label="הקראת השאלה">${ic('speaker')}</button>` : ''}
       </div>
       ${q.fig || ''}
       <div class="answer-area" id="mainAns">${inputHTML(q)}</div>
@@ -6402,8 +6517,8 @@ function renderQ() {
         ${state.sim && state.i > 0 ? '<button class="secondary" id="prevQ">→ לשאלה הקודמת</button>' : ''}
         ${q.type === 'choice' && practice ? '' : `<button id="go">${state.sim ? (state.i + 1 === total ? 'סיום והגשה' : 'לשאלה הבאה ←') : !practice ? (state.i + 1 === total ? 'סיום והגשה' : 'שמירה והמשך ←') : 'בדיקה ✓'}</button>`}
         ${state.sim && state.i + 1 < total ? '<button class="secondary" id="simDone">🏁 הגשה</button>' : ''}
-        ${practice ? '<button class="secondary" id="hintBtn">💡 רמז</button>' : ''}
-        ${practice && q.gen ? '<button class="secondary" id="exBtn">📖 דוגמה פתורה</button>' : ''}
+        ${practice ? `<button class="secondary" id="hintBtn">${ic('bulb')} רמז</button>` : ''}
+        ${practice && q.gen ? `<button class="secondary" id="exBtn">${ic('example')} דוגמה פתורה</button>` : ''}
         <button class="hidden" id="next">${state.i + 1 === total ? 'לסיכום 🏁' : 'לשאלה הבאה ←'}</button>
       </div>
       <div class="fb" id="fb" aria-live="polite"></div>
@@ -6422,7 +6537,7 @@ function renderQ() {
   }
   if ($('speakBtn')) $('speakBtn').onclick = e => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.join('. ') : ''), e.currentTarget);
   if ($('go')) $('go').onclick = submit;
-  if ($('hintBtn')) $('hintBtn').onclick = () => showFb('hint', `💡 <span class="head">רמז:</span> ${q.hint}`);
+  if ($('hintBtn')) $('hintBtn').onclick = () => showFb('hint', `${ic('bulb')} <span class="head">רמז:</span> ${q.hint}`);
   if ($('exBtn')) $('exBtn').onclick = showExample;
   $('next').onclick = nextQ;
 
@@ -6469,7 +6584,7 @@ function showExample() {
   if (!box.classList.contains('hidden')) { box.classList.add('hidden'); return; }
   const ex = q.gen();
   box.innerHTML = `
-    <div class="exhead">📖 דוגמה פתורה – שאלה דומה עם מספרים אחרים</div>
+    <div class="exhead">${ic('example')} דוגמה פתורה – שאלה דומה עם מספרים אחרים</div>
     <div class="qtext">${ex.text}</div>
     ${ex.fig || ''}
     ${ex.steps ? `<ol class="exsteps">${ex.steps.map(s => `<li>${s.p} <b class="m">${fmt(s.a)}</b></li>`).join('')}</ol>` : ''}
@@ -6520,7 +6635,7 @@ function submit() {
     }
     showFb('bad', trap
       ? `<div class="head">🤔 כמעט! ${trap.m}</div>נסו שוב 💪`
-      : `<div class="head">לא בדיוק... נסו שוב 💪</div>💡 רמז: ${q.hint}`);
+      : `<div class="head">לא בדיוק... נסו שוב</div>${ic('bulb')} רמז: ${q.hint}`);
     return;
   }
   // ניסיון שני לא הצליח
@@ -6565,7 +6680,7 @@ function renderStep() {
       <div class="answer-area">
         <input id="sans" class="ans" inputmode="decimal" autocomplete="off" aria-label="תשובה לשלב">
         <button id="sgo">בדיקה ✓</button>
-        ${canSpeak ? '<button class="ghost speak" id="sspeak" aria-label="הקראת השלב">🔊</button>' : ''}
+        ${canSpeak ? `<button class="ghost speak" id="sspeak" aria-label="הקראת השלב">${ic('speaker')}</button>` : ''}
       </div>
       <div class="sfb" id="sfb" aria-live="polite"></div>
     </div>` : '';
@@ -6636,7 +6751,7 @@ function summary() {
   const s = state, n = s.results.length;
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
-  const label = titleText().replace(/^\S+\s/, '');
+  const label = titleText();
   const cnt = o => s.results.filter(r => r.outcome === o).length;
   const first = cnt('first'), second = cnt('second'), guided = cnt('guided'), shown = cnt('shown');
   const correct = first + second;
@@ -6717,10 +6832,10 @@ function summary() {
       ${growth ? `<div class="growth"><div class="muted">ההתקדמות שלי:</div>${growth}</div>` : ''}
       ${breakdown}
       <div class="actions" style="justify-content:center">
-        ${missed.length ? `<button id="retryBtn">🔁 תרגול השאלות שהיו קשות (${missed.length})</button>` : ''}
-        <button class="${missed.length ? 'secondary' : ''}" id="again">▶ סבב נוסף</button>
-        <button class="secondary" id="copy">📋 העתקת התוצאה</button>
-        <button class="secondary" id="homeBtn">🏠 לתפריט</button>
+        ${missed.length ? `<button id="retryBtn">${ic('retry')} תרגול השאלות שהיו קשות (${missed.length})</button>` : ''}
+        <button class="${missed.length ? 'secondary' : ''}" id="again">סבב נוסף ←</button>
+        <button class="secondary" id="copy">${ic('copy')} העתקת התוצאה</button>
+        <button class="secondary" id="homeBtn">${ic('home')} לתפריט</button>
       </div>
       <p class="muted" id="copied" style="min-height:1.4em"></p>
     </div>
@@ -7272,7 +7387,7 @@ function kfHome() {
   const m = kfMastered(), placed = !!kf.placed;
   const streak = kf.lastDay >= kfToday() - 1 ? kf.streak || 0 : 0;
   app.innerHTML = `
-    <div class="topbar"><span class="title">⚡ אימון לוח הכפל</span><span></span><span><button class="ghost" id="kfBack">🏠 לתפריט</button></span></div>
+    <div class="topbar"><span class="title">אימון לוח הכפל</span><span></span><span><button class="ghost" id="kfBack">${ic('home')} לתפריט</button></span></div>
     <div class="card center">
       <div class="kf-stats">
         <div><b>${m}</b><span>מתוך 36 עובדות בשליטה</span></div>
@@ -7364,7 +7479,7 @@ function kfQ() {
   app.innerHTML = `
     <div class="topbar"><span class="title">${kz.mode === 'place' ? '🧭 בדיקת פתיחה' : kz.mode === 'daily' ? '⚡ אימון יומי' : '🏆 אתגר דקה'}</span>
       <span>${kz.mode === 'chal' ? `<b id="kfClock">⏱️ ${Math.ceil((kz.end - Date.now()) / 1000)}</b> · נכון: <b>${kz.right}</b>` : total}</span>
-      <span><button class="ghost" id="kfQuit">✖ יציאה</button></span></div>
+      <span><button class="ghost" id="kfQuit">${ic('close')} יציאה</button></span></div>
     ${kz.mode === 'chal' ? '' : `<div class="progress"><div style="width:${kz.i / kz.queue.length * 100}%"></div></div>`}
     <div class="card center kf-q">
       ${q.intro ? `<div class="kf-new">✨ עובדה חדשה<br><span class="small">${kfStrategy(q.a, q.b)}</span></div>` : ''}
