@@ -185,7 +185,9 @@
   .muted { color: var(--muted); }
   .hidden { display: none !important; }
 
-  .tools { display: flex; justify-content: flex-start; }
+  .tools { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  a.btnlink.printlink { background: #fff; padding: 8px 16px; font-size: 1rem; font-weight: 600; }
+  a.btnlink.printlink:hover { background: #f0f2ff; }
   .banner { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-right: 6px solid #e0a800; background: #fffaf0; font-size: 1.15rem; }
   .lbl2 { font-weight: 600; font-size: 1.05rem; }
   .seg { display: inline-flex; gap: 6px; }
@@ -3455,7 +3457,7 @@ function home() {
   const name = store.name || '';
   const len = store.roundLen || 10;
   app.innerHTML = `
-    <div class="tools"><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></div>
+    <div class="tools"><a class="btnlink printlink" href="?print">🖨️ דפי עבודה להדפסה</a><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></div>
     <h1>מתרגלים מתמטיקה 🎯</h1>
     <div class="subtitle">כיתה ו' · הכנה למבדק</div>
     ${PRESET ? `<div class="card banner">
@@ -3507,7 +3509,6 @@ function home() {
       <button id="test" class="secondary">📝 מבדק לדוגמה<span class="desc">20 שאלות כמו במבדק – הציון והפתרונות בסוף</span></button>
     </div>
     ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>המבדקים האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
-    <p class="center muted small-link"><a href="?print">🖨️ דפי עבודה להדפסה</a></p>
   `;
   $('fontBtn').onclick = cycleFont;
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
