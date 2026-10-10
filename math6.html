@@ -5679,7 +5679,7 @@ function wsQuestionHTML(q, n) {
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
   else ans = `<div class="wschoices">${q.choices.map(c => `<div><span class="wscheck">☐</span> ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
-  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"><span>${wordy ? 'דרך הפתרון' : 'טיוטה'}</span></div>`;
+  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
   return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${ans}</div>${grid}</div>`;
 }
 
@@ -5691,7 +5691,7 @@ function examQuestionHTML(q, n) {
   const plain = q.text.replace(/<[^>]+>/g, '');
   const wordy = q.steps && q.steps.length >= 3 && plain.length > 60;
   const work = wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : '';
-  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"><span>טיוטה</span></div>`;
+  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
   return `<div class="ex-q"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>${grid}</div>`;
 }
 
@@ -5751,7 +5751,7 @@ function printBuilder() {
           <button class="secondary" id="wexam">📝 מבחן מודפס בסגנון מבדק</button>
           <button class="secondary hidden" id="wprint">🖨️ הדפסה / שמירה כ-PDF</button>
         </div>
-        <p class="muted small">📝 <b>מבחן בסגנון מבדק:</b> 20 שאלות מכל הנושאים של הכיתה, ממוספרות כמו במבחן, עם כותרת ומשבצות לטיוטה ולחישובים ליד כל שאלה. (הנושאים והרמה נבחרים אוטומטית; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
+        <p class="muted small">📝 <b>מבחן בסגנון מבדק:</b> 20 שאלות מכל הנושאים של הכיתה, ממוספרות כמו במבחן, עם כותרת ומלבן משבצות לחישוב ליד כל שאלה. (הנושאים והרמה נבחרים אוטומטית; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
         <div>
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
