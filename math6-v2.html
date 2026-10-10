@@ -409,7 +409,7 @@
   .ex-rules { list-style: none; padding: 0; font-size: 1.1rem; line-height: 2.3; }
   .ex-luck { font-size: 2rem; font-weight: 800; text-align: center; color: #2c2c54; margin: 30px 0; font-style: italic; }
   .ex-end { min-height: 500px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
-  .ex-q { padding: 18px 0 26px; break-inside: avoid; }
+  .ex-q { padding: 14px 0 16px; break-inside: avoid; border-bottom: 1px solid #ddd; }
   .ex-num { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: #4c5fd5; color: #fff; font-weight: 800; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; }
   .ex-q .qtext { font-size: 1.12rem; line-height: 2; }
   .ex-choices { padding-right: 50px; margin-top: 8px; line-height: 2.4; font-size: 1.08rem; }
@@ -420,6 +420,9 @@
   .ex-space.small { height: 40px; }
   .ex-q .wsans { padding-right: 50px; }
   .ws-page .ex-q .fig { max-width: 360px; }
+  .ex-grid { position: relative; margin: 8px 50px 6px 0; height: 4cm; border: 1.5px solid #8e97b5; border-radius: 4px; background-color: #fff; background-image: linear-gradient(#cdd3e4 1px, transparent 1px), linear-gradient(90deg, #cdd3e4 1px, transparent 1px); background-size: 0.5cm 0.5cm; }
+  .ex-grid.big { height: 6cm; }
+  .ex-grid span { position: absolute; top: 3px; right: 6px; font-size: 0.75rem; color: #666; background: #fff; padding: 0 4px; }
   @media print {
     .ex-cover { min-height: 260mm; }
     .ex-body { break-after: page; }
@@ -1117,7 +1120,7 @@ function genFracWord() {
   const name = pick(['דנה', 'יואב', 'מאיה', 'עומר', 'נועה', 'איתי']);
   const [d1, d2] = twoDens();
   const n1 = R(1, d1 - 1), n2 = R(1, d2 - 1);
-  if (n1 * d2 + n2 * d1 >= d1 * d2) return genFracWord();
+  if (n1 * d2 + n2 * d1 >= d1 * d2 || gcd(n1, d1) > 1 || gcd(n2, d2) > 1) return genFracWord();
   const L = lcm(d1, d2), a = n1 * L / d1, b = n2 * L / d2;
   const remain = Math.random() < 0.5;
   const res = remain ? L - a - b : a + b;
@@ -5667,9 +5670,8 @@ function examQuestionHTML(q, n) {
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
   else ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   const plain = q.text.replace(/<[^>]+>/g, '');
-  const work = q.steps && q.steps.length >= 3 && plain.length > 60
-    ? '<div class="ex-work">הַצִּיגוּ אֶת דֶּרֶךְ הַפִּתְרוֹן.<div class="ex-space"></div></div>'
-    : q.type !== 'choice' ? '<div class="ex-space small"></div>' : '';
+  const wordy = q.steps && q.steps.length >= 3 && plain.length > 60;
+  const work = `${wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : ''}<div class="ex-grid${wordy ? ' big' : ''}"><span>טיוטה וחישובים</span></div>`;
   return `<div class="ex-q"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>`;
 }
 
@@ -5729,7 +5731,7 @@ function printBuilder() {
           <button class="secondary" id="wexam">📝 מבחן מודפס בסגנון מבדק</button>
           <button class="secondary hidden" id="wprint">🖨️ הדפסה / שמירה כ-PDF</button>
         </div>
-        <p class="muted small">📝 <b>מבחן בסגנון מבדק:</b> 20 שאלות מכל הנושאים של הכיתה, עם עמוד שער, עמוד הוראות ועמוד סיום – כמו במבחן אמיתי. (הנושאים והרמה נבחרים אוטומטית; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
+        <p class="muted small">📝 <b>מבחן בסגנון מבדק:</b> 20 שאלות מכל הנושאים של הכיתה, ממוספרות כמו במבחן, עם כותרת ומשבצות לטיוטה ולחישובים ליד כל שאלה. (הנושאים והרמה נבחרים אוטומטית; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
         <div>
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
@@ -5772,35 +5774,13 @@ function printBuilder() {
     const title = $('wt').value.trim() || 'מבחן תרגול במתמטיקה';
     const sheets = Array.from({ length: versions }, () => buildTest());
     const vname = v => versions > 1 ? `נוסח ${letters[v]}` : '';
-    const topicNames = Object.keys(TEST_PLAN).map(id => TOPIC[id].name);
     let out = sheets.map((qs, v) => `
-      <section class="ws-page ex-cover">
-        <div class="ex-deco" aria-hidden="true">+ − × ÷ = ½ % ° △ □ ⅓ 7 3 9</div>
-        <div class="ex-title">${esc(title)}</div>
-        ${NEUTRAL ? '' : `<div class="ex-grade">${GRADE_NAME[GRADE]}</div>`}
-        ${vname(v) ? `<div class="ex-ver">${vname(v)}</div>` : ''}
-        <div class="ex-fields"><div>שם התלמיד/ה:<span class="ex-box"></span></div><div>הכיתה:<span class="ex-box"></span></div></div>
-      </section>
-      <section class="ws-page ex-intro">
-        <h2>מה במבחן?</h2>
-        <p>במבחן ${qs.length} שאלות במתמטיקה מסוגים שונים: שאלות מילוליות, תרגילים ושאלות הכוללות סרטוטים.<br>השאלות עוסקות בנושאים הבאים:</p>
-        <ol class="ex-topics">${topicNames.map(n => `<li>${n}</li>`).join('')}</ol>
-        <h2>אז מה צריך לעשות?</h2>
-        <ul class="ex-rules">
-          <li>✏️ לפתור את כל התרגילים ולענות על כל השאלות ברצינות ובתשומת לב.</li>
-          <li>☒ בשאלות שבהן יש לבחור תשובה – יש לסמן X במשבצת שליד התשובה הנכונה.</li>
-          <li>📏 אפשר להיעזר בסרגל.</li>
-          <li>🚫 אסור להיעזר במחשבון או בלוח הכפל.</li>
-          <li>🙋 אם צריך עוד זמן – מבקשים מהמורה.</li>
-        </ul>
-        <div class="ex-luck">בהצלחה!</div>
-      </section>
       <section class="ws-page ex-body">
+        <div class="wshead">
+          <h1>${esc(title)}${vname(v) ? ' – ' + vname(v) : ''}</h1>
+          <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
+        </div>
         ${qs.map((q, i) => examQuestionHTML(q, i + 1)).join('')}
-      </section>
-      <section class="ws-page ex-end">
-        <div class="ex-luck">כל הכבוד!<br>סיימת את המבחן.</div>
-        <p>לפני שמגישים – כדאי לעבור שוב על התשובות ולבדוק שלא דילגת על אף שאלה.</p>
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey">
