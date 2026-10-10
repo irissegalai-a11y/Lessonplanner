@@ -414,9 +414,9 @@
    כיתה: ?grade=5 (ברירת מחדל: כיתה ו'), ?neutral=1 – כותרת בלי מספר כיתה
    ========================================================= */
 const GRADE_PARAMS = new URLSearchParams(location.search);
-const GRADE = GRADE_PARAMS.get('grade') === '5' ? 5 : 6;
+const GRADE = ['4', '5'].includes(GRADE_PARAMS.get('grade')) ? Number(GRADE_PARAMS.get('grade')) : 6;
 const NEUTRAL = GRADE_PARAMS.get('neutral') === '1';
-const GRADE_NAME = { 5: "כיתה ה'", 6: "כיתה ו'" };
+const GRADE_NAME = { 4: "כיתה ד'", 5: "כיתה ה'", 6: "כיתה ו'" };
 const TEST_NAME = GRADE === 6 ? 'מבדק לדוגמה' : 'מבחן תרגול';
 const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : GRADE === 6 ? "כיתה ו' · הכנה למבדק" : `${GRADE_NAME[GRADE]} · תרגול`;
 document.title = NEUTRAL ? 'מתרגלים מתמטיקה' : `מתרגלים מתמטיקה – ${GRADE_NAME[GRADE]}`;
@@ -490,9 +490,9 @@ function choiceQ(base, correct, wrongs, keepOrder = false) {
    ========================================================= */
 const PLACE = ['יחידות', 'עשרות', 'מאות', 'אלפים', 'עשרות אלפים', 'מאות אלפים', 'מיליונים'];
 
-function genDigitValue() {
+function genDigitValue(maxLen = 7) {
   for (;;) {
-    const len = R(5, 7);
+    const len = R(Math.min(5, maxLen), maxLen);
     const digits = [R(1, 9)];
     for (let i = 1; i < len; i++) digits.push(R(0, 9));
     const cands = [];
@@ -2190,6 +2190,202 @@ const LEVEL_DESC5 = {
 };
 
 /* =========================================================
+   כיתה ו' – ראשוניים ופריקים בסגנון המבדק
+   ========================================================= */
+function genPrimeProduct() {
+  const name = pick(['רינה', 'יואב', 'מאיה', 'עומר', 'נועה']);
+  const [a, b] = shuffle(PRIMES.filter(p => p > 2 && p < 20)).slice(0, 2);
+  const sum = Math.random() < 0.4;
+  const q = choiceQ({
+    text: sum
+      ? `${name} אמר/ה שהסכום של שני המספרים הראשוניים ${M(a)} ו-${M(b)} הוא מספר <b>ראשוני</b>.<br>האם ${name} צודק/ת?`
+      : `${name} אמר/ה שהמכפלה של שני המספרים הראשוניים ${M(a)} ו-${M(b)} היא מספר <b>ראשוני</b>.<br>האם ${name} צודק/ת? (אין צורך לחשב)`,
+    hint: sum ? 'שני המספרים אי-זוגיים. מה אפשר לומר על הסכום של שני מספרים אי-זוגיים?' : 'האם המכפלה מתחלקת במספר נוסף, חוץ מ-1 ומעצמה?',
+    exp: sum
+      ? `${M(`${a} + ${b} = ${a + b}`)} – מספר זוגי, ולכן מתחלק ב-2. מספר זוגי גדול מ-2 אינו ראשוני – ${name} לא צודק/ת.`
+      : `המכפלה ${M(`${a} × ${b}`)} מתחלקת גם ב-${a} וגם ב-${b}, ולכן היא מספר <b>פריק</b> – ${name} לא צודק/ת.`
+  }, 'לא', ['כן'], true);
+  q.traps = [{ c: 'כן', m: sum ? `בדקו: ${a} + ${b} = ${a + b}. האם המספר הזה מתחלק ב-2?` : `המכפלה מתחלקת ב-${a} וב-${b} – יש לה יותר משני מחלקים, ולכן היא לא ראשונית.` }];
+  q.choices = ['כן', 'לא']; q.ans = 1;
+  return q;
+}
+
+/* =========================================================
+   כיתה ד' – שאלות נוספות
+   ========================================================= */
+function genDivMissingDigit() {
+  for (;;) {
+    const d = pick([3, 9, 3]), a = R(10, 99), b = R(0, 9);
+    let x = null;
+    for (let t = 0; t <= 9; t++) if ((a * 100 + t * 10 + b) % d === 0) { x = t; break; }
+    if (x === null) continue;
+    const s = digitSum(a) + b;
+    return {
+      type: 'num',
+      text: `מה הספרה <b>הקטנה ביותר</b> שאפשר לכתוב במקום הריבוע, כדי שהמספר ${M(`${a}${BOX}${b}`)} יתחלק ב-${d}?`,
+      ans: x,
+      steps: [{ p: `סכום הספרות הידועות: ${M(`${String(a).split('').join(' + ')} + ${b} =`)}`, a: s },
+        { p: `מה הספרה הקטנה ביותר שצריך להוסיף ל-${s} כדי לקבל מספר שמתחלק ב-${d}?`, a: x }],
+      hint: DIV_HINT[d] + ' חשבו קודם את סכום הספרות הידועות.',
+      exp: `${M(`${s} + ${x} = ${s + x}`)}, ו-${s + x} מתחלק ב-${d}. המספר: ${M(String(a * 100 + x * 10 + b))}.`
+    };
+  }
+}
+
+function genSubSame() {
+  const d = R(3, 12), n1 = R(2, d - 1), n2 = R(1, n1 - 1);
+  const ex = addSubExplain(n1, d, n2, d, '-');
+  return {
+    type: 'frac', form: 'any', text: `פתרו: ${M(`${F(n1, d)} - ${F(n2, d)} =`)}`, ans: { n: ex.n, d: ex.d },
+    steps: ex.steps,
+    hint: 'כשהמכנים שווים – מחסרים רק את המונים, והמכנה נשאר.',
+    exp: ex.s
+  };
+}
+
+function genUnits4(kind) {
+  const k = kind || R(1, 3);
+  const U = [
+    { big: "מ'", small: 'ס"מ', f: 100 },
+    { big: 'ק"ג', small: "גר'", f: 1000 },
+    { big: 'ק"מ', small: "מ'", f: 1000 },
+    { big: 'שעות', small: 'דקות', f: 60, one: 'שעה' },
+    { big: 'ליטר', small: 'מ"ל', f: 1000 }
+  ];
+  const u = pick(U);
+  const rtl = s => `<span class="m" style="direction:rtl">${s}</span>`;
+  if (k === 1) {
+    const v = R(2, 9);
+    return {
+      type: 'num', text: `כתבו את המספר החסר: ${rtl(`${v} ${u.big} = ${BOX} ${u.small}`)}`, ans: v * u.f,
+      traps: [{ v: v * (u.f === 60 ? 100 : u.f / 10), m: `בדקו: 1 ${u.one || u.big} = ${fmt(u.f)} ${u.small}.` }],
+      hint: `1 ${u.one || u.big} = ${fmt(u.f)} ${u.small}`,
+      exp: `${M(`${v} × ${fmt(u.f)} = ${fmt(v * u.f)}`)} ${u.small}`
+    };
+  }
+  if (k === 2) {
+    const v = R(2, 9);
+    return {
+      type: 'num', text: `כתבו את המספר החסר: ${rtl(`${fmt(v * u.f)} ${u.small} = ${BOX} ${u.big}`)}`, ans: v,
+      traps: [{ v: v * u.f * u.f, m: 'עוברים ליחידה גדולה יותר – המספר צריך לקטון, לכן מחלקים.' }],
+      hint: `${fmt(u.f)} ${u.small} = 1 ${u.one || u.big}. כמה פעמים ${fmt(u.f)} נכנס ב-${fmt(v * u.f)}?`,
+      exp: `${M(`${fmt(v * u.f)} : ${fmt(u.f)} = ${v}`)} ${u.big}`
+    };
+  }
+  const v = R(1, 5), part = u.f === 60 ? R(1, 5) * 10 : u.f === 100 ? R(5, 95) : pick([R(1, 9) * 100 + R(1, 9) * 10, R(11, 99), R(101, 950)]);
+  const ans = v * u.f + part;
+  const traps = [{ v: v + part, m: `קודם הופכים את ה-${v} ${u.big} ל${u.small}: ${v} × ${fmt(u.f)}.` }];
+  const naive = Number(`${v}${part}`);
+  if (naive !== ans) traps.push({ v: naive, m: `לא מצמידים את המספרים! ${v} ${u.big} = ${fmt(v * u.f)} ${u.small}, ועוד ${part}.` });
+  return {
+    type: 'num', text: `כתבו את המספר החסר: ${rtl(`${v} ${v === 1 && u.one ? u.one : u.big} ו-${part} ${u.small} = ${BOX} ${u.small}`)}`, ans, traps,
+    steps: [{ p: `כמה ${u.small} יש ב-${v} ${u.big}? ${M(`${v} × ${fmt(u.f)} =`)}`, a: v * u.f }, { p: `ועכשיו מוסיפים: ${M(`${fmt(v * u.f)} + ${part} =`)}`, a: ans }],
+    hint: `הפכו קודם את ה${u.big} ל${u.small}, ואז חברו.`,
+    exp: `${M(`${v} × ${fmt(u.f)} + ${part} = ${fmt(ans)}`)} ${u.small}`
+  };
+}
+
+function genShapeTypes() {
+  const items = [
+    { q: 'במשולש יש זווית אחת של 120°. איזה משולש הוא?', c: 'משולש קהה-זווית', w: ['משולש חד-זווית', 'משולש ישר-זווית', 'משולש שווה-צלעות'] },
+    { q: 'במשולש יש זווית של 90°. איזה משולש הוא?', c: 'משולש ישר-זווית', w: ['משולש קהה-זווית', 'משולש חד-זווית', 'משולש שווה-צלעות'] },
+    { q: 'כל הזוויות במשולש קטנות מ-90°. איזה משולש הוא?', c: 'משולש חד-זווית', w: ['משולש קהה-זווית', 'משולש ישר-זווית', 'אין משולש כזה'] },
+    { q: 'כל שלוש הצלעות של משולש שוות באורכן. איזה משולש הוא?', c: 'משולש שווה-צלעות', w: ['משולש ישר-זווית', 'משולש קהה-זווית', 'משולש שונה-צלעות'] },
+    { q: 'למרובע יש בדיוק זוג <b>אחד</b> של צלעות מקבילות. איזה מרובע הוא?', c: 'טרפז', w: ['מקבילית', 'מלבן', 'ריבוע'] },
+    { q: 'במרובע כל הצלעות שוות, אבל הזוויות <b>אינן</b> ישרות. איזה מרובע הוא?', c: 'מעוין', w: ['ריבוע', 'מלבן', 'טרפז'] },
+    { q: 'שני ישרים שנפגשים בזווית ישרה (90°) נקראים:', c: 'ישרים מאונכים', w: ['ישרים מקבילים', 'ישרים שווים', 'אלכסונים'] },
+    { q: 'שני ישרים שאף פעם לא נפגשים, והמרחק ביניהם תמיד שווה, נקראים:', c: 'ישרים מקבילים', w: ['ישרים מאונכים', 'ישרים נחתכים', 'אלכסונים'] },
+    { q: 'איזו זווית היא <b>קהה</b>?', c: '130°', w: ['90°', '45°', '80°'] },
+    { q: 'איזו זווית היא <b>חדה</b>?', c: '60°', w: ['90°', '120°', '150°'] }
+  ];
+  const s = pick(items);
+  return choiceQ({ text: s.q, hint: 'זווית חדה – פחות מ-90°. ישרה – בדיוק 90°. קהה – יותר מ-90°. מקבילים – לא נפגשים. מאונכים – נפגשים בזווית ישרה.', exp: `התשובה: ${s.c}.` }, s.c, s.w);
+}
+
+const TOPICS4 = [
+  {
+    id: 'place', name: 'מספרים עד מיליון', icon: '🔢', color: '#4c5fd5',
+    desc: 'ערך הספרה, הרכבת מספרים, השוואה ועיגול',
+    levels: {
+      1: [Object.assign(() => genDigitValue(6), { __learn: { lesson: 'place', card: 1 } }), genCompose],
+      2: [genRound, genCompare, genHowMany],
+      3: [genCompose, genRound, genHowMany, genCompare]
+    },
+    tips: ['כל מקום שווה פי 10 מהמקום שמימינו: יחידות, עשרות, מאות, אלפים...', 'אפס שומר מקום: 4 אלפים ו-3 עשרות = 4,030.', 'עיגול: הספרה שמימין למקום העיגול – 5 ומעלה למעלה.']
+  },
+  {
+    id: 'divis', name: 'סימני התחלקות', icon: '🔍', color: '#6a4fd5',
+    desc: 'התחלקות ב-2, 5, 10, 3 ו-9',
+    levels: {
+      1: [() => genDivRule(1)],
+      2: [() => genDivRule(2), () => genDivRule(1)],
+      3: [genDivMissingDigit, () => genDivRule(2)]
+    },
+    tips: ['ב-2: ספרה אחרונה זוגית. ב-5: ספרה אחרונה 0 או 5. ב-10: ספרה אחרונה 0.', 'ב-3: סכום הספרות מתחלק ב-3. ב-9: סכום הספרות מתחלק ב-9.']
+  },
+  {
+    id: 'ops', name: 'כפל וחילוק', icon: '➗', color: '#e0703a',
+    desc: 'כפל במאונך, חילוק ארוך, שארית וסדר פעולות',
+    levels: {
+      1: [() => genMul(1), () => genDiv(1), () => genOrder(1)],
+      2: [() => genMul(2), () => genDiv(1), () => genOrder(2), () => genOrderSame(), genDivRem],
+      3: [genWord, () => genMissing(2), genEstimate, genDivRem]
+    },
+    tips: ['בודקים חילוק בעזרת כפל.', 'סדר פעולות: סוגריים ← כפל וחילוק ← חיבור וחיסור.', 'רק כפל וחילוק, או רק חיבור וחיסור – משמאל לימין.']
+  },
+  {
+    id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c',
+    desc: 'הרחבה וצמצום, השוואה, מדומה ↔ מעורב, חיבור וחיסור במכנה שווה',
+    levels: {
+      1: [genExpand, genReduce, () => genFracOfQty(1)],
+      2: [genImproperToMixed, genMixedToImproper, genCompareFrac],
+      3: [genAddSame, genSubSame, () => genFracOfQty(1), genCompareFrac]
+    },
+    tips: ['הרחבה/צמצום: כופלים או מחלקים את המונה ואת המכנה באותו מספר.', 'שבר מדומה ← שבר מעורב: מונה : מכנה.', 'חיבור וחיסור עם מכנה שווה: רק המונים משתנים.']
+  },
+  {
+    id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55',
+    desc: 'משולשים ומרובעים, זוויות, מקבילים ומאונכים, היקף ושטח',
+    levels: {
+      1: [genShapeTypes, genRect, () => genSquare(1)],
+      2: [genShapeTypes, genRectReverse, () => genSquare(2), genTrianglePerim],
+      3: [genLShape, genSamePerimeter, genShapeTypes, genRect]
+    },
+    tips: ['זווית חדה < 90°, ישרה = 90°, קהה > 90°.', 'מקבילים – לא נפגשים. מאונכים – נפגשים בזווית ישרה.', 'היקף = סכום הצלעות. שטח מלבן = אורך × רוחב.']
+  },
+  {
+    id: 'units', name: 'מדידות', icon: '⚖️', color: '#1e8a8a',
+    desc: 'המרת יחידות אורך, משקל, נפח וזמן',
+    levels: {
+      1: [() => genUnits4(1)],
+      2: [() => genUnits4(2), genEstimateLength],
+      3: [() => genUnits4(3), () => genUnits4(3), genEstimateLength]
+    },
+    tips: ['1 מ\' = 100 ס"מ · 1 ק"מ = 1,000 מ\' · 1 ק"ג = 1,000 גרם · 1 ליטר = 1,000 מ"ל · 1 שעה = 60 דקות.', 'מיחידה גדולה לקטנה – כופלים. מקטנה לגדולה – מחלקים.']
+  },
+  {
+    id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1',
+    desc: 'קריאת דיאגרמות, השוואה, הפרשים וסכום',
+    levels: {
+      1: [() => genBarRead(0), () => genBarRead(1)],
+      2: [() => genBarRead(2), () => genBarRead(3)],
+      3: [() => genBakery(), () => genBarRead(2), () => genBarRead(3)]
+    },
+    tips: ['קוראים את הכותרת, הצירים והמקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.']
+  }
+];
+const LEVEL_DESC4 = {
+  place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'שילוב של כל הנושאים'],
+  divis: ['התחלקות ב-2, 5 ו-10', 'התחלקות ב-3 וב-9', 'השלמת ספרה חסרה כדי שהמספר יתחלק'],
+  ops: ['כפל וחילוק בחד-ספרתי, סדר פעולות בסיסי', 'כפל דו-ספרתי, שארית, סדר פעולות', 'בעיות מילוליות, מספר חסר ואומדן'],
+  frac: ['הרחבה, צמצום, שבר מכמות', 'מדומה ↔ מעורב, השוואת שברים', 'חיבור וחיסור עם מכנה שווה'],
+  geo: ['סוגי משולשים ומרובעים, מלבן וריבוע', 'מציאת צלע חסרה, היקף משולש', 'מצולעים מורכבים והשוואות'],
+  units: ['מיחידה גדולה לקטנה', 'מיחידה קטנה לגדולה, הערכת מידות', 'המרה של מידות מורכבות (3 מ\' ו-25 ס"מ)'],
+  data: ['קריאת דיאגרמה', 'הפרשים וסכום', 'דיאגרמה כפולה'],
+  mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
+};
+
+/* =========================================================
    נושאים ורמות
    ========================================================= */
 const TOPICS6 = [
@@ -2205,13 +2401,13 @@ const TOPICS6 = [
   },
   {
     id: 'ops', name: '4 פעולות חשבון', icon: '➗', color: '#e0703a',
-    desc: 'כפל, חילוק, סדר פעולות, בעיות מילוליות, אומדן',
+    desc: 'כפל, חילוק, סדר פעולות, בעיות מילוליות, אומדן, ראשוניים ופריקים',
     levels: {
       1: [() => genMul(1), () => genDiv(1), () => genOrder(1), () => genOrderSame(1)],
-      2: [() => genMul(2), () => genDiv(2), () => genOrder(2), () => genOrderSame(), () => genMissing(2), genEstimate],
-      3: [() => genMissing(3), genWord, genBuildings, genEstimate, genWord]
+      2: [() => genMul(2), () => genDiv(2), () => genOrder(2), () => genOrderSame(), () => genMissing(2), genEstimate, genPrime],
+      3: [() => genMissing(3), genWord, genBuildings, genEstimate, genWord, genPrimeProduct, genPrime]
     },
-    tips: ['סדר פעולות: סוגריים ← כפל וחילוק ← חיבור וחיסור.', 'רק חיבור וחיסור, או רק כפל וחילוק – פותרים לפי הסדר, משמאל לימין.', 'בודקים חילוק בעזרת כפל.', 'בבעיה מילולית: מה ידוע? מה שואלים? מה מחשבים קודם?', 'אומדן: מעגלים את המספרים ואז מחשבים.']
+    tips: ['סדר פעולות: סוגריים ← כפל וחילוק ← חיבור וחיסור.', 'רק חיבור וחיסור, או רק כפל וחילוק – פותרים לפי הסדר, משמאל לימין.', 'בודקים חילוק בעזרת כפל.', 'בבעיה מילולית: מה ידוע? מה שואלים? מה מחשבים קודם?', 'אומדן: מעגלים את המספרים ואז מחשבים.', 'מספר ראשוני מתחלק רק ב-1 ובעצמו. מכפלה של שני מספרים (גדולים מ-1) היא תמיד פריקה.']
   },
   {
     id: 'frac', name: 'שברים פשוטים', icon: '🍕', color: '#d94a8c',
@@ -2254,9 +2450,9 @@ const TOPICS6 = [
     tips: ['קוראים את הכותרת, את הצירים ואת המקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.', 'ממוצע = סכום הערכים : מספר הערכים.', 'ציון אחד משתנה ← הממוצע משתנה ב: השינוי : מספר הציונים.', 'איבר חסר: (ממוצע × מספר הערכים) פחות סכום הידועים.']
   }
 ];
-const TOPICS = GRADE === 5 ? TOPICS5 : TOPICS6;
+const TOPICS = GRADE === 4 ? TOPICS4 : GRADE === 5 ? TOPICS5 : TOPICS6;
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
-const TEST_PLAN = GRADE === 5 ? { divis: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 } : { place: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 };
+const TEST_PLAN = GRADE === 4 ? { place: 3, divis: 2, ops: 4, frac: 3, geo: 3, units: 3, data: 2 } : GRADE === 5 ? { divis: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 } : { place: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 };
 const LEVEL_NAME = { 1: 'רמה 1', 2: 'רמה 2', 3: 'רמה 3' };
 
 function mk(topic, gen, lv) {
@@ -3321,7 +3517,7 @@ Object.assign(LESSONS, {
     ]
   }
 });
-LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 5 ? ['order', 'frac', 'dec', 'geo', 'mean'] : ['place', 'order', 'frac', 'dec', 'geo', 'mean']));
+LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 4 ? ['place', 'order', 'frac', 'geo'] : GRADE === 5 ? ['order', 'frac', 'dec', 'geo', 'mean'] : ['place', 'order', 'frac', 'dec', 'geo', 'mean']));
 
 // קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
 [[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
@@ -3838,14 +4034,14 @@ function home() {
 /* ---------- בחירת רמה ---------- */
 const LEVEL_DESC6 = {
   place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'ספרות אחרי הנקודה העשרונית'],
-  ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן', 'בעיות מילוליות ותרגילים מאתגרים'],
+  ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן, ראשוניים ופריקים', 'בעיות מילוליות, ראשוניים ופריקים ותרגילים מאתגרים'],
   frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
   dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
   geo: ['מלבן וריבוע, תכונות של צורות', 'מקבילית, משולש, מציאת צלע חסרה', 'מצולעים מורכבים והשוואות'],
   data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
-const LEVEL_DESC = GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
+const LEVEL_DESC = GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
 const LEVEL_TAG = { 1: 'בסיסית', 2: 'בינונית', 3: 'מאתגרת' };
 
 function currentLevel(topicId) {
@@ -4367,6 +4563,7 @@ function teacher() {
         <select id="tg">
           <option value="6" ${GRADE === 6 ? 'selected' : ''}>כיתה ו'</option>
           <option value="5" ${GRADE === 5 ? 'selected' : ''}>כיתה ה'</option>
+          <option value="4" ${GRADE === 4 ? 'selected' : ''}>כיתה ד'</option>
         </select>
       </label>
       <label class="chk"><input type="checkbox" id="tn" ${NEUTRAL ? 'checked' : ''}> כותרת ניטרלית – בלי מספר כיתה (מתאים לתלמיד/ה שחוזר/ת על חומר של כיתה נמוכה)</label>
@@ -4424,7 +4621,7 @@ function teacher() {
       <p id="ttsInfo" class="muted"></p>
     </div>
     <p class="center"><a href="${location.pathname}${gq()}">← חזרה לאפליקציה</a></p>`;
-  $('tg').onchange = () => { location.search = '?teacher' + ($('tg').value === '5' ? '&grade=5' : '') + (NEUTRAL ? '&neutral=1' : ''); };
+  $('tg').onchange = () => { location.search = '?teacher' + ($('tg').value !== '6' ? '&grade=' + $('tg').value : '') + (NEUTRAL ? '&neutral=1' : ''); };
   const ttsInfo = () => {
     loadVoices();
     const el = $('ttsInfo');
@@ -4500,6 +4697,7 @@ function printBuilder() {
           <select id="wg">
             <option value="6" ${GRADE === 6 ? 'selected' : ''}>כיתה ו'</option>
             <option value="5" ${GRADE === 5 ? 'selected' : ''}>כיתה ה'</option>
+            <option value="4" ${GRADE === 4 ? 'selected' : ''}>כיתה ד'</option>
           </select>
         </label>
         <div class="lbl2">נושאים:</div>
@@ -4533,7 +4731,7 @@ function printBuilder() {
       <p class="center"><a href="${location.pathname}${gq()}">← לאפליקציה</a></p>
     </div>
     <div id="wsout"></div>`;
-  $('wg').onchange = () => { location.search = '?print' + ($('wg').value === '5' ? '&grade=5' : '') + (NEUTRAL ? '&neutral=1' : ''); };
+  $('wg').onchange = () => { location.search = '?print' + ($('wg').value !== '6' ? '&grade=' + $('wg').value : '') + (NEUTRAL ? '&neutral=1' : ''); };
   const letters = 'אבג';
   $('wgo').onclick = () => {
     const topics = [...app.querySelectorAll('.wstopics input:checked')].map(x => x.value);
