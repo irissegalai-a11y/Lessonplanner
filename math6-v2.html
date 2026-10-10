@@ -403,6 +403,31 @@
   .wskey li { break-inside: avoid; }
   .wstips { columns: 1; }
   .ws-pg { break-after: page; }
+  .kf-banner { border: 2px solid #f0b429; }
+  .kf-class { margin-top: 14px; }
+  .kf-join { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .kf-join .tinput { flex: 1 1 130px; }
+  .kf-stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+  .kf-stats div { background: #f4f6ff; border-radius: 12px; padding: 10px 16px; min-width: 120px; }
+  .kf-stats b { display: block; font-size: 1.8rem; }
+  .kf-stats span { font-size: 0.85rem; color: var(--muted); }
+  .kf-map { margin: 0 auto; border-collapse: collapse; font-size: 1rem; }
+  .kf-map th, .kf-map td { width: 2.4em; height: 2.4em; text-align: center; border: 1px solid #fff; }
+  .kf-map th { color: var(--muted); }
+  .kf-c0 { background: #e9ebf3; } .kf-c1 { background: #ffe08a; } .kf-c3 { background: #7bd389; font-weight: 700; }
+  .kf-legend { display: flex; gap: 10px; justify-content: center; margin-top: 10px; font-size: 0.85rem; }
+  .kf-legend span { padding: 2px 10px; border-radius: 8px; }
+  .kf-q .kf-ex { font-size: 2.6rem; font-weight: 700; margin: 14px 0; }
+  .kf-q input.kf-in { font-size: 2rem; width: 160px; text-align: center; }
+  .kf-new { background: #fff7e0; border: 1.5px dashed #f0b429; border-radius: 12px; padding: 8px 12px; margin-bottom: 6px; }
+  .kfp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px; font-size: 1.05rem; line-height: 2.3; direction: ltr; }
+  .kfp-grid .wsline { min-width: 40px; width: 40px; }
+  .kfp-bingo { break-inside: avoid; display: inline-block; vertical-align: top; width: 49%; margin: 6px 0 10px; text-align: center; }
+  .kfp-bt { font-weight: 700; margin-bottom: 4px; }
+  .kfp-bingo table { border-collapse: collapse; margin: 0 auto; direction: ltr; }
+  .kfp-bingo td { width: 16mm; height: 14mm; border: 2px solid #333; text-align: center; font-size: 1.3rem; font-weight: 700; }
+  .kfp-call { columns: 4; line-height: 2; direction: rtl; }
+  .kfp-chk { color: #999; }
   .bktopics { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; margin: 6px 0 10px; }
   .bkrow { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .bkcoderow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
@@ -5870,6 +5895,10 @@ function home() {
       </div>
       ${store.solved ? `<div class="center muted" style="margin-top:12px">🏅 עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
     </div>
+    ${GRADE >= 3 ? `<div class="card banner kf-banner">
+      <div>⚡ <b>אימון לוח הכפל</b> – 5 דקות ביום. ${kf.placed ? `בשליטה: <b>${kfMastered()}</b> מתוך 36 עובדות.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
+      <button id="kfGoHome">לאימון ←</button>
+    </div>` : ''}
     <h2>📚 ללמוד</h2>
     <div class="topics">
       ${LESSON_ORDER.map(id => LESSONS[id]).map(L => {
@@ -5906,6 +5935,7 @@ function home() {
     </div>
     ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
   `;
+  if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
   $('fontBtn').onclick = cycleFont;
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
   app.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
@@ -6764,6 +6794,14 @@ function printBuilder() {
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
+      ${GRADE >= 3 ? `<div class="card tform">
+        <h2>⚡ לוח הכפל – לכיתה</h2>
+        <p class="muted small"><b>אתגר דקה:</b> 48 תרגילי כפל בדף – כמה תספיקו נכון בדקה? (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.) <b>בינגו כפל:</b> כרטיס שונה לכל תלמיד, ורשימת קריאה למורה.</p>
+        <label>מספר כרטיסי בינגו:
+          <select id="kfpn">${[10, 20, 30, 36].map(n => `<option ${n === 30 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+        </label>
+        <div class="actions"><button class="secondary" id="kfpc">⚡ דף אתגר דקה</button><button class="secondary" id="kfpb">🎲 כרטיסי בינגו</button></div>
+      </div>` : ''}
       <div class="card tform" id="bkcard">
         <h2>📚 חוברת לפי נושאים</h2>
         <p class="muted small">בחרו כמה שאלות מכל נושא (0 = בלי הנושא). כל נושא הוא פרק נפרד, והשאלות בו מסודרות מהקל אל הקשה. בחוברת יש עמוד שער עם תוכן עניינים, מספרי עמודים ודף תשובות בסוף.</p>
@@ -6840,6 +6878,9 @@ function printBuilder() {
     $('wmsg').textContent = 'המבחן מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה נוספת יוצרת מבחן חדש.';
   };
   $('wprint').onclick = () => window.print();
+  const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
+  if ($('kfpc')) $('kfpc').onclick = () => kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked));
+  if ($('kfpb')) $('kfpb').onclick = () => kfOut(kfPrintBingo(Number($('kfpn').value)));
   $('bkgo').onclick = () => {
     const counts = TOPICS.map(t => Number(app.querySelector(`[data-bk="${t.id}"]`).value));
     if (!counts.some(Boolean)) { $('bkmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
@@ -7007,6 +7048,290 @@ function dropTipsIfOverflow() {
 }
 
 
+/* =========================================================
+   ⚡ אימון לוח הכפל – בדיקת פתיחה, מפה אישית, אימון יומי עם חזרה מרווחת, אתגר דקה
+   (נשמר רק במחשב של התלמיד)
+   ========================================================= */
+const KF_KEY = 'math-kefel-v1';
+const KF_FACTS = [];
+for (let a = 2; a <= 9; a++) for (let b = a; b <= 9; b++) KF_FACTS.push([a, b]);
+const KF_INTERVAL = { 1: 0, 2: 1, 3: 3, 4: 7, 5: 14 };
+// שליחת תוצאות לטופס של המורה – רק לתלמידים שהזינו את קוד הכיתה
+const KF_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSfId_jLGbxTvBDtYOClJFoV1XFqf0EPjx3BusDbQEcUBjMjKw/formResponse';
+const KF_FIELDS = { name: 'entry.233330149', klass: 'entry.553468133', minutes: 'entry.1873864621', mastered: 'entry.1570983296', score: 'entry.1494651186', mistakes: 'entry.678117454' };
+const KF_CLASS_HASH = '97949116';
+let kf = (() => { try { return JSON.parse(localStorage.getItem(KF_KEY)) || {}; } catch (e) { return {}; } })();
+kf.facts = kf.facts || {};
+const kfSave = () => { try { localStorage.setItem(KF_KEY, JSON.stringify(kf)); } catch (e) { /* לא חובה */ } };
+const kfToday = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 864e5);
+const kfId = (a, b) => `${Math.min(a, b)}x${Math.max(a, b)}`;
+const kfFact = (a, b) => (kf.facts[kfId(a, b)] = kf.facts[kfId(a, b)] || { box: 0, due: 0, right: 0, wrong: 0 });
+function kfReport(data) {
+  if (!kf.report) return;
+  kf.outbox = (kf.outbox || []).concat([{ name: kf.name, klass: kf.klass, ...data }]).slice(-30);
+  kfSave();
+  kfFlush();
+}
+function kfFlush() {
+  (kf.outbox || []).slice().forEach(item => {
+    const body = new URLSearchParams();
+    Object.entries(KF_FIELDS).forEach(([k, e]) => body.append(e, item[k] == null ? '' : String(item[k])));
+    fetch(KF_FORM, { method: 'POST', mode: 'no-cors', body }).then(() => {
+      kf.outbox = (kf.outbox || []).filter(x => x !== item && JSON.stringify(x) !== JSON.stringify(item)); kfSave();
+    }).catch(() => { /* אין אינטרנט – ננסה שוב בפעם הבאה */ });
+  });
+}
+const kfMastered = () => KF_FACTS.filter(([a, b]) => (kf.facts[kfId(a, b)] || {}).box >= 3).length;
+function kfRank([a, b]) {
+  if (a === 2 || b === 2) return 1;
+  if (a === 5 || b === 5) return 2;
+  if (a === 9 || b === 9) return 3;
+  if (a === 4 || b === 4) return 4;
+  if (a === 3 || b === 3) return 5;
+  if (a === b) return 6;
+  return 7;
+}
+function kfStrategy(x, y) {
+  const a = Math.min(x, y), b = Math.max(x, y), p = a * b;
+  const has = n => a === n || b === n, o = n => (a === n ? b : a);
+  if (has(2)) return `× 2 זה כפול: ${o(2)} + ${o(2)} = ${p}`;
+  if (has(5)) return `× 5 זה חצי מ-× 10: ${o(5)} × 10 = ${o(5) * 10}, והחצי – ${p}`;
+  if (has(9)) return `× 9 זה × 10 פחות פעם אחת: ${o(9)} × 10 = ${o(9) * 10}, פחות ${o(9)} = ${p}`;
+  if (has(4)) return `× 4 זה כפול-כפול: ${o(4)} × 2 = ${o(4) * 2}, ועוד פעם כפול = ${p}`;
+  if (has(3)) return `× 3 זה כפול ועוד פעם: ${o(3)} × 2 = ${o(3) * 2}, ועוד ${o(3)} = ${p}`;
+  if (a === b) return `ריבוע – כדאי לזכור בעל פה: ${a} × ${a} = ${p}`;
+  if (a === 7 && b === 8) return 'טריק: 5, 6, 7, 8 → 56 = 7 × 8';
+  return `מתחילים מ-× 5: ${b} × 5 = ${b * 5}, ועוד ${a - 5} פעמים ${b} = ${p}`;
+}
+
+function kfHome() {
+  stopSimTimer(); state = null; lessonView = null; stopSpeak();
+  const m = kfMastered(), placed = !!kf.placed;
+  const streak = kf.lastDay >= kfToday() - 1 ? kf.streak || 0 : 0;
+  app.innerHTML = `
+    <div class="topbar"><span class="title">⚡ אימון לוח הכפל</span><span></span><span><button class="ghost" id="kfBack">🏠 לתפריט</button></span></div>
+    <div class="card center">
+      <div class="kf-stats">
+        <div><b>${m}</b><span>מתוך 36 עובדות בשליטה</span></div>
+        <div><b>${streak ? '🔥 ' + streak : '–'}</b><span>ימי אימון ברצף</span></div>
+        <div><b>${kf.best || '–'}</b><span>שיא באתגר דקה</span></div>
+      </div>
+      <div class="actions" style="justify-content:center">
+        ${placed ? `<button id="kfDaily">⚡ אימון יומי (כ-5 דקות)</button>` : `<button id="kfPlace">🧭 בדיקת פתיחה (כ-3 דקות)</button>`}
+        <button class="secondary" id="kfChal">🏆 אתגר דקה</button>
+        <button class="secondary" id="kfLearn">📚 טריקים ללוח הכפל</button>
+      </div>
+      <p class="muted small">${placed ? 'בכל יום: כמה עובדות חדשות, וחזרה על מה שקשה לך. עובדה הופכת לירוקה כשעונים עליה נכון ומהר בשני ימים שונים.' : 'בבדיקת הפתיחה עוברים פעם אחת על כל 36 העובדות. ענו מהר ככל שאפשר – זה לא מבחן, זה כדי לדעת מאיפה להתחיל.'}</p>
+    </div>
+    <h2>🗺️ המפה שלי</h2>
+    <div class="card">${kfMapHTML()}
+      <div class="kf-legend"><span class="kf-c3">שולט</span><span class="kf-c1">בתהליך</span><span class="kf-c0">עוד לא</span></div>
+    </div>
+    <div class="card kf-class">
+      ${kf.report ? `<div>👩‍🏫 <b>מחובר לכיתה</b> – התוצאות של האימונים נשלחות למורה. שם: <b>${esc(kf.name)}</b> · כיתה: <b>${esc(kf.klass)}</b> <button class="linkish" id="kfEdit">שינוי</button></div>`
+      : `<div class="small"><b>👩‍🏫 קיבלתם מהמורה קוד כיתה?</b> הקלידו אותו כאן פעם אחת, והתוצאות של האימונים יישלחו למורה.</div>
+        <div class="kf-join"><input id="kfName" class="tinput" placeholder="שם ושם משפחה" value="${esc(kf.name || store.name || '')}"><input id="kfKlass" class="tinput" placeholder="כיתה (למשל ו1)" value="${esc(kf.klass || '')}"><input id="kfCode" class="tinput" placeholder="קוד כיתה" inputmode="numeric" autocomplete="off"><button class="secondary" id="kfJoin">חיבור</button></div>
+        <div class="small" id="kfJoinMsg"></div>`}
+    </div>`;
+  $('kfBack').onclick = home;
+  if ($('kfPlace')) $('kfPlace').onclick = () => kfStart('place');
+  if ($('kfDaily')) $('kfDaily').onclick = () => kfStart('daily');
+  $('kfChal').onclick = () => kfStart('chal');
+  $('kfLearn').onclick = () => startLesson('times');
+  if ($('kfEdit')) $('kfEdit').onclick = () => { kf.report = false; kfSave(); kfHome(); };
+  if ($('kfJoin')) $('kfJoin').onclick = () => {
+    const name = $('kfName').value.trim(), klass = $('kfKlass').value.trim(), code = $('kfCode').value.trim();
+    if (!name || !klass) { $('kfJoinMsg').textContent = 'כתבו שם וכיתה 🙂'; return; }
+    if (codeHash('kefel:' + code) !== KF_CLASS_HASH) { $('kfJoinMsg').textContent = 'הקוד לא נכון. בדקו עם המורה.'; return; }
+    Object.assign(kf, { name, klass, report: true }); kfSave(); kfHome();
+  };
+  if ((kf.outbox || []).length) kfFlush();
+  window.scrollTo(0, 0);
+}
+
+function kfMapHTML() {
+  let h = '<table class="kf-map" dir="ltr"><tr><th>×</th>' + [2, 3, 4, 5, 6, 7, 8, 9].map(n => `<th>${n}</th>`).join('') + '</tr>';
+  for (let a = 2; a <= 9; a++) {
+    h += `<tr><th>${a}</th>`;
+    for (let b = 2; b <= 9; b++) {
+      const f = kf.facts[kfId(a, b)], box = f ? f.box : 0;
+      h += `<td class="kf-c${box >= 3 ? 3 : box >= 1 ? 1 : 0}">${box >= 3 ? a * b : ''}</td>`;
+    }
+    h += '</tr>';
+  }
+  return h + '</table>';
+}
+
+let kz = null;
+function kfStart(mode) {
+  const today = kfToday();
+  let queue = [];
+  if (mode === 'place') queue = shuffle(KF_FACTS.slice()).map(([a, b]) => ({ a, b, v: 'mul' }));
+  else if (mode === 'daily') {
+    const due = KF_FACTS.filter(([a, b]) => { const f = kf.facts[kfId(a, b)]; return f && f.box >= 1 && f.due <= today; })
+      .sort((x, y) => kf.facts[kfId(...x)].box - kf.facts[kfId(...y)].box).slice(0, 12);
+    const fresh = KF_FACTS.filter(([a, b]) => !kf.facts[kfId(a, b)] || kf.facts[kfId(a, b)].box === 0)
+      .sort((x, y) => kfRank(x) - kfRank(y)).slice(0, due.length > 8 ? 2 : 3);
+    const known = shuffle(KF_FACTS.filter(fc => (kf.facts[kfId(...fc)] || {}).box >= 3 && !due.includes(fc)));
+    const list = [];
+    fresh.forEach(([a, b]) => { list.push({ a, b, v: 'mul', intro: true }); });
+    shuffle(due).forEach(([a, b]) => list.push({ a, b, v: kf.facts[kfId(a, b)].box >= 2 ? pick(['mul', 'mul', 'div', 'miss']) : 'mul' }));
+    fresh.forEach(([a, b]) => list.push({ a, b, v: 'mul' }));
+    known.slice(0, Math.max(0, 16 - list.length)).forEach(([a, b]) => list.push({ a, b, v: pick(['mul', 'div', 'miss', 'tens']) }));
+    queue = list;
+  } else queue = Array.from({ length: 200 }, () => { const [a, b] = pick(KF_FACTS); return { a, b, v: Math.random() < 0.8 ? 'mul' : 'div' }; });
+  kz = { mode, queue, i: 0, right: 0, wrong: 0, missed: {}, reins: {}, start: Date.now(), newGreen: 0, mistakes: [] };
+  if (mode === 'chal') kz.end = Date.now() + 60000;
+  kfQ();
+}
+
+function kfText(q) {
+  const [x, y] = Math.random() < 0.5 ? [q.a, q.b] : [q.b, q.a], p = q.a * q.b;
+  if (q.v === 'div') return { t: `${p} : ${x} =`, ans: y };
+  if (q.v === 'miss') return { t: `${BOX} × ${x} = ${p}`, ans: y };
+  if (q.v === 'tens') return { t: `${x * 10} × ${y} =`, ans: p * 10 };
+  return { t: `${x} × ${y} =`, ans: p };
+}
+
+function kfQ() {
+  if (kz.i >= kz.queue.length || (kz.end && Date.now() >= kz.end)) return kfDone();
+  const q = kz.queue[kz.i];
+  if (!q.shown) q.shown = kfText(q);
+  const total = kz.mode === 'chal' ? '' : `${kz.i + 1} / ${kz.queue.length}`;
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${kz.mode === 'place' ? '🧭 בדיקת פתיחה' : kz.mode === 'daily' ? '⚡ אימון יומי' : '🏆 אתגר דקה'}</span>
+      <span>${kz.mode === 'chal' ? `<b id="kfClock">⏱️ ${Math.ceil((kz.end - Date.now()) / 1000)}</b> · נכון: <b>${kz.right}</b>` : total}</span>
+      <span><button class="ghost" id="kfQuit">✖ יציאה</button></span></div>
+    ${kz.mode === 'chal' ? '' : `<div class="progress"><div style="width:${kz.i / kz.queue.length * 100}%"></div></div>`}
+    <div class="card center kf-q">
+      ${q.intro ? `<div class="kf-new">✨ עובדה חדשה<br><span class="small">${kfStrategy(q.a, q.b)}</span></div>` : ''}
+      <div class="kf-ex">${M(q.shown.t.replace(BOX, '<span class="box">?</span>'))}</div>
+      <input id="kfAns" class="ans kf-in" inputmode="numeric" autocomplete="off" aria-label="תשובה">
+      <div class="actions" style="justify-content:center"><button id="kfGo">✓</button></div>
+      <div class="fb" id="kfFb" aria-live="polite"></div>
+    </div>`;
+  const inp = $('kfAns');
+  inp.focus();
+  q.t0 = Date.now();
+  const go = () => kfAnswer(inp.value);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+  $('kfGo').onclick = go;
+  $('kfQuit').onclick = () => { if (kz.mode === 'chal' || confirm('לצאת מהאימון?')) { kfStopClock(); kfHome(); } };
+  if (kz.mode === 'chal' && !kz.clock) kz.clock = setInterval(() => {
+    if (!kz || kz.mode !== 'chal') return;
+    const left = Math.ceil((kz.end - Date.now()) / 1000);
+    if ($('kfClock')) $('kfClock').textContent = '⏱️ ' + Math.max(0, left);
+    if (left <= 0) { kfStopClock(); kfDone(); }
+  }, 250);
+}
+function kfStopClock() { if (kz && kz.clock) { clearInterval(kz.clock); kz.clock = null; } }
+
+function kfAnswer(raw) {
+  if (!raw.trim()) return;
+  const q = kz.queue[kz.i], ok = Number(raw.trim()) === q.shown.ans, ms = Date.now() - q.t0;
+  const fast = ms <= (q.v === 'mul' ? 5000 : 7000);
+  const f = kfFact(q.a, q.b), today = kfToday();
+  if (ok) kz.right++; else { kz.wrong++; const t = `${Math.min(q.a, q.b)}×${Math.max(q.a, q.b)}`; if (!kz.mistakes.includes(t)) kz.mistakes.push(t); }
+  if (kz.mode === 'place') {
+    if (ok && ms <= 4000) { f.box = 3; f.lastUp = today; f.due = today + KF_INTERVAL[3]; }
+    else if (ok) { f.box = 1; f.due = today; }
+    else f.box = 0;
+  } else if (kz.mode === 'daily') {
+    if (!ok) { f.box = 1; f.due = today; f.wrong++; kz.missed[kfId(q.a, q.b)] = 1; }
+    else {
+      f.right++;
+      const was = f.box;
+      if (fast && !kz.missed[kfId(q.a, q.b)]) {
+        if (f.box <= 1) { f.box = 2; f.lastUp = today; }
+        else if (f.lastUp !== today) { f.box = Math.min(5, f.box + 1); f.lastUp = today; }
+      } else f.box = Math.max(1, Math.min(f.box, 2));
+      if (was < 3 && f.box >= 3) kz.newGreen++;
+      f.due = today + KF_INTERVAL[Math.max(1, f.box)];
+    }
+  } else if (!ok) { f.wrong++; }
+  kfSave();
+  // טעות באימון – העובדה חוזרת עוד כמה שאלות
+  if (!ok && kz.mode === 'daily' && (kz.reins[kfId(q.a, q.b)] || 0) < 2) {
+    kz.reins[kfId(q.a, q.b)] = (kz.reins[kfId(q.a, q.b)] || 0) + 1;
+    kz.queue.splice(Math.min(kz.queue.length, kz.i + 3), 0, { a: q.a, b: q.b, v: 'mul' });
+  }
+  const fb = $('kfFb'), full = `${q.shown.t.includes(BOX) ? q.shown.t.replace(BOX, String(q.shown.ans)) : q.shown.t + ' ' + q.shown.ans}`;
+  if (kz.mode === 'place') { kz.i++; return kfQ(); }
+  if (ok) {
+    fb.className = 'fb show ok'; fb.innerHTML = `✔ ${M(full)}`;
+    kz.i++; setTimeout(kfQ, kz.mode === 'chal' ? 250 : 500);
+    return;
+  }
+  fb.className = 'fb show bad';
+  if (kz.mode === 'chal') { fb.innerHTML = `${M(full)}`; kz.i++; setTimeout(kfQ, 900); return; }
+  fb.innerHTML = `<div class="head">התשובה: ${M(full)}</div>💡 ${kfStrategy(q.a, q.b)}<div class="actions" style="justify-content:center"><button id="kfNext">הבנתי, ממשיכים ←</button></div>`;
+  $('kfAns').disabled = true; $('kfGo').classList.add('hidden');
+  $('kfNext').focus();
+  $('kfNext').onclick = () => { kz.i++; kfQ(); };
+}
+
+function kfDone() {
+  kfStopClock();
+  const today = kfToday();
+  let rec = '';
+  if (kz.mode !== 'chal') {
+    if (kf.lastDay !== today) { kf.streak = kf.lastDay === today - 1 ? (kf.streak || 0) + 1 : 1; kf.lastDay = today; }
+    if (kz.mode === 'place') kf.placed = true;
+    kf.sessions = (kf.sessions || 0) + 1;
+  } else {
+    if (kz.right > (kf.best || 0)) { rec = kf.best ? `🏆 <b>שיא חדש!</b> השיא הקודם היה ${kf.best}.` : '🏆 זה השיא הראשון שלך!'; kf.best = kz.right; }
+    else rec = `השיא שלך: ${kf.best}. ${kz.right >= kf.best - 2 ? 'כמעט! 💪' : 'נסו שוב – כל יום משתפרים.'}`;
+  }
+  kfSave();
+  const m = kfMastered();
+  kfReport({
+    minutes: Math.max(1, Math.round((Date.now() - kz.start) / 60000)),
+    mastered: `${m}/36`,
+    score: kz.mode === 'chal' ? `אתגר דקה: ${kz.right} נכון` : `${kz.mode === 'place' ? 'בדיקת פתיחה' : 'אימון יומי'}: ${kz.right}/${kz.right + kz.wrong}`,
+    mistakes: kz.mistakes.join(', ')
+  });
+  app.innerHTML = `
+    <div class="card center">
+      <h2>${kz.mode === 'place' ? '🧭 סיימת את בדיקת הפתיחה!' : kz.mode === 'daily' ? '⚡ סיימת את האימון היומי!' : '🏆 נגמרה הדקה!'}</h2>
+      ${kz.mode === 'chal' ? `<div class="score-big">${kz.right} תרגילים נכונים בדקה</div><p>${rec}</p>`
+        : `<p>✅ נכון: <b>${kz.right}</b> · ✘ לא נכון: <b>${kz.wrong}</b></p>
+           <p>🗺️ בשליטה: <b>${m}</b> מתוך 36${kz.newGreen ? ` · <b>+${kz.newGreen}</b> חדשות היום 🎉` : ''}</p>
+           ${kz.mode === 'place' ? '<p>מעכשיו – כל יום אימון של כ-5 דקות. נתחיל מהעובדות שעוד לא בשליטה.</p>' : `<p>🔥 ימי אימון ברצף: <b>${kf.streak}</b>. נתראה מחר!</p>`}`}
+      <div class="actions" style="justify-content:center">
+        ${kz.mode === 'chal' ? '<button id="kfAgain">🔁 עוד דקה</button>' : ''}
+        <button class="${kz.mode === 'chal' ? 'secondary' : ''}" id="kfHomeBtn">🗺️ למפה שלי</button>
+      </div>
+    </div>`;
+  if ($('kfAgain')) $('kfAgain').onclick = () => kfStart('chal');
+  $('kfHomeBtn').onclick = kfHome;
+}
+
+/* ---------- להדפסה בכיתה: אתגר דקה ובינגו כפל ---------- */
+function kfPrintChallenge(versions, key) {
+  const out = [];
+  for (let v = 0; v < versions; v++) {
+    const qs = Array.from({ length: 48 }, () => { const [a, b] = pick(KF_FACTS); return Math.random() < 0.5 ? [a, b] : [b, a]; });
+    out.push(`<section class="ws-page"><div class="wshead"><h1>⚡ אתגר דקה – לוח הכפל${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>תאריך: <span class="wsline"></span></span><span>נכון: <span class="wsline"></span></span></div></div>
+      <div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} =`)}<span class="wsline"></span></div>`).join('')}</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – אתגר דקה${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h2><div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} = ${a * b}`)}</div>`).join('')}</div></section>`);
+  }
+  return out.join('');
+}
+function kfPrintBingo(n) {
+  const prods = [...new Set(KF_FACTS.map(([a, b]) => a * b))];
+  const cards = Array.from({ length: n }, (_, i) => {
+    const cells = shuffle(prods.slice()).slice(0, 24);
+    cells.splice(12, 0, '⭐');
+    return `<div class="kfp-bingo"><div class="kfp-bt">🎲 בינגו כפל <span class="small">· כרטיס ${i + 1}</span><div class="small">שם: ______________</div></div><table>${[0, 1, 2, 3, 4].map(r => `<tr>${cells.slice(r * 5, r * 5 + 5).map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table></div>`;
+  });
+  const call = shuffle(prods.slice()).map(p => { const f = shuffle(KF_FACTS.filter(([a, b]) => a * b === p)); const [a, b] = f[0]; return M(`${a} × ${b}`); });
+  return `<section class="ws-page"><div class="wshead"><h1>🎲 בינגו כפל – כרטיסים לתלמידים</h1></div>
+      <p class="small">המורה מקריאה תרגיל, והתלמידים מסמנים את התוצאה בכרטיס. מי שמשלים שורה, טור או אלכסון – "בינגו!" ⭐ = משבצת חופשית.</p>
+      ${cards.join('')}</section>
+    <section class="ws-page wskey"><h2>📋 רשימת הקריאה למורה (לפי הסדר)</h2><ol class="kfp-call">${call.map(c => `<li>${c} <span class="kfp-chk">☐</span></li>`).join('')}</ol></section>`;
+}
+
 /* ---------- כניסת מורה (קוד) ---------- */
 // הקוד לא נשמר כאן – רק "טביעת אצבע" שלו. זו לא אבטחה אמיתית, אלא מניעת כניסה מקרית.
 const TEACHER_HASH = '3d9bf467';
@@ -7045,7 +7370,7 @@ function teacherGate() {
 // חשיפה לבדיקות אוטומטיות
 window.__math6 = { TOPICS, LESSONS, check, correctHTML, findTrap, speechText };
 
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else home();
 </script>
 </body>
 </html>
