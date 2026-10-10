@@ -91,6 +91,7 @@
 
   .big-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
   .big-actions button { padding: 18px; font-size: 1.2rem; }
+  .credit { text-align: center; font-size: 0.8rem; color: #8a8fa8; margin: 24px auto 12px; padding: 0 16px; }
   .timer { font-weight: 800; font-variant-numeric: tabular-nums; background: #eef1ff; color: #2c2c54; border: 1.5px solid #9aa6d8; border-radius: 999px; padding: 2px 12px; cursor: pointer; font-size: 1rem; }
   .timer.warn { background: #fdecea; color: #c0392b; border-color: #e08b80; }
   .simnav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 10px 0 4px; }
@@ -402,7 +403,7 @@
   @media screen and (max-width: 640px) { .wsq, .ex-q { flex-direction: column; } .ex-grid { flex-basis: auto; } }
 
   @media print {
-    @page { size: A4; margin: 12mm; }
+    @page { size: A4; margin: 12mm 12mm 14mm; @bottom-center { content: "© 2026 איריס סגל. כל הזכויות שמורות."; font-family: Rubik, Arial, sans-serif; font-size: 8.5pt; color: #777; } }
     .noprint, .toast, .overlay { display: none !important; }
     html, body { background: #fff !important; padding: 0 !important; }
     .wrap { max-width: none; }
@@ -480,6 +481,7 @@
 </head>
 <body>
 <div class="wrap" id="app"></div>
+<footer class="credit noprint">© 2026 איריס סגל. כל הזכויות שמורות.</footer>
 
 <script>
 /* =========================================================
