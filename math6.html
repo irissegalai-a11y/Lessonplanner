@@ -658,6 +658,7 @@
     html.calm .fb.ok, html.calm .fb.bad, html.calm .fb.hint, html.calm .fb.info, html.calm details.tips, html.calm .rule,
     html.calm .warn, html.calm .stepper, html.calm .kf-banner, html.calm .way, html.calm .explain { background: var(--card); }
   }
+  .navhome { border: 2px solid var(--ink) !important; border-radius: var(--sk1, 12px) !important; background: var(--card, #fff) !important; padding: 6px 14px !important; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   /* איורים בקו יד */
   .ico { width: 1.15em; height: 1.15em; vertical-align: -0.2em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
   .speak .ico { width: 1.4em; height: 1.4em; }
@@ -5585,6 +5586,7 @@ function markLearned(id, k) {
 let lessonView = null;
 
 function startLesson(id, k = 0) {
+  navPush('view');
   state = null;
   stopSpeak();
   lessonView = { id, k, modal: false, box: app };
@@ -5615,7 +5617,7 @@ function renderLesson() {
     ${lv.modal ? '' : `<div class="topbar">
       <span class="title">${L.name}</span>
       <span>כרטיסייה ${lv.k + 1} מתוך ${N}</span>
-      <span><button class="ghost" data-font>א+</button><button class="ghost" data-home>${ic('close')} יציאה</button></span>
+      <span><button class="ghost" data-font>א+</button><button class="ghost navhome" data-home>${ic('home')} לדף הבית</button></span>
     </div>`}
     <div class="dots">${CARDS.map((_, i) => `<button class="dot${i === lv.k ? ' cur' : ''}${learned.has(i) ? ' ok' : ''}" data-go="${i}" aria-label="כרטיסייה ${i + 1}">${learned.has(i) ? '✔' : i + 1}</button>`).join('')}</div>
     <div class="card lcard" style="border-top:6px solid ${L.color}">
@@ -6071,7 +6073,25 @@ let state = null;
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 const $ = id => document.getElementById(id);
 
+// כפתור "אחורה" של הדפדפן/הטלפון – חוזר שלב אחורה בתוך האתר
+let navPopping = false;
+function navPush(v) {
+  if (navPopping) return;
+  try { if ((history.state && history.state.v) !== v) history.pushState({ v }, ''); } catch (e) { /* לא חובה */ }
+}
+window.addEventListener('popstate', e => {
+  navPopping = true;
+  try {
+    stopSimTimer(); if (typeof kfStopClock === 'function') kfStopClock(); stopSpeak();
+    document.querySelectorAll('.overlay').forEach(o => o.remove());
+    const v = e.state && e.state.v;
+    if (URLP.has('print') || URLP.has('teacher')) return;
+    if (v === 'kf') kfHome(); else home();
+  } finally { navPopping = false; }
+});
+
 function home() {
+  if (!navPopping) { try { if (history.state && history.state.v) history.replaceState(null, ''); } catch (e) {} }
   stopSimTimer();
   state = null;
   lessonView = null;
@@ -6305,6 +6325,7 @@ function masterySnapshot() {
 }
 
 function startPractice(topicId, opt = {}) {
+  navPush('view');
   let level = opt.level;
   if (!level) {
     if (topicId === 'mix') {
@@ -6324,6 +6345,7 @@ function startPractice(topicId, opt = {}) {
 }
 
 function startTest(withFeedback) {
+  navPush('view');
   const qs = buildTest();
   if (withFeedback) return startPractice('test', { list: qs, label: `${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב` });
   state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0 };
@@ -6354,6 +6376,7 @@ function showSimPicker() {
 }
 
 function startSim(mins) {
+  navPush('view');
   stopSimTimer();
   const qs = buildTest();
   state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0,
@@ -6493,7 +6516,7 @@ function renderQ() {
       ${state.sim ? `<button class="timer" id="timer" title="הסתרה/הצגה של השעון">${simClockText()}</button>` : ''}
       <span>
         <button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+</button>
-        <button class="ghost" id="quit">${ic('close')} יציאה</button>
+        <button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button>
       </span>
     </div>
     <div class="progress"><div style="width:${state.i / total * 100}%"></div></div>
@@ -6835,7 +6858,7 @@ function summary() {
         ${missed.length ? `<button id="retryBtn">${ic('retry')} תרגול השאלות שהיו קשות (${missed.length})</button>` : ''}
         <button class="${missed.length ? 'secondary' : ''}" id="again">סבב נוסף ←</button>
         <button class="secondary" id="copy">${ic('copy')} העתקת התוצאה</button>
-        <button class="secondary" id="homeBtn">${ic('home')} לתפריט</button>
+        <button class="secondary" id="homeBtn">${ic('home')} לדף הבית</button>
       </div>
       <p class="muted" id="copied" style="min-height:1.4em"></p>
     </div>
@@ -7017,7 +7040,8 @@ function printBuilder() {
   document.title = 'דפי עבודה – מתרגלים מתמטיקה';
   app.innerHTML = `
     <div class="noprint">
-      <h1>🖨️ דפי עבודה להדפסה</h1>
+      <div class="tools"><a class="btnlink navhome" href="${location.pathname}${gq()}">${ic('home')} לדף הבית</a><span></span></div>
+      <h1>דפי עבודה להדפסה</h1>
       <div class="subtitle">בחרו נושאים ורמה – בכל לחיצה נוצר דף חדש עם מספרים אחרים</div>
       <div class="card tform">
         <label>כיתה:
@@ -7085,7 +7109,7 @@ function printBuilder() {
         </label>
         <p class="muted small" id="bkmsg"></p>
       </div>
-      <p class="center"><a href="${location.pathname}${gq()}">← לאפליקציה</a></p>
+      <p class="center"><a class="btnlink navhome" href="${location.pathname}${gq()}">${ic('home')} לדף הבית</a></p>
     </div>
     <div id="wsout"></div>`;
   $('wg').onchange = () => { location.search = '?print' + ($('wg').value !== '6' ? '&grade=' + $('wg').value : '') + (NEUTRAL ? '&neutral=1' : ''); };
@@ -7383,11 +7407,12 @@ function kfStrategy(x, y) {
 }
 
 function kfHome() {
+  navPush('kf');
   stopSimTimer(); state = null; lessonView = null; stopSpeak();
   const m = kfMastered(), placed = !!kf.placed;
   const streak = kf.lastDay >= kfToday() - 1 ? kf.streak || 0 : 0;
   app.innerHTML = `
-    <div class="topbar"><span class="title">אימון לוח הכפל</span><span></span><span><button class="ghost" id="kfBack">${ic('home')} לתפריט</button></span></div>
+    <div class="topbar"><span class="title">אימון לוח הכפל</span><span></span><span><button class="ghost navhome" id="kfBack">${ic('home')} לדף הבית</button></span></div>
     <div class="card center">
       <div class="kf-stats">
         <div><b>${m}</b><span>מתוך 36 עובדות בשליטה</span></div>
@@ -7442,6 +7467,7 @@ function kfMapHTML() {
 
 let kz = null;
 function kfStart(mode) {
+  navPush('kfrun');
   const today = kfToday();
   let queue = [];
   if (mode === 'place') queue = shuffle(KF_FACTS.slice()).map(([a, b]) => ({ a, b, v: 'mul' }));
@@ -7479,7 +7505,7 @@ function kfQ() {
   app.innerHTML = `
     <div class="topbar"><span class="title">${kz.mode === 'place' ? '🧭 בדיקת פתיחה' : kz.mode === 'daily' ? '⚡ אימון יומי' : '🏆 אתגר דקה'}</span>
       <span>${kz.mode === 'chal' ? `<b id="kfClock">⏱️ ${Math.ceil((kz.end - Date.now()) / 1000)}</b> · נכון: <b>${kz.right}</b>` : total}</span>
-      <span><button class="ghost" id="kfQuit">${ic('close')} יציאה</button></span></div>
+      <span><button class="ghost navhome" id="kfQuit">→ חזרה לאימון</button></span></div>
     ${kz.mode === 'chal' ? '' : `<div class="progress"><div style="width:${kz.i / kz.queue.length * 100}%"></div></div>`}
     <div class="card center kf-q">
       ${q.intro ? `<div class="kf-new">✨ עובדה חדשה<br><span class="small">${kfStrategy(q.a, q.b)}</span></div>` : ''}
@@ -7579,7 +7605,7 @@ function kfDone() {
       ${sent ? `<p class="small muted">📤 התוצאות נשלחו למורה (${esc(kf.name)}, ${esc(kf.klass)}).</p>` : ''}
       <div class="actions" style="justify-content:center">
         ${kz.mode === 'chal' ? '<button id="kfAgain">🔁 עוד דקה</button>' : ''}
-        <button class="${kz.mode === 'chal' ? 'secondary' : ''}" id="kfHomeBtn">🗺️ למפה שלי</button>
+        <button class="${kz.mode === 'chal' ? 'secondary' : ''}" id="kfHomeBtn">→ חזרה לאימון</button>
       </div>
     </div>`;
   if ($('kfAgain')) $('kfAgain').onclick = () => kfStart('chal');
@@ -7634,7 +7660,7 @@ function teacherGate() {
       </div>
       <p class="muted" id="tcmsg" style="min-height:1.4em"></p>
     </div>
-    <p class="center"><a href="${location.pathname}${gq()}">← לאפליקציה</a></p>`;
+    <p class="center"><a class="btnlink navhome" href="${location.pathname}${gq()}">${ic('home')} לדף הבית</a></p>`;
   const tryCode = () => {
     if (codeHash('math6:' + $('tcode').value.trim()) === TEACHER_HASH) {
       store.teacherKey = TEACHER_HASH; saveStore(store);
