@@ -3507,7 +3507,7 @@ function home() {
       <button id="test" class="secondary">📝 מבדק לדוגמה<span class="desc">20 שאלות כמו במבדק – הציון והפתרונות בסוף</span></button>
     </div>
     ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>המבדקים האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
-    <p class="center muted small-link"><a href="?teacher">🧑‍🏫 למורה: יצירת קישור מותאם</a> · <a href="?print">🖨️ דפי עבודה להדפסה</a></p>
+    <p class="center muted small-link"><a href="?print">🖨️ דפי עבודה להדפסה</a></p>
   `;
   $('fontBtn').onclick = cycleFont;
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
@@ -4200,7 +4200,7 @@ function printBuilder() {
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
-      <p class="center"><a href="${location.pathname}?teacher">← למסך המורה</a> · <a href="${location.pathname}">לאפליקציה</a></p>
+      <p class="center"><a href="${location.pathname}">← לאפליקציה</a></p>
     </div>
     <div id="wsout"></div>`;
   const letters = 'אבג';
@@ -4235,10 +4235,42 @@ function printBuilder() {
   $('wprint').onclick = () => window.print();
 }
 
+
+/* ---------- כניסת מורה (קוד) ---------- */
+// הקוד לא נשמר כאן – רק "טביעת אצבע" שלו. זו לא אבטחה אמיתית, אלא מניעת כניסה מקרית.
+const TEACHER_HASH = '3d9bf467';
+function codeHash(s) {
+  let x = 0x811c9dc5;
+  for (const ch of s) { x ^= ch.charCodeAt(0); x = Math.imul(x, 0x01000193) >>> 0; }
+  return x.toString(16);
+}
+function teacherGate() {
+  if (store.teacherKey === TEACHER_HASH) return teacher();
+  app.innerHTML = `
+    <h1>🔒 כניסת מורה</h1>
+    <div class="card center">
+      <p>האזור הזה מיועד למורה בלבד.</p>
+      <div class="name-row">
+        <input id="tcode" class="ans" type="password" inputmode="numeric" autocomplete="off" placeholder="קוד מורה" aria-label="קוד מורה">
+        <button id="tgo">כניסה</button>
+      </div>
+      <p class="muted" id="tcmsg" style="min-height:1.4em"></p>
+    </div>
+    <p class="center"><a href="${location.pathname}">← לאפליקציה</a></p>`;
+  const tryCode = () => {
+    if (codeHash('math6:' + $('tcode').value.trim()) === TEACHER_HASH) {
+      store.teacherKey = TEACHER_HASH; saveStore(store); teacher();
+    } else { $('tcmsg').textContent = 'הקוד לא נכון. נסו שוב.'; $('tcode').select(); }
+  };
+  $('tgo').onclick = tryCode;
+  $('tcode').addEventListener('keydown', e => { if (e.key === 'Enter') tryCode(); });
+  $('tcode').focus();
+}
+
 // חשיפה לבדיקות אוטומטיות
 window.__math6 = { TOPICS, LESSONS, check, correctHTML, findTrap, speechText };
 
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacher(); else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else home();
 </script>
 </body>
 </html>
