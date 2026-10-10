@@ -383,6 +383,19 @@
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 
+  .dgroups { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0; direction: ltr; }
+  .dgroup { display: inline-flex; flex-wrap: wrap; gap: 5px; padding: 8px; border: 2px dashed #e0703a; border-radius: 12px; max-width: 220px; justify-content: center; }
+  .dgroup.left { border-color: #c0392b; background: #fdecea; }
+  .dot1 { width: 18px; height: 18px; border-radius: 50%; background: #e0703a; display: inline-block; }
+  .rects { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: flex-end; margin: 8px 0; direction: ltr; }
+  .rect1 { text-align: center; }
+  .rgrid { display: inline-grid; gap: 2px; }
+  .rgrid span { width: 14px; height: 14px; background: #6a4fd5; border-radius: 2px; display: inline-block; }
+  .divt td.yes { color: var(--ok); font-weight: 700; }
+  .divt td.no { color: var(--bad); font-weight: 700; }
+  .hlc { background: #ffe08a; padding: 0 4px; border-radius: 4px; }
+  .lbtns button.sel { background: var(--accent); color: #fff; }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
@@ -3257,9 +3270,14 @@ function lShapeFig() {
 
 Object.assign(LESSONS, {
   order: {
-    id: 'order', name: 'סדר פעולות חשבון', icon: '🔢', color: '#e0703a', topic: 'ops',
+    id: 'order', name: 'סדר פעולות חשבון', icon: '🔢', color: '#e0703a', topic: { 3: 'muldiv', 4: 'ops', 5: 'ops', 6: 'ops' },
     desc: 'סוגריים, כפל וחילוק, חיבור וחיסור – ומה עושים כשיש רק חיבור וחיסור, או רק כפל וחילוק',
-    practice: [() => genOrder(1), () => genOrderSame(1), () => genOrderSame(3), () => genOrder(2), () => genOrderSame(2), () => genOrderSame(4), () => genOrder(2), () => genOrder(2)],
+    practice: {
+      3: [() => genOrder(1), () => genOrderSame(1), () => genOrder(1), () => genOrderSame(2), () => genOrderSame(3), () => genOrder(1)],
+      4: [() => genOrder(1), () => genOrderSame(1), () => genOrderSame(3), () => genOrder(2), () => genOrderSame(2), () => genOrderSame(4), () => genOrder(2), () => genOrder(2)],
+      5: [() => genOrder(1), () => genOrderSame(1), () => genOrderSame(3), () => genOrder(2), () => genOrderSame(2), () => genOrderSame(4), () => genOrder(2), () => genOrder(2)],
+      6: [() => genOrder(1), () => genOrderSame(1), () => genOrderSame(3), () => genOrder(2), () => genOrderSame(2), () => genOrderSame(4), () => genOrder(2), () => genOrder(2)]
+    },
     cards: [
       {
         title: 'למה צריך סדר?',
@@ -3988,13 +4006,480 @@ Object.assign(LESSONS, {
     ]
   }
 });
-LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 3 ? ['place', 'order'] : GRADE === 4 ? ['place', 'order', 'frac', 'geo'] : GRADE === 5 ? ['order', 'frac', 'dec', 'geo', 'mean'] : ['place', 'order', 'frac', 'dec', 'geo', 'mean']));
+LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 3 ? ['place', 'times', 'divis', 'timemoney', 'angles', 'order'] : GRADE === 4 ? ['place', 'times', 'divis', 'order', 'frac', 'angles', 'geo'] : GRADE === 5 ? ['divis', 'order', 'frac', 'dec', 'angles', 'geo', 'mean'] : ['place', 'order', 'divis', 'frac', 'dec', 'geo', 'mean']));
 
 // קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
 [[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
  [genDecimalPlace, 'dec', 0], [genExpandedDecimal, 'dec', 0], [genFracToDec, 'dec', 1], [genDecToFrac, 'dec', 1], [genFracPlusDec, 'dec', 1],
  [genDecCompare, 'dec', 2], [genNumberLine, 'dec', 3], [genSequence, 'dec', 4], [genDecAddSub, 'dec', 4], [genMul10, 'dec', 5],
  [genUnits, 'dec', 6], [genEstimateLength, 'dec', 6]].forEach(([g, l, c]) => { g.__learn = { lesson: l, card: c }; });
+/* ---------- כרטיסיות: לוח הכפל, זמן וכסף, סימני התחלקות, זוויות ומשולשים ---------- */
+function dotsSVG(rows, cols, color = '#e0703a') {
+  const s = 26, W = cols * s + 10, H = rows * s + 10;
+  let g = '';
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) g += `<circle cx="${5 + c * s + s / 2}" cy="${5 + r * s + s / 2}" r="9" fill="${color}"/>`;
+  return `<svg class="fbar" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${g}</svg>`;
+}
+function groupsHTML(groups, per, left = 0) {
+  const box = n => `<span class="dgroup">${'<span class="dot1"></span>'.repeat(n)}</span>`;
+  return `<div class="dgroups">${Array.from({ length: groups }, () => box(per)).join('')}${left ? `<span class="dgroup left">${'<span class="dot1"></span>'.repeat(left)}</span>` : ''}</div>`;
+}
+function clockSVG(h, m) {
+  const cx = 100, cy = 100, r = 86;
+  let g = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="#23264a" stroke-width="4"/>`;
+  for (let i = 0; i < 60; i++) {
+    const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = big ? r - 12 : r - 6;
+    g += `<line x1="${cx + r1 * Math.sin(a)}" y1="${cy - r1 * Math.cos(a)}" x2="${cx + (r - 2) * Math.sin(a)}" y2="${cy - (r - 2) * Math.cos(a)}" stroke="#23264a" stroke-width="${big ? 2.5 : 1}"/>`;
+  }
+  for (let n = 1; n <= 12; n++) {
+    const a = n * 30 * Math.PI / 180;
+    g += `<text x="${cx + (r - 26) * Math.sin(a)}" y="${cy - (r - 26) * Math.cos(a) + 6}" text-anchor="middle" class="lb" style="font-size:17px;font-weight:bold">${n}</text>`;
+  }
+  const ha = ((h % 12) + m / 60) * 30 * Math.PI / 180, ma = m * 6 * Math.PI / 180;
+  g += `<line x1="${cx}" y1="${cy}" x2="${cx + 45 * Math.sin(ha)}" y2="${cy - 45 * Math.cos(ha)}" stroke="#c0392b" stroke-width="7" stroke-linecap="round"/>`;
+  g += `<line x1="${cx}" y1="${cy}" x2="${cx + 70 * Math.sin(ma)}" y2="${cy - 70 * Math.cos(ma)}" stroke="#4c5fd5" stroke-width="4" stroke-linecap="round"/>`;
+  g += `<circle cx="${cx}" cy="${cy}" r="6" fill="#23264a"/>`;
+  return `<svg class="fig" viewBox="0 0 200 200" width="200" height="200" style="max-width:200px">${g}</svg>`;
+}
+function angleSVG(deg) {
+  const cx = 150, cy = 140, L = 120, a = deg * Math.PI / 180;
+  const x2 = cx + L * Math.cos(a), y2 = cy - L * Math.sin(a);
+  let g = `<line x1="${cx}" y1="${cy}" x2="${cx + L}" y2="${cy}" stroke="#23264a" stroke-width="4" stroke-linecap="round"/>`;
+  g += `<line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#23264a" stroke-width="4" stroke-linecap="round"/>`;
+  if (deg === 90) g += `<polyline points="${cx + 22},${cy} ${cx + 22},${cy - 22} ${cx},${cy - 22}" fill="none" stroke="#e0703a" stroke-width="3"/>`;
+  else {
+    const r = 34, ex = cx + r * Math.cos(a), ey = cy - r * Math.sin(a);
+    g += `<path d="M ${cx + r} ${cy} A ${r} ${r} 0 ${deg > 180 ? 1 : 0} 0 ${ex} ${ey}" fill="none" stroke="#e0703a" stroke-width="3"/>`;
+  }
+  g += `<circle cx="${cx}" cy="${cy}" r="5" fill="#23264a"/>`;
+  const la = a / 2;
+  g += T(cx + 58 * Math.cos(la), cy - 58 * Math.sin(la) + 6, `${deg}°`, 'middle', 'lb');
+  return `<svg class="fig" viewBox="0 0 300 170" width="300" height="170" style="max-width:300px">${g}</svg>`;
+}
+const angleType = d => d < 90 ? 'זווית חדה (פחות מ-90°)' : d === 90 ? 'זווית ישרה (בדיוק 90°)' : d < 180 ? 'זווית קהה (בין 90° ל-180°)' : 'זווית שטוחה (180° – קו ישר)';
+function sectorPath(cx, cy, r, a0, a1) {
+  const p = a => [cx + r * Math.cos(a * Math.PI / 180), cy - r * Math.sin(a * Math.PI / 180)];
+  const [x0, y0] = p(a0), [x1, y1] = p(a1);
+  return `M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 0 0 ${x1} ${y1} Z`;
+}
+function triSumSVG(torn) {
+  const A = [50, 60, 70], col = ['#e0703a', '#4c5fd5', '#2f8f55'];
+  if (!torn) {
+    const P = [[40, 170], [300, 170], [140, 40]];
+    let g = `<polygon points="${P.map(p => p.join(',')).join(' ')}" fill="#f7f8ff" stroke="#23264a" stroke-width="2.5"/>`;
+    const ang = (p, q) => Math.atan2(-(q[1] - p[1]), q[0] - p[0]) * 180 / Math.PI;
+    [[0, 1, 2], [1, 2, 0], [2, 0, 1]].forEach(([i, j, k], n) => {
+      let a0 = ang(P[i], P[j]), a1 = ang(P[i], P[k]);
+      if (((a1 - a0) % 360 + 360) % 360 > 180) [a0, a1] = [a1, a0];
+      g += `<path d="${sectorPath(P[i][0], P[i][1], 30, a0, a1)}" fill="${col[n]}" opacity="0.8"/>`;
+    });
+    return `<svg class="fig" viewBox="0 0 340 190" width="340" height="190">${g}</svg>`;
+  }
+  let g = `<line x1="20" y1="150" x2="320" y2="150" stroke="#23264a" stroke-width="3"/>`, start = 0;
+  A.forEach((a, n) => {
+    g += `<path d="${sectorPath(170, 150, 110, start, start + a)}" fill="${col[n]}" opacity="0.85" stroke="#fff" stroke-width="2"/>`;
+    const mid = (start + a / 2) * Math.PI / 180;
+    g += T(170 + 72 * Math.cos(mid), 150 - 72 * Math.sin(mid) + 6, `${a}°`, 'middle', 'lb');
+    start += a;
+  });
+  g += T(170, 180, '50° + 60° + 70° = 180° – בדיוק קו ישר!', 'middle', 'lb');
+  return `<svg class="fig" viewBox="0 0 340 190" width="340" height="190">${g}</svg>`;
+}
+
+const DIV_CHECK = n => {
+  const s = String(n), last = n % 10, ds = digitSum(n);
+  const row = (d, ok, why) => `<tr><td>מתחלק ב-${d}?</td><td class="${ok ? 'yes' : 'no'}">${ok ? '✔ כן' : '✘ לא'}</td><td class="small">${why}</td></tr>`;
+  return { last, ds, s, row };
+};
+
+Object.assign(LESSONS, {
+  times: {
+    id: 'times', name: 'לוח הכפל וחילוק', icon: '✖️', color: '#e0703a', topic: { 3: 'muldiv', 4: 'ops' },
+    desc: 'מה זה כפל, טריקים ללוח הכפל, כפל בעשרות, חילוק ושארית',
+    practice: { 3: [genTimesTable, genDivTable, genMulTens, genMul2x1, genDivRem, genWordMulDiv3, genTimesTable, genDivTable], 4: [genTimesTable, genDivTable, genMulTens, genMul2x1, () => genMul(1), () => genDiv(1), genDivRem, genDivRem] },
+    cards: [
+      {
+        title: 'מה זה כפל?',
+        html: `<p>כפל הוא דרך מהירה לספור <b>קבוצות שוות</b>. נסו לשנות את מספר השורות והעמודות:</p>
+          <div data-arr class="center"></div>
+          <div class="lbtns"><button class="secondary" data-r="1">שורות +1</button><button class="secondary" data-r="-1">שורות −1</button><button class="secondary" data-c="1">בכל שורה +1</button><button class="secondary" data-c="-1">בכל שורה −1</button></div>
+          <div class="rule">💡 <b>כפל = חיבור חוזר.</b> ${M('3 × 4')} זה 3 פעמים 4: ${M('4 + 4 + 4 = 12')}</div>`,
+        setup(root) {
+          let r = 3, c = 4;
+          const show = () => { root.querySelector('[data-arr]').innerHTML = `${dotsSVG(r, c)}<div class="fbig">${M(`${r} × ${c} = ${r * c}`)}</div><div>${r} שורות, בכל שורה ${c} – ${M(Array(r).fill(c).join(' + '))} = ${r * c}</div>`; };
+          root.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { r = Math.max(1, Math.min(8, r + Number(b.dataset.r))); show(); });
+          root.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { c = Math.max(1, Math.min(10, c + Number(b.dataset.c))); show(); });
+          show();
+        },
+        try: { type: 'num', q: 'בגינה יש 5 שורות של עציצים, ובכל שורה 6 עציצים. כמה עציצים יש בגינה?', ans: 30, hint: '5 פעמים 6.', exp: `${M('5 × 6 = 30')}`, traps: [{ v: 11, m: 'חיברתם 5 + 6. אבל יש 5 שורות של 6 – זה כפל!' }] }
+      },
+      {
+        title: 'אפשר להחליף את הסדר',
+        html: `<p>סובבו את הסידור – מה קורה לתוצאה?</p>
+          <div data-arr class="center"></div>
+          <div class="lbtns"><button class="secondary" data-act="rot">🔄 סובבו</button></div>
+          <div class="rule">💡 בכפל אפשר להחליף את הסדר: ${M('3 × 5 = 5 × 3')}.<br>אם יודעים ${M('3 × 8 = 24')} – יודעים גם ${M('8 × 3 = 24')}. חצי מלוח הכפל – בחינם!</div>`,
+        setup(root) {
+          let r = 3, c = 5;
+          const show = () => { root.querySelector('[data-arr]').innerHTML = `${dotsSVG(r, c, '#4c5fd5')}<div class="fbig">${M(`${r} × ${c} = ${r * c}`)}</div>`; };
+          root.querySelector('[data-act="rot"]').onclick = () => { [r, c] = [c, r]; show(); };
+          show();
+        },
+        try: { type: 'num', q: `ידוע ש-${M('7 × 3 = 21')}. כמה זה ${M('3 × 7')}?`, ans: 21, hint: 'אפשר להחליף את הסדר בכפל.', exp: `${M('3 × 7 = 7 × 3 = 21')}` }
+      },
+      {
+        title: 'טריקים ללוח הכפל',
+        html: `<p>בחרו מספר, וראו איך מחשבים אותו בעזרת טריקים:</p>
+          <div class="lbtns" data-nums>${[2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button class="secondary" data-n="${n}">${n}</button>`).join('')}</div>
+          <div data-tricks></div>
+          <div class="rule">💡 <b>× 2</b> = כפול (פעמיים). <b>× 4</b> = כפול ועוד פעם כפול. <b>× 10</b> = מוסיפים 0.<br><b>× 5</b> = חצי מ-× 10. <b>× 9</b> = × 10 פחות פעם אחת.</div>`,
+        setup(root) {
+          const show = n => {
+            root.querySelectorAll('[data-n]').forEach(b => b.classList.toggle('sel', Number(b.dataset.n) === n));
+            root.querySelector('[data-tricks]').innerHTML = `<table class="ftable">
+              <tr><td>${M(`${n} × 2`)}</td><td>כפול: ${M(`${n} + ${n} = ${n * 2}`)}</td></tr>
+              <tr><td>${M(`${n} × 4`)}</td><td>כפול ועוד כפול: ${M(`${n * 2} + ${n * 2} = ${n * 4}`)}</td></tr>
+              <tr><td>${M(`${n} × 10`)}</td><td>מוסיפים 0: ${M(`${n * 10}`)}</td></tr>
+              <tr><td>${M(`${n} × 5`)}</td><td>חצי מ-${n * 10}: ${M(`${n * 5}`)}</td></tr>
+              <tr><td>${M(`${n} × 9`)}</td><td>${M(`${n * 10} - ${n} = ${n * 9}`)}</td></tr></table>`;
+          };
+          root.querySelectorAll('[data-n]').forEach(b => b.onclick = () => show(Number(b.dataset.n)));
+          show(7);
+        },
+        try: { type: 'num', q: `פתרו בעזרת הטריק של 9: ${M('9 × 7 =')}`, ans: 63, hint: `${M('10 × 7 = 70')}, ואז מורידים 7 אחד.`, exp: `${M('70 - 7 = 63')}`, traps: [{ v: 70, m: 'זה 10 × 7. ב-× 9 מורידים עוד 7 אחד.' }] }
+      },
+      {
+        title: 'כפל בעשרות ופירוק',
+        html: `<p><b>כפל בעשרות:</b> ${M('3 × 40')} = 3 פעמים 4 עשרות = 12 עשרות = <b>120</b>. כלומר: ${M('3 × 4 = 12')}, ומוסיפים 0.</p>
+          <p><b>כפל דו-ספרתי בחד-ספרתי</b> – מפרקים לעשרות ויחידות:</p>
+          ${stepperHTML([
+            { e: M(`${HL('23')} × 4`), n: 'מפרקים: 23 = 20 + 3' },
+            { e: M(`${HL('20 × 4')} + 3 × 4`), n: 'כופלים את העשרות: 20 × 4 = 80' },
+            { e: M(`80 + ${HL('3 × 4')}`), n: 'כופלים את היחידות: 3 × 4 = 12' },
+            { e: M(HL('80 + 12')), n: 'מחברים' },
+            { e: M('92'), n: '✔ 23 × 4 = 92' }])}
+          <div class="warn">⚠️ אל תשכחו לכפול <b>גם</b> את העשרות <b>וגם</b> את היחידות!</div>`,
+        setup(root) { setupStepper(root, [
+          { e: M(`${HL('23')} × 4`), n: 'מפרקים: 23 = 20 + 3' },
+          { e: M(`${HL('20 × 4')} + 3 × 4`), n: 'כופלים את העשרות: 20 × 4 = 80' },
+          { e: M(`80 + ${HL('3 × 4')}`), n: 'כופלים את היחידות: 3 × 4 = 12' },
+          { e: M(HL('80 + 12')), n: 'מחברים' },
+          { e: M('92'), n: '✔ 23 × 4 = 92' }]); },
+        try: { type: 'num', q: `פתרו: ${M('6 × 30 =')}`, ans: 180, hint: 'חשבו 6 × 3 והוסיפו 0.', exp: `${M('6 × 3 = 18')}, ולכן ${M('6 × 30 = 180')}`, traps: [{ v: 18, m: 'שכחתם את האפס! 30 זה 3 עשרות.' }] }
+      },
+      {
+        title: 'חילוק – ההפך של כפל',
+        html: `<p>יש 12 עיגולים. מחלקים אותם ל-3 קבוצות <b>שוות</b>:</p>
+          <div data-div></div>
+          <div class="lbtns"><button class="secondary" data-act="split">➗ חלקו ל-3 קבוצות</button></div>
+          <div class="rule">💡 <b>"משפחת עובדות":</b> ${M('3 × 4 = 12')} · ${M('4 × 3 = 12')} · ${M('12 : 3 = 4')} · ${M('12 : 4 = 3')}<br>כדי לחלק – שואלים: <b>איזה מספר כפול 3 נותן 12?</b></div>`,
+        setup(root) {
+          root.querySelector('[data-div]').innerHTML = groupsHTML(1, 12);
+          root.querySelector('[data-act="split"]').onclick = () => { root.querySelector('[data-div]').innerHTML = groupsHTML(3, 4) + `<div class="fbig">${M('12 : 3 = 4')}</div>`; };
+        },
+        try: { type: 'num', q: `פתרו: ${M('56 : 8 =')}`, ans: 7, hint: 'איזה מספר כפול 8 נותן 56?', exp: `${M('8 × 7 = 56')}, ולכן ${M('56 : 8 = 7')}`, traps: [{ v: 48, m: 'חיסרתם 56 − 8. בחילוק שואלים: כמה פעמים 8 נכנס ב-56?' }] }
+      },
+      {
+        title: 'חילוק עם שארית',
+        html: `<p>יש 14 עוגיות. שמים 4 עוגיות בכל קופסה. כמה קופסאות מלאות? כמה עוגיות נשארות?</p>
+          <div data-div></div>
+          <div class="lbtns"><button class="secondary" data-act="split">📦 סדרו בקופסאות</button></div>
+          <div class="reveal hidden explain">3 קופסאות מלאות (${M('3 × 4 = 12')}), ונשארות <b>2</b> עוגיות. כותבים: ${M('14 : 4 = 3')} ושארית 2.</div>
+          <div class="rule">💡 השארית תמיד <b>קטנה</b> מהמספר שמחלקים בו. בדיקה: ${M('3 × 4 + 2 = 14')} ✔</div>`,
+        setup(root) {
+          root.querySelector('[data-div]').innerHTML = groupsHTML(1, 14);
+          root.querySelector('[data-act="split"]').onclick = () => { root.querySelector('[data-div]').innerHTML = groupsHTML(3, 4, 2); reveal(root); };
+        },
+        try: { type: 'num', q: `${M('23 : 5')} = 4 ושארית ${BOX}. מה השארית?`, ans: 3, hint: `${M('4 × 5 = 20')}. כמה חסר עד 23?`, exp: `${M('4 × 5 = 20')}, ${M('23 - 20 = 3')}`, traps: [{ v: 4, m: '4 זו המנה. השאלה היא כמה <b>נשאר</b>.' }] }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+          <li>✖️ <b>כפל</b> = חיבור חוזר של קבוצות שוות. אפשר להחליף את הסדר.</li>
+          <li>🧠 טריקים: × 2 כפול · × 4 כפול-כפול · × 5 חצי מ-× 10 · × 9 = × 10 פחות פעם אחת · × 10 מוסיפים 0.</li>
+          <li>🔟 <b>כפל בעשרות:</b> 3 × 40 → 3 × 4 = 12 → 120.</li>
+          <li>🧩 <b>פירוק:</b> 23 × 4 = 20 × 4 + 3 × 4.</li>
+          <li>➗ <b>חילוק</b> = ההפך של כפל. <b>שארית</b> = מה שנשאר, תמיד קטנה מהמחלק.</li>
+        </ul><p class="center"><b>כל הכבוד! סיימתם את כרטיסיות לוח הכפל 🎉</b></p>`
+      }
+    ]
+  },
+
+  timemoney: {
+    id: 'timemoney', name: 'זמן וכסף', icon: '🕒', color: '#1e8a8a', topic: { 3: 'geo' },
+    desc: 'קריאת שעון, כמה זמן עבר, שעות ודקות, כסף ועודף',
+    practice: { 3: [genTime3, genMoney3, genTime3, genMoney3, genLen3, genTime3] },
+    cards: [
+      {
+        title: 'קוראים שעון',
+        html: `<div class="frow"><div data-clock></div><div class="dval" data-time></div></div>
+          <div class="lbtns"><button class="secondary" data-add="5">+5 דקות</button><button class="secondary" data-add="15">+15 דקות</button><button class="secondary" data-add="60">+שעה</button></div>
+          <div class="rule">💡 <b style="color:#c0392b">המחוג הקטן</b> – מראה את <b>השעה</b>. <b style="color:#4c5fd5">המחוג הגדול</b> – מראה את <b>הדקות</b>.<br>כל מספר בשעון = 5 דקות למחוג הגדול: על 3 = 15 דקות, על 6 = 30 דקות, על 9 = 45 דקות.</div>`,
+        setup(root) {
+          let t = 8 * 60 + 30;
+          const word = m => m === 0 ? 'בדיוק' : m === 15 ? 'ורבע' : m === 30 ? 'וחצי' : m === 45 ? `(רבע ל-${Math.floor(t / 60) % 12 + 1})` : `ו-${m} דקות`;
+          const show = () => {
+            const h = Math.floor(t / 60) % 12 || 12, m = t % 60;
+            root.querySelector('[data-clock]').innerHTML = clockSVG(h, m);
+            root.querySelector('[data-time]').innerHTML = `<div class="fbig">${M(`${h}:${String(m).padStart(2, '0')}`)}</div><div>${h} ${word(m)}</div>`;
+          };
+          root.querySelectorAll('[data-add]').forEach(b => b.onclick = () => { t += Number(b.dataset.add); show(); });
+          show();
+        },
+        try: {
+          type: 'choice', q: `מה השעה בשעון?<div class="center">${clockSVG(4, 45)}</div>`, choices: [M('4:45'), M('5:45'), M('9:20'), M('4:09')], ans: 0,
+          hint: 'המחוג הקטן (אדום) – בין 4 ל-5. המחוג הגדול (כחול) – על 9.', exp: 'המחוג הקטן עוד לא הגיע ל-5, והגדול על 9 = 45 דקות: 4:45.',
+          traps: [{ c: M('5:45'), m: 'המחוג הקטן קרוב ל-5 – אבל עוד <b>לא הגיע</b> אליו. לכן השעה עדיין 4.' }, { c: M('9:20'), m: 'החלפתם בין המחוגים. הקטן מראה שעות, הגדול – דקות.' }]
+        }
+      },
+      {
+        title: 'שעות ודקות',
+        html: `<table class="ftable">
+            <tr><td>שעה</td><td>60 דקות</td></tr><tr><td>חצי שעה</td><td>30 דקות</td></tr>
+            <tr><td>רבע שעה</td><td>15 דקות</td></tr><tr><td>שעה וחצי</td><td>90 דקות</td></tr><tr><td>שעתיים</td><td>120 דקות</td></tr></table>
+          <div class="warn">⚠️ בשעה יש <b>60</b> דקות – לא 100! לכן אחרי 8:59 מגיעים ל-9:00, ולא ל-8:60.</div>`,
+        try: { type: 'num', q: 'כמה דקות יש בשעה ורבע?', ans: 75, hint: 'שעה = 60 דקות, רבע שעה = 15 דקות.', exp: `${M('60 + 15 = 75')} דקות`, traps: [{ v: 125, m: 'בשעה יש 60 דקות, לא 100.' }, { v: 115, m: 'בשעה יש 60 דקות, לא 100.' }] }
+      },
+      {
+        title: 'כמה זמן עבר?',
+        html: `<p>הסרט התחיל ב-${M('8:40')} ונגמר ב-${M('10:15')}. כמה זמן נמשך?</p>
+          <ol class="lsteps"><li>מ-${M('8:40')} עד השעה העגולה ${M('9:00')} – <b>20 דקות</b>.</li>
+            <li>מ-${M('9:00')} עד ${M('10:00')} – <b>60 דקות</b>.</li>
+            <li>מ-${M('10:00')} עד ${M('10:15')} – <b>15 דקות</b>.</li>
+            <li>ביחד: ${M('20 + 60 + 15 = 95')} דקות (שעה ו-35 דקות).</li></ol>
+          <div class="rule">💡 <b>קופצים לשעה העגולה</b> – ומשם ממשיכים.</div>`,
+        try: { type: 'num', q: `שיעור התחיל ב-${M('10:45')} ונגמר ב-${M('12:00')}. כמה דקות נמשך?`, ans: 75, hint: `מ-10:45 עד 11:00, ומ-11:00 עד 12:00.`, exp: `${M('15 + 60 = 75')} דקות`, traps: [{ v: 115, m: '12:00 פחות 10:45 זה לא כמו חיסור רגיל – בשעה יש 60 דקות. קפצו לשעה העגולה.' }, { v: 55, m: 'קפצו לשעה העגולה: מ-10:45 עד 11:00 – 15 דקות, ועוד שעה שלמה.' }] }
+      },
+      {
+        title: 'כסף ועודף',
+        html: `<p><b>מטבעות:</b> 10 אג', 50 אג', 1 ₪, 2 ₪, 5 ₪, 10 ₪. <b>שטרות:</b> 20 ₪, 50 ₪, 100 ₪, 200 ₪.</p>
+          <p>קניתי ב-<b>37 ₪</b> ושילמתי ב-<b>50 ₪</b>. כמה עודף? <b>סופרים מהמחיר למעלה:</b></p>
+          ${stepperHTML([{ e: M(HL('37')), n: 'מתחילים מהמחיר' }, { e: M(`37 + ${HL('3')} = 40`), n: 'קופצים לעשרת השלמה: עוד 3 ₪' }, { e: M(`40 + ${HL('10')} = 50`), n: 'ועוד 10 ₪ עד 50' }, { e: M('3 + 10 = 13'), n: '✔ העודף: 13 ₪' }])}
+          <div class="rule">💡 עודף = מה ששילמנו פחות המחיר: ${M('50 - 37 = 13')}</div>`,
+        setup(root) { setupStepper(root, [{ e: M(HL('37')), n: 'מתחילים מהמחיר' }, { e: M(`37 + ${HL('3')} = 40`), n: 'קופצים לעשרת השלמה: עוד 3 ₪' }, { e: M(`40 + ${HL('10')} = 50`), n: 'ועוד 10 ₪ עד 50' }, { e: M('3 + 10 = 13'), n: '✔ העודף: 13 ₪' }]); },
+        try: { type: 'num', q: 'קניתי משחק ב-64 ₪ ושילמתי בשטר של 100 ₪. כמה עודף קיבלתי?', ans: 36, hint: 'מ-64 עד 70, ומ-70 עד 100.', exp: `${M('6 + 30 = 36')} ₪`, traps: [{ v: 46, m: 'בדקו שוב: מ-64 עד 70 זה 6, ומ-70 עד 100 זה 30.' }, { v: 164, m: 'חיברתם. עודף = מה ששילמתי פחות המחיר.' }] }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+          <li>🕒 מחוג קטן – שעות, מחוג גדול – דקות. כל מספר = 5 דקות.</li>
+          <li>⏱️ שעה = 60 דקות, חצי שעה = 30, רבע שעה = 15.</li>
+          <li>➡️ <b>כמה זמן עבר?</b> קופצים לשעה העגולה ומשם ממשיכים.</li>
+          <li>💰 <b>עודף:</b> סופרים מהמחיר עד הסכום ששילמנו.</li>
+        </ul><p class="center"><b>כל הכבוד! סיימתם את כרטיסיות הזמן והכסף 🎉</b></p>`
+      }
+    ]
+  },
+
+  divis: {
+    id: 'divis', name: 'סימני התחלקות', icon: '🔍', color: '#6a4fd5', topic: { 3: 'divis', 4: 'divis', 5: 'divis', 6: 'ops' },
+    desc: 'זוגי ואי-זוגי, התחלקות ב-2, 5, 10, 3 ו-9, ראשוניים ומחלקים',
+    practice: {
+      3: [genEvenOdd, () => genDivRule(1), genEvenOddSum, genEvenOdd, () => genDivRule(1), genEvenOddSum],
+      4: [() => genDivRule(1), () => genDivRule(2), genDivMissingDigit, () => genDivRule(1), () => genDivRule(2), genDivMissingDigit],
+      5: [() => genDivRule(1), () => genDivRule(2), genPrime, genDivisors, genLcmGcd, genPrime, genDivisors, genLcmGcd],
+      6: [genPrime, genPrimeProduct, () => genDivRule(2), genPrime, genPrimeProduct, genPrime]
+    },
+    cards: [
+      {
+        title: 'זוגי ואי-זוגי', grades: [3, 4],
+        html: `<p>מספר <b>זוגי</b> – אפשר לסדר אותו בזוגות בלי שיישאר אף אחד. נסו:</p>
+          <div data-pairs class="center"></div>
+          <div class="lbtns"><button class="secondary" data-d="-1">−1</button><button class="secondary" data-d="1">+1</button></div>
+          <div class="rule">💡 בודקים רק את <b>ספרת היחידות</b> (האחרונה):<br>0, 2, 4, 6, 8 ← <b>זוגי</b> · 1, 3, 5, 7, 9 ← <b>אי-זוגי</b>.<br>למשל 3,456 זוגי (כי 6 זוגי), ו-2,481 אי-זוגי (כי 1 אי-זוגי).</div>`,
+        setup(root) {
+          let n = 7;
+          const show = () => {
+            const pairs = Math.floor(n / 2), left = n % 2;
+            root.querySelector('[data-pairs]').innerHTML = groupsHTML(pairs, 2, left) + `<div class="fbig">${n} – ${left ? '<b>אי-זוגי</b> (נשאר אחד לבד)' : '<b>זוגי</b>'}</div>`;
+          };
+          root.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { n = Math.max(1, Math.min(20, n + Number(b.dataset.d))); show(); });
+          show();
+        },
+        try: { type: 'choice', q: 'איזה מספר הוא <b>אי-זוגי</b>?', choices: [M('438'), M('347'), M('560'), M('1,002')], ans: 1, hint: 'הסתכלו רק על הספרה האחרונה.', exp: 'הספרה האחרונה של 347 היא 7 – אי-זוגית.' }
+      },
+      {
+        title: 'התחלקות ב-2, 5 ו-10',
+        html: `<p>כתבו מספר וראו אם הוא מתחלק ב-2, ב-5 וב-10:</p>
+          <div class="center"><input class="ans" data-num value="350" inputmode="numeric" maxlength="7" aria-label="מספר"></div>
+          <div data-res></div>
+          <div class="rule">💡 <b>ב-2:</b> הספרה האחרונה זוגית (0, 2, 4, 6, 8).<br><b>ב-5:</b> הספרה האחרונה 0 או 5.<br><b>ב-10:</b> הספרה האחרונה 0.</div>`,
+        setup(root) {
+          const inp = root.querySelector('[data-num]');
+          const show = () => {
+            const n = Number(inp.value.replace(/\D/g, '')) || 0, last = n % 10;
+            root.querySelector('[data-res]').innerHTML = `<table class="ftable divt">
+              <tr><td>מתחלק ב-2?</td><td class="${last % 2 ? 'no' : 'yes'}">${last % 2 ? '✘ לא' : '✔ כן'}</td><td>הספרה האחרונה ${last} ${last % 2 ? 'אי-זוגית' : 'זוגית'}</td></tr>
+              <tr><td>מתחלק ב-5?</td><td class="${last % 5 ? 'no' : 'yes'}">${last % 5 ? '✘ לא' : '✔ כן'}</td><td>הספרה האחרונה ${last}</td></tr>
+              <tr><td>מתחלק ב-10?</td><td class="${last ? 'no' : 'yes'}">${last ? '✘ לא' : '✔ כן'}</td><td>הספרה האחרונה ${last}</td></tr></table>`;
+          };
+          inp.addEventListener('input', show); show();
+        },
+        try: { type: 'choice', q: 'איזה מספר מתחלק <b>גם</b> ב-2, <b>גם</b> ב-5 <b>וגם</b> ב-10?', choices: [M('355'), M('350'), M('352'), M('525')], ans: 1, hint: 'מתחלק ב-10 – הספרה האחרונה 0.', exp: '350 מסתיים ב-0 – לכן מתחלק ב-2, ב-5 וב-10.', traps: [{ c: M('355'), m: '355 מתחלק ב-5, אבל לא ב-2 ולא ב-10 – הוא מסתיים ב-5.' }] }
+      },
+      {
+        title: 'התחלקות ב-3 וב-9', grades: [4, 5, 6],
+        html: `<p>כאן לא מספיק להסתכל על הספרה האחרונה – <b>מחברים את כל הספרות!</b> כתבו מספר:</p>
+          <div class="center"><input class="ans" data-num value="4512" inputmode="numeric" maxlength="7" aria-label="מספר"></div>
+          <div data-res></div>
+          <div class="rule">💡 <b>ב-3:</b> סכום הספרות מתחלק ב-3.<br><b>ב-9:</b> סכום הספרות מתחלק ב-9.<br>כל מספר שמתחלק ב-9 מתחלק גם ב-3 (אבל לא להפך).</div>
+          <div class="warn">⚠️ 13, 23, 43 מסתיימים ב-3 – ובכל זאת <b>לא</b> מתחלקים ב-3! הספרה האחרונה לא קובעת כאן.</div>`,
+        setup(root) {
+          const inp = root.querySelector('[data-num]');
+          const show = () => {
+            const s = inp.value.replace(/\D/g, '') || '0', ds = digitSum(Number(s));
+            root.querySelector('[data-res]').innerHTML = `<div class="center explain">סכום הספרות: ${M(`${s.split('').join(' + ')} = ${ds}`)}</div>
+              <table class="ftable divt"><tr><td>מתחלק ב-3?</td><td class="${ds % 3 ? 'no' : 'yes'}">${ds % 3 ? '✘ לא' : '✔ כן'}</td><td>${ds} ${ds % 3 ? 'לא מתחלק' : 'מתחלק'} ב-3</td></tr>
+              <tr><td>מתחלק ב-9?</td><td class="${ds % 9 ? 'no' : 'yes'}">${ds % 9 ? '✘ לא' : '✔ כן'}</td><td>${ds} ${ds % 9 ? 'לא מתחלק' : 'מתחלק'} ב-9</td></tr></table>`;
+          };
+          inp.addEventListener('input', show); show();
+        },
+        try: { type: 'choice', q: `האם המספר ${M('4,512')} מתחלק ב-<b>9</b>?`, choices: ['כן', 'לא'], ans: 1, hint: 'חברו את הספרות: 4 + 5 + 1 + 2.', exp: 'סכום הספרות 12 – מתחלק ב-3 אבל לא ב-9. לכן 4,512 מתחלק ב-3, אבל לא ב-9.', traps: [{ c: 'כן', m: 'סכום הספרות הוא 12. האם 12 מתחלק ב-9?' }] }
+      },
+      {
+        title: 'מספרים ראשוניים ופריקים', grades: [5, 6],
+        html: `<p>בכמה דרכים אפשר לסדר משבצות במלבן? בחרו מספר:</p>
+          <div class="lbtns"><button class="secondary" data-d="-1">−1</button><span class="fbig" data-n></span><button class="secondary" data-d="1">+1</button></div>
+          <div data-rects class="rects"></div>
+          <div class="rule">💡 <b>מספר ראשוני</b> – יש לו רק 2 מחלקים: 1 והוא עצמו (אפשר לסדר רק בשורה אחת).<br><b>מספר פריק</b> – יש לו יותר מ-2 מחלקים.<br>⚠️ <b>1</b> אינו ראשוני ואינו פריק. <b>2</b> הוא המספר הזוגי הראשוני היחיד.</div>
+          <div class="rule">💡 הראשוניים עד 30: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29.</div>`,
+        setup(root) {
+          let n = 12;
+          const show = () => {
+            const ds = divisorsOf(n), pairs = ds.filter(d => d <= n / d);
+            root.querySelector('[data-n]').textContent = n;
+            root.querySelector('[data-rects]').innerHTML = pairs.map(a => `<div class="rect1"><div class="rgrid" style="grid-template-columns:repeat(${n / a},14px)">${'<span></span>'.repeat(n)}</div><div class="small">${M(`${a} × ${n / a}`)}</div></div>`).join('') +
+              `<div class="explain center">המחלקים של ${n}: ${ds.join(', ')} – ${n === 1 ? 'לא ראשוני ולא פריק' : ds.length === 2 ? '<b>ראשוני!</b> (רק שורה אחת)' : '<b>פריק</b> (יש עוד דרכים)'}</div>`;
+          };
+          root.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { n = Math.max(1, Math.min(30, n + Number(b.dataset.d))); show(); });
+          show();
+        },
+        try: { type: 'choice', q: 'איזה מספר הוא <b>ראשוני</b>?', choices: [M('21'), M('27'), M('29'), M('33')], ans: 2, hint: 'בדקו אם המספר מתחלק ב-3 או ב-7.', exp: '29 מתחלק רק ב-1 ובעצמו. 21 = 3 × 7, 27 = 3 × 9, 33 = 3 × 11.', traps: [{ c: M('21'), m: '21 = 3 × 7 – פריק.' }, { c: M('27'), m: '27 = 3 × 9 – פריק.' }, { c: M('33'), m: '33 = 3 × 11 – פריק.' }] }
+      },
+      {
+        title: 'מוצאים את כל המחלקים', grades: [5, 6],
+        html: `<p>מחפשים <b>זוגות</b> של מספרים שמכפלתם היא המספר. למשל 24:</p>
+          <div class="center">${M('1 × 24')} · ${M('2 × 12')} · ${M('3 × 8')} · ${M('4 × 6')}</div>
+          <div class="explain">המחלקים של 24: 1, 2, 3, 4, 6, 8, 12, 24 – <b>8 מחלקים</b>.</div>
+          <div class="rule">💡 מתחילים מ-1 ועולים. כשהזוגות "נפגשים" (כמו 4 × 6 ואחריו 6 × 4) – סיימנו.<br>⚠️ לא לשכוח את 1 ואת המספר עצמו!</div>`,
+        try: { type: 'num', q: 'כמה מחלקים יש למספר 18?', ans: 6, hint: 'זוגות: 1 × 18, 2 × 9, 3 × 6.', exp: 'המחלקים: 1, 2, 3, 6, 9, 18 – 6 מחלקים.', traps: [{ v: 4, m: 'שכחתם את 1 ואת 18 – גם הם מחלקים!' }] }
+      },
+      {
+        title: 'כפולה משותפת ומחלק משותף', grades: [5],
+        html: `<p><b>הכפולה המשותפת הקטנה ביותר</b> של 4 ו-6:</p>
+          <div class="explain">כפולות של 4: 4, 8, <b class="hlc">12</b>, 16, 20, <b class="hlc">24</b>...<br>כפולות של 6: 6, <b class="hlc">12</b>, 18, <b class="hlc">24</b>...<br>הקטנה ביותר שמשותפת: <b>12</b>.</div>
+          <p><b>המחלק המשותף הגדול ביותר</b> של 12 ו-18:</p>
+          <div class="explain">מחלקים של 12: 1, 2, 3, <b class="hlc">6</b>, 12<br>מחלקים של 18: 1, 2, 3, <b class="hlc">6</b>, 9, 18<br>הגדול ביותר שמשותף: <b>6</b>.</div>
+          <div class="rule">💡 כפולה משותפת – שימושית למכנה משותף בשברים. מחלק משותף – שימושי לצמצום.</div>`,
+        try: { type: 'num', q: 'מהי הכפולה המשותפת הקטנה ביותר של 6 ו-8?', ans: 24, hint: 'כפולות של 8: 8, 16, 24... איזו מתחלקת גם ב-6?', exp: '24 מתחלק גם ב-6 וגם ב-8, והוא הקטן ביותר.', traps: [{ v: 48, m: '48 הוא כפולה משותפת – אבל יש קטנה יותר.' }] }
+      },
+      {
+        title: 'כללים לזכור 📌', grades: [3],
+        html: `<ul class="recap"><li>🔢 <b>זוגי</b> – ספרה אחרונה 0, 2, 4, 6, 8. <b>אי-זוגי</b> – 1, 3, 5, 7, 9.</li>
+          <li>✔️ <b>ב-2:</b> זוגי. <b>ב-5:</b> מסתיים ב-0 או 5. <b>ב-10:</b> מסתיים ב-0.</li>
+          <li>➕ זוגי + זוגי = זוגי · אי-זוגי + אי-זוגי = זוגי · זוגי + אי-זוגי = אי-זוגי.</li></ul>
+          <p class="center"><b>כל הכבוד! 🎉</b></p>`
+      },
+      {
+        title: 'כללים לזכור 📌', grades: [4, 5, 6],
+        html: `<ul class="recap"><li>✔️ <b>ב-2:</b> ספרה אחרונה זוגית. <b>ב-5:</b> 0 או 5. <b>ב-10:</b> 0.</li>
+          <li>➕ <b>ב-3 / ב-9:</b> סכום הספרות מתחלק ב-3 / ב-9.</li>
+          ${GRADE >= 5 ? `<li>🔍 <b>ראשוני</b> – רק 2 מחלקים (1 והוא עצמו). <b>פריק</b> – יותר מ-2. 1 – לא זה ולא זה.</li>
+          <li>👫 <b>מחלקים</b> – מחפשים בזוגות. לא לשכוח את 1 ואת המספר עצמו.</li>` : ''}
+          ${GRADE === 6 ? '<li>✖️ מכפלה של שני מספרים (גדולים מ-1) היא תמיד <b>פריקה</b>.</li>' : ''}</ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות ההתחלקות 🎉</b></p>`
+      }
+    ]
+  },
+
+  angles: {
+    id: 'angles', name: 'זוויות ומשולשים', icon: '📐', color: '#2f8f55', topic: { 3: 'geo', 4: 'geo', 5: 'geo' },
+    desc: 'סוגי זוויות, סוגי משולשים ומרובעים, סכום הזוויות במשולש',
+    practice: {
+      3: [genShapes3, genShapes3, genShapes3, genShapes3, genShapes3],
+      4: [genShapeTypes, genShapeTypes, genShapeTypes, genShapeTypes, genShapeTypes, genShapeTypes],
+      5: [() => genTriangleAngle(1), () => genTriangleAngle(2), () => genTriangleAngle(3), () => genTriangleAngle(1), () => genTriangleAngle(2), () => genTriangleAngle(3)]
+    },
+    cards: [
+      {
+        title: 'סוגי זוויות', grades: [3, 4, 5],
+        html: `<p>שנו את גודל הזווית וראו איך קוראים לה:</p>
+          <div data-ang class="center"></div>
+          <div class="lbtns"><button class="secondary" data-a="-15">−15°</button><button class="secondary" data-a="15">+15°</button><button class="ghost" data-set="45">45°</button><button class="ghost" data-set="90">90°</button><button class="ghost" data-set="135">135°</button><button class="ghost" data-set="180">180°</button></div>
+          <div class="rule">💡 <b>חדה</b> – פחות מ-90°. <b>ישרה</b> – בדיוק 90° (כמו פינה של דף). <b>קהה</b> – בין 90° ל-180°. <b>שטוחה</b> – 180° (קו ישר).</div>`,
+        setup(root) {
+          let d = 60;
+          const show = () => { root.querySelector('[data-ang]').innerHTML = angleSVG(d) + `<div class="fbig">${angleType(d)}</div>`; };
+          root.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { d = Math.max(15, Math.min(180, d + Number(b.dataset.a))); show(); });
+          root.querySelectorAll('[data-set]').forEach(b => b.onclick = () => { d = Number(b.dataset.set); show(); });
+          show();
+        },
+        try: { type: 'choice', q: 'זווית של 100° היא:', choices: ['זווית חדה', 'זווית ישרה', 'זווית קהה'], ans: 2, hint: 'השוו ל-90°.', exp: '100° גדול מ-90° – זווית קהה.', traps: [{ c: 'זווית חדה', m: 'זווית חדה קטנה מ-90°. 100° גדול מ-90°.' }] }
+      },
+      {
+        title: 'סוגי משולשים', grades: [4, 5],
+        html: `<p><b>לפי הזוויות:</b></p>
+          <table class="ftable"><tr><td>משולש <b>חד-זווית</b></td><td>כל הזוויות חדות</td></tr><tr><td>משולש <b>ישר-זווית</b></td><td>יש זווית ישרה (90°)</td></tr><tr><td>משולש <b>קהה-זווית</b></td><td>יש זווית קהה</td></tr></table>
+          <p><b>לפי הצלעות:</b></p>
+          <table class="ftable"><tr><td>משולש <b>שווה-צלעות</b></td><td>כל 3 הצלעות שוות</td></tr><tr><td>משולש <b>שווה-שוקיים</b></td><td>2 צלעות שוות (השוקיים)</td></tr><tr><td>משולש <b>שונה-צלעות</b></td><td>כל הצלעות שונות</td></tr></table>`,
+        try: { type: 'choice', q: 'במשולש יש זוויות של 30°, 60° ו-90°. איזה משולש הוא?', choices: ['משולש חד-זווית', 'משולש ישר-זווית', 'משולש קהה-זווית'], ans: 1, hint: 'יש זווית של 90°?', exp: 'יש זווית של 90° – משולש ישר-זווית.' }
+      },
+      {
+        title: 'מרובעים, מקבילים ומאונכים', grades: [4],
+        html: `<div class="frow">
+            <div class="center"><svg class="fbar" viewBox="0 0 140 80" width="140" height="80"><line x1="10" y1="20" x2="130" y2="20" stroke="#23264a" stroke-width="4"/><line x1="10" y1="60" x2="130" y2="60" stroke="#23264a" stroke-width="4"/></svg><div><b>ישרים מקבילים</b> – לעולם לא נפגשים</div></div>
+            <div class="center"><svg class="fbar" viewBox="0 0 140 80" width="140" height="80"><line x1="10" y1="70" x2="130" y2="70" stroke="#23264a" stroke-width="4"/><line x1="70" y1="5" x2="70" y2="70" stroke="#23264a" stroke-width="4"/><polyline points="82,70 82,58 70,58" fill="none" stroke="#e0703a" stroke-width="2.5"/></svg><div><b>ישרים מאונכים</b> – נפגשים בזווית ישרה</div></div>
+          </div>
+          <table class="ftable"><tr><th>מרובע</th><th>מה מיוחד בו</th></tr>
+            <tr><td>ריבוע</td><td>4 צלעות שוות, 4 זוויות ישרות</td></tr><tr><td>מלבן</td><td>צלעות נגדיות שוות, 4 זוויות ישרות</td></tr>
+            <tr><td>מעוין</td><td>4 צלעות שוות, הזוויות לא בהכרח ישרות</td></tr><tr><td>מקבילית</td><td>2 זוגות של צלעות מקבילות</td></tr><tr><td>טרפז</td><td>זוג <b>אחד</b> של צלעות מקבילות</td></tr></table>`,
+        try: { type: 'choice', q: 'למרובע יש זוג <b>אחד</b> בלבד של צלעות מקבילות. איזה מרובע הוא?', choices: ['מקבילית', 'טרפז', 'מלבן', 'מעוין'], ans: 1, hint: 'במקבילית ובמלבן יש 2 זוגות.', exp: 'טרפז – זוג אחד של צלעות מקבילות.', traps: [{ c: 'מקבילית', m: 'במקבילית יש <b>שני</b> זוגות של צלעות מקבילות.' }] }
+      },
+      {
+        title: 'סכום הזוויות במשולש', grades: [5],
+        html: `<p>גוזרים משולש מנייר וקורעים את 3 הפינות שלו. מה קורה כשמניחים אותן אחת ליד השנייה?</p>
+          <div data-tri class="center">${triSumSVG(false)}</div>
+          <div class="lbtns"><button class="secondary" data-act="tear">✂️ קורעים ומחברים את הפינות</button><button class="ghost" data-act="back">↺ חזרה</button></div>
+          <div class="rule">💡 <b>סכום הזוויות בכל משולש הוא 180°</b> – בדיוק כמו קו ישר.<br>לכן: זווית חסרה = 180° פחות שתי הזוויות הידועות.</div>`,
+        setup(root) {
+          root.querySelector('[data-act="tear"]').onclick = () => { root.querySelector('[data-tri]').innerHTML = triSumSVG(true); };
+          root.querySelector('[data-act="back"]').onclick = () => { root.querySelector('[data-tri]').innerHTML = triSumSVG(false); };
+        },
+        try: { type: 'num', q: 'במשולש יש זוויות של 45° ו-75°. מה גודל הזווית השלישית? (במעלות)', ans: 60, hint: '180 פחות הסכום של השתיים.', exp: `${M('180 - 45 - 75 = 60')}°`, traps: [{ v: 240, m: '360° זה במרובע. במשולש – 180°.' }, { v: 120, m: 'זה סכום שתי הזוויות. כמה חסר עד 180°?' }] }
+      },
+      {
+        title: 'ישר-זווית ושווה-שוקיים', grades: [5],
+        html: `<p><b>משולש ישר-זווית:</b> זווית אחת היא 90°, לכן שתי האחרות ביחד = 90°.<br>אם זווית אחת 35° – השנייה ${M('90 - 35 = 55')}°.</p>
+          <p><b>משולש שווה-שוקיים:</b> שתי זוויות הבסיס <b>שוות</b>.<br>אם זווית הראש 40° – נשארים ${M('180 - 40 = 140')}° לשתי זוויות הבסיס, כל אחת ${M('140 : 2 = 70')}°.</p>
+          <div class="rule">💡 <b>משולש שווה-צלעות:</b> כל הזוויות שוות – 60° כל אחת (${M('180 : 3 = 60')}).</div>`,
+        try: { type: 'num', q: 'במשולש שווה-שוקיים זווית הראש היא 50°. מה גודל כל אחת מזוויות הבסיס?', ans: 65, hint: '180 − 50, ואז לחלק ל-2.', exp: `${M('(180 - 50) : 2 = 65')}°`, traps: [{ v: 130, m: 'זה סכום <b>שתי</b> זוויות הבסיס. כל אחת – חצי.' }] }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap"><li>📐 חדה &lt; 90° · ישרה = 90° · קהה בין 90° ל-180° · שטוחה = 180°.</li>
+          ${GRADE >= 4 ? '<li>🔺 משולשים: חד-זווית, ישר-זווית, קהה-זווית · שווה-צלעות, שווה-שוקיים, שונה-צלעות.</li>' : ''}
+          ${GRADE === 4 ? '<li>⏸️ מקבילים – לא נפגשים. ⊥ מאונכים – נפגשים בזווית ישרה. טרפז – זוג אחד של צלעות מקבילות.</li>' : ''}
+          ${GRADE >= 5 ? '<li>➕ <b>סכום הזוויות במשולש = 180°.</b> בשווה-שוקיים – זוויות הבסיס שוות.</li>' : ''}</ul>
+          <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות הזוויות 🎉</b></p>`
+      }
+    ]
+  }
+});
+
+// קישורים משאלות התרגול לכרטיסיות החדשות
+[[genTimesTable, 'times', 2], [genDivTable, 'times', 4], [genMulTens, 'times', 3], [genMul2x1, 'times', 3], [genDivRem, 'times', 5], [genWordMulDiv3, 'times', 0],
+ [genEvenOdd, 'divis', 0], [genEvenOddSum, 'divis', 0], [genDivMissingDigit, 'divis', 2], [genPrime, 'divis', 3], [genPrimeProduct, 'divis', 3], [genDivisors, 'divis', 4], [genLcmGcd, 'divis', 5],
+ [genShapes3, 'angles', 0], [genShapeTypes, 'angles', 1], [genTime3, 'timemoney', 2], [genMoney3, 'timemoney', 3]
+].forEach(([g, l, c]) => { g.__learn = { lesson: l, card: c }; });
+genDivRule = tagLearn(genDivRule, q => ({ lesson: 'divis', card: /ב-(3|9)</.test(q.text) ? 2 : 1 }));
+genTriangleAngle = tagLearn(genTriangleAngle, q => ({ lesson: 'angles', card: /ישר-זווית|שווה-שוקיים/.test(q.text) ? 4 : 3 }));
+
+// כרטיסיות לפי כיתה
+function cardsOf(id) {
+  return LESSONS[id].cards.filter(c => !c.grades || c.grades.includes(GRADE));
+}
+const lessonTopic = L => typeof L.topic === 'object' ? L.topic[GRADE] : L.topic;
+const lessonPractice = L => Array.isArray(L.practice) ? L.practice : (L.practice[GRADE] || []);
 const LESSON_SOON = [];
 
 function learnedSet(id) {
@@ -4019,6 +4504,7 @@ function startLesson(id, k = 0) {
 }
 
 function openLessonModal(id, k) {
+  k = Math.max(0, cardsOf(id).indexOf(LESSONS[id].cards[k]));
   const ov = document.createElement('div');
   ov.className = 'overlay';
   ov.innerHTML = '<div class="modal" role="dialog" aria-modal="true"><div class="mtop"><button class="ghost" data-close>✖ חזרה לשאלה</button></div><div class="lessonbox"></div></div>';
@@ -4031,7 +4517,7 @@ function openLessonModal(id, k) {
 }
 
 function renderLesson() {
-  const lv = lessonView, L = LESSONS[lv.id], c = L.cards[lv.k], N = L.cards.length;
+  const lv = lessonView, L = LESSONS[lv.id], CARDS = cardsOf(lv.id), c = CARDS[lv.k], N = CARDS.length;
   const learned = learnedSet(lv.id);
   if (!c.try) markLearned(lv.id, lv.k);
   const last = lv.k === N - 1;
@@ -4043,7 +4529,7 @@ function renderLesson() {
       <span>כרטיסייה ${lv.k + 1} מתוך ${N}</span>
       <span><button class="ghost" data-font>א+</button><button class="ghost" data-home>✖ יציאה</button></span>
     </div>`}
-    <div class="dots">${L.cards.map((_, i) => `<button class="dot${i === lv.k ? ' cur' : ''}${learned.has(i) ? ' ok' : ''}" data-go="${i}" aria-label="כרטיסייה ${i + 1}">${learned.has(i) ? '✔' : i + 1}</button>`).join('')}</div>
+    <div class="dots">${CARDS.map((_, i) => `<button class="dot${i === lv.k ? ' cur' : ''}${learned.has(i) ? ' ok' : ''}" data-go="${i}" aria-label="כרטיסייה ${i + 1}">${learned.has(i) ? '✔' : i + 1}</button>`).join('')}</div>
     <div class="card lcard" style="border-top:6px solid ${L.color}">
       <div class="qhead">
         <h2 class="ltitle">${c.title}</h2>
@@ -4098,7 +4584,7 @@ function scrollTop() {
 }
 
 function lessonCheck(v) {
-  const lv = lessonView, c = LESSONS[lv.id].cards[lv.k], tr = c.try;
+  const lv = lessonView, c = cardsOf(lv.id)[lv.k], tr = c.try;
   if (lv.done) return;
   const fb = lv.box.querySelector('[data-fb]');
   const show = (kind, html) => { fb.className = `fb show ${kind}`; fb.innerHTML = html; };
@@ -4128,12 +4614,14 @@ function lessonCheck(v) {
 function startLessonPractice(id) {
   const L = LESSONS[id];
   lessonView = null;
-  startPractice(L.topic, { retry: L.practice.map(g => ({ topic: L.topic, gen: g, lv: 3 })), label: `✏️ תרגול: ${L.name}`, lessonId: id });
+  const topic = lessonTopic(L);
+  startPractice(topic, { retry: lessonPractice(L).map(g => ({ topic, gen: g, lv: 3 })), label: `✏️ תרגול: ${L.name}`, lessonId: id });
 }
 
 function learnLink(q) {
   if (!q.learn || !LESSONS[q.learn.lesson]) return '';
   const L = LESSONS[q.learn.lesson], c = L.cards[q.learn.card];
+  if (!c || !cardsOf(L.id).includes(c) || !LESSON_ORDER.includes(L.id)) return '';
   return `<div><button class="linkish" data-learn="${q.learn.lesson}" data-card="${q.learn.card}">📚 לכרטיסיית הלימוד: ${c.title}</button></div>`;
 }
 document.addEventListener('click', e => {
@@ -4460,8 +4948,8 @@ function home() {
           <span class="ic">${L.icon}</span>
           <span class="nm">${L.name}</span>
           <span class="ds">${L.desc}</span>
-          <span class="mbar"><span style="width:${n / L.cards.length * 100}%"></span></span>
-          <span class="best">${n ? `✔ ${n} מתוך ${L.cards.length} כרטיסיות` : `${L.cards.length} כרטיסיות`}</span>
+          <span class="mbar"><span style="width:${n / cardsOf(L.id).length * 100}%"></span></span>
+          <span class="best">${n ? `✔ ${n} מתוך ${cardsOf(L.id).length} כרטיסיות` : `${cardsOf(L.id).length} כרטיסיות`}</span>
         </button>`;
       }).join('')}
       ${LESSON_SOON.map(x => `<div class="topic soon"><span class="ic">${x.icon}</span><span class="nm">${x.name}</span><span class="ds">בקרוב...</span></div>`).join('')}
