@@ -373,21 +373,24 @@
   .wskey ol { line-height: 2.1; padding-right: 38px; }
   .wsexp { font-size: 0.88rem; color: #444; }
   /* חיסכון בדפים: שתי עמודות */
-  .wsqs, .ex-qs { columns: 2; column-gap: 7mm; column-rule: 1px solid #e3e3e3; }
-  .wsq, .ex-q { padding: 6px 0 8px; break-inside: avoid; page-break-inside: avoid; border-bottom: 1px solid #ddd; min-width: 0; display: block; }
+  /* כל שאלה בשורה: התרגיל מימין, מלבן משבצות לחישוב משמאל */
+  .wsqs, .ex-qs { columns: 1; }
+  .wsq, .ex-q { padding: 6px 0 8px; break-inside: avoid; page-break-inside: avoid; border-bottom: 1px solid #ddd; min-width: 0; display: flex; gap: 6mm; align-items: stretch; }
+  .qmain { flex: 1 1 0; min-width: 0; }
   .ws-page .qtext { font-size: 0.98rem; line-height: 1.6; }
   .wsnum, .ex-num { width: 28px; height: 28px; font-size: 0.95rem; }
   .ws-page .fig, .ws-page .ex-q .fig { max-width: 100%; width: 100%; max-height: 5.2cm; margin: 2px auto; }
   .wsans, .ex-q .wsans, .wschoices, .ex-choices, .wsspace, .ex-work { padding-right: 0; }
   .wschoices, .ex-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; line-height: 1.9; font-size: 0.98rem; margin-top: 4px; }
-  .ex-grid { margin: 5px 0 3px; height: 2.5cm; }
-  .ex-grid.big { height: 4cm; }
-  .ex-grid.sm { height: 1.5cm; }
+  .ex-grid { flex: 0 0 44%; margin: 2px 0; min-height: 2.6cm; }
+  .ex-grid.big { min-height: 4cm; }
+  .ex-grid.sm { min-height: 2.2cm; }
+  .ws-page .wsq .fig, .ws-page .ex-q .fig { max-height: 4.6cm; }
   .wsspace div { height: 1.6em; }
   .wskey ol { columns: 2; column-gap: 8mm; }
   .wskey li { break-inside: avoid; }
   .wstips { columns: 1; }
-  @media screen and (max-width: 640px) { .wsqs, .ex-qs { columns: 1; } }
+  @media screen and (max-width: 640px) { .wsq, .ex-q { flex-direction: column; } .ex-grid { flex-basis: auto; } }
 
   @media print {
     @page { size: A4; margin: 12mm; }
@@ -426,9 +429,8 @@
   .ex-rules { list-style: none; padding: 0; font-size: 1.1rem; line-height: 2.3; }
   .ex-luck { font-size: 2rem; font-weight: 800; text-align: center; color: #2c2c54; margin: 30px 0; font-style: italic; }
   .ex-end { min-height: 500px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
-  .ex-q { padding: 14px 0 16px; break-inside: avoid; border-bottom: 1px solid #ddd; }
   .ex-num { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: #4c5fd5; color: #fff; font-weight: 800; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; }
-  .ex-q .qtext { font-size: 1.12rem; line-height: 2; }
+  .ex-q .qtext { font-size: 1rem; line-height: 1.7; }
   .ex-choices { padding-right: 50px; margin-top: 8px; line-height: 2.4; font-size: 1.08rem; }
   .ex-idx { display: inline-block; width: 16px; font-size: 0.75rem; color: #555; }
   .ex-check { display: inline-block; width: 20px; height: 20px; border: 1.5px solid #000; border-radius: 3px; vertical-align: middle; margin: 0 4px 0 8px; }
@@ -437,8 +439,7 @@
   .ex-space.small { height: 40px; }
   .ex-q .wsans { padding-right: 50px; }
   .ws-page .ex-q .fig { max-width: 360px; }
-  .ex-grid { position: relative; margin: 8px 50px 6px 0; height: 4cm; border: 1.5px solid #8e97b5; border-radius: 4px; background-color: #fff; background-image: linear-gradient(#cdd3e4 1px, transparent 1px), linear-gradient(90deg, #cdd3e4 1px, transparent 1px); background-size: 0.5cm 0.5cm; }
-  .ex-grid.big { height: 6cm; }
+  .ex-grid { position: relative; border: 1.5px solid #8e97b5; border-radius: 4px; background-color: #fff; background-image: linear-gradient(#cdd3e4 1px, transparent 1px), linear-gradient(90deg, #cdd3e4 1px, transparent 1px); background-size: 0.5cm 0.5cm; }
   .ex-grid span { position: absolute; top: 3px; right: 6px; font-size: 0.75rem; color: #666; background: #fff; padding: 0 4px; }
   @media print {
     .ex-cover { min-height: 260mm; }
@@ -5677,8 +5678,9 @@ function wsQuestionHTML(q, n) {
   if (q.type === 'num') ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
   else ans = `<div class="wschoices">${q.choices.map(c => `<div><span class="wscheck">☐</span> ${c}</div>`).join('')}</div>`;
-  const space = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70 ? '<div class="wsspace"><span>דרך הפתרון:</span><div></div><div></div><div></div></div>' : '';
-  return `<div class="wsq"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${space}${ans}</div>`;
+  const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
+  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"><span>${wordy ? 'דרך הפתרון' : 'טיוטה'}</span></div>`;
+  return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${ans}</div>${grid}</div>`;
 }
 
 function examQuestionHTML(q, n) {
@@ -5688,8 +5690,9 @@ function examQuestionHTML(q, n) {
   else ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   const plain = q.text.replace(/<[^>]+>/g, '');
   const wordy = q.steps && q.steps.length >= 3 && plain.length > 60;
-  const work = `${wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : ''}<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"><span>טיוטה</span></div>`;
-  return `<div class="ex-q"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>`;
+  const work = wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : '';
+  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"><span>טיוטה</span></div>`;
+  return `<div class="ex-q"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>${grid}</div>`;
 }
 
 function buildWorksheet(topics, level, count) {
