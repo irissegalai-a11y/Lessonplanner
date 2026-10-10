@@ -6019,7 +6019,7 @@ function home() {
   const name = store.name || '';
   const len = store.roundLen || 10;
   app.innerHTML = `
-    <div class="tools"><span class="toollinks"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><a class="btnlink printlink" href="${gq('print')}#book">📚 חוברות</a></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${document.documentElement.classList.contains('calm')}">${document.documentElement.classList.contains('calm') ? 'מצב צבעוני' : 'מצב רגוע'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
+    <div class="tools"><span class="toollinks"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><a class="btnlink printlink" href="${gq('print')}#book">📚 חוברות</a></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${document.documentElement.classList.contains('calm')}">${document.documentElement.classList.contains('calm') ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
     <div class="hero-wrap">
       <h1 class="hero">מתרגלים מתמטיקה</h1>
       <svg class="doodle-line" aria-hidden="true" width="300" height="14" viewBox="0 0 300 14"><path d="M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"></path></svg>
