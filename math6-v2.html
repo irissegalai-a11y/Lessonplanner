@@ -402,6 +402,18 @@
   .wskey li { break-inside: avoid; }
   .wstips { columns: 1; }
   .ws-pg { break-after: page; }
+  .bktopics { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 14px; margin: 6px 0 10px; }
+  .bkrow { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .bkcoderow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .bkcoderow .tinput { flex: 1 1 180px; text-align: left; font-family: monospace; letter-spacing: 1px; }
+  .bk-cover h1 { font-size: 2.1rem; text-align: center; margin: 18mm 0 10mm; }
+  .bk-cover h2 { margin-top: 14mm; }
+  .bk-toc { list-style: none; padding: 0; font-size: 1.1rem; line-height: 2.3; }
+  .bk-toc li { display: flex; align-items: baseline; gap: 6px; }
+  .bk-dots { flex: 1; border-bottom: 2px dotted #999; transform: translateY(-4px); }
+  .bk-code { margin-top: 16mm; text-align: center; border: 1.5px dashed #999; border-radius: 8px; padding: 8px; }
+  .bk-key h3 { margin: 10px 0 2px; font-size: 1.05rem; }
+  .bk-pgnum { float: right; }
   .ws-pg:last-child { break-after: auto; }
   @media screen { .ws-pg + .ws-pg { border-top: 2px dashed #ccc; margin-top: 14px; padding-top: 10px; } }
   #wsout.measure .ws-page { width: 186mm; max-width: none; padding: 0; margin: 0; box-shadow: none; }
@@ -6559,6 +6571,23 @@ function printBuilder() {
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
+      <div class="card tform">
+        <h2>📚 חוברת לפי נושאים</h2>
+        <p class="muted small">בחרו כמה שאלות מכל נושא (0 = בלי הנושא). כל נושא הוא פרק נפרד, והשאלות בו מסודרות מהקל אל הקשה. בחוברת יש עמוד שער עם תוכן עניינים, מספרי עמודים ודף תשובות בסוף.</p>
+        <div class="bktopics">${TOPICS.map(t => `<label class="bkrow"><span>${t.icon} ${t.name}</span><select data-bk="${t.id}">${BOOK_COUNTS.map(n => `<option value="${n}" ${n === 8 ? 'selected' : ''}>${n ? n + ' שאלות' : 'בלי'}</option>`).join('')}</select></label>`).join('')}</div>
+        <label>כותרת החוברת:
+          <input id="bkt" class="tinput" placeholder="חוברת תרגול במתמטיקה – ${GRADE_NAME[GRADE]}">
+        </label>
+        <label class="chk"><input type="checkbox" id="bktips" checked> תיבת "תזכורת" בתחילת כל פרק</label>
+        <label class="chk"><input type="checkbox" id="bkkey" checked> דף תשובות למורה (בסוף החוברת)</label>
+        <div class="actions">
+          <button id="bkgo">📚 יצירת חוברת</button>
+        </div>
+        <label>יש לכם קוד חוברת? אפשר ליצור בדיוק את אותה חוברת שוב:
+          <span class="bkcoderow"><input id="bkcode" class="tinput" dir="ltr" placeholder="למשל 4-3333333-K7QPM" autocomplete="off"><button class="secondary" id="bkfrom">🔁 יצירה לפי קוד</button></span>
+        </label>
+        <p class="muted small" id="bkmsg"></p>
+      </div>
       <p class="center"><a href="${location.pathname}${gq()}">← לאפליקציה</a></p>
     </div>
     <div id="wsout"></div>`;
@@ -6618,6 +6647,83 @@ function printBuilder() {
     $('wmsg').textContent = 'המבחן מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה נוספת יוצרת מבחן חדש.';
   };
   $('wprint').onclick = () => window.print();
+  $('bkgo').onclick = () => {
+    const counts = TOPICS.map(t => Number(app.querySelector(`[data-bk="${t.id}"]`).value));
+    if (!counts.some(Boolean)) { $('bkmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
+    renderBooklet(bookEncode(counts, bookSeed()));
+  };
+  $('bkfrom').onclick = () => {
+    const code = $('bkcode').value.trim().toUpperCase().replace(/\s+/g, '');
+    const d = bookDecode(code);
+    if (!d) { $('bkmsg').textContent = 'הקוד לא תקין. בדקו שהעתקתם אותו בדיוק כמו שהוא מופיע בשער החוברת.'; return; }
+    if (d.grade !== GRADE) { location.search = `?print&grade=${d.grade}&book=${encodeURIComponent(code)}${NEUTRAL ? '&neutral=1' : ''}`; return; }
+    renderBooklet(code);
+  };
+  const bk = URLP.get('book');
+  if (bk && bookDecode(bk.toUpperCase())) { $('bkcode').value = bk.toUpperCase(); renderBooklet(bk.toUpperCase()); }
+}
+
+/* ---------- חוברת לפי נושאים, עם קוד ליצירה חוזרת ---------- */
+const BOOK_COUNTS = [0, 4, 6, 8, 10, 12, 15, 20];
+const BOOK_ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+function bookSeed() { let s = ''; for (let i = 0; i < 5; i++) s += BOOK_ABC[Math.floor(Math.random() * 32)]; return s; }
+function bookEncode(counts, seed) { return `${GRADE}-${counts.map(n => BOOK_COUNTS.indexOf(n)).join('')}-${seed}`; }
+function bookDecode(code) {
+  const m = /^([2-6])-([0-7]+)-([2-9A-HJ-NP-Z]{5})$/.exec(code || '');
+  if (!m) return null;
+  const grade = Number(m[1]);
+  if (grade === GRADE && m[2].length !== TOPICS.length) return null;
+  return { grade, counts: m[2].split('').map(c => BOOK_COUNTS[Number(c)]), seed: m[3] };
+}
+// מחולל מספרים "אקראיים" קבוע לפי הקוד – אותו קוד, אותה חוברת
+function withSeed(seed, fn) {
+  let a = 0;
+  for (const c of seed) a = (a * 32 + BOOK_ABC.indexOf(c)) >>> 0;
+  a = (a ^ 0x9E3779B9) >>> 0;
+  const orig = Math.random;
+  Math.random = () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  try { return fn(); } finally { Math.random = orig; }
+}
+function renderBooklet(code) {
+  const d = bookDecode(code);
+  if (!d) return;
+  const title = $('bkt').value.trim() || `חוברת תרגול במתמטיקה – ${GRADE_NAME[GRADE]}`;
+  const tipsOn = $('bktips').checked, keyOn = $('bkkey').checked;
+  const chapters = withSeed(d.seed, () => TOPICS.map((t, i) => ({ t, qs: d.counts[i] ? buildWorksheet([t.id], 'mix', d.counts[i]) : [] })).filter(c => c.qs.length));
+  let n = 0;
+  chapters.forEach(c => { c.start = n + 1; n += c.qs.length; });
+  const cover = `
+    <section class="ws-page bk-cover">
+      <h1>${esc(title)}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span></div>
+      <h2>תוכן העניינים</h2>
+      <ol class="bk-toc">${chapters.map((c, i) => `<li><span>${c.t.icon} ${c.t.name} <span class="small">(${c.qs.length} שאלות)</span></span><span class="bk-dots"></span><span data-toc="${i}"></span></li>`).join('')}
+        ${keyOn ? '<li class="bk-keyline"><span>🔑 דף תשובות</span><span class="bk-dots"></span><span data-toc="key"></span></li>' : ''}</ol>
+      <div class="bk-code">קוד החוברת: <b dir="ltr">${code}</b><br><span class="small">אפשר להקליד את הקוד בדף ההדפסה ולקבל בדיוק את אותה חוברת.</span></div>
+    </section>`;
+  const body = chapters.map((c, i) => `
+    <section class="ws-page bk-ch" data-ch="${i}">
+      <div class="wshead"><h1>${c.t.icon} פרק ${i + 1}: ${c.t.name}</h1></div>
+      ${tipsOn ? `<div class="wstips"><b>📘 תזכורת</b><ul>${c.t.tips.map(x => `<li>${x}</li>`).join('')}</ul></div>` : ''}
+      <div class="wsqs">${c.qs.map((q, j) => wsQuestionHTML(q, c.start + j)).join('')}</div>
+    </section>`).join('');
+  const key = keyOn ? `
+    <section class="ws-page wskey bk-key">
+      <h2>🔑 דף תשובות – ${esc(title)}</h2>
+      ${chapters.map((c, i) => `<h3>${c.t.icon} פרק ${i + 1}: ${c.t.name}</h3><ol start="${c.start}">${c.qs.map(q => `<li><b>${correctHTML(q)}</b></li>`).join('')}</ol>`).join('')}
+    </section>` : '';
+  $('wsout').innerHTML = cover + body + key;
+  paginateSheets();
+  const pages = [...$('wsout').querySelectorAll('.ws-pg')];
+  pages.forEach((pg, i) => { const cr = pg.querySelector('.wscredit'); if (cr) cr.insertAdjacentHTML('afterbegin', `<span class="bk-pgnum">עמוד ${i + 1}</span>`); });
+  const pageOf = sec => pages.indexOf(sec.querySelector('.ws-pg')) + 1;
+  $('wsout').querySelectorAll('.bk-ch').forEach(sec => { const t = $('wsout').querySelector(`[data-toc="${sec.dataset.ch}"]`); if (t) t.textContent = pageOf(sec); });
+  const ks = $('wsout').querySelector('.bk-key'), kt = $('wsout').querySelector('[data-toc="key"]');
+  if (ks && kt) kt.textContent = pageOf(ks);
+  $('bkcode').value = code;
+  $('wprint').classList.remove('hidden');
+  $('bkmsg').innerHTML = `החוברת מוכנה: ${n} שאלות, ${pages.length} עמודים. קוד החוברת: <b dir="ltr">${code}</b> – שמרו אותו כדי ליצור את אותה חוברת שוב. גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".`;
+  $('wsout').scrollIntoView({ behavior: 'smooth' });
 }
 
 // כמה עמודי A4 ייקח דף (שאלה לא נחתכת בין עמודים)
@@ -6645,7 +6751,7 @@ function paginateSheets() {
   out.querySelectorAll('.ws-page').forEach(sec => {
     const items = [];
     [...sec.children].forEach(ch => {
-      if (ch.matches('.wsqs, .ex-qs, ol')) [...ch.children].forEach(el => items.push({ el, wrap: ch }));
+      if (ch.matches('.wsqs, .ex-qs, ol')) [...ch.children].forEach((el, idx) => items.push({ el, wrap: ch, idx }));
       else items.push({ el: ch, wrap: null });
     });
     sec.innerHTML = '';
@@ -6662,7 +6768,7 @@ function paginateSheets() {
         box = page.lastElementChild;
         if (!box || box.__src !== it.wrap) {
           box = it.wrap.cloneNode(false); box.__src = it.wrap;
-          if (box.tagName === 'OL') box.start = [...it.wrap.children].indexOf(it.el) + 1;
+          if (box.tagName === 'OL') box.start = (it.wrap.start || 1) + it.idx;
           page.appendChild(box);
         }
       }
@@ -6677,7 +6783,10 @@ function paginateSheets() {
       if (n > 1 && page.getBoundingClientRect().height > H) {
         it.el.remove();
         if (box !== page && !box.children.length) box.remove();
+        // כותרת לא נשארת לבד בתחתית העמוד – עוברת יחד עם מה שאחריה
+        const last = page.lastElementChild, orphan = last && /^H[1-3]$/.test(last.tagName) && page.children.length > 2 ? last : null;
         newPage(); n = 1;
+        if (orphan) { page.appendChild(orphan); n++; }
         place(it);
       }
     }
