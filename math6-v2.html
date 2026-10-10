@@ -414,9 +414,9 @@
    כיתה: ?grade=5 (ברירת מחדל: כיתה ו'), ?neutral=1 – כותרת בלי מספר כיתה
    ========================================================= */
 const GRADE_PARAMS = new URLSearchParams(location.search);
-const GRADE = ['4', '5'].includes(GRADE_PARAMS.get('grade')) ? Number(GRADE_PARAMS.get('grade')) : 6;
+const GRADE = ['3', '4', '5'].includes(GRADE_PARAMS.get('grade')) ? Number(GRADE_PARAMS.get('grade')) : 6;
 const NEUTRAL = GRADE_PARAMS.get('neutral') === '1';
-const GRADE_NAME = { 4: "כיתה ד'", 5: "כיתה ה'", 6: "כיתה ו'" };
+const GRADE_NAME = { 3: "כיתה ג'", 4: "כיתה ד'", 5: "כיתה ה'", 6: "כיתה ו'" };
 const TEST_NAME = GRADE === 6 ? 'מבדק לדוגמה' : 'מבחן תרגול';
 const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : GRADE === 6 ? "כיתה ו' · הכנה למבדק" : `${GRADE_NAME[GRADE]} · תרגול`;
 document.title = NEUTRAL ? 'מתרגלים מתמטיקה' : `מתרגלים מתמטיקה – ${GRADE_NAME[GRADE]}`;
@@ -2386,6 +2386,477 @@ const LEVEL_DESC4 = {
 };
 
 /* =========================================================
+   כיתה ג' – שאלות
+   ========================================================= */
+const RTL = s => `<span class="m" style="direction:rtl">${s}</span>`;
+
+function genCompose3() {
+  const places = shuffle([0, 1, 2, 3]).slice(0, R(2, 3));
+  if (!places.includes(3)) places.push(3);
+  const parts = places.map(p => ({ p, d: R(2, 9) }));
+  const val = parts.reduce((s, x) => s + x.d * 10 ** x.p, 0);
+  const shown = Math.random() < 0.6 ? parts.slice().sort((a, b) => b.p - a.p) : shuffle(parts);
+  const missingZero = [0, 1, 2].some(p => !places.includes(p));
+  return {
+    type: 'num',
+    text: `כתבו את המספר:<br>${shown.map(x => `${M(x.d)} ${PLACE[x.p]}`).join(' + ')}`,
+    ans: val,
+    traps: missingZero ? [{ v: Number(parts.slice().sort((a, b) => b.p - a.p).map(x => x.d).join('')), m: 'שכחתם לכתוב 0 במקום שאין בו כלום! האפס שומר מקום.' }] : [],
+    steps: shown.map(x => ({ p: `כמה זה ${M(x.d)} ${PLACE[x.p]}?`, a: x.d * 10 ** x.p })).concat([{ p: `עכשיו חברו: ${shown.map(x => M(fmt(x.d * 10 ** x.p))).join(' + ')} =`, a: val }]),
+    hint: 'כתבו כל חלק כמספר (למשל 3 מאות = 300) וחברו. במקום שחסר – כותבים 0.',
+    exp: shown.map(x => M(fmt(x.d * 10 ** x.p))).join(' + ') + ` = ${M(fmt(val))}`
+  };
+}
+
+function genRound3() {
+  const unit = pick([{ v: 10, n: 'לעשרות' }, { v: 100, n: 'למאות' }]);
+  let N;
+  do { N = R(100, 9999); } while (N % unit.v === 0);
+  const ans = Math.round(N / unit.v) * unit.v, down = Math.floor(N / unit.v) * unit.v;
+  const nd = Math.floor(N / (unit.v / 10)) % 10;
+  return {
+    type: 'num', text: `עגלו את המספר ${M(fmt(N))} <b>${unit.n}</b> הקרובות.`, ans,
+    traps: [{ v: ans === down ? down + unit.v : down, m: `עיגלתם לכיוון הלא נכון. הספרה שמימין למקום העיגול היא ${nd}: 5 ומעלה – למעלה, 4 ומטה – למטה.` }],
+    steps: [{ p: `מה הספרה שמימין למקום שאליו מעגלים, במספר ${M(fmt(N))}?`, a: nd }, { p: `${nd >= 5 ? 'מעגלים למעלה' : 'מעגלים למטה'}. מה התוצאה?`, a: ans }],
+    hint: 'הסתכלו על הספרה שמימין למקום שאליו מעגלים: 5 ומעלה – למעלה, 4 ומטה – למטה.',
+    exp: `${M(fmt(N))} ≈ ${M(fmt(ans))}`
+  };
+}
+
+function genCompare3() {
+  for (;;) {
+    const digits = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 4);
+    const set = new Set();
+    let guard = 0;
+    while (set.size < 4 && guard++ < 50) { const p = shuffle(digits); if (p[0] !== 0) set.add(Number(p.join(''))); }
+    if (set.size < 4) continue;
+    const nums = [...set], big = Math.random() < 0.5, t = big ? Math.max(...nums) : Math.min(...nums);
+    return choiceQ({
+      text: `איזה מספר הוא <b>${big ? 'הגדול' : 'הקטן'} ביותר</b>?`,
+      hint: 'משווים ספרה אחר ספרה משמאל: קודם האלפים, אחר כך המאות...',
+      exp: `${M(fmt(t))} הוא ה${big ? 'גדול' : 'קטן'} ביותר – משווים קודם את ספרת האלפים.`
+    }, M(fmt(t)), nums.filter(x => x !== t).map(x => M(fmt(x))));
+  }
+}
+
+function genNumberLine3() {
+  const k = R(0, 2);
+  let a, b, parts;
+  if (k === 0) { a = R(0, 9) * 100; b = a + 100; parts = 10; }
+  else if (k === 1) { a = R(0, 8) * 1000; b = a + 1000; parts = 10; }
+  else { a = 0; b = pick([50, 100]); parts = 5; }
+  const pos = R(1, parts - 1), step = (b - a) / parts, val = a + pos * step;
+  return {
+    type: 'num', text: 'כתבו את המספר המתאים במלבן שמתחת לישר המספרים.', fig: nlineSVG(a, b, parts, pos, false), ans: val,
+    traps: [{ v: a + pos, m: `כל חלק שווה ${step}, לא 1. ספרו בקפיצות של ${step}.` }, { v: b - pos * step, m: `ספרתם מהצד הלא נכון. מתחילים לספור מ-${fmt(a)}.` }],
+    steps: [{ p: `לכמה חלקים שווים מחולק הקטע בין ${fmt(a)} ל-${fmt(b)}?`, a: parts }, { p: `כמה שווה כל חלק? ${M(`(${b} - ${a}) : ${parts} =`)}`, a: step }, { p: `המלבן נמצא ${pos} חלקים אחרי ${fmt(a)}: ${M(`${a} + ${pos} × ${step} =`)}`, a: val }],
+    hint: `לכמה חלקים מחולק הקטע? כמה שווה כל חלק?`,
+    exp: `כל חלק = ${step}. ${M(`${fmt(a)} + ${pos} × ${step} = ${fmt(val)}`)}`
+  };
+}
+
+function digitsErr(a, b, op) {
+  const A = String(a), B = String(b).padStart(A.length, '0');
+  return Number(A.split('').map((x, i) => op === '+' ? (Number(x) + Number(B[i])) % 10 : Math.abs(Number(x) - Number(B[i]))).join(''));
+}
+
+function genAddSub3(lv = 1) {
+  const op = Math.random() < 0.5 ? '+' : '-';
+  let a, b;
+  if (lv === 1) { a = R(25, 499); b = R(12, 399); if (op === '+' && a + b > 999) b = 999 - a; }
+  else { a = R(1200, 7999); b = R(150, 1999); }
+  if (op === '-' && b > a) [a, b] = [b, a];
+  if (op === '-' && a === b) a += R(10, 90);
+  const ans = op === '+' ? a + b : a - b;
+  const err = digitsErr(a, b, op);
+  const traps = err !== ans ? [{ v: err, m: op === '+' ? 'שכחתם להעביר הלאה! כשסכום בעמודה הוא 10 או יותר – מעבירים 1 לעמודה הבאה.' : 'בעמודה שבה הספרה למעלה קטנה יותר – חיסרתם הפוך. צריך להמיר עשרת (או מאה) מהעמודה השכנה.' }] : [];
+  let steps;
+  if (op === '+') {
+    const pv = n => { const s = String(n); return s.split('').map((d, i) => Number(d) * 10 ** (s.length - 1 - i)); };
+    const len = Math.max(String(a).length, String(b).length);
+    const A = pv(a), B = pv(b);
+    while (A.length < len) A.unshift(0);
+    while (B.length < len) B.unshift(0);
+    const sums = A.map((x, i) => x + B[i]);
+    steps = A.map((x, i) => ({ p: M(`${fmt(x)} + ${fmt(B[i])} =`), a: sums[i] })).filter(s => s.a)
+      .concat([{ p: `חברו את הכול: ${M(sums.filter(Boolean).map(fmt).join(' + ') + ' =')}`, a: ans }]);
+  }
+  return {
+    type: 'num', text: `פתרו: ${M(`${fmt(a)} ${op} ${fmt(b)} =`)}`, ans, traps, steps,
+    hint: op === '+' ? 'חברו במאונך: יחידות מתחת ליחידות. אם יוצא 10 או יותר – מעבירים הלאה.' : 'חסרו במאונך. אם הספרה למעלה קטנה – ממירים עשרת מהעמודה השכנה.',
+    exp: `${M(`${fmt(a)} ${op} ${fmt(b)} = ${fmt(ans)}`)}${op === '-' ? `. בדיקה: ${M(`${fmt(ans)} + ${fmt(b)} = ${fmt(a)}`)}` : ''}`
+  };
+}
+
+function genMissing3() {
+  if (Math.random() < 0.5) {
+    const b = R(50, 400), c = R(b + 50, 999);
+    return {
+      type: 'num', text: `השלימו: ${M(`${BOX} + ${b} = ${c}`)}`, ans: c - b,
+      traps: [{ v: c + b, m: 'חיברתם. כדי למצוא את החסר – מחסרים: התוצאה פחות המספר הידוע.' }],
+      hint: `כמה צריך להוסיף ל-${b} כדי להגיע ל-${c}?`, exp: `${M(`${c} - ${b} = ${c - b}`)}`
+    };
+  }
+  const a = R(300, 999), x = R(50, a - 50);
+  return {
+    type: 'num', text: `השלימו: ${M(`${a} - ${BOX} = ${a - x}`)}`, ans: x,
+    traps: [{ v: 2 * a - x, m: 'חיברתם. כאן צריך לחסר: המספר הגדול פחות התוצאה.' }],
+    hint: `כמה צריך להוריד מ-${a} כדי לקבל ${a - x}?`, exp: `${M(`${a} - ${a - x} = ${x}`)}`
+  };
+}
+
+function genWordAddSub3() {
+  const k = R(0, 2);
+  if (k === 0) {
+    const a = R(250, 899), b = R(150, 899);
+    return {
+      type: 'num', unit: 'תלמידים', text: `בבית הספר לומדים ${a} בנים ו-${b} בנות.<br>כמה תלמידים לומדים בבית הספר?`, ans: a + b,
+      traps: [{ v: Math.abs(a - b), m: 'חיסרתם. השאלה היא כמה <b>ביחד</b> – מחברים.' }],
+      hint: 'כמה ביחד? מחברים.', exp: `${M(`${a} + ${b} = ${fmt(a + b)}`)}`
+    };
+  }
+  if (k === 1) {
+    const a = R(800, 2500), b = R(120, 700);
+    return {
+      type: 'num', unit: 'ספרים', text: `בספרייה היו ${fmt(a)} ספרים. השאילו ${b} ספרים.<br>כמה ספרים נשארו בספרייה?`, ans: a - b,
+      traps: [{ v: a + b, m: 'חיברתם. כשמשאילים ספרים – נשארים פחות, אז מחסרים.' }],
+      hint: 'כמה נשארו? מחסרים.', exp: `${M(`${fmt(a)} - ${b} = ${fmt(a - b)}`)}`
+    };
+  }
+  const a = R(120, 450), d = R(30, 200);
+  return {
+    type: 'num', unit: 'מדבקות', text: `לדנה יש ${a} מדבקות. ליואב יש ${d} מדבקות <b>יותר</b> מלדנה.<br>כמה מדבקות יש ליואב?`, ans: a + d,
+    traps: [{ v: a - d, m: 'ליואב יש <b>יותר</b> – לכן מחברים.' }],
+    hint: '"יותר מ..." – מחברים את ההפרש.', exp: `${M(`${a} + ${d} = ${a + d}`)}`
+  };
+}
+
+function genTimesTable() {
+  const a = R(2, 10), b = R(2, 10);
+  return {
+    type: 'num', text: `פתרו: ${M(`${a} × ${b} =`)}`, ans: a * b,
+    traps: [{ v: a + b, m: 'חיברתם במקום לכפול.' }],
+    hint: `${a} × ${b} זה ${b} פעמים ${a}. אפשר לדלג בקפיצות של ${a}.`,
+    exp: `${M(`${a} × ${b} = ${a * b}`)}`
+  };
+}
+
+function genDivTable() {
+  const a = R(2, 10), b = R(2, 10);
+  return {
+    type: 'num', text: `פתרו: ${M(`${a * b} : ${a} =`)}`, ans: b,
+    traps: [{ v: a * b * a, m: 'כפלתם במקום לחלק.' }, { v: a * b - a, m: 'חיסרתם במקום לחלק.' }],
+    hint: `איזה מספר כפול ${a} נותן ${a * b}?`,
+    exp: `${M(`${a} × ${b} = ${a * b}`)}, ולכן ${M(`${a * b} : ${a} = ${b}`)}`
+  };
+}
+
+function genMulTens() {
+  const a = R(2, 9), b = R(2, 9);
+  const tensFirst = Math.random() < 0.5;
+  const expr = tensFirst ? `${a * 10} × ${b}` : `${a} × ${b * 10}`;
+  return {
+    type: 'num', text: `פתרו: ${M(expr + ' =')}`, ans: a * b * 10,
+    traps: [{ v: a * b, m: 'שכחתם את האפס! כפל בעשרות – התוצאה בעשרות.' }],
+    steps: [{ p: `קודם בלי האפס: ${M(`${a} × ${b} =`)}`, a: a * b }, { p: `ועכשיו מוסיפים את האפס: ${M(`${a * b} × 10 =`)}`, a: a * b * 10 }],
+    hint: `חשבו ${a} × ${b}, ואז הוסיפו 0.`,
+    exp: `${M(`${a} × ${b} = ${a * b}`)}, ולכן ${M(`${expr} = ${a * b * 10}`)}`
+  };
+}
+
+function genMul2x1() {
+  const t = R(1, 4), u = R(1, 9), n = t * 10 + u, d = R(2, 9);
+  return {
+    type: 'num', text: `פתרו: ${M(`${n} × ${d} =`)}`, ans: n * d,
+    traps: [{ v: t * 10 * d + u, m: `שכחתם לכפול גם את ה-${u} ב-${d}.` }, { v: t * 10 + u * d, m: `שכחתם לכפול גם את העשרות ב-${d}.` }],
+    steps: [{ p: `מפרקים: ${M(`${n} = ${t * 10} + ${u}`)}. כמה זה ${M(`${t * 10} × ${d}`)}?`, a: t * 10 * d }, { p: M(`${u} × ${d} =`), a: u * d }, { p: `חברו: ${M(`${t * 10 * d} + ${u * d} =`)}`, a: n * d }],
+    hint: `פרקו את ${n} לעשרות ויחידות: ${t * 10} + ${u}.`,
+    exp: `${M(`${t * 10} × ${d} + ${u} × ${d} = ${t * 10 * d} + ${u * d} = ${n * d}`)}`
+  };
+}
+
+function genWordMulDiv3() {
+  const k = R(0, 2), a = R(3, 9), b = R(3, 9);
+  const items = [
+    { t: `בכל קופסה יש ${a} עפרונות. כמה עפרונות יש ב-${b} קופסאות?`, ans: a * b, u: 'עפרונות', ex: `${M(`${a} × ${b} = ${a * b}`)}`, tr: a + b, m: 'חיברתם. בכל קופסה אותו מספר – זה כפל.' },
+    { t: `${a * b} תלמידים מתחלקים ל-${a} קבוצות שוות. כמה תלמידים יש בכל קבוצה?`, ans: b, u: 'תלמידים', ex: `${M(`${a * b} : ${a} = ${b}`)}`, tr: a * b - a, m: 'חיסרתם. מתחלקים שווה בשווה – זה חילוק.' },
+    { t: `יש ${a * b} בלונים. כל ילד מקבל ${a} בלונים. כמה ילדים יקבלו בלונים?`, ans: b, u: 'ילדים', ex: `${M(`${a * b} : ${a} = ${b}`)}`, tr: a * b * a, m: 'כפלתם. מחלקים את הבלונים לילדים – זה חילוק.' }
+  ];
+  const s = items[k];
+  return { type: 'num', unit: s.u, text: s.t, ans: s.ans, traps: [{ v: s.tr, m: s.m }], hint: 'קבוצות שוות: כמה קבוצות? כמה בכל קבוצה?', exp: s.ex };
+}
+
+function genEvenOdd() {
+  for (;;) {
+    const even = Math.random() < 0.5;
+    const len = R(2, 4);
+    const mk1 = wantEven => { let n; do { n = R(10 ** (len - 1), 10 ** len - 1); } while ((n % 2 === 0) !== wantEven); return n; };
+    const correct = mk1(even);
+    const tricky = (() => { let n; do { n = mk1(!even); } while ((Number(String(n)[0]) % 2 === 0) !== even); return n; })();
+    const others = new Set([tricky]);
+    while (others.size < 3) others.add(mk1(!even));
+    if (others.has(correct)) continue;
+    const q = choiceQ({
+      text: `איזה מספר הוא <b>${even ? 'זוגי' : 'אי-זוגי'}</b>?`,
+      hint: 'בודקים רק את ספרת היחידות (האחרונה): 0, 2, 4, 6, 8 – זוגי. 1, 3, 5, 7, 9 – אי-זוגי.',
+      exp: `ספרת היחידות של ${correct} היא ${correct % 10} – לכן הוא ${even ? 'זוגי' : 'אי-זוגי'}.`
+    }, M(String(correct)), [...others].map(x => M(String(x))));
+    q.traps = [{ c: M(String(tricky)), m: 'בודקים את הספרה <b>האחרונה</b> (היחידות), לא את הראשונה!' }];
+    return q;
+  }
+}
+
+function genEvenOddSum() {
+  const k = R(0, 2);
+  const odd = () => R(5, 49) * 2 + 1, even = () => R(5, 49) * 2;
+  const [a, b, res] = k === 0 ? [odd(), odd(), 'זוגי'] : k === 1 ? [even(), even(), 'זוגי'] : [even(), odd(), 'אי-זוגי'];
+  const q = choiceQ({
+    text: `בלי לחשב: הסכום ${M(`${a} + ${b}`)} הוא מספר...`,
+    hint: 'זוגי + זוגי = ? · אי-זוגי + אי-זוגי = ? · זוגי + אי-זוגי = ?',
+    exp: `${a} ${a % 2 ? 'אי-זוגי' : 'זוגי'} ו-${b} ${b % 2 ? 'אי-זוגי' : 'זוגי'}. ${k === 0 ? 'אי-זוגי + אי-זוגי = זוגי' : k === 1 ? 'זוגי + זוגי = זוגי' : 'זוגי + אי-זוגי = אי-זוגי'}. (${M(`${a} + ${b} = ${a + b}`)})`
+  }, res, ['זוגי', 'אי-זוגי'].filter(x => x !== res), true);
+  q.choices = ['זוגי', 'אי-זוגי']; q.ans = q.choices.indexOf(res);
+  if (k === 0) q.traps = [{ c: 'אי-זוגי', m: 'נסו עם מספרים קטנים: 3 + 5 = 8. מה יצא?' }];
+  return q;
+}
+
+function genFracBar3() {
+  for (;;) {
+    const d = pick([2, 3, 4, 5, 6, 8]), n = R(1, d - 1);
+    const c = M(F(n, d));
+    const w = [M(F(d - n, d)), M(F(n, d - n)), M(F(d, n))].filter((x, i, arr) => x !== c && arr.indexOf(x) === i && !(i === 1 && d - n === n));
+    if (w.length < 2) continue;
+    const q = choiceQ({
+      text: `איזה שבר מתאר את החלק <b>הצבוע</b>?<div class="center">${fracBarSVG(n, d)}</div>`,
+      hint: 'המכנה (למטה) – לכמה חלקים שווים חילקו. המונה (למעלה) – כמה חלקים צבועים.',
+      exp: `הפס מחולק ל-${d} חלקים שווים, ו-${n} מהם צבועים: ${c}.`
+    }, c, w.slice(0, 3));
+    q.traps = [];
+    if (d - n !== n) q.traps.push({ c: M(F(d - n, d)), m: 'ספרתם את החלקים הלבנים. המונה הוא מספר החלקים <b>הצבועים</b>.' }, { c: M(F(n, d - n)), m: 'המכנה הוא מספר <b>כל</b> החלקים – גם הצבועים וגם הלבנים.' });
+    return q;
+  }
+}
+
+function genFracQty3(lv = 1) {
+  const d = pick([2, 3, 4, 5]), k = R(2, 8), N = d * k;
+  const n = lv >= 3 && d > 2 ? R(2, d - 1) : 1;
+  const thing = pick([{ w: 'תפוחים', s: 'בסל' }, { w: 'ילדים', s: 'בכיתה' }, { w: 'גולות', s: 'בשקית' }]);
+  return {
+    type: 'num', unit: thing.w,
+    text: `${thing.s} יש ${N} ${thing.w}. כמה ${thing.w} הם ${M(F(n, d))} מהם?`,
+    ans: n * k,
+    traps: n > 1 ? [{ v: k, m: `זה ${F(1, d)} מהם. אבל ביקשו ${F(n, d)} – ${n} חלקים כאלה!` }] : [{ v: N - k, m: `זה מה שנשאר. ${F(1, d)} זה חלק אחד מתוך ${d} חלקים שווים.` }],
+    steps: [{ p: `מחלקים ל-${d} חלקים שווים: ${M(`${N} : ${d} =`)}`, a: k }].concat(n > 1 ? [{ p: `ולוקחים ${n} חלקים: ${M(`${k} × ${n} =`)}`, a: n * k }] : []),
+    hint: `${F(1, d)} – מחלקים ל-${d} חלקים שווים.`,
+    exp: `${M(`${N} : ${d} = ${k}`)}${n > 1 ? `, ${M(`${k} × ${n} = ${n * k}`)}` : ''}`
+  };
+}
+
+function genCompareUnit() {
+  if (Math.random() < 0.6) {
+    let a, b;
+    do { a = R(2, 10); b = R(2, 10); } while (a === b);
+    const big = a < b ? a : b, small = a < b ? b : a;
+    const q = choiceQ({
+      text: `איזה שבר גדול יותר: ${M(F(1, a))} או ${M(F(1, b))}?`,
+      hint: 'דמיינו פיצה: מה גדול יותר – חתיכה כשמחלקים ל-' + a + ' או כשמחלקים ל-' + b + '?',
+      exp: `ככל שמחלקים ליותר חלקים – כל חלק קטן יותר. לכן ${M(F(1, big))} גדול מ-${M(F(1, small))}.`
+    }, M(F(1, big)), [M(F(1, small)), 'הם שווים'], true);
+    q.traps = [{ c: M(F(1, small)), m: `${small} גדול מ-${big}, אבל כשמחלקים ל-${small} חלקים – כל חלק <b>קטן</b> יותר!` }];
+    return q;
+  }
+  const d = R(4, 10);
+  let n1, n2;
+  do { n1 = R(1, d - 1); n2 = R(1, d - 1); } while (n1 === n2);
+  const c = n1 > n2 ? M(F(n1, d)) : M(F(n2, d));
+  return choiceQ({
+    text: `איזה שבר גדול יותר: ${M(F(n1, d))} או ${M(F(n2, d))}?`,
+    hint: 'המכנים שווים – החלקים באותו גודל. למי יש יותר חלקים?',
+    exp: `המכנים שווים, לכן משווים את המונים: ${Math.max(n1, n2)} > ${Math.min(n1, n2)}.`
+  }, c, [n1 > n2 ? M(F(n2, d)) : M(F(n1, d)), 'הם שווים'], true);
+}
+
+function genShapes3() {
+  const items = [
+    { q: 'כמה צלעות יש למשושה?', c: '6', w: ['5', '8', '4'] },
+    { q: 'כמה צלעות יש למחומש?', c: '5', w: ['6', '4', '8'] },
+    { q: 'כמה קודקודים יש למשולש?', c: '3', w: ['4', '2', '6'] },
+    { q: 'כמה קודקודים יש למרובע?', c: '4', w: ['3', '5', '8'] },
+    { q: 'באיזו צורה <b>כל</b> הצלעות שוות <b>וכל</b> הזוויות ישרות?', c: 'ריבוע', w: ['מלבן', 'משולש', 'מחומש'] },
+    { q: 'כמה זוויות ישרות יש במלבן?', c: '4', w: ['2', '1', '0'] },
+    { q: 'איזו זווית היא <b>ישרה</b>?', c: '90°', w: ['45°', '120°', '60°'] },
+    { q: 'זווית שקטנה מזווית ישרה נקראת:', c: 'זווית חדה', w: ['זווית קהה', 'זווית ישרה', 'זווית שטוחה'] },
+    { q: 'זווית שגדולה מזווית ישרה (אבל קטנה מזווית שטוחה) נקראת:', c: 'זווית קהה', w: ['זווית חדה', 'זווית ישרה', 'זווית קטנה'] }
+  ];
+  const s = pick(items);
+  return choiceQ({ text: s.q, hint: 'משולש – 3 צלעות, מרובע – 4, מחומש – 5, משושה – 6. זווית ישרה = 90°.', exp: `התשובה: ${s.c}.` }, s.c, s.w);
+}
+
+function genPerim3() {
+  const k = R(0, 2);
+  if (k === 2) return genTrianglePerim();
+  const sq = k === 1, w = R(3, 15), h = sq ? w : R(2, w - 1);
+  return {
+    type: 'num', unit: 'ס"מ', text: `מהו <b>ההיקף</b> של ה${sq ? 'ריבוע' : 'מלבן'}?`,
+    fig: rectFig(w, h, `${w} ס"מ`, sq ? '' : `${h} ס"מ`), ans: 2 * (w + h),
+    traps: [{ v: w + h, m: `חיברתם רק שתי צלעות. ל${sq ? 'ריבוע' : 'מלבן'} יש 4 צלעות!` }, { v: w * h, m: 'כפלתם. היקף = <b>חיבור</b> של כל הצלעות.' }],
+    steps: sq ? [{ p: `לריבוע 4 צלעות שוות: ${M(`${w} + ${w} + ${w} + ${w} =`)}`, a: 4 * w }] : [{ p: `צלע ארוכה וצלע קצרה: ${M(`${w} + ${h} =`)}`, a: w + h }, { p: `יש שתיים מכל אחת: ${M(`${w + h} + ${w + h} =`)}`, a: 2 * (w + h) }],
+    hint: 'היקף = סכום כל הצלעות.',
+    exp: `${M(`${w} + ${h} + ${w} + ${h} = ${2 * (w + h)}`)} ס"מ`
+  };
+}
+
+const hhmm = m => `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
+function genTime3() {
+  const k = R(0, 2);
+  if (k === 0) {
+    const h = R(2, 5), half = Math.random() < 0.5;
+    return {
+      type: 'num', unit: 'דקות', text: `כמה דקות יש ב-${half ? `${h} שעות וחצי` : `${h} שעות`}?`, ans: h * 60 + (half ? 30 : 0),
+      traps: [{ v: h * 100 + (half ? 50 : 0), m: 'בשעה יש <b>60</b> דקות, לא 100.' }],
+      hint: 'בשעה אחת יש 60 דקות. בחצי שעה – 30.', exp: `${M(`${h} × 60${half ? ' + 30' : ''} = ${h * 60 + (half ? 30 : 0)}`)} דקות`
+    };
+  }
+  if (k === 1) {
+    const start = R(7, 15) * 60 + pick([0, 15, 30, 45]), add = pick([15, 30, 45, 60, 75, 90]);
+    const end = start + add;
+    const wrongs = [hhmm(end + 15), hhmm(end - 15), `${Math.floor(start / 60)}:${String((start % 60) + add).padStart(2, '0')}`].filter(x => x !== hhmm(end));
+    const uniq = [...new Set(wrongs)].slice(0, 3);
+    let extra = 30;
+    while (uniq.length < 3) { const x = hhmm(end + extra); if (!uniq.includes(x)) uniq.push(x); extra += 30; }
+    const q = choiceQ({
+      text: `עכשיו השעה ${M(hhmm(start))}. מה תהיה השעה בעוד ${add} דקות?`,
+      hint: 'זכרו: אחרי 59 דקות מתחילה שעה חדשה (60 דקות = שעה).',
+      exp: `${M(hhmm(start))} ועוד ${add} דקות = ${M(hhmm(end))}.`
+    }, M(hhmm(end)), uniq.map(M));
+    const naive = `${Math.floor(start / 60)}:${String((start % 60) + add).padStart(2, '0')}`;
+    if ((start % 60) + add >= 60) q.traps = [{ c: M(naive), m: 'בשעה יש רק 60 דקות! כשעוברים את 60 – עוברים לשעה הבאה.' }];
+    return q;
+  }
+  const s = R(8, 15) * 60 + pick([0, 15, 30]), dur = pick([30, 45, 60, 75, 90, 105, 120]);
+  return {
+    type: 'num', unit: 'דקות', text: `שיעור התחיל בשעה ${M(hhmm(s))} ונגמר בשעה ${M(hhmm(s + dur))}. כמה דקות נמשך השיעור?`, ans: dur,
+    hint: 'ספרו קודם עד השעה העגולה, ואז הוסיפו.',
+    exp: `מ-${M(hhmm(s))} עד ${M(hhmm(s + dur))} עוברות ${dur} דקות.`
+  };
+}
+
+function genMoney3() {
+  const k = R(0, 1);
+  if (k === 0) {
+    const a = R(5, 25), b = R(5, 20), pay = pick([50, 100]);
+    return {
+      type: 'num', unit: '₪', text: `קניתי ספר ב-${a} ₪ ומשחק ב-${b} ₪. שילמתי בשטר של ${pay} ₪.<br>כמה עודף קיבלתי?`, ans: pay - a - b,
+      traps: [{ v: a + b, m: 'זה המחיר של שני הדברים. כמה <b>עודף</b> מקבלים מ-' + pay + ' ₪?' }],
+      steps: [{ p: `כמה עלו שני הדברים יחד? ${M(`${a} + ${b} =`)}`, a: a + b }, { p: `כמה עודף? ${M(`${pay} - ${a + b} =`)}`, a: pay - a - b }],
+      hint: 'קודם חשבו כמה עלה הכול, ואז כמה נשאר מהשטר.', exp: `${M(`${a} + ${b} = ${a + b}`)}, ${M(`${pay} - ${a + b} = ${pay - a - b}`)} ₪`
+    };
+  }
+  const p = R(3, 9), n = R(3, 8);
+  return {
+    type: 'num', unit: '₪', text: `מחברת עולה ${p} ₪. כמה עולות ${n} מחברות?`, ans: p * n,
+    traps: [{ v: p + n, m: 'חיברתם. כל מחברת עולה אותו מחיר – זה כפל.' }],
+    hint: `${n} פעמים ${p} ₪.`, exp: `${M(`${p} × ${n} = ${p * n}`)} ₪`
+  };
+}
+
+function genLen3() {
+  const k = R(0, 2);
+  if (k === 0) { const v = R(2, 9); return { type: 'num', text: `כתבו את המספר החסר: ${RTL(`${v} מ' = ${BOX} ס"מ`)}`, ans: v * 100, traps: [{ v: v * 10, m: "1 מ' = <b>100</b> ס\"מ." }], hint: "1 מ' = 100 ס\"מ", exp: `${M(`${v} × 100 = ${v * 100}`)} ס"מ` }; }
+  if (k === 1) { const v = R(2, 9); return { type: 'num', text: `כתבו את המספר החסר: ${RTL(`${v * 100} ס"מ = ${BOX} מ'`)}`, ans: v, traps: [{ v: v * 10, m: "100 ס\"מ = 1 מ'. כמה פעמים 100 נכנס?" }], hint: "100 ס\"מ = 1 מ'", exp: `${M(`${v * 100} : 100 = ${v}`)} מ'` }; }
+  const v = R(1, 5), c = R(5, 95);
+  return {
+    type: 'num', text: `כתבו את המספר החסר: ${RTL(`${v} מ' ו-${c} ס"מ = ${BOX} ס"מ`)}`, ans: v * 100 + c,
+    traps: [{ v: v + c, m: `קודם הופכים את ה-${v} מ' לס"מ: ${v} × 100.` }].concat(c < 10 ? [{ v: Number(`${v}${c}`), m: `${v} מ' = ${v * 100} ס"מ, ועוד ${c} – לא מצמידים את המספרים!` }] : []),
+    steps: [{ p: `${M(`${v} × 100 =`)} ס"מ`, a: v * 100 }, { p: M(`${v * 100} + ${c} =`), a: v * 100 + c }],
+    hint: "1 מ' = 100 ס\"מ. הפכו את המטרים לס\"מ והוסיפו.", exp: `${M(`${v * 100} + ${c} = ${v * 100 + c}`)} ס"מ`
+  };
+}
+
+const TOPICS3 = [
+  {
+    id: 'place', name: 'מספרים עד 10,000', icon: '🔢', color: '#4c5fd5',
+    desc: 'ערך הספרה, השוואה, ישר מספרים ועיגול',
+    levels: {
+      1: [Object.assign(() => genDigitValue(4), { __learn: { lesson: 'place', card: 1 } }), genCompose3],
+      2: [genCompare3, genNumberLine3, genRound3],
+      3: [genCompose3, genRound3, genNumberLine3, genCompare3]
+    },
+    tips: ['כל מקום שווה פי 10 מהמקום שמימינו: יחידות, עשרות, מאות, אלפים.', 'אפס שומר מקום: 3 אלפים ו-5 עשרות = 3,050.', 'עיגול: הספרה שמימין למקום העיגול – 5 ומעלה למעלה.']
+  },
+  {
+    id: 'addsub', name: 'חיבור וחיסור', icon: '➕', color: '#e0703a',
+    desc: 'חיבור וחיסור במאונך עד 10,000, מספר חסר ובעיות',
+    levels: {
+      1: [() => genAddSub3(1), () => genAddSub3(1), genMissing3],
+      2: [() => genAddSub3(2), genMissing3],
+      3: [genWordAddSub3, () => genAddSub3(2), genWordAddSub3]
+    },
+    tips: ['במאונך: יחידות מתחת ליחידות, עשרות מתחת לעשרות.', 'בחיבור: 10 ומעלה בעמודה – מעבירים 1 לעמודה הבאה.', 'בחיסור: אם הספרה למעלה קטנה – ממירים עשרת מהעמודה השכנה.', 'בודקים חיסור בעזרת חיבור.']
+  },
+  {
+    id: 'muldiv', name: 'כפל וחילוק', icon: '✖️', color: '#d9762b',
+    desc: 'לוח הכפל, כפל בעשרות, כפל דו-ספרתי בחד-ספרתי, שארית',
+    levels: {
+      1: [genTimesTable, genDivTable, genTimesTable],
+      2: [genMulTens, genMul2x1, genDivTable],
+      3: [genWordMulDiv3, genDivRem, genMul2x1, () => genOrder(1)]
+    },
+    tips: ['כפל = חיבור חוזר של אותו מספר.', 'חילוק = חלוקה לקבוצות שוות. בודקים בעזרת כפל.', 'כפל בעשרות: 3 × 40 = 3 × 4 = 12, ועוד אפס – 120.', 'כפל לפני חיבור וחיסור.']
+  },
+  {
+    id: 'divis', name: 'זוגי ואי-זוגי', icon: '🔍', color: '#6a4fd5',
+    desc: 'זוגי ואי-זוגי, התחלקות ב-2, 5 ו-10',
+    levels: {
+      1: [genEvenOdd],
+      2: [() => genDivRule(1), genEvenOdd],
+      3: [() => genDivRule(1), genEvenOddSum, genEvenOdd]
+    },
+    tips: ['זוגי – ספרת היחידות 0, 2, 4, 6 או 8. אי-זוגי – 1, 3, 5, 7 או 9.', 'מתחלק ב-5: ספרה אחרונה 0 או 5. מתחלק ב-10: ספרה אחרונה 0.']
+  },
+  {
+    id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c',
+    desc: 'חצי, שליש ורבע, שבר מכמות והשוואה',
+    levels: {
+      1: [genFracBar3, () => genFracQty3(1)],
+      2: [genCompareUnit, () => genFracQty3(1), genFracBar3],
+      3: [() => genFracQty3(3), genCompareUnit, genAddSame]
+    },
+    tips: ['המכנה (למטה) – לכמה חלקים שווים חילקנו. המונה (למעלה) – כמה חלקים לקחנו.', 'רבע מ-12: מחלקים ל-4 חלקים שווים – 3.', 'ככל שהמכנה גדול יותר – כל חלק קטן יותר.']
+  },
+  {
+    id: 'geo', name: 'צורות ומדידות', icon: '📐', color: '#2f8f55',
+    desc: 'מצולעים, זוויות, היקף, אורך, זמן וכסף',
+    levels: {
+      1: [genShapes3, genPerim3],
+      2: [genTime3, genMoney3, genLen3, genPerim3],
+      3: [genTime3, genMoney3, genLen3, genShapes3]
+    },
+    tips: ['היקף = סכום כל הצלעות.', "1 מ' = 100 ס\"מ. 1 שעה = 60 דקות.", 'זווית ישרה = 90°. חדה – פחות מישרה, קהה – יותר מישרה.']
+  },
+  {
+    id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1',
+    desc: 'קריאת דיאגרמות והשוואה',
+    levels: {
+      1: [() => genBarRead(0), () => genBarRead(1)],
+      2: [() => genBarRead(2), () => genBarRead(1)],
+      3: [() => genBarRead(2), () => genBarRead(3)]
+    },
+    tips: ['קוראים את הכותרת ואת הצירים לפני שעונים.', 'בודקים כמה שווה כל קו רשת.']
+  }
+];
+const LEVEL_DESC3 = {
+  place: ['ערך הספרה והרכבת מספרים', 'השוואה, ישר מספרים ועיגול', 'שילוב של כל הנושאים'],
+  addsub: ['חיבור וחיסור עד 1,000', 'חיבור וחיסור עד 10,000 עם המרה', 'בעיות מילוליות'],
+  muldiv: ['לוח הכפל וחילוק', 'כפל בעשרות, כפל דו-ספרתי בחד-ספרתי', 'בעיות, שארית וסדר פעולות'],
+  divis: ['זוגי ואי-זוגי', 'התחלקות ב-2, 5 ו-10', 'סכום של מספרים זוגיים ואי-זוגיים'],
+  frac: ['איזה שבר צבוע, שבר מכמות', 'השוואת שברים', 'שבר מכמות (לא רק חלק אחד), חיבור שברים'],
+  geo: ['מצולעים, זוויות והיקף', 'זמן, כסף ואורך', 'שאלות מאתגרות בזמן, כסף ואורך'],
+  data: ['קריאת דיאגרמה', 'השוואה בין עמודות', 'הפרשים וסכום'],
+  mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
+};
+
+/* =========================================================
    נושאים ורמות
    ========================================================= */
 const TOPICS6 = [
@@ -2450,9 +2921,9 @@ const TOPICS6 = [
     tips: ['קוראים את הכותרת, את הצירים ואת המקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.', 'ממוצע = סכום הערכים : מספר הערכים.', 'ציון אחד משתנה ← הממוצע משתנה ב: השינוי : מספר הציונים.', 'איבר חסר: (ממוצע × מספר הערכים) פחות סכום הידועים.']
   }
 ];
-const TOPICS = GRADE === 4 ? TOPICS4 : GRADE === 5 ? TOPICS5 : TOPICS6;
+const TOPICS = GRADE === 3 ? TOPICS3 : GRADE === 4 ? TOPICS4 : GRADE === 5 ? TOPICS5 : TOPICS6;
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
-const TEST_PLAN = GRADE === 4 ? { place: 3, divis: 2, ops: 4, frac: 3, geo: 3, units: 3, data: 2 } : GRADE === 5 ? { divis: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 } : { place: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 };
+const TEST_PLAN = GRADE === 3 ? { place: 3, addsub: 4, muldiv: 4, divis: 2, frac: 3, geo: 3, data: 1 } : GRADE === 4 ? { place: 3, divis: 2, ops: 4, frac: 3, geo: 3, units: 3, data: 2 } : GRADE === 5 ? { divis: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 } : { place: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 };
 const LEVEL_NAME = { 1: 'רמה 1', 2: 'רמה 2', 3: 'רמה 3' };
 
 function mk(topic, gen, lv) {
@@ -3517,7 +3988,7 @@ Object.assign(LESSONS, {
     ]
   }
 });
-LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 4 ? ['place', 'order', 'frac', 'geo'] : GRADE === 5 ? ['order', 'frac', 'dec', 'geo', 'mean'] : ['place', 'order', 'frac', 'dec', 'geo', 'mean']));
+LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 3 ? ['place', 'order'] : GRADE === 4 ? ['place', 'order', 'frac', 'geo'] : GRADE === 5 ? ['order', 'frac', 'dec', 'geo', 'mean'] : ['place', 'order', 'frac', 'dec', 'geo', 'mean']));
 
 // קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
 [[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
@@ -4041,7 +4512,7 @@ const LEVEL_DESC6 = {
   data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
-const LEVEL_DESC = GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
+const LEVEL_DESC = GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
 const LEVEL_TAG = { 1: 'בסיסית', 2: 'בינונית', 3: 'מאתגרת' };
 
 function currentLevel(topicId) {
@@ -4564,6 +5035,7 @@ function teacher() {
           <option value="6" ${GRADE === 6 ? 'selected' : ''}>כיתה ו'</option>
           <option value="5" ${GRADE === 5 ? 'selected' : ''}>כיתה ה'</option>
           <option value="4" ${GRADE === 4 ? 'selected' : ''}>כיתה ד'</option>
+          <option value="3" ${GRADE === 3 ? 'selected' : ''}>כיתה ג'</option>
         </select>
       </label>
       <label class="chk"><input type="checkbox" id="tn" ${NEUTRAL ? 'checked' : ''}> כותרת ניטרלית – בלי מספר כיתה (מתאים לתלמיד/ה שחוזר/ת על חומר של כיתה נמוכה)</label>
@@ -4698,6 +5170,7 @@ function printBuilder() {
             <option value="6" ${GRADE === 6 ? 'selected' : ''}>כיתה ו'</option>
             <option value="5" ${GRADE === 5 ? 'selected' : ''}>כיתה ה'</option>
             <option value="4" ${GRADE === 4 ? 'selected' : ''}>כיתה ד'</option>
+            <option value="3" ${GRADE === 3 ? 'selected' : ''}>כיתה ג'</option>
           </select>
         </label>
         <div class="lbl2">נושאים:</div>
