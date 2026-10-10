@@ -91,6 +91,15 @@
 
   .big-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
   .big-actions button { padding: 18px; font-size: 1.2rem; }
+  .timer { font-weight: 800; font-variant-numeric: tabular-nums; background: #eef1ff; color: #2c2c54; border: 1.5px solid #9aa6d8; border-radius: 999px; padding: 2px 12px; cursor: pointer; font-size: 1rem; }
+  .timer.warn { background: #fdecea; color: #c0392b; border-color: #e08b80; }
+  .simnav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 10px 0 4px; }
+  .simnav button { width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 0.9rem; background: #fff; color: #2c2c54; border: 1.5px solid #b8c0de; box-shadow: none; }
+  .simnav button.done { background: #4c5fd5; color: #fff; border-color: #4c5fd5; }
+  .simnav button.cur { outline: 3px solid #e0703a; outline-offset: 1px; }
+  .simnote { text-align: center; font-size: 0.85rem; color: #666; }
+  .simtimes { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+  .simtimes button { min-width: 110px; padding: 16px; font-size: 1.15rem; }
   .big-actions .desc { display: block; font-size: 0.9rem; opacity: 0.85; margin-top: 4px; font-weight: normal; }
 
   .topbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -4706,7 +4715,7 @@ const PRESET = (() => {
   const ln = URLP.get('learn');
   if (ln && LESSONS[ln]) return { learn: ln };
   const t = URLP.get('topic');
-  if (!t || !(TOPIC[t] || ['mix', 'test', 'testfb'].includes(t))) return null;
+  if (!t || !(TOPIC[t] || ['mix', 'test', 'testfb', 'sim'].includes(t))) return null;
   const lv = Number(URLP.get('level')), cnt = Number(URLP.get('count'));
   const level = [1, 2, 3].includes(lv) ? lv : null;
   return {
@@ -4719,6 +4728,7 @@ function presetLabel(p) {
   if (p.learn) return `📚 לימוד: ${LESSONS[p.learn].name}`;
   if (p.topic === 'test') return TEST_NAME;
   if (p.topic === 'testfb') return TEST_NAME + ' עם משוב';
+  if (p.topic === 'sim') return 'סימולציה עם שעון';
   return p.topic === 'mix' ? 'תרגול מעורב' : TOPIC[p.topic].name;
 }
 
@@ -4966,6 +4976,7 @@ function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<':
 const $ = id => document.getElementById(id);
 
 function home() {
+  stopSimTimer();
   state = null;
   lessonView = null;
   stopSpeak();
@@ -5022,6 +5033,7 @@ function home() {
       <button id="mix">🔀 תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
       <button id="testfb" class="secondary">📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב<span class="desc">20 שאלות מכל הנושאים, עם רמזים ועזרה תוך כדי</span></button>
       <button id="test" class="secondary">📝 ${TEST_NAME}<span class="desc">20 שאלות מכל הנושאים – הציון והפתרונות בסוף</span></button>
+      <button id="sim" class="secondary">⏱️ סימולציה עם שעון<span class="desc">כמו ${GRADE === 6 ? 'במבדק' : 'במבחן'} אמיתי: זמן מוגבל, אפשר לדלג ולחזור לשאלות</span></button>
     </div>
     ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
   `;
@@ -5036,6 +5048,7 @@ function home() {
   $('mix').onclick = () => showLevelPicker('mix');
   $('test').onclick = () => startTest(false);
   $('testfb').onclick = () => startTest(true);
+  $('sim').onclick = showSimPicker;
   if (PRESET) $('presetGo').onclick = startPreset;
 }
 
@@ -5117,6 +5130,7 @@ function startPreset() {
   if (p.learn) return startLesson(p.learn);
   if (p.topic === 'test') return startTest(false);
   if (p.topic === 'testfb') return startTest(true);
+  if (p.topic === 'sim') return showSimPicker();
   startPractice(p.topic, { level: p.level, count: p.count, fixed: p.fixed, hideLevel: p.fixed });
 }
 
@@ -5148,6 +5162,110 @@ function startTest(withFeedback) {
   if (withFeedback) return startPractice('test', { list: qs, label: `📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב` });
   state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0 };
   renderQ();
+}
+
+/* ---------- סימולציה עם שעון ---------- */
+let simTimer = null;
+function stopSimTimer() { if (simTimer) { clearInterval(simTimer); simTimer = null; } }
+
+function showSimPicker() {
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = `<div class="modal picker" role="dialog" aria-modal="true">
+    <div class="mtop"><button class="ghost" data-close>✖ ביטול</button></div>
+    <h2 class="center">⏱️ סימולציה עם שעון</h2>
+    <p class="center">20 שאלות מכל הנושאים, בלי רמזים. אפשר לדלג על שאלה ולחזור אליה, ולהגיש מתי שרוצים.<br>כשהזמן נגמר – ${GRADE === 6 ? 'המבדק' : 'המבחן'} מוגש לבד.</p>
+    <p class="center"><b>כמה זמן?</b></p>
+    <div class="simtimes">${[30, 45, 60].map(m => `<button data-min="${m}"${m === 45 ? ' class="cur"' : ''}>${m} דקות</button>`).join('')}</div>
+    <p class="muted center small">אפשר ללחוץ על השעון כדי להסתיר אותו בזמן הפתרון.</p>
+  </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  ov.querySelector('[data-close]').onclick = close;
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  ov.querySelectorAll('[data-min]').forEach(b => b.onclick = () => { close(); startSim(Number(b.dataset.min)); });
+  ov.querySelector('[data-min="45"]').focus();
+}
+
+function startSim(mins) {
+  stopSimTimer();
+  const qs = buildTest();
+  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0,
+    sim: { mins, start: Date.now(), end: Date.now() + mins * 60000, answers: [], raw: [], hide: false } };
+  const me = state;
+  simTimer = setInterval(() => {
+    if (state !== me) return stopSimTimer();
+    updateSimClock();
+    if (Date.now() >= me.sim.end) finishSim(true);
+  }, 1000);
+  renderQ();
+}
+
+function simLeft() { return Math.max(0, Math.ceil((state.sim.end - Date.now()) / 1000)); }
+function simClockText() {
+  if (state.sim.hide) return '⏱️ הצגת השעון';
+  const t = simLeft();
+  return `⏱️ ${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+}
+function updateSimClock() {
+  const el = $('timer');
+  if (!el) return;
+  el.textContent = simClockText();
+  el.classList.toggle('warn', !state.sim.hide && simLeft() <= 300);
+}
+
+// שמירת התשובה של השאלה הנוכחית (בלי בדיקה)
+function simSave() {
+  const s = state, q = s.qs[s.i];
+  if (!$('mainAns')) return;
+  s.sim.answers[s.i] = readAnswer(q);
+  const raw = {};
+  app.querySelectorAll('#mainAns input').forEach(inp => raw[inp.id] = inp.value);
+  raw.selected = s.selected;
+  s.sim.raw[s.i] = raw;
+}
+function simRestore() {
+  const raw = state.sim.raw[state.i];
+  if (!raw) return;
+  app.querySelectorAll('#mainAns input').forEach(inp => { if (raw[inp.id] != null) inp.value = raw[inp.id]; });
+  if (raw.selected != null) {
+    state.selected = raw.selected;
+    const b = app.querySelector(`.choices button[data-c="${raw.selected}"]`);
+    if (b) b.classList.add('sel');
+  }
+}
+function simAnswered(i) {
+  const a = state.sim.answers[i];
+  return !!a && !check(state.qs[i], a).empty;
+}
+function simGo(i) {
+  simSave();
+  state.i = i;
+  renderQ();
+  window.scrollTo(0, 0);
+}
+function simSubmitAsk() {
+  simSave();
+  const left = state.qs.filter((q, i) => !simAnswered(i)).length;
+  if (!confirm(left ? `יש עוד ${left} שאלות בלי תשובה. להגיש בכל זאת?` : `להגיש את ${GRADE === 6 ? 'המבדק' : 'המבחן'}?`)) return;
+  finishSim(false);
+}
+function finishSim(timeUp) {
+  stopSimTimer();
+  const s = state;
+  if (timeUp) simSave();
+  s.sim.used = Math.min(s.sim.mins * 60, Math.round((Date.now() - s.sim.start) / 1000));
+  s.sim.timeUp = timeUp;
+  const empty = q => q.type === 'num' ? { raw: '', val: null } : q.type === 'choice' ? { val: null } : { val: { w: null, n: null, d: null } };
+  s.results = s.qs.map((q, i) => {
+    const a = s.sim.answers[i] || empty(q);
+    const ok = !!check(q, a).ok;
+    return { q, a, ok, outcome: ok ? 'first' : 'shown' };
+  });
+  s.score = s.results.filter(r => r.ok).length;
+  s.i = s.count;
+  if (timeUp) alert('⏰ הזמן נגמר! ' + (GRADE === 6 ? 'המבדק הוגש' : 'המבחן הוגש') + '. בואו נראה איך הלך.');
+  summary();
 }
 
 function makeQuestion() {
@@ -5182,6 +5300,7 @@ function inputHTML(q) {
 }
 
 function titleText() {
+  if (state.sim) return '⏱️ סימולציה עם שעון';
   if (state.mode === 'test') return '📝 ' + TEST_NAME;
   if (state.label) return state.label;
   if (state.retry) return '🔁 תרגול הטעויות שלי';
@@ -5205,12 +5324,15 @@ function renderQ() {
     <div class="topbar">
       <span class="title">${titleText()}</span>
       <span>שאלה ${state.i + 1} מתוך ${total}</span>
+      ${state.sim ? `<button class="timer" id="timer" title="הסתרה/הצגה של השעון">${simClockText()}</button>` : ''}
       <span>
         <button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+</button>
         <button class="ghost" id="quit">✖ יציאה</button>
       </span>
     </div>
     <div class="progress"><div style="width:${state.i / total * 100}%"></div></div>
+    ${state.sim ? `<div class="simnav" aria-label="מעבר בין שאלות">${state.qs.map((x, i) => `<button data-go="${i}" class="${simAnswered(i) ? 'done' : ''}${i === state.i ? ' cur' : ''}" aria-label="שאלה ${i + 1}">${i + 1}</button>`).join('')}</div>
+    <div class="simnote">כחול = יש תשובה · אפשר ללחוץ על מספר כדי לעבור לשאלה</div>` : ''}
     ${practice ? `<div class="statusrow">
       ${showLevel ? `<span class="lvlwrap"><button class="lvl" id="lvlBtn" title="שינוי רמה" aria-label="שינוי רמה">${levelBadgeText()}</button><span class="lvlpick hidden" id="lvlPick">${[1, 2, 3].map(n => `<button class="${n === state.level ? 'sel' : ''}" data-lv="${n}">${'⭐'.repeat(n)} ${LEVEL_NAME[n]}</button>`).join('')}</span><span class="lvlnote" id="lvlNote"></span></span>` : '<span></span>'}
       <span class="streak">${state.streak >= 2 ? `🔥 ${state.streak} ברצף!` : ''}</span>
@@ -5226,7 +5348,9 @@ function renderQ() {
       ${q.fig || ''}
       <div class="answer-area" id="mainAns">${inputHTML(q)}</div>
       <div class="actions">
-        ${q.type === 'choice' && practice ? '' : `<button id="go">${!practice ? (state.i + 1 === total ? 'סיום והגשה' : 'שמירה והמשך ←') : 'בדיקה ✓'}</button>`}
+        ${state.sim && state.i > 0 ? '<button class="secondary" id="prevQ">→ לשאלה הקודמת</button>' : ''}
+        ${q.type === 'choice' && practice ? '' : `<button id="go">${state.sim ? (state.i + 1 === total ? 'סיום והגשה' : 'לשאלה הבאה ←') : !practice ? (state.i + 1 === total ? 'סיום והגשה' : 'שמירה והמשך ←') : 'בדיקה ✓'}</button>`}
+        ${state.sim && state.i + 1 < total ? '<button class="secondary" id="simDone">🏁 הגשה</button>' : ''}
         ${practice ? '<button class="secondary" id="hintBtn">💡 רמז</button>' : ''}
         ${practice && q.gen ? '<button class="secondary" id="exBtn">📖 דוגמה פתורה</button>' : ''}
         <button class="hidden" id="next">${state.i + 1 === total ? 'לסיכום 🏁' : 'לשאלה הבאה ←'}</button>
@@ -5239,6 +5363,12 @@ function renderQ() {
   $('fontBtn').onclick = cycleFont;
   bindLevelBadge();
   $('quit').onclick = () => { if (confirm('לצאת לתפריט הראשי? ההתקדמות בסבב הזה לא תישמר.')) home(); };
+  if (state.sim) {
+    $('timer').onclick = () => { state.sim.hide = !state.sim.hide; updateSimClock(); };
+    app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => simGo(Number(b.dataset.go)));
+    if ($('prevQ')) $('prevQ').onclick = () => simGo(state.i - 1);
+    if ($('simDone')) $('simDone').onclick = simSubmitAsk;
+  }
   if ($('speakBtn')) $('speakBtn').onclick = e => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.join('. ') : ''), e.currentTarget);
   if ($('go')) $('go').onclick = submit;
   if ($('hintBtn')) $('hintBtn').onclick = () => showFb('hint', `💡 <span class="head">רמז:</span> ${q.hint}`);
@@ -5259,6 +5389,7 @@ function renderQ() {
     }));
     if (inputs[0] && window.innerWidth > 600) inputs[0].focus();
   }
+  if (state.sim) { simRestore(); updateSimClock(); }
 }
 
 function showFb(kind, html) {
@@ -5305,6 +5436,10 @@ function submit() {
   const a = readAnswer(q);
   const r = check(q, a);
 
+  if (state.sim) {
+    if (state.i + 1 === state.count) return simSubmitAsk();
+    return simGo(state.i + 1);
+  }
   if (state.mode === 'test') {
     if (r.empty && !confirm('לא כתבתם תשובה. להמשיך בכל זאת?')) return;
     state.results.push({ q, a, ok: !!r.ok, outcome: r.ok ? 'first' : 'shown' });
@@ -5526,6 +5661,7 @@ function summary() {
         <li>👣 נפתרו צעד אחר צעד: <b>${guided}</b></li>
         <li>📖 למדנו מהתשובה: <b>${shown}</b></li>` : `<li>✘ לא נכון: <b>${n - correct}</b></li>`}
       </ul>
+      ${s.sim ? `<p class="compare">${s.sim.timeUp ? '⏰ הזמן נגמר.' : `⏱️ סיימת ב-${s.sim.used >= 60 ? Math.floor(s.sim.used / 60) + ' דקות' + (s.sim.used % 60 ? ' ו-' : '') : ''}${s.sim.used % 60 || s.sim.used < 60 ? (s.sim.used % 60) + ' שניות' : ''} (מתוך ${s.sim.mins} דקות).`}</p>` : ''}
       ${compare ? `<p class="compare">${compare}</p>` : ''}
       ${growth ? `<div class="growth"><div class="muted">ההתקדמות שלי:</div>${growth}</div>` : ''}
       ${breakdown}
@@ -5541,6 +5677,7 @@ function summary() {
 
   if ($('retryBtn')) $('retryBtn').onclick = () => startPractice(s.topicId === 'test' ? 'mix' : s.topicId, { retry: shuffle(missed) });
   $('again').onclick = () => {
+    if (s.sim) return startSim(s.sim.mins);
     if (s.mode === 'test') return startTest(false);
     if (s.list) return startTest(true);
     if (s.lessonId) return startLessonPractice(s.lessonId);
@@ -5584,6 +5721,7 @@ function teacher() {
           <option value="mix">🔀 תרגול מעורב</option>
           <option value="testfb">📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב</option>
           <option value="test">📝 ${TEST_NAME} (בלי משוב)</option>
+          <option value="sim">⏱️ סימולציה עם שעון</option>
           ${LESSON_ORDER.map(id => LESSONS[id]).map(L => `<option value="learn:${L.id}">📚 לימוד: ${L.name} (כרטיסיות הדרכה)</option>`).join('')}
         </select>
       </label>
@@ -5646,7 +5784,7 @@ function teacher() {
   const upd = () => {
     const t = $('tt').value, l = $('tl').value, c = $('tc').value;
     const isLearn = t.startsWith('learn:'), isHome = t === 'home';
-    const isTest = t.startsWith('test') || isLearn || isHome;
+    const isTest = t.startsWith('test') || t === 'sim' || isLearn || isHome;
     $('tl').disabled = $('tc').disabled = isTest;
     $('tf').disabled = isTest || !l;
     if (!l) $('tf').checked = false;
