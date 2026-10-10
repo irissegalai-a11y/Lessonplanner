@@ -401,6 +401,9 @@
   .wskey ol { columns: 2; column-gap: 8mm; }
   .wskey li { break-inside: avoid; }
   .wstips { columns: 1; }
+  .ws-pg { break-after: page; }
+  .ws-pg:last-child { break-after: auto; }
+  @media screen { .ws-pg + .ws-pg { border-top: 2px dashed #ccc; margin-top: 14px; padding-top: 10px; } }
   #wsout.measure .ws-page { width: 186mm; max-width: none; padding: 0; margin: 0; box-shadow: none; }
   @media screen and (max-width: 640px) { .wsq, .ex-q { flex-direction: column; } .ex-grid { flex-basis: auto; } }
 
@@ -5980,7 +5983,6 @@ function printBuilder() {
     const vname = v => versions > 1 ? ` – נוסח ${letters[v]}` : '';
     let out = sheets.map((qs, v) => `
       <section class="ws-page">
-        <div class="wscredit">© איריס סגל</div>
         <div class="wshead">
           <h1>${esc(title)}${vname(v)}</h1>
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
@@ -5991,12 +5993,12 @@ function printBuilder() {
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey">
-        <div class="wscredit">© איריס סגל</div>
         <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
     if (tips) dropTipsIfOverflow();
+    paginateSheets();
     $('wprint').classList.remove('hidden');
     $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
     $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".';
@@ -6008,7 +6010,6 @@ function printBuilder() {
     const vname = v => versions > 1 ? `נוסח ${letters[v]}` : '';
     let out = sheets.map((qs, v) => `
       <section class="ws-page ex-body">
-        <div class="wscredit">© איריס סגל</div>
         <div class="wshead">
           <h1>${esc(title)}${vname(v) ? ' – ' + vname(v) : ''}</h1>
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
@@ -6017,11 +6018,11 @@ function printBuilder() {
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey">
-        <div class="wscredit">© איריס סגל</div>
         <h2>🔑 דף תשובות – ${esc(title)}${vname(v) ? ' – ' + vname(v) : ''}</h2>
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b> <span class="small muted">(${TOPIC[q.topic].name})</span>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
+    paginateSheets();
     $('wprint').classList.remove('hidden');
     $('wmsg').textContent = 'המבחן מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה נוספת יוצרת מבחן חדש.';
   };
@@ -6044,6 +6045,55 @@ function sheetPages(sec, H_MM) {
   }
   return pages;
 }
+// חלוקה לעמודים מראש, כדי שהשם יופיע בראש כל עמוד מודפס (בכל דפדפן)
+const CREDIT = '© איריס סגל';
+function paginateSheets() {
+  const out = $('wsout');
+  const H = 270 * 96 / 25.4;
+  out.classList.add('measure');
+  out.querySelectorAll('.ws-page').forEach(sec => {
+    const items = [];
+    [...sec.children].forEach(ch => {
+      if (ch.matches('.wsqs, .ex-qs, ol')) [...ch.children].forEach(el => items.push({ el, wrap: ch }));
+      else items.push({ el: ch, wrap: null });
+    });
+    sec.innerHTML = '';
+    let page;
+    const newPage = () => {
+      page = document.createElement('div');
+      page.className = 'ws-pg';
+      page.innerHTML = `<div class="wscredit">${CREDIT}</div>`;
+      sec.appendChild(page);
+    };
+    const place = it => {
+      let box = page;
+      if (it.wrap) {
+        box = page.lastElementChild;
+        if (!box || box.__src !== it.wrap) {
+          box = it.wrap.cloneNode(false); box.__src = it.wrap;
+          if (box.tagName === 'OL') box.start = [...it.wrap.children].indexOf(it.el) + 1;
+          page.appendChild(box);
+        }
+      }
+      box.appendChild(it.el);
+      return box;
+    };
+    newPage();
+    let n = 0;
+    for (const it of items) {
+      const box = place(it);
+      n++;
+      if (n > 1 && page.getBoundingClientRect().height > H) {
+        it.el.remove();
+        if (box !== page && !box.children.length) box.remove();
+        newPage(); n = 1;
+        place(it);
+      }
+    }
+  });
+  out.classList.remove('measure');
+}
+
 // אם התזכורת גורמת לדף לגלוש לעמוד נוסף – מוותרים עליה
 function dropTipsIfOverflow() {
   const out = $('wsout');
