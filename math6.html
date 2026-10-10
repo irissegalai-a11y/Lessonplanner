@@ -673,6 +673,7 @@
   }
   html.calm .mnote::before { display: none; }
   html.calm .mnote { border: 1.5px dashed var(--ink, #222); border-radius: 12px; }
+  .gswitch { color: inherit; font-size: 0.95rem; text-underline-offset: 3px; }
   .navhome { border: 2px solid var(--ink) !important; border-radius: var(--sk1, 12px) !important; background: var(--card, #fff) !important; padding: 6px 14px !important; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   /* איורים בקו יד */
   .ico { width: 1.15em; height: 1.15em; vertical-align: -0.2em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
@@ -727,6 +728,8 @@
 const GRADE_PARAMS = new URLSearchParams(location.search);
 const GRADE = ['2', '3', '4', '5'].includes(GRADE_PARAMS.get('grade')) ? Number(GRADE_PARAMS.get('grade')) : 6;
 const NEUTRAL = GRADE_PARAMS.get('neutral') === '1';
+// זוכרים את הכיתה האחרונה – לכתובת הראשית math.html
+try { if (!GRADE_PARAMS.has('teacher')) localStorage.setItem('math-grade', String(GRADE)); } catch (e) {}
 const GRADE_NAME = { 2: "כיתה ב'", 3: "כיתה ג'", 4: "כיתה ד'", 5: "כיתה ה'", 6: "כיתה ו'" };
 const TEST_NAME = GRADE === 6 ? 'מבדק לדוגמה' : 'מבחן תרגול';
 const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : GRADE === 6 ? "כיתה ו' · הכנה למבדק" : `${GRADE_NAME[GRADE]} · תרגול`;
@@ -6130,7 +6133,7 @@ function home() {
       <svg class="doodle-line" aria-hidden="true" width="300" height="14" viewBox="0 0 300 14"><path d="M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"></path></svg>
       <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
-    <div class="subtitle">${SUBTITLE}</div>
+    <div class="subtitle">${SUBTITLE}${NEUTRAL ? '' : ` · <a class="gswitch" href="math.html?choose">החלפת כיתה</a>`}</div>
     ${PRESET ? `<div class="card banner today">
       <div><div class="today-k">הוכן בשבילך</div><div class="today-t">${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div></div>
       <button id="presetGo">התחילו ←</button>

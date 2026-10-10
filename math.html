@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מתרגלים מתמטיקה – בחירת כיתה</title>
+<script>
+  // אתר אחד לכל הכיתות: מי שכבר בחר כיתה – עובר אליה ישר (אלא אם ביקש להחליף)
+  (function () {
+    var p = new URLSearchParams(location.search), g = null;
+    try { g = localStorage.getItem('math-grade'); } catch (e) {}
+    if (!p.has('choose') && ['2', '3', '4', '5', '6'].indexOf(g) >= 0) {
+      if (g !== '6') p.set('grade', g);
+      var s = p.toString().replace(/=(&|$)/g, '$1');
+      location.replace('math6.html' + (s ? '?' + s : '') + location.hash);
+    }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@400;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100vh; }
+  body {
+    font-family: 'Assistant', 'Segoe UI', Arial, sans-serif; color: #1f1e1c; direction: rtl; text-align: center;
+    background-color: #fbf8f1;
+    background-image: linear-gradient(#ece6d9 1px, transparent 1px), linear-gradient(90deg, #ece6d9 1px, transparent 1px);
+    background-size: 26px 26px; padding: 40px 16px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  .hero { position: relative; display: inline-block; isolation: isolate; }
+  .hero::before { content: ''; position: absolute; inset: -14px -30px; background: rgba(127, 168, 214, 0.34); border-radius: 48% 52% 44% 56% / 58% 42% 60% 40%; filter: url(#wcwash); z-index: -1; }
+  h1 { font-family: 'Playpen Sans Hebrew', cursive; font-size: 2.6rem; margin: 0; }
+  .sig { font-family: 'Playpen Sans Hebrew', cursive; font-size: 1.1rem; margin: 14px 0 4px; }
+  h2 { font-family: 'Playpen Sans Hebrew', cursive; font-size: 1.7rem; margin: 34px 0 18px; }
+  .grades { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 14px; }
+  .grades a {
+    display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1f1e1c;
+    background: #fffdf8; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px;
+    padding: 18px 10px; font-family: 'Playpen Sans Hebrew', cursive; position: relative; isolation: isolate;
+  }
+  .grades a:hover, .grades a:focus-visible { box-shadow: 4px 5px 0 #1f1e1c; transform: translate(-1px, -1px); outline: none; }
+  .grades b { font-size: 2.6rem; line-height: 1.1; position: relative; }
+  .grades b::before { content: ''; position: absolute; inset: -6px -14px; background: var(--c); opacity: 0.38; border-radius: 48% 52% 45% 55% / 55% 45% 52% 48%; filter: url(#wcwash); z-index: -1; }
+  .grades span { font-size: 1.05rem; }
+  .note { color: #5f5a50; margin-top: 26px; font-size: 1rem; }
+  .credit { margin-top: 40px; font-size: 0.75rem; color: #9a9384; }
+  @media (max-width: 480px) { h1 { font-size: 2rem; } .hero::before { inset: -10px -12px; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
+<div class="wrap">
+  <div class="hero"><h1>מתרגלים מתמטיקה</h1></div>
+  <div class="sig">מאת <b>איריס סגל</b></div>
+  <h2>באיזו כיתה אתם?</h2>
+  <nav class="grades" aria-label="בחירת כיתה">
+    <a href="math6.html?grade=2" data-g="2" style="--c:#e2b357"><b>ב'</b><span>כיתה ב'</span></a>
+    <a href="math6.html?grade=3" data-g="3" style="--c:#9db27a"><b>ג'</b><span>כיתה ג'</span></a>
+    <a href="math6.html?grade=4" data-g="4" style="--c:#6fb3ad"><b>ד'</b><span>כיתה ד'</span></a>
+    <a href="math6.html?grade=5" data-g="5" style="--c:#d98a9a"><b>ה'</b><span>כיתה ה'</span></a>
+    <a href="math6.html" data-g="6" style="--c:#7fa8d6"><b>ו'</b><span>כיתה ו'</span></a>
+  </nav>
+  <p class="note">האתר יזכור את הבחירה. אפשר להחליף כיתה בכל רגע – בראש הדף, ליד שם הכיתה.</p>
+  <div class="credit">© איריס סגל</div>
+</div>
+<script>
+  // שומרים את הבחירה, ומעבירים הלאה גם פרמטרים נוספים (למשל ?print)
+  var extra = new URLSearchParams(location.search); extra.delete('choose');
+  document.querySelectorAll('[data-g]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      try { localStorage.setItem('math-grade', a.dataset.g); } catch (err) {}
+      var p = new URLSearchParams(extra.toString());
+      if (a.dataset.g !== '6') p.set('grade', a.dataset.g);
+      var s = p.toString().replace(/=(&|$)/g, '$1');
+      location.href = 'math6.html' + (s ? '?' + s : '') + location.hash;
+    });
+  });
+</script>
+</body>
+</html>
