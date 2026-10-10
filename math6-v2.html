@@ -411,6 +411,25 @@
 
 <script>
 /* =========================================================
+   כיתה: ?grade=5 (ברירת מחדל: כיתה ו'), ?neutral=1 – כותרת בלי מספר כיתה
+   ========================================================= */
+const GRADE_PARAMS = new URLSearchParams(location.search);
+const GRADE = GRADE_PARAMS.get('grade') === '5' ? 5 : 6;
+const NEUTRAL = GRADE_PARAMS.get('neutral') === '1';
+const GRADE_NAME = { 5: "כיתה ה'", 6: "כיתה ו'" };
+const TEST_NAME = GRADE === 6 ? 'מבדק לדוגמה' : 'מבחן תרגול';
+const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : GRADE === 6 ? "כיתה ו' · הכנה למבדק" : `${GRADE_NAME[GRADE]} · תרגול`;
+document.title = NEUTRAL ? 'מתרגלים מתמטיקה' : `מתרגלים מתמטיקה – ${GRADE_NAME[GRADE]}`;
+// שומר על הכיתה ועל הכותרת הניטרלית בקישורים פנימיים
+function gq(first) {
+  const parts = [];
+  if (first) parts.push(first);
+  if (GRADE !== 6) parts.push('grade=' + GRADE);
+  if (NEUTRAL) parts.push('neutral=1');
+  return parts.length ? '?' + parts.join('&') : '';
+}
+
+/* =========================================================
    כלי עזר
    ========================================================= */
 const R = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -1881,9 +1900,299 @@ genTrianglePerim = tagLearn(genTrianglePerim, LL('geo', 0));
 genLShape = tagLearn(genLShape, LL('geo', 5));
 
 /* =========================================================
+   כיתה ה' – שאלות נוספות
+   ========================================================= */
+const digitSum = n => String(n).split('').reduce((s, d) => s + Number(d), 0);
+const DIV_RULE = {
+  2: n => `הספרה האחרונה (${n % 10}) ${n % 2 ? 'אי-זוגית' : 'זוגית'}`,
+  5: n => `הספרה האחרונה היא ${n % 10}`,
+  10: n => `הספרה האחרונה היא ${n % 10}`,
+  3: n => `סכום הספרות: ${String(n).split('').join(' + ')} = ${digitSum(n)}`,
+  9: n => `סכום הספרות: ${String(n).split('').join(' + ')} = ${digitSum(n)}`
+};
+const DIV_HINT = {
+  2: 'מספר מתחלק ב-2 אם הספרה האחרונה שלו זוגית (0, 2, 4, 6, 8).',
+  5: 'מספר מתחלק ב-5 אם הספרה האחרונה שלו 0 או 5.',
+  10: 'מספר מתחלק ב-10 אם הספרה האחרונה שלו 0.',
+  3: 'מספר מתחלק ב-3 אם סכום הספרות שלו מתחלק ב-3.',
+  9: 'מספר מתחלק ב-9 אם סכום הספרות שלו מתחלק ב-9.'
+};
+
+function genDivRule(lv = 1) {
+  const d = lv === 1 ? pick([2, 5, 10]) : pick([3, 9, 3]);
+  for (;;) {
+    const good = d * R(Math.ceil(100 / d), Math.floor(9999 / d));
+    const wrongs = new Set();
+    // מסיח "מלכודת": ספרה אחרונה 3/9 (או 5 כשמחלקים ב-10) בלי להתחלק
+    if (d === 3 || d === 9) { let t; do { t = R(10, 999) * 10 + d; } while (t % d === 0); wrongs.add(t); }
+    if (d === 10) { wrongs.add(R(10, 999) * 10 + 5); }
+    if (d === 2) { let t; do { t = R(100, 9999); } while (t % 2 === 0 || String(t)[0] % 2); wrongs.add(t); }
+    let guard = 0;
+    while (wrongs.size < 3 && guard++ < 100) { const t = R(100, 9999); if (t % d && t !== good) wrongs.add(t); }
+    if (wrongs.size < 3 || wrongs.has(good)) continue;
+    const w = [...wrongs].slice(0, 3);
+    const q = choiceQ({
+      text: `איזה מספר <b>מתחלק ב-${d}</b> ללא שארית?`,
+      hint: DIV_HINT[d],
+      exp: `${M(fmt(good))}: ${DIV_RULE[d](good)}, ולכן הוא מתחלק ב-${d}.`
+    }, M(String(good)), w.map(x => M(String(x))));
+    if (d === 3 || d === 9) q.traps = [{ c: M(String(w[0])), m: `הספרה האחרונה היא ${d} – אבל זה לא הכלל! ב-${d} בודקים את <b>סכום הספרות</b>.` }];
+    if (d === 10) q.traps = [{ c: M(String(w[0])), m: 'מספר שמסתיים ב-5 מתחלק ב-5, אבל לא ב-10. ב-10 הספרה האחרונה צריכה להיות 0.' }];
+    if (d === 2) q.traps = [{ c: M(String(w[0])), m: 'בודקים את הספרה <b>האחרונה</b> (היחידות), לא את הראשונה.' }];
+    return q;
+  }
+}
+
+const PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59];
+const TRICKY = [9, 15, 21, 25, 27, 33, 35, 39, 49, 51, 57];
+const divisorsOf = n => { const r = []; for (let i = 1; i <= n; i++) if (n % i === 0) r.push(i); return r; };
+
+function genPrime() {
+  const askPrime = Math.random() < 0.6;
+  let correct, wrongs;
+  if (askPrime) {
+    correct = pick(PRIMES.filter(p => p > 2 || Math.random() < 0.3));
+    wrongs = shuffle(TRICKY).slice(0, 2).concat(Math.random() < 0.4 ? [1] : [pick([4, 6, 8, 10, 12, 14, 16])]);
+  } else {
+    correct = pick(TRICKY);
+    wrongs = shuffle(PRIMES.filter(p => p > 10)).slice(0, 3);
+  }
+  const q = choiceQ({
+    text: askPrime ? 'איזה מספר הוא <b>ראשוני</b>?' : 'איזה מספר הוא <b>פריק</b> (לא ראשוני)?',
+    hint: 'מספר ראשוני מתחלק רק ב-1 ובעצמו. מספר פריק מתחלק גם במספר נוסף.',
+    exp: askPrime
+      ? `${correct} מתחלק רק ב-1 ובעצמו – לכן הוא ראשוני.`
+      : `${correct} מתחלק ב-${divisorsOf(correct).slice(1, -1).join(' וב-')} – לכן הוא פריק. (המחלקים שלו: ${divisorsOf(correct).join(', ')})`
+  }, M(String(correct)), wrongs.map(x => M(String(x))));
+  q.traps = [];
+  if (askPrime) {
+    if (wrongs.includes(1)) q.traps.push({ c: M('1'), m: '1 הוא לא ראשוני ולא פריק – יש לו רק מחלק אחד.' });
+    wrongs.filter(x => x > 1 && x % 2).forEach(x => q.traps.push({ c: M(String(x)), m: `${x} הוא אי-זוגי, אבל הוא מתחלק גם ב-${divisorsOf(x)[1]}. לא כל מספר אי-זוגי הוא ראשוני!` }));
+  } else wrongs.forEach(x => q.traps.push({ c: M(String(x)), m: `${x} מתחלק רק ב-1 ובעצמו – הוא ראשוני.` }));
+  return q;
+}
+
+function genDivisors() {
+  const n = pick([6, 8, 10, 12, 14, 15, 16, 18, 20, 21, 24, 28, 30, 36]);
+  const ds = divisorsOf(n);
+  const pairs = ds.filter(d => d * d <= n).map(d => `${d} × ${n / d}`);
+  return {
+    type: 'num', text: `כמה <b>מחלקים</b> יש למספר ${M(n)}?`, ans: ds.length,
+    traps: [{ v: ds.length - 2, m: `אל תשכחו את 1 ואת המספר עצמו (${n}) – גם הם מחלקים!` }, { v: ds.length - 1, m: 'חסר לכם מחלק אחד. נסו לחפש בזוגות: 1 × ..., 2 × ..., 3 × ...' }],
+    steps: [{ p: `מחפשים זוגות שמכפלתם ${n}: ${pairs.map(M).join(' , ')}. כמה מספרים שונים יש בזוגות האלה?`, a: ds.length }],
+    hint: `חפשו זוגות של מספרים שמכפלתם ${n}: 1 × ${n}, 2 × ...`,
+    exp: `המחלקים של ${n}: ${ds.join(', ')} – בסך הכול ${ds.length}.`
+  };
+}
+
+function genLcmGcd() {
+  const lcmQ = Math.random() < 0.5;
+  for (;;) {
+    const a = R(2, 12), b = R(2, 15);
+    if (a === b || a % b === 0 || b % a === 0) continue;
+    const L = lcm(a, b), G = gcd(a, b);
+    if (lcmQ && L > 60) continue;
+    if (!lcmQ && G === 1 && Math.random() < 0.7) continue;
+    if (lcmQ) return {
+      type: 'num', text: `מהי <b>הכפולה המשותפת הקטנה ביותר</b> של ${M(a)} ו-${M(b)}?`, ans: L,
+      traps: L !== a * b ? [{ v: a * b, m: `${a * b} הוא כפולה משותפת – אבל יש קטנה יותר.` }] : [],
+      steps: [{ p: `הכפולות של ${Math.max(a, b)}: ${[1, 2, 3, 4, 5, 6].map(k => k * Math.max(a, b)).join(', ')}... איזו מהן הראשונה שמתחלקת גם ב-${Math.min(a, b)}?`, a: L }],
+      hint: `עברו על הכפולות של ${Math.max(a, b)} ובדקו איזו מתחלקת גם ב-${Math.min(a, b)}.`,
+      exp: `${L} מתחלק גם ב-${a} וגם ב-${b}, והוא הקטן ביותר.`
+    };
+    return {
+      type: 'num', text: `מהו <b>המחלק המשותף הגדול ביותר</b> של ${M(a)} ו-${M(b)}?`, ans: G,
+      traps: [{ v: Math.min(a, b), m: `${Math.min(a, b)} לא מחלק את ${Math.max(a, b)}. מחפשים מספר שמחלק את <b>שניהם</b>.` }],
+      steps: [{ p: `המחלקים של ${a}: ${divisorsOf(a).join(', ')}. המחלקים של ${b}: ${divisorsOf(b).join(', ')}. מה המחלק הגדול ביותר שמופיע בשתי הרשימות?`, a: G }],
+      hint: `רשמו את המחלקים של ${a} ושל ${b}, וחפשו את הגדול ביותר שמשותף לשניהם.`,
+      exp: `המחלקים המשותפים: ${divisorsOf(a).filter(x => b % x === 0).join(', ')}. הגדול ביותר: ${G}.`
+    };
+  }
+}
+
+function genDivRem() {
+  const d = R(3, 9), q = R(4, 40), r = R(1, d - 1), n = d * q + r;
+  if (Math.random() < 0.5) return {
+    type: 'num', text: `${M(`${n} : ${d}`)} = ${M(q)} ושארית ${BOX}.<br>מה <b>השארית</b>?`, ans: r,
+    traps: [{ v: q, m: 'זו המנה. השאלה היא כמה <b>נשאר</b>.' }],
+    steps: [{ p: M(`${d} × ${q} =`), a: d * q }, { p: `כמה נשאר? ${M(`${n} - ${d * q} =`)}`, a: r }],
+    hint: `כמה זה ${d} × ${q}? וכמה חסר עד ${n}?`,
+    exp: `${M(`${d} × ${q} = ${d * q}`)}, ו-${M(`${n} - ${d * q} = ${r}`)}. השארית: ${r}.`
+  };
+  const item = pick([{ what: 'עוגיות', box: 'קופסה', boxes: 'קופסאות' }, { what: 'מדבקות', box: 'דף', boxes: 'דפים' }, { what: 'תלמידים', box: 'קבוצה', boxes: 'קבוצות' }]);
+  return {
+    type: 'num', unit: item.what,
+    text: `יש ${n} ${item.what}. מסדרים ${d} ${item.what} בכל ${item.box}, עד שאי אפשר למלא עוד ${item.box} שלמה.<br>כמה ${item.what} <b>נשארו</b> בחוץ?`,
+    ans: r,
+    traps: [{ v: q, m: `${q} זה מספר ה${item.boxes} המלאות. כמה ${item.what} נשארו?` }],
+    steps: [{ p: `כמה ${item.boxes} מלאות? (כמה פעמים ${d} נכנס ב-${n})`, a: q }, { p: `כמה ${item.what} בתוכן? ${M(`${q} × ${d} =`)}`, a: q * d }, { p: `כמה נשארו? ${M(`${n} - ${q * d} =`)}`, a: r }],
+    hint: 'זה חילוק עם שארית – השארית היא מה שנשאר בחוץ.',
+    exp: `${M(`${n} : ${d}`)} = ${q} ושארית ${r}.`
+  };
+}
+
+function genDiv2(lv = 2) {
+  const d = R(12, 35), q = lv >= 3 ? R(40, 250) : R(12, 60), n = d * q;
+  const big = q - q % 10, small = q % 10;
+  const steps = big && small ? [
+    { p: `נחלק בחלקים. כמה זה ${M(`${d} × ${big}`)}?`, a: d * big },
+    { p: `כמה נשאר? ${M(`${fmt(n)} - ${fmt(d * big)} =`)}`, a: d * small },
+    { p: M(`${d * small} : ${d} =`), a: small },
+    { p: `חברו את שני החלקים: ${M(`${big} + ${small} =`)}`, a: q }
+  ] : undefined;
+  return {
+    type: 'num', text: `פתרו: ${M(`${fmt(n)} : ${d} =`)}`, ans: q, steps,
+    hint: `נסו להעריך: כמה פעמים ${d} נכנס ב-${fmt(n)}? אפשר להתחיל מ-${d} × 10 = ${d * 10}.`,
+    exp: `${M(`${fmt(n)} : ${d} = ${q}`)}. בדיקה: ${M(`${q} × ${d} = ${fmt(n)}`)}`
+  };
+}
+
+function genFracTimesWhole() {
+  const [n, d] = properFrac(2, 9);
+  const w = R(2, 9);
+  const res = n * w;
+  const word = Math.random() < 0.4;
+  return {
+    type: 'frac', form: 'any',
+    text: word
+      ? `נועם שותה בכל יום ${M(F(n, d))} ליטר מיץ. כמה ליטר הוא שותה ב-${w} ימים?`
+      : `פתרו: ${M(`${F(n, d)} × ${w} =`)}`,
+    ans: { n: res, d },
+    traps: [{ f: { n: res, d: d * w }, m: 'כפלתם גם את המכנה. כופלים רק את המונה במספר השלם!' }, { f: { n: n + w, d }, m: 'חיברתם במקום לכפול.' }],
+    steps: [{ p: `כופלים רק את המונה: ${M(`${n} × ${w} =`)} (המכנה נשאר ${d})`, a: res }],
+    hint: `${F(n, d)} × ${w} זה ${w} פעמים ${F(n, d)}. כופלים את המונה במספר, והמכנה נשאר.`,
+    exp: `${M(`${F(n, d)} × ${w} = ${F(res, d)}`)} = ${FX(res, d)}`
+  };
+}
+
+function triAngleFig(kind, labels) {
+  const P = kind === 2 ? [[50, 170], [300, 170], [50, 40]] : kind === 3 ? [[60, 170], [280, 170], [170, 40]] : [[40, 170], [300, 170], [125, 35]];
+  const L = [[P[0][0] + 26, P[0][1] - 12], [P[1][0] - 34, P[1][1] - 12], [P[2][0] + (kind === 2 ? 22 : 2), P[2][1] + 36]];
+  let g = `<polygon points="${P.map(p => p.join(',')).join(' ')}" class="shape"/>`;
+  if (kind === 2) g += `<polyline class="ra" points="${P[0][0] + 16},${P[0][1]} ${P[0][0] + 16},${P[0][1] - 16} ${P[0][0]},${P[0][1] - 16}"/>`;
+  labels.forEach((t, i) => { if (t) g += T(L[i][0], L[i][1], t, 'middle', 'lb'); });
+  if (kind === 3) {
+    // סימון צלעות שוות
+    const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    [mid(P[0], P[2]), mid(P[1], P[2])].forEach(([x, y]) => { g += `<line x1="${x - 5}" y1="${y - 5}" x2="${x + 5}" y2="${y + 5}" stroke="#2f6f55" stroke-width="2.5"/>`; });
+  }
+  g += T(170, 200, 'הסרטוט אינו בקנה מידה', 'middle', 'lbs');
+  return svg(340, 210, g);
+}
+
+function genTriangleAngle(kind) {
+  const k = kind || R(1, 3);
+  if (k === 1) {
+    const a = R(3, 14) * 5, b = R(3, 14) * 5;
+    if (a + b >= 170) return genTriangleAngle(1);
+    const c = 180 - a - b;
+    return {
+      type: 'num', unit: '°', text: 'במשולש שלפניכם נתונות שתי זוויות. מה גודל הזווית השלישית?',
+      fig: triAngleFig(1, [`${a}°`, `${b}°`, '?']), ans: c,
+      traps: [{ v: 360 - a - b, m: '360° זה סכום הזוויות במרובע. במשולש סכום הזוויות הוא <b>180°</b>.' }, { v: a + b, m: 'זה סכום שתי הזוויות הנתונות. כמה חסר עד 180°?' }],
+      steps: [{ p: `סכום שתי הזוויות: ${M(`${a} + ${b} =`)}`, a: a + b }, { p: `כמה חסר עד 180°? ${M(`180 - ${a + b} =`)}`, a: c }],
+      hint: 'סכום הזוויות במשולש הוא 180°.',
+      exp: `${M(`180 - ${a} - ${b} = ${c}`)}°`
+    };
+  }
+  if (k === 2) {
+    const a = R(4, 16) * 5, c = 90 - a;
+    return {
+      type: 'num', unit: '°', text: 'לפניכם משולש ישר-זווית. מה גודל הזווית המסומנת ב-?',
+      fig: triAngleFig(2, ['', `${a}°`, '?']), ans: c,
+      traps: [{ v: 180 - a, m: 'שכחתם את הזווית הישרה (90°)! גם היא חלק מה-180°.' }, { v: 270 - a, m: '360° זה במרובע. במשולש – 180°.' }],
+      steps: [{ p: `הזווית הישרה היא 90°. ${M(`90 + ${a} =`)}`, a: 90 + a }, { p: M(`180 - ${90 + a} =`), a: c }],
+      hint: 'במשולש ישר-זווית יש זווית של 90°. סכום כל הזוויות – 180°.',
+      exp: `${M(`180 - 90 - ${a} = ${c}`)}°`
+    };
+  }
+  const apex = R(4, 14) * 10, base = (180 - apex) / 2;
+  return {
+    type: 'num', unit: '°', text: 'לפניכם משולש <b>שווה-שוקיים</b> (שתי הצלעות המסומנות שוות). זווית הראש היא ' + apex + '°. מה גודל כל אחת מזוויות הבסיס?',
+    fig: triAngleFig(3, ['?', '?', `${apex}°`]), ans: base,
+    traps: [{ v: 180 - apex, m: 'זה סכום <b>שתי</b> זוויות הבסיס יחד. במשולש שווה-שוקיים הן שוות – כל אחת חצי.' }],
+    steps: [{ p: `כמה נשאר לשתי זוויות הבסיס? ${M(`180 - ${apex} =`)}`, a: 180 - apex }, { p: `הן שוות – כל אחת: ${M(`${180 - apex} : 2 =`)}`, a: base }],
+    hint: 'במשולש שווה-שוקיים זוויות הבסיס שוות. סכום כל הזוויות 180°.',
+    exp: `${M(`(180 - ${apex}) : 2 = ${base}`)}°`
+  };
+}
+
+const TOPICS5 = [
+  {
+    id: 'divis', name: 'התחלקות', icon: '🔍', color: '#4c5fd5',
+    desc: 'סימני התחלקות, ראשוניים ופריקים, מחלקים וכפולות',
+    levels: {
+      1: [() => genDivRule(1), () => genDivRule(1), genPrime],
+      2: [() => genDivRule(2), genPrime, genDivisors],
+      3: [genDivisors, genLcmGcd, () => genDivRule(2), genPrime]
+    },
+    tips: ['מתחלק ב-2: ספרה אחרונה זוגית. ב-5: ספרה אחרונה 0 או 5. ב-10: ספרה אחרונה 0.', 'מתחלק ב-3 / ב-9: סכום הספרות מתחלק ב-3 / ב-9.', 'מספר ראשוני מתחלק רק ב-1 ובעצמו. 1 אינו ראשוני ואינו פריק.', 'מחפשים מחלקים בזוגות: 1 × 12, 2 × 6, 3 × 4.']
+  },
+  {
+    id: 'ops', name: 'כפל וחילוק', icon: '➗', color: '#e0703a',
+    desc: 'כפל במאונך, חילוק ארוך, שארית, סדר פעולות ובעיות',
+    levels: {
+      1: [() => genMul(1), () => genDiv(1), genDivRem],
+      2: [() => genMul(2), () => genDiv2(2), () => genOrder(2), genDivRem, () => genOrderSame()],
+      3: [genWord, () => genDiv2(3), genBuildings, genWord]
+    },
+    tips: ['בודקים חילוק בעזרת כפל: מנה × מחלק + שארית = המספר.', 'בחילוק במחלק דו-ספרתי – מעריכים קודם (למשל 23 × 10 = 230).', 'סדר פעולות: סוגריים ← כפל וחילוק ← חיבור וחיסור.', 'רק כפל וחילוק, או רק חיבור וחיסור – משמאל לימין.']
+  },
+  {
+    id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c',
+    desc: 'הרחבה וצמצום, מכנה משותף, חיבור וחיסור, כפל שבר במספר שלם',
+    levels: {
+      1: [genExpand, genReduce, genAddSame, genImproperToMixed],
+      2: [genAddDiff, genSubDiff, genCompareFrac, () => genFracOfQty(1)],
+      3: [genMixedAddSub, genFracTimesWhole, genFracWord, genFromWhole]
+    },
+    tips: ['הרחבה/צמצום: כופלים או מחלקים את המונה ואת המכנה באותו מספר.', 'חיבור וחיסור: קודם מכנה משותף, ואז רק המונים.', 'כפל שבר במספר שלם: כופלים רק את המונה.', 'שבר מדומה ← שבר מעורב: מונה : מכנה.']
+  },
+  {
+    id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a',
+    desc: 'עשיריות ומאיות, השוואה, ישר מספרים, חיבור וחיסור',
+    levels: {
+      1: [genFracToDec, genDecimalPlace, genMul10],
+      2: [genDecCompare, genNumberLine, genDecAddSub, genDecToFrac],
+      3: [genSequence, genDecAddSub, genUnits, genExpandedDecimal]
+    },
+    tips: ['אחרי הנקודה: עשיריות, מאיות, אלפיות.', 'בחיבור וחיסור – נקודה מתחת לנקודה.', 'כפל ב-10/100/1000 – הנקודה ימינה; חילוק – שמאלה.', 'השוואה: מוסיפים אפסים בסוף ומשווים.']
+  },
+  {
+    id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55',
+    desc: 'היקף ושטח, מקבילית ומשולש, זוויות במשולש',
+    levels: {
+      1: [genRect, () => genSquare(1), () => genTriangleAngle(1)],
+      2: [genParallelogram, genTriangleArea, () => genTriangleAngle(2), genRectReverse],
+      3: [genLShape, () => genTriangleAngle(3), genTriangleArea, genParallelogram]
+    },
+    tips: ['היקף = סכום כל הצלעות. שטח מלבן = אורך × רוחב.', 'שטח מקבילית = צלע × גובה. שטח משולש = (צלע × גובה) : 2.', 'סכום הזוויות במשולש הוא 180°.', 'במשולש שווה-שוקיים זוויות הבסיס שוות.']
+  },
+  {
+    id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1',
+    desc: 'קריאת דיאגרמות, הפרשים, סכום וממוצע',
+    levels: {
+      1: [() => genBarRead(0), () => genBarRead(1)],
+      2: [() => genBarRead(2), () => genBarRead(3), () => genBakery()],
+      3: [() => genBarRead(4), () => genMeanList(1), () => genMeanList(2)]
+    },
+    tips: ['קוראים את הכותרת, הצירים והמקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.', 'ממוצע = סכום הערכים : מספר הערכים.']
+  }
+];
+const LEVEL_DESC5 = {
+  divis: ['סימני התחלקות ב-2, 5 ו-10', 'סימני התחלקות ב-3 וב-9, ראשוניים ופריקים', 'מחלקים, כפולה משותפת ומחלק משותף'],
+  ops: ['כפל וחילוק בחד-ספרתי, חילוק עם שארית', 'כפל דו-ספרתי, חילוק במחלק דו-ספרתי, סדר פעולות', 'בעיות מילוליות'],
+  frac: ['הרחבה, צמצום, חיבור עם מכנה שווה, מדומה ← מעורב', 'חיבור וחיסור עם מכנים שונים, השוואה, שבר מכמות', 'שברים מעורבים, כפל שבר במספר שלם, בעיות'],
+  dec: ['שבר ↔ עשרוני, ערך הספרה, כפל ב-10 ו-100', 'השוואה, ישר מספרים, חיבור וחיסור', 'סדרות, יחידות מידה, פירוק עשרוני'],
+  geo: ['מלבן וריבוע, זוויות במשולש', 'מקבילית ומשולש, משולש ישר-זווית', 'מצולעים מורכבים, משולש שווה-שוקיים'],
+  data: ['קריאת דיאגרמה', 'הפרשים וסכום', 'ממוצע ואיבר חסר'],
+  mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
+};
+
+/* =========================================================
    נושאים ורמות
    ========================================================= */
-const TOPICS = [
+const TOPICS6 = [
   {
     id: 'place', name: 'מבנה עשרוני', icon: '🔢', color: '#4c5fd5',
     desc: 'ערך הספרה, עיגול, השוואה, הרכבת מספרים',
@@ -1945,8 +2254,9 @@ const TOPICS = [
     tips: ['קוראים את הכותרת, את הצירים ואת המקרא לפני שעונים.', 'בודקים כמה שווה כל קו רשת.', 'ממוצע = סכום הערכים : מספר הערכים.', 'ציון אחד משתנה ← הממוצע משתנה ב: השינוי : מספר הציונים.', 'איבר חסר: (ממוצע × מספר הערכים) פחות סכום הידועים.']
   }
 ];
+const TOPICS = GRADE === 5 ? TOPICS5 : TOPICS6;
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
-const TEST_PLAN = { place: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 };
+const TEST_PLAN = GRADE === 5 ? { divis: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 } : { place: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 };
 const LEVEL_NAME = { 1: 'רמה 1', 2: 'רמה 2', 3: 'רמה 3' };
 
 function mk(topic, gen, lv) {
@@ -3011,7 +3321,7 @@ Object.assign(LESSONS, {
     ]
   }
 });
-LESSON_ORDER.splice(0, LESSON_ORDER.length, 'place', 'order', 'frac', 'dec', 'geo', 'mean');
+LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 5 ? ['order', 'frac', 'dec', 'geo', 'mean'] : ['place', 'order', 'frac', 'dec', 'geo', 'mean']));
 
 // קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
 [[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
@@ -3167,7 +3477,7 @@ document.addEventListener('click', e => {
 /* =========================================================
    שמירה מקומית (בדפדפן של התלמיד/ה בלבד)
    ========================================================= */
-const STORE_KEY = 'math6-practice-v2';
+const STORE_KEY = GRADE === 6 ? 'math6-practice-v2' : 'math-practice-g' + GRADE;
 function loadStore() {
   try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; }
 }
@@ -3202,8 +3512,8 @@ const PRESET = (() => {
 })();
 function presetLabel(p) {
   if (p.learn) return `📚 לימוד: ${LESSONS[p.learn].name}`;
-  if (p.topic === 'test') return 'מבדק לדוגמה';
-  if (p.topic === 'testfb') return 'מבדק לדוגמה עם משוב';
+  if (p.topic === 'test') return TEST_NAME;
+  if (p.topic === 'testfb') return TEST_NAME + ' עם משוב';
   return p.topic === 'mix' ? 'תרגול מעורב' : TOPIC[p.topic].name;
 }
 
@@ -3457,9 +3767,9 @@ function home() {
   const name = store.name || '';
   const len = store.roundLen || 10;
   app.innerHTML = `
-    <div class="tools"><a class="btnlink printlink" href="?print">🖨️ דפי עבודה להדפסה</a><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></div>
+    <div class="tools"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></div>
     <h1>מתרגלים מתמטיקה 🎯</h1>
-    <div class="subtitle">כיתה ו' · הכנה למבדק</div>
+    <div class="subtitle">${SUBTITLE}</div>
     ${PRESET ? `<div class="card banner">
       <div>✨ <b>הוכן בשבילך:</b> ${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div>
       <button id="presetGo">התחילו ←</button>
@@ -3505,10 +3815,10 @@ function home() {
     </div>
     <div class="big-actions">
       <button id="mix">🔀 תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
-      <button id="testfb" class="secondary">📝 מבדק עם משוב<span class="desc">20 שאלות כמו במבדק, עם רמזים ועזרה תוך כדי</span></button>
-      <button id="test" class="secondary">📝 מבדק לדוגמה<span class="desc">20 שאלות כמו במבדק – הציון והפתרונות בסוף</span></button>
+      <button id="testfb" class="secondary">📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב<span class="desc">20 שאלות מכל הנושאים, עם רמזים ועזרה תוך כדי</span></button>
+      <button id="test" class="secondary">📝 ${TEST_NAME}<span class="desc">20 שאלות מכל הנושאים – הציון והפתרונות בסוף</span></button>
     </div>
-    ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>המבדקים האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
+    ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
   `;
   $('fontBtn').onclick = cycleFont;
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
@@ -3526,7 +3836,7 @@ function home() {
 
 
 /* ---------- בחירת רמה ---------- */
-const LEVEL_DESC = {
+const LEVEL_DESC6 = {
   place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'ספרות אחרי הנקודה העשרונית'],
   ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן', 'בעיות מילוליות ותרגילים מאתגרים'],
   frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
@@ -3535,6 +3845,7 @@ const LEVEL_DESC = {
   data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
+const LEVEL_DESC = GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
 const LEVEL_TAG = { 1: 'בסיסית', 2: 'בינונית', 3: 'מאתגרת' };
 
 function currentLevel(topicId) {
@@ -3629,7 +3940,7 @@ function startPractice(topicId, opt = {}) {
 
 function startTest(withFeedback) {
   const qs = buildTest();
-  if (withFeedback) return startPractice('test', { list: qs, label: '📝 מבדק עם משוב' });
+  if (withFeedback) return startPractice('test', { list: qs, label: `📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב` });
   state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0 };
   renderQ();
 }
@@ -3666,7 +3977,7 @@ function inputHTML(q) {
 }
 
 function titleText() {
-  if (state.mode === 'test') return '📝 מבדק לדוגמה';
+  if (state.mode === 'test') return '📝 ' + TEST_NAME;
   if (state.label) return state.label;
   if (state.retry) return '🔁 תרגול הטעויות שלי';
   if (state.topicId === 'mix') return '🔀 תרגול מעורב';
@@ -4052,12 +4363,20 @@ function teacher() {
     <h1>🧑‍🏫 קישור מותאם לתלמידים</h1>
     <div class="subtitle">בחרו הגדרות, העתיקו את הקישור והדביקו אותו במטלה בקלאסרום</div>
     <div class="card tform">
+      <label>כיתה:
+        <select id="tg">
+          <option value="6" ${GRADE === 6 ? 'selected' : ''}>כיתה ו'</option>
+          <option value="5" ${GRADE === 5 ? 'selected' : ''}>כיתה ה'</option>
+        </select>
+      </label>
+      <label class="chk"><input type="checkbox" id="tn" ${NEUTRAL ? 'checked' : ''}> כותרת ניטרלית – בלי מספר כיתה (מתאים לתלמיד/ה שחוזר/ת על חומר של כיתה נמוכה)</label>
       <label>נושא:
         <select id="tt">
+          <option value="home">🏠 מסך הפתיחה (כל הנושאים)</option>
           ${TOPICS.map(t => `<option value="${t.id}">${t.icon} ${t.name}</option>`).join('')}
           <option value="mix">🔀 תרגול מעורב</option>
-          <option value="testfb">📝 מבדק עם משוב</option>
-          <option value="test">📝 מבדק לדוגמה (בלי משוב)</option>
+          <option value="testfb">📝 ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב</option>
+          <option value="test">📝 ${TEST_NAME} (בלי משוב)</option>
           ${LESSON_ORDER.map(id => LESSONS[id]).map(L => `<option value="learn:${L.id}">📚 לימוד: ${L.name} (כרטיסיות הדרכה)</option>`).join('')}
         </select>
       </label>
@@ -4096,7 +4415,7 @@ function teacher() {
     <div class="card">
       <h2>🖨️ דפי עבודה להדפסה</h2>
       <p>יצירת דפי עבודה מודפסים מאותן שאלות של האפליקציה – לפי נושא ורמה, עם כמה נוסחים ודף תשובות.</p>
-      <div class="actions"><a class="btnlink" href="${location.pathname}?print">🖨️ למחולל דפי העבודה</a></div>
+      <div class="actions"><a class="btnlink" href="${location.pathname}${gq('print')}">🖨️ למחולל דפי העבודה</a></div>
     </div>
     <div class="card">
       <h2>🔊 בדיקת הקראה במכשיר הזה</h2>
@@ -4104,7 +4423,8 @@ function teacher() {
       <div class="actions"><button id="ttsTest">▶ השמיעו משפט לדוגמה</button></div>
       <p id="ttsInfo" class="muted"></p>
     </div>
-    <p class="center"><a href="${location.pathname}">← חזרה לאפליקציה</a></p>`;
+    <p class="center"><a href="${location.pathname}${gq()}">← חזרה לאפליקציה</a></p>`;
+  $('tg').onchange = () => { location.search = '?teacher' + ($('tg').value === '5' ? '&grade=5' : '') + (NEUTRAL ? '&neutral=1' : ''); };
   const ttsInfo = () => {
     loadVoices();
     const el = $('ttsInfo');
@@ -4118,20 +4438,23 @@ function teacher() {
   setTimeout(ttsInfo, 600);
   const upd = () => {
     const t = $('tt').value, l = $('tl').value, c = $('tc').value;
-    const isLearn = t.startsWith('learn:');
-    const isTest = t.startsWith('test') || isLearn;
+    const isLearn = t.startsWith('learn:'), isHome = t === 'home';
+    const isTest = t.startsWith('test') || isLearn || isHome;
     $('tl').disabled = $('tc').disabled = isTest;
     $('tf').disabled = isTest || !l;
     if (!l) $('tf').checked = false;
-    const p = isLearn ? new URLSearchParams({ learn: t.slice(6) }) : new URLSearchParams({ topic: t });
+    const p = isHome ? new URLSearchParams() : isLearn ? new URLSearchParams({ learn: t.slice(6) }) : new URLSearchParams({ topic: t });
+    if (GRADE !== 6) p.set('grade', GRADE);
+    if ($('tn').checked) p.set('neutral', '1');
     if (!isTest && l) p.set('level', l);
     if (!isTest && l && $('tf').checked) p.set('fixed', '1');
     if (!isTest && c) p.set('count', c);
-    const url = location.origin + location.pathname + '?' + p.toString();
+    const qs = p.toString();
+    const url = location.origin + location.pathname + (qs ? '?' + qs : '');
     $('tlink').textContent = url;
     $('ttry').href = url;
   };
-  ['tt', 'tl', 'tc', 'tf'].forEach(id => $(id).addEventListener('change', upd));
+  ['tt', 'tl', 'tc', 'tf', 'tn'].forEach(id => $(id).addEventListener('change', upd));
   upd();
   $('tcopy').onclick = async () => {
     try { await navigator.clipboard.writeText($('tlink').textContent); $('tmsg').textContent = 'הקישור הועתק ✔'; }
@@ -4173,6 +4496,12 @@ function printBuilder() {
       <h1>🖨️ דפי עבודה להדפסה</h1>
       <div class="subtitle">בחרו נושאים ורמה – בכל לחיצה נוצר דף חדש עם מספרים אחרים</div>
       <div class="card tform">
+        <label>כיתה:
+          <select id="wg">
+            <option value="6" ${GRADE === 6 ? 'selected' : ''}>כיתה ו'</option>
+            <option value="5" ${GRADE === 5 ? 'selected' : ''}>כיתה ה'</option>
+          </select>
+        </label>
         <div class="lbl2">נושאים:</div>
         <div class="wstopics">${TOPICS.map((t, i) => `<label class="chk"><input type="checkbox" value="${t.id}" ${i === 0 ? 'checked' : ''}> ${t.icon} ${t.name}</label>`).join('')}</div>
         <label>רמה:
@@ -4201,9 +4530,10 @@ function printBuilder() {
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
-      <p class="center"><a href="${location.pathname}">← לאפליקציה</a></p>
+      <p class="center"><a href="${location.pathname}${gq()}">← לאפליקציה</a></p>
     </div>
     <div id="wsout"></div>`;
+  $('wg').onchange = () => { location.search = '?print' + ($('wg').value === '5' ? '&grade=5' : '') + (NEUTRAL ? '&neutral=1' : ''); };
   const letters = 'אבג';
   $('wgo').onclick = () => {
     const topics = [...app.querySelectorAll('.wstopics input:checked')].map(x => x.value);
@@ -4246,7 +4576,9 @@ function codeHash(s) {
   return x.toString(16);
 }
 function teacherGate() {
-  if (store.teacherKey === TEACHER_HASH) return teacher();
+  let shared = null;
+  try { shared = localStorage.getItem('math-teacher-key'); } catch (e) { /* לא חובה */ }
+  if (store.teacherKey === TEACHER_HASH || shared === TEACHER_HASH) return teacher();
   app.innerHTML = `
     <h1>🔒 כניסת מורה</h1>
     <div class="card center">
@@ -4257,10 +4589,12 @@ function teacherGate() {
       </div>
       <p class="muted" id="tcmsg" style="min-height:1.4em"></p>
     </div>
-    <p class="center"><a href="${location.pathname}">← לאפליקציה</a></p>`;
+    <p class="center"><a href="${location.pathname}${gq()}">← לאפליקציה</a></p>`;
   const tryCode = () => {
     if (codeHash('math6:' + $('tcode').value.trim()) === TEACHER_HASH) {
-      store.teacherKey = TEACHER_HASH; saveStore(store); teacher();
+      store.teacherKey = TEACHER_HASH; saveStore(store);
+      try { localStorage.setItem('math-teacher-key', TEACHER_HASH); } catch (e) { /* לא חובה */ }
+      teacher();
     } else { $('tcmsg').textContent = 'הקוד לא נכון. נסו שוב.'; $('tcode').select(); }
   };
   $('tgo').onclick = tryCode;
