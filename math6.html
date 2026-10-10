@@ -3217,7 +3217,19 @@ function stopSpeak() {
   if (canSpeak) speechSynthesis.cancel();
   setSpeakBtn(null);
 }
+const isAndroid = /Android/i.test(navigator.userAgent);
+function chromeIntentURL() {
+  return `intent://${location.host}${location.pathname}${location.search}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(location.href)};end`;
+}
 function voiceHelpHTML() {
+  if (isAndroid) return `<b>🔇 ההקראה לא עובדת בדפדפן הזה.</b>
+    <p>כשפותחים את הקישור מתוך אפליקציה (קלאסרום, וואטסאפ...), הוא נפתח בדפדפן פנימי שלא תמיד יודע להקריא. ב-<b>Chrome</b> זה עובד:</p>
+    <p><a class="btnlink" href="${chromeIntentURL()}">🌐 פתחו ב-Chrome</a></p>
+    <p class="small muted">או: לחצו על ⋮ בפינה ← "פתח ב-Chrome" / "פתח בדפדפן". שימו לב: ההתקדמות נשמרת בנפרד בכל דפדפן.</p>
+    <details><summary>עדיין לא עובד גם ב-Chrome?</summary>${voiceInstallHTML()}</details>`;
+  return voiceInstallHTML();
+}
+function voiceInstallHTML() {
   return `<b>🔇 לא נמצא במכשיר הזה קול בעברית, ולכן ההקראה לא עובדת.</b>
     <ul>
       <li><b>כרומבוק:</b> הגדרות ← נגישות ← המרת טקסט לדיבור ← הגדרות קול – להוסיף שפה <b>עברית</b>.</li>
@@ -3242,7 +3254,7 @@ function speak(html, btn) {
   if (speakingBtn) { const same = speakingBtn === btn; stopSpeak(); if (same) return; }
   loadVoices();
   // באנדרואיד חלק מהדפדפנים לא מדווחים על הקול העברי למרות שהוא מותקן – מנסים בכל זאת עם קול ברירת המחדל
-  if (voicesReady && !heVoice && !/Android/i.test(navigator.userAgent)) { showToast(voiceHelpHTML()); return; }
+  if (voicesReady && !heVoice && !isAndroid) { showToast(voiceHelpHTML()); return; }
   if (synth.speaking || synth.pending) synth.cancel();
   if (synth.paused) synth.resume();
   const parts = speechChunks(speechText(html));
@@ -4053,7 +4065,7 @@ function teacher() {
     if (!canSpeak) el.innerHTML = 'הדפדפן הזה לא תומך בהקראה.';
     else if (!voicesReady) el.innerHTML = 'הקולות עדיין נטענים... לחצו שוב על הכפתור בעוד רגע.';
     else if (heVoice) el.innerHTML = `✔ נמצא קול בעברית: <b>${esc(heVoice.name)}</b>`;
-    else if (/Android/i.test(navigator.userAgent)) el.innerHTML = 'הדפדפן לא מדווח על קול בעברית, אבל ננסה להקריא עם קול ברירת המחדל של המכשיר. אם שמעתם את המשפט – הכול תקין! אם לא – ' + voiceHelpHTML();
+    else if (isAndroid) el.innerHTML = 'הדפדפן לא מדווח על קול בעברית, אבל ננסה להקריא עם קול ברירת המחדל של המכשיר. אם שמעתם את המשפט – הכול תקין! אם לא: ' + voiceHelpHTML();
     else el.innerHTML = voiceHelpHTML();
   };
   $('ttsTest').onclick = e => { speak('שלום! זו בדיקה של ההקראה. שלוש ועוד ארבע שווה שבע.', e.currentTarget); ttsInfo(); };
