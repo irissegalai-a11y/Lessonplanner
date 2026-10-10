@@ -396,6 +396,35 @@
   .hlc { background: #ffe08a; padding: 0 4px; border-radius: 4px; }
   .lbtns button.sel { background: var(--accent); color: #fff; }
 
+  .ex-cover { position: relative; overflow: hidden; min-height: 900px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: linear-gradient(160deg, #eef1ff 0%, #dfe6ff 60%, #cfd8ff 100%) !important; border: 3px solid #4c5fd5; }
+  .ex-deco { position: absolute; inset: 0; font-size: 64px; color: rgba(76, 95, 213, 0.12); line-height: 1.6; word-spacing: 40px; padding: 30px; pointer-events: none; text-align: center; }
+  .ex-title { font-size: 3rem; font-weight: 800; color: #2c2c54; text-align: center; position: relative; }
+  .ex-grade { font-size: 1.8rem; font-weight: 700; background: #4c5fd5; color: #fff; border-radius: 50%; width: 130px; height: 130px; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; }
+  .ex-ver { font-size: 1.8rem; color: #4c5fd5; position: relative; }
+  .ex-fields { display: flex; flex-direction: column; gap: 14px; position: relative; font-size: 1.2rem; font-weight: 700; color: #2c2c54; }
+  .ex-box { display: block; width: 300px; height: 44px; background: #fff; border-radius: 10px; margin-top: 4px; border: 1.5px solid #9aa6d8; }
+  .ex-intro h2 { color: #e0703a; font-size: 1.7rem; margin-top: 18px; }
+  .ex-intro p { font-size: 1.15rem; line-height: 2; }
+  .ex-topics { font-size: 1.4rem; line-height: 2.4; font-weight: 600; color: #2c2c54; padding-right: 30px; }
+  .ex-rules { list-style: none; padding: 0; font-size: 1.1rem; line-height: 2.3; }
+  .ex-luck { font-size: 2rem; font-weight: 800; text-align: center; color: #2c2c54; margin: 30px 0; font-style: italic; }
+  .ex-end { min-height: 500px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .ex-q { padding: 18px 0 26px; break-inside: avoid; }
+  .ex-num { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: #4c5fd5; color: #fff; font-weight: 800; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; }
+  .ex-q .qtext { font-size: 1.12rem; line-height: 2; }
+  .ex-choices { padding-right: 50px; margin-top: 8px; line-height: 2.4; font-size: 1.08rem; }
+  .ex-idx { display: inline-block; width: 16px; font-size: 0.75rem; color: #555; }
+  .ex-check { display: inline-block; width: 20px; height: 20px; border: 1.5px solid #000; border-radius: 3px; vertical-align: middle; margin: 0 4px 0 8px; }
+  .ex-work { padding-right: 50px; margin-top: 8px; font-size: 1.05rem; }
+  .ex-space { height: 150px; }
+  .ex-space.small { height: 40px; }
+  .ex-q .wsans { padding-right: 50px; }
+  .ws-page .ex-q .fig { max-width: 360px; }
+  @media print {
+    .ex-cover { min-height: 260mm; }
+    .ex-body { break-after: page; }
+  }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
@@ -5632,6 +5661,18 @@ function wsQuestionHTML(q, n) {
   return `<div class="wsq"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${space}${ans}</div>`;
 }
 
+function examQuestionHTML(q, n) {
+  let ans;
+  if (q.type === 'choice') ans = `<div class="ex-choices">${q.choices.map((c, i) => `<div><span class="ex-idx">${i + 1}</span><span class="ex-check"></span> ${c}</div>`).join('')}</div>`;
+  else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
+  else ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
+  const plain = q.text.replace(/<[^>]+>/g, '');
+  const work = q.steps && q.steps.length >= 3 && plain.length > 60
+    ? '<div class="ex-work">הַצִּיגוּ אֶת דֶּרֶךְ הַפִּתְרוֹן.<div class="ex-space"></div></div>'
+    : q.type !== 'choice' ? '<div class="ex-space small"></div>' : '';
+  return `<div class="ex-q"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>`;
+}
+
 function buildWorksheet(topics, level, count) {
   const qs = [], prev = {};
   for (let i = 0; i < count; i++) {
@@ -5685,7 +5726,11 @@ function printBuilder() {
         <label class="chk"><input type="checkbox" id="wexp"> לכלול דרך פתרון בדף התשובות</label>
         <div class="actions">
           <button id="wgo">✨ יצירת דף עבודה</button>
+          <button class="secondary" id="wexam">📝 מבחן מודפס בסגנון מבדק</button>
           <button class="secondary hidden" id="wprint">🖨️ הדפסה / שמירה כ-PDF</button>
+        </div>
+        <p class="muted small">📝 <b>מבחן בסגנון מבדק:</b> 20 שאלות מכל הנושאים של הכיתה, עם עמוד שער, עמוד הוראות ועמוד סיום – כמו במבחן אמיתי. (הנושאים והרמה נבחרים אוטומטית; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
+        <div>
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
@@ -5721,6 +5766,50 @@ function printBuilder() {
     $('wprint').classList.remove('hidden');
     $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
     $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".';
+  };
+  $('wexam').onclick = () => {
+    const versions = Number($('wv').value);
+    const title = $('wt').value.trim() || 'מבחן תרגול במתמטיקה';
+    const sheets = Array.from({ length: versions }, () => buildTest());
+    const vname = v => versions > 1 ? `נוסח ${letters[v]}` : '';
+    const topicNames = Object.keys(TEST_PLAN).map(id => TOPIC[id].name);
+    let out = sheets.map((qs, v) => `
+      <section class="ws-page ex-cover">
+        <div class="ex-deco" aria-hidden="true">+ − × ÷ = ½ % ° △ □ ⅓ 7 3 9</div>
+        <div class="ex-title">${esc(title)}</div>
+        ${NEUTRAL ? '' : `<div class="ex-grade">${GRADE_NAME[GRADE]}</div>`}
+        ${vname(v) ? `<div class="ex-ver">${vname(v)}</div>` : ''}
+        <div class="ex-fields"><div>שם התלמיד/ה:<span class="ex-box"></span></div><div>הכיתה:<span class="ex-box"></span></div></div>
+      </section>
+      <section class="ws-page ex-intro">
+        <h2>מה במבחן?</h2>
+        <p>במבחן ${qs.length} שאלות במתמטיקה מסוגים שונים: שאלות מילוליות, תרגילים ושאלות הכוללות סרטוטים.<br>השאלות עוסקות בנושאים הבאים:</p>
+        <ol class="ex-topics">${topicNames.map(n => `<li>${n}</li>`).join('')}</ol>
+        <h2>אז מה צריך לעשות?</h2>
+        <ul class="ex-rules">
+          <li>✏️ לפתור את כל התרגילים ולענות על כל השאלות ברצינות ובתשומת לב.</li>
+          <li>☒ בשאלות שבהן יש לבחור תשובה – יש לסמן X במשבצת שליד התשובה הנכונה.</li>
+          <li>📏 אפשר להיעזר בסרגל.</li>
+          <li>🚫 אסור להיעזר במחשבון או בלוח הכפל.</li>
+          <li>🙋 אם צריך עוד זמן – מבקשים מהמורה.</li>
+        </ul>
+        <div class="ex-luck">בהצלחה!</div>
+      </section>
+      <section class="ws-page ex-body">
+        ${qs.map((q, i) => examQuestionHTML(q, i + 1)).join('')}
+      </section>
+      <section class="ws-page ex-end">
+        <div class="ex-luck">כל הכבוד!<br>סיימת את המבחן.</div>
+        <p>לפני שמגישים – כדאי לעבור שוב על התשובות ולבדוק שלא דילגת על אף שאלה.</p>
+      </section>`).join('');
+    if ($('wkey').checked) out += sheets.map((qs, v) => `
+      <section class="ws-page wskey">
+        <h2>🔑 דף תשובות – ${esc(title)}${vname(v) ? ' – ' + vname(v) : ''}</h2>
+        <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b> <span class="small muted">(${TOPIC[q.topic].name})</span>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
+      </section>`).join('');
+    $('wsout').innerHTML = out;
+    $('wprint').classList.remove('hidden');
+    $('wmsg').textContent = 'המבחן מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה נוספת יוצרת מבחן חדש.';
   };
   $('wprint').onclick = () => window.print();
 }
