@@ -336,6 +336,11 @@
   .lockrow input { margin-top: 6px; }
   .small { font-size: 0.9rem; }
 
+  .speak.on { background: #fff3c4; }
+  .toast { position: fixed; bottom: 16px; left: 16px; right: 16px; max-width: 620px; margin: 0 auto; background: #fff; border: 2px solid #e0a800; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); padding: 12px 16px; z-index: 80; line-height: 1.8; font-size: 1rem; }
+  .toast ul { margin: 6px 0 0; padding-right: 20px; }
+  .toast .tclose { float: left; padding: 2px 8px; }
+
   @media (max-width: 520px) {
     h1 { font-size: 1.7rem; }
     .card { padding: 16px; }
@@ -2989,7 +2994,7 @@ let lessonView = null;
 
 function startLesson(id, k = 0) {
   state = null;
-  if (canSpeak) speechSynthesis.cancel();
+  stopSpeak();
   lessonView = { id, k, modal: false, box: app };
   renderLesson();
 }
@@ -2999,7 +3004,7 @@ function openLessonModal(id, k) {
   ov.className = 'overlay';
   ov.innerHTML = '<div class="modal" role="dialog" aria-modal="true"><div class="mtop"><button class="ghost" data-close>✖ חזרה לשאלה</button></div><div class="lessonbox"></div></div>';
   document.body.appendChild(ov);
-  const close = () => { ov.remove(); lessonView = null; if (canSpeak) speechSynthesis.cancel(); };
+  const close = () => { ov.remove(); lessonView = null; stopSpeak(); };
   ov.querySelector('[data-close]').onclick = close;
   ov.addEventListener('click', e => { if (e.target === ov) close(); });
   lessonView = { id, k, modal: true, box: ov.querySelector('.lessonbox'), close };
@@ -3053,10 +3058,11 @@ function renderLesson() {
   if (q('[data-font]')) q('[data-font]').onclick = cycleFont;
   if (q('[data-closeend]')) q('[data-closeend]').onclick = lv.close;
   if (q('[data-practice]')) q('[data-practice]').onclick = () => startLessonPractice(lv.id);
-  if (q('[data-speak]')) q('[data-speak]').onclick = () => {
+  if (q('[data-speak]')) q('[data-speak]').onclick = e => {
+    const sbtn = e.currentTarget;
     const body = q('.lbody').cloneNode(true);
     body.querySelectorAll('.chartwrap, .lbtns, .live, .reveal.hidden').forEach(x => x.remove());
-    speak(c.title + '. ' + body.innerHTML + (tr ? '. נסו בעצמכם: ' + tr.q : ''));
+    speak(c.title + '. ' + body.innerHTML + (tr ? '. נסו בעצמכם: ' + tr.q : ''), sbtn);
   };
   if (tr) {
     if (tr.type === 'choice') lv.box.querySelectorAll('.ltry .choices button').forEach(b => b.onclick = () => lessonCheck(Number(b.dataset.c)));
@@ -3175,17 +3181,92 @@ function speechText(html) {
   words.forEach(([a, b]) => { t = t.split(a).join(b); });
   return t;
 }
-function speak(html) {
+// קול בעברית: הקולות נטענים באיחור בחלק מהדפדפנים, לכן מחפשים שוב בכל הקראה
+let voicesReady = false, heVoice = null, speakingBtn = null;
+function loadVoices() {
   if (!canSpeak) return;
-  if (speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
-  const u = new SpeechSynthesisUtterance(speechText(html));
-  u.lang = 'he-IL';
-  u.rate = 0.9;
-  const v = speechSynthesis.getVoices().find(x => /^(he|iw)/i.test(x.lang));
-  if (v) u.voice = v;
-  speechSynthesis.speak(u);
+  const vs = speechSynthesis.getVoices() || [];
+  if (!vs.length) return;
+  voicesReady = true;
+  heVoice = vs.find(v => /^(he|iw)([-_]|$)/i.test(v.lang)) || vs.find(v => /hebrew|עברית|carmit|asaf/i.test(v.name)) || null;
 }
-if (canSpeak) speechSynthesis.getVoices();
+if (canSpeak) {
+  loadVoices();
+  if (speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', loadVoices);
+  else speechSynthesis.onvoiceschanged = loadVoices;
+}
+// משפטים קצרים – Chrome נוטה להפסיק באמצע הקראה ארוכה
+function speechChunks(text) {
+  const out = [];
+  text.replace(/\s+/g, ' ').replace(/([.!?:])\s+/g, '$1\n').split('\n').forEach(s => {
+    while (s.length > 160) {
+      const cut = s.lastIndexOf(' ', 160);
+      const at = cut > 40 ? cut : 160;
+      out.push(s.slice(0, at)); s = s.slice(at);
+    }
+    if (s.trim()) out.push(s);
+  });
+  return out;
+}
+function setSpeakBtn(btn) {
+  if (speakingBtn) { speakingBtn.textContent = '🔊'; speakingBtn.classList.remove('on'); }
+  speakingBtn = btn || null;
+  if (speakingBtn) { speakingBtn.textContent = '⏹'; speakingBtn.classList.add('on'); }
+}
+function stopSpeak() {
+  if (canSpeak) speechSynthesis.cancel();
+  setSpeakBtn(null);
+}
+function voiceHelpHTML() {
+  return `<b>🔇 לא נמצא במכשיר הזה קול בעברית, ולכן ההקראה לא עובדת.</b>
+    <ul>
+      <li><b>כרומבוק:</b> הגדרות ← נגישות ← המרת טקסט לדיבור ← הגדרות קול – להוסיף שפה <b>עברית</b>.</li>
+      <li><b>מחשב Windows:</b> הגדרות ← זמן ושפה ← דיבור ← הוספת קולות ← <b>עברית</b>. אחר כך לסגור ולפתוח מחדש את הדפדפן.</li>
+      <li><b>אייפד/אייפון:</b> לבדוק שהמכשיר לא על <b>מצב שקט</b> ושהווליום פתוח.</li>
+      <li><b>אנדרואיד:</b> הגדרות ← נגישות ← המרת טקסט לדיבור – לבחור מנוע של Google ולהוריד עברית.</li>
+    </ul>`;
+}
+function showToast(html) {
+  const old = document.querySelector('.toast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.setAttribute('role', 'alert');
+  t.innerHTML = `<button class="ghost tclose" aria-label="סגירה">✖</button>${html}`;
+  t.querySelector('.tclose').onclick = () => t.remove();
+  document.body.appendChild(t);
+}
+function speak(html, btn) {
+  if (!canSpeak) { showToast('<b>🔇 הדפדפן הזה לא תומך בהקראה.</b> נסו בדפדפן Chrome.'); return; }
+  const synth = speechSynthesis;
+  if (speakingBtn) { const same = speakingBtn === btn; stopSpeak(); if (same) return; }
+  loadVoices();
+  if (voicesReady && !heVoice) { showToast(voiceHelpHTML()); return; }
+  if (synth.speaking || synth.pending) synth.cancel();
+  if (synth.paused) synth.resume();
+  const parts = speechChunks(speechText(html));
+  if (!parts.length) return;
+  setSpeakBtn(btn);
+  let started = false;
+  parts.forEach((txt, i) => {
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang = heVoice ? heVoice.lang : 'he-IL';
+    if (heVoice) u.voice = heVoice;
+    u.rate = 0.9;
+    u.volume = 1;
+    u.onstart = () => { started = true; };
+    if (i === parts.length - 1) u.onend = () => { if (speakingBtn === btn) setSpeakBtn(null); };
+    u.onerror = e => {
+      if (speakingBtn === btn) setSpeakBtn(null);
+      if (e.error && !['interrupted', 'canceled'].includes(e.error)) showToast(voiceHelpHTML());
+    };
+    synth.speak(u);
+  });
+  // אם אחרי כמה שניות שום דבר לא התחיל – כנראה שאין קול מתאים
+  setTimeout(() => {
+    if (!started && speakingBtn === btn) { synth.cancel(); setSpeakBtn(null); showToast(voiceHelpHTML()); }
+  }, 4000);
+}
 
 const FONT_STEPS = [1, 1.15, 1.3];
 function applyFont() {
@@ -3317,7 +3398,7 @@ const $ = id => document.getElementById(id);
 function home() {
   state = null;
   lessonView = null;
-  if (canSpeak) speechSynthesis.cancel();
+  stopSpeak();
   const name = store.name || '';
   const len = store.roundLen || 10;
   app.innerHTML = `
@@ -3546,7 +3627,7 @@ function renderQ() {
   const total = state.count;
   const practice = state.mode === 'practice';
   Object.assign(state, { tries: 0, selected: null, done: false, guide: null });
-  if (canSpeak) speechSynthesis.cancel();
+  stopSpeak();
   const tips = practice && TOPIC[state.topicId]
     ? `<details class="tips"><summary>📘 תזכורת – מה חשוב לזכור בנושא</summary><ul>${t.tips.map(x => `<li>${x}</li>`).join('')}</ul></details>` : '';
   const showLevel = practice && !state.hideLevel && !state.list && !state.retry;
@@ -3588,7 +3669,7 @@ function renderQ() {
   $('fontBtn').onclick = cycleFont;
   bindLevelBadge();
   $('quit').onclick = () => { if (confirm('לצאת לתפריט הראשי? ההתקדמות בסבב הזה לא תישמר.')) home(); };
-  if ($('speakBtn')) $('speakBtn').onclick = () => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.join('. ') : ''));
+  if ($('speakBtn')) $('speakBtn').onclick = e => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.join('. ') : ''), e.currentTarget);
   if ($('go')) $('go').onclick = submit;
   if ($('hintBtn')) $('hintBtn').onclick = () => showFb('hint', `💡 <span class="head">רמז:</span> ${q.hint}`);
   if ($('exBtn')) $('exBtn').onclick = showExample;
@@ -3737,7 +3818,7 @@ function renderStep() {
   const inp = $('sans');
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); checkStep(); } });
   $('sgo').onclick = checkStep;
-  if ($('sspeak')) $('sspeak').onclick = () => speak(q.steps[g.k].p);
+  if ($('sspeak')) $('sspeak').onclick = e => speak(q.steps[g.k].p, e.currentTarget);
   inp.focus();
 }
 
@@ -3958,7 +4039,22 @@ function teacher() {
       </ol>
       <p class="muted">טיפ: לתלמידים שמתקשים כדאי לתת "רמה 1", 5 שאלות, ולהשאיר את ההתאמה האוטומטית פעילה – כך יתחילו בהצלחה ויעלו רמה בעצמם.</p>
     </div>
+    <div class="card">
+      <h2>🔊 בדיקת הקראה במכשיר הזה</h2>
+      <p>ההקראה משתמשת בקול שמותקן במכשיר. כאן אפשר לבדוק אם במכשיר יש קול בעברית.</p>
+      <div class="actions"><button id="ttsTest">▶ השמיעו משפט לדוגמה</button></div>
+      <p id="ttsInfo" class="muted"></p>
+    </div>
     <p class="center"><a href="${location.pathname}">← חזרה לאפליקציה</a></p>`;
+  const ttsInfo = () => {
+    loadVoices();
+    const el = $('ttsInfo');
+    if (!canSpeak) el.innerHTML = 'הדפדפן הזה לא תומך בהקראה.';
+    else if (!voicesReady) el.innerHTML = 'הקולות עדיין נטענים... לחצו שוב על הכפתור בעוד רגע.';
+    else el.innerHTML = heVoice ? `✔ נמצא קול בעברית: <b>${esc(heVoice.name)}</b>` : voiceHelpHTML();
+  };
+  $('ttsTest').onclick = e => { speak('שלום! זו בדיקה של ההקראה. שלוש ועוד ארבע שווה שבע.', e.currentTarget); ttsInfo(); };
+  setTimeout(ttsInfo, 600);
   const upd = () => {
     const t = $('tt').value, l = $('tl').value, c = $('tc').value;
     const isLearn = t.startsWith('learn:');
