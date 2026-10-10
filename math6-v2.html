@@ -91,6 +91,7 @@
 
   .big-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
   .big-actions button { padding: 18px; font-size: 1.2rem; }
+  .wscredit { text-align: left; font-size: 7.5pt; font-weight: 300; color: #b5b5b5; line-height: 1; margin: 0 0 2px; }
   .credit { text-align: center; font-size: 0.72rem; font-weight: 300; color: #b3b7c8; margin: 24px auto 12px; padding: 0 16px; }
   .timer { font-weight: 800; font-variant-numeric: tabular-nums; background: #eef1ff; color: #2c2c54; border: 1.5px solid #9aa6d8; border-radius: 999px; padding: 2px 12px; cursor: pointer; font-size: 1rem; }
   .timer.warn { background: #fdecea; color: #c0392b; border-color: #e08b80; }
@@ -403,7 +404,7 @@
   @media screen and (max-width: 640px) { .wsq, .ex-q { flex-direction: column; } .ex-grid { flex-basis: auto; } }
 
   @media print {
-    @page { size: A4; margin: 12mm 12mm 13mm; @bottom-center { content: "© איריס סגל"; font-family: Rubik, Arial, sans-serif; font-size: 7pt; font-weight: 300; color: #b5b5b5; vertical-align: top; padding-top: 1.5mm; } }
+    @page { size: A4; margin: 12mm; }
     .noprint, .toast, .overlay { display: none !important; }
     html, body { background: #fff !important; padding: 0 !important; }
     .wrap { max-width: none; }
@@ -5978,6 +5979,7 @@ function printBuilder() {
     const vname = v => versions > 1 ? ` – נוסח ${letters[v]}` : '';
     let out = sheets.map((qs, v) => `
       <section class="ws-page">
+        <div class="wscredit">© איריס סגל</div>
         <div class="wshead">
           <h1>${esc(title)}${vname(v)}</h1>
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
@@ -5988,6 +5990,7 @@ function printBuilder() {
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey">
+        <div class="wscredit">© איריס סגל</div>
         <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
@@ -6003,6 +6006,7 @@ function printBuilder() {
     const vname = v => versions > 1 ? `נוסח ${letters[v]}` : '';
     let out = sheets.map((qs, v) => `
       <section class="ws-page ex-body">
+        <div class="wscredit">© איריס סגל</div>
         <div class="wshead">
           <h1>${esc(title)}${vname(v) ? ' – ' + vname(v) : ''}</h1>
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
@@ -6011,6 +6015,7 @@ function printBuilder() {
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey">
+        <div class="wscredit">© איריס סגל</div>
         <h2>🔑 דף תשובות – ${esc(title)}${vname(v) ? ' – ' + vname(v) : ''}</h2>
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b> <span class="small muted">(${TOPIC[q.topic].name})</span>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
