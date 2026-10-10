@@ -1164,7 +1164,7 @@ function genFracWord() {
     type: 'frac', form: 'any',
     text: `${name} קרא/ה ספר. ביום ראשון קרא/ה ${M(F(n1, d1))} מהספר, וביום שני ${M(F(n2, d2))} מהספר.<br><b>${remain ? 'איזה חלק מהספר נשאר לקרוא?' : 'איזה חלק מהספר קרא/ה בשני הימים יחד?'}</b>`,
     ans: { n: res, d: L }, steps, traps,
-    hint: remain ? `קודם חשבו כמה קרא/ה בסך הכול, ואז חסרו מהשלם (1 = ${F(L, L)}).` : 'חברו את שני השברים בעזרת מכנה משותף.',
+    hint: remain ? `קודם חשבו כמה קרא/ה בסך הכול, ואז חסרו מהשלם (${M('1 = ' + F(L, L))}).` : 'חברו את שני השברים בעזרת מכנה משותף.',
     exp: `${M(`${F(a, L)} + ${F(b, L)} = ${F(a + b, L)}`)}` + (remain ? `. נשאר: ${M(`${F(L, L)} - ${F(a + b, L)} = ${F(res, L)}`)} = ${FX(res, L)}` : ` = ${FX(res, L)}`)
   };
 }
@@ -1979,8 +1979,8 @@ const DIV_RULE = {
   2: n => `הספרה האחרונה (${n % 10}) ${n % 2 ? 'אי-זוגית' : 'זוגית'}`,
   5: n => `הספרה האחרונה היא ${n % 10}`,
   10: n => `הספרה האחרונה היא ${n % 10}`,
-  3: n => `סכום הספרות: ${String(n).split('').join(' + ')} = ${digitSum(n)}`,
-  9: n => `סכום הספרות: ${String(n).split('').join(' + ')} = ${digitSum(n)}`
+  3: n => `סכום הספרות: ${M(String(n).split('').join(' + ') + ' = ' + digitSum(n))}`,
+  9: n => `סכום הספרות: ${M(String(n).split('').join(' + ') + ' = ' + digitSum(n))}`
 };
 const DIV_HINT = {
   2: 'מספר מתחלק ב-2 אם הספרה האחרונה שלו זוגית (0, 2, 4, 6, 8).',
@@ -2114,7 +2114,7 @@ function genDiv2(lv = 2) {
   ] : undefined;
   return {
     type: 'num', text: `פתרו: ${M(`${fmt(n)} : ${d} =`)}`, ans: q, steps,
-    hint: `נסו להעריך: כמה פעמים ${d} נכנס ב-${fmt(n)}? אפשר להתחיל מ-${d} × 10 = ${d * 10}.`,
+    hint: `נסו להעריך: כמה פעמים ${d} נכנס ב-${fmt(n)}? אפשר להתחיל מ-${M(`${d} × 10 = ${d * 10}`)}.`,
     exp: `${M(`${fmt(n)} : ${d} = ${q}`)}. בדיקה: ${M(`${q} × ${d} = ${fmt(n)}`)}`
   };
 }
@@ -4970,6 +4970,73 @@ function check(q, a) {
    ממשק
    ========================================================= */
 const app = document.getElementById('app');
+
+/* ---------- כיוון תרגילים: תרגיל במאוזן נכתב משמאל לימין (סימן השווה מימין למחוברים) ----------
+   כשתרגיל בנוי מכמה חלקים (M(...) = M(...)), הדפדפן מסדר אותם מימין לשמאל.
+   כאן מאחדים רצף של חלקי חשבון צמודים לתיבה אחת משמאל לימין. */
+const MATH_EL = el => el.nodeType === 1 && /(^|\s)(m|fr|box)(\s|$)/.test(el.className || '');
+const JOIN_RE = /^(?:\s|[=+\-×:·?()]|\d+(?:[.,]\d+)*)*$/;
+const OP_RE = /[=+\-×:·]/;
+const PLAIN_EQ = /\(?\d+(?:[.,]\d+)*\)?(?:\s*[=+\-−×:·→]\s*(?:\(?\s*\d+(?:[.,]\d+)*\s*\)?|\?))+(?:\s*=)?/;
+function fixMathRuns(root) {
+  if (!root || root.nodeType !== 1 || root.closest('svg, .m')) return;
+  const parents = [root, ...root.querySelectorAll('*')].filter(el => !el.closest('svg, .m') && el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE');
+  for (const par of parents) {
+    // תרגיל שנכתב כטקסט רגיל (למשל "12 : 4 = 3") – עוטפים בתיבה משמאל לימין
+    for (const t of [...par.childNodes]) {
+      if (t.nodeType !== 3) continue;
+      const re = new RegExp(PLAIN_EQ.source, 'g');
+      if (!re.test(t.textContent)) continue;
+      re.lastIndex = 0;
+      const frag = document.createDocumentFragment();
+      let last = 0, m;
+      while ((m = re.exec(t.textContent))) {
+        frag.appendChild(document.createTextNode(t.textContent.slice(last, m.index)));
+        const sp = document.createElement('span'); sp.className = 'm'; sp.textContent = m[0];
+        frag.appendChild(sp); last = m.index + m[0].length;
+      }
+      frag.appendChild(document.createTextNode(t.textContent.slice(last)));
+      par.replaceChild(frag, t);
+    }
+    let kids = [...par.childNodes];
+    for (let i = 0; i < kids.length; i++) {
+      if (!MATH_EL(kids[i])) continue;
+      // קידומת: סוף טקסט לפני האיבר (למשל "3 + ")
+      const run = [kids[i]];
+      let j = i + 1;
+      while (j < kids.length) {
+        const k = kids[j];
+        if (MATH_EL(k)) { run.push(k); j++; continue; }
+        if (k.nodeType === 3) {
+          if (JOIN_RE.test(k.textContent)) { run.push(k); j++; continue; }
+          const m = k.textContent.match(/^(?:\s|[=+\-×:·?()]|\d+(?:[.,]\d+)*)*[=+\-×:·?]/);
+          if (m && OP_RE.test(m[0])) { k.splitText(m[0].length); run.push(k); }
+        }
+        break;
+      }
+      // מורידים טקסט ריק/רווחים מסוף הרצף
+      while (run.length > 1 && run[run.length - 1].nodeType === 3 && !run[run.length - 1].textContent.trim()) run.pop();
+      const prev = kids[i].previousSibling;
+      if (prev && prev.nodeType === 3) {
+        const m = prev.textContent.match(/(?:^|\s)((?:\d+(?:[.,]\d+)*\s*)?[=+\-×:·(]\s*)$/);
+        if (m && OP_RE.test(m[1]) && m[1].trim()) { const tail = prev.splitText(prev.textContent.length - m[1].length); run.unshift(tail); }
+      }
+      const hasOp = run.some(n => n.nodeType === 3 && OP_RE.test(n.textContent));
+      if (run.length > 1 && hasOp) {
+        const w = document.createElement('span');
+        w.className = 'm';
+        run[0].parentNode.insertBefore(w, run[0]);
+        run.forEach(n => w.appendChild(n));
+      }
+      kids = [...par.childNodes];
+      i = kids.indexOf(run[0].parentNode === par ? run[run.length - 1] : run[0].parentNode);
+    }
+  }
+}
+new MutationObserver(muts => {
+  for (const mu of muts) for (const n of mu.addedNodes) if (n.nodeType === 1) fixMathRuns(n);
+  for (const mu of muts) if (mu.type === 'childList' && mu.target.nodeType === 1 && mu.addedNodes.length) fixMathRuns(mu.target);
+}).observe(document.body, { childList: true, subtree: true });
 let state = null;
 
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
