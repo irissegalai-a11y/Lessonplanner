@@ -7081,8 +7081,15 @@ function kfFlush() {
     const q = new URLSearchParams();
     Object.entries(KF_FIELDS).forEach(([k, e]) => q.append(e, item[k] == null ? '' : String(item[k])));
     q.append('submit', 'Submit');
-    const img = new Image();
-    img.src = KF_FORM + '?' + q.toString();
+    // שליחה כמו טופס רגיל, לתוך מסגרת נסתרת (הדרך הוותיקה והאמינה לשלוח לגוגל פורמס מאתר)
+    let sink = document.getElementById('kfSink');
+    if (!sink) { sink = document.createElement('iframe'); sink.name = sink.id = 'kfSink'; sink.style.display = 'none'; document.body.appendChild(sink); }
+    const form = document.createElement('form');
+    form.method = 'POST'; form.action = KF_FORM; form.target = 'kfSink'; form.style.display = 'none';
+    q.forEach((v, k) => { const inp = document.createElement('input'); inp.type = 'hidden'; inp.name = k; inp.value = v; form.appendChild(inp); });
+    document.body.appendChild(form);
+    try { HTMLFormElement.prototype.submit.call(form); } catch (e) { /* לא חוסם את האימון */ }
+    setTimeout(() => form.remove(), 1000);
   });
   return items.length;
 }
