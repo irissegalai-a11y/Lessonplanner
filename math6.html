@@ -7073,13 +7073,18 @@ function kfReport(data) {
   kfFlush();
 }
 function kfFlush() {
-  (kf.outbox || []).slice().forEach(item => {
-    const body = new URLSearchParams();
-    Object.entries(KF_FIELDS).forEach(([k, e]) => body.append(e, item[k] == null ? '' : String(item[k])));
-    fetch(KF_FORM, { method: 'POST', mode: 'no-cors', body }).then(() => {
-      kf.outbox = (kf.outbox || []).filter(x => x !== item && JSON.stringify(x) !== JSON.stringify(item)); kfSave();
-    }).catch(() => { /* אין אינטרנט – ננסה שוב בפעם הבאה */ });
+  if (navigator.onLine === false) return;
+  const items = (kf.outbox || []).slice();
+  kf.outbox = []; kfSave();
+  items.forEach(item => {
+    // שליחה בכתובת (GET) – אותה דרך כמו קישור שמולא מראש
+    const q = new URLSearchParams();
+    Object.entries(KF_FIELDS).forEach(([k, e]) => q.append(e, item[k] == null ? '' : String(item[k])));
+    q.append('submit', 'Submit');
+    const img = new Image();
+    img.src = KF_FORM + '?' + q.toString();
   });
+  return items.length;
 }
 const kfMastered = () => KF_FACTS.filter(([a, b]) => (kf.facts[kfId(a, b)] || {}).box >= 3).length;
 function kfRank([a, b]) {
@@ -7284,6 +7289,7 @@ function kfDone() {
   }
   kfSave();
   const m = kfMastered();
+  const sent = kf.report;
   kfReport({
     minutes: Math.max(1, Math.round((Date.now() - kz.start) / 60000)),
     mastered: `${m}/36`,
@@ -7297,6 +7303,7 @@ function kfDone() {
         : `<p>✅ נכון: <b>${kz.right}</b> · ✘ לא נכון: <b>${kz.wrong}</b></p>
            <p>🗺️ בשליטה: <b>${m}</b> מתוך 36${kz.newGreen ? ` · <b>+${kz.newGreen}</b> חדשות היום 🎉` : ''}</p>
            ${kz.mode === 'place' ? '<p>מעכשיו – כל יום אימון של כ-5 דקות. נתחיל מהעובדות שעוד לא בשליטה.</p>' : `<p>🔥 ימי אימון ברצף: <b>${kf.streak}</b>. נתראה מחר!</p>`}`}
+      ${sent ? `<p class="small muted">📤 התוצאות נשלחו למורה (${esc(kf.name)}, ${esc(kf.klass)}).</p>` : ''}
       <div class="actions" style="justify-content:center">
         ${kz.mode === 'chal' ? '<button id="kfAgain">🔁 עוד דקה</button>' : ''}
         <button class="${kz.mode === 'chal' ? 'secondary' : ''}" id="kfHomeBtn">🗺️ למפה שלי</button>
