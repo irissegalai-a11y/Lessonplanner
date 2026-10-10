@@ -199,6 +199,7 @@
   .tools { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
   a.btnlink.printlink { background: #fff; padding: 8px 16px; font-size: 1rem; font-weight: 600; }
   a.btnlink.printlink:hover { background: #f0f2ff; }
+  .toollinks { display: flex; gap: 8px; flex-wrap: wrap; }
   .banner { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-right: 6px solid #e0a800; background: #fffaf0; font-size: 1.15rem; }
   .lbl2 { font-weight: 600; font-size: 1.05rem; }
   .seg { display: inline-flex; gap: 6px; }
@@ -5851,7 +5852,7 @@ function home() {
   const name = store.name || '';
   const len = store.roundLen || 10;
   app.innerHTML = `
-    <div class="tools"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></div>
+    <div class="tools"><span class="toollinks"><a class="btnlink printlink" href="${gq('print')}">🖨️ דפי עבודה להדפסה</a><a class="btnlink printlink" href="${gq('print')}#book">📚 חוברות</a></span><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></div>
     <h1>מתרגלים מתמטיקה 🎯</h1>
     <div class="subtitle">${SUBTITLE}</div>
     ${PRESET ? `<div class="card banner">
@@ -6763,7 +6764,7 @@ function printBuilder() {
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
-      <div class="card tform">
+      <div class="card tform" id="bkcard">
         <h2>📚 חוברת לפי נושאים</h2>
         <p class="muted small">בחרו כמה שאלות מכל נושא (0 = בלי הנושא). כל נושא הוא פרק נפרד, והשאלות בו מסודרות מהקל אל הקשה. בחוברת יש עמוד שער עם תוכן עניינים, מספרי עמודים ודף תשובות בסוף.</p>
         <div class="bktopics">${TOPICS.map(t => `<label class="bkrow"><span>${t.icon} ${t.name}</span><select data-bk="${t.id}">${BOOK_COUNTS.map(n => `<option value="${n}" ${n === 8 ? 'selected' : ''}>${n ? n + ' שאלות' : 'בלי'}</option>`).join('')}</select></label>`).join('')}</div>
@@ -6851,6 +6852,7 @@ function printBuilder() {
     if (d.grade !== GRADE) { location.search = `?print&grade=${d.grade}&book=${encodeURIComponent(code)}${NEUTRAL ? '&neutral=1' : ''}`; return; }
     renderBooklet(code);
   };
+  if (location.hash === '#book') setTimeout(() => $('bkcard').scrollIntoView({ block: 'start' }), 50);
   const bk = URLP.get('book');
   if (bk && bookDecode(bk.toUpperCase())) { $('bkcode').value = bk.toUpperCase(); renderBooklet(bk.toUpperCase()); }
 }
