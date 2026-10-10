@@ -372,6 +372,23 @@
   .wskey h2 { font-size: 1.3rem; }
   .wskey ol { line-height: 2.1; padding-right: 38px; }
   .wsexp { font-size: 0.88rem; color: #444; }
+  /* חיסכון בדפים: שתי עמודות */
+  .wsqs, .ex-qs { columns: 2; column-gap: 7mm; column-rule: 1px solid #e3e3e3; }
+  .wsq, .ex-q { padding: 6px 0 8px; break-inside: avoid; page-break-inside: avoid; border-bottom: 1px solid #ddd; min-width: 0; display: block; }
+  .ws-page .qtext { font-size: 0.98rem; line-height: 1.6; }
+  .wsnum, .ex-num { width: 28px; height: 28px; font-size: 0.95rem; }
+  .ws-page .fig, .ws-page .ex-q .fig { max-width: 100%; width: 100%; max-height: 5.2cm; margin: 2px auto; }
+  .wsans, .ex-q .wsans, .wschoices, .ex-choices, .wsspace, .ex-work { padding-right: 0; }
+  .wschoices, .ex-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; line-height: 1.9; font-size: 0.98rem; margin-top: 4px; }
+  .ex-grid { margin: 5px 0 3px; height: 2.5cm; }
+  .ex-grid.big { height: 4cm; }
+  .ex-grid.sm { height: 1.5cm; }
+  .wsspace div { height: 1.6em; }
+  .wskey ol { columns: 2; column-gap: 8mm; }
+  .wskey li { break-inside: avoid; }
+  .wstips { columns: 1; }
+  @media screen and (max-width: 640px) { .wsqs, .ex-qs { columns: 1; } }
+
   @media print {
     @page { size: A4; margin: 12mm; }
     .noprint, .toast, .overlay { display: none !important; }
@@ -5671,7 +5688,7 @@ function examQuestionHTML(q, n) {
   else ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   const plain = q.text.replace(/<[^>]+>/g, '');
   const wordy = q.steps && q.steps.length >= 3 && plain.length > 60;
-  const work = `${wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : ''}<div class="ex-grid${wordy ? ' big' : ''}"><span>טיוטה וחישובים</span></div>`;
+  const work = `${wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : ''}<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"><span>טיוטה</span></div>`;
   return `<div class="ex-q"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>`;
 }
 
@@ -5780,7 +5797,7 @@ function printBuilder() {
           <h1>${esc(title)}${vname(v) ? ' – ' + vname(v) : ''}</h1>
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
         </div>
-        ${qs.map((q, i) => examQuestionHTML(q, i + 1)).join('')}
+        <div class="ex-qs">${qs.map((q, i) => examQuestionHTML(q, i + 1)).join('')}</div>
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey">
