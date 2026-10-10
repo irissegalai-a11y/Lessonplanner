@@ -401,6 +401,7 @@
   .wskey ol { columns: 2; column-gap: 8mm; }
   .wskey li { break-inside: avoid; }
   .wstips { columns: 1; }
+  #wsout.measure .ws-page { width: 186mm; max-width: none; padding: 0; margin: 0; box-shadow: none; }
   @media screen and (max-width: 640px) { .wsq, .ex-q { flex-direction: column; } .ex-grid { flex-basis: auto; } }
 
   @media print {
@@ -5995,6 +5996,7 @@ function printBuilder() {
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
+    if (tips) dropTipsIfOverflow();
     $('wprint').classList.remove('hidden');
     $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
     $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".';
@@ -6024,6 +6026,38 @@ function printBuilder() {
     $('wmsg').textContent = 'המבחן מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה נוספת יוצרת מבחן חדש.';
   };
   $('wprint').onclick = () => window.print();
+}
+
+// כמה עמודי A4 ייקח דף (שאלה לא נחתכת בין עמודים)
+function sheetPages(sec, H_MM) {
+  const H = (H_MM || 273) * 96 / 25.4; // גובה העמוד בלי השוליים
+  const blocks = [];
+  for (const el of sec.children) {
+    if (el.classList.contains('wsqs')) blocks.push(...el.children); else blocks.push(el);
+  }
+  let pages = 1, used = 0;
+  for (const b of blocks) {
+    const cs = getComputedStyle(b);
+    const h = b.getBoundingClientRect().height + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+    if (used + h > H && used > 0) { pages++; used = 0; }
+    used += h;
+  }
+  return pages;
+}
+// אם התזכורת גורמת לדף לגלוש לעמוד נוסף – מוותרים עליה
+function dropTipsIfOverflow() {
+  const out = $('wsout');
+  out.classList.add('measure');
+  out.querySelectorAll('.ws-page:not(.wskey)').forEach(sec => {
+    const tips = sec.querySelector('.wstips');
+    if (!tips) return;
+    // בודקים גם ב-A4 וגם בדף קצר יותר (Letter), כדי שלא תגלוש שאלה לעמוד נוסף
+    const withTips = [273, 255].map(h => sheetPages(sec, h));
+    tips.style.display = 'none';
+    const without = [273, 255].map(h => sheetPages(sec, h));
+    if (without.some((n, i) => n < withTips[i])) tips.remove(); else tips.style.display = '';
+  });
+  out.classList.remove('measure');
 }
 
 
