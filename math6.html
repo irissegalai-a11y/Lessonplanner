@@ -3241,7 +3241,8 @@ function speak(html, btn) {
   const synth = speechSynthesis;
   if (speakingBtn) { const same = speakingBtn === btn; stopSpeak(); if (same) return; }
   loadVoices();
-  if (voicesReady && !heVoice) { showToast(voiceHelpHTML()); return; }
+  // באנדרואיד חלק מהדפדפנים לא מדווחים על הקול העברי למרות שהוא מותקן – מנסים בכל זאת עם קול ברירת המחדל
+  if (voicesReady && !heVoice && !/Android/i.test(navigator.userAgent)) { showToast(voiceHelpHTML()); return; }
   if (synth.speaking || synth.pending) synth.cancel();
   if (synth.paused) synth.resume();
   const parts = speechChunks(speechText(html));
@@ -4051,7 +4052,9 @@ function teacher() {
     const el = $('ttsInfo');
     if (!canSpeak) el.innerHTML = 'הדפדפן הזה לא תומך בהקראה.';
     else if (!voicesReady) el.innerHTML = 'הקולות עדיין נטענים... לחצו שוב על הכפתור בעוד רגע.';
-    else el.innerHTML = heVoice ? `✔ נמצא קול בעברית: <b>${esc(heVoice.name)}</b>` : voiceHelpHTML();
+    else if (heVoice) el.innerHTML = `✔ נמצא קול בעברית: <b>${esc(heVoice.name)}</b>`;
+    else if (/Android/i.test(navigator.userAgent)) el.innerHTML = 'הדפדפן לא מדווח על קול בעברית, אבל ננסה להקריא עם קול ברירת המחדל של המכשיר. אם שמעתם את המשפט – הכול תקין! אם לא – ' + voiceHelpHTML();
+    else el.innerHTML = voiceHelpHTML();
   };
   $('ttsTest').onclick = e => { speak('שלום! זו בדיקה של ההקראה. שלוש ועוד ארבע שווה שבע.', e.currentTarget); ttsInfo(); };
   setTimeout(ttsInfo, 600);
