@@ -11,7 +11,7 @@
   (function () {
     var p = new URLSearchParams(location.search), g = null;
     try { g = localStorage.getItem('math-grade'); } catch (e) {}
-    if (!p.has('choose') && ['2', '3', '4', '5', '6'].indexOf(g) >= 0) {
+    if (!p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) {
       if (g !== '6') p.set('grade', g);
       var s = p.toString().replace(/=(&|$)/g, '$1');
       location.replace('math6.html' + (s ? '?' + s : '') + location.hash);
@@ -36,7 +36,7 @@
   h1 { font-family: 'Playpen Sans Hebrew', cursive; font-size: 2.6rem; margin: 0; }
   .sig { font-family: 'Playpen Sans Hebrew', cursive; font-size: 1.1rem; margin: 14px 0 4px; }
   h2 { font-family: 'Playpen Sans Hebrew', cursive; font-size: 1.7rem; margin: 34px 0 18px; }
-  .grades { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 14px; }
+  .grades { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .grades a {
     display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #1f1e1c;
     background: #fffdf8; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px;
@@ -58,6 +58,7 @@
   <div class="sig">מאת <b>איריס סגל</b></div>
   <h2>איזו רמת כיתה אתם מתרגלים?</h2>
   <nav class="grades" aria-label="בחירת כיתה">
+    <a href="math6.html?grade=1" data-g="1" style="--c:#d9482b"><b>א'</b><span>כיתה א'</span></a>
     <a href="math6.html?grade=2" data-g="2" style="--c:#e2b357"><b>ב'</b><span>כיתה ב'</span></a>
     <a href="math6.html?grade=3" data-g="3" style="--c:#9db27a"><b>ג'</b><span>כיתה ג'</span></a>
     <a href="math6.html?grade=4" data-g="4" style="--c:#6fb3ad"><b>ד'</b><span>כיתה ד'</span></a>
