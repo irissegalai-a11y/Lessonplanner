@@ -691,6 +691,7 @@
   .mem-top { display: flex; justify-content: space-between; gap: 10px; font-size: 1.1rem; margin-bottom: 12px; flex-wrap: wrap; }
   .mem-top b { font-family: var(--hand, inherit); font-size: 1.3rem; }
   .mem-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 10px; max-width: 640px; margin: 0 auto; }
+  .mcard .mc-in, .mcard .mc-back, .mcard .mc-face { pointer-events: none; }
   .mcard { aspect-ratio: 3 / 4; padding: 0; background: transparent; border: none; box-shadow: none; perspective: 700px; min-height: 0; color: #1f1e1c; font-family: 'Assistant', sans-serif; }
   .mcard:hover, .mcard:active { background: transparent; box-shadow: none; transform: none; }
   .mc-in { position: relative; display: block; width: 100%; height: 100%; transition: transform 0.45s ease; transform-style: preserve-3d; }
@@ -896,7 +897,7 @@
   .war-side { display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .war-name { font-weight: 700; color: var(--tc); font-size: 1.1rem; }
   .war-mid { font-family: var(--hand, inherit); font-size: 3.2rem; font-weight: 700; min-width: 1.4em; text-align: center; direction: ltr; }
-  .war-card { width: min(100%, 240px); aspect-ratio: 5 / 7; perspective: 800px; }
+  .war-card { width: min(100%, 240px); aspect-ratio: 5 / 7; perspective: 800px; pointer-events: none; }
   .wc-in { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
   .war-card.flip .wc-in { animation: wcFlip 0.55s ease; }
   @keyframes wcFlip { from { transform: rotateY(180deg); } to { transform: rotateY(0); } }
@@ -908,6 +909,7 @@
   .wc-pip { position: absolute; top: 8px; right: 12px; color: var(--tc); font-size: 1.2rem; }
   .wc-pip.b { top: auto; bottom: 8px; right: auto; left: 12px; transform: rotate(180deg); }
   .war-ask { font-size: 1.35rem; margin: 14px 0 8px; }
+  .war-btns, .war-ask, #wNext { position: relative; z-index: 2; }
   .war-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
   .war-btns button[data-wc]:not(.secondary) { background: var(--tc); font-size: 1.1rem; }
   .war-final { display: flex; gap: 40px; justify-content: center; margin: 10px 0; }
@@ -1010,7 +1012,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ט</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 י</span></footer>
 
 <script>
 /* =========================================================
