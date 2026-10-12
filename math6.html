@@ -782,6 +782,26 @@
   .mil-opt.gone { visibility: hidden; }
   .mil-q .fig { max-height: 240px; width: auto; max-width: 100%; }
   .mil-q .jeo-qtext { font-size: clamp(1.3rem, 2.6vw, 2rem); }
+  .mil-opt.dim { opacity: 0.45; }
+  div.mil-opt { cursor: default; }
+  .mt-mark { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0; }
+  .mt-tm { background: #fffdf8; color: var(--tc); border: 2.5px solid var(--tc); box-shadow: 2px 3px 0 var(--tc); font-size: 1.15rem; }
+  .mt-tm.on { background: var(--tc); color: #fff; }
+  .mt-board { display: flex; flex-direction: column; gap: 10px; padding: 12px; border: 2px solid #1f1e1c; border-radius: 14px; background: #fffdf8; }
+  .mt-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 0; font-size: 0.85rem; text-align: center; }
+  .mt-col b { color: var(--tc); font-size: 0.82rem; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mt-wrap { grid-template-columns: 1fr minmax(260px, 34%); }
+  .mt-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; }
+  .mt-row b { color: var(--tc); font-size: 1.05rem; }
+  .mt-pr { font-weight: 700; font-size: 0.95rem; white-space: nowrap; }
+  .mt-hbar { grid-column: 1 / -1; height: 18px; border: 2px solid #1f1e1c; border-radius: 9px; overflow: hidden; background: repeating-linear-gradient(to left, transparent 0 calc(100% / 15 - 1px), #ece6d9 calc(100% / 15 - 1px) calc(100% / 15)); }
+  .mt-hbar span { display: block; height: 100%; background: var(--tc); transition: width 0.5s ease; }
+  .mt-goal { font-size: 0.85rem; color: #5f5a50; display: flex; align-items: center; gap: 6px; }
+  .mt-goal svg { width: 16px; height: 16px; }
+  .mt-col > span:last-child { font-size: 0.78rem; white-space: nowrap; }
+  .mt-bar { width: 26px; height: 260px; border: 2px solid #1f1e1c; border-radius: 13px; display: flex; align-items: flex-end; overflow: hidden; background: repeating-linear-gradient(to top, transparent 0 16px, #ece6d9 16px 17.3px); }
+  .mt-bar span { display: block; width: 100%; background: var(--tc); transition: height 0.5s ease; }
+  @media (max-width: 760px) { .mt-bar { height: 120px; } }
   .mil-final { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 1.3rem; padding: 10px; border: 2px dashed #1f1e1c; border-radius: 14px; background: rgba(239, 201, 106, 0.3); }
   .mil-ladder { list-style: none; margin: 0; padding: 8px; border: 2px solid #1f1e1c; border-radius: 14px; background: #fffdf8; }
   .mil-ladder li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 10px; border-radius: 8px; font-size: 0.95rem; }
@@ -957,7 +977,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ו</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ז</span></footer>
 
 <script>
 /* =========================================================
@@ -6835,6 +6855,11 @@ function home() {
             <span class="gc-nm">אמת או שקר?</span>
             <span class="gc-ds">קוראים טענה ומחליטים: נכון או לא נכון? עם הסבר אחרי כל תשובה.</span>
           </button>
+          <button class="game-card" id="milGo">
+            <span class="gc-ic" style="--gw:rgba(226,179,87,0.75)">${ic('star')}</span>
+            <span class="gc-nm">מי רוצה להיות מיליונר?</span>
+            <span class="gc-ds">15 שאלות בקושי עולה, סולם פרסים ו-3 גלגלי הצלה – לבד, עד מיליון!</span>
+          </button>
           <button class="game-card" id="cityGo">
             <span class="gc-ic" style="--gw:rgba(226,179,87,0.7)">${ic('grid')}</span>
             <span class="gc-nm">בונים עיר – שטח והיקף</span>
@@ -6851,10 +6876,10 @@ function home() {
             <span class="gc-nm">כיבוש שטחים</span>
             <span class="gc-ds">עד 6 קבוצות על מפה. עונים נכון – כובשים משבצת, ואפשר גם לתקוף!</span>
           </button>
-          <button class="game-card" id="milGo">
+          <button class="game-card" id="mtGo0">
             <span class="gc-ic" style="--gw:rgba(226,179,87,0.75)">${ic('star')}</span>
-            <span class="gc-nm">מי רוצה להיות מיליונר?</span>
-            <span class="gc-ds">15 שאלות בקושי עולה, סולם פרסים ו-3 גלגלי הצלה.</span>
+            <span class="gc-nm">מיליונר קבוצתי</span>
+            <span class="gc-ds">2–6 קבוצות עונות על אותן שאלות – כל קבוצה מטפסת בסולם שלה עד מיליון!</span>
           </button>
           <button class="game-card" id="bingoGo">
             <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('grid')}</span>
@@ -6883,6 +6908,7 @@ function home() {
   $('memGo').onclick = () => memHome();
   $('jeoGo').onclick = () => jeoHome();
   $('milGo').onclick = () => milHome();
+  $('mtGo0').onclick = () => milTeamHome();
   $('cqGo0').onclick = () => cqHome();
   $('cityGo').onclick = () => cityHome();
   $('bingoGo').onclick = () => bingoHome();
@@ -8157,7 +8183,7 @@ function toChoice4(q) {
   if (w.length < 3) return null;
   const vals = shuffle([a, ...w]);
   const u = q.unit ? ' ' + q.unit : '';
-  return { text: q.text, fig: q.fig || '', choices: vals.map(v => M(fmt(v)) + u), ans: vals.indexOf(a), hint: q.hint || '', exp: q.exp || '' };
+  return { text: q.text, fig: q.fig || '', choices: vals.map(v => q.unit === '%' ? M(fmt(v) + '%') : M(fmt(v)) + u), ans: vals.indexOf(a), hint: q.hint || '', exp: q.exp || '' };
 }
 function milHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('mil');
@@ -8165,7 +8191,7 @@ function milHome() {
     <div class="topbar"><span class="title">${ic('star')} מי רוצה להיות מיליונר?</span><button class="secondary" id="mlHome">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro">
       <p class="race-how"><b>15 שאלות</b> – כל אחת קשה יותר מהקודמת. תשובה נכונה – עולים בסולם. בשאלה 5 ובשאלה 10 יש <b>נקודות ביטחון</b>: מה שהגעתם אליו שם נשאר שלכם.</p>
-      <p class="muted">שלושה גלגלי הצלה (כל אחד פעם אחת): <b>50:50</b> · <b>הכיתה עוזרת</b> · <b>רמז</b>. משחקים תלמיד אחד, זוג או קבוצה – וכל הכיתה צופה.</p>
+      <p class="muted">שלושה גלגלי הצלה (כל אחד פעם אחת): <b>50:50</b> – מוחק שתי תשובות שגויות · <b>החלפת שאלה</b> – מקבלים שאלה אחרת · <b>רמז</b>.</p>
     </div>
     <div class="name-row" style="justify-content:center"><label for="mlName">מי משחק/ת?</label><input id="mlName" placeholder="שם (לא חובה)" autocomplete="off" maxlength="20"></div>
     <h2>נושאים</h2>${topicChecks('mlt')}
@@ -8179,23 +8205,22 @@ function milHome() {
   };
   window.scrollTo(0, 0);
 }
-function milStart(topics, name) {
-  const qs = [], seen = new Set();
-  let order = shuffle(topics.slice());
-  for (let i = 0; i < 15; i++) {
-    const lv = i < 5 ? 1 : i < 10 ? 2 : 3;
-    let q = null;
-    for (let tries = 0; tries < 60 && !q; tries++) {
-      const t = TOPIC[order[(i + tries) % order.length]];
-      const raw = mk(t.id, pick(t.levels[lv]), lv);
-      if (seen.has(raw.text)) continue;
-      const c = toChoice4(raw);
-      if (c) { c.topic = t.id; q = c; seen.add(raw.text); }
-    }
-    if (!q) { window.milFb = (window.milFb || 0) + 1; const raw = mk(TOPICS[0].id, () => ({ type: 'num', text: `פתרו: ${M(`${i + 2} × ${i + 3} =`)}`, ans: (i + 2) * (i + 3) }), lv); q = toChoice4(raw); q.topic = TOPICS[0].id; }
-    qs.push(q);
+// שאלה אמריקאית לשלב i (1–5 קלות, 6–10 בינוניות, 11–15 מאתגרות)
+function milMakeQ(topics, i, seen) {
+  const lv = i < 5 ? 1 : i < 10 ? 2 : 3, order = shuffle(topics.slice());
+  for (let tries = 0; tries < 60; tries++) {
+    const t = TOPIC[order[tries % order.length]];
+    const raw = mk(t.id, pick(t.levels[lv]), lv);
+    if (seen.has(raw.text)) continue;
+    const c = toChoice4(raw);
+    if (c) { c.topic = t.id; seen.add(raw.text); return c; }
   }
-  mil = { qs, i: 0, name, life: { half: true, poll: true, hint: true }, hidden: [], sel: null, locked: false };
+  window.milFb = (window.milFb || 0) + 1;
+  const q = toChoice4(mk(TOPICS[0].id, () => ({ type: 'num', text: `פתרו: ${M(`${i + 2} × ${i + 3} =`)}`, ans: (i + 2) * (i + 3) }), lv)); q.topic = TOPICS[0].id; return q;
+}
+function milStart(topics, name) {
+  const seen = new Set(), qs = Array.from({ length: 15 }, (_, i) => milMakeQ(topics, i, seen));
+  mil = { qs, i: 0, name, topics, seen, life: { half: true, swap: true, hint: true }, hidden: [], sel: null, locked: false };
   milDraw();
 }
 const MIL_L = 'אבגד';
@@ -8209,7 +8234,7 @@ function milDraw() {
       <div class="mil-main">
         <div class="mil-life">
           <button class="mil-lf" id="lf50" ${mil.life.half ? '' : 'disabled'}>50:50</button>
-          <button class="mil-lf" id="lfPoll" ${mil.life.poll ? '' : 'disabled'}>הכיתה עוזרת</button>
+          <button class="mil-lf" id="lfSwap" ${mil.life.swap ? '' : 'disabled'}>${ic('retry')} החלפת שאלה</button>
           <button class="mil-lf" id="lfHint" ${mil.life.hint ? '' : 'disabled'}>${ic('bulb')} רמז</button>
         </div>
         <div class="card mil-q">
@@ -8248,18 +8273,12 @@ function milDraw() {
     mil.life.hint = false; $('lfHint').disabled = true;
     $('mlBox').innerHTML = `<div class="fb show hint">${ic('bulb')} רמז: ${q.hint || 'קראו שוב את השאלה, ונסו לפסול תשובות שלא הגיוניות.'}</div>`;
   };
-  $('lfPoll').onclick = () => {
-    if (!mil.life.poll || mil.locked) return;
-    mil.life.poll = false; $('lfPoll').disabled = true;
-    const votes = q.choices.map(() => 0);
-    const drawPoll = () => {
-      const max = Math.max(1, ...votes);
-      $('mlBox').innerHTML = `<div class="mil-poll"><div class="muted">הכיתה מצביעה: מי חושב שהתשובה היא... (המורה סופרת ידיים ולוחצת +)</div>
-        ${q.choices.map((c, k) => mil.hidden.includes(k) ? '' : `<div class="mp-row"><span class="jl">${MIL_L[k]}</span><span class="mp-bar"><span style="width:${votes[k] / max * 100}%"></span></span><b data-raw>${votes[k]}</b><button class="secondary" data-pv="${k}">+</button><button class="ghost" data-pm="${k}" aria-label="פחות">−</button></div>`).join('')}</div>`;
-      $('mlBox').querySelectorAll('[data-pv]').forEach(b => b.onclick = () => { votes[Number(b.dataset.pv)]++; drawPoll(); });
-      $('mlBox').querySelectorAll('[data-pm]').forEach(b => b.onclick = () => { const k = Number(b.dataset.pm); votes[k] = Math.max(0, votes[k] - 1); drawPoll(); });
-    };
-    drawPoll();
+  $('lfSwap').onclick = () => {
+    if (!mil.life.swap || mil.locked) return;
+    mil.life.swap = false;
+    mil.qs[mil.i] = milMakeQ(mil.topics, mil.i, mil.seen);
+    mil.hidden = []; mil.sel = null;
+    milDraw();
   };
   window.scrollTo(0, 0);
 }
@@ -8297,6 +8316,107 @@ function milEnd(how) {
   fsBind();
   $('mlHome').onclick = home;
   $('mlAgain').onclick = milHome;
+}
+
+/* ---------- מיליונר קבוצתי: כל הקבוצות עונות על אותה שאלה, וכל קבוצה מטפסת בסולם שלה ---------- */
+let mt = null;
+function milTeamHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('mt');
+  let nTeams = 3;
+  const names = JEO_TEAMS.map(t => t.name);
+  const draw = () => {
+    app.innerHTML = `
+      <div class="topbar"><span class="title">${ic('star')} מיליונר קבוצתי</span><button class="secondary" id="mtHomeB">${ic('home')} לדף הבית</button></div>
+      <div class="card race-intro">
+        <h2 style="margin-top:0">איך משחקים?</h2>
+        <div class="cq-rules">
+          <div class="cq-goal">${ic('star')} <span><b>המטרה:</b> לטפס הכי גבוה בסולם הפרסים – עד מיליון ₪!</span></div>
+          <ol class="cq-steps">
+            <li>על המסך מופיעה שאלה עם 4 תשובות: א, ב, ג, ד.</li>
+            <li><b>כל הקבוצות עונות בבת אחת</b> – כל קבוצה כותבת את האות של התשובה על דף (או מרימה כרטיס).</li>
+            <li>המורה חושפת את התשובה ומסמנת אילו קבוצות צדקו.</li>
+            <li>כל קבוצה שצדקה <b>עולה שלב</b> בסולם. קבוצה שטעתה נשארת במקום.</li>
+            <li>15 שאלות, מהקלה לקשה. בסוף – הקבוצה שהגיעה הכי גבוה מנצחת!</li>
+          </ol>
+        </div>
+      </div>
+      <h2>כמה קבוצות?</h2>
+      <div class="name-row" style="justify-content:center"><span class="seg">${[2, 3, 4, 5, 6].map(n => `<button data-mn2="${n}" class="${n === nTeams ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
+      <div class="jeo-teams">${JEO_TEAMS.slice(0, nTeams).map((t, i) => `<label class="jeo-tname" style="--tc:${t.color}"><span class="jdot"></span><input data-mtn="${i}" value="${esc(names[i])}" maxlength="16" aria-label="שם קבוצה ${i + 1}"></label>`).join('')}</div>
+      <h2>נושאים</h2>${topicChecks('mtt')}
+      <p class="muted small" id="mtMsg"></p>
+      <div class="actions" style="justify-content:center"><button id="mtGo" class="race-go">מתחילים! ←</button></div>`;
+    $('mtHomeB').onclick = home;
+    const keep = () => app.querySelectorAll('[data-mtn]').forEach(inp => { names[Number(inp.dataset.mtn)] = inp.value.trim() || JEO_TEAMS[Number(inp.dataset.mtn)].name; });
+    app.querySelectorAll('[data-mn2]').forEach(b => b.onclick = () => { keep(); nTeams = Number(b.dataset.mn2); draw(); });
+    $('mtGo').onclick = () => {
+      keep();
+      const topics = [...app.querySelectorAll('[data-mtt]:checked')].map(c => c.dataset.mtt);
+      if (!topics.length) { $('mtMsg').textContent = 'בחרו לפחות נושא אחד.'; return; }
+      const seen = new Set();
+      mt = { teams: JEO_TEAMS.slice(0, nTeams).map((t, i) => ({ name: names[i], color: t.color, level: 0 })), qs: Array.from({ length: 15 }, (_, i) => milMakeQ(topics, i, seen)), i: 0, shown: false, right: new Set() };
+      mtDraw();
+    };
+  };
+  draw();
+  window.scrollTo(0, 0);
+}
+function mtDraw() {
+  stopJeoTimer(); navPush('mt');
+  const q = mt.qs[mt.i], t = TOPIC[q.topic], last = mt.i === 14;
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('star')} מיליונר קבוצתי</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="mtQuit">${ic('close')} יציאה</button></span></div>
+    <div class="mil-wrap mt-wrap">
+      <div class="mil-main">
+        <div class="card mil-q">
+          <div class="mil-qn"><span>שאלה ${mt.i + 1} מתוך 15 · ${t.name}</span><b>${shekel(MIL_LADDER[mt.i])}</b></div>
+          <div class="jeo-qtext">${q.text}</div>
+          ${q.fig}
+        </div>
+        <div class="mil-opts">${q.choices.map((c, k) => `<div class="mil-opt${mt.shown && k === q.ans ? ' right' : ''}${mt.shown && k !== q.ans ? ' dim' : ''}"><span class="jl">${MIL_L[k]}</span><span>${c}</span></div>`).join('')}</div>
+        ${mt.shown ? `
+          <div class="fb show ok"><div class="head">התשובה הנכונה: ${MIL_L[q.ans]}</div>${q.exp}</div>
+          <div class="jeo-who">אילו קבוצות ענו נכון? (לחיצה מסמנת)</div>
+          <div class="mt-mark">${mt.teams.map((tm, k) => `<button class="mt-tm${mt.right.has(k) ? ' on' : ''}" data-mk="${k}" style="--tc:${tm.color}">${mt.right.has(k) ? '✓ ' : ''}${esc(tm.name)}</button>`).join('')}</div>
+          <div class="actions" style="justify-content:center"><button id="mtNext" class="race-go">${last ? 'לתוצאות ←' : 'לשאלה הבאה ←'}</button></div>`
+        : `
+          <p class="center muted">כל קבוצה כותבת את האות של התשובה שלה (א / ב / ג / ד).</p>
+          <div class="jeo-tools" style="justify-content:center"><button class="secondary" id="mtT">${ic('clock')} 30 שניות</button><span class="jeo-clock" id="mtClock"></span></div>
+          <div class="actions" style="justify-content:center"><button id="mtShow" class="race-go">הצגת התשובה</button></div>`}
+      </div>
+      <div class="mt-board">${mt.teams.map(tm => `<div class="mt-row" style="--tc:${tm.color}"><b>${esc(tm.name)}</b><div class="mt-hbar"><span style="width:${tm.level / 15 * 100}%"></span></div><span class="mt-pr">${tm.level ? shekel(MIL_LADDER[tm.level - 1]) : '0 ₪'}</span></div>`).join('')}<div class="mt-goal">${ic('star')} 1,000,000 ₪ = 15 שלבים</div></div>
+    </div>`;
+  fsBind();
+  $('mtQuit').onclick = () => { if (confirm('לצאת מהמשחק?')) milTeamHome(); };
+  if ($('mtShow')) $('mtShow').onclick = () => { mt.shown = true; mtDraw(); };
+  if ($('mtT')) $('mtT').onclick = () => {
+    stopJeoTimer();
+    const end = Date.now() + 30000, el = $('mtClock');
+    const tick = () => { if (!el.isConnected) return stopJeoTimer(); const s2 = Math.max(0, Math.ceil((end - Date.now()) / 1000)); el.textContent = s2 || 'הזמן נגמר!'; el.classList.toggle('low', s2 <= 5); if (!s2) stopJeoTimer(); };
+    tick(); jeoTimer = setInterval(tick, 250);
+  };
+  app.querySelectorAll('[data-mk]').forEach(b => b.onclick = () => { const k = Number(b.dataset.mk); mt.right.has(k) ? mt.right.delete(k) : mt.right.add(k); mtDraw(); });
+  if ($('mtNext')) $('mtNext').onclick = () => {
+    mt.right.forEach(k => { mt.teams[k].level++; });
+    if (last) return mtEnd();
+    mt.i++; mt.shown = false; mt.right = new Set(); mtDraw();
+  };
+  window.scrollTo(0, 0);
+}
+function mtEnd() {
+  const ranked = mt.teams.slice().sort((a, b) => b.level - a.level), top = ranked[0].level, winners = ranked.filter(t => t.level === top);
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('star')} מיליונר קבוצתי</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="mtHomeB">${ic('home')} לדף הבית</button></span></div>
+    <div class="card center race-end rec">
+      <h2>${winners.length > 1 ? 'תיקו!' : top === 15 ? 'מיליונרים!!!' : 'המנצחים:'}</h2>
+      <div class="jeo-win">${winners.map(w => `<span style="--tc:${w.color}">${esc(w.name)}</span>`).join(' ')}</div>
+      <ol class="jeo-rank">${ranked.map(t => `<li style="--tc:${t.color}"><span class="jdot"></span><span>${esc(t.name)}</span><b data-raw>${t.level ? shekel(MIL_LADDER[t.level - 1]) : '0 ₪'}</b></li>`).join('')}</ol>
+      <p class="compare">כל הכבוד לכל הקבוצות!</p>
+      <div class="actions" style="justify-content:center"><button id="mtNew">משחק חדש ←</button></div>
+    </div>`;
+  fsBind();
+  $('mtHomeB').onclick = home;
+  $('mtNew').onclick = milTeamHome;
 }
 
 /* =========================================================
@@ -8736,8 +8856,9 @@ function apGridQ(n, askPer) {
     : { text: 'מה <b>השטח</b> של הצורה? (כמה משבצות?)', svg, ans: s.cells.length, unit: 'משבצות', hint: 'ספרו את המשבצות הצבועות. אפשר לספור שורה אחרי שורה.', exp: `בצורה יש ${s.cells.length} משבצות.` };
 }
 function apRectQ(max, askPer) {
-  const w = R(2, max), h = R(2, Math.max(2, max - 2));
-  const sq = Math.random() < 0.2, H = sq ? w : h;
+  const w = R(3, max), sq = Math.random() < 0.2;
+  let h; do { h = R(2, Math.max(3, max - 2)); } while (h === w);
+  const H = sq ? w : h;
   const pts = [[0, 0], [w, 0], [w, H], [0, H]];
   const svg = apSVG(pts, { u: Math.min(36, 260 / Math.max(w, H)), labels: [{ i: 2, t: w }, { i: 1, t: H }], over: [apRight([0, H], 1, -1)] });
   const name = sq ? 'ריבוע' : 'מלבן';
