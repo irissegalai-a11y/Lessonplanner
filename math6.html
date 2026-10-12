@@ -928,6 +928,10 @@
   .op-dots span.on { border-color: #1f1e1c; color: #1f1e1c; background: rgba(239,201,106,0.45); font-weight: 700; }
   .op-dots span.done { color: #1f1e1c; }
   .op-slide h2 { margin-top: 0; }
+  .dec-grids { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .pv-tbl { margin: 8px auto; }
+  .pv-tbl td { font-size: 1.4rem; font-weight: 700; min-width: 2.2em; text-align: center; }
+  .pv-tbl .pv-dot { min-width: 0.6em; padding: 0; }
   .op-pies { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 18px; margin: 8px 0; }
   .op-pies > div { display: flex; align-items: center; gap: 10px; }
   .op-pies b { font-family: var(--hand, inherit); font-size: 1.4rem; }
@@ -1039,7 +1043,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יב</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יג</span></footer>
 
 <script>
 /* =========================================================
@@ -9524,6 +9528,92 @@ const OP_FRACDIV = [
   }
 ];
 const OP_SPECIAL = GRADE >= 5 ? [{ id: 'fracdiv', name: 'השבר כמנת חילוק', desc: 'פתיחים לפי מארגן ההוראה: חלוקה שווה, פיצות, ישר המספרים, מחיר ליחידה', build: () => shuffle(OP_FRACDIV.slice()).slice(0, 4).map(f => f()) }] : [];
+
+/* ---------- פתיח: כפל שלם בשבר (לפי "כפל שברים פשוטים – שיעור 1") ---------- */
+// ישר מספרים עם קפיצות שוות (חיבור חוזר)
+function opJumps(n, p, q, maxW = 460) {
+  const total = n * p / q, end = Math.max(1, Math.ceil(total)), unit = Math.min(140, (maxW - 40) / end), X = v => 20 + v * unit;
+  let g = `<line x1="10" y1="60" x2="${X(end) + 14}" y2="60" stroke="#1f1e1c" stroke-width="2.4"/>`;
+  for (let k = 0; k <= end * q; k++) { const v = k / q, big = k % q === 0; g += `<line x1="${X(v)}" y1="${big ? 50 : 54}" x2="${X(v)}" y2="${big ? 70 : 66}" stroke="#1f1e1c" stroke-width="${big ? 2.4 : 1.4}"/>`; if (big) g += `<text x="${X(v)}" y="88" text-anchor="middle" font-size="15" font-weight="700">${v}</text>`; }
+  for (let j = 0; j < n; j++) { const a = X(j * p / q), b = X((j + 1) * p / q), m = (a + b) / 2, h = Math.min(34, (b - a) * 0.7 + 8); g += `<path d="M${a} 58 Q${m} ${58 - h} ${b} 58" fill="none" stroke="#d9482b" stroke-width="2.2"/><path d="M${b - 5} ${54} L${b} 58 L${b - 6} 60" fill="none" stroke="#d9482b" stroke-width="2"/>`; }
+  return `<svg class="fig" viewBox="0 0 ${X(end) + 30} 96" width="${X(end) + 30}" height="96" aria-hidden="true" style="max-width:${maxW}px">${g}</svg>`;
+}
+const opMixed = (a, b) => { const g = gcd(a, b), A = a / g, B = b / g; if (B === 1) return M(A); return A > B ? `${F(A, B)} = ${M(Math.floor(A / B))}${F(A % B, B)}` : F(A, B); };
+const OP_MULFRAC = [
+  () => { // מה משותף? עוגות ופיצה
+    const a = R(3, 6), b = R(3, 8), k = R(3, 7), n = pick([6, 8, 10, 12]);
+    return { title: 'מה משותף לשאלות?', q: `<ol class="op-list"><li>רעות אפתה <b>${a} עוגות</b>, וקישטה כל עוגה ב-<b>${b} לבבות</b> שוקולד. בכמה לבבות היא השתמשה?</li><li>בפיצרייה חילקו כל פיצה ל"משולשים" שגודלם ${F(1, n)} פיצה. <b>${k} חברים</b> הזמינו משולש אחד לכל אחד. איזה חלק מפיצה שלמה הם הזמינו?</li></ol><p><b>מה משותף לשתי השאלות?</b></p>`, a: `<ol class="op-list"><li>${M(`${a} × ${b} = ${a * b}`)} – כלומר ${M(Array(a).fill(b).join(' + '))}.</li><li>${M(`${k} ×`)} ${F(1, n)} = ${F(k, n)} – כלומר ${k} פעמים ${F(1, n)}.</li></ol><div class="rule">💡 בשתיהן <b>כפל = חיבור חוזר</b>: מחברים את אותה כמות כמה פעמים – גם כשהכמות היא שבר!</div>` };
+  },
+  () => { // טושים – האם ישלים חבילה?
+    const q = pick([3, 4, 5, 6, 8]), p = R(1, q - 1), packs = pick([2, 3]);
+    const tot = packs * p, ok = tot >= q;
+    return { title: 'האם תהיה חבילה שלמה?', q: `<p>לדור היו <b>${packs} חבילות</b> זהות של טושים. מכל חבילה נשארו לו <b>${F(p, q)}</b> מהטושים, והשאר אבדו.</p><p><b>האם דור יצליח להרכיב חבילה שלמה מהטושים שנשארו?</b> הסבירו.</p>${pieSVG(packs, q, 26)}`, a: `${M(`${packs} ×`)} ${F(p, q)} = ${Array(packs).fill(F(p, q)).join(' + ')} = ${F(tot, q)}${tot >= q ? ` = ${opMixed(tot, q)}` : ''}.<br>${ok ? (tot === q ? '<b>כן – בדיוק חבילה שלמה!</b>' : '<b>כן – ויותר מחבילה שלמה!</b>') : `<b>לא</b> – יש לו רק ${F(tot, q)} חבילה, פחות משלמה.`}` };
+  },
+  () => { // קופת חיסכון
+    const c = pick([[2, 'חצי שקל'], [10, '10 אגורות'], [5, '20 אגורות']]), cnt = c[0] * R(2, 6) + (Math.random() < 0.4 ? R(1, c[0] - 1) : 0);
+    return { title: 'קופת החיסכון', q: `<p>בקופת החיסכון של אור יש רק <b>${cnt} מטבעות</b> של ${c[1]} (${F(1, c[0])} שקל).</p><p><b>כמה שקלים יש לאור?</b> כתבו תרגיל כפל.</p>`, a: `${M(`${cnt} ×`)} ${F(1, c[0])} = ${F(cnt, c[0])} = ${opMixed(cnt, c[0])} שקלים.<br>כמו לחבר ${F(1, c[0])} לעצמו ${cnt} פעמים.` };
+  },
+  () => { // מוט מדידה
+    const d = pick([2, 4, 5, 10]), k = d * R(2, 4) + (Math.random() < 0.5 ? 0 : R(1, d - 1));
+    return { title: 'מודדים בעזרת מוט', q: `<p>לאורי יש מוט באורך <b>${F(1, d)} מטר</b>. הוא מדד את הקיר בחדר שלו, והמוט נכנס בדיוק <b>${k} פעמים</b>.</p><p><b>מה אורך הקיר?</b></p>`, a: `${M(`${k} ×`)} ${F(1, d)} = ${F(k, d)} = ${opMixed(k, d)} מטר.${d === 4 ? `<br>💡 כל 4 מוטות = מטר אחד.` : ''}` };
+  },
+  () => { // צפרדע על ישר המספרים
+    const q = pick([3, 4, 5]), p = R(1, q - 1), n = R(3, 6);
+    return { title: 'הצפרדע הקופצת', q: `<p>צפרדעים קופצות למרחק גדול פי 20–60 מאורך גופן! צפרדע קטנה קופצת בכל קפיצה <b>${F(p, q)} מטר</b>.</p><p><b>איזה מרחק היא תעבור ב-${n} קפיצות?</b> נסו לצייר על ישר המספרים.</p>`, a: `${opJumps(n, p, q)}${M(`${n} ×`)} ${F(p, q)} = ${F(n * p, q)} = ${opMixed(n * p, q)} מטר.` };
+  },
+  () => { // תרגילים קשורים
+    const q = pick([3, 4, 5, 6]), k = q > 3 ? pick([2, 3]) : 2, p = R(1, Math.max(1, Math.floor((q - 1) / k))), base = q * R(1, 3);
+    const r1 = base * p / q;
+    return { title: 'היעזרו בתרגיל הפתור', q: `<p>לפניכם תרגיל פתור:</p><p class="center">${M(`${base} ×`)} ${F(p, q)} = ${M(r1)}</p><p>היעזרו בו (בלי לחשב מההתחלה!):</p><ol class="op-list"><li>${M(`${base * k} ×`)} ${F(p, q)} = ?</li><li>${M(`${base} ×`)} ${F(p * k < q ? p * k : p, q)} = ?</li></ol>`, a: `<ol class="op-list"><li>${M(base * k)} גדול פי ${k} מ-${M(base)} ← גם התוצאה גדולה פי ${k}: ${M(`${r1} × ${k} = ${r1 * k}`)}.</li><li>${p * k < q ? `המונה גדול פי ${k} ← התוצאה גדולה פי ${k}: ${M(r1 * k)}.` : `זה אותו תרגיל – ${M(r1)}.`}</li></ol>` };
+  },
+  () => { // שברי יסוד מול מונה גדול
+    const q = pick([5, 6, 7, 8, 9]), n = R(2, 4), m = R(2, Math.min(4, q - 1));
+    return { title: 'מה הקשר בין התרגילים?', q: `<p class="center">${M(`${n} ×`)} ${F(1, q)} = ${F(n, q)}</p><p>שערו – בלי לחשב בדרך הארוכה:</p><ol class="op-list"><li>${M(`${n} ×`)} ${F(m, q)} = ?</li><li>${M(`${n * 2} ×`)} ${F(1, q)} = ?</li></ol><p><b>מה הקשר בין התרגילים?</b></p>`, a: `<ol class="op-list"><li>${F(m, q)} גדול פי ${m} מ-${F(1, q)} ← ${F(n * m, q)}${n * m >= q ? ` = ${opMixed(n * m, q)}` : ''}.</li><li>${M(n * 2)} גדול פי 2 מ-${M(n)} ← ${F(n * 2, q)}${n * 2 >= q ? ` = ${opMixed(n * 2, q)}` : ''}.</li></ol><div class="rule">💡 כופלים שלם בשבר: כופלים את השלם <b>במונה</b>, והמכנה נשאר.</div>` };
+  }
+];
+
+/* ---------- פתיח: ייצוגים של שברים עשרוניים (לפי המיקרו-שיעור של מרכז המורים) ---------- */
+function opGrid100(blueCols, redCells, size = 150) {
+  const c = size / 10; let g = '';
+  for (let x = 0; x < 10; x++) for (let y = 0; y < 10; y++) {
+    const blue = x < blueCols, red = !blue && (x - blueCols) * 10 + y < redCells;
+    g += `<rect x="${x * c}" y="${y * c}" width="${c}" height="${c}" fill="${blue ? 'rgba(47,91,211,0.55)' : red ? 'rgba(217,72,43,0.6)' : '#fffdf8'}" stroke="#8a8478" stroke-width="0.6"/>`;
+  }
+  return `<svg class="fig" viewBox="-2 -2 ${size + 4} ${size + 4}" width="${size}" height="${size}" aria-hidden="true" style="max-width:${size}px;margin:4px">${g}<rect x="0" y="0" width="${size}" height="${size}" fill="none" stroke="#1f1e1c" stroke-width="2"/></svg>`;
+}
+function opDecLine(vals) {
+  const X = v => 20 + v * 420;
+  let g = `<line x1="10" y1="40" x2="450" y2="40" stroke="#1f1e1c" stroke-width="2.2"/>`;
+  for (let k = 0; k <= 10; k++) g += `<line x1="${X(k / 10)}" y1="${k % 5 ? 34 : 30}" x2="${X(k / 10)}" y2="${k % 5 ? 46 : 50}" stroke="#1f1e1c" stroke-width="${k % 5 ? 1.4 : 2.2}"/>` + (k === 0 || k === 10 || k === 5 ? `<text x="${X(k / 10)}" y="68" text-anchor="middle" font-size="14">${k / 10}</text>` : '');
+  vals.forEach((v, i) => { const col = i ? '#d9482b' : '#2f5bd3'; g += `<circle cx="${X(v)}" cy="40" r="6" fill="${col}"/><text x="${X(v)}" y="${i ? 22 : 18}" text-anchor="middle" font-size="15" font-weight="700" fill="${col}">${fmt(v)}</text>`; });
+  return `<svg class="fig" viewBox="0 0 460 76" width="460" height="76" aria-hidden="true" style="max-width:520px">${g}</svg>`;
+}
+function opPvTable(vals) {
+  const row = v => { const s = (Math.round(v * 100) / 100).toFixed(2).split('.'); return `<tr><td>${s[0]}</td><td class="pv-dot">.</td><td>${s[1][0]}</td><td>${s[1][1]}</td></tr>`; };
+  return `<table class="ftable pv-tbl" dir="ltr" style="direction:ltr"><tr><th>יחידות</th><th></th><th>עשיריות</th><th>מאיות</th></tr>${vals.map(row).join('')}</table>`;
+}
+const opAgorot = v => Math.round(v * 100);
+const OP_DECREP = [
+  () => { // 0.a מול 0.0a – 5 ייצוגים
+    const a = R(2, 9), x = a / 10, y = a / 100;
+    return { title: `${fmt(x)} ו-${fmt(y)} – חמש דרכים`, q: `<p>הציגו את המספרים <b>${M(fmt(x))}</b> ו-<b>${M(fmt(y))}</b>:</p><ol class="op-list"><li>בקירוב על ישר המספרים (מ-0 עד 1)</li><li>ברשת של 10 × 10</li><li>בעזרת מטבעות ושטרות</li><li>כשברים פשוטים</li><li>בטבלת המבנה העשרוני</li></ol><p>הסבירו איך ידעתם. <b>מה ההבדל בין שני המספרים?</b></p>`, a: `${opDecLine([x, y])}<div class="dec-grids">${opGrid100(a, 0)}${opGrid100(0, a)}</div><p>${M(fmt(x))} = ${a} עשיריות (${a} עמודות) · ${M(fmt(y))} = ${a} מאיות (${a} משבצות).</p><p>💰 ${M(fmt(x))} שקל = ${opAgorot(x)} אגורות · ${M(fmt(y))} שקל = ${opAgorot(y)} אגורות.</p><p>${M(fmt(x))} = ${F(a, 10)} · ${M(fmt(y))} = ${F(a, 100)}</p>${opPvTable([x, y])}` };
+  },
+  () => { // השוואה ברשת
+    let x, y; do { x = R(2, 8) / 10; y = R(11, 89) / 100; } while (Math.abs(x - y) < 0.05 || Math.round(y * 10) === y * 10);
+    const big = x > y ? x : y;
+    return { title: 'מי גדול יותר?', q: `<p>איזה מספר גדול יותר: <b>${M(fmt(x))}</b> או <b>${M(fmt(y))}</b>?</p><p>יש מי שאומרים: "${M(fmt(y))} גדול יותר, כי ${opAgorot(y)} גדול מ-${Math.round(x * 10)}". <b>האם הם צודקים?</b> הראו ברשת של 10 × 10.</p>`, a: `<div class="dec-grids">${opGrid100(Math.round(x * 10), 0)}${opGrid100(Math.floor(y * 10), Math.round(y * 100) % 10)}</div><p>${M(fmt(x))} = ${opAgorot(x)} מאיות, ${M(fmt(y))} = ${opAgorot(y)} מאיות ← <b>${M(fmt(big))} גדול יותר</b>.${big === x ? ' לא סופרים ספרות – משווים עשיריות קודם!' : ''}</p>` };
+  },
+  () => { // כסף
+    const a = R(1, 9), b = R(1, 9), v = (a * 10 + b) / 100;
+    return { title: 'בחנות', q: `<p>בקבלה מהחנות כתוב: <b>${M(fmt(v))} ₪</b>.</p><ol class="op-list"><li>כמה אגורות זה?</li><li>ואם היה כתוב ${M(fmt(a / 10))} ₪? ו-${M(fmt(b / 100))} ₪?</li><li>הציגו את ${M(fmt(v))} בטבלת המבנה העשרוני.</li></ol>`, a: `<ol class="op-list"><li>${M(fmt(v))} ₪ = ${opAgorot(v)} אגורות (${a} עשיריות = ${a * 10} אגורות, ועוד ${b} מאיות = ${b} אגורות).</li><li>${M(fmt(a / 10))} ₪ = ${a * 10} אגורות · ${M(fmt(b / 100))} ₪ = ${b} אגורות.</li><li>${opPvTable([v])}</li></ol><div class="rule">💡 1 שקל = 100 אגורות, ולכן אגורה = מאית שקל, ו-10 אגורות = עשירית שקל.</div>` };
+  },
+  () => { // ישר המספרים בקירוב
+    const vals = shuffle([R(1, 4) / 10, R(5, 9) / 10, R(11, 99) / 100]).slice(0, 3);
+    return { title: 'על ישר המספרים', q: `<p>סמנו <b>בקירוב</b> על ישר המספרים מ-0 עד 1 את המספרים: ${vals.map(v => `<b>${M(fmt(v))}</b>`).join(' , ')}.</p>${opDecLine([])}<p>איך החלטתם איפה לסמן? (רמז: איפה ${M('0.5')}?)</p>`, a: `${opDecLine(vals)}<p>${vals.map(v => `${M(fmt(v))} = ${F(opAgorot(v), 100)}`).join(' · ')}</p><p>💡 קודם מוצאים את ${M('0.5')} (באמצע), ואז מחלקים לעשיריות. מאיות נמצאות בין שתי עשיריות.</p>` };
+  }
+];
+OP_SPECIAL.push(...(GRADE >= 5 ? [{ id: 'decrep', name: 'ייצוגים של שברים עשרוניים', desc: 'ישר מספרים, רשת 10 × 10, כסף, שבר פשוט וטבלת המבנה העשרוני', build: () => [OP_DECREP[0]].concat(shuffle(OP_DECREP.slice(1))).map(f => f()) }] : []),
+  ...(GRADE >= 6 ? [{ id: 'mulfrac', name: 'כפל שלם בשבר', desc: 'כפל כחיבור חוזר: עוגות, טושים, מוט מדידה, צפרדע, תרגילים קשורים', build: () => { const f = OP_MULFRAC.slice(); return [f[0]].concat(shuffle(f.slice(1)).slice(0, 3)).map(x => x()); } }] : []));
 
 function opHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('op');
