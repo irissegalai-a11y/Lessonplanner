@@ -41,7 +41,7 @@
 
   body { padding: 18px 16px 60px; }
 
-  .wrap { max-width: 860px; margin: 0 auto; }
+  .wrap { max-width: var(--wrap-w, 860px); margin: 0 auto; }
 
   h1 { font-size: 2.2rem; margin: 6px 0 4px; text-align: center; }
   h2 { font-size: 1.5rem; margin: 0 0 12px; }
@@ -1052,7 +1052,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 טז</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יז</span></footer>
 
 <script>
 /* =========================================================
@@ -6232,6 +6232,7 @@ function markLearned(id, k) {
 let lessonView = null;
 
 function startLesson(id, k = 0) {
+  if (!k) track('למידה', (LESSONS[id] && (LESSONS[id].title || LESSONS[id].name)) || id);
   navPush('view');
   state = null;
   stopSpeak();
@@ -6528,9 +6529,18 @@ function speak(html, btn) {
 }
 
 const FONT_STEPS = [1, 1.15, 1.3];
-function applyFont() {
-  document.documentElement.style.fontSize = (FONT_STEPS[store.font || 0] * 100) + '%';
+// התאמה לגודל המסך: במסכים רחבים האתר נפרס לרוחב ומגדיל מעט את הכתב
+function screenFit() {
+  const w = window.innerWidth || 1280;
+  return { wrap: w <= 1000 ? 860 : Math.round(Math.min(w * 0.9, 1600)), scale: Math.min(1.3, Math.max(1, w / 1450)) };
 }
+function applyFont() {
+  const fit = screenFit(), root = document.documentElement;
+  root.style.setProperty('--wrap-w', fit.wrap + 'px');
+  root.style.fontSize = (FONT_STEPS[store.font || 0] * fit.scale * 100) + '%';
+}
+let fitTimer = null;
+window.addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = setTimeout(applyFont, 150); });
 function cycleFont() {
   store.font = ((store.font || 0) + 1) % FONT_STEPS.length;
   saveStore(store);
@@ -6800,7 +6810,28 @@ const $ = id => document.getElementById(id);
 
 // כפתור "אחורה" של הדפדפן/הטלפון – חוזר שלב אחורה בתוך האתר
 let navPopping = false;
+/* =========================================================
+   מעקב פעילות – נשלח לטופס גוגל פרטי של המורה (רק היא רואה את התשובות)
+   כל עוד TRACK.form ריק – לא נשלח כלום
+   ========================================================= */
+const TRACK = { form: '', f: { device: '', grade: '', name: '', action: '', detail: '' } };
+const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל' };
+const trackDevice = () => { try { let d = localStorage.getItem('math-dev'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('math-dev', d); } return d; } catch (e) { return 'x'; } };
+let trackLast = '';
+function track(action, detail = '') {
+  if (!TRACK.form || URLP.has('teacher') || URLP.has('print')) return;
+  const key = action + '|' + detail;
+  if (key === trackLast) return;
+  trackLast = key;
+  try {
+    const nm = (typeof store !== 'undefined' && store.name) || '';
+    const body = new URLSearchParams({ [TRACK.f.device]: trackDevice(), [TRACK.f.grade]: String(GRADE), [TRACK.f.name]: nm, [TRACK.f.action]: action, [TRACK.f.detail]: String(detail).slice(0, 200) });
+    fetch(TRACK.form, { method: 'POST', mode: 'no-cors', body }).catch(() => {});
+  } catch (e) { /* לא חובה */ }
+}
+
 function navPush(v) {
+  if (TRACK_SCREENS[v]) track(TRACK_SCREENS[v]);
   if (navPopping) return;
   try { if ((history.state && history.state.v) !== v) history.pushState({ v }, ''); } catch (e) { /* לא חובה */ }
 }
@@ -7616,6 +7647,7 @@ function nextQ() {
 /* ---------- סיכום ---------- */
 function summary() {
   const s = state, n = s.results.length;
+  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
   const label = titleText();
@@ -9792,6 +9824,7 @@ function opHome() {
   window.scrollTo(0, 0);
 }
 function opDraw() {
+  if (op.k === 0 && !op.show) track(OP_SPECIAL.some(x => x.id === op.topic) ? 'מארגן ההוראה' : 'פתיח שיעור', opName(op.topic));
   navPush('op');
   const s = op.slides[op.k], last = op.k === op.slides.length - 1;
   app.innerHTML = `
@@ -10655,6 +10688,7 @@ function teacherGate() {
 // חשיפה לבדיקות אוטומטיות
 window.__math6 = { TOPICS, LESSONS, check, correctHTML, findTrap, speechText };
 
+try { if (!sessionStorage.getItem('math-vis')) { sessionStorage.setItem('math-vis', '1'); track('כניסה לאתר', GRADE_NAME[GRADE] || ''); } } catch (e) { /* לא חובה */ }
 if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else home();
 </script>
 </body>
