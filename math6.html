@@ -9161,7 +9161,7 @@ function warDraw() {
   const last = w.round + 1 >= WAR_ROUNDS;
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('cards')} מלחמת תרגילים</span><span class="toollinks">${w.teams ? fsBtnHTML() : ''}<button class="secondary" id="wQuit">${ic('close')} יציאה</button></span></div>
-    <div class="war-score">${[0, 1].map(k => `<div class="war-pl${w.judge === k && w.teams ? ' on' : ''}" style="--tc:${cols[k]}"><b>${esc(w.names[k])}</b><span class="war-stack">${'<i></i>'.repeat(Math.min(12, Math.ceil(w.won[k] / 2)))}</span><span data-raw>${w.won[k]} קלפים</span></div>`).join('<span class="war-vs">סיבוב ' + (w.round + 1) + ' / ' + WAR_ROUNDS + '</span>')}</div>
+    <div class="war-score">${[0, 1].map(k => `<div class="war-pl${w.judge === k && w.teams ? ' on' : ''}" style="--tc:${cols[k]}"><b>${esc(w.names[k])}</b><span class="war-stack">${'<i></i>'.repeat(Math.min(12, Math.ceil(w.won[k] / 2)))}</span><span>${w.won[k]} קלפים</span></div>`).join('<span class="war-vs">סיבוב ' + (w.round + 1) + ' / ' + WAR_ROUNDS + '</span>')}</div>
     ${w.warNow ? '<div class="war-banner">מלחמה! ערמה של ' + w.pot + ' קלפים</div>' : ''}
     <div class="war-table">
       <div class="war-side" style="--tc:${cols[0]}"><div class="war-name">${esc(w.names[0])}</div>${warCardHTML(c0, 'l', w.phase === 'pick')}</div>
