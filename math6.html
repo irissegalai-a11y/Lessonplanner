@@ -725,6 +725,8 @@
   .race-track { display: flex; flex-direction: column; gap: 4px; background: #fffdf8; color: #1f1e1c; border: 2px solid #1f1e1c; border-radius: 16px 225px 16px 255px / 255px 16px 225px 16px; box-shadow: none; padding: 14px; }
   .race-track .nm { font-size: 1.1rem; }
   .race-track .best { font-family: 'Assistant', sans-serif; font-weight: 400; font-size: 0.95rem; color: #5f5a50; }
+  .race-track:hover { background: #fff; color: #1f1e1c; box-shadow: 2px 3px 0 #1f1e1c; }
+  .race-track.op-special:hover { background: rgba(239,201,106,0.38); }
   .race-track.sel { background: rgba(127, 168, 214, 0.32); box-shadow: 3px 4px 0 #1f1e1c; }
   .race-go { font-size: 1.3rem; padding: 12px 34px; }
   .race-play { position: relative; text-align: center; }
@@ -928,6 +930,13 @@
   .op-dots span.on { border-color: #1f1e1c; color: #1f1e1c; background: rgba(239,201,106,0.45); font-weight: 700; }
   .op-dots span.done { color: #1f1e1c; }
   .op-slide h2 { margin-top: 0; }
+  .op-src { margin-top: 14px; font-size: 0.85rem; color: #5f5a50; border-top: 1px dashed #cfc6b4; padding-top: 6px; }
+  .op-src-s { font-size: 0.78rem; color: #8a8478; font-family: 'Assistant', sans-serif; font-weight: 400; }
+  .op-big { font-size: 1.4em; font-weight: 700; }
+  .op-angs { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .op-angs > div { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border: 2px solid #1f1e1c; border-radius: 12px; background: #fffdf8; }
+  .op-angs .ap-fig, .op-angs .fig { max-height: 150px; width: auto; margin: 0; }
+  .op-word { font-family: inherit !important; font-size: 1.2rem !important; }
   .dec-grids { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
   .pv-tbl { margin: 8px auto; }
   .pv-tbl td { font-size: 1.4rem; font-weight: 700; min-width: 2.2em; text-align: center; }
@@ -1043,7 +1052,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יג</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 טו</span></footer>
 
 <script>
 /* =========================================================
@@ -9447,7 +9456,7 @@ function opOddOne() {
 const opName = id => (OP_SPECIAL.find(x => x.id === id) || TOPIC[id]).name;
 function opBuild(topicId) {
   const sp = OP_SPECIAL.find(x => x.id === topicId);
-  if (sp) return sp.build();
+  if (sp) return sp.build().map(sl => ({ ...sl, src: sp.src }));
   const t = TOPIC[topicId], seen = new Set();
   const get = (lv, cond) => { for (let i = 0; i < 80; i++) { const q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text) && (!cond || cond(q))) { seen.add(q.text); return q; } } return mk(t.id, pick(t.levels[lv]), lv); };
   const slides = [];
@@ -9527,7 +9536,7 @@ const OP_FRACDIV = [
     return { title: 'איזה מארז משתלם?', q: `<p>בחנות מוכרים מארז של <b>${a} סבונים</b> ב-${M(x)} ₪, ומארז של <b>${b} סבונים</b> מאותו סוג ב-${M(y)} ₪.</p><p><b>באיזה מארז מחיר סבון אחד נמוך יותר?</b> הסבירו.</p>`, a: `מחיר סבון: ${M(`${x} : ${a}`)} = ${F(x, a)} ₪, ו-${M(`${y} : ${b}`)} = ${F(y, b)} ₪.<br>משווים (מכנה משותף ${a * b}): ${F(x * b, a * b)} מול ${F(y * a, a * b)} – <b>במארז של ${cheap}</b> סבון בודד זול יותר.` };
   }
 ];
-const OP_SPECIAL = GRADE >= 5 ? [{ id: 'fracdiv', name: 'השבר כמנת חילוק', desc: 'פתיחים לפי מארגן ההוראה: חלוקה שווה, פיצות, ישר המספרים, מחיר ליחידה', build: () => shuffle(OP_FRACDIV.slice()).slice(0, 4).map(f => f()) }] : [];
+const OP_SPECIAL = GRADE >= 5 ? [{ id: 'fracdiv', src: 'מארגן ההוראה תשפ"ו – משימות לנושא "השבר כמנת חילוק" (כולל יחידת הוראה מתוקשבת "הרחבת משמעות השבר")', name: 'השבר כמנת חילוק', desc: 'פתיחים לפי מארגן ההוראה: חלוקה שווה, פיצות, ישר המספרים, מחיר ליחידה', build: () => shuffle(OP_FRACDIV.slice()).slice(0, 4).map(f => f()) }] : [];
 
 /* ---------- פתיח: כפל שלם בשבר (לפי "כפל שברים פשוטים – שיעור 1") ---------- */
 // ישר מספרים עם קפיצות שוות (חיבור חוזר)
@@ -9612,8 +9621,62 @@ const OP_DECREP = [
     return { title: 'על ישר המספרים', q: `<p>סמנו <b>בקירוב</b> על ישר המספרים מ-0 עד 1 את המספרים: ${vals.map(v => `<b>${M(fmt(v))}</b>`).join(' , ')}.</p>${opDecLine([])}<p>איך החלטתם איפה לסמן? (רמז: איפה ${M('0.5')}?)</p>`, a: `${opDecLine(vals)}<p>${vals.map(v => `${M(fmt(v))} = ${F(opAgorot(v), 100)}`).join(' · ')}</p><p>💡 קודם מוצאים את ${M('0.5')} (באמצע), ואז מחלקים לעשיריות. מאיות נמצאות בין שתי עשיריות.</p>` };
   }
 ];
-OP_SPECIAL.push(...(GRADE >= 5 ? [{ id: 'decrep', name: 'ייצוגים של שברים עשרוניים', desc: 'ישר מספרים, רשת 10 × 10, כסף, שבר פשוט וטבלת המבנה העשרוני', build: () => [OP_DECREP[0]].concat(shuffle(OP_DECREP.slice(1))).map(f => f()) }] : []),
-  ...(GRADE >= 6 ? [{ id: 'mulfrac', name: 'כפל שלם בשבר', desc: 'כפל כחיבור חוזר: עוגות, טושים, מוט מדידה, צפרדע, תרגילים קשורים', build: () => { const f = OP_MULFRAC.slice(); return [f[0]].concat(shuffle(f.slice(1)).slice(0, 3)).map(x => x()); } }] : []));
+OP_SPECIAL.push(...(GRADE >= 5 ? [{ id: 'decrep', src: 'מיקרו־שיעור "ייצוגים של שברים עשרוניים" – מרכז המורים הארצי למתמטיקה בחינוך היסודי', name: 'ייצוגים של שברים עשרוניים', desc: 'ישר מספרים, רשת 10 × 10, כסף, שבר פשוט וטבלת המבנה העשרוני', build: () => [OP_DECREP[0]].concat(shuffle(OP_DECREP.slice(1))).map(f => f()) }] : []),
+  ...(GRADE >= 6 ? [{ id: 'mulfrac', src: 'יחידת הוראה מתוקשבת "כפל שברים פשוטים – כיתה ו\'", שיעור 1', name: 'כפל שלם בשבר', desc: 'כפל כחיבור חוזר: עוגות, טושים, מוט מדידה, צפרדע, תרגילים קשורים', build: () => { const f = OP_MULFRAC.slice(); return [f[0]].concat(shuffle(f.slice(1)).slice(0, 3)).map(x => x()); } }] : []));
+
+/* ---------- פתיחים מוכנים נוספים – לפי מאגרי המשימות של ההדרכה (עשרוניים, זוויות ומרובעים, שטחים, נתונים) ---------- */
+const d1 = v => fmt(rnd(v));
+const OP_DECCOMP = [
+  () => { const a = R(1, 8); return { title: 'השלימו מספר מתאים', q: `<p>השלימו מספר מתאים:</p><p class="center op-big">${M(`${d1((a + 1) / 10)} > ___ > ${d1(a / 10)}`)}</p><p>מצאו <b>עוד אפשרות</b>. כמה אפשרויות יש?</p>`, a: `למשל ${M(d1(a / 10 + 0.05))}, ${M(d1(a / 10 + 0.01))}, ${M(d1(a / 10 + 0.099))}...<br><b>יש אינסוף אפשרויות!</b> בין כל שני מספרים עשרוניים תמיד יש עוד מספרים – מוסיפים ספרות אחרי הנקודה.` }; },
+  () => { const a = R(3, 8), lo = a / 10, hi = (a + 1) / 10; const opts = shuffle([d1(hi - 0.001), d1(lo), d1(lo + 0.043), d1(hi + 0.01), d1(lo - 0.01), d1(lo + 0.09)]); const ok = opts.filter(x => Number(x) > lo && Number(x) < hi); return { title: 'הקיפו את המתאימים', q: `<p>אילו מהמספרים מתאימים?</p><p class="center op-big">${M(`${d1(hi)} > ___ > ${d1(lo)}`)}</p><div class="op-nums">${opts.map(x => `<span>${M(x)}</span>`).join('')}</div>`, a: `מתאימים: <b>${ok.map(x => M(x)).join(' , ')}</b>.<br>${M(d1(lo))} עצמו לא מתאים – הוא לא <b>גדול</b> מ-${M(d1(lo))}. משווים קודם את העשיריות, ואז את המאיות.` }; },
+  () => { const a = R(150, 399) / 100, b = R(110, 299) / 100, c = R(110, 299) / 100, x = rnd(a + b - c); return { title: 'בלי לחשב!', q: `<p>השלימו את המספר המתאים:</p><p class="center op-big">${M(`${d1(a)} + ${d1(b)} = ___ + ${d1(c)}`)}</p><p><b>הסבירו איך אפשר להשלים בלי לחשב את התוצאות.</b></p>`, a: `${M(fmt(x))}. ${d1(c) > d1(a) ? '' : ''}${c > a ? `${M(d1(c))} גדול מ-${M(d1(a))} ב-${M(d1(c - a))}, אז המספר החסר קטן מ-${M(d1(b))} ב-${M(d1(c - a))}` : `${M(d1(c))} קטן מ-${M(d1(a))} ב-${M(d1(a - c))}, אז המספר החסר גדול מ-${M(d1(b))} ב-${M(d1(a - c))}`}: ${M(`${d1(b)} ${c > a ? '-' : '+'} ${d1(Math.abs(c - a))} = ${fmt(x)}`)}.<br>💡 כשמגדילים מחובר אחד – צריך להקטין את השני באותה כמות.` }; },
+  () => { const a = R(41, 89) / 10, b = R(21, Math.floor(a * 10) - 5) / 10, n1 = pick(['יובל', 'נועה', 'מאיה']), n2 = pick(['ניר', 'עידו', 'אורי']); return { title: 'מי זרק רחוק יותר?', q: `<p>${n1} זרקה כדור למרחק <b>${M(d1(a))} מטרים</b>. ${n2} זרק למרחק <b>${M(d1(b))} מטרים</b>.</p><p><b>בכמה מטרים זרקה ${n1} רחוק יותר?</b></p>`, a: `${M(`${d1(a)} - ${d1(b)} = ${d1(a - b)}`)} מטרים.<br>💡 אפשר גם "לקפוץ" על ישר המספרים: מ-${M(d1(b))} עד ${M(Math.ceil(b))}, ומשם עד ${M(d1(a))}.` }; },
+  () => { const p1 = R(1100, 2999) / 100, p2 = R(900, 1999) / 100, pay = 50, ch = rnd(pay - p1 - p2); return { title: 'כמה עודף?', q: `<p>אבי קנה מחברת ב-${M(d1(p1))} ₪ וספר ב-${M(d1(p2))} ₪. הוא שילם ${M(pay)} ₪.</p><p><b>כמה עודף קיבל?</b> קודם – אומדן: בערך כמה?</p>`, a: `אומדן: ${M(`${Math.round(p1)} + ${Math.round(p2)} ≈ ${Math.round(p1) + Math.round(p2)}`)}, עודף בערך ${M(pay - Math.round(p1) - Math.round(p2))} ₪.<br>מדויק: ${M(`${d1(p1)} + ${d1(p2)} = ${d1(p1 + p2)}`)}, ${M(`${pay} - ${d1(p1 + p2)} = ${d1(ch)}`)} ₪.` }; },
+  () => { const a = R(210, 280) / 100; return { title: 'השלימו מספר', q: `<ol class="op-list"><li>השלימו מספר כך שהסכום יהיה <b>גדול מ-3 וקטן מ-4</b>: ${M(`${d1(a)} + ___`)}</li><li>השלימו מספר כך שהסכום יהיה <b>גדול מ-${d1(a)} וקטן מ-3</b>: ${M(`${d1(a)} + ___`)}</li></ol>`, a: `<ol class="op-list"><li>מספר גדול מ-${M(d1(3 - a))} וקטן מ-${M(d1(4 - a))}, למשל ${M(d1(3.5 - a))} (הסכום: ${M('3.5')}).</li><li>מספר גדול מ-0 וקטן מ-${M(d1(3 - a))}, למשל ${M(d1((3 - a) / 2))}.</li></ol>` }; },
+  () => { const step = pick([0.03, 0.02, 0.05, 0.25, 0.1]), st = rnd(R(1, 9) * step + (step < 0.1 ? 0.06 : 0)); const seq = Array.from({ length: 6 }, (_, i) => d1(st + i * step)); const show = [2, 3, 4]; return { title: 'קפיצות שוות', q: `<p>השלימו כך שה"קפיצות" בין המספרים יהיו שוות:</p><p class="center op-big">${M(seq.map((x, i) => show.includes(i) ? x : '___').join(' , '))}</p>`, a: `הקפיצה: ${M(d1(step))}.<br>${M(seq.join(' , '))}` }; },
+  () => { const tot = R(8, 12), h1 = R(Math.ceil(tot * 0.2 * 2), Math.floor(tot * 0.6 * 2)) / 2, h2 = R(2, Math.floor((tot - h1) * 2 - 1)) / 2; const fr = h1 / tot, band = fr < 1 / 3 ? 'פחות מ-⅓ הדרך' : fr < 1 / 2 ? 'יותר מ-⅓ ופחות מ-½ הדרך' : fr < 2 / 3 ? 'יותר מ-½ ופחות מ-⅔ הדרך' : 'יותר מ-⅔ הדרך'; return { title: 'החילזון והחסה', q: `<p>חילזון זוחל אל החסה שבגינה, שנמצאת במרחק <b>${M(tot)} מטרים</b> ממנו. בשעה הראשונה עבר <b>${M(d1(h1))} מטרים</b>, ובשעה השנייה <b>${M(d1(h2))} מטרים</b>.</p><ol class="op-list"><li>כמה מטרים נותרו לו אחרי השעה השנייה?</li><li>בשעה הראשונה עבר: פחות מ-⅓ הדרך / בין ⅓ ל-½ / בין ½ ל-⅔ / יותר מ-⅔?</li></ol>`, a: `<ol class="op-list"><li>${M(`${tot} - ${d1(h1)} - ${d1(h2)} = ${d1(tot - h1 - h2)}`)} מטרים.</li><li>⅓ מ-${tot} = ${M(d1(tot / 3))}, ½ = ${M(d1(tot / 2))}, ⅔ = ${M(d1(tot * 2 / 3))} ← ${M(d1(h1))} זה <b>${band}</b>.</li></ol>` }; }
+];
+// ---- זוויות ומרובעים ----
+function angSVG(deg, s = 90) { const r = s * 0.8, a = deg * Math.PI / 180, cx = 10, cy = s - 8; const x2 = cx + r * Math.cos(a), y2 = cy - r * Math.sin(a); const arc = deg === 90 ? `<path d="M${cx + 12} ${cy} V${cy - 12} H${cx}" fill="none" stroke="#2f5bd3" stroke-width="2"/>` : `<path d="M${cx + 16} ${cy} A16 16 0 0 0 ${cx + 16 * Math.cos(a)} ${cy - 16 * Math.sin(a)}" fill="none" stroke="#2f5bd3" stroke-width="2"/>`; return `<svg class="ang-fig" viewBox="0 0 ${s + 10} ${s}" width="${s + 10}" height="${s}" style="width:${s + 10}px;height:${s}px" aria-hidden="true"><line x1="${cx}" y1="${cy}" x2="${cx + r}" y2="${cy}" stroke="#1f1e1c" stroke-width="3" stroke-linecap="round"/><line x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" stroke="#1f1e1c" stroke-width="3" stroke-linecap="round"/>${arc}</svg>`; }
+const QUADS = {
+  'ריבוע': { pts: [[0, 0], [4, 0], [4, 4], [0, 4]], names: ['ריבוע', 'מלבן', 'מעוין', 'מקבילית', 'דלתון'] },
+  'מלבן': { pts: [[0, 0], [6, 0], [6, 3], [0, 3]], names: ['מלבן', 'מקבילית'] },
+  'מעוין': { pts: [[2.5, 0], [5, 3], [2.5, 6], [0, 3]], names: ['מעוין', 'מקבילית', 'דלתון'] },
+  'מקבילית': { pts: [[1.5, 0], [6.5, 0], [5, 3], [0, 3]], names: ['מקבילית'] },
+  'טרפז': { pts: [[1.5, 0], [4.5, 0], [6, 3], [0, 3]], names: ['טרפז'] },
+  'דלתון': { pts: [[2, 0], [4, 1.5], [2, 6], [0, 1.5]], names: ['דלתון'] }
+};
+const quadSVG = (k, u = 24) => apSVG(QUADS[k].pts, { u, fill: 'rgba(127,168,214,0.4)' });
+const QUAD_NAMES = ['ריבוע', 'מלבן', 'מעוין', 'מקבילית', 'טרפז', 'דלתון'];
+const OP_QUADS = [
+  () => { const k = pick(Object.keys(QUADS)); return { title: 'כל השמות המתאימים', q: `<div class="center">${quadSVG(k)}</div><p>אילו שמות מתאימים למצולע? (אפשר כמה!)</p><div class="op-nums">${QUAD_NAMES.map(n => `<span class="op-word">${n}</span>`).join('')}</div>`, a: `<b>${QUADS[k].names.join(' , ')}</b>.<br>${k === 'ריבוע' ? 'ריבוע הוא גם מלבן (4 זוויות ישרות), גם מעוין (4 צלעות שוות) וגם מקבילית (2 זוגות צלעות מקבילות). הוא גם דלתון!' : k === 'מעוין' ? 'מעוין – 4 צלעות שוות. יש לו 2 זוגות צלעות מקבילות, ולכן הוא גם מקבילית; ושני זוגות של צלעות סמוכות שוות – לכן גם דלתון.' : k === 'מלבן' ? 'מלבן – 4 זוויות ישרות, 2 זוגות צלעות מקבילות ולכן גם מקבילית. הוא לא מעוין, כי הצלעות לא כולן שוות.' : k === 'מקבילית' ? 'רק מקבילית – אין זוויות ישרות ולא כל הצלעות שוות.' : k === 'טרפז' ? 'טרפז – זוג אחד בלבד של צלעות מקבילות.' : 'דלתון – שני זוגות של צלעות סמוכות שוות.'}` }; },
+  () => { const st = pick([['כל ריבוע הוא מלבן.', true, 'לריבוע 4 זוויות ישרות.'], ['כל מלבן הוא ריבוע.', false, 'למלבן לא חייבות להיות צלעות שוות.'], ['כל ריבוע הוא מעוין.', true, 'לריבוע 4 צלעות שוות.'], ['כל מעוין הוא ריבוע.', false, 'למעוין לא חייבות להיות זוויות ישרות.'], ['כל מלבן הוא מקבילית.', true, 'במלבן יש 2 זוגות צלעות מקבילות.'], ['כל מקבילית היא מלבן.', false, 'במקבילית לא חייבות להיות זוויות ישרות.'], ['כל מעוין הוא מקבילית.', true, 'במעוין הצלעות הנגדיות מקבילות.'], ['טרפז הוא מקבילית.', false, 'בטרפז רק זוג אחד של צלעות מקבילות.']]); const st2 = pick([['למלבן האלכסונים שווים באורכם.', true, 'נכון – במלבן (וגם בריבוע) האלכסונים שווים.'], ['במעוין האלכסונים מאונכים זה לזה.', true, 'נכון – והם גם קווי סימטריה.'], ['במקבילית האלכסונים תמיד מאונכים.', false, 'רק במעוין (ובריבוע) הם מאונכים.']]); return { title: 'נכון או לא נכון?', q: `<ol class="op-list"><li>${st[0]}</li><li>${st2[0]}</li></ol><p>הסבירו! ציירו דוגמה או דוגמה נגדית.</p>`, a: `<ol class="op-list"><li><b>${st[1] ? 'נכון' : 'לא נכון'}</b> – ${st[2]}</li><li><b>${st2[1] ? 'נכון' : 'לא נכון'}</b> – ${st2[2]}</li></ol>` }; },
+  () => { const types = shuffle([['חדה', R(25, 70)], ['ישרה', 90], ['קהה', R(110, 160)]]); const main = types[0], odd = types[1]; const cards = shuffle([main[1], main[0] === 'ישרה' ? 90 : main[1] + R(-12, 12), main[0] === 'ישרה' ? 90 : main[1] + R(-15, 15), odd[1]]); const oi = cards.indexOf(odd[1]); return { title: 'איזה קלף יוצא דופן?', q: `<div class="op-angs">${cards.map((d, i) => `<div><b>${'אבגד'[i]}</b>${angSVG(d)}</div>`).join('')}</div><p>באיזה קלף הסרטוט יוצא דופן? הסבירו.</p>`, a: `<b>קלף ${'אבגד'[oi]}</b> – זווית ${odd[0]}, ובכל השאר זווית ${main[0]}.<br>חדה – פחות מ-90°, ישרה – 90°, קהה – בין 90° ל-180°.` }; },
+  () => { const riddles = [['יש לי זוג אחד בלבד של צלעות מקבילות.', 'טרפז'], ['האלכסונים שלי מאונכים זה לזה, וכל הצלעות שלי שוות – אבל אין לי זווית ישרה.', 'מעוין'], ['רק אחד מהאלכסונים שלי הוא קו סימטריה, ויש לי שני זוגות של צלעות סמוכות שוות.', 'דלתון'], ['יש לי שני זוגות של צלעות מקבילות, והאלכסונים שלי אינם קווי סימטריה ואינם שווים.', 'מקבילית'], ['כל הזוויות שלי ישרות, והאלכסונים שלי שווים – אבל הצלעות שלי לא כולן שוות.', 'מלבן']]; const r = pick(riddles); return { title: 'מי אני?', q: `<div class="op-wrong">${r[0]}</div><p><b>איזה מרובע אני?</b> ציירו אותי, וכתבו עוד תכונה שלי.</p>`, a: `<div class="center">${quadSVG(r[1])}</div><b>${r[1]}</b>.` }; },
+  () => { const conv = Math.random() < 0.5; const pts1 = [[0, 0], [5, 0], [5, 4], [0, 4]], pts2 = [[0, 0], [5, 0], [2.5, 1.6], [2.5, 4.5]]; return { title: 'אלכסון בחוץ?', q: `<div class="op-angs"><div><b>א</b>${apSVG(conv ? pts2 : pts1, { u: 22, fill: 'rgba(127,168,214,0.4)' })}</div><div><b>ב</b>${apSVG(conv ? pts1 : pts2, { u: 22, fill: 'rgba(127,168,214,0.4)' })}</div></div><p>ציירו את כל האלכסונים בכל מצולע. <b>באיזה מצולע יש אלכסון שעובר מחוץ למצולע?</b></p>`, a: `במצולע <b>${conv ? 'א' : 'ב'}</b> – יש לו "שקע" (זווית גדולה מ-180°), ולכן אחד האלכסונים יוצא החוצה. במצולע השני כל האלכסונים בפנים.` }; }
+];
+// ---- שטחים: חשיבה ----
+const OP_AREATH = [
+  () => { const b = R(4, 8), h = R(3, 5), s1 = R(1, 2), s2 = R(4, 6); const p1 = apSVG([[s1, 0], [b + s1, 0], [b, h], [0, h]], { u: 18, fill: 'rgba(217,72,43,0.35)', labels: [{ i: 2, t: b }] }), p2 = apSVG([[s2, 0], [b + s2, 0], [b, h], [0, h]], { u: 18, fill: 'rgba(47,91,211,0.35)', labels: [{ i: 2, t: b }] }); return { title: 'איזו מקבילית גדולה יותר?', q: `<div class="op-angs"><div>${p1}</div><div>${p2}</div></div><p>לשתי המקביליות אותו בסיס (${M(b)}) ואותו גובה (${M(h)}). <b>לאיזו שטח גדול יותר?</b></p>`, a: `<b>לשתיהן אותו שטח:</b> ${M(`${b} × ${h} = ${b * h}`)}.<br>💡 שטח מקבילית תלוי רק בבסיס ובגובה – לא בכמה היא "נוטה".` }; },
+  () => { const w = R(4, 10), h = R(3, 8), x = R(1, w - 1); const svg = apSVG([[0, 0], [w, 0], [w, h], [0, h]], { u: 22, fill: 'rgba(127,168,214,0.2)', labels: [{ i: 2, t: w }, { i: 1, t: h }], over: [(X, Y) => `<polygon points="${X(0)},${Y(h)} ${X(w)},${Y(h)} ${X(x)},${Y(0)}" fill="rgba(217,72,43,0.45)" stroke="#1f1e1c" stroke-width="2"/>`] }); return { title: 'משולש בתוך מלבן', q: `${svg}<ol class="op-list"><li>איזה חלק משטח המלבן הוא שטח המשולש?</li><li>מה שטח המשולש?</li></ol>`, a: `<ol class="op-list"><li><b>חצי</b> – לבסיס ולגובה של המשולש אותן מידות כמו למלבן.</li><li>${M(`${w} × ${h} : 2 = ${w * h / 2}`)}</li></ol>` }; },
+  () => { const s = pick([4, 5, 6, 8, 10]), P = 4 * s, A = s * s; const divs = []; for (let a = 1; a <= A; a++) if (A % a === 0 && a < A / a && a !== s) divs.push([a, A / a]); return { title: 'מלבן עם אותו שטח', q: `<p>ההיקף של ריבוע הוא <b>${M(P)} ס"מ</b>.</p><ol class="op-list"><li>מה שטח הריבוע?</li><li>הציעו <b>שני מלבנים שונים</b> (שאינם ריבוע) עם אותו שטח. מה ההיקף שלהם?</li></ol>`, a: `<ol class="op-list"><li>צלע: ${M(`${P} : 4 = ${s}`)}. שטח: ${M(`${s} × ${s} = ${A}`)} סמ"ר.</li><li>${divs.slice(0, 3).map(([a, b]) => `${M(`${a} × ${b}`)} (היקף ${M(2 * (a + b))})`).join(' · ')}<br>💡 לכל המלבנים אותו שטח, אבל ההיקף שלהם גדול יותר מההיקף של הריבוע!</li></ol>` }; },
+  () => { const t = pick([9, 18, 27, 36, 45]), small = t / 9; const svg = `<svg class="fig" viewBox="0 0 200 200" width="200" height="200" aria-hidden="true"><polygon points="100,10 178,145 22,145" fill="rgba(127,168,214,0.45)" stroke="#1f1e1c" stroke-width="2.5"/><polygon points="100,190 22,55 178,55" fill="rgba(217,72,43,0.35)" stroke="#1f1e1c" stroke-width="2.5"/></svg>`; return { title: 'מגן דוד', q: `${svg}<p>שני משולשים שווי צלעות חופפים יוצרים מגן דוד. השטח של כל משולש הוא <b>${M(t)} סמ"ר</b>. <b>מה השטח של מגן הדוד?</b></p>`, a: `כל משולש גדול מתחלק ל-9 משולשים קטנים שווים: ${M(`${t} : 9 = ${small}`)}.<br>מגן הדוד בנוי מ-12 משולשים קטנים (6 במשושה האמצעי + 6 קודקודים): ${M(`12 × ${small} = ${12 * small}`)} סמ"ר.` }; },
+  () => { const W = R(10, 16), H = R(8, 12), lw = R(3, W - 5), lh = R(3, H - 4); const svg = apSVG([[0, 0], [W, 0], [W, H], [0, H]], { u: 18, fill: 'rgba(226,179,87,0.25)', labels: [{ i: 2, t: W }, { i: 1, t: H }, { at: [lw / 2, lh + 0.6], t: lw }, { at: [lw + 0.6, lh / 2], t: lh }], over: [apRect(0, 0, lw, lh, 'rgba(157,178,122,0.75)')] }); const free = W * H - lw * lh; return { title: 'גינת המשחקים', q: `${svg}<p>גינת משחקים מלבנית, ובפינה <b>מדשאה</b> (בירוק). המידות במטרים.</p><ol class="op-list"><li>מה שטח המדשאה?</li><li>באזור שאין בו מדשאה רוצים בריכת דגים מלבנית בשטח <b>${M(20)} מ"ר</b>. הציעו מידות שמתאימות לגינה, וחשבו את ההיקף.</li></ol>`, a: `<ol class="op-list"><li>${M(`${lw} × ${lh} = ${lw * lh}`)} מ"ר.</li><li>למשל ${M('4 × 5')} (היקף ${M(18)}) או ${M('2 × 10')} (היקף ${M(24)}) – אם יש מקום: שטח פנוי ${M(free)} מ"ר.</li></ol>` }; }
+];
+// ---- ניתוח נתונים וממוצע ----
+const OP_DATA = [
+  () => { const cols = ['אדומים', 'כחולים', 'צהובים', 'לבנים']; let v; do { v = cols.map(() => R(4, 20)); } while (v[3] - v[2] < 3 || new Set(v).size < 4); const tot = v.reduce((a, b) => a + b, 0); return { title: 'הבלונים של אורלי', q: `<p>אורלי הזמינה בלונים למסיבת הסיום:</p><table class="ftable op-tbl"><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr><tr>${v.map(x => `<td>${x}</td>`).join('')}</tr></table><ol class="op-list"><li>איזה חלק מכל הבלונים הם הכחולים?</li><li>מספר הבלונים הסגולים גדול מהצהובים אבל קטן מהלבנים. תנו דוגמה. <b>כמה פתרונות יש?</b></li></ol>`, a: `<ol class="op-list"><li>סך הכול ${M(tot)} בלונים ← ${F(v[1], tot)}${gcd(v[1], tot) > 1 ? ` = ${F(v[1] / gcd(v[1], tot), tot / gcd(v[1], tot))}` : ''}.</li><li>מספר בין ${v[2]} ל-${v[3]} (לא כולל): ${Array.from({ length: v[3] - v[2] - 1 }, (_, i) => v[2] + 1 + i).join(', ')} – <b>${v[3] - v[2] - 1} פתרונות</b>.</li></ol>` }; },
+  () => { const m = R(12, 30), a = R(m + 2, m + 12); return { title: 'מה המספר השני?', q: `<p>הממוצע של <b>שני מספרים</b> הוא <b>${M(m)}</b>. אחד המספרים הוא <b>${M(a)}</b>.</p><p><b>מהו המספר השני?</b> הסבירו.</p>`, a: `${M(m * 2 - a)}.<br>סכום שני המספרים: ${M(`${m} × 2 = ${2 * m}`)}, ולכן ${M(`${2 * m} - ${a} = ${2 * m - a}`)}.<br>💡 דרך נוספת: ${M(a)} גדול מהממוצע ב-${a - m}, אז השני קטן ממנו ב-${a - m}.` }; },
+  () => { let v; do { v = Array.from({ length: 5 }, () => R(3, 16)); } while (v.reduce((a, b) => a + b, 0) % 5); const mean = v.reduce((a, b) => a + b, 0) / 5, d = R(1, 4); return { title: 'הממוצע לא השתנה', q: `<ol class="op-list"><li>חשבו את הממוצע של המספרים: <b>${M(v.join(' , '))}</b></li><li>ניצן הוסיף <b>שני מספרים</b>, והממוצע <b>לא השתנה</b>. אילו מספרים יכול היה להוסיף?</li></ol>`, a: `<ol class="op-list"><li>${M(`(${v.join(' + ')}) : 5 = ${mean}`)}</li><li>למשל ${M(mean)} ו-${M(mean)}, או ${M(mean - d)} ו-${M(mean + d)} – כל זוג שהממוצע שלו ${M(mean)}.</li></ol>` }; },
+  () => { const names = ['אביב', 'גל', 'יהלי', 'יובל', 'נועם']; let v; do { v = [R(3, 9), R(2, 8), R(1, 7), 0, R(0, 3)]; } while (v.reduce((a, b) => a + b, 0) % 5); const s = v.reduce((a, b) => a + b, 0); return { title: 'קליעות לסל', q: `<table class="ftable op-tbl"><tr>${names.map(n => `<th>${n}</th>`).join('')}</tr><tr>${v.map(x => `<td>${x}</td>`).join('')}</tr></table><p><b>מה מספר הקליעות הממוצע לילד?</b> (שימו לב לאפסים!)</p>`, a: `${M(`${s} : 5 = ${s / 5}`)}.<br>💡 גם ילד שלא קלע נספר! מחלקים ב-5, לא ב-${v.filter(x => x).length}.` }; },
+  () => { const m = R(2, 4), tot = 5 * m; let v, miss; do { v = Array.from({ length: 5 }, () => R(0, 7)); miss = tot - v.reduce((a, b, i) => i === 2 ? a : a + b, 0); } while (miss < 1 || miss > 7); v[2] = miss; const others = tot - miss; return { title: 'כמה ילדים בדירה 3?', q: `<p>בבניין <b>5 דירות</b>. הממוצע של מספר הילדים בדירה הוא <b>${M(m)}</b>.</p>${barsHTML(v, ['דירה 1', 'דירה 2', 'דירה 3', 'דירה 4', 'דירה 5'], 9, null, 2)}<ol class="op-list"><li>כמה ילדים גרים בבניין?</li><li>כמה ילדים גרים בדירה 3?</li></ol>`, a: `<ol class="op-list"><li>${M(`5 × ${m} = ${tot}`)} ילדים.</li><li>${M(`${tot} - ${others} = ${miss}`)} ילדים.</li></ol>` }; }
+];
+OP_SPECIAL.push(
+  ...(GRADE >= 5 ? [{ id: 'deccomp', src: 'מארגן ההוראה תשפ"ו – מאגר המשימות של הדרכת המתמטיקה', name: 'שברים עשרוניים: השוואה וחישוב', desc: 'בין שני מספרים, השלמה בלי לחשב, עודף, קפיצות שוות, החילזון', build: () => shuffle(OP_DECCOMP.slice()).slice(0, 4).map(f => f()) }] : []),
+  ...(GRADE >= 4 ? [{ id: 'quads', src: 'מארגן ההוראה תשפ"ו – מאגר המשימות של הדרכת המתמטיקה', name: 'זוויות, מרובעים וקשרי הכלה', desc: 'כל השמות המתאימים, נכון/לא נכון, קלף יוצא דופן, מי אני, אלכסונים', build: () => shuffle(OP_QUADS.slice()).slice(0, 4).map(f => f()) }] : []),
+  ...(GRADE >= 5 ? [{ id: 'areath', src: 'מארגן ההוראה תשפ"ו – מאגר המשימות של הדרכת המתמטיקה', name: 'שטחים – חשיבה', desc: 'מקביליות עם אותו בסיס וגובה, משולש בתוך מלבן, מגן דוד, מלבנים עם אותו שטח', build: () => shuffle(OP_AREATH.slice()).slice(0, 4).map(f => f()) }] : []),
+  ...(GRADE >= 4 ? [{ id: 'datam', src: 'מארגן ההוראה תשפ"ו – מאגר המשימות של הדרכת המתמטיקה', name: 'ניתוח נתונים וממוצע', desc: 'טבלאות, דיאגרמה, ממוצע ומה קורה כשמוסיפים מספרים', build: () => shuffle(OP_DATA.slice()).slice(0, 4).map(f => f()) }] : [])
+);
 
 function opHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('op');
@@ -9621,7 +9684,7 @@ function opHome() {
     <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור</span><button class="secondary" id="opHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how">4 שקפים קצרים להקרנה בתחילת השיעור, על הנושא שתבחרו: <b>חימום</b> בראש · <b>מצאו את הטעות</b> · <b>איזה לא שייך?</b> (לשיח) · <b>שאלת אתגר</b>. בכל שקף – קודם חושבים, ואז חושפים את התשובה.</p></div>
     <h2>על איזה נושא השיעור?</h2>
-    ${OP_SPECIAL.length ? `<h3 class="games-sub">פתיחים מוכנים לפי מארגן ההוראה</h3><div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-opt="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div><h3 class="games-sub">לפי נושאי התרגול</h3>` : ''}
+    ${OP_SPECIAL.length ? `<h3 class="games-sub">פתיחים מוכנים לפי מארגן ההוראה</h3><div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-opt="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span><span class="op-src-s">מקור: ${t.src}</span></button>`).join('')}</div><h3 class="games-sub">לפי נושאי התרגול</h3>` : ''}
     <div class="race-tracks">${TOPICS.map(t => `<button class="race-track" data-opt="${t.id}" style="border-color:${t.color}"><span class="nm">${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>`;
   $('opHomeB').onclick = home;
   app.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => { op = { topic: b.dataset.opt, slides: opBuild(b.dataset.opt), k: 0, show: false }; opDraw(); });
@@ -9637,6 +9700,7 @@ function opDraw() {
       <h2>${s.title}</h2>
       <div class="op-q">${s.q}</div>
       ${op.show ? `<div class="op-a">${s.a}</div>` : ''}
+      ${s.src ? `<div class="op-src">מקור: ${s.src}</div>` : ''}
     </div>
     <div class="actions" style="justify-content:center">
       ${op.k ? '<button class="secondary" id="opPrev">→ הקודם</button>' : ''}
