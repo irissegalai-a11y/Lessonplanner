@@ -928,6 +928,12 @@
   .op-dots span.on { border-color: #1f1e1c; color: #1f1e1c; background: rgba(239,201,106,0.45); font-weight: 700; }
   .op-dots span.done { color: #1f1e1c; }
   .op-slide h2 { margin-top: 0; }
+  .op-pies { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 18px; margin: 8px 0; }
+  .op-pies > div { display: flex; align-items: center; gap: 10px; }
+  .op-pies b { font-family: var(--hand, inherit); font-size: 1.4rem; }
+  .op-pies .pie-fig { width: auto; max-width: 100%; height: 64px; margin: 0; }
+  .op-tbl td, .op-tbl th { padding: 8px 12px; }
+  .op-special { border-color: #e8b84a !important; background: rgba(239,201,106,0.22); }
   .op-q { font-size: clamp(1.3rem, 2.6vw, 1.9rem); line-height: 1.7; }
   .op-q .fig { max-height: 34vh; width: auto; max-width: 100%; }
   .op-list { padding-inline-start: 1.4em; }
@@ -1033,7 +1039,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יא</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יב</span></footer>
 
 <script>
 /* =========================================================
@@ -9434,7 +9440,10 @@ function opOddOne() {
   const nums = shuffle([...yes, no[0]]);
   return { title: 'איזה לא שייך?', q: `<div class="op-nums">${nums.map(n => `<span>${M(fmt(n))}</span>`).join('')}</div><p>איזה מספר לא שייך לאחרים? למה? (יכולות להיות כמה תשובות נכונות – העיקר להסביר!)</p>`, a: `למשל: ${M(fmt(no[0]))} – כי כל השאר <b>${P.name}</b>, והוא לא. מצאתם סיבה אחרת? מצוין – הסבירו אותה!` };
 }
+const opName = id => (OP_SPECIAL.find(x => x.id === id) || TOPIC[id]).name;
 function opBuild(topicId) {
+  const sp = OP_SPECIAL.find(x => x.id === topicId);
+  if (sp) return sp.build();
   const t = TOPIC[topicId], seen = new Set();
   const get = (lv, cond) => { for (let i = 0; i < 80; i++) { const q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text) && (!cond || cond(q))) { seen.add(q.text); return q; } } return mk(t.id, pick(t.levels[lv]), lv); };
   const slides = [];
@@ -9448,12 +9457,81 @@ function opBuild(topicId) {
   slides.push({ title: 'שאלת אתגר', q: `${c.text}${c.fig || ''}${c.type === 'choice' ? `<div class="op-ch">${c.choices.map((x, k) => `<span><b>${'אבגדהוזח'[k]}</b> ${x}</span>`).join('')}</div>` : ''}<p class="muted">חשבו לבד דקה, ואז שתפו את בן/בת הזוג בדרך שלכם.</p>`, a: `${correctHTML(c)}<br>${c.exp}` });
   return slides;
 }
+/* ---------- פתיחים מוכנים לפי מארגן ההוראה: השבר כמנת חילוק (כיתות ה'–ו') ---------- */
+const PIE_COLS = ['#2f8f55', '#7fa8d6', '#d9482b', '#e8b84a', '#8a5cd1', '#d94a8c', '#d9822b', '#6fb3ad'];
+// count עיגולים, כל אחד מחולק ל-parts חלקים שווים
+function pieSVG(count, parts, r = 34) {
+  const gap = 12, W = count * (2 * r + gap) + gap, H = 2 * r + 2 * gap;
+  let g = '';
+  for (let c = 0; c < count; c++) {
+    const cx = gap + r + c * (2 * r + gap), cy = gap + r;
+    if (parts === 1) { g += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${PIE_COLS[0]}" stroke="#1f1e1c" stroke-width="2"/>`; continue; }
+    for (let k = 0; k < parts; k++) {
+      const a0 = -Math.PI / 2 + k * 2 * Math.PI / parts, a1 = a0 + 2 * Math.PI / parts;
+      const p = (a) => `${(cx + r * Math.cos(a)).toFixed(1)} ${(cy + r * Math.sin(a)).toFixed(1)}`;
+      g += `<path d="M${cx} ${cy} L${p(a0)} A${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${p(a1)} Z" fill="${PIE_COLS[k % PIE_COLS.length]}" stroke="#1f1e1c" stroke-width="1.6"/>`;
+    }
+  }
+  return `<svg class="fig pie-fig" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">${g}</svg>`;
+}
+const fracWords = (a, b) => { const g = gcd(a, b); return g === b ? M(a / b) : a > b ? `${F(a, b)} = ${M(Math.floor(a / b))}${F(a % b, b)}` : F(a, b); };
+const OP_FRACDIV = [
+  () => { // גיליונות בריסטול
+    const s = R(3, 7), k1 = R(2, s - 1), k2 = R(s + 1, s + 4);
+    return { title: 'קיר אמנותי', q: `<p>בשבט הצופים החליטו ליצור קיר אמנותי מגיליונות בריסטול. כל שכבה קיבלה <b>${s} גיליונות</b> מלבניים שווים בגודלם.</p><ol class="op-list"><li>בשכבה ד' התנדבו <b>${k1} ילדים</b>, והם מחלקים את הגיליונות שווה בשווה. הציעו להם איך לחלק. כמה יקבל כל ילד?</li><li>בשכבה ה' התנדבו <b>${k2} ילדים</b>. איך אפשר לחלק ${s} גיליונות ל-${k2} ילדים שווה בשווה? כמה יקבל כל ילד?</li></ol>`, a: `<ol class="op-list"><li>${M(`${s} : ${k1}`)} = ${fracWords(s, k1)} – כל ילד מקבל גיליון שלם ועוד חלק (למשל: כל אחד לוקח גיליון, ואת השאר מחלקים ל-${k1} חלקים).</li><li>${M(`${s} : ${k2}`)} = ${F(s, k2)} – מחלקים כל גיליון ל-${k2} חלקים, וכל ילד לוקח חלק אחד מכל גיליון: ${s} חלקים של ${F(1, k2)}.</li></ol><div class="rule">💡 ${M('a : b')} = ${F('a', 'b')} – השבר הוא מנת החילוק!</div>` };
+  },
+  () => { // התאימו תרגיל לכל ציור
+    const pool = shuffle([[2, 3], [5, 3], [3, 2], [3, 5], [4, 3], [3, 4], [2, 5], [5, 2], [4, 5]]);
+    const pairs = []; for (const p of pool) { if (pairs.length < 4 && !pairs.some(q => q[0] === p[0] && q[1] === p[1])) pairs.push(p); }
+    const ex = shuffle(pairs.slice());
+    return { title: 'התאימו תרגיל לכל ציור', q: `<p>בכל ציור – פיצות שחולקו שווה בשווה בין ילדים. כל ילד מקבל <b>חלק אחד מכל פיצה</b>. איזה תרגיל מתאים לכל ציור?</p><div class="op-pies">${pairs.map((p, k) => `<div><b>${'אבגד'[k]}</b>${pieSVG(p[0], p[1], 24)}</div>`).join('')}</div><div class="op-nums">${ex.map(p => `<span>${M(`${p[0]} : ${p[1]} =`)}</span>`).join('')}</div>`, a: pairs.map((p, k) => `<b>${'אבגד'[k]}</b>: ${p[0]} פיצות, כל אחת חולקה ל-${p[1]} – ${M(`${p[0]} : ${p[1]}`)} = ${fracWords(p[0], p[1])}`).join('<br>') };
+  },
+  () => { // משפחות ופיצות
+    let a, b, c, d; do { a = R(1, 4); b = R(a + 1, a + 4); c = R(1, 5); d = R(c + 1, c + 5); } while (a * d === b * c || a / b === c / d);
+    const big = a / b > c / d ? 'ישראלי' : 'אביב';
+    return { title: 'באיזו משפחה – יותר פיצה?', q: `<p>למשפחת ישראלי <b>${b} ילדים</b>. הם הזמינו <b>${a} פיצות</b> וחילקו אותן שווה בשווה בין הילדים.</p><p>במשפחת אביב <b>${d} ילדים</b>, והם הזמינו <b>${c} פיצות</b> באותו גודל.</p><p><b>באיזו משפחה כל ילד קיבל חלק גדול יותר של פיצה?</b> הסבירו!</p>`, a: `ישראלי: ${M(`${a} : ${b}`)} = ${F(a, b)} פיצה לילד. אביב: ${M(`${c} : ${d}`)} = ${F(c, d)} פיצה לילד.<br>משווים: ${F(a * d, b * d)} מול ${F(c * b, d * b)} (מכנה משותף) – <b>במשפחת ${big}</b> כל ילד קיבל יותר.` };
+  },
+  () => { // השלימו מספרים חד-ספרתיים
+    const n = pick([8, 6, 9, 5]);
+    return { title: 'השלימו – חשיבה פתוחה', q: `<p>השלימו <b>מספרים חד-ספרתיים שונים</b> כך שהתוצאה תתאים:</p><table class="ftable op-tbl"><tr><th>תוצאה קטנה מ-1</th><th>תוצאה גדולה מ-1</th><th>תוצאה שהיא מספר שלם</th></tr><tr><td>${M(`___ : ${n} =`)}</td><td>${M(`___ : ${n} =`)}</td><td>${M(`___ : ${n} =`)}</td></tr><tr><td>${M(`${n} : ___ =`)}</td><td>${M(`${n} : ___ =`)}</td><td>${M(`${n} : ___ =`)}</td></tr></table><p class="muted">כמה אפשרויות תמצאו?</p>`, a: (() => {
+      const lt = R(1, n - 1), gt = n < 9 ? R(n + 1, 9) : null, dv = [1, 2, 3, 4].filter(d => d < n && n % d === 0 && d !== n).pop();
+      return `<b>קטנה מ-1</b> (המחולק קטן מהמחלק): ${M(`${lt} : ${n}`)} = ${F(lt, n)}${gt ? `, ${M(`${n} : ${gt}`)} = ${F(n, gt)}` : ` – ובשורה השנייה אין אפשרות! (אין ספרה גדולה מ-${n})`}.<br><b>גדולה מ-1</b> (המחולק גדול מהמחלק): ${gt ? `${M(`${gt} : ${n}`)} = ${fracWords(gt, n)}` : `בשורה הראשונה אין אפשרות! (אין ספרה גדולה מ-${n})`}, ${M(`${n} : ${lt}`)} = ${fracWords(n, lt)}.<br><b>מספר שלם:</b> ${M(`${n} : ${n} = 1`)}${dv ? `, ${M(`${n} : ${dv} = ${n / dv}`)}` : ''}.<br>💡 דברו על זה: מתי המנה קטנה מ-1? מתי שלמה?`;
+    })() };
+  },
+  () => { // סבתא ופשטידות
+    const p = R(2, 5);
+    const opts = []; for (let n = p + 1; n < 2 * p; n++) opts.push(n);
+    return { title: 'הפשטידות של סבתא', q: `<p>סבתא הכינה <b>${p} פשטידות</b> לנכדיה, וחילקה אותן לפרוסות שוות. כל נכד קיבל <b>פרוסה אחת</b>, וכל פרוסה היא חלק <b>גדול מ-${F(1, 2)} וקטן מפשטידה שלמה</b>.</p><p>כמה נכדים יכולים להיות לסבתא? הסבירו. מצאו עוד אפשרות!</p>`, a: `כל נכד מקבל ${M(`${p} : n`)} = ${F(p, 'n')} פשטידה.<br>גדול מ-${F(1, 2)} ← n קטן מ-${2 * p}. קטן מ-1 ← n גדול מ-${p}.<br>האפשרויות: <b>${opts.join(', ')}</b> נכדים.${opts.length === 1 ? ' (יש רק אפשרות אחת!)' : ''}` };
+  },
+  () => { // ישר המספרים
+    const a = R(1, 3), b = R(a + 2, a + 4), big = Math.random() < 0.5;
+    const blue = big ? [b, b + 1] : [a, a + 1], orange = big ? [a, a + 1] : [b, b + 1];
+    const ticks = Array.from({ length: 10 }, (_, i) => i);
+    const X = v => 20 + v * 40;
+    const seg = (r, c) => `<line x1="${X(r[0])}" y1="40" x2="${X(r[1])}" y2="40" stroke="${c}" stroke-width="9" stroke-linecap="round"/>`;
+    const svg = `<svg class="fig" viewBox="0 0 400 70" width="400" height="70" aria-hidden="true" style="max-width:520px"><line x1="10" y1="40" x2="395" y2="40" stroke="#1f1e1c" stroke-width="2.5"/>${seg(blue, '#2f5bd3')}${seg(orange, '#d9822b')}${ticks.map(t => `<line x1="${X(t)}" y1="32" x2="${X(t)}" y2="48" stroke="#1f1e1c" stroke-width="2.5"/><text x="${X(t)}" y="64" text-anchor="middle" font-size="14">${t}</text>`).join('')}</svg>`;
+    return { title: 'מנה על ישר המספרים', q: `<p>סיוון בחרה מספר מהקטע <b style="color:#2f5bd3">הכחול</b> וחילקה אותו במספר מהקטע <b style="color:#d9822b">הכתום</b>.</p>${svg}<p>מה נכון?</p><ol class="op-list"><li>המנה קטנה מ-1.</li><li>המנה גדולה מ-1.</li><li>אי אפשר לדעת.</li></ol>`, a: big ? `<b>המנה גדולה מ-1</b> – כל מספר בקטע הכחול גדול מכל מספר בקטע הכתום, וכשמחלקים מספר גדול במספר קטן ממנו – המנה גדולה מ-1.` : `<b>המנה קטנה מ-1</b> – כל מספר בקטע הכחול קטן מכל מספר בקטע הכתום, וכשמחלקים מספר קטן במספר גדול ממנו – המנה קטנה מ-1.` };
+  },
+  () => { // איזה תרגיל תוצאתו
+    const k = R(1, 9), d = pick([10, 10, 100]), n = d === 100 ? R(11, 99) : k;
+    const val = fmt(n / d), opts = shuffle([[n, d], [0, n], [d, n], [1, n]].filter((x, i, arr) => arr.findIndex(y => y[0] === x[0] && y[1] === x[1]) === i));
+    return { title: `איזה תרגיל שווה ${val}?`, q: `<p>סמנו את התרגיל שהתוצאה שלו היא <b>${M(val)}</b>:</p><ol class="op-list">${opts.map(o => `<li>${M(`${o[0]} : ${o[1]}`)}</li>`).join('')}</ol>`, a: `${M(`${n} : ${d}`)} = ${F(n, d)} = ${M(val)}.<br>שימו לב: ${M(`${d} : ${n}`)} גדול מ-1, ו-${M(`0 : ${n} = 0`)}.` };
+  },
+  () => { // מחיר ליחידה
+    let a, x, b, y; do { a = R(2, 4); b = R(a + 1, 6); x = R(a + 2, a * 4); y = R(b + 2, b * 4); } while (x * b === y * a);
+    const cheap = x / a < y / b ? a : b;
+    return { title: 'איזה מארז משתלם?', q: `<p>בחנות מוכרים מארז של <b>${a} סבונים</b> ב-${M(x)} ₪, ומארז של <b>${b} סבונים</b> מאותו סוג ב-${M(y)} ₪.</p><p><b>באיזה מארז מחיר סבון אחד נמוך יותר?</b> הסבירו.</p>`, a: `מחיר סבון: ${M(`${x} : ${a}`)} = ${F(x, a)} ₪, ו-${M(`${y} : ${b}`)} = ${F(y, b)} ₪.<br>משווים (מכנה משותף ${a * b}): ${F(x * b, a * b)} מול ${F(y * a, a * b)} – <b>במארז של ${cheap}</b> סבון בודד זול יותר.` };
+  }
+];
+const OP_SPECIAL = GRADE >= 5 ? [{ id: 'fracdiv', name: 'השבר כמנת חילוק', desc: 'פתיחים לפי מארגן ההוראה: חלוקה שווה, פיצות, ישר המספרים, מחיר ליחידה', build: () => shuffle(OP_FRACDIV.slice()).slice(0, 4).map(f => f()) }] : [];
+
 function opHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('op');
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור</span><button class="secondary" id="opHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how">4 שקפים קצרים להקרנה בתחילת השיעור, על הנושא שתבחרו: <b>חימום</b> בראש · <b>מצאו את הטעות</b> · <b>איזה לא שייך?</b> (לשיח) · <b>שאלת אתגר</b>. בכל שקף – קודם חושבים, ואז חושפים את התשובה.</p></div>
     <h2>על איזה נושא השיעור?</h2>
+    ${OP_SPECIAL.length ? `<h3 class="games-sub">פתיחים מוכנים לפי מארגן ההוראה</h3><div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-opt="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div><h3 class="games-sub">לפי נושאי התרגול</h3>` : ''}
     <div class="race-tracks">${TOPICS.map(t => `<button class="race-track" data-opt="${t.id}" style="border-color:${t.color}"><span class="nm">${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>`;
   $('opHomeB').onclick = home;
   app.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => { op = { topic: b.dataset.opt, slides: opBuild(b.dataset.opt), k: 0, show: false }; opDraw(); });
@@ -9463,7 +9541,7 @@ function opDraw() {
   navPush('op');
   const s = op.slides[op.k], last = op.k === op.slides.length - 1;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור · ${TOPIC[op.topic].name}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור · ${opName(op.topic)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
     <div class="op-dots">${op.slides.map((x, k) => `<span class="${k === op.k ? 'on' : k < op.k ? 'done' : ''}">${k + 1}. ${x.title}</span>`).join('')}</div>
     <div class="card op-slide">
       <h2>${s.title}</h2>
