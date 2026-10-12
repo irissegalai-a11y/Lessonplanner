@@ -1052,7 +1052,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יח</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 יט</span></footer>
 
 <script>
 /* =========================================================
@@ -6805,7 +6805,7 @@ let navPopping = false;
    מעקב פעילות – נשלח לטופס גוגל פרטי של המורה (רק היא רואה את התשובות)
    כל עוד TRACK.form ריק – לא נשלח כלום
    ========================================================= */
-const TRACK = { form: '', f: { device: '', grade: '', name: '', action: '', detail: '' } };
+const TRACK = { form: 'https://docs.google.com/forms/d/e/1FAIpQLScbU-3oB6Sx3hsec4cxoQQUWUfSnuvGH8X7DOKLR5hldhe6CA/formResponse', f: { device: 'entry.218291459', grade: 'entry.2065505054', name: 'entry.1804780443', action: 'entry.285567241', detail: 'entry.1501454704' } };
 const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל' };
 const trackDevice = () => { try { let d = localStorage.getItem('math-dev'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('math-dev', d); } return d; } catch (e) { return 'x'; } };
 let trackLast = '';
