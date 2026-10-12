@@ -6215,8 +6215,11 @@ applyFont();
 function parseNum(s) {
   s = (s || '').trim().replace(/\s/g, '').replace(/[−–]/g, '-');
   if (!s) return null;
-  if (/^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s = s.replace(/,/g, '');
-  else s = s.replace(',', '.');
+  // מפרידי אלפים לא משנים: 4,000 / 4'000 / 4׳000 / 4 000 – כולם 4000
+  s = s.replace(/(\d)['׳’`´"״](?=\d)/g, '$1');
+  // פסיק יחיד שאחריו לא 3 ספרות (למשל 2,5) – נקודה עשרונית; כל פסיק אחר – מפריד אלפים
+  if (/^-?\d+,\d+$/.test(s) && !/,\d{3}$/.test(s)) s = s.replace(',', '.');
+  else s = s.replace(/(\d),(?=\d)/g, '$1');
   if (!/^-?(\d+\.?\d*|\.\d+)$/.test(s)) return NaN;
   return parseFloat(s);
 }
@@ -6285,7 +6288,7 @@ function check(q, a) {
   const v = a.val;
   if (q.type === 'num') {
     if (v == null) return { empty: true };
-    if (isNaN(v)) return { ok: false, retry: true, msg: 'כתבו מספר בלבד (אפשר עם נקודה עשרונית).' };
+    if (isNaN(v)) return { ok: false, retry: true, msg: /[A-Za-zא-ת]/.test(a.raw || '') ? 'כתבו את התשובה <b>במספר</b>, לא במילים. למשל: 1000 ולא "אלף".' : 'כתבו מספר בלבד (אפשר עם נקודה עשרונית).' };
     return { ok: Math.abs(v - q.ans) < 1e-9 };
   }
   if (q.type === 'choice') {
@@ -6383,7 +6386,16 @@ function fixMathRuns(root) {
     }
   }
 }
+/* מספר עם 4 ספרות ומעלה מוצג עם פסיקים של אלפים: 12345 ← 12,345 (לא נוגעים בשעות, בקודים ובספרות שאחרי הנקודה) */
+const BIG_NUM = /(^|[^\d.,:\/\-A-Za-z_])(\d{4,})(?![\d:A-Za-z_])/g;
+function groupDigits(root) {
+  if (!root || root.nodeType !== 1 || root.closest('[data-raw], textarea, script, style')) return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: t => t.parentElement && t.parentElement.closest('[data-raw], textarea, script, style') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(t => { if (/\d{4}/.test(t.data)) { const v = t.data.replace(BIG_NUM, (m, a, n) => a + n.replace(/\B(?=(\d{3})+(?!\d))/g, ',')); if (v !== t.data) t.data = v; } });
+}
 new MutationObserver(muts => {
+  for (const mu of muts) for (const n of mu.addedNodes) { if (n.nodeType === 1) groupDigits(n); else if (n.nodeType === 3 && n.parentElement) groupDigits(n.parentElement); }
   for (const mu of muts) for (const n of mu.addedNodes) if (n.nodeType === 1) fixMathRuns(n);
   for (const mu of muts) if (mu.type === 'childList' && mu.target.nodeType === 1 && mu.addedNodes.length) fixMathRuns(mu.target);
 }).observe(document.body, { childList: true, subtree: true });
@@ -6424,6 +6436,17 @@ if (NIKUD_MODE) new MutationObserver(muts => {
   }
 }).observe(document.body, { childList: true, subtree: true });
 let state = null;
+
+// בתיבת תשובה מספרית – רק ספרות (אותיות נמחקות מיד, עם הסבר קצר)
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (!t.matches || !t.matches('input.ans, .fracin input') || t.type === 'password') return;
+  if (/[A-Za-zא-ת]/.test(t.value)) {
+    t.value = t.value.replace(/[A-Za-zא-ת]/g, '');
+    showToast('<b>כותבים רק מספרים.</b> למשל: 1000 ולא "אלף".');
+    const tt = document.querySelector('.toast'); setTimeout(() => tt && tt.remove(), 5000);
+  }
+});
 
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 const $ = id => document.getElementById(id);
@@ -7306,7 +7329,7 @@ function teacher() {
           <option>5</option><option>8</option><option>10</option><option>15</option><option>20</option>
         </select>
       </label>
-      <div class="linkbox" id="tlink" dir="ltr"></div>
+      <div class="linkbox" id="tlink" dir="ltr" data-raw></div>
       <div class="actions">
         <button id="tcopy">📋 העתקת הקישור</button>
         <a class="btnlink secondary" id="ttry" target="_blank" rel="noopener">👀 לנסות את הקישור</a>
@@ -7650,6 +7673,7 @@ function sheetPages(sec, H_MM) {
 const CREDIT = '© איריס סגל';
 function paginateSheets() {
   const out = $('wsout');
+  groupDigits(out);
   nikudify(out);
   const H = 270 * 96 / 25.4;
   out.classList.add('measure');
@@ -7702,6 +7726,7 @@ function paginateSheets() {
 // אם התזכורת גורמת לדף לגלוש לעמוד נוסף – מוותרים עליה
 function dropTipsIfOverflow() {
   const out = $('wsout');
+  groupDigits(out);
   nikudify(out);
   out.classList.add('measure');
   out.querySelectorAll('.ws-page:not(.wskey)').forEach(sec => {
