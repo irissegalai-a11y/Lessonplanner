@@ -123,6 +123,7 @@
   }
   .qhead { display: flex; align-items: flex-start; margin-bottom: 12px; }
   .qtext { font-size: 1.3rem; line-height: 2.1; }
+  .numtip { margin-top: 10px; padding: 8px 12px; border: 1.5px dashed #1f1e1c; border-radius: 10px; background: rgba(127, 168, 214, 0.18); }
   .qtag { font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
 
   .m { direction: ltr; unicode-bidi: isolate; white-space: nowrap; display: inline-block; }
@@ -5980,7 +5981,7 @@ function renderLesson() {
   if (tr) {
     if (tr.type === 'choice') lv.box.querySelectorAll('.ltry .choices button').forEach(b => b.onclick = () => lessonCheck(Number(b.dataset.c)));
     else {
-      q('[data-check]').onclick = () => lessonCheck(parseNum(q('[data-ans]').value));
+      q('[data-check]').onclick = () => lessonCheck(parseNum(q('[data-ans]').value), q('[data-ans]').value);
       q('[data-ans]').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); lessonCheck(parseNum(q('[data-ans]').value)); } });
     }
   }
@@ -5991,11 +5992,12 @@ function scrollTop() {
   else window.scrollTo(0, 0);
 }
 
-function lessonCheck(v) {
+function lessonCheck(v, raw) {
   const lv = lessonView, c = cardsOf(lv.id)[lv.k], tr = c.try;
   if (lv.done) return;
   const fb = lv.box.querySelector('[data-fb]');
-  const show = (kind, html) => { fb.className = `fb show ${kind}`; fb.innerHTML = html; };
+  const tip = raw != null ? numWritingTip(raw, v) : '';
+  const show = (kind, html) => { fb.className = `fb show ${kind}`; fb.innerHTML = html + (kind === 'hint' ? '' : tip); };
   if (v == null || (typeof v === 'number' && Number.isNaN(v))) { show('hint', 'כתבו מספר ואז לחצו "בדיקה" 🙂'); return; }
   const ok = tr.type === 'choice' ? v === tr.ans : Math.abs(v - tr.ans) < 1e-9;
   const btn = tr.type === 'choice' ? lv.box.querySelector(`.ltry .choices button[data-c="${v}"]`) : null;
@@ -6284,10 +6286,27 @@ function findTrap(q, a) {
   return q.traps.find(t => t.f && fv.N * t.f.d === t.f.n * fv.D && t.f.n * q.ans.d !== q.ans.n * t.f.d) || null;
 }
 
+// התלמיד כתב מספר עם מפריד לא נכון (גרש, רווח, פסיק במקום הלא נכון, פסיק עשרוני) – מקבלים, אבל מסבירים איך כותבים
+function numWritingTip(raw, v) {
+  raw = String(raw || '').trim();
+  if (v == null || isNaN(v) || !/\d/.test(raw)) return '';
+  const r = raw.replace(/[−–]/g, '-');
+  const neg = v < 0, abs = Math.abs(v), whole = Math.trunc(abs);
+  if (/\d['׳’`´"״\s]+\d/.test(r) || (/,/.test(r) && /^-?\d+,\d{3}/.test(r) && !/^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(r))) {
+    return `<div class="numtip">✏️ <b>איך כותבים נכון:</b> בין האלפים שמים <b>פסיק</b> ( , ) – לא גרש ולא רווח. סופרים 3 ספרות מימין ושמים פסיק: <span class="m">${fmt(v)}</span>${whole >= 1000 ? `. אפשר גם בלי פסיק: <span class="m" data-raw>${neg ? '-' : ''}${String(abs)}</span>` : ''}</div>`;
+  }
+  if (/^-?\d+,\d+$/.test(r) && !/,\d{3}$/.test(r)) {
+    return `<div class="numtip">✏️ <b>איך כותבים נכון:</b> במספר עשרוני כותבים <b>נקודה</b>, לא פסיק: <span class="m">${fmt(v)}</span></div>`;
+  }
+  return '';
+}
+
 function check(q, a) {
   const v = a.val;
   if (q.type === 'num') {
     if (v == null) return { empty: true };
+    const tip = numWritingTip(a.raw, v);
+    if (tip && !isNaN(v)) return { ok: Math.abs(v - q.ans) < 1e-9, note: tip, tip };
     if (isNaN(v)) return { ok: false, retry: true, msg: /[A-Za-zא-ת]/.test(a.raw || '') ? 'כתבו את התשובה <b>במספר</b>, לא במילים. למשל: 1000 ולא "אלף".' : 'כתבו מספר בלבד (אפשר עם נקודה עשרונית).' };
     return { ok: Math.abs(v - q.ans) < 1e-9 };
   }
@@ -7046,7 +7065,7 @@ function submit() {
     state.results.push({ q, a, ok: true, outcome });
     const up = adapt(outcome);
     if (q.type === 'choice') markChoices(q, state.selected);
-    showFb('ok', `<div class="head">${outcome === 'first' ? pick(CHEERS) : 'נכון! הצלחתם בניסיון השני 👍'}</div>${up ? `<div class="levelup">${up}</div>` : ''}${r.note ? r.note + '<br>' : ''}<span class="muted">הסבר:</span> ${q.exp}`);
+    showFb('ok', `<div class="head">${outcome === 'first' ? pick(CHEERS) : 'נכון! הצלחתם בניסיון השני 👍'}</div>${up ? `<div class="levelup">${up}</div>` : ''}${r.note && !r.tip ? r.note + '<br>' : ''}<span class="muted">הסבר:</span> ${q.exp}${r.tip || ''}`);
     lockInputs();
     return;
   }
@@ -7057,8 +7076,8 @@ function submit() {
       btn.classList.add('wrong'); btn.disabled = true;
     }
     showFb('bad', trap
-      ? `<div class="head">🤔 כמעט! ${trap.m}</div>נסו שוב 💪`
-      : `<div class="head">לא בדיוק... נסו שוב</div>${ic('bulb')} רמז: ${q.hint}`);
+      ? `<div class="head">🤔 כמעט! ${trap.m}</div>נסו שוב 💪${r.tip || ''}`
+      : `<div class="head">לא בדיוק... נסו שוב</div>${ic('bulb')} רמז: ${q.hint}${r.tip || ''}`);
     return;
   }
   // ניסיון שני לא הצליח
@@ -7068,7 +7087,7 @@ function submit() {
     state.done = true;
     state.results.push({ q, a, ok: false, outcome: 'shown' });
     adapt('shown');
-    showFb('info', `<div class="head">לא נורא – ככה לומדים! 💙</div>${trap ? `🤔 ${trap.m}<br>` : ''}התשובה הנכונה: <b>${correctHTML(q)}</b><br><span class="muted">הסבר:</span> ${q.exp}`);
+    showFb('info', `<div class="head">לא נורא – ככה לומדים! 💙</div>${trap ? `🤔 ${trap.m}<br>` : ''}התשובה הנכונה: <b>${correctHTML(q)}</b><br><span class="muted">הסבר:</span> ${q.exp}${r.tip || ''}`);
     lockInputs();
   }
 }
@@ -7230,6 +7249,7 @@ function summary() {
           ${r.q.text}
           ${r.q.fig || ''}
           <div>התשובה שלי: ${answerHTML(r.q, r.a)}${r.ok ? '' : ` · <b>התשובה הנכונה: ${correctHTML(r.q)}</b>`}</div>
+          ${r.q.type === 'num' ? numWritingTip(r.a.raw, r.a.val) : ''}
           ${r.ok ? '' : `<div class="small">הסבר: ${r.q.exp}</div>`}
         </li>`).join('')}
       </ul>
