@@ -823,6 +823,20 @@
   body.jeo-full .tf-s { font-size: clamp(2.4rem, 5vw, 4rem); }
   @media (max-width: 760px) { .mil-wrap { grid-template-columns: 1fr; } .mil-ladder { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; padding: 4px; } .mil-ladder li { flex-direction: column; align-items: center; padding: 2px; font-size: 0.72rem; gap: 0; } .mil-opts { grid-template-columns: 1fr; } }
   .jeo-q .fig { max-height: 38vh; width: auto; max-width: 100%; }
+  .cq-rules { text-align: right; font-size: 1.12rem; line-height: 1.7; }
+  .cq-goal { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border: 2px solid #1f1e1c; border-radius: 16px 225px 16px 255px / 255px 16px 225px 16px; background: rgba(239, 201, 106, 0.35); font-size: 1.2rem; }
+  .cq-goal svg { width: 28px; height: 28px; flex-shrink: 0; }
+  .cq-steps { margin: 12px 0; padding-inline-start: 1.6em; }
+  .cq-steps li { margin: 4px 0; }
+  .cq-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: center; padding: 8px 12px; border: 1.5px dashed #1f1e1c; border-radius: 12px; background: #fffdf8; }
+  .cq-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+  .cq-legend .cq-dots { font-size: 1rem; color: #1f1e1c; }
+  .cq-lg-can { width: 22px; height: 22px; border: 3px dashed #1f1e1c; border-radius: 6px 2px 6px 2px; display: inline-block; }
+  .cq-lg-home { width: 22px; height: 22px; background: #1f1e1c; color: #fff; border-radius: 6px 2px 6px 2px; display: inline-flex; align-items: center; justify-content: center; }
+  .cq-lg-home svg { width: 15px; height: 15px; }
+  .cq-legend-side { flex-direction: column; align-items: flex-start; gap: 4px; font-size: 0.95rem; }
+  .jeo-ov .cq-rules { font-size: clamp(1.1rem, 2.2vw, 1.5rem); }
+  @media (max-width: 760px) { .cq-legend-side { flex-direction: row; } }
   .cq-wrap { display: grid; grid-template-columns: 1fr 190px; gap: 16px; align-items: start; }
   .cq-map { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 5px; max-width: min(100%, 78vh); margin: 0 auto; width: 100%; }
   .cq-cell { aspect-ratio: 1; padding: 0; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fffdf8; color: #1f1e1c; border: 2px solid #cfc6b4; border-radius: 10px 4px 10px 4px; box-shadow: none; font-family: 'Assistant', sans-serif; position: relative; }
@@ -943,7 +957,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ה</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ו</span></footer>
 
 <script>
 /* =========================================================
@@ -8483,6 +8497,24 @@ function cqHomes(n, k) {
   const m = Math.floor(n / 2), e = n - 1;
   return [[0, 0], [e, e], [0, e], [e, 0], [0, m], [e, m]].slice(0, k);
 }
+const CQ_RULES = () => `
+  <div class="cq-rules">
+    <div class="cq-goal">${ic('flag')} <span><b>המטרה:</b> לכבוש כמה שיותר משבצות במפה. בסוף המשחק – הקבוצה עם הכי הרבה משבצות מנצחת!</span></div>
+    <ol class="cq-steps">
+      <li>כל קבוצה מתחילה ב<b>בסיס</b> – משבצת עם דגל בצבע שלה.</li>
+      <li>בתור שלה, הקבוצה בוחרת <b>משבצת שנוגעת בשטח שלה</b> (המשבצות שאפשר לבחור מסומנות במסגרת מקווקוות).</li>
+      <li>מופיעה שאלה. <b>תשובה נכונה – כובשים</b> את המשבצת, והיא נצבעת בצבע הקבוצה. תשובה לא נכונה – המשבצת נשארת כמו שהייתה.</li>
+      <li>אחר כך התור עובר לקבוצה הבאה.</li>
+      <li><b>תקיפה:</b> אפשר לבחור גם משבצת של קבוצה אחרת שנוגעת בשטח שלכם. השאלה קשה יותר – ובתשובה נכונה המשבצת עוברת אליכם! (את הבסיסים אי אפשר לכבוש.)</li>
+      <li>המשחק נגמר כשכל המפה כבושה (או כשהמורה מחליטה לסיים).</li>
+    </ol>
+    <div class="cq-legend">
+      <span><span class="cq-dots">●</span> שאלה קלה</span>
+      <span><span class="cq-dots">●●</span> בינונית</span>
+      <span><span class="cq-dots">●●●</span> מאתגרת</span>
+      <span><span class="cq-lg-can"></span> אפשר לבחור</span>
+    </div>
+  </div>`;
 function cqHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('cq');
   const saved = cqLoad();
@@ -8493,8 +8525,8 @@ function cqHome() {
     app.innerHTML = `
       <div class="topbar"><span class="title">${ic('flag')} כיבוש שטחים</span><button class="secondary" id="cqHomeB">${ic('home')} לדף הבית</button></div>
       <div class="card race-intro">
-        <p class="race-how">כל קבוצה מתחילה ב<b>בסיס</b> משלה. בתורה, הקבוצה בוחרת משבצת <b>שנוגעת בשטח שלה</b> ועונה על שאלה – תשובה נכונה = <b>כובשים</b> את המשבצת! אפשר גם לתקוף משבצת של קבוצה אחרת (שאלה קשה יותר). בסוף – הקבוצה עם הכי הרבה שטח מנצחת.</p>
-        <p class="muted">הנקודות במשבצת מראות כמה השאלה קשה: ● קלה · ●● בינונית · ●●● מאתגרת.</p>
+        <h2 style="margin-top:0">איך משחקים?</h2>
+        ${CQ_RULES()}
         ${live ? `<div class="jeo-resume"><span>יש משחק שלא הסתיים</span><button id="cqResume">להמשיך את המשחק ←</button></div>` : ''}
       </div>
       <h2>כמה קבוצות?</h2>
@@ -8554,12 +8586,25 @@ function cqBoard() {
       </div>
       <div class="cq-side">
         ${cq.teams.map((tm, k) => `<div class="jeo-team${k === t ? ' on' : ''}" style="--tc:${tm.color}"><span class="jt-nm" data-ct2="${k}">${esc(tm.name)}</span><b data-raw>${counts[k]}</b><span class="small muted">משבצות</span></div>`).join('')}
+        <div class="cq-legend cq-legend-side">
+          <span><span class="cq-dots">●</span> קלה</span><span><span class="cq-dots">●●</span> בינונית</span><span><span class="cq-dots">●●●</span> מאתגרת</span>
+          <span><span class="cq-lg-can"></span> אפשר לבחור</span><span><span class="cq-lg-home">${ic('flag')}</span> בסיס</span>
+        </div>
+        <button class="secondary" id="cqRules">איך משחקים?</button>
         <p class="muted small">משבצות פנויות: ${free}<br>לחיצה על שם קבוצה – העברת התור אליה.</p>
       </div>
     </div>`;
   fsBind();
   $('cqExit').onclick = home;
   $('cqEnd').onclick = cqEnd;
+  $('cqRules').onclick = () => {
+    const ov = document.createElement('div');
+    ov.className = 'overlay jeo-ov';
+    ov.innerHTML = `<div class="modal jeo-q"><h2 style="margin-top:0">איך משחקים כיבוש שטחים?</h2>${CQ_RULES()}<div class="actions" style="justify-content:center"><button id="cqRulesX">הבנו – חזרה למפה</button></div></div>`;
+    document.body.appendChild(ov);
+    ov.querySelector('#cqRulesX').onclick = () => ov.remove();
+    ov.onclick = e => { if (e.target === ov) ov.remove(); };
+  };
   app.querySelectorAll('[data-ct2]').forEach(n => { n.style.cursor = 'pointer'; n.onclick = () => { cq.turn = Number(n.dataset.ct2); cqSave(); cqBoard(); }; });
   app.querySelectorAll('[data-cq]').forEach(b => b.onclick = () => cqAsk(Number(b.dataset.cq)));
 }
