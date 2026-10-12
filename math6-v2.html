@@ -689,14 +689,9 @@
   .gc-nm { grid-area: nm; font-family: var(--hand, inherit); font-size: 1.35rem; font-weight: 700; }
   .gc-ds { grid-area: ds; font-family: 'Assistant', sans-serif; font-weight: 400; color: #5f5a50; }
   .gc-st { grid-area: st; font-family: 'Assistant', sans-serif; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
-  .rtokens { display: inline-flex; gap: 5px; vertical-align: middle; }
-  .rtok { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #1f1e1c; background: transparent; }
-  .rtok.on { background: #e8b84a; }
   .race-intro { text-align: center; }
   .race-art { width: 220px; max-width: 70%; }
   .race-how { font-size: 1.15rem; margin: 6px 0; }
-  .race-tok { margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .race-lock { display: inline-flex; gap: 8px; align-items: center; padding: 8px 14px; border: 1.5px dashed #1f1e1c; border-radius: 12px; background: rgba(239, 201, 106, 0.25); }
   .race-tracks { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
   .race-track { display: flex; flex-direction: column; gap: 4px; background: #fffdf8; color: #1f1e1c; border: 2px solid #1f1e1c; border-radius: 16px 225px 16px 255px / 255px 16px 225px 16px; box-shadow: none; padding: 14px; }
   .race-track .nm { font-size: 1.1rem; }
@@ -726,8 +721,6 @@
   .race-end.rec .race-final b { color: #d9482b; }
   .race-wrong { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; margin: 10px 0; font-size: 1.2rem; }
   .race-wrong .m { padding: 2px 10px; border: 1.5px dashed #1f1e1c; border-radius: 10px; }
-  .race-unlock { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 14px auto; padding: 10px 16px; border: 2px solid #1f1e1c; border-radius: 16px 225px 16px 255px / 255px 16px 225px 16px; background: rgba(239, 201, 106, 0.3); max-width: 460px; }
-  .race-unlock .gc-ic { width: 44px; height: 44px; }
   @media (prefers-reduced-motion: reduce) { .race-runner { transition: none; } .race-q.ok, .race-q.bad { animation: none; } }
   html.calm .race-q.ok, html.calm .race-q.bad { animation: none; }
   @media print { .race-play, .race-pad { display: none; } }
@@ -6641,9 +6634,8 @@ function home() {
             <span class="gc-ic">${ic('flag')}</span>
             <span class="gc-nm">מרוץ נגד השעון</span>
             <span class="gc-ds">כמה תרגילים תפתרו בדקה אחת? נסו לעבור את השיא שלכם.</span>
-            <span class="gc-st">${raceData().tokens ? `פתוח · ${raceTokensHTML(raceData().tokens)}` : `${ic('star')} נפתח אחרי סבב תרגול`}</span>
+            ${Object.keys(raceData().best).length ? `<span class="gc-st">${ic('star')} השיא שלי: ${Math.max(...Object.values(raceData().best))}</span>` : ''}
           </button>
-          <p class="muted">כל סבב תרגול שמסיימים פותח משחק אחד (אפשר לצבור עד ${RACE_MAX_TOKENS}).</p>
         </section>
         <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
           <h2>הדפסה</h2>
@@ -7278,9 +7270,6 @@ function summary() {
   }
   if (s.mode === 'test') store.tests = (store.tests || []).concat({ date, score: correct, total: n }).slice(-10);
   saveStore(store);
-  // סבב שהסתיים פותח משחק
-  const unlocked = !s.sim && n >= 3 && !s.granted;
-  if (unlocked) { s.granted = true; raceGrant(); }
 
   const msg = ratio >= 0.8 ? 'מעולה! 🏆' : ratio >= 0.5 ? 'עבודה טובה! 💪' : 'כל הכבוד על ההתמדה! 🌱';
   const sub = ratio >= 0.5 ? '' : '<div class="muted">כל שאלה שפתרת – גם בעזרה – מקדמת אותך. התרגול הבא יהיה קל יותר!</div>';
@@ -7343,7 +7332,6 @@ function summary() {
       ${compare ? `<p class="compare">${compare}</p>` : ''}
       ${growth ? `<div class="growth"><div class="muted">ההתקדמות שלי:</div>${growth}</div>` : ''}
       ${breakdown}
-      ${unlocked ? `<div class="race-unlock"><span class="gc-ic">${ic('flag')}</span><span><b>פתחתם משחק!</b> מרוץ נגד השעון</span><button id="toRace">למשחק ←</button></div>` : ''}
       <div class="actions" style="justify-content:center">
         ${missed.length ? `<button id="retryBtn">${ic('retry')} תרגול השאלות שהיו קשות (${missed.length})</button>` : ''}
         <button class="${missed.length ? 'secondary' : ''}" id="again">סבב נוסף ←</button>
@@ -7364,7 +7352,6 @@ function summary() {
     startPractice(s.topicId, { fixed: s.fixed, hideLevel: s.hideLevel, level: s.fixed ? s.level : null, count: s.count });
   };
   $('homeBtn').onclick = home;
-  if ($('toRace')) $('toRace').onclick = () => raceHome();
   $('copy').onclick = async () => {
     const out = $('copied');
     try {
@@ -7380,7 +7367,7 @@ function summary() {
 /* =========================================================
    משחקים – מרוץ נגד השעון (נפתח אחרי סבב תרגול)
    ========================================================= */
-const RACE_SECS = 60, RACE_MAX_TOKENS = 3;
+const RACE_SECS = 60;
 const RACE_TRACKS = GRADE === 1 ? [
   { id: 'a10', name: 'חיבור וחיסור עד 10' },
   { id: 'a20', name: 'חיבור וחיסור עד 20' }
@@ -7426,48 +7413,38 @@ function raceQ(track) {
     }
   }
 }
-function raceData() { store.race = store.race || { tokens: 0, best: {}, plays: 0 }; store.race.best = store.race.best || {}; return store.race; }
-// סבב תרגול שהסתיים פותח משחק אחד (עד 3 שמורים)
-function raceGrant() { const r = raceData(); r.tokens = Math.min(RACE_MAX_TOKENS, (r.tokens || 0) + 1); saveStore(store); }
+function raceData() { store.race = store.race || { best: {}, plays: 0 }; store.race.best = store.race.best || {}; return store.race; }
 let race = null;
 function stopRace() { if (race && race.timer) clearInterval(race.timer); if (race) race.timer = null; }
 
-function raceTokensHTML(n) {
-  return `<span class="rtokens" aria-label="${n} משחקים פתוחים">${Array.from({ length: RACE_MAX_TOKENS }, (_, i) => `<span class="rtok${i < n ? ' on' : ''}"></span>`).join('')}</span>`;
-}
 
 function raceHome(trackId) {
   stopRace(); state = null; lessonView = null; navPush('race');
   const r = raceData();
   const tr = RACE_TRACKS.find(t => t.id === trackId) || RACE_TRACKS.find(t => t.id === r.lastTrack) || RACE_TRACKS[0];
-  const locked = !r.tokens;
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('flag')} מרוץ נגד השעון</span><button class="secondary" id="rHome">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro">
       <svg class="race-art" viewBox="0 0 220 90" aria-hidden="true"><path d="M8 70 C 60 60, 120 78, 212 66" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"/><path d="M8 70 C 60 60, 120 78, 212 66" fill="none" stroke="#1f1e1c" stroke-width="1.2" stroke-dasharray="6 7" transform="translate(0,-14)"/><circle cx="58" cy="44" r="17" fill="rgba(217,72,43,0.45)" filter="url(#wcwash)"/><path d="M180 64V22" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"/><path d="M180 22h22l-5 7 5 7h-22" fill="rgba(239,201,106,0.8)" stroke="#1f1e1c" stroke-width="2"/><path d="M30 40h-14M34 50h-20" stroke="#1f1e1c" stroke-width="2" stroke-linecap="round"/></svg>
       <p class="race-how">פותרים כמה שיותר תרגילים ב-<b>${RACE_SECS} שניות</b>. תשובה נכונה – הרץ מתקדם. מנסים לעבור את השיא שלכם!</p>
-      <div class="race-tok">משחקים פתוחים: ${raceTokensHTML(r.tokens || 0)}</div>
-      ${locked ? `<div class="race-lock">${ic('star')} <span>המשחק נפתח <b>אחרי סבב תרגול</b>. כל סבב שמסיימים – פותח משחק אחד.</span></div>` : ''}
     </div>
     <h2>בחרו מסלול</h2>
     <div class="race-tracks">
       ${RACE_TRACKS.map(t => `<button class="race-track${t.id === tr.id ? ' sel' : ''}" data-rt="${t.id}"><span class="nm">${t.name}</span><span class="best">${r.best[t.id] ? `השיא: <b>${r.best[t.id]}</b>` : 'עוד אין שיא'}</span></button>`).join('')}
     </div>
     <div class="actions" style="justify-content:center">
-      ${locked ? `<button id="rPractice">${ic('pencil')} לתרגול ←</button>` : `<button id="rGo" class="race-go">מתחילים! ←</button>`}
+      <button id="rGo" class="race-go">מתחילים! ←</button>
     </div>`;
   let sel = tr.id;
   app.querySelectorAll('[data-rt]').forEach(b => b.onclick = () => { sel = b.dataset.rt; app.querySelectorAll('[data-rt]').forEach(x => x.classList.toggle('sel', x === b)); });
   $('rHome').onclick = home;
-  if ($('rPractice')) $('rPractice').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-tab', homeTab); } catch (e) {} home(); };
-  if ($('rGo')) $('rGo').onclick = () => raceStart(sel);
+  $('rGo').onclick = () => raceStart(sel);
   window.scrollTo(0, 0);
 }
 
 function raceStart(trackId) {
   const r = raceData();
-  if (!r.tokens) return raceHome(trackId);
-  r.tokens--; r.plays = (r.plays || 0) + 1; r.lastTrack = trackId; saveStore(store);
+  r.plays = (r.plays || 0) + 1; r.lastTrack = trackId; saveStore(store);
   race = { track: trackId, score: 0, streak: 0, wrong: [], q: null, left: RACE_SECS, best: r.best[trackId] || 0, timer: null, typed: '' };
   const touch = window.matchMedia && matchMedia('(pointer: coarse)').matches;
   app.innerHTML = `
@@ -7591,17 +7568,15 @@ function raceEnd() {
       <div class="race-final"><b>${race.score}</b><span>תשובות נכונות ב-${RACE_SECS} שניות</span></div>
       <p class="compare">${rec ? ic('star') + ' ' : ''}${msg}</p>
       ${wrong.length ? `<div class="race-wrong"><div class="muted">כדאי לזכור:</div>${wrong.map(w => `<span class="m">${w.t} ${fmt(w.ans)}</span>`).join('')}</div>` : ''}
-      <div class="race-tok">משחקים פתוחים: ${raceTokensHTML(r.tokens || 0)}</div>
       <div class="actions" style="justify-content:center">
-        ${r.tokens ? `<button id="rAgain">עוד מרוץ ←</button>` : `<button id="rPractice">${ic('pencil')} סבב תרגול – ועוד משחק נפתח</button>`}
+        <button id="rAgain">עוד מרוץ ←</button>
         <button class="secondary" id="rTracks">בחירת מסלול</button>
       </div>
     </div>`;
   const t = race.track;
   $('rHome').onclick = home;
   $('rTracks').onclick = () => raceHome(t);
-  if ($('rAgain')) $('rAgain').onclick = () => raceStart(t);
-  if ($('rPractice')) $('rPractice').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-tab', homeTab); } catch (e) {} home(); };
+  $('rAgain').onclick = () => raceStart(t);
 }
 
 /* =========================================================
