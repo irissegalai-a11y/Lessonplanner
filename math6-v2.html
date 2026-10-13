@@ -1054,7 +1054,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כג</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כד</span></footer>
 
 <script>
 /* =========================================================
@@ -1893,10 +1893,10 @@ function genNumberLine() {
     type: 'num', text: 'כתבו את המספר המתאים במלבן שמתחת לישר המספרים.',
     fig: svg(W, 100, g), ans: val, traps,
     steps: [{ p: `לכמה חלקים שווים מחולק הקטע בין ${fmt(a)} ל-${fmt(b)}? (ספרו את הרווחים)`, a: parts },
-      { p: `כמה שווה כל חלק? ${M(`(${fmt(b)} - ${fmt(a)}) : ${parts} =`)}`, a: stepV },
-      { p: `המלבן נמצא ${pos} חלקים אחרי ${fmt(a)}. ${M(`${fmt(a)} + ${pos} × ${fmt(stepV)} =`)}`, a: val }],
+      { p: `הקטע בין ${fmt(a)} ל-${fmt(b)} מחולק ל-${parts} חלקים שווים. כמה שווה כל חלק?`, a: stepV },
+      { p: `המלבן נמצא ${pos} חלקים אחרי ${fmt(a)}. סופרים ${pos} קפיצות של ${M(fmt(stepV))} מ-${M(fmt(a))}. איזה מספר מקבלים?`, a: val }],
     hint: `לכמה חלקים שווים מחולק הקטע בין ${fmt(a)} ל-${fmt(b)}? כמה שווה כל חלק?`,
-    exp: `הקטע מחולק ל-${parts} חלקים, כל חלק = ${M(fmt(stepV))}. המלבן נמצא ${pos} חלקים אחרי ${fmt(a)}: ${M(`${fmt(a)} + ${pos} × ${fmt(stepV)} = ${fmt(val)}`)}`
+    exp: `הקטע מחולק ל-${parts} חלקים, כל חלק = ${M(fmt(stepV))}. המלבן נמצא ${pos} חלקים אחרי ${fmt(a)}: ${M(Array.from({ length: pos + 1 }, (_, i) => fmt(rnd(a + i * stepV))).join(' → '))}`
   };
 }
 function decPair(maxDec = 2) {
@@ -2830,11 +2830,11 @@ const TOPICS5 = [
     id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a',
     desc: 'עשיריות ומאיות, השוואה, ישר מספרים, חיבור וחיסור',
     levels: {
-      1: [genFracToDec, genDecimalPlace, genMul10],
+      1: [genFracToDec, genDecimalPlace, genDecToFrac],
       2: [genDecCompare, genNumberLine, genDecAddSub, genDecToFrac],
-      3: [genSequence, genDecAddSub, genUnits, genExpandedDecimal]
+      3: [genSequence, genDecAddSub, genFracPlusDec, genExpandedDecimal]
     },
-    tips: ['אחרי הנקודה: עשיריות, מאיות, אלפיות.', 'בחיבור וחיסור – נקודה מתחת לנקודה.', 'כפל ב-10/100/1000 – הנקודה ימינה; חילוק – שמאלה.', 'השוואה: מוסיפים אפסים בסוף ומשווים.']
+    tips: ['אחרי הנקודה: עשיריות, מאיות, אלפיות.', 'בחיבור וחיסור – נקודה מתחת לנקודה.', 'השוואה: מוסיפים אפסים בסוף ומשווים.']
   },
   {
     id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55',
@@ -3993,21 +3993,22 @@ function genPctConvert() {
   const v = pick([R(1, 99) / 100, R(1, 9) / 10, R(1, 99) / 100]);
   return {
     type: 'num', unit: '%', text: `כתבו את ${M(fmt(v))} באחוזים.`, ans: Math.round(v * 100),
-    traps: [{ v: Math.round(v * 10), m: 'כופלים ב-100 (שתי ספרות), לא ב-10.' }].filter(t => t.v !== Math.round(v * 100)),
-    hint: 'כופלים ב-100: הנקודה זזה שתי ספרות ימינה.',
+    traps: [{ v: Math.round(v * 10), m: 'אחוז = מאיות. קראו את המספר במאיות (למשל 0.3 = 30 מאיות = 30%).' }].filter(t => t.v !== Math.round(v * 100)),
+    hint: 'כמה <b>מאיות</b> יש במספר? אחוז = מאיות: 0.35 = 35 מאיות = 35%.',
     exp: `${M(`${fmt(v)} = ${F(Math.round(v * 100), 100)}`)} = ${P(Math.round(v * 100))}`
   };
 }
 
 function genPctOf(lv = 1) {
   const opts = lv === 1 ? [[50, () => R(2, 60) * 2], [25, () => R(2, 30) * 4], [10, () => R(2, 50) * 10], [100, () => R(10, 300)]]
-    : [[20, () => R(2, 40) * 5], [30, () => R(2, 30) * 10], [75, () => R(2, 30) * 4], [5, () => R(2, 30) * 20], [15, () => R(2, 20) * 20], [40, () => R(2, 30) * 5], [60, () => R(2, 30) * 5], [12, () => R(1, 9) * 25]];
+    : [[20, () => R(2, 20) * 10], [30, () => R(2, 30) * 10], [75, () => R(2, 30) * 4], [5, () => R(2, 30) * 20], [15, () => R(2, 20) * 20], [40, () => R(2, 30) * 10], [60, () => R(2, 30) * 10], [12, () => R(1, 9) * 25]];
   const [p, f] = pick(opts), N = f(), ans = rnd(N * p / 100);
   if (ans % 1) return genPctOf(lv);
   const ten = N / 10;
   const steps = p === 50 ? [{ p: `50% זה חצי: ${M(`${N} : 2 =`)}`, a: ans }]
     : p === 25 ? [{ p: `25% זה רבע: ${M(`${N} : 4 =`)}`, a: ans }]
     : p === 100 ? undefined
+    : p % 10 ? [{ p: `${P(p)} מ-${N}: ${M(`${N} × ${p} : 100 =`)}`, a: ans }]
     : [{ p: `קודם 10%: ${M(`${N} : 10 =`)}`, a: ten }].concat(p === 10 ? [] : p % 10 === 0 ? [{ p: `${P(p)} = ${p / 10} פעמים 10%: ${M(`${fmt(ten)} × ${p / 10} =`)}`, a: ans }] : [{ p: `ועכשיו ${P(p)}: ${M(`${N} × ${p} : 100 =`)}`, a: ans }]);
   return {
     type: 'num', text: `כמה הם ${P(p)} מ-${M(fmt(N))}?`, ans, learn: { lesson: 'pct', card: 2 },
@@ -4422,13 +4423,13 @@ const TOPICS6 = [
   },
   {
     id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a',
-    desc: 'שבר ↔ עשרוני, ישר מספרים, סדרות, פעולות, מידות',
+    desc: 'שבר ↔ עשרוני, ישר מספרים, סדרות, השוואה, חיבור וחיסור',
     levels: {
-      1: [genFracToDec, genDecToFrac, genMul10, genUnits],
+      1: [genFracToDec, genDecToFrac, genDecimalPlace, genDecCompare],
       2: [genSequence, genNumberLine, genDecAddSub, genDecCompare, genEstimateLength],
-      3: [genDecMulWhole, genFracPlusDec, genSequence, genNumberLine]
+      3: [genDecAddSub, genFracPlusDec, genSequence, genNumberLine]
     },
-    tips: ['בחיבור וחיסור – נקודה מתחת לנקודה.', 'כפל ב-10/100/1000 – הנקודה זזה ימינה; חילוק – שמאלה.', '1 ק"ג = 1,000 גרם · 1 מ\' = 100 ס"מ · 1 ק"מ = 1,000 מ\' · 1 ליטר = 1,000 מ"ל.', '0.5 לא קטן מ-0.45! משווים עשיריות קודם.']
+    tips: ['בחיבור וחיסור – נקודה מתחת לנקודה.', '0.5 לא קטן מ-0.45! משווים עשיריות קודם.']
   },
   {
     id: 'geo', name: 'מצולעים – שטח והיקף', icon: '📐', color: '#2f8f55',
@@ -5384,7 +5385,7 @@ Object.assign(LESSONS, {
   dec: {
     id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a', topic: 'dec',
     desc: 'עשיריות ומאיות, שבר ↔ עשרוני, השוואה, ישר מספרים, חיבור וחיסור, כפל ב-10 ויחידות מידה',
-    practice: [genFracToDec, genDecToFrac, genDecCompare, genNumberLine, genDecAddSub, genMul10, genUnits, genSequence],
+    practice: [genFracToDec, genDecToFrac, genDecCompare, genNumberLine, genDecAddSub, genSequence],
     cards: [
       {
         title: 'מה זה מספר עשרוני?',
@@ -5471,53 +5472,6 @@ Object.assign(LESSONS, {
         }
       },
       {
-        title: 'כפל וחילוק ב-10, 100, 1000',
-        html: `<p>לחצו וראו איך <b>הנקודה זזה</b>:</p>
-          <div class="fbig" data-num></div>
-          <div class="center muted" data-move>&nbsp;</div>
-          <div class="lbtns"><button class="secondary" data-m="10">× 10</button><button class="secondary" data-m="100">× 100</button><button class="secondary" data-m="0.1">: 10</button><button class="secondary" data-m="0.01">: 100</button><button class="ghost" data-m="0">↺ חזרה ל-3.45</button></div>
-          <div class="rule">💡 <b>כפל</b> ב-10/100/1000 ← הנקודה זזה <b>ימינה</b> 1/2/3 מקומות (המספר <b>גדל</b>).<br><b>חילוק</b> ב-10/100/1000 ← הנקודה זזה <b>שמאלה</b> 1/2/3 מקומות (המספר <b>קטן</b>).<br>כמה אפסים יש ב-10/100/1000 = כמה מקומות זזים.</div>`,
-        setup(root) {
-          let x = 3.45;
-          const show = msg => {
-            root.querySelector('[data-num]').innerHTML = M(fmt(x));
-            root.querySelector('[data-move]').innerHTML = msg || '&nbsp;';
-          };
-          root.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
-            const f = Number(b.dataset.m);
-            if (!f) { x = 3.45; show(); return; }
-            const nx = rnd(x * f);
-            if (nx > 100000 || nx < 0.00001) return;
-            x = nx;
-            const z = Math.round(Math.abs(Math.log10(f)));
-            show(f > 1 ? `הנקודה זזה ${z} ${z === 1 ? 'מקום' : 'מקומות'} ימינה ← המספר גדל` : `הנקודה זזה ${z} ${z === 1 ? 'מקום' : 'מקומות'} שמאלה ← המספר קטן`);
-          });
-          show();
-        },
-        try: {
-          type: 'num', q: `פתרו: ${M('0.38 × 100 =')}`, ans: 38,
-          hint: 'ב-100 יש שני אפסים – הנקודה זזה 2 מקומות ימינה.', exp: `הנקודה זזה 2 מקומות ימינה: ${M('0.38 × 100 = 38')}`,
-          traps: [{ v: 3.8, m: 'הנקודה זזה רק מקום אחד. ב-100 יש <b>שני</b> אפסים.' }, { v: 0.0038, m: 'בכפל המספר <b>גדל</b> – הנקודה זזה ימינה.' }]
-        }
-      },
-      {
-        title: 'יחידות מידה ומספרים עשרוניים',
-        html: `<table class="ftable">
-            <tr><th>יחידה גדולה</th><th>יחידה קטנה</th><th>דוגמה</th></tr>
-            <tr><td>1 ק"ג</td><td>1,000 גרם</td><td>0.2 ק"ג = 200 גרם</td></tr>
-            <tr><td>1 מ'</td><td>100 ס"מ</td><td>1.5 מ' = 150 ס"מ</td></tr>
-            <tr><td>1 ק"מ</td><td>1,000 מ'</td><td>0.4 ק"מ = 400 מ'</td></tr>
-            <tr><td>1 ליטר</td><td>1,000 מ"ל</td><td>0.25 ליטר = 250 מ"ל</td></tr>
-          </table>
-          <div class="rule">💡 <b>מיחידה גדולה לקטנה</b> ← כופלים (המספר גדל). ${M("1.5 × 100 = 150")}<br><b>מיחידה קטנה לגדולה</b> ← מחלקים (המספר קטן). ${M('350 : 1,000 = 0.35')}</div>
-          <div class="rule">✔ בדיקת היגיון: ביחידה קטנה צריך <b>יותר</b> ממנה – לכן המספר גדול יותר.</div>`,
-        try: {
-          type: 'num', q: `השלימו: 1.5 מ' = ${BOX} ס"מ`, ans: 150,
-          hint: "1 מ' = 100 ס\"מ. ממטרים לסנטימטרים – כופלים ב-100.", exp: `${M('1.5 × 100 = 150')} ס"מ`,
-          traps: [{ v: 15, m: "1 מ' = <b>100</b> ס\"מ – הנקודה זזה 2 מקומות." }, { v: 1500, m: "1 מ' = 100 ס\"מ (לא 1,000). הנקודה זזה 2 מקומות." }, { v: 0.015, m: 'עוברים ליחידה קטנה יותר – המספר צריך לגדול!' }]
-        }
-      },
-      {
         title: 'כללים לזכור 📌',
         html: `<ul class="recap">
             <li>📏 אחרי הנקודה: <b>עשיריות, מאיות, אלפיות</b>.</li>
@@ -5525,8 +5479,6 @@ Object.assign(LESSONS, {
             <li>⚖️ <b>השוואה:</b> מוסיפים אפסים בסוף ומשווים. יותר ספרות ≠ גדול יותר!</li>
             <li>📍 <b>ישר מספרים:</b> כמה חלקים? כמה שווה כל חלק? סופרים מההתחלה.</li>
             <li>➕ <b>חיבור וחיסור:</b> נקודה מתחת לנקודה.</li>
-            <li>✖️ <b>כפל ב-10/100/1000:</b> הנקודה ימינה. <b>חילוק:</b> הנקודה שמאלה.</li>
-            <li>⚖️ <b>יחידות:</b> מגדולה לקטנה – כופלים; מקטנה לגדולה – מחלקים.</li>
           </ul>
           <p class="center"><b>כל הכבוד! סיימתם את כרטיסיות המספרים העשרוניים 🎉</b></p>`
       }
@@ -5538,8 +5490,7 @@ LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 1 ? ['count1', 'add1']
 // קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
 [[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
  [genDecimalPlace, 'dec', 0], [genExpandedDecimal, 'dec', 0], [genFracToDec, 'dec', 1], [genDecToFrac, 'dec', 1], [genFracPlusDec, 'dec', 1],
- [genDecCompare, 'dec', 2], [genNumberLine, 'dec', 3], [genSequence, 'dec', 4], [genDecAddSub, 'dec', 4], [genMul10, 'dec', 5],
- [genUnits, 'dec', 6], [genEstimateLength, 'dec', 6]].forEach(([g, l, c]) => { g.__learn = { lesson: l, card: c }; });
+ [genDecCompare, 'dec', 2], [genNumberLine, 'dec', 3], [genSequence, 'dec', 4], [genDecAddSub, 'dec', 4]].forEach(([g, l, c]) => { g.__learn = { lesson: l, card: c }; });
 /* ---------- כרטיסיות: לוח הכפל, זמן וכסף, סימני התחלקות, זוויות ומשולשים ---------- */
 function dotsSVG(rows, cols, color = '#e0703a') {
   const s = 26, W = cols * s + 10, H = rows * s + 10;
@@ -9780,13 +9731,11 @@ const boxSVG = (a, b, c, labels) => { const k = 14, dx = b * k * 0.5, dy = b * k
 const OP6_UNITS = [
   () => { const r = () => { const a = R(1, 15), b = R(5, 140), c = a + pick([-1, 0, 1]), d = R(5, 140); return [a, b, c < 1 ? 1 : c, d]; }; const mt = a => a === 1 ? 'מטר אחד' : `${a} מטרים`; const rows = [r(), r()]; const sym = (x, y) => x > y ? '>' : x < y ? '<' : '='; return { title: 'סמנו < או > או =', q: `<ol class="op-list">${rows.map(([a, b, c, d]) => `<li>${mt(a)} ו-${b} ס"מ <b>___</b> ${mt(c)} ו-${d} ס"מ</li>`).join('')}</ol><p class="muted">שימו לב – לפעמים יש יותר מ-100 ס"מ!</p>`, a: `<ol class="op-list">${rows.map(([a, b, c, d]) => { const x = a * 100 + b, y = c * 100 + d; return `<li>בס"מ: <b>${M(`${x} ${sym(x, y)} ${y}`)}</b></li>`; }).join('')}</ol>💡 כדאי להמיר הכול לאותה יחידה – למשל לס"מ.` }; },
   () => { const [W, g] = pick([[180, 600], [150, 500], [120, 400], [240, 800], [90, 300], [150, 750], [200, 250]]); return { title: 'שק האורז', q: `<p>בחנות תבלינים קיבלו שק אורז שמשקלו <b>${M(W)} ק"ג</b>. אורזים את האורז באריזות של <b>${M(g)} גרם</b>.</p><p><b>כמה אריזות יהיו?</b></p>`, a: `${M(W)} ק"ג = ${M(W * 1000)} גרם. ${M(`${W * 1000} : ${g} = ${W * 1000 / g}`)} אריזות.${1000 % g ? '' : `<br>💡 אפשר גם: בכל ק"ג יש ${M(`1000 : ${g} = ${1000 / g}`)} אריזות, כפול ${W}.`}` }; },
-  () => { const opts = shuffle([[2000, R(4, 7)], [1500, rnd(R(30, 50) / 10)], [300, rnd(R(10, 25) / 10)], [500, rnd(R(15, 30) / 10)]]).slice(0, 3); const per = opts.map(([ml, p]) => p / ml * 1000); const best = per.indexOf(Math.min(...per)); const nm = ml => ml >= 1000 ? `${op6r(ml / 1000)} ליטר` : `${ml} סמ"ק`; return { title: 'מה הכי משתלם?', q: `<ol class="op-list">${opts.map(([ml, p]) => `<li>${nm(ml)} מיץ במחיר ${M(op6r(p))} ₪</li>`).join('')}</ol><p><b>מה הכי חסכוני?</b></p>`, a: `מחיר לליטר: ${opts.map(([ml, p], i) => `${M(op6r(per[i]))} ₪`).join(' · ')}<br><b>הכי משתלם: ${nm(opts[best][0])}</b>.<br>💡 משווים מחיר ליחידה אחת (ליטר) – וזוכרים ש-1 ליטר = 1000 סמ"ק.` }; },
-  () => { const a = R(20, 30), b = pick([500, 600, 800, 900, 1200]), c = a - 1 - R(0, 2), cat = a * 1000 + b - c * 1000; return { title: 'הנדנדה המאוזנת', q: `<p>בצד אחד של הנדנדה יושבים ילד (<b>${M(a)} ק"ג</b>) וגור כלבים (<b>${M(b)} גרם</b>). בצד השני – ילד של <b>${M(c)} ק"ג</b> וחתול. הנדנדה מאוזנת.</p><p><b>מה משקל החתול?</b></p>`, a: `צד ראשון: ${M(`${a * 1000} + ${b} = ${a * 1000 + b}`)} גרם. החתול: ${M(`${a * 1000 + b} - ${c * 1000} = ${cat}`)} גרם = ${M(op6r(cat / 1000))} ק"ג.` }; },
-  () => { const p = pick([120, 140, 160, 200]), s = pick([10, 15, 20, 25]), c = pick([2, 3, 4]), P = p * s * c / 100; return { title: 'מי צודק?', q: `<p>חבילת מדבקות עולה <b>${M(op6r(P))} ₪</b>. בחבילה <b>${M(p)} דפים</b>, ובכל דף <b>${M(s)} מדבקות</b>. איך מחשבים את המחיר של מדבקה אחת?</p><ul class="op-list"><li>יעל: ${M(`${op6r(P)} : ${p} : ${s}`)}</li><li>טל: ${M(`${op6r(P * 100)} : ${p} : ${s}`)}</li><li>יאיר: ${M(`${op6r(P * 100)} : (${p} × ${s})`)}</li></ul><p><b>מי צודק? הסבירו.</b></p>`, a: `<b>כולם צודקים!</b> יעל מחשבת בשקלים: ${M(op6r(c / 100))} ₪. טל ויאיר עברו לאגורות (${M(op6r(P))} ₪ = ${M(op6r(P * 100))} אגורות) ומקבלים ${M(c)} אגורות.<br>יאיר מחלק במספר המדבקות כולו (${M(p * s)}) – לחלק ב-${p} ואז ב-${s} זה אותו דבר.` }; },
-  () => { const L = R(81, 99); return { title: 'קצת פחות ממטר', q: `<ol class="op-list"><li>יעל רשמה מידה בס"מ, המירה למטרים, וקיבלה מספר <b>קצת קטן ממטר</b>. מה יכולה להיות המידה? כתבו 3 אפשרויות.</li><li>אורך התורן של הדגל ${M(L * 5 + 50)} ס"מ. מה אורכו במטרים?</li></ol>`, a: `<ol class="op-list"><li>למשל 99 ס"מ = ${M('0.99')} מ', 95 ס"מ = ${M('0.95')} מ', 90 ס"מ = ${M('0.9')} מ'.</li><li>${M(op6r((L * 5 + 50) / 100))} מטרים.</li></ol>` }; }
+  () => { const base = pick([5, 6, 7, 8]); const opts = shuffle([[2, base * 2 - R(1, 2)], [1, base], [3, base * 3 + R(1, 3)]]); const per = opts.map(([l, p]) => p / l); const best = per.indexOf(Math.min(...per)); const nm = l => l === 1 ? 'ליטר אחד' : `${l} ליטרים`; return { title: 'מה הכי משתלם?', q: `<ol class="op-list">${opts.map(([l, p]) => `<li>${nm(l)} מיץ במחיר ${M(p)} ₪</li>`).join('')}</ol><p><b>מה הכי חסכוני?</b> איך אפשר להשוות?</p>`, a: `משווים מה היה המחיר של <b>אותה כמות</b> – למשל 6 ליטרים:<ul class="op-list">${opts.map(([l, p]) => `<li>${nm(l)}: קונים ${6 / l} פעמים – ${M(`${p} × ${6 / l} = ${p * 6 / l}`)} ₪</li>`).join('')}</ul><b>הכי משתלם: ${nm(opts[best][0])}</b>.` }; },
+  () => { const a = R(20, 30), b = pick([500, 600, 800, 900]), c = a - 1 - R(0, 2), cat = a * 1000 + b - c * 1000; return { title: 'הנדנדה המאוזנת', q: `<p>בצד אחד של הנדנדה יושבים ילד (<b>${M(a)} ק"ג</b>) וגור כלבים (<b>${M(b)} גרם</b>). בצד השני – ילד של <b>${M(c)} ק"ג</b> וחתול. הנדנדה מאוזנת.</p><p><b>מה משקל החתול בגרמים?</b></p>`, a: `1 ק"ג = 1,000 גרם.<br>צד ראשון: ${M(`${a * 1000} + ${b} = ${a * 1000 + b}`)} גרם. החתול: ${M(`${a * 1000 + b} - ${c * 1000} = ${cat}`)} גרם.` }; },
 ];
 const OP6_ALG = [
-  () => { const D = pick([40, 80, 120, 160]), B = D * 1.5, A = 2 * B, C = B / 3, E = B + C; return { title: 'מחירי הרובוטים', q: `<ul class="op-list"><li>רובוט ד' עולה <b>${M(D)} ₪</b>.</li><li>רובוט ב' עולה פי ${M('1.5')} מרובוט ד'.</li><li>רובוט א' – כפול ממחיר רובוט ב'.</li><li>רובוט ג' – זול פי 3 מרובוט ב'.</li><li>רובוט ה' – כמו ב' ו-ג' יחד.</li></ul><p><b>מה המחיר של כל רובוט?</b> מאיזה רובוט כדאי להתחיל?</p>`, a: `מתחילים מהנתון: ד' = ${M(D)}.<br>ב' = ${M(`${D} × 1.5 = ${B}`)} · א' = ${M(`${B} × 2 = ${A}`)} · ג' = ${M(`${B} : 3 = ${C}`)} · ה' = ${M(`${B} + ${C} = ${E}`)} ₪.` }; },
+  () => { const D = pick([20, 30, 40, 50]), B = D * 3, A = 2 * B, C = B / 3, E = B + C; return { title: 'מחירי הרובוטים', q: `<ul class="op-list"><li>רובוט ד' עולה <b>${M(D)} ₪</b>.</li><li>רובוט ב' עולה פי 3 מרובוט ד'.</li><li>רובוט א' – כפול ממחיר רובוט ב'.</li><li>רובוט ג' – זול פי 3 מרובוט ב'.</li><li>רובוט ה' – כמו ב' ו-ג' יחד.</li></ul><p><b>מה המחיר של כל רובוט?</b> מאיזה רובוט כדאי להתחיל?</p>`, a: `מתחילים מהנתון: ד' = ${M(D)}.<br>ב' = ${M(`${D} × 3 = ${B}`)} · א' = ${M(`${B} × 2 = ${A}`)} · ג' = ${M(`${B} : 3 = ${C}`)} · ה' = ${M(`${B} + ${C} = ${E}`)} ₪.` }; },
   () => { const L = R(6, 20), x = 3 * (L + 2); return { title: 'כמה דובדבנים היו?', q: `<p>לתום היו דובדבנים. הוא נתן <b>שליש</b> מהם לדנה. אחר כך נתן <b>4</b> לגילי. לבסוף נתן למיה <b>חצי</b> ממה שנשאר. בסוף נשארו לו <b>${M(L)}</b> דובדבנים.</p><p><b>כמה היו לו בהתחלה?</b> (רמז: מתחילים מהסוף!)</p>`, a: `הולכים אחורה: לפני מיה – ${M(`${L} × 2 = ${2 * L}`)}. לפני גילי – ${M(`${2 * L} + 4 = ${2 * L + 4}`)}. זה ⅔ מהכמות (אחרי שנתן שליש) – ⅓ = ${M((2 * L + 4) / 2)}, ולכן בהתחלה: <b>${M(x)}</b> דובדבנים.` }; },
   () => { const pat = shuffle([[2, 0, 2, 6], [1, 3, 5], [4, 1, 4, 2, 0], [2, 0, 2, 5]])[0], n = pat.length, N = pick([100, 102, 200, 150, 99]), sum = pat.reduce((a, b) => a + b, 0), full = Math.floor(N / n), rest = pat.slice(0, N % n).reduce((a, b) => a + b, 0); const shown = Array.from({ length: n * 3 + 1 }, (_, i) => pat[i % n]); return { title: 'סדרה עם דגם חוזר', q: `<p class="center op-big">${M(shown.join(' , '))} ...</p><ol class="op-list"><li>כתבו את שלושת המספרים הבאים.</li><li>מה סכום <b>${N}</b> המספרים הראשונים?</li></ol>`, a: `<ol class="op-list"><li>${M(Array.from({ length: 3 }, (_, i) => pat[(n * 3 + 1 + i) % n]).join(' , '))}</li><li>בכל דגם ${n} מספרים שסכומם ${sum}. ב-${N} מספרים יש ${full} דגמים שלמים${N % n ? ` ועוד ${N % n} מספרים (סכומם ${rest})` : ''}: ${M(`${full} × ${sum}${N % n ? ` + ${rest}` : ''} = ${full * sum + rest}`)}.</li></ol>` }; },
   () => { const S = R(40, 99); const odd = S % 2; return { title: 'זוגי או אי-זוגי?', q: `<p>סכום של <b>שני מספרים שלמים</b> הוא <b>${M(S)}</b>. מה נכון?</p><ol class="op-list"><li>המכפלה שלהם תמיד זוגית.</li><li>המכפלה שלהם תמיד אי-זוגית.</li><li>לפעמים זוגית ולפעמים אי-זוגית.</li></ol><p>הסבירו!</p>`, a: odd ? `<b>תמיד זוגית.</b> הסכום אי-זוגי, ולכן אחד המספרים זוגי והשני אי-זוגי – ומכפלה שיש בה גורם זוגי היא זוגית. למשל ${M(`${S - 1} × 1`)}, ${M(`${Math.floor(S / 2)} × ${Math.ceil(S / 2)}`)}.` : `<b>לפעמים.</b> הסכום זוגי: שני המספרים זוגיים (המכפלה זוגית) – או ששניהם אי-זוגיים (המכפלה אי-זוגית). למשל ${M(`${S / 2 + (S / 2) % 2} × ${S / 2 - (S / 2) % 2}`)} מול ${M(`${S - 1} × 1`)}.` }; },
@@ -9809,7 +9758,7 @@ const OP6_VOL = [
 ];
 const SRC6 = 'מארגן ההוראה תשפ"ו – מאגר המשימות לכיתה ו\' (כולל דפי חודש ויחידות הוראה מתוקשבות)';
 if (GRADE === 6) OP_SPECIAL.push(
-  { id: 'u6', src: SRC6, name: 'מידות והמרות', desc: 'מטרים וס"מ, ק"ג וגרם, ליטר וסמ"ק, מה הכי משתלם, מי צודק', build: () => shuffle(OP6_UNITS.slice()).slice(0, 4).map(f => f()) },
+  { id: 'u6', src: SRC6, name: 'מידות והמרות', desc: 'מטרים וס"מ, ק"ג וגרם, מה הכי משתלם, הנדנדה המאוזנת', build: () => shuffle(OP6_UNITS.slice()).slice(0, 4).map(f => f()) },
   { id: 'alg6', src: SRC6, name: 'חשיבה אלגברית ותובנה מספרית', desc: 'מחירי רובוטים, דובדבנים מהסוף, דגם חוזר, זוגיות, הגדלה פי 6, גילים', build: () => shuffle(OP6_ALG.slice()).slice(0, 4).map(f => f()) },
   { id: 'data6', src: SRC6, name: 'נתונים, אחוזים וממוצע (כיתה ו\')', desc: 'חלוקה ביחס, ממוצע של עוקבים, נכון/לא נכון, טבלת אחוזים ושברים, חוגים', build: () => shuffle(OP6_DATA.slice()).slice(0, 4).map(f => f()) },
   { id: 'vol6', src: SRC6, name: 'נפח – תיבה וקובייה', desc: 'אקווריום, קובייה ותיבה באותו נפח, ממלאים 8 פעמים, תיבה מדף נייר, מ"ל', build: () => shuffle(OP6_VOL.slice()).slice(0, 4).map(f => f()) }
