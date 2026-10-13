@@ -1076,7 +1076,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לב</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לג</span></footer>
 
 <script>
 /* =========================================================
@@ -9304,13 +9304,13 @@ const apAsQ = f => () => { const q = f(); return { type: 'num', text: q.text, fi
 if (GRADE >= 5) TOPIC.composite = { id: 'composite', name: 'שטחים מורכבים', icon: '🧩', color: '#2f8f55', levels: {
   1: [apAsQ(() => apLQ(false, false)), apAsQ(() => apLQ(false, false)), apAsQ(apFrameQ)],
   2: [apAsQ(() => apLQ(false, true)), apAsQ(apRoomQ), apAsQ(apFrameQ), apAsQ(() => apUQ(false))],
-  3: [apAsQ(() => apUQ(false)), apAsQ(apPathQ), apAsQ(() => apLQ(true, true)), apAsQ(() => apUQ(true))]
+  3: [apAsQ(() => apUQ(false)), apAsQ(apPathQ), apAsQ(apRoomQ)]
 } };
 // בג'פרדי, כשבוחרים רק "שטחים מורכבים" – הלוח מתחלק ל-4 עמודות משלו
 if (GRADE >= 5) [
   ['compL', 'צורת L', [() => apLQ(false, false)], [() => apLQ(false, false)], [() => apLQ(false, true)]],
-  ['compHide', 'צלעות חסרות', [() => apLQ(false, true)], [() => apLQ(false, true), apRoomQ], [() => apLQ(true, true), () => apUQ(true)]],
-  ['compU', 'צורת U', [() => apUQ(false)], [() => apUQ(false)], [() => apUQ(false), () => apUQ(true)]],
+  ['compHide', 'צלעות חסרות', [() => apLQ(false, true)], [() => apLQ(false, true), apRoomQ], [() => apLQ(false, true), apRoomQ]],
+  ['compU', 'צורת U', [() => apUQ(false)], [() => apUQ(false)], [() => apUQ(false)]],
   ['compGarden', 'גינות ובריכות', [apFrameQ], [apFrameQ, apPathQ], [apPathQ]]
 ].forEach(([id, name, l1, l2, l3]) => { TOPIC[id] = { id, name, icon: '🧩', color: '#2f8f55', levels: { 1: l1.map(apAsQ), 2: l2.map(apAsQ), 3: l3.map(apAsQ) } }; });
 const gameTopics = () => TOPIC.composite ? [TOPIC.composite, ...TOPICS] : TOPICS;
@@ -10094,7 +10094,7 @@ function exitHome() {
     <div class="topbar"><span class="title">${ic('clipboard')} כרטיס יציאה</span><button class="secondary" id="exHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how"><b>3 שאלות קצרות</b> על מה שלמדנו היום – קלה, בינונית ומאתגרת. עונים לבד, בלי עזרה. בסוף רואים את התוצאה${kf.report ? ', והיא נשלחת למורה' : ''}.</p></div>
     <h2>מה למדנו היום?</h2>
-    <div class="race-tracks">${TOPICS.map(t => `<button class="race-track" data-ext="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}</div>`;
+    <div class="race-tracks">${gameTopics().map(t => `<button class="race-track" data-ext="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}</div>`;
   $('exHomeB').onclick = home;
   app.querySelectorAll('[data-ext]').forEach(b => b.onclick = () => {
     const t = TOPIC[b.dataset.ext];
