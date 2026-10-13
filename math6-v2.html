@@ -1074,7 +1074,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כח</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כט</span></footer>
 
 <script>
 /* =========================================================
@@ -9458,10 +9458,11 @@ function opOddOne() {
   const nums = shuffle([...yes, no[0]]);
   return { title: 'איזה לא שייך?', q: `<div class="op-nums">${nums.map(n => `<span>${M(fmt(n))}</span>`).join('')}</div><p>איזה מספר לא שייך לאחרים? למה? (יכולות להיות כמה תשובות נכונות – העיקר להסביר!)</p>`, a: `למשל: ${M(fmt(no[0]))} – כי כל השאר <b>${P.name}</b>, והוא לא. מצאתם סיבה אחרת? מצוין – הסבירו אותה!` };
 }
-const opName = id => (OP_SPECIAL.find(x => x.id === id) || TOPIC[id]).name;
+const opName = id => id === 'composite' ? 'שטחים מורכבים' : (OP_SPECIAL.find(x => x.id === id) || TOPIC[id]).name;
 function opBuild(topicId) {
   const sp = OP_SPECIAL.find(x => x.id === topicId);
   if (sp) return sp.build().map(sl => ({ ...sl, src: sp.src }));
+  if (topicId === 'composite') return opComposite();
   const t = TOPIC[topicId], seen = new Set();
   const get = (lv, cond) => { for (let i = 0; i < 80; i++) { const q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text) && (!cond || cond(q))) { seen.add(q.text); return q; } } return mk(t.id, pick(t.levels[lv]), lv); };
   const slides = [];
@@ -9980,13 +9981,31 @@ function classSub(kind) {
   window.scrollTo(0, 0);
 }
 
+// פתיח לפי נושא: שטחים מורכבים (כיתות ה'–ו') – חימום, צלע חסרה, מצאו את הטעות, אתגר
+function opComposite() {
+  const sl = (title, q, ex) => ({ title, q: `<div class="center cmp-big">${q.svg}</div><p>${q.text}</p>`, a: `${q.hsvg ? `<div class="center cmp-big">${q.hsvg}</div>` : ''}<p>${q.exp}</p>` });
+  const s = cmpShape('L'), w2 = s.ways[2], cw = s.pts[0][0], ch = s.pts[4][1], wrongAdd = s.W * s.H + cw * ch;
+  const mistake = {
+    title: 'מצאו את הטעות',
+    q: `<div class="center cmp-big">${cmpSVG(s, null, { max: 340 })}</div><p>יואב השלים את הצורה למלבן גדול, וחישב:</p><p class="center op-big">${M(`${s.W} × ${s.H} + ${cw} × ${ch} = ${wrongAdd}`)}</p><p><b>מה הטעות של יואב?</b> מה התשובה הנכונה?</p>`,
+    a: `${cmpWayHTML(s, w2, { max: 260 })}<p>כשמשלימים למלבן, החלק המקווקו <b>לא שייך</b> לצורה – צריך <b>להחסיר</b> אותו, לא להוסיף!</p>`
+  };
+  const t = cmpShape(pick(['U', 'S']));
+  const challenge = pick([
+    () => sl('אתגר: השביל', apPathQ()),
+    () => sl('אתגר: הבריכה בגינה', apFrameQ()),
+    () => ({ title: 'אתגר: איזו דרך הכי קצרה?', q: `<div class="center cmp-big">${cmpSVG(t, null, { max: 340 })}</div><p>המידות בס"מ. מה השטח? <b>באיזו דרך הכי כדאי לחשב?</b></p>`, a: `<div class="cmp-ways">${t.ways.map(w => cmpWayHTML(t, w, { max: 210 })).join('')}</div>` })
+  ])();
+  return [sl('חימום', apLQ(false, false)), sl('הצלע החסרה', apLQ(false, true)), mistake, challenge];
+}
+
 function opHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('op');
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור</span><button class="secondary" id="opHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how">4 שקפים קצרים להקרנה בתחילת השיעור, על הנושא שתבחרו: <b>חימום</b> בראש · <b>מצאו את הטעות</b> · <b>איזה לא שייך?</b> (לשיח) · <b>שאלת אתגר</b>. בכל שקף – קודם חושבים, ואז חושפים את התשובה.</p></div>
     <h2>על איזה נושא השיעור?</h2>
-    <div class="race-tracks">${TOPICS.map(t => `<button class="race-track" data-opt="${t.id}" style="border-color:${t.color}"><span class="nm">${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>`;
+    <div class="race-tracks">${GRADE >= 5 ? `<button class="race-track" data-opt="composite" style="border-color:#2f8f55"><span class="nm">שטחים מורכבים</span><span class="best">חימום, צלע חסרה, מצאו את הטעות, ואתגר</span></button>` : ''}${TOPICS.map(t => `<button class="race-track" data-opt="${t.id}" style="border-color:${t.color}"><span class="nm">${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>`;
   $('opHomeB').onclick = () => classSub('open');
   app.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => { op = { topic: b.dataset.opt, slides: opBuild(b.dataset.opt), k: 0, show: false }; opDraw(); });
   window.scrollTo(0, 0);
