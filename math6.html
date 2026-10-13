@@ -1074,7 +1074,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כה</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כז</span></footer>
 
 <script>
 /* =========================================================
@@ -6848,7 +6848,7 @@ function home() {
     { id: 'practice', label: 'לתרגל', icon: 'pencil', wash: 'rgba(217,138,154,0.28)' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
-    ...(OP_SPECIAL.length ? [{ id: 'org', label: 'מארגן ההוראה', icon: 'booklet', wash: 'rgba(127,190,170,0.34)' }] : []),
+    { id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' },
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)' },
     { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
   ];
@@ -6969,12 +6969,19 @@ function home() {
             <span class="gc-nm">לוח מסמרים</span>
             <span class="gc-ds">משרטטים צורות על רשת נקודות – והאתר מחשב שטח והיקף. יש גם משימות!</span>
           </button>
-          <h3 class="games-sub">לכל הכיתה – מקרינים על הלוח</h3>
+        </section>
+        <section class="panel" data-panel="class" ${homeTab === 'class' ? '' : 'hidden'}>
+          <h2>בכיתה – מקרינים על הלוח</h2>
+          <p class="race-how">כל מה שצריך לשיעור בכיתה במקום אחד: פתיח, משחק קבוצתי, דפים להדפסה וכרטיס יציאה. מומלץ ללחוץ "מסך מלא" בזמן ההקרנה.</p>
+          <h3 class="games-sub">1. פותחים שיעור</h3>
           <button class="game-card" id="opGo">
             <span class="gc-ic" style="--gw:rgba(239,201,106,0.7)">${ic('bulb')}</span>
             <span class="gc-nm">פתיח שיעור</span>
             <span class="gc-ds">4 שקפים לתחילת השיעור לפי נושא: חימום, מצאו את הטעות, איזה לא שייך, ואתגר.</span>
           </button>
+          ${OP_SPECIAL.length ? `<h3 class="games-sub">פתיחים לפי מארגן ההוראה</h3>
+          <div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-org="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span><span class="op-src-s">מקור: ${t.src}</span></button>`).join('')}</div>` : ''}
+          <h3 class="games-sub">2. משחקים לכל הכיתה</h3>
           <button class="game-card" id="jeoGo">
             <span class="gc-ic" style="--gw:rgba(217,138,154,0.6)">${ic('grid')}</span>
             <span class="gc-nm">ג'פרדי כיתתי</span>
@@ -7000,13 +7007,24 @@ function home() {
             <span class="gc-nm">בינגו כיתתי</span>
             <span class="gc-ds">כל תלמיד ממלא לוח במחברת, ועל המסך מופיעים תרגילים. בלי הדפסה!</span>
           </button>
+          <h3 class="games-sub">3. דפים להדפסה לשיעור</h3>
+          ${GRADE >= 5 ? `<button class="game-card" id="cmpSheetGo">
+            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('printer')}</span>
+            <span class="gc-nm">שטחים מורכבים – דף עבודה ופתקי יציאה</span>
+            <span class="gc-ds">6 צורות על רשת משבצות (שתי דרכים לכל צורה), דף תשובות, ו-4 פתקי יציאה בעמוד.</span>
+          </button>` : ''}
+          <a class="game-card" href="${gq('print')}" style="text-decoration:none;color:inherit">
+            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('printer')}</span>
+            <span class="gc-nm">דפי תרגול ומבחנים לפי נושא</span>
+            <span class="gc-ds">בוחרים נושאים ורמה – ומקבלים דף להדפסה עם דף תשובות.</span>
+          </a>
+          <h3 class="games-sub">4. סוף השיעור</h3>
+          <button class="game-card" id="exitGo2">
+            <span class="gc-ic" style="--gw:rgba(164,140,201,0.6)">${ic('clipboard')}</span>
+            <span class="gc-nm">כרטיס יציאה</span>
+            <span class="gc-ds">3 שאלות על מה שלמדנו היום – התלמידים עונים והתוצאה נשלחת אלייך.</span>
+          </button>
         </section>
-        ${OP_SPECIAL.length ? `<section class="panel" data-panel="org" ${homeTab === 'org' ? '' : 'hidden'}>
-          <h2>כרטיסיות לפי מארגן ההוראה</h2>
-          <p class="race-how">פתיחים מוכנים להקרנה בתחילת השיעור – 4 שקפים בכל פעם, בנויים לפי המשימות במארגן ההוראה. בכל שקף קודם חושבים, ואז חושפים את התשובה. בכל לחיצה נוצרים מספרים חדשים.</p>
-          ${GRADE >= 5 ? `<button class="race-track op-special" id="cmpSheetGo" style="margin-bottom:12px"><span class="nm">🖨️ דף עבודה ופתקי יציאה – שטחים מורכבים</span><span class="best">להדפסה: 6 צורות על רשת משבצות (שתי דרכים לכל צורה), דף תשובות, ו-4 פתקי יציאה בעמוד</span></button>` : ''}
-          <div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-org="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span><span class="op-src-s">מקור: ${t.src}</span></button>`).join('')}</div>
-        </section>` : ''}
         <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
           <h2>הדפסה</h2>
           <div class="print-links">
@@ -7034,6 +7052,7 @@ function home() {
   $('gbGo').onclick = gbHome;
   $('opGo').onclick = opHome;
   if ($('cmpSheetGo')) $('cmpSheetGo').onclick = cmpSheetHome;
+  if ($('exitGo2')) $('exitGo2').onclick = exitHome;
   app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { op = { topic: b.dataset.org, slides: opBuild(b.dataset.org), k: 0, show: false }; opDraw(); });
   $('warGo1').onclick = () => warHome('solo');
   $('warGo2').onclick = () => warHome('teams');
@@ -7060,7 +7079,7 @@ function home() {
   $('sim').onclick = showSimPicker;
   if (PRESET) $('presetGo').onclick = startPreset;
 }
-let homeTab = (() => { try { return sessionStorage.getItem('math-tab') || 'practice'; } catch (e) { return 'practice'; } })();
+let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
 
 // "מה עושים היום?" – הצעה אחת ברורה לצעד הבא
 function todaySuggestion() {
@@ -9932,7 +9951,7 @@ function cmpSheetHome() {
       <div class="actions"><button id="cmpPrint" class="race-go">${ic('printer')} הדפסה</button><button id="cmpNew" class="secondary">דף חדש</button></div>
       <p class="small muted">טיפ: בחלון ההדפסה אפשר לבחור אילו עמודים להדפיס – למשל רק את פתקי היציאה (עמוד 3).</p></div>
     <div id="wsout">${ws}${key}${tickets}</div>`;
-  $('cmpBack').onclick = () => { homeTab = 'org'; home(); };
+  $('cmpBack').onclick = () => { homeTab = 'class'; home(); };
   $('cmpPrint').onclick = () => window.print();
   $('cmpNew').onclick = cmpSheetHome;
   window.scrollTo(0, 0);
@@ -9969,7 +9988,7 @@ function opDraw() {
       ${last ? '<button id="opNew" class="race-go">פתיח חדש</button>' : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
     </div>`;
   fsBind();
-  $('opBack').onclick = () => { if (OP_SPECIAL.some(x => x.id === op.topic)) { homeTab = 'org'; home(); } else opHome(); };
+  $('opBack').onclick = () => { if (OP_SPECIAL.some(x => x.id === op.topic)) { homeTab = 'class'; home(); } else opHome(); };
   if ($('opPrev')) $('opPrev').onclick = () => { op.k--; op.show = false; opDraw(); };
   if ($('opShow')) $('opShow').onclick = () => { op.show = true; opDraw(); };
   if ($('opNext')) $('opNext').onclick = () => { op.k++; op.show = false; opDraw(); };
