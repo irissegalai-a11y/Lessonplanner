@@ -1076,7 +1076,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לא</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לב</span></footer>
 
 <script>
 /* =========================================================
@@ -9914,16 +9914,36 @@ function cmpOpener() {
 }
 
 // ---- דף עבודה + דף תשובות + פתקי יציאה להדפסה ----
-function cmpSheetHome() {
+// מספרים אקראיים קבועים לפי קוד – כדי שאותו דף יחזור בכל פתיחה (גם במחשב אחר, לפי הקוד)
+function cmpWithSeed(seed, fn) {
+  const orig = Math.random; let a = seed >>> 0;
+  Math.random = () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  try { return fn(); } finally { Math.random = orig; }
+}
+const CMP_SEED_KEY = 'math-cmp-seed-g' + GRADE;
+const cmpBuild = seed => cmpWithSeed(seed, () => ({ shapes: ['L', 'U', 'S', 'L', 'U', 'S'].map(cmpShape), ticket: cmpShape(pick(['L', 'U'])) }));
+// הקרנת הדף שהודפס: שקף לכל צורה, והתשובה – שלוש הדרכים
+function cmpProject(seed) {
+  const { shapes } = cmpBuild(seed);
+  op = { topic: 'cmp3', k: 0, show: false, back: () => cmpSheetHome(seed), slides: shapes.map((s, i) => ({ title: `צורה ${i + 1}`, src: `דף העבודה – קוד <span data-raw>${seed}</span>`,
+    q: `<div class="center cmp-big">${cmpSVG(s, null, { max: 380, grid: true })}</div><p>המידות בס"מ. אילו צלעות חסרות? באילו דרכים אפשר לחשב את השטח?</p>`,
+    a: `<p>${s.missing}</p><div class="cmp-ways">${s.ways.map(w => cmpWayHTML(s, w, { max: 210 })).join('')}</div><p><b>השטח: ${M(s.A)} סמ"ר</b></p>` })) };
+  opDraw();
+}
+function cmpSheetHome(seedArg) {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('cmpsheet');
-  const shapes = ['L', 'U', 'S', 'L', 'U', 'S'].map(cmpShape), ticket = cmpShape(pick(['L', 'U']));
-  const head = t => `<div class="wshead"><h1>${t}</h1><div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>`;
+  let seed = Number(seedArg) || 0;
+  if (!seed) { try { seed = Number(localStorage.getItem(CMP_SEED_KEY)) || 0; } catch (e) {} }
+  if (!seed) seed = R(1000, 9999);
+  try { localStorage.setItem(CMP_SEED_KEY, String(seed)); } catch (e) {}
+  const { shapes, ticket } = cmpBuild(seed);
+  const head = t => `<div class="wshead"><h1>${t}</h1><div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span><span class="small muted">קוד דף: <span data-raw>${seed}</span></span></div></div>`;
   const ws = `<section class="ws-page cmp-sheet">${head('שטחים מורכבים – שתי דרכים')}
       <div class="cmp-instr"><b>בכל צורה (המידות בס"מ):</b><ol><li>מצאו קודם את הצלעות החסרות וכתבו אותן על הציור.</li><li>סמנו בצבע אחד את החלוקה של דרך א', וכתבו תרגיל.</li><li>סמנו בצבע אחר את דרך ב', וכתבו תרגיל.</li><li>בדקו: האם קיבלתם אותו שטח? אם לא – חפשו את הטעות.</li></ol></div>
       <div class="cmp-grid">${shapes.map((s, i) => `<div class="cmp-q"><div class="cmp-n">${i + 1}</div><div class="cmp-fig">${cmpSVG(s, null, { max: 230, grid: true })}</div>
         <div class="cmp-lines"><div>דרך א': <span class="wsline long"></span></div><div>דרך ב': <span class="wsline long"></span></div><div>השטח: <span class="wsline"></span> סמ"ר</div></div></div>`).join('')}</div>
     </section>`;
-  const key = `<section class="ws-page cmp-sheet wskey"><h2>🔑 דף תשובות – שטחים מורכבים</h2>
+  const key = `<section class="ws-page cmp-sheet wskey"><h2>🔑 דף תשובות – שטחים מורכבים <span class="small muted">(קוד דף: <span data-raw>${seed}</span>)</span></h2>
       <div class="cmp-grid">${shapes.map((s, i) => `<div class="cmp-q"><div class="cmp-n">${i + 1}</div><div><b>השטח: ${M(s.A)} סמ"ר</b><div class="small">${s.missing}</div>
         ${s.ways.map(w => `<div class="small">• <b>${w.name}:</b> ${M(w.expr)}</div>`).join('')}</div></div>`).join('')}</div>
       <h3>פתק יציאה</h3><p><b>השטח: ${M(ticket.A)} סמ"ר</b> · ${ticket.missing}</p>${ticket.ways.map(w => `<div class="small">• <b>${w.name}:</b> ${M(w.expr)}</div>`).join('')}
@@ -9936,12 +9956,16 @@ function cmpSheetHome() {
   app.innerHTML = `
     <div class="topbar noprint"><span class="title">${ic('printer')} דף עבודה ופתקי יציאה – שטחים מורכבים</span><span class="toollinks"><button class="secondary" id="cmpBack">${ic('home')} חזרה</button></span></div>
     <div class="card noprint"><p>3 עמודים: <b>דף עבודה</b> (6 צורות על רשת משבצות), <b>דף תשובות</b> עם שלוש דרכים לכל צורה, ו<b>פתקי יציאה</b> – 4 בעמוד, לגזור. כל לחיצה על "דף חדש" יוצרת צורות ומידות חדשות.</p>
-      <div class="actions"><button id="cmpPrint" class="race-go">${ic('printer')} הדפסה</button><button id="cmpNew" class="secondary">דף חדש</button></div>
+      <p><b>קוד הדף: <span data-raw>${seed}</span></b> – כשחוזרים למסך הזה באותו מחשב, יופיע אותו דף. במחשב אחר – מקלידים את הקוד.</p>
+      <div class="actions"><button id="cmpPrint" class="race-go">${ic('printer')} הדפסה</button><button id="cmpProj" class="secondary">${ic('bulb')} הקרנת הדף בכיתה</button><button id="cmpNew" class="secondary">דף חדש</button></div>
+      <div class="actions"><label for="cmpCode">פתיחת דף לפי קוד:</label><input id="cmpCode" inputmode="numeric" maxlength="4" style="width:6em;text-align:center" placeholder="1234"><button id="cmpOpen" class="ghost">פתיחה</button></div>
       <p class="small muted">טיפ: בחלון ההדפסה אפשר לבחור אילו עמודים להדפיס – למשל רק את פתקי היציאה (עמוד 3).</p></div>
     <div id="wsout">${ws}${key}${tickets}</div>`;
   $('cmpBack').onclick = () => classSub('print');
   $('cmpPrint').onclick = () => window.print();
-  $('cmpNew').onclick = cmpSheetHome;
+  $('cmpNew').onclick = () => { let n; do { n = R(1000, 9999); } while (n === seed); cmpSheetHome(n); };
+  $('cmpProj').onclick = () => cmpProject(seed);
+  $('cmpOpen').onclick = () => { const v = Number($('cmpCode').value); if (v >= 1000 && v <= 9999) cmpSheetHome(v); else $('cmpCode').focus(); };
   window.scrollTo(0, 0);
 }
 if (GRADE >= 5) OP_SPECIAL.push({ id: 'cmp3', src: 'הוכן במיוחד לשיעור "שטחים מורכבים" – שלוש דרכים לחישוב אותו שטח', name: 'שטחים מורכבים – שלוש דרכים', desc: 'אותה צורה, שלוש דרכים: חותכים, חותכים אחרת, משלימים למלבן. ובסוף – איזו דרך הכי קצרה?', build: cmpOpener });
@@ -10000,7 +10024,7 @@ function classSub(kind) {
   app.innerHTML = `<div class="topbar"><span class="title">${ic(T[0])} ${T[1]}</span><button class="secondary" id="clsBack">${ic('home')} חזרה</button></div>${body}`;
   $('clsBack').onclick = () => { homeTab = 'class'; home(); };
   const on = (id, fn) => { if ($(id)) $(id).onclick = fn; };
-  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('cmpSheetGo', cmpSheetHome);
+  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('cmpSheetGo', () => cmpSheetHome());
   app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { op = { topic: b.dataset.org, slides: opBuild(b.dataset.org), k: 0, show: false }; opDraw(); });
   window.scrollTo(0, 0);
 }
@@ -10050,14 +10074,14 @@ function opDraw() {
     <div class="actions" style="justify-content:center">
       ${op.k ? '<button class="secondary" id="opPrev">→ הקודם</button>' : ''}
       ${op.show ? '' : '<button id="opShow" class="secondary">הצגת התשובה</button>'}
-      ${last ? '<button id="opNew" class="race-go">פתיח חדש</button>' : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
+      ${last ? `<button id="opNew" class="race-go">${op.back ? 'חזרה לדף' : 'פתיח חדש'}</button>` : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
     </div>`;
   fsBind();
-  $('opBack').onclick = () => { if (OP_SPECIAL.some(x => x.id === op.topic)) classSub('open'); else opHome(); };
+  $('opBack').onclick = () => { if (op.back) op.back(); else if (OP_SPECIAL.some(x => x.id === op.topic)) classSub('open'); else opHome(); };
   if ($('opPrev')) $('opPrev').onclick = () => { op.k--; op.show = false; opDraw(); };
   if ($('opShow')) $('opShow').onclick = () => { op.show = true; opDraw(); };
   if ($('opNext')) $('opNext').onclick = () => { op.k++; op.show = false; opDraw(); };
-  if ($('opNew')) $('opNew').onclick = () => { op = { topic: op.topic, slides: opBuild(op.topic), k: 0, show: false }; opDraw(); };
+  if ($('opNew')) $('opNew').onclick = () => { if (op.back) return op.back(); op = { topic: op.topic, slides: opBuild(op.topic), k: 0, show: false }; opDraw(); };
   window.scrollTo(0, 0);
 }
 
