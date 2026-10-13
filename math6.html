@@ -938,6 +938,8 @@
   .cmp-ways { display: grid; gap: 6px; }
   .cmp-ways .cmp-way .cmp-fig { width: 170px; }
   .cmp-fig svg { width: 100%; height: auto; }
+  .cmp-instr { border: 1.5px solid #888; border-radius: 8px; padding: 6px 12px; font-size: 0.92rem; }
+  .cmp-instr ol { margin: 4px 0 0; padding-inline-start: 22px; }
   .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 22px; margin-top: 10px; }
   .cmp-q { display: flex; gap: 8px; align-items: flex-start; break-inside: avoid; border-bottom: 1px dashed #bbb; padding-bottom: 8px; }
   .cmp-q .cmp-fig { width: 215px; flex: none; }
@@ -1074,7 +1076,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ל</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לא</span></footer>
 
 <script>
 /* =========================================================
@@ -9917,7 +9919,7 @@ function cmpSheetHome() {
   const shapes = ['L', 'U', 'S', 'L', 'U', 'S'].map(cmpShape), ticket = cmpShape(pick(['L', 'U']));
   const head = t => `<div class="wshead"><h1>${t}</h1><div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>`;
   const ws = `<section class="ws-page cmp-sheet">${head('שטחים מורכבים – שתי דרכים')}
-      <p>בכל צורה: <b>מצאו את השטח בשתי דרכים שונות</b>. סמנו בצבע את החלוקה, וכתבו תרגיל לכל דרך. המידות בס"מ.</p>
+      <div class="cmp-instr"><b>בכל צורה (המידות בס"מ):</b><ol><li>מצאו קודם את הצלעות החסרות וכתבו אותן על הציור.</li><li>סמנו בצבע אחד את החלוקה של דרך א', וכתבו תרגיל.</li><li>סמנו בצבע אחר את דרך ב', וכתבו תרגיל.</li><li>בדקו: האם קיבלתם אותו שטח? אם לא – חפשו את הטעות.</li></ol></div>
       <div class="cmp-grid">${shapes.map((s, i) => `<div class="cmp-q"><div class="cmp-n">${i + 1}</div><div class="cmp-fig">${cmpSVG(s, null, { max: 230, grid: true })}</div>
         <div class="cmp-lines"><div>דרך א': <span class="wsline long"></span></div><div>דרך ב': <span class="wsline long"></span></div><div>השטח: <span class="wsline"></span> סמ"ר</div></div></div>`).join('')}</div>
     </section>`;
