@@ -1074,7 +1074,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כט</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ל</span></footer>
 
 <script>
 /* =========================================================
@@ -8138,7 +8138,7 @@ function jeoHome() {
       <div class="name-row" style="justify-content:center"><span class="seg">${[2, 3, 4, 5, 6].map(n => `<button data-jn="${n}" class="${n === nTeams ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
       <div class="jeo-teams">${JEO_TEAMS.slice(0, nTeams).map((t, i) => `<label class="jeo-tname" style="--tc:${t.color}"><span class="jdot"></span><input data-jt="${i}" value="${t.name}" maxlength="16" aria-label="שם קבוצה ${i + 1}"></label>`).join('')}</div>
       <h2>נושאים בלוח <span class="muted small">(עד 6)</span></h2>
-      <div class="jeo-topics">${TOPICS.map(t => `<label class="chk"><input type="checkbox" data-jtop="${t.id}" ${pickTopics.includes(t.id) ? 'checked' : ''}> ${t.name}</label>`).join('')}</div>
+      <div class="jeo-topics">${gameTopics().map(t => `<label class="chk"><input type="checkbox" data-jtop="${t.id}" ${pickTopics.includes(t.id) ? 'checked' : ''}> ${t.name}</label>`).join('')}</div>${topicBtns('jtop')}
       <p class="muted small" id="jMsg"></p>
       <div class="actions" style="justify-content:center"><button id="jGo" class="race-go">${live ? 'משחק חדש' : 'מתחילים!'} ←</button></div>`;
     $('jHome').onclick = home;
@@ -8153,7 +8153,8 @@ function jeoHome() {
     });
     $('jGo').onclick = () => {
       const topics = [...app.querySelectorAll('[data-jtop]:checked')].map(c => c.dataset.jtop);
-      if (topics.length < 2) { $('jMsg').textContent = 'בחרו לפחות 2 נושאים.'; return; }
+      if (topics.length === 1 && topics[0] === 'composite') topics.splice(0, 1, 'compL', 'compHide', 'compU', 'compGarden');
+      if (topics.length < 2) { $('jMsg').textContent = 'בחרו לפחות 2 נושאים (או רק "שטחים מורכבים").'; return; }
       const teams = [...app.querySelectorAll('[data-jt]')].map((inp, i) => ({ name: inp.value.trim() || JEO_TEAMS[i].name, color: JEO_TEAMS[i].color, score: 0 }));
       jeoStart(teams, topics);
     };
@@ -8275,7 +8276,7 @@ function jeoEnd() {
 /* ---------- משחקי כיתה: כפתור מסך מלא משותף ---------- */
 function fsBtnHTML() { return document.fullscreenEnabled ? `<button class="secondary" id="jFull">${document.fullscreenElement ? 'יציאה ממסך מלא' : 'מסך מלא'}</button>` : ''; }
 function fsBind() { if ($('jFull')) $('jFull').onclick = () => { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else document.documentElement.requestFullscreen().catch(() => {}); }; }
-function topicChecks(attr) { return `<div class="jeo-topics">${TOPICS.map(t => `<label class="chk"><input type="checkbox" data-${attr}="${t.id}" checked> ${t.name}</label>`).join('')}</div>`; }
+function topicChecks(attr) { return `<div class="jeo-topics">${gameTopics().map(t => `<label class="chk"><input type="checkbox" data-${attr}="${t.id}" ${t.id === 'composite' ? '' : 'checked'}> ${t.name}</label>`).join('')}</div>${topicBtns(attr)}`; }
 
 /* =========================================================
    מי רוצה להיות מיליונר? – 15 שאלות בקושי עולה, 3 גלגלי הצלה
@@ -9297,6 +9298,27 @@ function apRoomQ() {
   return { ...q, text: q.text.replace('מה <b>השטח</b> של הצורה? (המידות בס"מ)', 'זו תכנית של חדר (המידות במטרים). כמה מ"ר של <b>ריצוף</b> צריך לכל החדר?').replace('מה <b>ההיקף</b> של הצורה? (המידות בס"מ)', 'זו תכנית של חדר (המידות במטרים). כמה מטרים של <b>פס עץ</b> צריך מסביב לכל החדר?'), unit: q.unit === AP_CM2 ? 'מ"ר' : "מ'", exp: q.exp.replace(/סמ"ר/g, 'מ"ר').replace(/ס"מ/g, "מ'") };
 }
 const apAsQ = f => () => { const q = f(); return { type: 'num', text: q.text, fig: q.svg, ans: q.ans, unit: q.unit, hint: q.hint, exp: q.exp }; };
+// "שטחים מורכבים" כנושא במשחקים הכיתתיים (ג'פרדי, כיבוש שטחים, מיליונר קבוצתי) – כיתות ה'–ו'
+if (GRADE >= 5) TOPIC.composite = { id: 'composite', name: 'שטחים מורכבים', icon: '🧩', color: '#2f8f55', levels: {
+  1: [apAsQ(() => apLQ(false, false)), apAsQ(() => apLQ(false, false)), apAsQ(apFrameQ)],
+  2: [apAsQ(() => apLQ(false, true)), apAsQ(apRoomQ), apAsQ(apFrameQ), apAsQ(() => apUQ(false))],
+  3: [apAsQ(() => apUQ(false)), apAsQ(apPathQ), apAsQ(() => apLQ(true, true)), apAsQ(() => apUQ(true))]
+} };
+// בג'פרדי, כשבוחרים רק "שטחים מורכבים" – הלוח מתחלק ל-4 עמודות משלו
+if (GRADE >= 5) [
+  ['compL', 'צורת L', [() => apLQ(false, false)], [() => apLQ(false, false)], [() => apLQ(false, true)]],
+  ['compHide', 'צלעות חסרות', [() => apLQ(false, true)], [() => apLQ(false, true), apRoomQ], [() => apLQ(true, true), () => apUQ(true)]],
+  ['compU', 'צורת U', [() => apUQ(false)], [() => apUQ(false)], [() => apUQ(false), () => apUQ(true)]],
+  ['compGarden', 'גינות ובריכות', [apFrameQ], [apFrameQ, apPathQ], [apPathQ]]
+].forEach(([id, name, l1, l2, l3]) => { TOPIC[id] = { id, name, icon: '🧩', color: '#2f8f55', levels: { 1: l1.map(apAsQ), 2: l2.map(apAsQ), 3: l3.map(apAsQ) } }; });
+const gameTopics = () => TOPIC.composite ? [TOPIC.composite, ...TOPICS] : TOPICS;
+const topicBtns = attr => `<div class="actions" style="justify-content:center;margin:4px 0"><button type="button" class="ghost small" data-all="${attr}">לסמן הכול</button><button type="button" class="ghost small" data-none="${attr}">לנקות הכול</button></div>`;
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-all],[data-none]'); if (!b) return;
+  const attr = b.dataset.all || b.dataset.none, on = !!b.dataset.all;
+  document.querySelectorAll(`[data-${attr}]`).forEach(c => { if (c.type === 'checkbox') { c.checked = on; } });
+  if (attr === 'jtop' && on) [...document.querySelectorAll('[data-jtop]')].slice(6).forEach(c => { c.checked = false; });
+});
 // מוסיפים לנושא הגאומטריה (כיתות ה'–ו') שאלות על שטחים מורכבים ומחיי היום-יום
 if (GRADE >= 5 && TOPIC.geo) {
   TOPIC.geo.levels[2].push(apAsQ(() => apLQ(false, true)), apAsQ(() => apLQ(true, true)));
