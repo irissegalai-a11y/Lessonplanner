@@ -932,6 +932,26 @@
   .op-dots span.on { border-color: #1f1e1c; color: #1f1e1c; background: rgba(239,201,106,0.45); font-weight: 700; }
   .op-dots span.done { color: #1f1e1c; }
   .op-slide h2 { margin-top: 0; }
+  .cmp-big svg { max-width: min(100%, 420px) !important; height: auto; }
+  .cmp-way { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 6px 0; }
+  .cmp-way .cmp-fig { width: 220px; max-width: 100%; }
+  .cmp-ways { display: grid; gap: 6px; }
+  .cmp-ways .cmp-way .cmp-fig { width: 170px; }
+  .cmp-fig svg { width: 100%; height: auto; }
+  .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 22px; margin-top: 10px; }
+  .cmp-q { display: flex; gap: 8px; align-items: flex-start; break-inside: avoid; border-bottom: 1px dashed #bbb; padding-bottom: 8px; }
+  .cmp-q .cmp-fig { width: 215px; flex: none; }
+  .wskey .cmp-grid { grid-template-columns: 1fr; gap: 6px; }
+  .wskey .cmp-q { padding-bottom: 4px; }
+  .cmp-n { font-weight: 800; font-size: 1.1rem; min-width: 1.4em; }
+  .cmp-lines { display: grid; gap: 14px; flex: 1; padding-top: 8px; font-size: 0.95rem; }
+  .cmp-lines .wsline.long { min-width: 120px; }
+  .cmp-tickets { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 0; min-height: 250mm; }
+  .cmp-ticket { border: 1.5px dashed #888; padding: 10px 12px; display: grid; gap: 10px; align-content: start; font-size: 0.95rem; }
+  .cmp-ticket .cmp-fig { width: 160px; margin: auto; }
+  .cmp-th { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  @media screen and (max-width: 640px) { .cmp-grid, .cmp-tickets { grid-template-columns: 1fr; } }
+
   .op-src { margin-top: 14px; font-size: 0.85rem; color: #5f5a50; border-top: 1px dashed #cfc6b4; padding-top: 6px; }
   .op-src-s { font-size: 0.78rem; color: #8a8478; font-family: 'Assistant', sans-serif; font-weight: 400; }
   .op-big { font-size: 1.4em; font-weight: 700; }
@@ -1054,7 +1074,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כד</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כה</span></footer>
 
 <script>
 /* =========================================================
@@ -6984,6 +7004,7 @@ function home() {
         ${OP_SPECIAL.length ? `<section class="panel" data-panel="org" ${homeTab === 'org' ? '' : 'hidden'}>
           <h2>כרטיסיות לפי מארגן ההוראה</h2>
           <p class="race-how">פתיחים מוכנים להקרנה בתחילת השיעור – 4 שקפים בכל פעם, בנויים לפי המשימות במארגן ההוראה. בכל שקף קודם חושבים, ואז חושפים את התשובה. בכל לחיצה נוצרים מספרים חדשים.</p>
+          ${GRADE >= 5 ? `<button class="race-track op-special" id="cmpSheetGo" style="margin-bottom:12px"><span class="nm">🖨️ דף עבודה ופתקי יציאה – שטחים מורכבים</span><span class="best">להדפסה: 6 צורות על רשת משבצות (שתי דרכים לכל צורה), דף תשובות, ו-4 פתקי יציאה בעמוד</span></button>` : ''}
           <div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-org="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span><span class="op-src-s">מקור: ${t.src}</span></button>`).join('')}</div>
         </section>` : ''}
         <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
@@ -7012,6 +7033,7 @@ function home() {
   $('cityGo').onclick = () => cityHome();
   $('gbGo').onclick = gbHome;
   $('opGo').onclick = opHome;
+  if ($('cmpSheetGo')) $('cmpSheetGo').onclick = cmpSheetHome;
   app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { op = { topic: b.dataset.org, slides: opBuild(b.dataset.org), k: 0, show: false }; opDraw(); });
   $('warGo1').onclick = () => warHome('solo');
   $('warGo2').onclick = () => warHome('teams');
@@ -9820,6 +9842,102 @@ if (GRADE === 3) OP_SPECIAL.push(
   { id: 'time3', src: SRC3, name: 'מדידות זמן', desc: 'כמה זמן בערך, איזה סרט, מתי לצאת, כמה זמן רצה, מתי נגמר השיעור, בין שתי שעות', build: () => shuffle(OP3_TIME.slice()).slice(0, 4).map(f => f()) },
   { id: 'ord3', src: SRC3, name: 'סדר פעולות חשבון', desc: 'הטעות של יואב, המספר החסר, הוופלים של שביט, משחק הקליעה, מגיעים ל-4', build: () => shuffle(OP3_ORD.slice()).slice(0, 4).map(f => f()) }
 );
+
+/* ---------- שיעור צפייה: שטחים מורכבים – שלוש דרכים (פתיח להקרנה + דף עבודה ופתקי יציאה להדפסה) ---------- */
+const CMP_COL = ['rgba(127,168,214,0.55)', 'rgba(239,201,106,0.65)', 'rgba(157,178,122,0.6)'];
+const cmpFill = (x, y, w, h, c) => (X, Y) => `<rect x="${X(x)}" y="${Y(y)}" width="${X(x + w) - X(x)}" height="${Y(y + h) - Y(y)}" fill="${c}" stroke="${AP_INK}" stroke-width="1.4"/>`;
+// צורה מלבנית-מורכבת: נקודות, צלעות עם מספרים, שטח, ושלוש דרכים (חלוקה, חלוקה אחרת, השלמה)
+function cmpShape(kind) {
+  if (kind === 'L') {
+    const W = R(7, 11), H = R(6, 9), cw = R(2, W - 4), ch = R(2, H - 3);
+    const pts = [[cw, 0], [W, 0], [W, H], [0, H], [0, ch], [cw, ch]];
+    const A = W * H - cw * ch;
+    return { kind, W, H, pts, A, labels: [{ i: 1, t: H }, { i: 2, t: W }, { i: 4, t: cw }, { i: 5, t: ch }],
+      missing: `הצלע העליונה: ${M(`${W} - ${cw} = ${W - cw}`)} · הצלע השמאלית: ${M(`${H} - ${ch} = ${H - ch}`)}`,
+      ways: [
+        { name: 'חותכים לרוחב', rects: [[cw, 0, W - cw, ch], [0, ch, W, H - ch]], expr: `${W - cw} × ${ch} + ${W} × ${H - ch} = ${(W - cw) * ch} + ${W * (H - ch)} = ${A}` },
+        { name: 'חותכים לאורך', rects: [[0, ch, cw, H - ch], [cw, 0, W - cw, H]], expr: `${cw} × ${H - ch} + ${W - cw} × ${H} = ${cw * (H - ch)} + ${(W - cw) * H} = ${A}` },
+        { name: 'משלימים למלבן ומחסירים', cut: [[0, 0, cw, ch]], expr: `${W} × ${H} - ${cw} × ${ch} = ${W * H} - ${cw * ch} = ${A}` }
+      ] };
+  }
+  if (kind === 'U') {
+    const W = R(9, 12), H = R(6, 9), a = R(2, 4), nw = R(2, W - a - 2), nd = R(2, H - 3), b = W - a - nw;
+    const pts = [[0, 0], [a, 0], [a, nd], [a + nw, nd], [a + nw, 0], [W, 0], [W, H], [0, H]];
+    const A = W * H - nw * nd;
+    return { kind, W, H, pts, A, labels: [{ i: 0, t: a }, { i: 1, t: nd }, { i: 4, t: b }, { i: 6, t: W }, { i: 7, t: H }],
+      missing: `רוחב החריץ: ${M(`${W} - ${a} - ${b} = ${nw}`)} · הצלע הימנית שווה לשמאלית: ${M(H)}`,
+      ways: [
+        { name: 'שלושה מלבנים לאורך', rects: [[0, 0, a, H], [a, nd, nw, H - nd], [a + nw, 0, b, H]], expr: `${a} × ${H} + ${nw} × ${H - nd} + ${b} × ${H} = ${a * H} + ${nw * (H - nd)} + ${b * H} = ${A}` },
+        { name: 'רצועה למטה ושני "עמודים"', rects: [[0, nd, W, H - nd], [0, 0, a, nd], [a + nw, 0, b, nd]], expr: `${W} × ${H - nd} + ${a} × ${nd} + ${b} × ${nd} = ${W * (H - nd)} + ${a * nd} + ${b * nd} = ${A}` },
+        { name: 'משלימים למלבן ומחסירים', cut: [[a, 0, nw, nd]], expr: `${W} × ${H} - ${nw} × ${nd} = ${W * H} - ${nw * nd} = ${A}` }
+      ] };
+  }
+  // מדרגות: שלוש עמודות בגבהים יורדים
+  const w1 = R(2, 4), w2 = R(2, 4), w3 = R(2, 4), h3 = R(2, 3), h2 = h3 + R(2, 3), h1 = h2 + R(2, 3), W = w1 + w2 + w3, H = h1;
+  const pts = [[0, 0], [w1, 0], [w1, h1 - h2], [w1 + w2, h1 - h2], [w1 + w2, h1 - h3], [W, h1 - h3], [W, h1], [0, h1]];
+  const A = w1 * h1 + w2 * h2 + w3 * h3;
+  return { kind: 'S', W, H, pts, A, labels: [{ i: 0, t: w1 }, { i: 1, t: h1 - h2 }, { i: 4, t: w3 }, { i: 5, t: h3 }, { i: 6, t: W }, { i: 7, t: h1 }],
+    missing: `רוחב המדרגה האמצעית: ${M(`${W} - ${w1} - ${w3} = ${w2}`)} · גובהה: ${M(`${h1} - ${h1 - h2} = ${h2}`)}`,
+    ways: [
+      { name: 'שלוש עמודות', rects: [[0, 0, w1, h1], [w1, h1 - h2, w2, h2], [w1 + w2, h1 - h3, w3, h3]], expr: `${w1} × ${h1} + ${w2} × ${h2} + ${w3} × ${h3} = ${w1 * h1} + ${w2 * h2} + ${w3 * h3} = ${A}` },
+      { name: 'שלוש שורות', rects: [[0, h1 - h3, W, h3], [0, h1 - h2, w1 + w2, h2 - h3], [0, 0, w1, h1 - h2]], expr: `${W} × ${h3} + ${w1 + w2} × ${h2 - h3} + ${w1} × ${h1 - h2} = ${W * h3} + ${(w1 + w2) * (h2 - h3)} + ${w1 * (h1 - h2)} = ${A}` },
+      { name: 'משלימים למלבן ומחסירים', cut: [[w1, 0, w2, h1 - h2], [w1 + w2, 0, w3, h1 - h3]], expr: `${W} × ${H} - ${w2} × ${h1 - h2} - ${w3} × ${h1 - h3} = ${W * H} - ${w2 * (h1 - h2)} - ${w3 * (h1 - h3)} = ${A}` }
+    ] };
+}
+// ציור: צורה רגילה, או צורה עם דרך מסוימת צבועה
+function cmpSVG(s, way, o = {}) {
+  const u = o.u || Math.min(30, (o.max || 300) / Math.max(s.W, s.H));
+  if (!way) return apSVG(s.pts, { u, grid: o.grid, labels: s.labels });
+  if (way.cut) return apSVG(s.pts, { u, grid: o.grid, labels: s.labels, fill: CMP_COL[0], extraPts: [[0, 0], [s.W, s.H]], under: way.cut.map(r => apRect(r[0], r[1], r[2], r[3], AP_CUT)) });
+  return apSVG(s.pts, { u, grid: o.grid, labels: s.labels, fill: 'none', over: way.rects.map((r, k) => cmpFill(r[0], r[1], r[2], r[3], CMP_COL[k % 3])) });
+}
+const cmpWayHTML = (s, w, o) => `<div class="cmp-way"><div class="cmp-fig">${cmpSVG(s, w, o)}</div><div><b>${w.name}</b><br>${M(w.expr)} סמ"ר</div></div>`;
+
+// ---- פתיח להקרנה: אותה צורה, שלוש דרכים ----
+function cmpOpener() {
+  const s = cmpShape('L'), t = cmpShape(pick(['U', 'S']));
+  const fig = `<div class="center cmp-big">${cmpSVG(s, null, { max: 360 })}</div>`;
+  return [
+    { title: 'כמה דרכים?', q: `${fig}<p>המידות בס"מ. <b>איך הייתם מחשבים את השטח?</b> אל תחשבו עדיין – תארו דרך. מי מצא דרך אחרת?</p>`, a: `לפני שמחשבים – מוצאים את הצלעות החסרות!<br>${s.missing}` },
+    { title: 'דרך ראשונה: חותכים', q: `${fig}<p>חתכו את הצורה <b>לשני מלבנים</b>. מה השטח?</p>`, a: cmpWayHTML(s, s.ways[0], { max: 300 }) },
+    { title: 'דרך שנייה: חותכים אחרת', q: `${fig}<p>אפשר לחתוך <b>בכיוון אחר</b>? האם השטח ישתנה?</p>`, a: cmpWayHTML(s, s.ways[1], { max: 300 }) + `<p>💡 אותו שטח – ${M(s.A)} סמ"ר! החיתוך לא משנה את השטח.</p>` },
+    { title: 'דרך שלישית: משלימים', q: `${fig}<p>דמיינו <b>מלבן גדול</b> סביב הצורה. מה חסר? איך זה עוזר?</p>`, a: cmpWayHTML(s, s.ways[2], { max: 300 }) + `<p>💡 שלוש דרכים – אותה תשובה. בוחרים את הדרך הקצרה ביותר לצורה!</p>` },
+    { title: 'אתגר: איזו דרך הכי קצרה?', q: `<div class="center cmp-big">${cmpSVG(t, null, { max: 360 })}</div><p>המידות בס"מ. <b>באיזו דרך הכי כדאי לחשב?</b> למה?</p>`, a: `<div class="cmp-ways">${t.ways.map(w => cmpWayHTML(t, w, { max: 210 })).join('')}</div><p>💡 כשחסרה "פינה" או "חריץ" – ההשלמה בדרך כלל קצרה יותר.</p>` }
+  ];
+}
+
+// ---- דף עבודה + דף תשובות + פתקי יציאה להדפסה ----
+function cmpSheetHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('cmpsheet');
+  const shapes = ['L', 'U', 'S', 'L', 'U', 'S'].map(cmpShape), ticket = cmpShape(pick(['L', 'U']));
+  const head = t => `<div class="wshead"><h1>${t}</h1><div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>`;
+  const ws = `<section class="ws-page cmp-sheet">${head('שטחים מורכבים – שתי דרכים')}
+      <p>בכל צורה: <b>מצאו את השטח בשתי דרכים שונות</b>. סמנו בצבע את החלוקה, וכתבו תרגיל לכל דרך. המידות בס"מ.</p>
+      <div class="cmp-grid">${shapes.map((s, i) => `<div class="cmp-q"><div class="cmp-n">${i + 1}</div><div class="cmp-fig">${cmpSVG(s, null, { max: 230, grid: true })}</div>
+        <div class="cmp-lines"><div>דרך א': <span class="wsline long"></span></div><div>דרך ב': <span class="wsline long"></span></div><div>השטח: <span class="wsline"></span> סמ"ר</div></div></div>`).join('')}</div>
+    </section>`;
+  const key = `<section class="ws-page cmp-sheet wskey"><h2>🔑 דף תשובות – שטחים מורכבים</h2>
+      <div class="cmp-grid">${shapes.map((s, i) => `<div class="cmp-q"><div class="cmp-n">${i + 1}</div><div><b>השטח: ${M(s.A)} סמ"ר</b><div class="small">${s.missing}</div>
+        ${s.ways.map(w => `<div class="small">• <b>${w.name}:</b> ${M(w.expr)}</div>`).join('')}</div></div>`).join('')}</div>
+      <h3>פתק יציאה</h3><p><b>השטח: ${M(ticket.A)} סמ"ר</b> · ${ticket.missing}</p>${ticket.ways.map(w => `<div class="small">• <b>${w.name}:</b> ${M(w.expr)}</div>`).join('')}
+    </section>`;
+  const one = `<div class="cmp-ticket"><div class="cmp-th"><b>פתק יציאה – שטחים מורכבים</b><span>שם: <span class="wsline"></span></span></div>
+      <div class="cmp-fig">${cmpSVG(ticket, null, { max: 150, grid: true })}</div>
+      <div>1. מה השטח? <span class="wsline"></span> סמ"ר (המידות בס"מ)</div>
+      <div>2. באיזו דרך בחרת? למה? <span class="wsline long"></span></div><div><span class="wsline long" style="width:100%"></span></div></div>`;
+  const tickets = `<section class="ws-page cmp-sheet"><div class="cmp-tickets">${one.repeat(4)}</div></section>`;
+  app.innerHTML = `
+    <div class="topbar noprint"><span class="title">${ic('printer')} דף עבודה ופתקי יציאה – שטחים מורכבים</span><span class="toollinks"><button class="secondary" id="cmpBack">${ic('home')} חזרה</button></span></div>
+    <div class="card noprint"><p>3 עמודים: <b>דף עבודה</b> (6 צורות על רשת משבצות), <b>דף תשובות</b> עם שלוש דרכים לכל צורה, ו<b>פתקי יציאה</b> – 4 בעמוד, לגזור. כל לחיצה על "דף חדש" יוצרת צורות ומידות חדשות.</p>
+      <div class="actions"><button id="cmpPrint" class="race-go">${ic('printer')} הדפסה</button><button id="cmpNew" class="secondary">דף חדש</button></div>
+      <p class="small muted">טיפ: בחלון ההדפסה אפשר לבחור אילו עמודים להדפיס – למשל רק את פתקי היציאה (עמוד 3).</p></div>
+    <div id="wsout">${ws}${key}${tickets}</div>`;
+  $('cmpBack').onclick = () => { homeTab = 'org'; home(); };
+  $('cmpPrint').onclick = () => window.print();
+  $('cmpNew').onclick = cmpSheetHome;
+  window.scrollTo(0, 0);
+}
+if (GRADE >= 5) OP_SPECIAL.push({ id: 'cmp3', src: 'הוכן במיוחד לשיעור "שטחים מורכבים" – שלוש דרכים לחישוב אותו שטח', name: 'שטחים מורכבים – שלוש דרכים', desc: 'אותה צורה, שלוש דרכים: חותכים, חותכים אחרת, משלימים למלבן. ובסוף – איזו דרך הכי קצרה?', build: cmpOpener });
 
 function opHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('op');
