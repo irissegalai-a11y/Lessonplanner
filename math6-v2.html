@@ -1054,7 +1054,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כב</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כג</span></footer>
 
 <script>
 /* =========================================================
@@ -9096,12 +9096,6 @@ function apFrameQ() {
   const svg = apSVG(pts, { u, labels: [{ i: 2, t: W }, { i: 1, t: H }, { at: [x + a / 2, y + b + 0.55], t: a }, { at: [x + a + 0.55, y + b / 2], t: b }], over: [(X, Y) => `<rect x="${X(x)}" y="${Y(y)}" width="${X(x + a) - X(x)}" height="${Y(y + b) - Y(y)}" fill="#fffdf8" stroke="${AP_INK}" stroke-width="2.2"/>`] });
   return { text: 'במרכז הגינה יש בריכה (המלבן הלבן). מה <b>השטח הצבוע</b> של הגינה? (המידות במטרים)', svg, ans: W * H - a * b, unit: 'מ"ר', hint: 'שטח כל הגינה פחות שטח הבריכה.', exp: `${M(`${W} × ${H} - ${a} × ${b} = ${W * H - a * b}`)} מ"ר.` };
 }
-function apCircleQ() {
-  const r = R(1, 10), k = R(0, 2);
-  const svg = `<svg class="fig ap-fig" viewBox="0 0 200 200" width="200" height="200" aria-hidden="true"><circle cx="100" cy="100" r="80" fill="${AP_FILL}" stroke="${AP_INK}" stroke-width="2.6"/><line x1="100" y1="100" x2="180" y2="100" stroke="#2f5bd3" stroke-width="2.2"/><circle cx="100" cy="100" r="3.5" fill="${AP_INK}"/><text x="140" y="90" text-anchor="middle" font-size="17" font-weight="700" fill="#2f5bd3">${r}</text></svg>`;
-  if (k === 0) return { text: `הרדיוס של המעגל הוא ${M(r)} ס"מ. מה <b>השטח</b> שלו? (השתמשו ב-${M('π = 3.14')})`, svg, ans: rnd(3.14 * r * r), unit: AP_CM2, hint: 'שטח עיגול = π × רדיוס × רדיוס.', exp: `${M(`3.14 × ${r} × ${r} = ${fmt(rnd(3.14 * r * r))}`)} סמ"ר.` };
-  return { text: `הרדיוס של המעגל הוא ${M(r)} ס"מ. מה <b>ההיקף</b> שלו? (השתמשו ב-${M('π = 3.14')})`, svg, ans: rnd(2 * 3.14 * r), unit: AP_CM, hint: 'היקף מעגל = 2 × π × רדיוס (או π × קוטר).', exp: `${M(`2 × 3.14 × ${r} = ${fmt(rnd(2 * 3.14 * r))}`)} ס"מ.` };
-}
 // 10 אתגרים, מהקל לקשה, לפי הכיתה
 function apPlan() {
   const g = GRADE, b = () => Math.random() < 0.5;
@@ -9113,7 +9107,7 @@ function apPlan() {
   const hard = g === 1 ? [() => apGridQ(R(8, 12), false)] : g === 2 ? [() => apGridQ(R(7, 11), true)]
     : g === 3 ? [() => apLQ(false, false), () => apRectQ(10, true)] : g === 4 ? [() => apLQ(b(), false), () => apUQ(false), () => apReverseQ()]
     : g === 5 ? [() => apUQ(b()), () => apLQ(b(), true), () => apParQ(b()), () => apTriQ(), () => apFrameQ()]
-    : [() => apUQ(b()), () => apTrapQ(), () => apHouseQ(), () => apFrameQ(), () => apCircleQ(), () => apLQ(b(), true)];
+    : [() => apUQ(b()), () => apTrapQ(), () => apHouseQ(), () => apFrameQ(), () => apLQ(b(), true)];
   const out = [];
   for (let i = 0; i < 10; i++) out.push(pick(i < 4 ? easy : i < 7 ? mid : hard)());
   return out;
@@ -9781,7 +9775,7 @@ if (GRADE === 4) OP_SPECIAL.push(
 );
 
 /* ---------- פתיחים מוכנים לכיתה ו' – לפי מאגר המשימות לכיתה ו' ---------- */
-const OP6_PI = 3.14, op6r = v => fmt(Math.round(v * 100) / 100);
+const op6r = v => fmt(Math.round(v * 100) / 100);
 const boxSVG = (a, b, c, labels) => { const k = 14, dx = b * k * 0.5, dy = b * k * 0.35, W = a * k, H = c * k; const f = [[0, dy], [W, dy], [W, dy + H], [0, dy + H]], t = [[0, dy], [dx, 0], [W + dx, 0], [W, dy]], s = [[W, dy], [W + dx, 0], [W + dx, H], [W, dy + H]]; const P = pts => pts.map(p => p.join(',')).join(' '); return `<svg class="fig" viewBox="-20 -20 ${W + dx + 60} ${H + dy + 50}" width="${W + dx + 60}" height="${H + dy + 50}" aria-hidden="true" style="max-width:300px"><polygon points="${P(t)}" fill="rgba(127,168,214,0.35)" stroke="#1f1e1c" stroke-width="2"/><polygon points="${P(s)}" fill="rgba(127,168,214,0.55)" stroke="#1f1e1c" stroke-width="2"/><polygon points="${P(f)}" fill="rgba(127,168,214,0.25)" stroke="#1f1e1c" stroke-width="2"/><text x="${W / 2}" y="${dy + H + 22}" text-anchor="middle" font-size="15" font-weight="700">${labels[0]}</text><text x="${W + dx / 2 + 14}" y="${dy / 2 + H + 18}" font-size="15" font-weight="700">${labels[1]}</text><text x="-6" y="${dy + H / 2}" text-anchor="end" font-size="15" font-weight="700">${labels[2]}</text></svg>`; };
 const OP6_UNITS = [
   () => { const r = () => { const a = R(1, 15), b = R(5, 140), c = a + pick([-1, 0, 1]), d = R(5, 140); return [a, b, c < 1 ? 1 : c, d]; }; const mt = a => a === 1 ? 'מטר אחד' : `${a} מטרים`; const rows = [r(), r()]; const sym = (x, y) => x > y ? '>' : x < y ? '<' : '='; return { title: 'סמנו < או > או =', q: `<ol class="op-list">${rows.map(([a, b, c, d]) => `<li>${mt(a)} ו-${b} ס"מ <b>___</b> ${mt(c)} ו-${d} ס"מ</li>`).join('')}</ol><p class="muted">שימו לב – לפעמים יש יותר מ-100 ס"מ!</p>`, a: `<ol class="op-list">${rows.map(([a, b, c, d]) => { const x = a * 100 + b, y = c * 100 + d; return `<li>בס"מ: <b>${M(`${x} ${sym(x, y)} ${y}`)}</b></li>`; }).join('')}</ol>💡 כדאי להמיר הכול לאותה יחידה – למשל לס"מ.` }; },
@@ -9813,20 +9807,12 @@ const OP6_VOL = [
   () => { const W = pick([20, 24, 30]), H = pick([16, 20, 24]), s = R(2, 5); return { title: 'תיבה מדף נייר', q: `<p>מדף נייר של <b>${W} × ${H} ס"מ</b> חותכים ריבועים של <b>${s} × ${s}</b> ס"מ מכל פינה, ומקפלים לתיבה פתוחה.</p><p><b>מה הנפח של התיבה?</b> ומה קורה לנפח אם חותכים ריבועים גדולים יותר?</p>`, a: `בסיס: ${M(`(${W} - ${2 * s}) × (${H} - ${2 * s}) = ${W - 2 * s} × ${H - 2 * s}`)}, גובה ${s}.<br>נפח: ${M(`${W - 2 * s} × ${H - 2 * s} × ${s} = ${(W - 2 * s) * (H - 2 * s) * s}`)} סמ"ק.<br>💡 ריבוע גדול יותר = תיבה גבוהה יותר אבל בסיס קטן יותר. נסו ${s + 1}!` }; },
   () => { const ml = R(510, 990), out = pick([500, 250, 750].filter(x => x < ml)); return { title: 'קרטון החלב', q: `<p>בקרטון היו <b>${M(ml)} מיליליטרים</b> חלב. מזגו ממנו <b>${out === 500 ? 'חצי ליטר' : out === 250 ? 'רבע ליטר' : 'שלושה רבעים ליטר'}</b>.</p><p><b>כמה מיליליטרים נשארו?</b></p>`, a: `${out === 500 ? 'חצי' : out === 250 ? 'רבע' : '¾'} ליטר = ${out} מ"ל. ${M(`${ml} - ${out} = ${ml - out}`)} מ"ל.` }; }
 ];
-const OP6_CIRC = [
-  () => { const a = pick([10, 20, 40]), r = a / 2; const svg = `<svg class="fig" viewBox="0 0 160 160" width="160" height="160" aria-hidden="true"><rect x="10" y="10" width="140" height="140" fill="rgba(31,30,28,0.25)" stroke="#1f1e1c" stroke-width="2.5"/><circle cx="80" cy="80" r="70" fill="#fffdf8" stroke="#1f1e1c" stroke-width="2.5"/><text x="80" y="8" text-anchor="middle" font-size="14" font-weight="700">${a}</text></svg>`; return { title: 'מעגל בתוך ריבוע', q: `${svg}<p>מעגל חסום בריבוע שצלעו <b>${M(a)} ס"מ</b>. (π = 3.14)</p><ol class="op-list"><li>מה שטח הריבוע?</li><li>מה היקף המעגל?</li><li>מה שטח העיגול?</li><li>מה השטח האפור?</li></ol>`, a: `<ol class="op-list"><li>${M(`${a} × ${a} = ${a * a}`)} סמ"ר.</li><li>הקוטר = ${a}: ${M(`3.14 × ${a} = ${op6r(OP6_PI * a)}`)} ס"מ.</li><li>${M(`3.14 × ${r} × ${r} = ${op6r(OP6_PI * r * r)}`)} סמ"ר.</li><li>${M(`${a * a} - ${op6r(OP6_PI * r * r)} = ${op6r(a * a - OP6_PI * r * r)}`)} סמ"ר.</li></ol>` }; },
-  () => { const d = pick([14, 18, 20, 24, 30]), c = OP6_PI * d; const opts = [rnd(c / 2), rnd(c), rnd(OP6_PI * d * d / 4), rnd(c * 2), rnd(d * 2)].map(v => Math.round(v)); const uniq = [...new Set(opts)]; return { title: 'הסרט סביב הכובע', q: `<p>החלק העליון של כובע הוא עיגול שקוטרו <b>${M(d)} ס"מ</b>. סביבו קשור סרט.</p><p><b>מה המספר הקרוב ביותר לאורך הסרט?</b></p><div class="op-nums">${shuffle(uniq).map(v => `<span>${M(v)}</span>`).join('')}</div>`, a: `אורך הסרט = היקף המעגל: ${M(`3.14 × ${d} ≈ ${op6r(c)}`)} ← <b>${M(Math.round(c))}</b> ס"מ.<br>💡 אומדן מהיר: ההיקף קצת יותר מפי 3 מהקוטר.` }; },
-  () => { const r = pick([3, 3.5, 4, 5]), base = OP6_PI * r * r; return { title: 'פחית רסק עגבניות', q: `<p>לפחית רדיוס בסיס של <b>${M(op6r(r))} ס"מ</b> וגובה <b>10 ס"מ</b>.</p><ol class="op-list"><li>מה שטח בסיס הפחית?</li><li>אורזים <b>12 פחיות</b> בתיבה – 3 שורות של 4 (מבט על). מה אורכי הצלעות של בסיס התיבה?</li></ol>`, a: `<ol class="op-list"><li>${M(`3.14 × ${op6r(r)} × ${op6r(r)} = ${op6r(base)}`)} סמ"ר.</li><li>קוטר פחית: ${M(op6r(2 * r))}. אורך: ${M(`4 × ${op6r(2 * r)} = ${op6r(8 * r)}`)}, רוחב: ${M(`3 × ${op6r(2 * r)} = ${op6r(6 * r)}`)} ס"מ.</li></ol>` }; },
-  () => { const r = pick([3, 4, 5, 6]); return { title: 'עיגול שחתכו ל-6', q: `<p>עיגול ברדיוס <b>${M(r)} ס"מ</b> חתכו ל-<b>6 גזרות שוות</b>, וסידרו אותן מחדש לסירוגין (אחת למעלה, אחת למטה) – מתקבלת צורה דומה למקבילית.</p><ol class="op-list"><li>מה היקף הצורה החדשה?</li><li>מה שטחה?</li></ol>`, a: `<ol class="op-list"><li>כל הקשתות (היקף המעגל) + שני רדיוסים בצדדים: ${M(`2 × 3.14 × ${r} + 2 × ${r} = ${op6r(2 * OP6_PI * r + 2 * r)}`)} ס"מ.</li><li>אותו שטח כמו העיגול – לא הוספנו ולא הורדנו: ${M(`3.14 × ${r} × ${r} = ${op6r(OP6_PI * r * r)}`)} סמ"ר.</li></ol>` }; },
-  () => { const r = pick([2, 2.5, 3, 3.5, 4]); const svg = `<svg class="fig" viewBox="0 0 140 140" width="140" height="140" aria-hidden="true"><rect x="10" y="10" width="120" height="120" fill="none" stroke="#1f1e1c" stroke-width="2.5"/>${[[40, 40], [100, 40], [40, 100], [100, 100]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="30" fill="rgba(127,168,214,0.4)" stroke="#1f1e1c" stroke-width="2"/>`).join('')}</svg>`; return { title: 'ארבעה עיגולים בריבוע', q: `${svg}<p>בריבוע <b>4 עיגולים חופפים</b>, והרדיוס של כל אחד <b>${M(op6r(r))} ס"מ</b>.</p><p><b>מה שטח הריבוע?</b></p>`, a: `צלע הריבוע = 2 קטרים = 4 רדיוסים: ${M(`4 × ${op6r(r)} = ${op6r(4 * r)}`)}. שטח: ${M(`${op6r(4 * r)} × ${op6r(4 * r)} = ${op6r(16 * r * r)}`)} סמ"ר.` }; }
-];
 const SRC6 = 'מארגן ההוראה תשפ"ו – מאגר המשימות לכיתה ו\' (כולל דפי חודש ויחידות הוראה מתוקשבות)';
 if (GRADE === 6) OP_SPECIAL.push(
   { id: 'u6', src: SRC6, name: 'מידות והמרות', desc: 'מטרים וס"מ, ק"ג וגרם, ליטר וסמ"ק, מה הכי משתלם, מי צודק', build: () => shuffle(OP6_UNITS.slice()).slice(0, 4).map(f => f()) },
   { id: 'alg6', src: SRC6, name: 'חשיבה אלגברית ותובנה מספרית', desc: 'מחירי רובוטים, דובדבנים מהסוף, דגם חוזר, זוגיות, הגדלה פי 6, גילים', build: () => shuffle(OP6_ALG.slice()).slice(0, 4).map(f => f()) },
   { id: 'data6', src: SRC6, name: 'נתונים, אחוזים וממוצע (כיתה ו\')', desc: 'חלוקה ביחס, ממוצע של עוקבים, נכון/לא נכון, טבלת אחוזים ושברים, חוגים', build: () => shuffle(OP6_DATA.slice()).slice(0, 4).map(f => f()) },
-  { id: 'vol6', src: SRC6, name: 'נפח – תיבה וקובייה', desc: 'אקווריום, קובייה ותיבה באותו נפח, ממלאים 8 פעמים, תיבה מדף נייר, מ"ל', build: () => shuffle(OP6_VOL.slice()).slice(0, 4).map(f => f()) },
-  { id: 'circ6', src: SRC6, name: 'מעגל ועיגול', desc: 'מעגל בריבוע, סרט סביב כובע, פחית, עיגול שחתכו ל-6, ארבעה עיגולים', build: () => shuffle(OP6_CIRC.slice()).slice(0, 4).map(f => f()) }
+  { id: 'vol6', src: SRC6, name: 'נפח – תיבה וקובייה', desc: 'אקווריום, קובייה ותיבה באותו נפח, ממלאים 8 פעמים, תיבה מדף נייר, מ"ל', build: () => shuffle(OP6_VOL.slice()).slice(0, 4).map(f => f()) }
 );
 
 /* ---------- פתיחים מוכנים לכיתה ג' – לפי מאגר המשימות לכיתה ג' ---------- */
