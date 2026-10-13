@@ -1074,7 +1074,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כז</span></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 כח</span></footer>
 
 <script>
 /* =========================================================
@@ -6972,57 +6972,25 @@ function home() {
         </section>
         <section class="panel" data-panel="class" ${homeTab === 'class' ? '' : 'hidden'}>
           <h2>בכיתה – מקרינים על הלוח</h2>
-          <p class="race-how">כל מה שצריך לשיעור בכיתה במקום אחד: פתיח, משחק קבוצתי, דפים להדפסה וכרטיס יציאה. מומלץ ללחוץ "מסך מלא" בזמן ההקרנה.</p>
-          <h3 class="games-sub">1. פותחים שיעור</h3>
-          <button class="game-card" id="opGo">
+          <button class="game-card" id="clsOpen">
             <span class="gc-ic" style="--gw:rgba(239,201,106,0.7)">${ic('bulb')}</span>
             <span class="gc-nm">פתיח שיעור</span>
-            <span class="gc-ds">4 שקפים לתחילת השיעור לפי נושא: חימום, מצאו את הטעות, איזה לא שייך, ואתגר.</span>
+            <span class="gc-ds">שקפים לתחילת השיעור – לפי נושא או לפי מארגן ההוראה.</span>
           </button>
-          ${OP_SPECIAL.length ? `<h3 class="games-sub">פתיחים לפי מארגן ההוראה</h3>
-          <div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-org="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span><span class="op-src-s">מקור: ${t.src}</span></button>`).join('')}</div>` : ''}
-          <h3 class="games-sub">2. משחקים לכל הכיתה</h3>
-          <button class="game-card" id="jeoGo">
+          <button class="game-card" id="clsGames">
             <span class="gc-ic" style="--gw:rgba(217,138,154,0.6)">${ic('grid')}</span>
-            <span class="gc-nm">ג'פרדי כיתתי</span>
-            <span class="gc-ds">משחק קבוצות לכל הכיתה, על כל הנושאים. מקרינים על הלוח.</span>
+            <span class="gc-nm">משחק לכל הכיתה</span>
+            <span class="gc-ds">ג'פרדי, כיבוש שטחים, מיליונר, מלחמה ובינגו – בקבוצות.</span>
           </button>
-          <button class="game-card" id="warGo2">
-            <span class="gc-ic" style="--gw:rgba(217,72,43,0.45)">${ic('cards')}</span>
-            <span class="gc-nm">מלחמת תרגילים – שתי קבוצות</span>
-            <span class="gc-ds">קבוצה מול קבוצה: כל סיבוב קבוצה אחרת מחליטה איזה קלף גדול יותר.</span>
-          </button>
-          <button class="game-card" id="cqGo0">
-            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('flag')}</span>
-            <span class="gc-nm">כיבוש שטחים</span>
-            <span class="gc-ds">עד 6 קבוצות על מפה. עונים נכון – כובשים משבצת, ואפשר גם לתקוף!</span>
-          </button>
-          <button class="game-card" id="mtGo0">
-            <span class="gc-ic" style="--gw:rgba(226,179,87,0.75)">${ic('star')}</span>
-            <span class="gc-nm">מיליונר קבוצתי</span>
-            <span class="gc-ds">2–6 קבוצות עונות על אותן שאלות – כל קבוצה מטפסת בסולם שלה עד מיליון!</span>
-          </button>
-          <button class="game-card" id="bingoGo">
-            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('grid')}</span>
-            <span class="gc-nm">בינגו כיתתי</span>
-            <span class="gc-ds">כל תלמיד ממלא לוח במחברת, ועל המסך מופיעים תרגילים. בלי הדפסה!</span>
-          </button>
-          <h3 class="games-sub">3. דפים להדפסה לשיעור</h3>
-          ${GRADE >= 5 ? `<button class="game-card" id="cmpSheetGo">
+          <button class="game-card" id="clsPrint">
             <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('printer')}</span>
-            <span class="gc-nm">שטחים מורכבים – דף עבודה ופתקי יציאה</span>
-            <span class="gc-ds">6 צורות על רשת משבצות (שתי דרכים לכל צורה), דף תשובות, ו-4 פתקי יציאה בעמוד.</span>
-          </button>` : ''}
-          <a class="game-card" href="${gq('print')}" style="text-decoration:none;color:inherit">
-            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('printer')}</span>
-            <span class="gc-nm">דפי תרגול ומבחנים לפי נושא</span>
-            <span class="gc-ds">בוחרים נושאים ורמה – ומקבלים דף להדפסה עם דף תשובות.</span>
-          </a>
-          <h3 class="games-sub">4. סוף השיעור</h3>
+            <span class="gc-nm">דפים להדפסה</span>
+            <span class="gc-ds">דפי עבודה, דפי תשובות ופתקי יציאה.</span>
+          </button>
           <button class="game-card" id="exitGo2">
             <span class="gc-ic" style="--gw:rgba(164,140,201,0.6)">${ic('clipboard')}</span>
             <span class="gc-nm">כרטיס יציאה</span>
-            <span class="gc-ds">3 שאלות על מה שלמדנו היום – התלמידים עונים והתוצאה נשלחת אלייך.</span>
+            <span class="gc-ds">3 שאלות בסוף השיעור – התוצאה נשלחת אלייך.</span>
           </button>
         </section>
         <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
@@ -7044,19 +7012,14 @@ function home() {
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
   $('raceGo').onclick = () => raceHome();
   $('memGo').onclick = () => memHome();
-  $('jeoGo').onclick = () => jeoHome();
   $('milGo').onclick = () => milHome();
-  $('mtGo0').onclick = () => milTeamHome();
-  $('cqGo0').onclick = () => cqHome();
   $('cityGo').onclick = () => cityHome();
   $('gbGo').onclick = gbHome;
-  $('opGo').onclick = opHome;
-  if ($('cmpSheetGo')) $('cmpSheetGo').onclick = cmpSheetHome;
-  if ($('exitGo2')) $('exitGo2').onclick = exitHome;
-  app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { op = { topic: b.dataset.org, slides: opBuild(b.dataset.org), k: 0, show: false }; opDraw(); });
+  $('exitGo2').onclick = exitHome;
+  $('clsOpen').onclick = () => classSub('open');
+  $('clsGames').onclick = () => classSub('games');
+  $('clsPrint').onclick = () => classSub('print');
   $('warGo1').onclick = () => warHome('solo');
-  $('warGo2').onclick = () => warHome('teams');
-  $('bingoGo').onclick = () => bingoHome();
   $('tfGo0').onclick = () => tfHome();
   if ($('todayGo')) $('todayGo').onclick = sug.go;
   $('calmBtn').onclick = () => {
@@ -9951,12 +9914,71 @@ function cmpSheetHome() {
       <div class="actions"><button id="cmpPrint" class="race-go">${ic('printer')} הדפסה</button><button id="cmpNew" class="secondary">דף חדש</button></div>
       <p class="small muted">טיפ: בחלון ההדפסה אפשר לבחור אילו עמודים להדפיס – למשל רק את פתקי היציאה (עמוד 3).</p></div>
     <div id="wsout">${ws}${key}${tickets}</div>`;
-  $('cmpBack').onclick = () => { homeTab = 'class'; home(); };
+  $('cmpBack').onclick = () => classSub('print');
   $('cmpPrint').onclick = () => window.print();
   $('cmpNew').onclick = cmpSheetHome;
   window.scrollTo(0, 0);
 }
 if (GRADE >= 5) OP_SPECIAL.push({ id: 'cmp3', src: 'הוכן במיוחד לשיעור "שטחים מורכבים" – שלוש דרכים לחישוב אותו שטח', name: 'שטחים מורכבים – שלוש דרכים', desc: 'אותה צורה, שלוש דרכים: חותכים, חותכים אחרת, משלימים למלבן. ובסוף – איזו דרך הכי קצרה?', build: cmpOpener });
+
+// לשונית "בכיתה": כל כפתור פותח מסך קטן משלו, כדי שהלשונית תישאר פשוטה
+function classSub(kind) {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('cls');
+  const T = { open: ['bulb', 'פתיח שיעור'], games: ['grid', 'משחק לכל הכיתה'], print: ['printer', 'דפים להדפסה'] }[kind];
+  const body = kind === 'open' ? `
+          <button class="game-card" id="opGo">
+            <span class="gc-ic" style="--gw:rgba(239,201,106,0.7)">${ic('bulb')}</span>
+            <span class="gc-nm">פתיח שיעור</span>
+            <span class="gc-ds">4 שקפים לתחילת השיעור לפי נושא: חימום, מצאו את הטעות, איזה לא שייך, ואתגר.</span>
+          </button>
+          ${OP_SPECIAL.length ? `<h3 class="games-sub">לפי מארגן ההוראה</h3>
+          <div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-org="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>` : ''}`
+    : kind === 'games' ? `
+          <button class="game-card" id="jeoGo">
+            <span class="gc-ic" style="--gw:rgba(217,138,154,0.6)">${ic('grid')}</span>
+            <span class="gc-nm">ג'פרדי כיתתי</span>
+            <span class="gc-ds">משחק קבוצות לכל הכיתה, על כל הנושאים. מקרינים על הלוח.</span>
+          </button>
+          <button class="game-card" id="warGo2">
+            <span class="gc-ic" style="--gw:rgba(217,72,43,0.45)">${ic('cards')}</span>
+            <span class="gc-nm">מלחמת תרגילים – שתי קבוצות</span>
+            <span class="gc-ds">קבוצה מול קבוצה: כל סיבוב קבוצה אחרת מחליטה איזה קלף גדול יותר.</span>
+          </button>
+          <button class="game-card" id="cqGo0">
+            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('flag')}</span>
+            <span class="gc-nm">כיבוש שטחים</span>
+            <span class="gc-ds">עד 6 קבוצות על מפה. עונים נכון – כובשים משבצת, ואפשר גם לתקוף!</span>
+          </button>
+          <button class="game-card" id="mtGo0">
+            <span class="gc-ic" style="--gw:rgba(226,179,87,0.75)">${ic('star')}</span>
+            <span class="gc-nm">מיליונר קבוצתי</span>
+            <span class="gc-ds">2–6 קבוצות עונות על אותן שאלות – כל קבוצה מטפסת בסולם שלה עד מיליון!</span>
+          </button>
+          <button class="game-card" id="bingoGo">
+            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('grid')}</span>
+            <span class="gc-nm">בינגו כיתתי</span>
+            <span class="gc-ds">כל תלמיד ממלא לוח במחברת, ועל המסך מופיעים תרגילים. בלי הדפסה!</span>
+          </button>
+`
+    : `
+          ${GRADE >= 5 ? `<button class="game-card" id="cmpSheetGo">
+            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('printer')}</span>
+            <span class="gc-nm">שטחים מורכבים – דף עבודה ופתקי יציאה</span>
+            <span class="gc-ds">6 צורות על רשת משבצות (שתי דרכים לכל צורה), דף תשובות, ו-4 פתקי יציאה בעמוד.</span>
+          </button>` : ''}
+          <a class="game-card" href="${gq('print')}" style="text-decoration:none;color:inherit">
+            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('printer')}</span>
+            <span class="gc-nm">דפי תרגול ומבחנים לפי נושא</span>
+            <span class="gc-ds">בוחרים נושאים ורמה – ומקבלים דף להדפסה עם דף תשובות.</span>
+          </a>
+`;
+  app.innerHTML = `<div class="topbar"><span class="title">${ic(T[0])} ${T[1]}</span><button class="secondary" id="clsBack">${ic('home')} חזרה</button></div>${body}`;
+  $('clsBack').onclick = () => { homeTab = 'class'; home(); };
+  const on = (id, fn) => { if ($(id)) $(id).onclick = fn; };
+  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('cmpSheetGo', cmpSheetHome);
+  app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { op = { topic: b.dataset.org, slides: opBuild(b.dataset.org), k: 0, show: false }; opDraw(); });
+  window.scrollTo(0, 0);
+}
 
 function opHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('op');
@@ -9965,7 +9987,7 @@ function opHome() {
     <div class="card race-intro"><p class="race-how">4 שקפים קצרים להקרנה בתחילת השיעור, על הנושא שתבחרו: <b>חימום</b> בראש · <b>מצאו את הטעות</b> · <b>איזה לא שייך?</b> (לשיח) · <b>שאלת אתגר</b>. בכל שקף – קודם חושבים, ואז חושפים את התשובה.</p></div>
     <h2>על איזה נושא השיעור?</h2>
     <div class="race-tracks">${TOPICS.map(t => `<button class="race-track" data-opt="${t.id}" style="border-color:${t.color}"><span class="nm">${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>`;
-  $('opHomeB').onclick = home;
+  $('opHomeB').onclick = () => classSub('open');
   app.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => { op = { topic: b.dataset.opt, slides: opBuild(b.dataset.opt), k: 0, show: false }; opDraw(); });
   window.scrollTo(0, 0);
 }
@@ -9988,7 +10010,7 @@ function opDraw() {
       ${last ? '<button id="opNew" class="race-go">פתיח חדש</button>' : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
     </div>`;
   fsBind();
-  $('opBack').onclick = () => { if (OP_SPECIAL.some(x => x.id === op.topic)) { homeTab = 'class'; home(); } else opHome(); };
+  $('opBack').onclick = () => { if (OP_SPECIAL.some(x => x.id === op.topic)) classSub('open'); else opHome(); };
   if ($('opPrev')) $('opPrev').onclick = () => { op.k--; op.show = false; opDraw(); };
   if ($('opShow')) $('opShow').onclick = () => { op.show = true; opDraw(); };
   if ($('opNext')) $('opNext').onclick = () => { op.k++; op.show = false; opDraw(); };
