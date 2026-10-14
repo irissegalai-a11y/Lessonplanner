@@ -1186,7 +1186,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -9888,8 +9888,8 @@ MKQ[5] = [
     return { q: `נָתוּן הַמִּסְפָּר: ${mkN(n)}`, parts: [
       { l: 'א.', q: 'כִּתבו את המספר <b>במילים</b>.', k: 'self', show: heNum(n) },
       { l: 'ב.', q: `החליפו במספר הנתון את <b>ספרת ${place[1]}</b> בספרה ${dg}. המספר שהתקבל הוא:`, k: 'num', a: nn, show: mkN(nn) },
-      { l: 'ג.', q: `המספר החדש <b>גדל</b> או <b>קטן</b>?`, k: 'choice', opts: ['גדל', 'קטן'], a: nn > n ? 0 : 1, show: nn > n ? 'גדל' : 'קטן' },
-      { l: 'ד.', q: 'בכמה?', k: 'num', a: diff, show: mkN(diff) }],
+      { l: 'ג.', alone: false, q: `המספר החדש <b>גדל</b> או <b>קטן</b>?`, k: 'choice', opts: ['גדל', 'קטן'], a: nn > n ? 0 : 1, show: nn > n ? 'גדל' : 'קטן' },
+      { l: 'ד.', alone: false, q: 'בכמה?', k: 'num', a: diff, show: mkN(diff) }],
       steps: [`קוראים לפי מחלקות: ${mkN(Math.floor(n / 1000))} אלף, ואז ${mkN(n % 1000)}: <b>${heNum(n)}</b>`, `ספרת ${place[1]} היא ${old}. מחליפים ב-${dg}: ${mkN(nn)}`, `השינוי: ${M(`${Math.abs(dg - old)} × ${fmt(place[0])} = ${fmt(diff)}`)} – ${nn > n ? 'גדל' : 'קטן'} ב-${mkN(diff)}`] };
   } },
   { t: 'סדרות – קפיצות שוות', g() {
@@ -9916,7 +9916,7 @@ MKQ[5] = [
     const c = mkChoice([`${M(fmt(na))} ${up ? 'גדול' : 'קטן'} ב-${k} מ-${M(fmt(a))}, לכן גם התוצאה ${up ? 'גדולה' : 'קטנה'} ב-${k}: ${M(`${fmt(a + b)} ${up ? '+' : '–'} ${k}`)}`, `מחברים מחדש את כל המספרים`, `התוצאה לא משתנה, כי ${M(fmt(b))} נשאר אותו דבר`, `${up ? 'מחסירים' : 'מוסיפים'} ${k} מהתוצאה`], 0);
     return { q: `לפניכם תרגיל פתור: ${M(`${fmt(a)} + ${fmt(b)} = ${fmt(a + b)}`)}`, parts: [
       { l: 'א.', q: 'הַשלימו בעזרת התרגיל הפתור:', q2: M(`${fmt(na)} + ${fmt(b)} = [[0]]`), k: 'fill', a: [na + b], show: mkN(na + b) },
-      { l: 'ב.', q: 'איך השלמתם בעזרת התרגיל הפתור?', k: 'choice', ...c, show: c.opts[c.a] }],
+      { l: 'ב.', alone: false, q: 'איך השלמתם בעזרת התרגיל הפתור?', k: 'choice', ...c, show: c.opts[c.a] }],
       steps: [`משווים את התרגילים: המחובר השני (${M(fmt(b))}) לא השתנה.`, `המחובר הראשון ${up ? 'גדל' : 'קטן'} ב-${k}: ${M(`${fmt(a)} → ${fmt(na)}`)}`, `לכן גם הסכום ${up ? 'גדל' : 'קטן'} ב-${k}: ${M(`${fmt(a + b)} ${up ? '+' : '–'} ${k} = ${fmt(na + b)}`)}`] };
   } },
   { t: 'השלמת מספרים מתאימים', g() {
@@ -10034,7 +10034,7 @@ MKQ[4] = [
     const ch = mkChoice([`${M(fmt(c))} גדול ב-${k} מ-${M(fmt(a))}, לכן המספר החסר קטן ב-${k} מ-${M(fmt(b))}`, `מחברים את כל המספרים`, `המספר החסר שווה ל-${M(fmt(b))}`, `מחסירים ${M(fmt(c))} מ-${M(fmt(a))}`], 0);
     return { q: '', parts: [
       { l: 'א.', q: 'הַשלימו את המספר החסר:', q2: M(`${fmt(a)} + ${fmt(b)} = ${fmt(c)} + [[0]]`), k: 'fill', a: [b - k], show: M(b - k) },
-      { l: 'ב.', q: `איך אפשר למצוא את המספר החסר <b>בלי</b> לחשב את התוצאה של ${M(`${fmt(a)} + ${fmt(b)}`)}?`, k: 'choice', ...ch, show: ch.opts[ch.a] }],
+      { l: 'ב.', alone: false, q: `איך אפשר למצוא את המספר החסר <b>בלי</b> לחשב את התוצאה של ${M(`${fmt(a)} + ${fmt(b)}`)}?`, k: 'choice', ...ch, show: ch.opts[ch.a] }],
       steps: [`שני הצדדים צריכים להיות שווים – כמו מאזניים.`, `בצד ימין המחובר הראשון גדל ב-${k} (${M(`${fmt(a)} → ${fmt(c)}`)}).`, `כדי לשמור על איזון, המחובר השני קטן ב-${k}: ${M(`${b} – ${k} = ${b - k}`)}`] };
   } },
   { t: 'פתרו את התרגילים', g() {
@@ -10194,7 +10194,7 @@ MKQ[3] = [
     const ch = mkChoice([`${M(c)} גדול ב-${k} מ-${M(a)}, לכן המספר החסר קטן ב-${k} מ-${M(b)}`, 'מחברים את כל המספרים', `המספר החסר הוא ${M(b)}`, `מחסירים ${M(a)} מ-${M(c)}`], 0);
     return { q: '', parts: [
       { l: 'א.', q: 'השלימו את המספר החסר:', q2: M(`${a} + ${b} = ${c} + [[0]]`), k: 'fill', a: [b - k], show: M(b - k) },
-      { l: 'ב.', q: `איך אפשר למצוא את המספר החסר <b>בלי</b> לחשב את ${M(`${a} + ${b}`)}?`, k: 'choice', ...ch, show: ch.opts[ch.a] }],
+      { l: 'ב.', alone: false, q: `איך אפשר למצוא את המספר החסר <b>בלי</b> לחשב את ${M(`${a} + ${b}`)}?`, k: 'choice', ...ch, show: ch.opts[ch.a] }],
       steps: ['הסימן = אומר ששני הצדדים שווים.', `${M(a)} הפך ל-${M(c)} – גדל ב-${k}.`, `לכן המספר השני צריך לקטון ב-${k}: ${M(`${b} – ${k} = ${b - k}`)}`] };
   } },
   { t: 'השלמת מספרים חסרים', g() {
@@ -10573,9 +10573,15 @@ function pathHome(from) {
   if (from == null) { const c = app.querySelector('.path-tile.cur'); if (c && c.getBoundingClientRect().top > innerHeight) c.scrollIntoView({ block: 'center' }); }
   track('משחק: מסע לאוצר');
 }
+// במסלול – תרגיל אחד בכל משבצת: מסעיפים רבים בוחרים סעיף אחד שעומד בפני עצמו
+function pathOne(q) {
+  const ok = q.parts.filter(p => p.k !== 'self' && p.alone !== false);
+  if (q.parts.length > 1 && ok.length) q.parts = [pick(ok)];
+  return q;
+}
 function pathQ(i, keep) {
   navPush('view');
-  const L = MKQ[GRADE], q = mkMake(i);
+  const L = MKQ[GRADE], q = pathOne(mkMake(i));
   pathS = keep && pathS && pathS.i === i ? Object.assign(pathS, { q }) : { i, q, att: 0 };
   mkS = { all: false, i, mode: 'practice', q };
   app.innerHTML = `
