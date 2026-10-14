@@ -1095,7 +1095,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-diag">© איריס סגל</div><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10385,6 +10385,12 @@ function printBuilder() {
       </div>` : ''}
       <div class="card tform" id="bkcard">
         <h2>📚 חוברת לפי נושאים</h2>
+        <div id="bklock"${bookOk() ? ' hidden' : ''}>
+          <p>🔒 החוברות פתוחות רק עם קוד.</p>
+          <span class="bkcoderow"><input id="bkpass" class="tinput" type="password" inputmode="numeric" placeholder="קוד" autocomplete="off"><button class="secondary" id="bkopen">פתיחה</button></span>
+          <p class="muted small" id="bklmsg"></p>
+        </div>
+        <div id="bkbody"${bookOk() ? '' : ' hidden'}>
         <p class="muted small">בחרו כמה שאלות מכל נושא (0 = בלי הנושא). כל נושא הוא פרק נפרד, והשאלות בו מסודרות מהקל אל הקשה. בחוברת יש עמוד שער עם תוכן עניינים, מספרי עמודים ודף תשובות בסוף.</p>
         <div class="bktopics">${TOPICS.map(t => `<label class="bkrow"><span>${t.icon} ${t.name}</span><select data-bk="${t.id}">${BOOK_COUNTS.map(n => `<option value="${n}" ${n === 8 ? 'selected' : ''}>${n ? n + ' שאלות' : 'בלי'}</option>`).join('')}</select></label>`).join('')}</div>
         <label>כותרת החוברת:
@@ -10399,6 +10405,7 @@ function printBuilder() {
           <span class="bkcoderow"><input id="bkcode" class="tinput" dir="ltr" placeholder="למשל 4-3333333-K7QPM" autocomplete="off"><button class="secondary" id="bkfrom">🔁 יצירה לפי קוד</button></span>
         </label>
         <p class="muted small" id="bkmsg"></p>
+        </div>
       </div>
       <p class="center"><a class="btnlink navhome" href="${location.pathname}${gq()}">${ic('home')} לדף הבית</a></p>
     </div>
@@ -10476,11 +10483,24 @@ function printBuilder() {
   };
   if (location.hash === '#book') setTimeout(() => $('bkcard').scrollIntoView({ block: 'start' }), 50);
   const bk = URLP.get('book');
-  if (bk && bookDecode(bk.toUpperCase())) { $('bkcode').value = bk.toUpperCase(); renderBooklet(bk.toUpperCase()); }
+  const bkUrl = () => { if (bk && bookDecode(bk.toUpperCase())) { $('bkcode').value = bk.toUpperCase(); renderBooklet(bk.toUpperCase()); } };
+  const bkTry = () => {
+    if (codeHash('book:' + $('bkpass').value.trim()) !== BOOK_HASH) { $('bklmsg').textContent = 'הקוד לא נכון.'; return; }
+    try { localStorage.setItem('math-book-key', BOOK_HASH); } catch (e) { /* לא חובה */ }
+    $('bklock').hidden = true; $('bkbody').hidden = false; bkUrl();
+  };
+  $('bkopen').onclick = bkTry;
+  $('bkpass').onkeydown = e => { if (e.key === 'Enter') bkTry(); };
+  if (bookOk()) bkUrl();
 }
 
 /* ---------- חוברת לפי נושאים, עם קוד ליצירה חוזרת ---------- */
 const BOOK_COUNTS = [0, 4, 6, 8, 10, 12, 15, 20];
+// החוברות נעולות בקוד של המורה (נשמר רק כ"טביעת אצבע", לא הקוד עצמו)
+var BOOK_HASH = 'e1050f14';
+function bookOk() {
+  try { return localStorage.getItem('math-book-key') === BOOK_HASH || localStorage.getItem('math-teacher-key') === '3d9bf467'; } catch (e) { return false; }
+}
 const BOOK_ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 function bookSeed() { let s = ''; for (let i = 0; i < 5; i++) s += BOOK_ABC[Math.floor(Math.random() * 32)]; return s; }
 function bookEncode(counts, seed) { return `${GRADE}-${counts.map(n => BOOK_COUNTS.indexOf(n)).join('')}-${seed}`; }
