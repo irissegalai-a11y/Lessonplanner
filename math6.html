@@ -540,11 +540,10 @@
     body { background: #fff; }
     .actions, .topbar button { display: none; }
   }
-  /* סימן מים – רק בהדפסה, חוזר על כל עמוד */
+  /* שורת זכויות יוצרים – רק בהדפסה, בתחתית כל עמוד */
   .pwm { display: none; }
   @media print {
     .pwm { display: block; }
-    .pwm-diag { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 80pt; font-weight: 800; color: rgba(0, 0, 0, 0.05); white-space: nowrap; pointer-events: none; z-index: 0; }
     .pwm-foot { position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 7.5pt; color: #888; direction: rtl; }
     .ws-page { padding-bottom: 6mm; }
   }
@@ -1095,8 +1094,8 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<div class="pwm" aria-hidden="true" data-raw><div class="pwm-diag">© איריס סגל</div><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
+<div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
