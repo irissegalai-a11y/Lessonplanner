@@ -1094,13 +1094,79 @@
   /* דפי ההדפסה: אותו גופן במסך ובהדפסה, כדי שהחלוקה לעמודים תהיה מדויקת */
   #wsout { font-family: "Segoe UI", "Arial Hebrew", Arial, sans-serif; }
   #wsout * { font-family: inherit; }
+  /* אימון לקראת המבחן */
+  .mk-list { display: grid; gap: 8px; margin-top: 14px; }
+  .mk-item { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--card, #fff); border: 1.5px solid var(--line, #ddd); border-radius: 12px; padding: 8px 12px; }
+  .mk-n { font-weight: 800; min-width: 1.6em; }
+  .mk-t { flex: 1 1 200px; }
+  .mk-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .mk-btns button { padding: 6px 12px; font-size: 0.95rem; }
+  .mk-how { margin: 6px 0 10px; line-height: 1.8; }
+  .mk-topic { font-size: 0.9rem; color: var(--muted, #666); margin-bottom: 4px; }
+  .mk-h { margin: 4px 0 8px; font-size: 1.15rem; }
+  .mk-stem { line-height: 1.9; margin-bottom: 6px; }
+  .mk-figbox { margin: 8px 0; text-align: center; overflow-x: auto; }
+  .mk-fig { display: inline-block; }
+  .mk-part { margin: 10px 0; line-height: 2; }
+  .mk-l { font-weight: 700; }
+  .mk-in { width: 6.5em; font: inherit; font-size: 1.05rem; padding: 3px 6px; border: 2px solid #8a8a8a; border-radius: 8px; text-align: center; direction: ltr; background: #fff; }
+  .m .mk-in { width: 5em; }
+  .mk-frac { display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
+  .mk-frac .mk-in { width: 3.2em; }
+  .mk-frac .mk-in.w { width: 3.6em; }
+  .mk-fr { display: inline-flex; flex-direction: column; gap: 2px; }
+  .mk-fr .mk-in:first-child { border-bottom-width: 3px; }
+  .fr .mk-in { width: 2.6em; padding: 1px 2px; }
+  .mk-fillrow { margin-top: 4px; }
+  .mk-opts { display: grid; gap: 4px; margin-top: 4px; }
+  .mk-opts.grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  .mk-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 3px 6px; border-radius: 8px; }
+  .mk-opt:hover { background: rgba(127, 168, 214, 0.15); }
+  .mk-on { font-size: 0.8rem; color: #777; min-width: 1em; }
+  .mk-optfig svg { max-width: 170px; }
+  .mk-row { font-size: 1.4rem; letter-spacing: 2px; }
+  .mk-self { width: 100%; font: inherit; margin-top: 4px; border: 1.5px solid #aaa; border-radius: 8px; padding: 6px; }
+  .mk-ok { color: var(--ok, #2c7a5b); font-weight: 700; }
+  .mk-bad { color: var(--bad, #b03a2e); font-weight: 700; }
+  .mk-wait { color: #9a6b00; }
+  .mk-model { background: rgba(157, 178, 122, 0.25); border-radius: 8px; padding: 6px 10px; }
+  .mk-ans { background: rgba(157, 178, 122, 0.28); border-radius: 8px; padding: 4px 10px; margin-top: 4px; }
+  .mk-steps { margin-top: 14px; border-top: 2px dashed var(--line, #ccc); padding-top: 8px; }
+  .mk-steps h4 { margin: 0 0 4px; }
+  .mk-steps li { margin: 6px 0; line-height: 1.8; }
+  .mk-msg { font-weight: 700; margin-top: 8px; }
+  .mk-cells .mk-cell { cursor: pointer; }
+  .mk-cells .mk-cell.on { fill: #f2a65a; }
+  .mk-sides .mk-side { cursor: pointer; }
+  .mk-sides .mk-sidec.on { stroke: #d9482b; }
+  .mk-clickline .mk-tickhit { cursor: pointer; }
+  .mk-clickline .mk-tick.on { stroke: #d9482b; stroke-width: 5; }
+  .mk-shop { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 8px 0; }
+  .mk-shop > div { border: 2px solid #333; border-radius: 8px; padding: 8px 14px; text-align: center; min-width: 90px; }
+  .mk-tris { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .mk-tris > div { text-align: center; }
+  .mk-plates { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; font-size: 1.5rem; }
+  .mk-plate { border: 2px solid #c9b78f; border-radius: 50%; padding: 8px 14px; background: #fff8e6; }
+  .mk-blank { display: inline-block; min-width: 7em; border-bottom: 1.5px solid #333; height: 1.2em; vertical-align: bottom; }
+  .mk-blank.sm { min-width: 3.5em; }
+  .mk-lines { height: 3.4em; border-bottom: 1px solid #999; margin: 4px 0 10px; background: linear-gradient(transparent 1.6em, #999 1.6em, #999 calc(1.6em + 1px), transparent calc(1.6em + 1px)); }
+  .mk-cover { margin-bottom: 14px; line-height: 1.8; }
+  .mk-cover .mk-hdr { display: flex; justify-content: space-between; font-weight: 700; }
+  .mk-print .mkq { break-inside: avoid; margin-bottom: 16px; }
+  .mk-print .mk-h { font-size: 1.05rem; text-decoration: underline; }
+  .m22v.hid { display: none; }
+  .m22long { font-family: monospace; font-size: 1.3rem; border-collapse: collapse; margin: 0 auto; }
+  .m22long td { width: 1.1em; text-align: center; padding: 0 1px; }
+  .m22long tr.ul td { border-bottom: 2px solid #333; }
+  .m22long tr.res td { font-weight: 800; }
+  .mk-stem svg.mk-fig, .mk-part > svg.mk-fig { display: block; margin: 8px auto; }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6457,7 +6523,7 @@ function masteryLabel(m) {
 const URLP = new URLSearchParams(location.search);
 const PRESET = (() => {
   const ln = URLP.get('learn');
-  if (ln && (LESSONS[ln] || (ln === 'composite' && GRADE >= 5))) return { learn: ln }; // composite מוגדר בהמשך הקובץ
+  if (ln && (LESSONS[ln] || (ln === 'composite' && GRADE >= 5) || (ln === 'mul22' && GRADE >= 4 && GRADE <= 6))) return { learn: ln }; // composite ו-mul22 מוגדרים בהמשך הקובץ
   const t = URLP.get('topic');
   if (!t || !(TOPIC[t] || ['mix', 'test', 'testfb', 'sim'].includes(t))) return null;
   const lv = Number(URLP.get('level')), cnt = Number(URLP.get('count'));
@@ -6875,7 +6941,7 @@ const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: '�
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
-const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$)/;
+const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן)/;
 const ACT_IDLE = 60000, ACT_TAIL = 10000;
 let actCur = null, actPaused = null;
 function actTick() {
@@ -7034,6 +7100,7 @@ function home() {
           <div class="big-actions">
             <button id="testfb" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב<span class="desc">20 שאלות מכל הנושאים, עם רמזים ועזרה תוך כדי</span></button>
             <button id="test" class="secondary">${ic('clipboard')} ${TEST_NAME}<span class="desc">20 שאלות מכל הנושאים – הציון והפתרונות בסוף</span></button>
+            ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת המבחן<span class="desc">שאלות בסגנון המבחן – הקנייה ותרגול לכל שאלה, ומבחן אימון להדפסה</span></button>` : ''}
             <button id="sim" class="secondary">${ic('clock')} סימולציה עם שעון<span class="desc">כמו ${GRADE === 6 ? 'במבדק' : 'במבחן'} אמיתי: זמן מוגבל, אפשר לדלג ולחזור לשאלות</span></button>
           </div>
           ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
@@ -7148,6 +7215,7 @@ function home() {
   $('test').onclick = () => startTest(false);
   $('testfb').onclick = () => startTest(true);
   $('sim').onclick = showSimPicker;
+  if ($('mkGo')) $('mkGo').onclick = mkHome;
   if (PRESET) $('presetGo').onclick = startPreset;
 }
 let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
@@ -9482,6 +9550,921 @@ if (GRADE >= 5) {
   });
   const gi = LESSON_ORDER.indexOf('geo');
   LESSON_ORDER.splice(gi >= 0 ? gi + 1 : LESSON_ORDER.length, 0, 'composite');
+}
+
+/* =========================================================
+   אימון לקראת המבחן – שאלות באותו סגנון של המבחן, עם מספרים והקשרים חדשים.
+   לכל שאלה שני מצבים: הקנייה (פתרון מודרך צעד אחר צעד) ותרגול (פותרים ובודקים).
+   ========================================================= */
+// מספר במילים (בלשון נקבה, כמו שכותבים מספר "סתם")
+function heNum(n) {
+  const F1 = ['', 'אחת', 'שתיים', 'שלוש', 'ארבע', 'חמש', 'שש', 'שבע', 'שמונה', 'תשע'];
+  const M1 = ['', 'אחד', 'שניים', 'שלושה', 'ארבעה', 'חמישה', 'שישה', 'שבעה', 'שמונה', 'תשעה'];
+  const FT = ['עשר', 'אחת עשרה', 'שתים עשרה', 'שלוש עשרה', 'ארבע עשרה', 'חמש עשרה', 'שש עשרה', 'שבע עשרה', 'שמונה עשרה', 'תשע עשרה'];
+  const MT = ['עשרה', 'אחד עשר', 'שנים עשר', 'שלושה עשר', 'ארבעה עשר', 'חמישה עשר', 'שישה עשר', 'שבעה עשר', 'שמונה עשר', 'תשעה עשר'];
+  const TENS = ['', '', 'עשרים', 'שלושים', 'ארבעים', 'חמישים', 'שישים', 'שבעים', 'שמונים', 'תשעים'];
+  const HUN = ['', 'מאה', 'מאתיים', 'שלוש מאות', 'ארבע מאות', 'חמש מאות', 'שש מאות', 'שבע מאות', 'שמונה מאות', 'תשע מאות'];
+  const parts = (x, masc) => {
+    const out = [], h = Math.floor(x / 100), r = x % 100;
+    if (h) out.push(HUN[h]);
+    if (r >= 10 && r < 20) out.push((masc ? MT : FT)[r - 10]);
+    else { if (r >= 20) out.push(TENS[Math.floor(r / 10)]); if (r % 10) out.push((masc ? M1 : F1)[r % 10]); }
+    return out;
+  };
+  const join = a => a.length > 1 ? a.slice(0, -1).join(' ') + ' ו' + a[a.length - 1] : (a[0] || '');
+  if (n === 0) return 'אפס';
+  const th = Math.floor(n / 1000), rest = n % 1000, out = [];
+  if (th) {
+    const TH = ['', 'אלף', 'אלפיים', 'שלושת אלפים', 'ארבעת אלפים', 'חמשת אלפים', 'ששת אלפים', 'שבעת אלפים', 'שמונת אלפים', 'תשעת אלפים', 'עשרת אלפים'];
+    out.push(th <= 10 ? TH[th] : join(parts(th, true)) + ' אלף');
+  }
+  const rp = parts(rest, false);
+  if (!rp.length) return out[0];
+  if (out.length) return out[0] + ' ' + (rp.length === 1 ? 'ו' + rp[0] : join(rp));
+  return join(rp);
+}
+const mkN = n => M(fmt(n));
+const mkLine = '<span class="mk-blank"></span>';
+// שבר כתוב (מעורב אם צריך), לא מצומצם
+const mkFr = (n, d) => n % d === 0 ? M(fmt(n / d)) : n > d ? M(`${Math.floor(n / d)}${F(n % d, d)}`) : M(F(n, d));
+const mkFrS = (n, d) => { const g = gcd(n, d); return mkFr(n / g, d / g); };
+const MK_F = ['נועה', 'מאיה', 'שירה', 'תמר', 'הדר', 'ליה', 'יעל', 'אביגיל'], MK_M = ['איתי', 'עומר', 'אורי', 'יונתן', 'אלון', 'גיא', 'עידו', 'אדם'];
+const MK_NAMES = MK_F.concat(MK_M);
+const mkName = () => pick(MK_NAMES);
+const mkName2 = nm => pick((MK_F.includes(nm) ? MK_F : MK_M).filter(x => x !== nm));
+// פעלים לפי מין: "אמר/ה" ← אמר או אמרה, לפי השם הראשון שמופיע בשאלה
+const MK_VERBS = { 'אמר/ה': ['אמר', 'אמרה'], 'בחר/ה': ['בחר', 'בחרה'], 'גר/ה': ['גר', 'גרה'], 'הכינ/ה': ['הכין', 'הכינה'], 'הרכיב/ה': ['הרכיב', 'הרכיבה'], 'שילם/ה': ['שילם', 'שילמה'], 'חיבר/ה': ['חיבר', 'חיברה'], 'חישב/ה': ['חישב', 'חישבה'], 'טעה/תה': ['טעה', 'טעתה'], 'יסדר/תסדר': ['יסדר', 'תסדר'], 'כפל/ה': ['כפל', 'כפלה'], 'סרטט/ה': ['סרטט', 'סרטטה'], 'קיבל/ה': ['קיבל', 'קיבלה'], 'קנה/תה': ['קנה', 'קנתה'] };
+function mkGender(q) {
+  const all = JSON.stringify([q.q, q.parts.map(p => p.q)]), first = MK_NAMES.map(n => [n, all.indexOf(n)]).filter(x => x[1] >= 0).sort((a, b) => a[1] - b[1])[0];
+  const f = first && MK_F.includes(first[0]) ? 1 : 0, fix = t => typeof t === 'string' ? t.replace(/[\u0590-\u05FF]+\/[\u0590-\u05FF]+/g, w => MK_VERBS[w] ? MK_VERBS[w][f] : w[0] === 'ו' && MK_VERBS[w.slice(1)] ? 'ו' + MK_VERBS[w.slice(1)][f] : w) : t;
+  q.q = fix(q.q); q.printQ = fix(q.printQ); q.steps = q.steps.map(fix);
+  q.parts.forEach(p => { ['q', 'q2', 'show', 'printQ'].forEach(k => { p[k] = fix(p[k]); }); if (p.opts) p.opts = p.opts.map(fix); });
+  return q;
+}
+
+/* ---------- ציורים ---------- */
+function mkSVG(w, h, body, cls = '') { return `<svg class="mk-fig ${cls}" viewBox="0 0 ${w} ${h}" width="${w}" style="max-width:100%;height:auto" role="img">${body}</svg>`; }
+const mkT = (x, y, t, o = {}) => `<text x="${x}" y="${y}" font-size="${o.fs || 13}" text-anchor="${o.a || 'middle'}" fill="${o.c || '#222'}"${o.b ? ' font-weight="700"' : ''}${o.rtl ? ' direction="rtl"' : ''}>${t}</text>`;
+// ישר מספרים: ticks = [{v, lab}], קטע מודגש [s, e] (ערכים), טווח [a, b]
+function mkNumLine(a, b, ticks, seg, o = {}) {
+  const W = o.w || 460, x0 = 20, x1 = W - 30, X = v => x0 + (v - a) / (b - a) * (x1 - x0), y = 30;
+  let s = `<line x1="${x0 - 8}" y1="${y}" x2="${x1 + 18}" y2="${y}" stroke="#333" stroke-width="1.5"/><path d="M${x1 + 18} ${y}l-8 -4v8z" fill="#333"/>`;
+  if (seg) s += `<line x1="${X(seg[0])}" y1="${y}" x2="${X(seg[1])}" y2="${y}" stroke="#111" stroke-width="6"/>`;
+  ticks.forEach((t, i) => {
+    const big = t.big;
+    s += `<line x1="${X(t.v)}" y1="${y - (big ? 9 : 6)}" x2="${X(t.v)}" y2="${y + (big ? 9 : 6)}" stroke="#333" stroke-width="${big ? 2.4 : 1.3}"${o.click ? ` class="mk-tick" data-tick="${i}"` : ''}/>`;
+    if (o.click) s += `<rect x="${X(t.v) - 7}" y="${y - 16}" width="14" height="32" fill="transparent" class="mk-tickhit" data-tick="${i}"/>`;
+    if (t.lab != null) s += t.frac ? `<text x="${X(t.v)}" y="${y + 24}" font-size="12" text-anchor="middle">${t.frac[0]}</text><line x1="${X(t.v) - 6}" y1="${y + 28}" x2="${X(t.v) + 6}" y2="${y + 28}" stroke="#222"/><text x="${X(t.v)}" y="${y + 40}" font-size="12" text-anchor="middle">${t.frac[1]}</text>` : mkT(X(t.v), y + 26, t.lab, { fs: 12 });
+  });
+  return mkSVG(W, ticks.some(t => t.frac) ? 80 : 62, s, o.click ? 'mk-clickline' : '');
+}
+// דיאגרמת נקודות (כל עיגול = תלמיד אחד)
+function mkDots(counts, xLabel) {
+  const n = counts.length, cw = 40, W = n * cw + 40, mx = Math.max(...counts), H = mx * 20 + 60;
+  let s = `<line x1="20" y1="${H - 34}" x2="${W - 8}" y2="${H - 34}" stroke="#333"/><path d="M${W - 8} ${H - 34}l-7 -4v8z" fill="#333"/>`;
+  counts.forEach((c, i) => {
+    const x = 34 + i * cw;
+    s += `<line x1="${x}" y1="${H - 38}" x2="${x}" y2="${H - 30}" stroke="#333"/>${mkT(x, H - 18, i, { fs: 12 })}`;
+    for (let k = 0; k < c; k++) s += `<circle cx="${x}" cy="${H - 46 - k * 20}" r="8" fill="#ffe08a" stroke="#333"/><circle cx="${x - 3}" cy="${H - 48 - k * 20}" r="1" fill="#333"/><circle cx="${x + 3}" cy="${H - 48 - k * 20}" r="1" fill="#333"/><path d="M${x - 3.5} ${H - 43 - k * 20}q3.5 3 7 0" stroke="#333" fill="none"/>`;
+  });
+  s += mkT(W / 2, H - 2, xLabel, { fs: 12, b: true, rtl: true });
+  return mkSVG(W, H, s);
+}
+// דיאגרמת עמודות
+function mkBars(vals, labs, yLabel, step = 2) {
+  const mx = Math.ceil(Math.max(...vals) / step) * step + step, n = vals.length, bw = 44, W = n * bw + 60, ch = 180, H = ch + 50, Y = v => 10 + ch - v / mx * ch;
+  let s = '';
+  for (let v = 0; v <= mx; v += step) s += `<line x1="40" y1="${Y(v)}" x2="${W - 6}" y2="${Y(v)}" stroke="#ddd"/>${mkT(34, Y(v) + 4, v, { fs: 11, a: 'end' })}`;
+  vals.forEach((v, i) => { const x = 48 + i * bw; s += `<rect x="${x}" y="${Y(v)}" width="${bw - 16}" height="${Y(0) - Y(v)}" fill="#6f8fd6"/>${mkT(x + (bw - 16) / 2, H - 22, labs[i], { fs: 12, rtl: true })}`; });
+  s += `<line x1="40" y1="${Y(0)}" x2="${W - 6}" y2="${Y(0)}" stroke="#333"/><text x="12" y="${10 + ch / 2}" font-size="11" text-anchor="middle" transform="rotate(-90 12 ${10 + ch / 2})" direction="rtl">${yLabel}</text>`;
+  return mkSVG(W, H, s);
+}
+// רשת משבצות (אפשר ללחוץ על משבצות כדי לצבוע)
+function mkGrid(cols, rows, o = {}) {
+  const u = o.u || 32, W = cols * u + 2, H = rows * u + 2;
+  let s = '';
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) s += `<rect x="${1 + c * u}" y="${1 + r * u}" width="${u}" height="${u}" fill="#fff" stroke="#bbb" class="${o.click ? 'mk-cell' : ''}" data-cell="${r * cols + c}"/>`;
+  s += `<rect x="1" y="1" width="${cols * u}" height="${rows * u}" fill="none" stroke="#222" stroke-width="2"/>`;
+  return mkSVG(W, H, s, o.click ? 'mk-cells' : '');
+}
+// סרגל: חפץ מ-a עד b (ס"מ)
+function mkRuler(len, obj, o = {}) {
+  const u = 26, x0 = 12, W = len * u + 30, H = obj ? 78 : 50, y = obj ? 36 : 8;
+  let s = `<rect x="4" y="${y}" width="${len * u + 18}" height="34" rx="3" fill="#fff8e6" stroke="#333"/>`;
+  for (let i = 0; i <= len * 10; i++) { const x = x0 + i * u / 10, L = i % 10 === 0 ? 12 : i % 5 === 0 ? 8 : 5; s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + L}" stroke="#333" stroke-width="${i % 10 ? 0.6 : 1.1}"/>`; if (i % 10 === 0) s += mkT(x, y + 27, i / 10, { fs: 11 }); }
+  if (obj) {
+    const xa = x0 + obj[0] * u, xb = x0 + obj[1] * u;
+    s += o.pencil
+      ? `<path d="M${xa} 20 L${xa + 14} 10 H${xb} V30 H${xa + 14} Z" fill="#f2c94c" stroke="#333"/><path d="M${xa} 20 L${xa + 6} 16 V24 Z" fill="#333"/><line x1="${xa}" y1="31" x2="${xa}" y2="${y}" stroke="#d9482b" stroke-dasharray="2 2"/><line x1="${xb}" y1="31" x2="${xb}" y2="${y}" stroke="#d9482b" stroke-dasharray="2 2"/>`
+      : `<rect x="${xa}" y="12" width="${xb - xa}" height="16" rx="8" fill="none" stroke="#555" stroke-width="3"/><rect x="${xa + 5}" y="16" width="${xb - xa - 16}" height="8" rx="4" fill="none" stroke="#555" stroke-width="2.5"/><line x1="${xa}" y1="29" x2="${xa}" y2="${y}" stroke="#d9482b" stroke-dasharray="2 2"/><line x1="${xb}" y1="29" x2="${xb}" y2="${y}" stroke="#d9482b" stroke-dasharray="2 2"/>`;
+  }
+  return mkSVG(W, H, s);
+}
+// מצולע עם תוויות צלעות; sides לחיצים אפשרי; bold = אינדקס צלע מודגשת
+function mkPoly(pts, o = {}) {
+  const u = o.u || 24, pad = 30, xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  const mnx = Math.min(...xs), mny = Math.min(...ys), W = (Math.max(...xs) - mnx) * u + pad * 2, H = (Math.max(...ys) - mny) * u + pad * 2;
+  const P = p => [pad + (p[0] - mnx) * u, pad + (p[1] - mny) * u];
+  const cx = pts.reduce((s, p) => s + P(p)[0], 0) / pts.length, cy = pts.reduce((s, p) => s + P(p)[1], 0) / pts.length;
+  let s = o.grid ? (() => { let g = ''; for (let x = pad % u; x < W; x += u) g += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="#e3e3e3"/>`; for (let y = pad % u; y < H; y += u) g += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#e3e3e3"/>`; return g; })() : '';
+  s += `<polygon points="${pts.map(p => P(p).join(',')).join(' ')}" fill="${o.fill || 'none'}" stroke="#222" stroke-width="2"${o.hide ? ' visibility="hidden"' : ''}/>`;
+  (o.extra || []).forEach(e => { s += e(P); });
+  pts.forEach((p, i) => {
+    const q = pts[(i + 1) % pts.length], [x1, y1] = P(p), [x2, y2] = P(q);
+    if (o.bold === i) s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#111" stroke-width="6"/>`;
+    if (o.click) s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="transparent" stroke-width="16" class="mk-side" data-side="${i}"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="transparent" stroke-width="5" class="mk-sidec" data-sidec="${i}" pointer-events="none"/>`;
+    if (o.labels && o.labels[i] != null) {
+      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = mx - cx, dy = my - cy, dl = Math.hypot(dx, dy) || 1;
+      s += mkT(mx + dx / dl * 16, my + dy / dl * 16 + 4, o.labels[i], { fs: 12, rtl: true });
+    }
+  });
+  return mkSVG(W, H, s, o.click ? 'mk-sides' : '');
+}
+const mkU = (v, u) => `${v} ${u}`;
+
+/* ---------- שאלות לפי כיתה ----------
+   כל שאלה: { t: נושא קצר, q: גוף השאלה, parts: [...], steps: [...] }
+   part: { l, q, k: 'num'|'fill'|'frac'|'choice'|'multi'|'self'|'cells'|'sides'|'tick', a, check, show, unit }
+*/
+const MKQ = {};
+const mkChoice = (opts, correct) => { const all = shuffle(opts.map((o, i) => ({ o, ok: i === correct }))); return { opts: all.map(x => x.o), a: all.findIndex(x => x.ok) }; };
+
+/* ===== כיתה ו' ===== */
+MKQ[6] = [
+  { t: 'ערך המקום – הוספת מאות/אלפים', g() {
+    const n = R(2, 8) * 1000 + R(1, 9) * 100 + R(0, 9) * 10 + R(1, 9), u = pick([[100, 'מאות'], [10, 'עשרות'], [1000, 'אלפים']]), k = u[0] === 1000 ? R(12, 35) : R(15, 60);
+    return { q: `למספר ${mkN(n)} הוסיפו ${M(k)} ${u[1]}. מה המספר החדש?`, parts: [{ k: 'num', a: n + k * u[0], show: mkN(n + k * u[0]) }],
+      steps: [`${M(k)} ${u[1]} הם ${M(`${k} × ${fmt(u[0])} = ${fmt(k * u[0])}`)}`, `מוסיפים: ${M(`${fmt(n)} + ${fmt(k * u[0])} = ${fmt(n + k * u[0])}`)}`, '⚠️ טעות נפוצה: להוסיף רק את הספרה בעמודת ה' + u[1] + ' – אבל ' + k + ' ' + u[1] + ' זה יותר מ-9!'] };
+  } },
+  { t: 'פתרו – סדר פעולות, חיסור, כפל וחילוק', g() {
+    const b = R(3, 9), c = R(3, 9), d = R(2, 9), a = b * c + d + R(8, 40);
+    const x = R(3, 8) * 100000 + R(10, 99) * 1000 + R(1, 9) * 100, y = x - R(15, 60) * 1000 - R(1, 9) * 100;
+    const m1 = R(23, 79), m2 = R(23, 69), dv = R(3, 9), q = R(120, 999);
+    return { q: 'פִּתרו:', parts: [
+      { l: 'א.', q: M(`${a} – ${b} × ${c} – ${d} =`), k: 'num', a: a - b * c - d, show: M(fmt(a - b * c - d)) },
+      { l: 'ב.', q: M(`${fmt(x)} – ${fmt(y)} =`), k: 'num', a: x - y, show: M(fmt(x - y)) },
+      { l: 'ג.', q: M(`${m1} × ${m2} =`), k: 'num', a: m1 * m2, show: M(fmt(m1 * m2)) },
+      { l: 'ד.', q: M(`${fmt(q * dv)} : ${dv} =`), k: 'num', a: q, show: M(fmt(q)) }],
+      steps: [`א. קודם כפל: ${M(`${b} × ${c} = ${b * c}`)}, ואז משמאל לימין: ${M(`${a} – ${b * c} – ${d} = ${a - b * c - d}`)}`,
+        `ב. חיסור במאונך (עם פריטה): ${M(`${fmt(x)} – ${fmt(y)} = ${fmt(x - y)}`)}`,
+        `ג. מפרקים: ${M(`${m1} × ${m2} = ${m1} × ${Math.floor(m2 / 10) * 10} + ${m1} × ${m2 % 10} = ${fmt(m1 * Math.floor(m2 / 10) * 10)} + ${fmt(m1 * (m2 % 10))} = ${fmt(m1 * m2)}`)}`,
+        `ד. חילוק ארוך, ובדיקה בכפל: ${M(`${q} × ${dv} = ${fmt(q * dv)}`)}`] };
+  } },
+  { t: 'מספר חסר בפירוק המספר', g() {
+    const big = R(2, 9) * 100000 + R(1, 9) * 1000, mid = R(1, 9) * 10000, sm = R(1, 9) * 100 + R(0, 9) * 10 + R(1, 9), tot = big + mid + sm;
+    return { q: '', parts: [
+      { l: 'א.', q: 'הַשלימו את המספר המתאים:', q2: M(`[[0]] + ${fmt(mid)} + ${fmt(sm)} = ${fmt(tot)}`), k: 'fill', a: [big], show: mkN(big) },
+      { l: 'ב.', q: 'הַשלימו את המספר השלם <b>הגדול ביותר</b> המתאים:', q2: M(`[[0]] + ${fmt(mid)} + ${fmt(sm)} < ${fmt(tot)}`), k: 'fill', a: [big - 1], show: mkN(big - 1) }],
+      steps: [`א. מחסירים מהסכום את מה שידוע: ${M(`${fmt(tot)} – ${fmt(mid)} – ${fmt(sm)} = ${fmt(big)}`)}`, `ב. הסכום צריך להיות <b>קטן</b> מ-${mkN(tot)}. עם ${mkN(big)} מקבלים בדיוק ${mkN(tot)} – זה לא קטן ממנו.`, `לכן המספר השלם הגדול ביותר הוא אחד פחות: ${mkN(big - 1)}`] };
+  } },
+  { t: 'אומדן – להסביר בלי לחשב', g() {
+    const a = R(3, 6) * 10 + R(1, 8), b = R(3, 7) * 10 + R(1, 8), ta = Math.floor(a / 10) * 10, tb = Math.floor(b / 10) * 10, T = ta * tb, nm = mkName();
+    const c = mkChoice([`${M(`${a} > ${ta}`)} ו-${M(`${b} > ${tb}`)}, ו-${M(`${ta} × ${tb} = ${fmt(T)}`)}, לכן התוצאה גדולה מ-${mkN(T)}`, `כי ${M(`${a} + ${b}`)} גדול מ-${M(100)}`, `כי ספרת האחדות של ${M(a)} גדולה מ-1`, `כי ${M(`${a} × ${b}`)} הוא מספר זוגי`], 0);
+    return { q: `${nm} אמר/ה שגם בלי לחשב במדויק את תוצאת התרגיל ${M(`${a} × ${b}`)} אפשר לדעת שהתוצאה גדולה מ-${mkN(T)}.`, parts: [
+      { l: 'א.', q: 'איזה הסבר נכון?', k: 'choice', ...c, show: c.opts[c.a] },
+      { l: 'ב.', q: 'הַסבירו במילים שלכם איך אפשר לדעת זאת.', k: 'self', show: `מעגלים <b>כלפי מטה</b> לעשרות: ${M(`${ta} × ${tb} = ${fmt(T)}`)}. המספרים האמיתיים גדולים יותר, לכן גם המכפלה גדולה יותר מ-${mkN(T)}.` }],
+      steps: [`מעגלים כל מספר כלפי מטה לעשרת: ${M(`${a} → ${ta}`)}, ${M(`${b} → ${tb}`)}`, `מחשבים בראש: ${M(`${ta} × ${tb} = ${fmt(T)}`)}`, `כי כפלנו מספרים קטנים יותר – התוצאה האמיתית בטוח <b>גדולה</b> מ-${mkN(T)}.`] };
+  } },
+  { t: 'בחירת תרגיל מתאים לבעיה', g() {
+    const ctx = pick([['גולות', 'גולות'], ['מדבקות', 'מדבקות'], ['קלפים', 'קלפים']]), k = R(3, 6), y = R(20, 90), x = y * k, a = mkName(), b = pick(MK_NAMES.filter(n => n !== a));
+    const c = mkChoice([M(`${fmt(x)} + ${fmt(x)} : ${k}`), M(`${fmt(x)} + ${fmt(x)} × ${k}`), M(`(${fmt(x)} + ${fmt(x)}) : ${k}`), M(`${fmt(x)} : ${k}`)], 0);
+    return { q: `${a} ו${b} אוספים ${ctx[0]}. ל${a} יש ${mkN(x)} ${ctx[1]}.<br>מספר ה${ctx[1]} של ${a} גדול <b>פי ${k}</b> ממספר ה${ctx[1]} של ${b}.<br>איזה תרגיל מתאים לחישוב מספר ה${ctx[1]} של שניהם <b>יחד</b>?`, parts: [{ k: 'choice', ...c, show: c.opts[c.a] }],
+      steps: [`ל${a} יותר (פי ${k}), לכן ל${b}: ${M(`${fmt(x)} : ${k} = ${y}`)}`, `יחד: מה שיש ל${a} + מה שיש ל${b} ← ${M(`${fmt(x)} + ${fmt(x)} : ${k}`)}`, `בסדר פעולות החילוק נעשה קודם: ${M(`${fmt(x)} + ${y} = ${fmt(x + y)}`)}`] };
+  } },
+  { t: 'שברים – חיבור, חיסור וכפל במספר שלם', g() {
+    const pairs = [[3, 4], [2, 5], [3, 8], [4, 6], [5, 6], [3, 10], [2, 7]], [d1, d2] = pick(pairs), w = R(1, 4), n1 = R(1, d1 - 1), n2 = R(1, d2 - 1), L = lcm(d1, d2);
+    const A = w * L + n1 * L / d1 + n2 * L / d2;
+    const tri = pick([[2, 4, 8], [3, 6, 12], [2, 3, 6], [4, 8, 2], [5, 10, 2]]), tn = tri.map(d => R(1, d - 1)), TL = tri.reduce(lcm), B = tn.reduce((s, n, i) => s + n * TL / tri[i], 0);
+    const d3 = pick([4, 5, 6, 7, 8]), a3 = R(1, d3 - 2), b3 = R(a3 + 1, d3 - 1), w1 = R(3, 6), w2 = R(1, w1 - 2), C = (w1 * d3 + a3) - (w2 * d3 + b3);
+    const k4 = R(3, 9), d4 = pick([3, 4, 5, 7, 8]), n4 = R(2, d4 - 1);
+    return { q: 'פִּתרו:', parts: [
+      { l: 'א.', q: M(`${w}${F(n1, d1)} + ${F(n2, d2)} =`), k: 'frac', a: [A, L], show: mkFrS(A, L) },
+      { l: 'ב.', q: M(`${F(tn[0], tri[0])} + ${F(tn[1], tri[1])} + ${F(tn[2], tri[2])} =`), k: 'frac', a: [B, TL], show: mkFrS(B, TL) },
+      { l: 'ג.', q: M(`${w1}${F(a3, d3)} – ${w2}${F(b3, d3)} =`), k: 'frac', a: [C, d3], show: mkFrS(C, d3) },
+      { l: 'ד.', q: M(`${k4} × ${F(n4, d4)} =`), k: 'frac', a: [k4 * n4, d4], show: mkFrS(k4 * n4, d4) }],
+      steps: [`א. מכנה משותף ${L}: ${M(`${F(n1, d1)} = ${F(n1 * L / d1, L)}`)}, ${M(`${F(n2, d2)} = ${F(n2 * L / d2, L)}`)}. מחברים ומוסיפים את ה-${w} השלמים.`,
+        `ב. מכנה משותף ${TL}: מרחיבים כל שבר ל-${TL} ומחברים את המונים. אם יוצא יותר משלם – הופכים למספר מעורב.`,
+        `ג. ${M(F(a3, d3))} קטן מ-${M(F(b3, d3))}, לכן "פורטים" שלם: ${M(`${w1}${F(a3, d3)} = ${w1 - 1}${F(a3 + d3, d3)}`)}, ואז מחסירים שלמים משלמים ושברים משברים.`,
+        `ד. כופלים את המונה במספר השלם: ${M(`${k4} × ${F(n4, d4)} = ${F(k4 * n4, d4)}`)} = ${mkFrS(k4 * n4, d4)}`] };
+  } },
+  { t: 'שבר על ישר המספרים – קרוב ל-1', g() {
+    const q = R(5, 8), p = q - 1, ok = [q, q + 1];
+    const c = mkChoice([M(F(ok[0], ok[1])), M(F(q - 2, q - 1)), M(F(q - 3, q - 2)), M(F(q + 2, q + 1))], 0);
+    return { q: `לפניכם ישר מספרים.${mkNumLine(0, 1, [{ v: 0, lab: 0 }, { v: p / q, lab: '', frac: [p, q] }, { v: 1, lab: 1 }], [p / q, 1])}איזה מספר מבין המספרים שלפניכם נמצא בקטע המודגש על ישר המספרים?`, parts: [{ k: 'choice', ...c, show: c.opts[c.a] }],
+      steps: [`הקטע המודגש: בין ${M(F(p, q))} ל-${M(1)}. ל-${M(F(p, q))} חסר ${M(F(1, q))} כדי להגיע ל-1.`, `ל-${M(F(q, q + 1))} חסר רק ${M(F(1, q + 1))} – חלק <b>קטן יותר</b>, לכן הוא קרוב יותר ל-1 ונמצא בקטע.`, `שבר שהמונה שלו גדול מהמכנה (כמו ${M(F(q + 2, q + 1))}) גדול מ-1 – מחוץ לקטע.`] };
+  } },
+  { t: 'דיאגרמת נקודות', g() {
+    let counts; do { counts = [R(1, 4), R(1, 4), R(2, 6), R(2, 6), R(1, 5), R(0, 3), 0, R(1, 2)]; counts[R(5, 6)] = 0; } while (counts.reduce((a, b) => a + b) < 18 || counts.reduce((a, b) => a + b) > 28);
+    const tot = counts.reduce((a, b) => a + b), ctx = pick([['מספר הסרטים שראו בחופשה', 'סרטים', 'ראו', 'לא ראו סרטים בחופשה'], ['מספר הפעמים שהלכו לבריכה בקיץ', 'פעמים', 'הלכו לבריכה', 'לא הלכו לבריכה בכלל']]), nm = mkName();
+    const k = R(2, 3), more = counts.slice(k + 1).reduce((a, b) => a + b, 0), f = [4, 3, 1, 7].find(v => counts[v] > 0);
+    return { q: `${nm} הכינ/ה דיאגרמה המציגה את <b>כל</b> תלמידי הכיתה לפי ${ctx[0]}.<br><span class="small muted">כל 🙂 = תלמיד אחד</span>${mkDots(counts, ctx[0])}`, parts: [
+      { l: 'א.', q: `כמה תלמידים ${ctx[2]} בדיוק ${k} ${ctx[1]}?`, k: 'num', a: counts[k], show: M(counts[k]), unit: 'תלמידים' },
+      { l: 'ב.', q: `כמה תלמידים ${ctx[3]}?`, k: 'num', a: counts[0], show: M(counts[0]), unit: 'תלמידים' },
+      { l: 'ג.', q: `כמה תלמידים ${ctx[2]} יותר מ-${k} ${ctx[1]}?`, k: 'num', a: more, show: M(more), unit: 'תלמידים' },
+      { l: 'ד.', q: `איזה <b>חלק</b> מתלמידי הכיתה ${ctx[2]} בדיוק ${f} ${ctx[1]}?`, k: 'frac', a: [counts[f], tot], show: M(F(counts[f], tot)) }],
+      steps: [`כל עמודה של פרצופים = מספר התלמידים עם אותה תשובה. סופרים את הפרצופים מעל המספר.`, `"יותר מ-${k}" – <b>לא כולל</b> את ${k}: מחברים את העמודות מ-${k + 1} והלאה: ${M(counts.slice(k + 1).join(' + ') + ' = ' + more)}`, `"איזה חלק" = שבר: מונה – כמה תלמידים, מכנה – <b>כל</b> הכיתה. סופרים את כולם: ${M(tot)} תלמידים.`] };
+  } },
+  { t: 'צביעת חלק ממלבן', g() {
+    const opt = pick([[3, 8, 8, 2], [2, 5, 5, 3], [3, 4, 4, 3], [5, 6, 6, 2], [4, 5, 10, 2], [3, 10, 5, 2], [5, 8, 4, 4]]), [a, b, cols, rows] = opt, need = cols * rows * a / b;
+    return { q: `צִבעו ${M(F(a, b))} משטח המלבן שבסרטוט.`, fig: () => mkGrid(cols, rows, { click: true }), figPrint: () => mkGrid(cols, rows), parts: [{ k: 'cells', a: need, show: `${M(need)} משבצות מתוך ${M(cols * rows)}` }],
+      steps: [`סופרים את כל המשבצות: ${M(`${cols} × ${rows} = ${cols * rows}`)}`, `${M(F(1, b))} מהמלבן: ${M(`${cols * rows} : ${b} = ${cols * rows / b}`)} משבצות`, `${M(F(a, b))}: ${M(`${a} × ${cols * rows / b} = ${need}`)} משבצות – צובעים כל ${need} משבצות שהן (לא חייב בשורה אחת).`] };
+  } },
+  { t: 'מספר עשרוני בין שני מספרים', g() {
+    const w = R(0, 3), t = R(1, 8), lo = w + t / 10, hi = w + (t + 1) / 10;
+    return { q: `כִּתבו מספר גדול מ-${M(fmt(lo))} וקטן מ-${M(fmt(hi))}`, parts: [{ k: 'num', check: v => v > lo + 1e-9 && v < hi - 1e-9, show: `למשל ${M(fmt(rnd(lo + 0.05)))} (או ${M(fmt(rnd(lo + 0.01)))}, ${M(fmt(rnd(lo + 0.08)))}...)` }],
+      steps: [`כותבים את המספרים עם שתי ספרות אחרי הנקודה: ${M(fmt(lo) + '0')} ו-${M(fmt(hi) + '0')}`, `עכשיו רואים מספרים באמצע: ${M(fmt(rnd(lo + 0.01)))}, ${M(fmt(rnd(lo + 0.02)))} ... ${M(fmt(rnd(lo + 0.09)))}`, 'כל אחד מהם הוא תשובה נכונה!'] };
+  } },
+  { t: 'מיקום שברים על ישר המספרים', g() {
+    const d = pick([4, 5, 3]), n1 = R(1, d - 1), n2 = R(1, d - 1), ticks = [];
+    for (let i = 0; i <= 2 * d; i++) ticks.push({ v: i / d, lab: i % d === 0 ? String(i / d) : null, big: i % d === 0 });
+    return { q: `לפניכם ישר-מספרים. כל שלם מחולק ל-${d} חלקים שווים.<br>לחצו על המקום המתאים לכל מספר:`, parts: [
+      { l: 'א.', q: `המספר ${M(F(n1, d))}`, k: 'tick', fig: () => mkNumLine(0, 2, ticks, null, { click: true }), a: n1, show: `הסימון ה-${n1} אחרי 0` },
+      { l: 'ב.', q: `המספר ${M(`1${F(n2, d)}`)}`, k: 'tick', fig: () => mkNumLine(0, 2, ticks, null, { click: true }), a: d + n2, show: `הסימון ה-${n2} אחרי 1` }],
+      figPrint: () => mkNumLine(0, 2, ticks, null), printNoParts: true, printQ: `כִּתבו את המספרים ${M(F(n1, d))} , ${M(`1${F(n2, d)}`)} במקומות המתאימים על ישר-המספרים.`,
+      steps: [`בין 0 ל-1 יש ${d} קפיצות – כל קפיצה היא ${M(F(1, d))}.`, `${M(F(n1, d))}: ${n1} קפיצות מ-0.`, `${M(`1${F(n2, d)}`)}: מגיעים ל-1, ומשם עוד ${n2} קפיצות.`] };
+  } },
+  { t: 'סדרה של מספרים עשרוניים', g() {
+    const st = R(2, 9), s = R(5, 40), v = i => rnd((s + st * i) / 100);
+    return { q: `הַשלימו את המספרים החסרים כך שתתקבל סדרה של מספרים שה"קפיצות" ביניהם שוות.`, parts: [{ k: 'fill', q: M(`[[0]], ${fmt(v(1))}, ${fmt(v(2))}, ${fmt(v(3))}, [[1]], [[2]]`), a: [v(0), v(4), v(5)], show: M([v(0), v(1), v(2), v(3), v(4), v(5)].map(fmt).join(', ')) }],
+      steps: [`הקפיצה: ${M(`${fmt(v(2))} – ${fmt(v(1))} = ${fmt(st / 100)}`)}`, `קדימה מוסיפים ${M(fmt(st / 100))}: ${M(`${fmt(v(3))} + ${fmt(st / 100)} = ${fmt(v(4))}`)}, ואז ${M(fmt(v(5)))}`, `אחורה מחסירים: ${M(`${fmt(v(1))} – ${fmt(st / 100)} = ${fmt(v(0))}`)}`] };
+  } },
+  { t: 'סקר – שבר מכמות', g() {
+    let T, k, b, a, c;
+    do { k = pick([3, 4, 5]); T = k * R(9, 16); a = T / k; b = R(Math.floor(T / 4), Math.floor(T / 2)); c = T - a - b; } while (c <= 0 || new Set([a, b, c]).size < 3);
+    const cats = pick([['כדורגל', 'כדורסל', 'שחייה'], ['ציור', 'מוזיקה', 'מחשבים'], ['תפוח', 'בננה', 'אבטיח']]), kind = pick(['ענף הספורט האהוב עליהם', 'החוג שמעניין אותם', 'הפרי האהוב עליהם']);
+    const ix = [a, b, c].indexOf(Math.max(a, b, c));
+    return { q: `בבית הספר נערך סקר על ${kind}: ${cats.join(', ')}. בסקר השתתפו ${M(T)} תלמידים, וכל תלמיד בחר אפשרות אחת.<br>${M(F(1, k))} מהתלמידים בחרו ב${cats[0]}, ${M(b)} תלמידים בחרו ב${cats[1]}, והשאר בחרו ב${cats[2]}.`, parts: [
+      { l: 'א.', q: `כמה תלמידים בחרו ב${cats[2]}?`, k: 'num', a: c, show: M(c) },
+      { l: 'ב.', q: 'באיזו אפשרות בחרו הכי הרבה תלמידים?', k: 'choice', opts: cats.map(x => x), a: ix, show: cats[ix] }],
+      steps: [`${M(F(1, k))} מ-${M(T)}: ${M(`${T} : ${k} = ${a}`)} תלמידים בחרו ב${cats[0]}`, `השאר: ${M(`${T} – ${a} – ${b} = ${c}`)} בחרו ב${cats[2]}`, `משווים: ${M(a)}, ${M(b)}, ${M(c)} ← הכי הרבה: ${cats[ix]}`] };
+  } },
+  { t: 'אלכסוני מרובע', g() {
+    const ty = pick(['kite', 'rhombus', 'rect', 'square']), names = ['ריבוע', 'מלבן', 'מעוין', 'דלתון', 'מקבילית'];
+    let A, B, C, D;
+    if (ty === 'kite') { A = [0, 2]; C = [R(5, 7), 2]; B = [2, 0]; D = [2, 4]; if (Math.random() < .5) { B = [2, -1]; D = [2, 5]; } }
+    else if (ty === 'rhombus') { A = [0, 2]; C = [6, 2]; B = [3, 0]; D = [3, 4]; }
+    else if (ty === 'square') { A = [0, 2]; C = [4, 2]; B = [2, 0]; D = [2, 4]; }
+    else { A = [0, 0]; C = [6, 3]; B = [6, 0]; D = [0, 3]; }
+    const nm = { kite: 'דלתון', rhombus: 'מעוין', rect: 'מלבן', square: 'ריבוע' }[ty];
+    const P = [A, B, C, D], diag = P2 => `<line x1="${P2(A)[0]}" y1="${P2(A)[1]}" x2="${P2(C)[0]}" y2="${P2(C)[1]}" stroke="#111" stroke-width="2.5"/><line x1="${P2(B)[0]}" y1="${P2(B)[1]}" x2="${P2(D)[0]}" y2="${P2(D)[1]}" stroke="#111" stroke-width="2.5"/>`;
+    const figD = () => mkPoly(P, { grid: true, u: 26, hide: true, extra: [diag] });
+    const figS = () => mkPoly(P, { grid: true, u: 26, extra: [diag] });
+    const why = { kite: 'האלכסונים מאונכים, ורק אחד מהם חוצה את השני', rhombus: 'האלכסונים מאונכים וחוצים זה את זה, אבל לא שווים', square: 'האלכסונים מאונכים, חוצים זה את זה ושווים', rect: 'האלכסונים שווים וחוצים זה את זה, אבל לא מאונכים' }[ty];
+    return { q: `הקטעים המסורטטים לפניכם הם <b>אלכסוני מרובע</b>.`, fig: figD, parts: [
+      { l: 'א.', q: 'סרטטו (בדמיון או על דף) את צלעות המרובע – מחברים את קצות האלכסונים.', k: 'self', show: `ככה נראה המרובע:${figS()}` },
+      { l: 'ב.', q: 'מה שם המרובע שאלה אלכסוניו?', k: 'choice', pl: true, opts: names, a: names.indexOf(nm), show: nm }],
+      steps: ['מחברים כל קצה של אלכסון אחד לשני הקצוות של האלכסון השני – מקבלים 4 צלעות.', `בודקים את האלכסונים: ${why}.`, `לכן זה <b>${nm}</b>.`] };
+  } },
+  { t: 'גובה במשולש', g() {
+    const base = R(3, 4), off = pick([-2, 1, base + 2]), h = R(3, 4), A = [0, h], B = [base, h], T = [off, 0];
+    const kinds = ['ok', 'side', 'median', 'short'];
+    const draw = kd => mkPoly([A, B, T], { grid: true, u: 22, fill: '#bdbdbd', extra: [P => {
+      const [tx, ty] = P(T), [ax, ay] = P(A), [bx] = P(B), foot = P([off, h]);
+      if (kd === 'ok') return `${off < 0 || off > base ? `<line x1="${Math.min(ax, foot[0])}" y1="${ay}" x2="${Math.max(bx, foot[0])}" y2="${ay}" stroke="#333" stroke-dasharray="4 3"/>` : ''}<line x1="${tx}" y1="${ty}" x2="${foot[0]}" y2="${foot[1]}" stroke="#111" stroke-width="4"/>`;
+      if (kd === 'side') { const m = P([(A[0] + T[0]) / 2 + 0.5, h / 2]); return `<line x1="${m[0]}" y1="${(ty + ay) / 2}" x2="${m[0]}" y2="${ay}" stroke="#111" stroke-width="4"/>`; }
+      if (kd === 'median') { const m = P([base / 2, h]); return `<line x1="${tx}" y1="${ty}" x2="${m[0]}" y2="${m[1]}" stroke="#111" stroke-width="4"/>`; }
+      return `<line x1="${tx}" y1="${ty}" x2="${tx}" y2="${(ty + ay) / 2}" stroke="#111" stroke-width="4"/>`;
+    }] });
+    const order = shuffle(kinds);
+    return { q: 'לפניכם סרטוטים של 4 משולשים הצבועים באפור.<br>באיזה סרטוט הקטע המודגש הוא <b>גובה</b> לאחת מצלעות המשולש?', parts: [{ k: 'choice', opts: order.map((kd, i) => `<span class="mk-optfig">${draw(kd)}</span>`), a: order.indexOf('ok'), show: `סרטוט ${order.indexOf('ok') + 1}`, grid: true }],
+      steps: ['גובה = קטע שיוצא מ<b>קודקוד</b> ומגיע <b>בזווית ישרה</b> לצלע שמולו (או להמשך שלה).', 'בודקים כל סרטוט: האם הקטע יוצא מקודקוד? האם הוא מאונך לצלע? האם הוא מגיע עד הצלע?', 'כשהמשולש "נוטה" – הגובה יכול ליפול <b>מחוץ</b> למשולש, על המשך הצלע (הקו המקווקו).'] };
+  } },
+  { t: 'שטח משולש ישר-זווית', g() {
+    const [a, b, c] = pick([[6, 8, 10], [5, 12, 13], [9, 12, 15], [8, 15, 17], [12, 9, 15], [8, 6, 10]]);
+    return { q: `לפניכם סרטוט של משולש ישר-זווית. מה <b>שטח</b> המשולש?${mkPoly([[0, 0], [0, a / 1.5], [b / 1.5, a / 1.5]], { u: 20, labels: [`${a} ס"מ`, `${b} ס"מ`, `${c} ס"מ`], extra: [P => { const [x, y] = P([0, a / 1.5]); return `<rect x="${x}" y="${y - 10}" width="10" height="10" fill="none" stroke="#222"/>`; }] })}`, parts: [{ k: 'num', a: a * b / 2, show: M(a * b / 2), unit: 'סמ"ר' }],
+      steps: [`במשולש ישר-זווית, שני הניצבים (הצלעות שליד הזווית הישרה) הם בסיס וגובה: ${M(a)} ו-${M(b)}.`, `שטח = בסיס × גובה : 2 ← ${M(`${a} × ${b} : 2 = ${a * b / 2}`)} סמ"ר`, `⚠️ הצלע הארוכה (${M(c)}) לא משמשת לחישוב השטח – היא לא גובה!`] };
+  } },
+  { t: 'שטח מורכב – חצר', g() {
+    const W = R(16, 24), H = R(10, 14), a = R(3, 5), b = R(3, 5), p = R(6, 9), q = R(4, 6), S = W * H - a * b - p * q;
+    const it = pick([['מחסן', 'בריכה'], ['ארגז חול', 'חניה'], ['ערוגה', 'ספסלים']]);
+    const k = 380 / W, Wp = W * k, Hp = H * k, ap = a * k, bp = b * k, pp = p * k, qp = q * k;
+    const fig = mkSVG(Wp + 70, Hp + 50, `<rect x="40" y="10" width="${Wp}" height="${Hp}" fill="#9fd29a" stroke="#222" stroke-width="2"/>
+      <rect x="40" y="10" width="${ap}" height="${bp}" fill="#fff" stroke="#222"/>${mkT(40 + ap / 2, 14 + bp / 2, it[0], { fs: 10, rtl: true })}
+      <rect x="${40 + Wp - pp}" y="${10 + Hp - qp}" width="${pp}" height="${qp}" fill="#fff" stroke="#222"/>${mkT(40 + Wp - pp / 2, 14 + Hp - qp / 2, it[1], { fs: 10, rtl: true })}
+      ${mkT(40 + ap / 2, 24 + bp, `${a} מ'`, { fs: 11, rtl: true })}${mkT(40 + ap + 18, 14 + bp / 2, `${b} מ'`, { fs: 11, rtl: true })}
+      ${mkT(40 + Wp - pp / 2, 4 + Hp - qp, `${p} מ'`, { fs: 11, rtl: true })}${mkT(40 + Wp - pp - 18, 14 + Hp - qp / 2, `${q} מ'`, { fs: 11, rtl: true })}
+      ${mkT(40 + Wp / 2, Hp + 30, `${W} מ'`, { fs: 12, b: true, rtl: true })}${mkT(20, 14 + Hp / 2, `${H} מ'`, { fs: 12, b: true, rtl: true })}
+      ${mkT(40 + Wp / 2 - 10, 18 + Hp / 2, 'דשא', { fs: 18, b: true, c: '#fff', rtl: true })}`);
+    return { q: `לפניכם סרטוט מוקטן של חצר בצורת מלבן. השטח הצבוע בירוק מכוסה בדשא.${fig}מה שטח הדשא? הַציגו את דרך הפתרון.`, parts: [{ k: 'num', a: S, show: M(S), unit: 'מ"ר' }],
+      steps: [`שטח כל החצר: ${M(`${W} × ${H} = ${W * H}`)} מ"ר`, `${it[0]}: ${M(`${a} × ${b} = ${a * b}`)} מ"ר, ${it[1]}: ${M(`${p} × ${q} = ${p * q}`)} מ"ר`, `הדשא = החצר פחות שני החלקים: ${M(`${W * H} – ${a * b} – ${p * q} = ${S}`)} מ"ר`] };
+  } }
+];
+
+/* ===== כיתה ה' ===== */
+MKQ[5] = [
+  { t: 'מספר במילים והחלפת ספרה', g() {
+    let n; do { n = R(1, 9) * 100000 + R(0, 9) * 10000 + R(0, 9) * 1000 + R(1, 8) * 100 + R(0, 9) * 10 + R(1, 9); } while (String(n).includes('00'));
+    const place = pick([[100, 'המאות'], [1000, 'האלפים'], [10, 'העשרות']]), old = Math.floor(n / place[0]) % 10;
+    let dg; do { dg = R(0, 9); } while (dg === old);
+    const nn = n + (dg - old) * place[0], diff = Math.abs(nn - n);
+    return { q: `נָתוּן הַמִּסְפָּר: ${mkN(n)}`, parts: [
+      { l: 'א.', q: 'כִּתבו את המספר <b>במילים</b>.', k: 'self', show: heNum(n) },
+      { l: 'ב.', q: `החליפו במספר הנתון את <b>ספרת ${place[1]}</b> בספרה ${dg}. המספר שהתקבל הוא:`, k: 'num', a: nn, show: mkN(nn) },
+      { l: 'ג.', q: `המספר החדש <b>גדל</b> או <b>קטן</b>?`, k: 'choice', opts: ['גדל', 'קטן'], a: nn > n ? 0 : 1, show: nn > n ? 'גדל' : 'קטן' },
+      { l: 'ד.', q: 'בכמה?', k: 'num', a: diff, show: mkN(diff) }],
+      steps: [`קוראים לפי מחלקות: ${mkN(Math.floor(n / 1000))} אלף, ואז ${mkN(n % 1000)}: <b>${heNum(n)}</b>`, `ספרת ${place[1]} היא ${old}. מחליפים ב-${dg}: ${mkN(nn)}`, `השינוי: ${M(`${Math.abs(dg - old)} × ${fmt(place[0])} = ${fmt(diff)}`)} – ${nn > n ? 'גדל' : 'קטן'} ב-${mkN(diff)}`] };
+  } },
+  { t: 'סדרות – קפיצות שוות', g() {
+    const s1 = R(3, 6) * 100 + R(1, 9), d1 = pick([15, 25, 30, 40]), s2 = R(3, 8) * 1000 + R(1, 9) * 100 + R(20, 90), d2 = pick([10, 100, 20]);
+    const A = i => s1 + d1 * i, B = i => s2 - d2 * i;
+    return { q: 'סדרות המספרים שלפניכם ממשיכות באותן קפיצות. הַשלימו את המספרים החסרים:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${fmt(A(0))} , ${fmt(A(1))} , ${fmt(A(2))} , [[0]] , [[1]] , [[2]]`), a: [A(3), A(4), A(5)], show: M([3, 4, 5].map(i => fmt(A(i))).join(' , ')) },
+      { l: 'ב.', k: 'fill', q: M(`${fmt(B(0))} , ${fmt(B(1))} , ${fmt(B(2))} , [[0]] , [[1]] , [[2]]`), a: [B(3), B(4), B(5)], show: M([3, 4, 5].map(i => fmt(B(i))).join(' , ')) }],
+      steps: [`מוצאים את הקפיצה: ${M(`${fmt(A(1))} – ${fmt(A(0))} = ${d1}`)} (עולה), ובסדרה השנייה ${M(`${fmt(B(0))} – ${fmt(B(1))} = ${d2}`)} (יורדת).`, `ממשיכים להוסיף ${d1} בסדרה הראשונה, ולהחסיר ${d2} בשנייה.`, `בדיקה: הפרש קבוע בין כל שני מספרים צמודים.`] };
+  } },
+  { t: 'פתרו בדרך הנוחה לכם', g() {
+    const a = R(312, 989), b = R(1203, 4876), c = R(4102, 8790), d = R(1209, c - 1500), e1 = R(4, 9), e2 = e1 * R(3, 9), e0 = R(e2 / e1 + 5, 90), m1 = R(23, 68), m2 = R(23, 68), dv = R(3, 8), q = R(105, 199);
+    return { q: 'פִּתרו בדרך הנוחה לכם:', parts: [
+      { l: 'א.', q: M(`${fmt(a)} + ${fmt(b)} =`), k: 'num', a: a + b, show: mkN(a + b) },
+      { l: 'ב.', q: M(`${fmt(c)} – ${fmt(d)} =`), k: 'num', a: c - d, show: mkN(c - d) },
+      { l: 'ג.', q: M(`${e0} – ${e2} : ${e1} =`), k: 'num', a: e0 - e2 / e1, show: M(e0 - e2 / e1) },
+      { l: 'ד.', q: M(`${m1} × ${m2} =`), k: 'num', a: m1 * m2, show: mkN(m1 * m2) },
+      { l: 'ה.', q: M(`${q * dv} : ${dv} =`), k: 'num', a: q, show: M(q) }],
+      steps: [`ג. סדר פעולות – קודם חילוק: ${M(`${e2} : ${e1} = ${e2 / e1}`)}, ואז ${M(`${e0} – ${e2 / e1} = ${e0 - e2 / e1}`)}`, `ד. כפל דו-ספרתי: ${M(`${m1} × ${m2} = ${m1} × ${Math.floor(m2 / 10) * 10} + ${m1} × ${m2 % 10} = ${fmt(m1 * Math.floor(m2 / 10) * 10)} + ${fmt(m1 * (m2 % 10))} = ${fmt(m1 * m2)}`)}`, `ה. בודקים בכפל: ${M(`${q} × ${dv} = ${q * dv}`)}`] };
+  } },
+  { t: 'שימוש בתרגיל פתור', g() {
+    const a = R(312, 689), b = R(213, 489), k = pick([2, 3, 4, 5, 10]), up = Math.random() < .5;
+    const na = up ? a + k : a - k;
+    const c = mkChoice([`${M(fmt(na))} ${up ? 'גדול' : 'קטן'} ב-${k} מ-${M(fmt(a))}, לכן גם התוצאה ${up ? 'גדולה' : 'קטנה'} ב-${k}: ${M(`${fmt(a + b)} ${up ? '+' : '–'} ${k}`)}`, `מחברים מחדש את כל המספרים`, `התוצאה לא משתנה, כי ${M(fmt(b))} נשאר אותו דבר`, `${up ? 'מחסירים' : 'מוסיפים'} ${k} מהתוצאה`], 0);
+    return { q: `לפניכם תרגיל פתור: ${M(`${fmt(a)} + ${fmt(b)} = ${fmt(a + b)}`)}`, parts: [
+      { l: 'א.', q: 'הַשלימו בעזרת התרגיל הפתור:', q2: M(`${fmt(na)} + ${fmt(b)} = [[0]]`), k: 'fill', a: [na + b], show: mkN(na + b) },
+      { l: 'ב.', q: 'איך השלמתם בעזרת התרגיל הפתור?', k: 'choice', ...c, show: c.opts[c.a] }],
+      steps: [`משווים את התרגילים: המחובר השני (${M(fmt(b))}) לא השתנה.`, `המחובר הראשון ${up ? 'גדל' : 'קטן'} ב-${k}: ${M(`${fmt(a)} → ${fmt(na)}`)}`, `לכן גם הסכום ${up ? 'גדל' : 'קטן'} ב-${k}: ${M(`${fmt(a + b)} ${up ? '+' : '–'} ${k} = ${fmt(na + b)}`)}`] };
+  } },
+  { t: 'השלמת מספרים מתאימים', g() {
+    const T = R(3, 8) * 1000, h = R(1, 9) * 100 + R(1, 9) * 10, o = R(1, 9);
+    const B = R(12, 25) * 100, P = pick([200, 300, 400, 600]), m = R(15, 45), k = R(4, 9), j = pick([10, 20]);
+    return { q: 'הַשלימו מספרים מתאימים:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${fmt(T)} + [[0]] + ${o} = ${fmt(T + h + o)}`), a: [h], show: M(h) },
+      { l: 'ב.', k: 'fill', q: M(`${fmt(B)} – ( [[0]] × [[1]] ) = ${fmt(B - P)}`), check: v => v[0] * v[1] === P, show: `כל שני מספרים שהמכפלה שלהם ${M(P)}, למשל ${M(`${P / 10} × 10`)}` },
+      { l: 'ג.', k: 'fill', q: M(`${m} × ${k} = [[0]] × ${k} + ${j} × ${k}`), a: [m - j], show: M(m - j) }],
+      steps: [`א. מפרקים את ${mkN(T + h + o)}: ${M(`${fmt(T)} + ${h} + ${o}`)}`, `ב. ${M(`${fmt(B)} – ? = ${fmt(B - P)}`)} ← מחסירים ${M(P)}. מחפשים שני מספרים שמכפלתם ${M(P)}.`, `ג. חוק הפילוג: ${M(`${m} = ${m - j} + ${j}`)}, לכן ${M(`${m} × ${k} = ${m - j} × ${k} + ${j} × ${k}`)}`] };
+  } },
+  { t: 'אומדן מכפלה על ישר המספרים', g() {
+    const a = R(21, 29);
+    const base = pick([3, 4, 5]), mults = [base, base + 2, base + 3, base + 4].map(t => t * 10 + R(1, 3));
+    const prods = mults.map(m => a * m), ci = R(0, 3), lo = Math.floor(prods[ci] / 100) * 100, hi = lo + 200;
+    if (prods.some((p, i) => i !== ci && p >= lo && p <= hi)) return MKQ[5][5].g();
+    const opts = mults.map(m => M(`${a} × ${m}`));
+    return { q: `סמנו את התרגיל שהתוצאה שלו היא מספר הנמצא בתחום המודגש על ישר-המספרים.${mkNumLine(lo - 100, hi + 100, [{ v: lo, lab: fmt(lo) }, { v: lo + 100, lab: fmt(lo + 100) }, { v: hi, lab: fmt(hi) }], [lo, hi])}`, parts: [{ k: 'choice', opts, a: ci, show: opts[ci] }],
+      steps: [`מעגלים: ${M(a)} ← בערך ${M(Math.round(a / 10) * 10)}, ומכפילים בעשרות של כל אפשרות.`, `${mults.map(m => M(`${a} × ${m} = ${fmt(a * m)}`)).join(' · ')}`, `רק ${M(fmt(prods[ci]))} נמצא בין ${M(fmt(lo))} ל-${M(fmt(hi))}.`] };
+  } },
+  { t: '"גדול ב-" – איזו פעולה?', g() {
+    const x = R(12, 30) * 10, k = R(2, 6) * 10, more = Math.random() < .5, it = pick([['כובעים', 'צעיפים'], ['עטים', 'עפרונות'], ['כדורים', 'מחבטים']]);
+    const opts = [`להוסיף ${k} ל-${x}`, `לחסר ${k} מ-${x}`, `לכפול ${x} ב-${k}`, `לחלק ${x} ב-${k}`];
+    return { q: `בחנות יש ${M(x)} ${it[0]}. מספר ה${it[0]} <b>${more ? 'גדול' : 'קטן'} ב-${k}</b> ממספר ה${it[1]}.<br>כיצד ניתן לחשב את מספר ה${it[1]}?`, parts: [{ k: 'choice', opts, a: more ? 1 : 0, show: opts[more ? 1 : 0] }],
+      steps: [`"${more ? 'גדול' : 'קטן'} ב-" מדבר על <b>הפרש</b> – חיבור או חיסור (לא כפל).`, more ? `יש יותר ${it[0]}, לכן ${it[1]} יש <b>פחות</b>: ${M(`${x} – ${k} = ${x - k}`)}` : `יש פחות ${it[0]}, לכן ${it[1]} יש <b>יותר</b>: ${M(`${x} + ${k} = ${x + k}`)}`, `בדיקה: ${more ? M(`${x - k} + ${k} = ${x}`) : M(`${x + k} – ${k} = ${x}`)} ✔`] };
+  } },
+  { t: 'בעיה מילולית – כפל וחילוק', g() {
+    let n, m, p; do { n = R(3, 6); m = pick([12, 15, 16, 18, 20, 24]); p = pick([4, 5, 6, 8, 9, 10]); } while ((n * m) % p || n * m / p > 20);
+    const nm = mkName(), it = pick([['קופסאות של עוגיות', 'עוגיות', 'צלחות'], ['שקיות של תפוזים', 'תפוזים', 'סלסלות'], ['חבילות של עפרונות', 'עפרונות', 'קלמרים']]);
+    return { q: `${nm} קנה/תה ${M(n)} ${it[0]}. בכל אחת יש ${M(m)} ${it[1]}.<br>${nm} רוצה לסדר את ה${it[1]} ב${it[2]}, ${M(p)} ${it[1]} בכל אחת.<br>בכמה ${it[2]} יסדר/תסדר את ה${it[1]}? הציגו את דרך הפתרון.`, parts: [{ k: 'num', a: n * m / p, show: M(n * m / p), unit: it[2] }],
+      steps: [`כמה ${it[1]} יש בסך הכול? ${M(`${n} × ${m} = ${n * m}`)}`, `מחלקים ל${it[2]} של ${p}: ${M(`${n * m} : ${p} = ${n * m / p}`)}`, `בדיקה: ${M(`${n * m / p} × ${p} = ${n * m}`)} ✔`] };
+  } },
+  { t: 'השלמה לשלם ולשניים', g() {
+    const d1 = pick([6, 7, 8, 9]), d2 = pick([3, 5, 6]), x = R(1, d2 - 1);
+    return { q: 'הַשלימו מספרים מתאימים:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${F('[[0]]', d1)} + ${F('[[1]]', d1)} = 1`), check: v => v[0] > 0 && v[1] > 0 && v[0] + v[1] === d1, show: `כל שני מונים שסכומם ${M(d1)}, למשל ${M(`${F(2, d1)} + ${F(d1 - 2, d1)}`)}` },
+      { l: 'ב.', k: 'fill', q: M(`${F(x, d2)} + ${F('[[0]]', d2)} = 2`), a: [2 * d2 - x], show: M(F(2 * d2 - x, d2)) }],
+      steps: [`שלם אחד = ${M(F(d1, d1))}. לכן סכום המונים צריך להיות ${M(d1)}.`, `2 שלמים = ${M(F(2 * d2, d2))}.`, `חסר: ${M(`${2 * d2} – ${x} = ${2 * d2 - x}`)} ← ${M(F(2 * d2 - x, d2))} (שבר גדול מ-1 – זה בסדר!)`] };
+  } },
+  { t: 'שבר מכמות – בתמונה', g() {
+    const [a, b] = pick([[3, 8], [2, 5], [3, 4], [2, 3], [4, 7]]), it = pick([['🍎', '🍐', 'מהפירות הם תפוחים'], ['⚽', '🏀', 'מהכדורים הם כדורגל'], ['🌸', '🍃', 'מהציורים הם פרחים']]);
+    const rows = shuffle([[a, b, true], [b - a, b, false], [a, b + a, false], [a * 2, b * 2 + 1, false]]).map(([k, t, ok]) => ({ k, t, ok }));
+    const opts = rows.map(r => `<span class="mk-row" dir="ltr">${it[0].repeat(r.k)}${it[1].repeat(r.t - r.k)}</span>`);
+    return { q: `סמנו את השורה שבה ${M(F(a, b))} ${it[2]}:`, parts: [{ k: 'choice', opts, a: rows.findIndex(r => r.ok), show: `השורה עם ${a} ${it[0]} מתוך ${b}` }],
+      steps: [`${M(F(a, b))} פירושו: מכל ${b} פריטים – ${a}.`, 'בכל שורה סופרים: כמה פריטים יש <b>בסך הכול</b> (המכנה), וכמה מהסוג המבוקש (המונה).', `השורה הנכונה: ${a} מתוך ${b} (או שבר שווה לו).`] };
+  } },
+  { t: 'שברים – כמה נשאר', g() {
+    const d = pick([5, 7, 8, 9]), a = R(1, d - 3), b = R(1, d - a - 1), nm = pick(['משפחת כהן', 'משפחת לוי', 'קבוצת הצופים']);
+    return { q: `${nm} יצאה לטיול רגלי.<br>בשעה הראשונה עברו ${M(F(a, d))} מהמסלול.<br>בשעה השנייה עברו ${M(F(b, d))} מהמסלול.<br>איזה חלק מהמסלול נותר להם לעבור?`, parts: [{ k: 'frac', a: [d - a - b, d], show: M(F(d - a - b, d)) }],
+      steps: [`עד עכשיו: ${M(`${F(a, d)} + ${F(b, d)} = ${F(a + b, d)}`)}`, `כל המסלול = ${M(F(d, d))} (שלם אחד).`, `נשאר: ${M(`${F(d, d)} – ${F(a + b, d)} = ${F(d - a - b, d)}`)}`] };
+  } },
+  { t: 'שבר מכמות – בעיה', g() {
+    const k = pick([3, 4, 5, 6]), N = k * R(5, 8), it = pick(['מגיעים לבית הספר באופניים', 'מנגנים על כלי נגינה', 'משחקים כדורגל אחרי הצהריים']);
+    return { q: `בכיתה ${M(N)} תלמידים.<br>${M(F(1, k))} מהתלמידים ${it}.<br>כמה תלמידים ${it}? הציגו את דרך הפתרון.`, parts: [{ k: 'num', a: N / k, show: M(N / k), unit: 'תלמידים' }],
+      steps: [`${M(F(1, k))} = מחלקים ל-${k} חלקים שווים ולוקחים חלק אחד.`, `${M(`${N} : ${k} = ${N / k}`)}`, `בדיקה: ${M(`${N / k} × ${k} = ${N}`)} ✔`] };
+  } },
+  { t: 'היקף מלבן – צלע חסרה', g() {
+    const s = R(4, 12), t = R(3, 11), P = 2 * (s + t), nm = mkName();
+    return { q: `${nm} סרטט/ה מלבן. היקף המלבן ${M(P)} ס"מ. האורך של אחת הצלעות הוא ${M(s)} ס"מ.<br>חשבו את אורך הצלע הסמוכה. הציגו את דרך הפתרון.${mkPoly([[0, 0], [s, 0], [s, t], [0, t]], { u: 14, labels: [`${s} ס"מ`, '?', null, null], bold: 1 })}`, parts: [{ k: 'num', a: t, show: M(t), unit: 'ס"מ' }],
+      steps: [`במלבן יש 2 צלעות של ${M(s)}: ${M(`2 × ${s} = ${2 * s}`)}`, `לשתי הצלעות האחרות נשאר: ${M(`${P} – ${2 * s} = ${2 * t}`)}`, `כל אחת: ${M(`${2 * t} : 2 = ${t}`)} ס"מ. (או: חצי היקף ${M(P / 2)}, פחות ${M(s)})`] };
+  } },
+  { t: 'מצולע – שם, אלכסונים וצלעות סמוכות', g() {
+    const shapes = [['מחומש', [[2, 0], [5, 1], [6, 4], [2, 5], [0, 2]]], ['משושה', [[1, 0], [4, 0], [6, 2], [5, 5], [1, 5], [0, 2]]], ['מרובע', [[0, 1], [5, 0], [6, 4], [1, 5]]]], [nm, pts] = pick(shapes), bi = R(0, pts.length - 1), n = pts.length;
+    const adj = [(bi + n - 1) % n, (bi + 1) % n], names = ['משולש', 'מרובע', 'מחומש', 'משושה', 'מתומן'];
+    return { q: 'לפניכם מצולע.', fig: () => mkPoly(pts, { u: 26, bold: bi, click: true }), figPrint: () => mkPoly(pts, { u: 26, bold: bi }), parts: [
+      { l: 'א.', q: 'מה שם המצולע?', k: 'choice', pl: true, opts: names, a: names.indexOf(nm), show: nm },
+      { l: 'ב.', q: 'כמה אלכסונים אפשר לסרטט מקודקוד אחד?', k: 'num', a: n - 3, show: M(n - 3), printQ: 'סרטטו שני אלכסונים במצולע.' },
+      { l: 'ג.', q: 'לחצו בציור על הצלעות <b>הסמוכות</b> לצלע המודגשת (בקו עבה).', printQ: 'סמנו בצבע את הצלעות הסמוכות לצלע המודגשת (בקו עבה).', k: 'sides', a: adj, show: 'שתי הצלעות שנוגעות בקצוות של הצלע המודגשת' }],
+      steps: [`סופרים צלעות: ${n} ← ${nm}.`, `אלכסון מחבר שני קודקודים <b>שאינם שכנים</b>. מכל קודקוד: ${M(`${n} – 3 = ${n - 3}`)} אלכסונים.`, 'צלעות סמוכות = צלעות שיש להן קודקוד משותף עם הצלע. לכל צלע יש בדיוק 2 צלעות סמוכות.'] };
+  } },
+  { t: 'דיאגרמת עמודות', g() {
+    const cols = ['כחול', 'לבן', 'ירוק', 'צהוב', 'כתום', 'אדום', 'סגול'];
+    let v; do { v = cols.map(() => R(0, 11)); } while (!v.some((x, i) => v.some(y => y && x === 2 * y)) || v.filter(x => x === Math.max(...v)).length > 1 || !v.some(x => x < 5));
+    const mx = v.indexOf(Math.max(...v)), less = cols.filter((c, i) => v[i] < 5), nm = mkName();
+    return { q: `הדיאגרמה מתארת את החרוזים ש${nm} בחר/ה לשרשרת. מספר החרוזים הוא מספר שלם.${mkBars(v, cols, 'מספר חרוזים')}`, parts: [
+      { l: 'א.', q: 'באיזה צבע מספר החרוזים הגדול ביותר?', k: 'choice', pl: true, opts: cols, a: mx, show: cols[mx] },
+      { l: 'ב.', q: 'באילו צבעים יש <b>פחות</b> מ-5 חרוזים? (סמנו את כולם)', k: 'multi', pl: true, opts: cols, a: cols.map((c, i) => i).filter(i => v[i] < 5), show: less.join(', ') },
+      { l: 'ג.', q: 'השלימו:', k: 'pair', opts: cols, check: (i, j) => v[j] > 0 && v[i] === 2 * v[j], show: (() => { const r = []; v.forEach((x, i) => v.forEach((y, j) => { if (y && x === 2 * y) r.push(`${cols[i]} (${x}) ו${cols[j]} (${y})`); })); return r.join(' · '); })() }],
+      steps: ['קוראים כל עמודה מול הקווים של הציר: הגובה = מספר החרוזים.', '"פחות מ-5" – לא כולל 5. גם צבע עם 0 חרוזים נחשב!', '"פי 2" – מספר אחד הוא <b>כפול</b> מהשני (למשל 8 ו-4).'] };
+  } },
+  { t: 'מצולע מריבועים – שטח נשמר', g() {
+    const sh = pick([[[7, 7, 6], 'משושה'], [[6, 6, 4], 'משושה'], [[6, 5, 4], 'מתומן'], [[8, 8, 6], 'משושה'], [[5, 5, 5, 3], 'משושה']]), rows = sh[0], n = rows.reduce((a, b) => a + b);
+    const u = 22; let s = ''; rows.forEach((L, r) => { for (let c = 0; c < L; c++) s += `<rect x="${2 + c * u}" y="${2 + r * u}" width="${u}" height="${u}" fill="#fff" stroke="#222" stroke-width="1.5"/>`; });
+    const fig = mkSVG(Math.max(...rows) * u + 4, rows.length * u + 4, s), names = ['מרובע', 'מחומש', 'משושה', 'מתומן'];
+    return { q: `${mkName()} הרכיב/ה מצולע מ-${M(n)} ריבועים זהים:${fig}`, parts: [
+      { l: 'א.', q: 'מה שם המצולע?', k: 'choice', pl: true, opts: names, a: names.indexOf(sh[1]), show: sh[1] },
+      { l: 'ב.', q: `מסדרים את <b>כל</b> הריבועים מחדש כמלבן. כתבו אורך ורוחב (במספר ריבועים) של מלבן אפשרי:`, printQ: 'איך אפשר לסדר את הריבועים אחרת כדי שיתקבל מלבן? שרטטו את המלבן.', k: 'fill', q2: M('[[0]] × [[1]]'), check: v => v[0] * v[1] === n, show: `כל זוג שמכפלתו ${M(n)}, למשל ${M(`${n / 2} × 2`)}` },
+      { l: 'ג.', q: 'האם שטח המלבן גדול, קטן או שווה לשטח המצולע המקורי?', k: 'choice', opts: ['גדול', 'קטן', 'שווה'], a: 2, show: 'שווה – באותם ריבועים בדיוק' }],
+      steps: [`סופרים צלעות של הצורה (כל "מדרגה" מוסיפה 2 צלעות) ← ${sh[1]}.`, `מלבן מ-${M(n)} ריבועים: שורות שוות. מחפשים שני מספרים שמכפלתם ${M(n)}.`, 'השטח = מספר הריבועים. לא הוספנו ולא הורדנו ריבועים, לכן השטח <b>שווה</b> (ההיקף יכול להשתנות!).'] };
+  } }
+];
+
+/* ===== כיתה ד' ===== */
+MKQ[4] = [
+  { t: 'מספר במילים ומספר זוגי מאותן ספרות', g() {
+    let n; do { n = R(1, 9) * 1000 + R(0, 9) * 100 + R(0, 9) * 10 + R(0, 9); } while (!String(n).split('').some(d => d % 2 === 0) || String(n) === String(n).split('').sort().reverse().join(''));
+    const ds = String(n).split('').sort().join('');
+    const best = (() => { let b = null; const p = (a, r) => { if (!a.length) { const v = +r; if (r[0] !== '0' && v > n && v % 2 === 0 && (b === null || v < b)) b = v; return; } a.forEach((x, i) => p(a.slice(0, i).concat(a.slice(i + 1)), r + x)); }; p(String(n).split(''), ''); return b; })();
+    if (best === null) return MKQ[4][0].g();
+    return { q: `נתון המספר: ${mkN(n)}`, parts: [
+      { l: 'א.', q: 'כִּתבו את המספר במילים.', k: 'self', show: heNum(n) },
+      { l: 'ב.', q: 'השתמשו <b>באותן הספרות</b> של המספר הנתון וכִתבו מספר <b>זוגי</b> הגדול ממנו.', k: 'num', check: v => String(v).split('').sort().join('') === ds && v % 2 === 0 && v > n, show: `למשל ${mkN(best)}` }],
+      steps: [`קוראים: ${heNum(n)}.`, 'מספר זוגי = ספרת האחדות שלו זוגית (0, 2, 4, 6, 8). שמים ספרה זוגית בסוף.', `את שאר הספרות מסדרים כך שהמספר יהיה גדול מ-${mkN(n)} – למשל ${mkN(best)}.`] };
+  } },
+  { t: 'החלפת ספרה – גדל או קטן ובכמה', g() {
+    let n; do { n = R(2, 9) * 1000 + R(1, 9) * 100 + R(1, 9) * 10 + R(1, 9); } while (false);
+    const pl = pick([[100, 'המאות'], [10, 'העשרות']]), d = Math.floor(n / pl[0]) % 10, nn = n - d * pl[0];
+    return { q: `נתון המספר ${mkN(n)}. מחליפים את ספרת ${pl[1]} (הספרה ${d}) בספרה 0.`, parts: [
+      { l: 'א.', q: `האם המספר החדש גדול יותר או קטן יותר מ-${mkN(n)}?`, k: 'choice', opts: ['גדול יותר', 'קטן יותר'], a: 1, show: 'קטן יותר' },
+      { l: 'ב.', q: 'בכמה?', k: 'num', a: d * pl[0], show: M(d * pl[0]) }],
+      steps: [`המספר החדש: ${mkN(nn)}.`, `הספרה ${d} בעמודת ${pl[1]} שווה ${M(`${d} × ${pl[0]} = ${d * pl[0]}`)}.`, `החלפנו אותה ב-0, לכן המספר קטן ב-${M(d * pl[0])}.`] };
+  } },
+  { t: 'מספר חסר – שוויון', g() {
+    const a = R(31, 79) * 10, b = R(12, 39) * 10, k = R(2, 9) * 10, c = a + k;
+    const ch = mkChoice([`${M(fmt(c))} גדול ב-${k} מ-${M(fmt(a))}, לכן המספר החסר קטן ב-${k} מ-${M(fmt(b))}`, `מחברים את כל המספרים`, `המספר החסר שווה ל-${M(fmt(b))}`, `מחסירים ${M(fmt(c))} מ-${M(fmt(a))}`], 0);
+    return { q: '', parts: [
+      { l: 'א.', q: 'הַשלימו את המספר החסר:', q2: M(`${fmt(a)} + ${fmt(b)} = ${fmt(c)} + [[0]]`), k: 'fill', a: [b - k], show: M(b - k) },
+      { l: 'ב.', q: `איך אפשר למצוא את המספר החסר <b>בלי</b> לחשב את התוצאה של ${M(`${fmt(a)} + ${fmt(b)}`)}?`, k: 'choice', ...ch, show: ch.opts[ch.a] }],
+      steps: [`שני הצדדים צריכים להיות שווים – כמו מאזניים.`, `בצד ימין המחובר הראשון גדל ב-${k} (${M(`${fmt(a)} → ${fmt(c)}`)}).`, `כדי לשמור על איזון, המחובר השני קטן ב-${k}: ${M(`${b} – ${k} = ${b - k}`)}`] };
+  } },
+  { t: 'פתרו את התרגילים', g() {
+    const a = R(215, 589), b = R(167, 389), c = R(3, 8) * 100 + R(1, 9), d = R(123, c - 100), e1 = R(3, 6), e2 = e1 * R(2, 5), e0 = R(e2 / e1 + 4, 30), m1 = R(13, 49), m2 = R(4, 9);
+    return { q: 'פִּתרו את התרגילים בדרך הנוחה לכם:', parts: [
+      { l: 'א.', q: M(`${a} + ${b} =`), k: 'num', a: a + b, show: M(a + b) },
+      { l: 'ב.', q: M(`${c} – ${d} =`), k: 'num', a: c - d, show: M(c - d) },
+      { l: 'ג.', q: M(`${e0} – ${e2} : ${e1} =`), k: 'num', a: e0 - e2 / e1, show: M(e0 - e2 / e1) },
+      { l: 'ד.', q: M(`${m1} × ${m2} =`), k: 'num', a: m1 * m2, show: M(m1 * m2) }],
+      steps: [`ב. כשיש 0 בעשרות – פורטים מאה: ${M(`${c} – ${d} = ${c - d}`)}. בדיקה: ${M(`${c - d} + ${d} = ${c}`)}`, `ג. קודם חילוק, אחר כך חיסור: ${M(`${e2} : ${e1} = ${e2 / e1}`)} ← ${M(`${e0} – ${e2 / e1} = ${e0 - e2 / e1}`)}`, `ד. מפרקים: ${M(`${m1} × ${m2} = ${Math.floor(m1 / 10) * 10} × ${m2} + ${m1 % 10} × ${m2} = ${Math.floor(m1 / 10) * 10 * m2} + ${(m1 % 10) * m2} = ${m1 * m2}`)}`] };
+  } },
+  { t: 'סדרות – קפיצות שוות', g() {
+    const s1 = R(4, 8) * 1000 + R(1, 9) * 100, d1 = pick([200, 300, 500]), s2 = R(2, 8) * 1000 + R(101, 899), d2 = pick([3, 4, 5, 6]);
+    return { q: 'סדרות המספרים שלפניכם ממשיכות באותן הקפיצות. השלימו את המספרים החסרים:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${fmt(s1)} , ${fmt(s1 - d1)} , ${fmt(s1 - 2 * d1)} , [[0]] , [[1]]`), a: [s1 - 3 * d1, s1 - 4 * d1], show: M(`${fmt(s1 - 3 * d1)} , ${fmt(s1 - 4 * d1)}`) },
+      { l: 'ב.', k: 'fill', q: M(`[[0]] , ${fmt(s2)} , ${fmt(s2 + d2)} , ${fmt(s2 + 2 * d2)} , [[1]]`), a: [s2 - d2, s2 + 3 * d2], show: M(`${fmt(s2 - d2)} ... ${fmt(s2 + 3 * d2)}`) }],
+      steps: [`א. הקפיצה: ${M(`${fmt(s1)} – ${fmt(s1 - d1)} = ${d1}`)} – הסדרה יורדת, ממשיכים להחסיר ${d1}.`, `ב. הקפיצה: ${M(`+${d2}`)}. המספר שלפני ${mkN(s2)}: מחסירים ${d2}.`, 'בודקים שהקפיצה זהה בין כל שני מספרים.'] };
+  } },
+  { t: 'מספרים בקטע על ישר המספרים', g() {
+    const lo = R(2, 7) * 1000 + pick([0, 500]), hi = lo + 500;
+    return { q: `לפניכם קטע מישר המספרים:${mkNumLine(lo - 500, hi + 500, [{ v: lo - 500, lab: fmt(lo - 500) }, { v: lo, lab: fmt(lo) }, { v: hi, lab: fmt(hi) }, { v: hi + 500, lab: fmt(hi + 500) }], [lo, hi])}כִּתבו <b>שני</b> מספרים שנמצאים בקטע המודגש.`, parts: [{ k: 'fill', q: M('[[0]] , [[1]]'), check: v => v[0] !== v[1] && v.every(x => x > lo && x < hi), show: `כל שני מספרים בין ${mkN(lo)} ל-${mkN(hi)}, למשל ${mkN(lo + 120)} ו-${mkN(lo + 350)}` }],
+      steps: [`הקטע המודגש מתחיל ב-${mkN(lo)} ונגמר ב-${mkN(hi)}.`, `כל מספר שגדול מ-${mkN(lo)} וקטן מ-${mkN(hi)} מתאים.`, `למשל: ${mkN(lo + 100)}, ${mkN(lo + 250)}, ${mkN(hi - 1)}.`] };
+  } },
+  { t: 'השלמת מספר חסר', g() {
+    const a = R(3, 9) * 10, s = R(21, 69) * 10, n = R(213, 987), p = R(3, 8) * 10, q = R(3, 9) * 10, h = R(2, 9) * 100;
+    return { q: 'השלימו:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${a} + [[0]] = ${s}`), a: [s - a], show: M(s - a) },
+      { l: 'ב.', k: 'fill', q: M(`${n} : 1 = ${n} + [[0]]`), a: [0], show: M(0) },
+      { l: 'ג.', k: 'fill', q: M(`${fmt(p * q)} = [[0]] × ${p}`), a: [q], show: M(q) },
+      { l: 'ד.', k: 'fill', q: M(`[[0]] – ${h} = ${h}`), a: [2 * h], show: M(2 * h) }],
+      steps: [`א. כמה חסר מ-${a} עד ${s}? ${M(`${s} – ${a} = ${s - a}`)}`, `ב. חילוק ב-1 לא משנה את המספר, לכן מוסיפים 0.`, `ג. ${M(`? × ${p} = ${fmt(p * q)}`)} ← ${M(`${fmt(p * q)} : ${p} = ${q}`)}. ד. מספר פחות ${h} שווה ${h} ← המספר הוא ${M(`${h} + ${h} = ${2 * h}`)}`] };
+  } },
+  { t: 'קפיצות שוות על ישר המספרים', g() {
+    const j = pick([2, 3, 4]), k = R(5, Math.floor(29 / j)), end = j * k;
+    let s = `<line x1="10" y1="60" x2="${30 + end * 14}" y2="60" stroke="#333" stroke-width="1.5"/><path d="M${30 + end * 14} 60l-8 -4v8z" fill="#333"/>`;
+    for (let i = 0; i <= end + 1; i++) s += `<line x1="${16 + i * 14}" y1="55" x2="${16 + i * 14}" y2="65" stroke="#333"/>`;
+    for (let i = 0; i < k; i++) s += `<path d="M${16 + i * j * 14} 54 q${j * 7} -22 ${j * 14} 0" fill="none" stroke="#333"/>`;
+    s += mkT(16, 80, 0, { fs: 12 }) + `<rect x="${8 + end * 14}" y="68" width="18" height="16" fill="#fff" stroke="#333"/>${mkT(16 + j * 7 - 6, 20, '+', { fs: 13 })}<rect x="${16 + j * 7 - 2}" y="8" width="18" height="16" fill="#fff" stroke="#333"/>`;
+    return { q: `על ישר המספרים סימנו <b>קפיצות שוות</b>, החל מ-0 ועד למספר כלשהו הקטן מ-30. כל שנתה = 1. השלימו מספרים מתאימים:${mkSVG(50 + end * 14, 90, s)}`, parts: [
+      { l: 'א.', q: 'גודל כל קפיצה:', k: 'num', a: j, show: M('+' + j) },
+      { l: 'ב.', q: 'המספר שבסוף הקפיצות:', k: 'num', a: end, show: M(end) }],
+      steps: [`סופרים שנתות בקפיצה אחת: ${j} ← כל קפיצה היא ${M('+' + j)}.`, `סופרים קפיצות: ${k}.`, `${M(`${k} × ${j} = ${end}`)} – זה המספר שבסוף.`] };
+  } },
+  { t: 'בעיה – כמה חסר', g() {
+    const have = R(213, 589), price = R(6, 9) * 100 + pick([0, 50]), who = pick(['בקופת ועד הכיתה', 'בקופה של מועדון השחמט', 'בחיסכון של המשפחה']), what = pick(['כרטיסים למוזיאון', 'כדורים חדשים', 'משחקי קופסה']);
+    return { q: `${who} יש ${M(have)} ש"ח. הם רוצים לקנות ${what}. המחיר הוא ${M(price)} ש"ח.<br>כמה שקלים חסרים כדי שיהיה להם מספיק כסף? הציגו את דרך הפתרון.`, parts: [{ k: 'num', a: price - have, show: M(price - have), unit: 'ש"ח' }],
+      steps: ['"כמה חסר" = ההפרש בין מה שצריך למה שיש.', `${M(`${price} – ${have} = ${price - have}`)}`, `בדיקה: ${M(`${have} + ${price - have} = ${price}`)} ✔`] };
+  } },
+  { t: 'כפל עשרות בעשרות', g() {
+    const a = R(2, 9) * 10, b = R(2, 6) * 10, it = pick([['חבילות', 'מחברות'], ['ארגזים', 'בקבוקים'], ['קרטונים', 'ביצים']]);
+    return { q: `במחסן ארזו ${M(a)} ${it[0]} של ${it[1]}. בכל אחת ${M(b)} ${it[1]}.<br>כמה ${it[1]} ארזו? הציגו את דרך הפתרון.`, parts: [{ k: 'num', a: a * b, show: mkN(a * b), unit: it[1] }],
+      steps: [`${M(`${a} × ${b}`)}: כופלים בלי האפסים: ${M(`${a / 10} × ${b / 10} = ${a * b / 100}`)}`, `מוסיפים את שני האפסים: ${mkN(a * b)}`, `(${M(`${a} × ${b} = ${a / 10} × ${b / 10} × 100`)})`] };
+  } },
+  { t: 'קניות בחנות', g() {
+    const items = shuffle([['מחברת', 'מחברות', R(1, 3) * 5 + 5, 'אחת'], ['קלמר', 'קלמרים', R(4, 7) * 10, 'אחד'], ['תיק', 'תיקים', R(9, 12) * 10, 'אחד']]);
+    const nm = mkName(), [i1, i2] = [0, 1], c1 = R(2, 5);
+    let T, combo; do { combo = items.map(() => R(0, 3)); T = combo.reduce((s, c, i) => s + c * items[i][2], 0); } while (T < 100 || T > 300 || T % 50);
+    const card = `<div class="mk-shop">${items.map(it => `<div><b>${it[0]}</b><br>מחיר: ${it[2]} ש"ח</div>`).join('')}</div>`;
+    return { q: `לפניכם שלושה פריטים שנמכרים בחנות "הכול לבית הספר":${card}`, parts: [
+      { l: 'א.', q: `${nm} קנה/תה ${c1} ${items[i1][1]} ו${items[i2][0]} ${items[i2][3]}. כמה שילם/ה?`, k: 'num', a: c1 * items[i1][2] + items[i2][2], show: M(c1 * items[i1][2] + items[i2][2]), unit: 'ש"ח' },
+      { l: 'ב.', q: `${mkName2(nm)} קנה/תה באותה חנות ושילם/ה <b>בדיוק</b> ${M(T)} ש"ח. השלימו רשימת קניות אפשרית (לא חייבים לקנות מכל פריט):`, k: 'fill', q2: items.map((it, i) => `[[${i}]] ${it[1]}`).join(' · '), check: v => v.every(x => x >= 0 && Number.isInteger(x)) && v.reduce((s, c, i) => s + c * items[i][2], 0) === T, show: `למשל: ${combo.map((c, i) => `${c} ${items[i][1]}`).join(', ')}` }],
+      steps: [`א. ${M(`${c1} × ${items[i1][2]} + ${items[i2][2]} = ${c1 * items[i1][2] + items[i2][2]}`)} ש"ח`, `ב. מנסים: מתחילים מהפריט היקר, ובודקים כמה כסף נשאר.`, `בודקים שהסכום יוצא בדיוק ${M(T)}.`] };
+  } },
+  { t: 'מאונך ומקביל – מפה', g() {
+    const st = shuffle(['הדקל', 'הזית', 'התאנה', 'הרימון']), perp = st[0], par1 = st[1], par2 = st[2], diag = st[3];
+    const s = `<rect x="0" y="0" width="300" height="200" fill="#f7f7f2"/>
+      <line x1="20" y1="170" x2="290" y2="170" stroke="#555" stroke-width="5" stroke-dasharray="2 4"/>${mkT(150, 192, 'מסילת הרכבת', { fs: 11, rtl: true })}
+      <line x1="70" y1="10" x2="70" y2="165" stroke="#333" stroke-width="4"/><text x="58" y="88" font-size="11" text-anchor="middle" direction="rtl" transform="rotate(-90 58 88)">רחוב ${perp}</text>
+      <line x1="100" y1="40" x2="290" y2="40" stroke="#333" stroke-width="4"/>${mkT(125, 33, 'רחוב ' + par1, { fs: 11, rtl: true })}
+      <line x1="100" y1="110" x2="290" y2="110" stroke="#333" stroke-width="4"/>${mkT(140, 103, 'רחוב ' + par2, { fs: 11, rtl: true })}
+      <line x1="150" y1="10" x2="260" y2="165" stroke="#333" stroke-width="4"/>${mkT(262, 75, 'רחוב ' + diag, { fs: 11, rtl: true })}`;
+    const opts = [perp, par1, par2, diag].map(x => 'רחוב ' + x);
+    return { q: `לפניכם מפה של שכונה.${mkSVG(300, 200, s)}`, parts: [
+      { l: 'א.', q: `${mkName()} גר/ה ברחוב <b>המאונך</b> למסילת הרכבת. באיזה רחוב?`, k: 'choice', opts, a: 0, show: opts[0] },
+      { l: 'ב.', q: `איזה רחוב <b>מקביל</b> למסילת הרכבת ולא נחתך איתה?`, k: 'multi', opts, a: [1, 2], show: `${opts[1]} ו${opts[2]}` }],
+      steps: ['<b>מאונך</b> = נפגש בזווית ישרה (כמו האות ⊥).', '<b>מקביל</b> = באותו כיוון, אף פעם לא נפגשים, והמרחק ביניהם קבוע.', 'רחוב באלכסון – לא מאונך ולא מקביל.'] };
+  } },
+  { t: 'סרגל – קטע באורך נתון', g() {
+    const L = R(3, 7);
+    return { q: `לפניכם סרגל (בס"מ).${mkRuler(15)}`, parts: [
+      { l: 'א.', q: `כתבו קטע שאורכו ${M(L)} ס"מ:`, k: 'fill', q2: 'מ- [[0]] עד [[1]]', check: v => v[1] - v[0] === L && v[0] >= 0 && v[1] <= 15, show: `למשל מ-0 עד ${L}` },
+      { l: 'ב.', q: `כתבו קטע <b>אחר</b> שאורכו ${M(L)} ס"מ, שלא מתחיל ב-0:`, k: 'fill', q2: 'מ- [[0]] עד [[1]]', check: v => v[1] - v[0] === L && v[0] > 0 && v[1] <= 15, show: `למשל מ-3 עד ${3 + L}` }],
+      steps: [`אורך = המספר בסוף פחות המספר בהתחלה.`, `מ-0: הקטע מסתיים ב-${L}.`, `מ-3: הקטע מסתיים ב-${M(`3 + ${L} = ${3 + L}`)} – גם הוא באורך ${L} ס"מ!`] };
+  } },
+  { t: 'סוגי משולשים לפי זוויות', g() {
+    const tri = { right: [[0, 0], [0, 3], [4, 3]], obtuse: [[0, 3], [5, 3], [-2, 0]], acute: [[0, 3], [4, 3], [2, 0]] }, ks = shuffle(['right', 'obtuse', 'acute']), lab = ['א', 'ב', 'ג'];
+    const fig = `<div class="mk-tris">${ks.map((k, i) => `<div>${mkPoly(tri[k], { u: 18, grid: true })}<b>${lab[i]}</b></div>`).join('')}</div>`;
+    return { q: `לפניכם שלושה משולשים.${fig}`, parts: [
+      { l: 'א.', q: 'איזה משולש הוא <b>ישר-זווית</b>?', k: 'choice', opts: lab, a: ks.indexOf('right'), show: 'משולש ' + lab[ks.indexOf('right')] },
+      { l: 'ב.', q: 'איזה משולש הוא <b>קהה-זווית</b>?', k: 'choice', opts: lab, a: ks.indexOf('obtuse'), show: 'משולש ' + lab[ks.indexOf('obtuse')] }],
+      steps: ['<b>ישר-זווית</b>: יש זווית אחת של 90° (כמו פינה של דף).', '<b>קהה-זווית</b>: יש זווית אחת גדולה מ-90° ("פתוחה" יותר מפינת דף).', '<b>חד-זווית</b>: כל הזוויות קטנות מ-90°.'] };
+  } },
+  { t: 'הטעות בחישוב היקף', g() {
+    const a = R(4, 9), b = R(2, a - 1), nm = mkName();
+    const c = mkChoice([`${nm} חיבר/ה רק שתי צלעות. במלבן יש 4 צלעות – צריך ${M(`${a} + ${b} + ${a} + ${b}`)}`, `${nm} כפל/ה במקום לחבר`, `${nm} חישב/ה את השטח`, `אין טעות`], 0);
+    return { q: `${nm} טעה/תה ואמר/ה שהיקף המלבן שבסרטוט הוא ${M(a + b)} ס"מ.${mkPoly([[0, 0], [a, 0], [a, b], [0, b]], { u: 18, labels: [`${a} ס"מ`, `${b} ס"מ`, null, null] })}`, parts: [
+      { l: 'א.', q: 'מה הייתה הטעות?', k: 'choice', ...c, show: c.opts[c.a] },
+      { l: 'ב.', q: 'מה ההיקף הנכון?', k: 'num', a: 2 * (a + b), show: M(2 * (a + b)), unit: 'ס"מ' }],
+      steps: ['היקף = אורך <b>כל</b> הצלעות מסביב.', `במלבן יש 2 צלעות של ${a} ו-2 צלעות של ${b}.`, `${M(`${a} + ${b} + ${a} + ${b} = ${2 * (a + b)}`)} ס"מ – ${nm} חיבר/ה רק חצי.`] };
+  } },
+  { t: 'דיאגרמת נקודות', g() {
+    let c; do { c = [R(1, 3), R(1, 3), R(2, 6), R(2, 5), R(0, 2), R(1, 4), R(1, 4), R(1, 3), R(0, 2)]; } while (c.reduce((a, b) => a + b) < 20 || c.reduce((a, b) => a + b) > 30);
+    const k = pick([2, 3, 5, 6]), ctx = pick([['מספר הספרים שקרא כל תלמיד בחודש', 'ספרים', 'קראו', 'לא קראו אף ספר'], ['מספר ההצגות שראה כל תלמיד השנה', 'הצגות', 'ראו', 'לא ראו אף הצגה']]);
+    const tot = c.reduce((a, b) => a + b);
+    return { q: `הדיאגרמה מתארת את ${ctx[0]}. כל 🙂 מייצג תלמיד אחד.${mkDots(c, 'מספר ה' + ctx[1])}`, parts: [
+      { l: 'א.', q: `כמה תלמידים ${ctx[2]} ${k} ${ctx[1]}?`, k: 'num', a: c[k], show: M(c[k]), unit: 'תלמידים' },
+      { l: 'ב.', q: `כמה תלמידים ${ctx[3]}?`, k: 'num', a: c[0], show: M(c[0]), unit: 'תלמידים' },
+      { l: 'ג.', q: 'כמה תלמידים יש בכיתה?', k: 'num', a: tot, show: M(tot), unit: 'תלמידים' }],
+      steps: [`מחפשים את המספר ${k} על הציר וסופרים את הפרצופים מעליו.`, '"אף לא אחד" = 0 – העמודה מעל 0.', `כל תלמיד מופיע פעם אחת, לכן סופרים את <b>כל</b> הפרצופים: ${M(c.join(' + ') + ' = ' + tot)}`] };
+  } }
+];
+
+/* ===== כיתה ג' ===== */
+MKQ[3] = [
+  { t: 'מספר במילים, קודם ועוקב', g() {
+    const n = R(1, 9) * 100 + R(1, 9) * 10 + R(0, 9);
+    return { q: `נָתוּן הַמִּספר: ${M(n)}`, parts: [
+      { l: 'א.', q: 'כִּתבו את המספר במילים.', k: 'self', show: heNum(n) },
+      { l: 'ב.', q: 'כִּתבו בספרות את המספר <b>הקודם</b> למספר הנתון.', k: 'num', a: n - 1, show: M(n - 1) },
+      { l: 'ג.', q: 'כִּתבו בספרות את המספר <b>העוקב</b> למספר הנתון.', k: 'num', a: n + 1, show: M(n + 1) }],
+      steps: [`${M(n)} = ${Math.floor(n / 100)} מאות, ${Math.floor(n / 10) % 10} עשרות ו-${n % 10} אחדות: ${heNum(n)}`, `הקודם = אחד פחות: ${M(n - 1)}`, `העוקב = אחד יותר: ${M(n + 1)}`] };
+  } },
+  { t: 'השלמת ספרה – גדול/קטן', g() {
+    const t = R(3, 8), o = R(2, 8), h = R(2, 8), a2 = R(4, 8);
+    return { q: 'הַשלימו ספרה מתאימה:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${t}[[0]] < ${t}${o}`), check: v => v[0] >= 0 && v[0] <= 9 && Number.isInteger(v[0]) && v[0] < o, show: `כל ספרה קטנה מ-${o}, למשל ${M(`${t}${o - 1} < ${t}${o}`)}` },
+      { l: 'ב.', k: 'fill', q: M(`${h}[[0]]${a2} > ${h}5${a2 - 1}`), check: v => v[0] >= 5 && v[0] <= 9 && Number.isInteger(v[0]), show: `5 עד 9, למשל ${M(`${h}6${a2} > ${h}5${a2 - 1}`)}` }],
+      steps: ['משווים ספרה אחר ספרה משמאל (מהמאות).', 'אם הספרות הראשונות שוות – מחליטים לפי הספרה הבאה.', 'לפעמים יש כמה תשובות נכונות – מספיק לכתוב אחת.'] };
+  } },
+  { t: 'סדרות – קפיצות שוות', g() {
+    const s1 = R(31, 70), d1 = pick([3, 4, 5]), s2 = R(5, 9) * 100 + R(3, 9) * 10, d2 = pick([10, 20]);
+    return { q: 'סדרות המספרים שלפניכם ממשיכות באותן קפיצות. הַשלימו את המספרים החסרים:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${s1} , ${s1 + d1} , ${s1 + 2 * d1} , [[0]] , [[1]] , [[2]]`), a: [s1 + 3 * d1, s1 + 4 * d1, s1 + 5 * d1], show: M([3, 4, 5].map(i => s1 + i * d1).join(' , ')) },
+      { l: 'ב.', k: 'fill', q: M(`${s2} , ${s2 - d2} , ${s2 - 2 * d2} , [[0]] , [[1]] , [[2]]`), a: [s2 - 3 * d2, s2 - 4 * d2, s2 - 5 * d2], show: M([3, 4, 5].map(i => s2 - i * d2).join(' , ')) }],
+      steps: [`א. בכל פעם מוסיפים ${d1}.`, `ב. בכל פעם מחסירים ${d2}.`, 'בודקים: הקפיצה בין כל שני מספרים זהה.'] };
+  } },
+  { t: 'פתרו את התרגילים', g() {
+    const a = R(25, 68), b = R(14, 99 - a), c = R(36, 89), d = R(11, 30), e = R(52, 94), f = R(15, 49), x = R(3, 9), y = R(3, 9), dv = R(2, 9), q = R(2, 9);
+    return { q: 'פִּתרו את התרגילים בדרך הנוחה לכם:', parts: [
+      { l: 'א.', q: M(`${a} + ${b} =`), k: 'num', a: a + b, show: M(a + b) },
+      { l: 'ב.', q: M(`${c} – ${d} =`), k: 'num', a: c - d, show: M(c - d) },
+      { l: 'ג.', q: M(`${e} – ${f} =`), k: 'num', a: e - f, show: M(e - f) },
+      { l: 'ד.', q: M(`${x} × ${y} =`), k: 'num', a: x * y, show: M(x * y) },
+      { l: 'ה.', q: M(`${dv * q} : ${dv} =`), k: 'num', a: q, show: M(q) }],
+      steps: [`א. עשרות עם עשרות, אחדות עם אחדות: ${M(`${a} + ${b} = ${a + b}`)}`, `ג. כשאין מספיק אחדות – פורטים עשרת: ${M(`${e} – ${f} = ${e - f}`)}`, `ה. חילוק = כמה פעמים ${dv} נכנס: ${M(`${q} × ${dv} = ${dv * q}`)}, לכן ${M(`${dv * q} : ${dv} = ${q}`)}`] };
+  } },
+  { t: 'מספרים בקטע על ישר המספרים', g() {
+    const lo = R(15, 85) * 10 + R(0, 5), hi = lo + R(8, 12), inside = [lo + 2, hi - 3], outside = [lo - R(2, 6), hi + R(2, 8)];
+    const opts = shuffle([...inside, ...outside]), bigEven = hi % 2 === 0 ? hi : hi - 1;
+    return { q: `לפניכם ישר מספרים:${mkNumLine(lo - 5, hi + 5, [{ v: lo, lab: lo }, { v: hi, lab: hi }], [lo, hi])}`, parts: [
+      { l: 'א.', q: 'סמנו את המספרים המתאימים לקטע המֻדגש.', k: 'multi', opts: opts.map(v => M(v)), a: opts.map((v, i) => i).filter(i => opts[i] >= lo && opts[i] <= hi), show: inside.map(v => M(v)).join(', ') },
+      { l: 'ב.', q: 'כִּתבו את המספר <b>הזוגי הגדול ביותר</b> שנמצא בקטע המֻדגש.', k: 'num', a: bigEven, show: M(bigEven) }],
+      steps: [`הקטע מתחיל ב-${M(lo)} ונגמר ב-${M(hi)}.`, 'מספר בקטע – גדול או שווה להתחלה, וקטן או שווה לסוף.', `הזוגי הגדול ביותר: מתחילים מהסוף (${M(hi)}) ויורדים עד שמגיעים למספר זוגי: ${M(bigEven)}`] };
+  } },
+  { t: 'מספר חסר – שוויון', g() {
+    const a = R(12, 19), b = R(3, 7) * 10, k = R(1, 2) * 10, c = a + k;
+    const ch = mkChoice([`${M(c)} גדול ב-${k} מ-${M(a)}, לכן המספר החסר קטן ב-${k} מ-${M(b)}`, 'מחברים את כל המספרים', `המספר החסר הוא ${M(b)}`, `מחסירים ${M(a)} מ-${M(c)}`], 0);
+    return { q: '', parts: [
+      { l: 'א.', q: 'השלימו את המספר החסר:', q2: M(`${a} + ${b} = ${c} + [[0]]`), k: 'fill', a: [b - k], show: M(b - k) },
+      { l: 'ב.', q: `איך אפשר למצוא את המספר החסר <b>בלי</b> לחשב את ${M(`${a} + ${b}`)}?`, k: 'choice', ...ch, show: ch.opts[ch.a] }],
+      steps: ['הסימן = אומר ששני הצדדים שווים.', `${M(a)} הפך ל-${M(c)} – גדל ב-${k}.`, `לכן המספר השני צריך לקטון ב-${k}: ${M(`${b} – ${k} = ${b - k}`)}`] };
+  } },
+  { t: 'השלמת מספרים חסרים', g() {
+    const a = R(6, 9) * 10 + R(1, 9), r = R(2, 5) * 10 + R(0, 9), m = R(2, 6), k = R(2, 9), s = R(2, 4) * 10 + R(1, 9), T = s + R(15, 40);
+    return { q: 'הַשלימו את המספרים החסרים:', parts: [
+      { l: 'א.', k: 'fill', q: M(`${a} – [[0]] = ${r}`), a: [a - r], show: M(a - r) },
+      { l: 'ב.', k: 'fill', q: M(`${m} × [[0]] = ${m * k}`), a: [k], show: M(k) },
+      { l: 'ג.', k: 'fill', q: M(`${s} + [[0]] > ${T}`), check: v => s + v[0] > T, show: `כל מספר גדול מ-${M(T - s)}, למשל ${M(T - s + 1)}` }],
+      steps: [`א. כמה צריך להוריד מ-${a} כדי להגיע ל-${r}? ${M(`${a} – ${r} = ${a - r}`)}`, `ב. באיזה מספר כופלים את ${m} כדי לקבל ${m * k}? ${M(k)}`, `ג. ${M(`${s} + ${T - s} = ${T}`)} – צריך <b>יותר</b>, לכן כל מספר גדול מ-${M(T - s)}.`] };
+  } },
+  { t: 'בעיה – חיסור', g() {
+    const N = R(65, 99), k = R(5, 14), g = pick(['ג', 'ד', 'ה']);
+    return { q: `בשכבת ${g}' יש ${M(N)} תלמידים. ${M(k)} תלמידים <b>לא</b> הגיעו להצגה.<br>כמה תלמידים הגיעו להצגה?`, parts: [{ k: 'num', a: N - k, show: M(N - k), unit: 'תלמידים' }],
+      steps: ['מכל התלמידים מורידים את אלה שלא הגיעו.', `${M(`${N} – ${k} = ${N - k}`)}`, `בדיקה: ${M(`${N - k} + ${k} = ${N}`)} ✔`] };
+  } },
+  { t: 'עודף', g() {
+    const a = R(12, 45), b = R(11, 40), bill = a + b < 100 ? 100 : 200, nm = mkName(), it = pick([['ספר', 'עט'], ['משחק', 'כדור'], ['חולצה', 'כובע']]);
+    return { q: `${nm} קנה/תה ${it[0]} במחיר ${M(a)} שקלים ו${it[1]} במחיר ${M(b)} שקלים.<br>${nm} שילם/ה בשטר של ${M(bill)} שקלים. כמה עודף קיבל/ה?`, parts: [{ k: 'num', a: bill - a - b, show: M(bill - a - b), unit: 'שקלים' }],
+      steps: [`כמה עלו הדברים יחד? ${M(`${a} + ${b} = ${a + b}`)}`, `עודף = מה ששילמו פחות המחיר: ${M(`${bill} – ${a + b} = ${bill - a - b}`)}`, `בדיקה: ${M(`${a + b} + ${bill - a - b} = ${bill}`)} ✔`] };
+  } },
+  { t: 'תרגיל כפל לפי תמונה', g() {
+    const n = R(3, 5), m = R(3, 6), it = pick(['🍪', '🍓', '🧁']);
+    const fig = `<div class="mk-plates" dir="ltr">${Array.from({ length: n }, () => `<span class="mk-plate">${it.repeat(m)}</span>`).join('')}</div>`;
+    return { q: `כִּתבו תרגיל <b>כפל</b> שבעזרתו אפשר לחשב את מספר ה${it} בתמונה.${fig}`, parts: [{ k: 'fill', q: M('[[0]] × [[1]] = [[2]]'), check: v => ((v[0] === n && v[1] === m) || (v[0] === m && v[1] === n)) && v[2] === n * m, show: M(`${n} × ${m} = ${n * m}`) }],
+      steps: [`יש ${n} צלחות, ובכל צלחת ${m}.`, `${n} פעמים ${m}: ${M(`${n} × ${m}`)}`, `${M(`${n} × ${m} = ${n * m}`)} (אפשר גם ${M(`${m} × ${n}`)})`] };
+  } },
+  { t: 'דיאגרמת עמודות', g() {
+    const kinds = ['גבינה', 'טונה', 'ביצה', 'חביתה'];
+    let v; do { v = kinds.map(() => R(2, 9)); } while (new Set(v).size < 4);
+    const [i, j] = (() => { const s = shuffle([0, 1, 2, 3]); return v[s[0]] > v[s[1]] ? [s[0], s[1]] : [s[1], s[0]]; })();
+    return { q: `כדי לאסוף כסף לטיול, תלמידי הכיתה מכרו כריכים בהפסקה. הדיאגרמה מתארת את סוגי הכריכים שנמכרו ואת מספרם.${mkBars(v, kinds, 'מספר כריכים', 1)}`, parts: [
+      { l: 'א.', q: 'כמה כריכים נמכרו בהפסקה?', k: 'num', a: v.reduce((a, b) => a + b), show: M(v.reduce((a, b) => a + b)) },
+      { l: 'ב.', q: `בכמה גדול מספר כריכי ה${kinds[i]} ממספר כריכי ה${kinds[j]}?`, k: 'num', a: v[i] - v[j], show: M(v[i] - v[j]) }],
+      steps: ['קוראים את הגובה של כל עמודה מול המספרים בצד.', `סך הכול: ${M(v.join(' + ') + ' = ' + v.reduce((a, b) => a + b))}`, `"בכמה גדול" = ההפרש: ${M(`${v[i]} – ${v[j]} = ${v[i] - v[j]}`)}`] };
+  } },
+  { t: 'מדידה בסרגל', g() {
+    const a = R(1, 4), L = R(3, 8), pen = Math.random() < .5;
+    return { q: `מה אורכו של ${pen ? 'העיפרון' : 'מהדק הנייר'}?${mkRuler(13, [a, a + L], { pencil: pen })}`, parts: [{ k: 'num', a: L, show: M(L), unit: 'ס"מ' }],
+      steps: [`שימו לב: ${pen ? 'העיפרון' : 'המהדק'} <b>לא</b> מתחיל ב-0!`, `הוא מתחיל ב-${M(a)} ונגמר ב-${M(a + L)}.`, `האורך: ${M(`${a + L} – ${a} = ${L}`)} ס"מ (או סופרים את הס"מ ביניהם).`] };
+  } },
+  { t: 'שם המצולע והיקפו', g() {
+    const sides = [R(5, 9), R(3, 7), R(4, 8), R(6, 10), R(3, 7)];
+    const names = ['משולש', 'מרובע', 'מחומש', 'משושה'];
+    return { q: `${mkPoly([[0, 2], [3, 0], [6, 2], [6, 6], [0, 6]], { u: 28, labels: sides.map(s => `${s} ס"מ`) })}`, parts: [
+      { l: 'א.', q: 'מה שם המצולע שבציור?', k: 'choice', pl: true, opts: names, a: 2, show: 'מחומש' },
+      { l: 'ב.', q: 'מה היקף המצולע?', k: 'num', a: sides.reduce((a, b) => a + b), show: M(sides.reduce((a, b) => a + b)), unit: 'ס"מ' }],
+      steps: ['סופרים צלעות: 5 ← מחומש.', 'היקף = מחברים את אורכי <b>כל</b> הצלעות.', `${M(sides.join(' + ') + ' = ' + sides.reduce((a, b) => a + b))} ס"מ`] };
+  } },
+  { t: 'חלוקת טרפז', g() {
+    const T = [[1, 0], [4, 0], [5, 3], [0, 3]];
+    const lines = [['diag', P => { const a = P([1, 0]), b = P([5, 3]); return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#d9482b" stroke-width="3"/>`; }], ['vert', P => { const a = P([4, 0]), b = P([4, 3]); return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#d9482b" stroke-width="3"/>`; }], ['mid', P => { const a = P([0.5, 1.5]), b = P([4.5, 1.5]); return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#d9482b" stroke-width="3"/>`; }]];
+    const ord = shuffle(lines), lab = ['א', 'ב', 'ג'];
+    const fig = `<div class="mk-tris">${ord.map((l, i) => `<div>${mkPoly(T, { u: 22, extra: [l[1]] })}<b>${lab[i]}</b></div>`).join('')}</div>`;
+    const pairOpts = ['טרפז ומשולש', 'שני משולשים', 'שני טרפזים', 'מלבן ומשולש'];
+    return { q: `לפניכם טרפז. בכל ציור העבירו בו קו אחר (באדום).${fig}`, parts: [
+      { l: 'א.', q: `באיזה ציור הקו מחלק את הטרפז ל<b>שני משולשים</b>?`, k: 'choice', opts: lab, a: ord.findIndex(l => l[0] === 'diag'), show: 'ציור ' + lab[ord.findIndex(l => l[0] === 'diag')] + ' – הקו מחבר שני קודקודים (אלכסון)' },
+      { l: 'ב.', q: `לאילו מצולעים הקו מחלק את הטרפז בציור ${lab[ord.findIndex(l => l[0] === 'vert')]}?`, k: 'choice', opts: pairOpts, a: 0, show: 'טרפז ומשולש' }],
+      steps: ['קו שמחבר שני קודקודים לא שכנים (אלכסון) – מחלק את הטרפז לשני משולשים.', 'קו שיורד מקודקוד ישר למטה – מפריד משולש קטן בצד, והשאר טרפז.', 'סופרים צלעות בכל חלק: 3 צלעות = משולש, 4 צלעות = מרובע (טרפז).'] };
+  } }
+];
+
+/* ---------- מסכי האימון ---------- */
+let mkS = null;
+const MK_HAS = () => !!MKQ[GRADE];
+function mkMake(i) { const Q = MKQ[GRADE][i]; return mkGender(Object.assign({ i, t: Q.t }, Q.g())); }
+const mkNumParse = s => { s = String(s || '').replace(/[,\s]/g, '').replace('−', '-'); return s === '' || !/^-?\d*\.?\d+$/.test(s) ? NaN : Number(s); };
+// טקסט עם [[0]] → שדות קלט (או קווים בהדפסה)
+function mkFill(tpl, pi, print) {
+  return tpl.replace(/\[\[(\d)\]\]/g, (m, k) => print ? '<span class="mk-blank sm"></span>' : `<input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="${k}" aria-label="תשובה">`);
+}
+function mkPartHTML(p, pi, mode) {
+  const teach = mode === 'teach', print = mode === 'print';
+  let h = `<div class="mk-part" data-pi="${pi}">${p.l ? `<span class="mk-l">${p.l}</span> ` : ''}`;
+  const qtxt = print && p.printQ ? p.printQ : p.q;
+  if (p.k === 'fill') {
+    const tpl = p.q2 || p.q;
+    if (p.q2) h += `${qtxt}<div class="mk-fillrow">`;
+    h += teach ? '' : mkFill(print && p.printQ ? '' : tpl, pi, print);
+    if (p.q2) h += '</div>';
+    if (teach) h += `${p.q2 ? '' : tpl.replace(/\[\[\d\]\]/g, '____')}`;
+  } else if (qtxt) h += qtxt;
+  if (p.fig && !print) h += `<div class="mk-figbox">${p.fig()}</div>`;
+  if (!teach && !print) {
+    if (p.k === 'num') h += ` <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה">${p.unit ? ` <span class="muted">${p.unit}</span>` : ''}`;
+    if (p.k === 'frac') h += ` <span class="mk-frac" dir="ltr"><input class="mk-in w" inputmode="numeric" data-p="${pi}" data-k="w" placeholder="שלם" aria-label="שלמים"><span class="mk-fr"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="n" aria-label="מונה"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="d" aria-label="מכנה"></span></span>`;
+    if (p.k === 'choice' || p.k === 'multi') h += `<div class="mk-opts${p.grid ? ' grid' : ''}">${p.opts.map((o, i) => `<label class="mk-opt"><input type="${p.k === 'choice' ? 'radio' : 'checkbox'}" name="mkS${pi}" value="${i}" data-p="${pi}"> <span class="mk-on">${i + 1}</span> ${o}</label>`).join('')}</div>`;
+    if (p.k === 'pair') h += `<div class="mk-fillrow">מספר החרוזים בצבע <select data-p="${pi}" data-k="0"><option value="">בחרו</option>${p.opts.map((o, i) => `<option value="${i}">${o}</option>`).join('')}</select> גדול <b>פי 2</b> ממספר החרוזים בצבע <select data-p="${pi}" data-k="1"><option value="">בחרו</option>${p.opts.map((o, i) => `<option value="${i}">${o}</option>`).join('')}</select></div>`;
+    if (p.k === 'self') h += `<textarea class="mk-self" rows="2" data-p="${pi}" placeholder="כתבו כאן את התשובה שלכם"></textarea>`;
+  }
+  if (print && p.printQ) h += p.k === 'self' ? '<div class="mk-lines"></div>' : '';
+  else if (print) {
+    if (p.k === 'num' || p.k === 'frac') h += ` <span class="mk-blank"></span>${p.unit ? ' ' + p.unit : ''}`;
+    if ((p.k === 'choice' || p.k === 'multi') && p.pl) h += ' <span class="mk-blank"></span>';
+    else if (p.k === 'choice' || p.k === 'multi') h += `<div class="mk-opts${p.grid ? ' grid' : ''}">${p.opts.map((o, i) => `<div class="mk-opt"><span class="ex-check"></span><span class="mk-on">${i + 1}</span> ${o}</div>`).join('')}</div>`;
+    if (p.k === 'pair') h += `<div>מספר החרוזים בצבע <span class="mk-blank sm"></span> גדול פי 2 ממספר החרוזים בצבע <span class="mk-blank sm"></span>.</div>`;
+    if (p.k === 'self' || p.k === 'sides' || p.k === 'cells' || p.k === 'tick') h += p.k === 'self' ? '<div class="mk-lines"></div>' : '';
+  }
+  if (teach) h += `<div class="mk-ans">✔ ${p.show}</div>`;
+  h += `<div class="mk-fb" data-fb="${pi}"></div></div>`;
+  return h;
+}
+function mkQHTML(q, mode, num) {
+  const print = mode === 'print';
+  const stem = print && q.printQ ? q.printQ : q.q;
+  const fig = print ? (q.figPrint || q.fig) : q.fig;
+  return `<div class="mkq"><h3 class="mk-h">שאלה ${num}</h3>${stem ? `<div class="mk-stem">${stem}</div>` : ''}${fig ? `<div class="mk-figbox">${fig()}</div>` : ''}${print && q.printNoParts ? '' : q.parts.map((p, pi) => mkPartHTML(p, pi, mode)).join('')}</div>`;
+}
+function mkHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('mock');
+  const L = MKQ[GRADE];
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('clipboard')} אימון לקראת המבחן</span><button class="secondary" id="mkHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="card"><p>שאלות <b>באותו סגנון</b> של המבחן – עם מספרים חדשים בכל פעם. לכל שאלה שתי אפשרויות:</p>
+      <ul class="mk-how"><li><b>📘 הקנייה</b> – רואים שאלה כזו פתורה, צעד אחר צעד.</li><li><b>✏️ תרגול</b> – פותרים לבד, בודקים, ומקבלים הסבר.</li></ul>
+      <div class="actions"><button id="mkAll">✏️ כל המבחן ברצף</button><button class="secondary" id="mkPrint">${ic('printer')} מבחן אימון להדפסה</button></div></div>
+    <div class="mk-list">${L.map((Q, i) => `<div class="mk-item"><span class="mk-n">${i + 1}</span><span class="mk-t">${Q.t}</span><span class="mk-btns"><button class="secondary" data-mk="${i}" data-mode="teach">📘 הקנייה</button><button data-mk="${i}" data-mode="practice">✏️ תרגול</button></span></div>`).join('')}</div>`;
+  $('mkHomeB').onclick = home;
+  $('mkAll').onclick = () => { mkS = { all: true }; mkView(0, 'practice'); };
+  $('mkPrint').onclick = mkPrintView;
+  app.querySelectorAll('[data-mk]').forEach(b => b.onclick = () => { mkS = { all: false }; mkView(+b.dataset.mk, b.dataset.mode); });
+  track('אימון למבחן');
+  window.scrollTo(0, 0);
+}
+function mkView(i, mode) {
+  navPush('view');
+  const L = MKQ[GRADE], q = mkMake(i), teach = mode === 'teach';
+  mkS = Object.assign(mkS || {}, { i, mode, q, step: 0 });
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${teach ? '📘 הקנייה' : '✏️ תרגול'} · שאלה ${i + 1} מתוך ${L.length}</span><button class="secondary" id="mkBack">← לרשימת השאלות</button></div>
+    <div class="card mk-card ${teach ? 'teach' : ''}"><div class="mk-topic">${q.t}</div>${mkQHTML(q, mode, i + 1)}
+      ${teach ? `<div class="mk-steps"><h4>💡 איך פותרים?</h4><ol>${q.steps.map((s, k) => `<li class="${k ? 'hidden' : ''}" data-st="${k}">${s}</li>`).join('')}</ol>${q.steps.length > 1 ? '<button class="secondary" id="mkNextStep">הצעד הבא ←</button>' : ''}</div>` : `<div class="mk-steps hidden" id="mkExp"><h4>💡 איך פותרים?</h4><ol>${q.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>`}
+      <div class="actions">${teach ? `<button id="mkSame" class="secondary">${ic('retry')} דוגמה נוספת</button><button id="mkToPr">✏️ עכשיו אני – תרגול</button>` : `<button id="mkCheck">${ic('check')} בדיקה</button><button id="mkSame" class="secondary">${ic('retry')} שאלה דומה</button><button id="mkToTe" class="secondary">📘 הקנייה</button>`}${i + 1 < L.length ? `<button id="mkNext" class="secondary">לשאלה ${i + 2} ←</button>` : ''}</div>
+      <div class="mk-msg" id="mkMsg"></div></div>`;
+  $('mkBack').onclick = mkHome;
+  $('mkSame').onclick = () => mkView(i, mode);
+  if ($('mkNext')) $('mkNext').onclick = () => mkView(i + 1, mode);
+  if (teach) {
+    $('mkToPr').onclick = () => mkView(i, 'practice');
+    if ($('mkNextStep')) $('mkNextStep').onclick = () => { const h = app.querySelector('.mk-steps li.hidden'); if (h) h.classList.remove('hidden'); if (!app.querySelector('.mk-steps li.hidden')) $('mkNextStep').remove(); };
+  } else {
+    $('mkToTe').onclick = () => mkView(i, 'teach');
+    $('mkCheck').onclick = mkCheck;
+    mkWire();
+  }
+  track('אימון למבחן', `שאלה ${i + 1} · ${teach ? 'הקנייה' : 'תרגול'}`);
+  window.scrollTo(0, 0);
+}
+// משבצות לצביעה, צלעות ללחיצה, שנתות ללחיצה
+function mkWire() {
+  app.querySelectorAll('.mk-cell').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
+  app.querySelectorAll('.mk-side').forEach(s => s.addEventListener('click', () => { const v = app.querySelector(`[data-sidec="${s.dataset.side}"]`); v.classList.toggle('on'); }));
+  app.querySelectorAll('.mk-part').forEach(part => part.querySelectorAll('.mk-tickhit').forEach(t => t.addEventListener('click', () => {
+    part.querySelectorAll('.mk-tick').forEach(x => x.classList.remove('on'));
+    part.querySelector(`.mk-tick[data-tick="${t.dataset.tick}"]`).classList.add('on');
+  })));
+}
+function mkCheck() {
+  const q = mkS.q; let ok = 0, tot = 0;
+  q.parts.forEach((p, pi) => {
+    const fb = app.querySelector(`[data-fb="${pi}"]`), part = app.querySelector(`.mk-part[data-pi="${pi}"]`);
+    const ins = [...part.querySelectorAll(`.mk-in[data-p="${pi}"]`)];
+    let res = null;
+    if (p.k === 'num') { const v = mkNumParse(ins[0].value); res = isNaN(v) ? null : (p.check ? p.check(v) : Math.abs(v - p.a) < 1e-9); }
+    else if (p.k === 'fill') { const vs = ins.map(x => mkNumParse(x.value)); res = vs.some(isNaN) ? null : (p.check ? p.check(vs) : vs.every((v, k) => Math.abs(v - p.a[k]) < 1e-9)); }
+    else if (p.k === 'frac') {
+      const g = k => part.querySelector(`[data-k="${k}"]`).value.trim(), w = g('w') === '' ? 0 : mkNumParse(g('w')), n = g('n') === '' ? 0 : mkNumParse(g('n')), d = g('d') === '' ? 1 : mkNumParse(g('d'));
+      res = (g('w') === '' && g('n') === '') || [w, n, d].some(isNaN) || d === 0 ? null : (w * d + n) * p.a[1] === p.a[0] * d;
+    } else if (p.k === 'choice') { const c = part.querySelector('input:checked'); res = c ? +c.value === p.a : null; }
+    else if (p.k === 'multi') { const c = [...part.querySelectorAll('input:checked')].map(x => +x.value).sort(); res = c.length ? c.join() === p.a.slice().sort().join() : null; }
+    else if (p.k === 'pair') { const s = [...part.querySelectorAll('select')].map(x => x.value); res = s.includes('') ? null : p.check(+s[0], +s[1]); }
+    else if (p.k === 'cells') { const n = app.querySelectorAll('.mk-cell.on').length; res = n ? n === p.a : null; }
+    else if (p.k === 'sides') { const s = [...app.querySelectorAll('.mk-sidec.on')].map(x => +x.dataset.sidec).sort(); res = s.length ? s.join() === p.a.slice().sort().join() : null; }
+    else if (p.k === 'tick') { const t = part.querySelector('.mk-tick.on'); res = t ? +t.dataset.tick === p.a : null; }
+    else if (p.k === 'self') { fb.innerHTML = `<div class="mk-model">תשובה לדוגמה: ${p.show}<div class="small muted">השוו לתשובה שלכם.</div></div>`; return; }
+    tot++;
+    if (res === null) { fb.innerHTML = '<span class="mk-wait">✋ עוד לא עניתם על הסעיף הזה</span>'; return; }
+    if (res) ok++;
+    fb.innerHTML = res ? '<span class="mk-ok">✔ נכון!</span>' : `<span class="mk-bad">✘ לא מדויק.</span> התשובה: ${p.show}`;
+  });
+  $('mkExp').classList.remove('hidden');
+  $('mkMsg').innerHTML = tot ? `${ok === tot ? '🌟 כל הכבוד!' : ''} ${ok} מתוך ${tot} סעיפים נכונים.` : '';
+}
+function mkPrintView() {
+  navPush('view');
+  const L = MKQ[GRADE], qs = L.map((Q, i) => mkMake(i));
+  const cover = `<div class="mk-cover"><div class="mk-hdr"><span>${GRADE_NAME[GRADE]}</span><span>מבחן אימון</span></div>
+    <p><b>שם התלמיד/ה:</b> <span class="wsline long"></span> <b>כיתה:</b> <span class="wsline"></span></p>
+    <p>תלמידים יקרים,<br>לפניכם <b>מבחן אימון</b> במתמטיקה. לרשותכם 90 דקות.<br>פִּתרו את כל התרגילים וענו על כל השאלות.<br>בחלק מן השאלות הודגשו מילים חשובות. שימו לב למילים אלה.<br>בהצלחה!</p></div>`;
+  const body = `<section class="ws-page mk-print"><div class="wsqs">${cover}${qs.map((q, i) => mkQHTML(q, 'print', i + 1)).join('')}</div></section>`;
+  const key = `<section class="ws-page wskey"><h2>🔑 דף תשובות – מבחן אימון</h2><ol>${qs.map(q => `<li>${q.parts.map(p => `${p.l ? p.l + ' ' : ''}${p.show}`).join(' · ')}</li>`).join('')}</ol></section>`;
+  app.innerHTML = `
+    <div class="topbar noprint"><span class="title">${ic('printer')} מבחן אימון להדפסה – ${GRADE_NAME[GRADE]}</span><button class="secondary" id="mkBack">← חזרה</button></div>
+    <div class="card noprint"><p>מבחן באותו מבנה ובאותו סגנון כמו המבחן – עם מספרים חדשים. בסוף יש דף תשובות.</p>
+      <div class="actions"><button id="mkDoPrint">${ic('printer')} הדפסה / שמירה כ-PDF</button><button class="secondary" id="mkNew">${ic('retry')} מבחן חדש (מספרים אחרים)</button></div></div>
+    <div id="wsout">${body}${key}</div>`;
+  $('wsout').dataset.what = `מבחן אימון – ${GRADE_NAME[GRADE]}`;
+  $('mkBack').onclick = mkHome;
+  $('mkNew').onclick = mkPrintView;
+  $('mkDoPrint').onclick = () => window.print();
+  paginateSheets();
+  window.scrollTo(0, 0);
+}
+
+/* =========================================================
+   כפל דו-ספרתי בדו-ספרתי – כרטיסיות לימוד ותרגול (כיתות ד'–ו')
+   ========================================================= */
+// מודל השטח: (a1 + a2) × (b1 + b2) – ארבעה מלבנים
+function mul22Area(a, b, show) {
+  const at = Math.floor(a / 10) * 10, ao = a % 10, bt = Math.floor(b / 10) * 10, bo = b % 10;
+  const W1 = 150, W2 = Math.max(48, ao * 9), H1 = 110, H2 = Math.max(40, bo * 8), x0 = 40, y0 = 30;
+  const cell = (x, y, w, h, v, c, k) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}" stroke="#333"/><text x="${x + w / 2}" y="${y + h / 2 + 5}" font-size="14" text-anchor="middle" class="m22v${show ? '' : ' hid'}" data-v="${k}" font-weight="700">${fmt(v)}</text>`;
+  return `<svg class="mk-fig" viewBox="0 0 ${x0 + W1 + W2 + 10} ${y0 + H1 + H2 + 10}" width="${x0 + W1 + W2 + 10}" style="max-width:100%;height:auto" direction="ltr">
+    <text x="${x0 + W1 / 2}" y="20" font-size="14" text-anchor="middle">${at}</text><text x="${x0 + W1 + W2 / 2}" y="20" font-size="14" text-anchor="middle">${ao}</text>
+    <text x="22" y="${y0 + H1 / 2 + 5}" font-size="14" text-anchor="middle">${bt}</text><text x="22" y="${y0 + H1 + H2 / 2 + 5}" font-size="14" text-anchor="middle">${bo}</text>
+    ${cell(x0, y0, W1, H1, at * bt, 'rgba(127,168,214,0.45)', 0)}${cell(x0 + W1, y0, W2, H1, ao * bt, 'rgba(226,179,87,0.45)', 1)}
+    ${cell(x0, y0 + H1, W1, H2, at * bo, 'rgba(157,178,122,0.5)', 2)}${cell(x0 + W1, y0 + H1, W2, H2, ao * bo, 'rgba(217,72,43,0.3)', 3)}</svg>`;
+}
+// כפל במאונך – מוצג כטבלה משמאל לימין
+function mul22Long(a, b) {
+  const p1 = a * (b % 10), p2 = a * Math.floor(b / 10) * 10, w = String(a * b).length + 1;
+  const row = (s, cls = '') => `<tr class="${cls}">${String(s).padStart(w, ' ').split('').map(c => `<td>${c.trim()}</td>`).join('')}</tr>`;
+  return `<table class="m22long" dir="ltr">${row(a)}${row('×' + b, 'ul')}${row(p1)}${row('+' + p2, 'ul')}${row(a * b, 'res')}</table>`;
+}
+function genMul22(kind) {
+  kind = kind || pick(['plain', 'plain', 'area', 'word', 'est']);
+  const a = R(13, 89), b = R(12, 79), at = Math.floor(a / 10) * 10, ao = a % 10, bt = Math.floor(b / 10) * 10, bo = b % 10;
+  if (kind === 'area') {
+    const k = R(0, 3), vals = [at * bt, ao * bt, at * bo, ao * bo], fig = mul22Area(a, b, true).replace(`class="m22v" data-v="${k}" font-weight="700">${fmt(vals[k])}`, `class="m22v" data-v="${k}" font-weight="700">?`);
+    return { type: 'num', text: `במודל השטח של ${M(`${a} × ${b}`)} – מה המספר החסר במלבן שמסומן ב-?<div class="chartwrap">${fig}</div>`, ans: vals[k],
+      hint: 'כל מלבן = האורך שמעליו × הרוחב שלידו.', exp: `${M([`${at} × ${bt}`, `${ao} × ${bt}`, `${at} × ${bo}`, `${ao} × ${bo}`][k] + ' = ' + fmt(vals[k]))}` };
+  }
+  if (kind === 'word') {
+    const ctx = pick([[`באולם ${a} שורות, ובכל שורה ${b} כיסאות. כמה כיסאות יש באולם?`], [`בכל ארגז ${b} בקבוקים. כמה בקבוקים יש ב-${a} ארגזים?`], [`בבניין ${b} קומות, ובכל קומה ${a} חלונות. כמה חלונות יש בבניין?`]]);
+    return { type: 'num', text: ctx[0], ans: a * b, steps: [{ p: M(`${a} × ${bt} =`), a: a * bt }, { p: M(`${a} × ${bo} =`), a: a * bo }, { p: `חברו: ${M(`${fmt(a * bt)} + ${fmt(a * bo)} =`)}`, a: a * b }],
+      hint: `התרגיל הוא ${M(`${a} × ${b}`)}. פרקו את ${b} לעשרות ואחדות.`, exp: M(`${a} × ${b} = ${fmt(a * bt)} + ${fmt(a * bo)} = ${fmt(a * b)}`) };
+  }
+  if (kind === 'est') {
+    const ra = Math.round(a / 10) * 10, rb = Math.round(b / 10) * 10, wrong = [a * b + 10 * R(5, 30), Math.max(100, a * b - 10 * R(5, 30)), a * b * 10].map(v => Math.round(v / 10) * 10 + (a * b) % 10);
+    const opts = shuffle([a * b, ...wrong.filter(v => v !== a * b)]).slice(0, 4);
+    if (!opts.includes(a * b)) opts[0] = a * b;
+    return { type: 'choice', text: `בלי לחשב במדויק – מה התוצאה של ${M(`${a} × ${b}`)}? (רמז: עגלו לעשרות)`, choices: opts.map(v => M(fmt(v))), ans: opts.indexOf(a * b),
+      hint: `${M(`${ra} × ${rb} = ${fmt(ra * rb)}`)} – חפשו את התשובה הקרובה, ובדקו גם את ספרת האחדות: ${M(`${ao} × ${bo}`)} נגמר ב-${(ao * bo) % 10}.`, exp: `אומדן: ${M(`${ra} × ${rb} = ${fmt(ra * rb)}`)}. ספרת האחדות: ${M(`${ao} × ${bo} = ${ao * bo}`)} ← ${(ao * bo) % 10}. התשובה: ${M(fmt(a * b))}` };
+  }
+  return { type: 'num', text: `פתרו: ${M(`${a} × ${b} =`)}`, ans: a * b,
+    steps: [{ p: M(`${a} × ${bo} =`), a: a * bo }, { p: M(`${a} × ${bt} =`), a: a * bt }, { p: `חברו: ${M(`${fmt(a * bo)} + ${fmt(a * bt)} =`)}`, a: a * b }],
+    hint: `מפרקים את ${b}: ${M(`${a} × ${bt} + ${a} × ${bo}`)}.`, exp: `${M(`${a} × ${b} = ${a} × ${bt} + ${a} × ${bo} = ${fmt(a * bt)} + ${fmt(a * bo)} = ${fmt(a * b)}`)}`,
+    traps: [{ v: at * bt + ao * bo, m: `כפלתם רק עשרות בעשרות ואחדות באחדות. חסרים שני חלקים: ${M(`${ao} × ${bt}`)} ו-${M(`${at} × ${bo}`)}!` }, { v: a * bo + a * Math.floor(b / 10), m: `בשורה השנייה כופלים ב-${bt} (עשרות!), לא ב-${Math.floor(b / 10)}. לכן מוסיפים 0.` }] };
+}
+if (GRADE >= 4 && GRADE <= 6) {
+  Object.assign(LESSONS, {
+    mul22: {
+      id: 'mul22', name: 'כפל דו-ספרתי בדו-ספרתי', icon: '✖️', color: '#e0703a', topic: 'ops',
+      desc: 'פירוק, מודל השטח, כפל במאונך ואומדן',
+      practice: [() => genMul22('area'), () => genMul22('plain'), () => genMul22('plain'), () => genMul22('word'), () => genMul22('est'), () => genMul22('plain'), () => genMul22('area'), () => genMul22('word')],
+      cards: [
+        {
+          title: 'מפרקים את אחד המספרים',
+          html: `<p>איך מחשבים ${M('23 × 14')}? כבר יודעים לכפול בחד-ספרתי ובעשרות. אז <b>מפרקים</b> את 14 ל-10 ועוד 4:</p>
+            <div class="rule big">${M('23 × 14 = 23 × 10 + 23 × 4')}</div>
+            <ol class="lsteps"><li>${M('23 × 10 = 230')}</li><li>${M('23 × 4 = 92')}</li><li>מחברים: ${M('230 + 92 = 322')}</li></ol>
+            <div class="rule">💡 ${M('14')} פעמים 23 = <b>10 פעמים</b> 23 ועוד <b>4 פעמים</b> 23.</div>`,
+          try: { type: 'num', q: `חשבו בעזרת פירוק: ${M('31 × 12 = 31 × 10 + 31 × 2 = ?')}`, ans: 372, hint: `${M('31 × 10 = 310')}, ${M('31 × 2 = 62')}. עכשיו חברו.`, exp: M('310 + 62 = 372'), traps: [{ v: 310, m: 'זה רק 31 × 10. אל תשכחו להוסיף את 31 × 2!' }] }
+        },
+        {
+          title: 'מודל השטח – 4 מלבנים',
+          html: `<p>אפשר לפרק <b>את שני המספרים</b>: ${M('23 = 20 + 3')}, ${M('14 = 10 + 4')}. מציירים מלבן ומחלקים אותו ל-4 חלקים:</p>
+            <div class="chartwrap">${mul22Area(23, 14, false)}</div>
+            <div class="lbtns"><button class="secondary" data-act="fill">🔢 חשבו כל מלבן</button></div>
+            <div class="reveal hidden explain">${M('20 × 10 = 200')}<br>${M('3 × 10 = 30')}<br>${M('20 × 4 = 80')}<br>${M('3 × 4 = 12')}<br>מחברים את כל 4 החלקים: ${M('200 + 30 + 80 + 12 = 322')} ✔</div>
+            <div class="rule">⚠️ טעות נפוצה: לחשב רק ${M('20 × 10')} ו-${M('3 × 4')}. חייבים את <b>כל ארבעת</b> החלקים!</div>`,
+          setup(root) { root.querySelector('[data-act="fill"]').onclick = () => { root.querySelectorAll('.m22v').forEach(t => t.classList.remove('hid')); reveal(root); }; },
+          try: { type: 'num', q: `במודל השטח של ${M('32 × 15')} החלקים הם ${M('300')}, ${M('20')}, ${M('150')} ו-${M('10')}. מה התוצאה?`, ans: 480, hint: 'מחברים את ארבעת החלקים.', exp: M('300 + 20 + 150 + 10 = 480'), traps: [{ v: 310, m: 'חיברתם רק שני חלקים. יש ארבעה!' }] }
+        },
+        {
+          title: 'כפל במאונך',
+          html: `<p>זו אותה דרך – רק כתובה בטור. מחשבים ${M('46 × 27')}:</p>
+            <div class="chartwrap">${mul22Long(46, 27)}</div>
+            <ol class="lsteps"><li>כופלים ב<b>אחדות</b>: ${M('46 × 7 = 322')}</li><li>כופלים ב<b>עשרות</b>: ${M('46 × 20 = 920')} (שימו 0 בסוף!)</li><li>מחברים את שתי השורות: ${M('322 + 920 = 1,242')}</li></ol>
+            <div class="rule">💡 השורה השנייה תמיד מסתיימת ב-0 – כי כופלים בעשרות.</div>`,
+          try: { type: 'num', q: `פתרו במאונך: ${M('35 × 24')}`, ans: 840, hint: `שורה ראשונה: ${M('35 × 4')}. שורה שנייה: ${M('35 × 20')}.`, exp: `${M('35 × 4 = 140')}, ${M('35 × 20 = 700')}, ${M('140 + 700 = 840')}`, traps: [{ v: 210, m: 'בשורה השנייה כופלים ב-20, לא ב-2. הוסיפו 0!' }] }
+        },
+        {
+          title: 'אומדן – האם התשובה הגיונית?',
+          html: `<p>לפני שמחשבים (או אחרי) – <b>מעגלים לעשרות</b> ובודקים:</p>
+            <div class="rule big">${M('38 × 21')} ← בערך ${M('40 × 20 = 800')}</div>
+            <p>התשובה המדויקת (${M('798')}) קרובה ל-800 – הגיוני! אם יצא לנו 7,980 או 98 – ברור שטעינו.</p>
+            <div class="rule">💡 עיגול <b>כלפי מטה</b> של שני המספרים נותן מספר <b>קטן</b> מהתוצאה: ${M('47 × 52')} גדול מ-${M('40 × 50 = 2,000')}.</div>`,
+          try: { type: 'choice', q: `מה התוצאה של ${M('29 × 31')}?`, choices: [M('899'), M('8,990'), M('89'), M('609')], ans: 0, hint: `${M('30 × 30 = 900')}`, exp: `אומדן: ${M('30 × 30 = 900')}, לכן ${M('899')}.` }
+        },
+        {
+          title: 'כללים לזכור 📌',
+          html: `<ul class="recap"><li><b>פירוק:</b> ${M('a × 23 = a × 20 + a × 3')}.</li><li><b>מודל השטח:</b> 4 חלקים – עשרות×עשרות, עשרות×אחדות, אחדות×עשרות, אחדות×אחדות.</li><li><b>במאונך:</b> שורה לאחדות, שורה לעשרות (עם 0), ומחברים.</li><li><b>אומדן:</b> מעגלים לעשרות ובודקים שהתשובה הגיונית.</li></ul>`
+        }
+      ]
+    }
+  });
+  const oi = LESSON_ORDER.indexOf(GRADE === 4 ? 'times' : 'order');
+  LESSON_ORDER.splice(oi >= 0 ? oi + 1 : LESSON_ORDER.length, 0, 'mul22');
 }
 
 /* =========================================================
