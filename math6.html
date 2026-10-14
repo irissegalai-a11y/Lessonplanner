@@ -1095,7 +1095,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6401,6 +6401,8 @@ function saveStore(s) {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) { /* לא חובה */ }
 }
 let store = loadStore();
+// השם משותף לכל הכיתות באותו מכשיר
+try { const nm0 = localStorage.getItem('math-name'); if (nm0 && !store.name) { store.name = nm0; saveStore(store); } } catch (e) { /* לא חובה */ }
 store.topics = store.topics || {};
 function tstat(id) {
   return store.topics[id] = store.topics[id] || { mastery: 0, level: 1 };
@@ -6860,13 +6862,19 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', () => actEnd());
 function trackSend(action, detail, beacon) {
-  if (!TRACK.form || URLP.has('teacher') || URLP.has('print')) return;
+  if (!TRACK.form || URLP.has('teacher') || bookOk()) return;
   try {
     const nm = (typeof store !== 'undefined' && store.name) || '';
     const body = new URLSearchParams({ [TRACK.f.device]: trackDevice(), [TRACK.f.grade]: String(GRADE), [TRACK.f.name]: nm, [TRACK.f.action]: action, [TRACK.f.detail]: String(detail).slice(0, 200) });
     fetch(TRACK.form, { method: 'POST', mode: 'no-cors', body, keepalive: !!beacon }).catch(() => {});
   } catch (e) { /* לא חובה */ }
 }
+// מה הודפס / נשמר כ-PDF: כל מחולל דפים כותב ב-wsout.dataset.what מה יצר, ונשלח כשנפתח חלון ההדפסה
+window.addEventListener('beforeprint', () => {
+  const el = document.getElementById('wsout'), h = document.querySelector('#wsout h1, #wsout h2, .topbar .title');
+  const what = (el && el.innerHTML.trim() && el.dataset.what) || (h ? h.textContent.trim() : document.title);
+  trackSend('הדפסה', what, true);
+});
 function track(action, detail = '') {
   if (!TRACK.form || URLP.has('teacher') || URLP.has('print')) return;
   const key = action + '|' + detail;
@@ -10021,6 +10029,7 @@ function cmpSheetHome(seedArg) {
       <p class="small muted">טיפ: בחלון ההדפסה אפשר לבחור אילו עמודים להדפיס – למשל רק את פתקי היציאה (עמוד 3).</p></div>
     <div id="wsout">${ws}${key}${tickets}</div>`;
   $('cmpBack').onclick = () => classSub('print');
+  $('wsout').dataset.what = `שטחים מורכבים: דף עבודה ופתקי יציאה · קוד ${seed}`;
   $('cmpPrint').onclick = () => window.print();
   $('cmpNew').onclick = () => { let n; do { n = R(1000, 9999); } while (n === seed); cmpSheetHome(n); };
   $('cmpProj').onclick = () => cmpProject(seed);
@@ -10447,6 +10456,7 @@ function printBuilder() {
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
+    $('wsout').dataset.what = `דף תרגול: ${topics.map(t => TOPIC[t].name).join(', ')} · ${$('wl').selectedOptions[0].textContent.trim()}${versions > 1 ? ` · ${versions} נוסחים` : ''}`;
     if (tips) dropTipsIfOverflow();
     paginateSheets();
     $('wprint').classList.remove('hidden');
@@ -10472,14 +10482,15 @@ function printBuilder() {
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b> <span class="small muted">(${TOPIC[q.topic].name})</span>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
+    $('wsout').dataset.what = 'מבחן תרגול';
     paginateSheets();
     $('wprint').classList.remove('hidden');
     $('wmsg').textContent = 'המבחן מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה נוספת יוצרת מבחן חדש.';
   });
   $('wprint').onclick = () => window.print();
   const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
-  if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked)));
-  if ($('kfpb')) $('kfpb').onclick = () => wsGate(() => kfOut(kfPrintBingo(Number($('kfpn').value))));
+  if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: דף אתגר דקה') && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked)));
+  if ($('kfpb')) $('kfpb').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: כרטיסי בינגו') && kfOut(kfPrintBingo(Number($('kfpn').value))));
   $('bkgo').onclick = () => {
     const counts = TOPICS.map(t => Number(app.querySelector(`[data-bk="${t.id}"]`).value));
     if (!counts.some(Boolean)) { $('bkmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
@@ -10586,6 +10597,7 @@ function renderBooklet(code) {
       ${chapters.map((c, i) => `<h3>${c.t.icon} פרק ${i + 1}: ${c.t.name}</h3><ol start="${c.start}">${c.qs.map(q => `<li><b>${correctHTML(q)}</b></li>`).join('')}</ol>`).join('')}
     </section>` : '';
   $('wsout').innerHTML = cover + body + key;
+  $('wsout').dataset.what = `חוברת לפי נושאים · קוד ${code}`;
   paginateSheets();
   const pages = [...$('wsout').querySelectorAll('.ws-pg')];
   pages.forEach((pg, i) => { const cr = pg.querySelector('.wscredit'); if (cr) cr.insertAdjacentHTML('afterbegin', `<span class="bk-pgnum">עמוד ${i + 1}</span>`); });
@@ -11043,7 +11055,7 @@ function askName(done) {
   document.body.appendChild(ov);
   const inp = ov.querySelector('#askNm');
   const close = nm => {
-    if (nm) { store.name = nm; saveStore(store); const box = $('nm'); if (box) box.value = nm; }
+    if (nm) { store.name = nm; saveStore(store); try { localStorage.setItem('math-name', nm); } catch (e) { /* לא חובה */ } const box = $('nm'); if (box) box.value = nm; }
     ov.remove(); done();
   };
   ov.querySelector('#askOk').onclick = () => { const nm = inp.value.trim().replace(/\s+/g, ' '); if (nm.split(' ').length >= 2) close(nm); else { ov.querySelector('#askErr').hidden = false; inp.focus(); } };
@@ -11054,8 +11066,8 @@ function askName(done) {
 (() => {
   let first = false;
   try { first = !sessionStorage.getItem('math-vis'); if (first) sessionStorage.setItem('math-vis', '1'); } catch (e) { /* לא חובה */ }
-  if (!first || URLP.has('print') || URLP.has('teacher')) return;
-  const logVisit = () => track('כניסה לאתר', GRADE_NAME[GRADE] || '');
+  if (!first || URLP.has('teacher')) return;
+  const logVisit = () => { if (!URLP.has('print')) track('כניסה לאתר', GRADE_NAME[GRADE] || ''); };
   if ((!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
 if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else home();
