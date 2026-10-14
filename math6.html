@@ -1086,7 +1086,7 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -1129,7 +1129,7 @@ try { if (!GRADE_PARAMS.has('teacher')) localStorage.setItem('math-grade', Strin
 if (GRADE === 1) document.documentElement.classList.add('g1');
 const GRADE_NAME = { 1: "כיתה א'", 2: "כיתה ב'", 3: "כיתה ג'", 4: "כיתה ד'", 5: "כיתה ה'", 6: "כיתה ו'" };
 const TEST_NAME = GRADE === 6 ? 'מבדק לדוגמה' : 'מבחן תרגול';
-const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : GRADE === 6 ? "כיתה ו' · הכנה למבדק" : `${GRADE_NAME[GRADE]} · תרגול`;
+const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : `${GRADE_NAME[GRADE]} · תרגול`;
 document.title = NEUTRAL ? 'מתרגלים מתמטיקה' : `מתרגלים מתמטיקה – ${GRADE_NAME[GRADE]}`;
 
 /* ---------- איורים בקו יד (במקום אימוג'ים) ---------- */
