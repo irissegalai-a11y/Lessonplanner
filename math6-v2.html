@@ -1186,7 +1186,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10554,14 +10554,15 @@ function pathHome(from) {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('path');
   const d = pathLoad(), n = MKQ[GRADE].length, cur = d.stars.findIndex(s => !s), tot = d.stars.reduce((a, b) => a + b, 0);
   app.innerHTML = `
-    <div class="topbar"><span class="title">🗺️ מסע לאוצר – אימון לקראת המבחן</span><button class="secondary" id="pathHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="topbar"><span class="title">🗺️ מסע לאוצר${d.trips > 1 ? ` מספר ${d.trips}` : ''} – אימון לקראת המבחן</span><button class="secondary" id="pathHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card path-head"><p>${cur < 0 ? '🏆 <b>הגעתם לאוצר!</b> לחצו על הגביע לסיכום.' : cur === 0 ? `ינשוף החכמה מחכה לכם בנקודת היציאה. בכל משבצת – שאלה אחת בסגנון המבחן. עונים נכון – ממשיכים הלאה. טעיתם? מקבלים הסבר ושאלה נוספת, בלי לחזור אחורה.` : `אתם במשבצת <b>${cur + 1}</b> מתוך ${n}. לחצו על המשבצת האדומה כדי להמשיך.`}</p>
       <div class="path-stat">⭐ <b>${tot}</b> מתוך ${n * 3} כוכבים · ${d.stars.filter(Boolean).length}/${n} משבצות</div></div>
     <div class="path-wrap">${pathMap(d, from)}</div>
     <p class="center small muted">אפשר ללחוץ גם על משבצת שכבר עברתם – כדי לשפר כוכבים.</p>
-    ${d.stars.some(Boolean) ? '<p class="center"><button class="ghost" id="pathReset">↺ להתחיל את המסע מחדש</button></p>' : ''}`;
+    ${cur < 0 ? '<p class="center"><button id="pathNew">🗺️ להמשיך למסע חדש</button></p>' : d.stars.some(Boolean) ? '<p class="center"><button class="ghost" id="pathReset">↺ להתחיל את המסע מחדש</button></p>' : ''}`;
   $('pathHomeB').onclick = home;
-  if ($('pathReset')) $('pathReset').onclick = () => { if (confirm('להתחיל את המסע מההתחלה? הכוכבים יימחקו.')) { pathSave({ stars: [] }); pathHome(); } };
+  if ($('pathNew')) $('pathNew').onclick = pathNewTrip;
+  if ($('pathReset')) $('pathReset').onclick = () => { if (confirm('להתחיל את המסע מההתחלה? הכוכבים יימחקו.')) { pathSave({ stars: [], trips: d.trips }); pathHome(); } };
   app.querySelectorAll('.path-tile.open').forEach(g => {
     const go = () => g.dataset.tile === 'end' ? pathEnd() : pathQ(+g.dataset.tile);
     g.addEventListener('click', go);
@@ -10607,16 +10608,20 @@ function pathQ(i, keep) {
   };
   window.scrollTo(0, 0);
 }
+// מסע חדש: המפה מתאפסת, ובכל משבצת יהיו שאלות חדשות
+function pathNewTrip() { const d = pathLoad(); pathSave({ stars: [], trips: (d.trips || 1) + 1 }); pathHome(); }
 function pathEnd() {
   navPush('view');
   const d = pathLoad(), L = MKQ[GRADE], tot = d.stars.reduce((a, b) => a + b, 0), weak = L.map((Q, i) => ({ i, t: Q.t, st: d.stars[i] })).filter(x => x.st < 3);
   app.innerHTML = `
     <div class="topbar"><span class="title">🏆 האוצר!</span><button class="secondary" id="pathBack">← למפה</button></div>
     <div class="card center path-end"><div class="path-trophy">🏆</div><h2>סיימתם את המסע!</h2><p>אספתם <b>${tot}</b> כוכבים מתוך ${L.length * 3}.</p>
+      <p><button id="pathNew2">🗺️ להמשיך למסע חדש</button></p>
       ${weak.length ? `<p>כדאי לחזור על השאלות האלה לפני המבחן:</p><div class="mk-list">${weak.map(w => `<div class="mk-item"><span class="mk-n">${w.i + 1}</span><span class="mk-t">${w.t} <span class="path-mini">${'★'.repeat(w.st)}</span></span><span class="mk-btns"><button class="secondary" data-te="${w.i}">📘 הקנייה</button><button data-pq="${w.i}">✏️ שוב</button></span></div>`).join('')}</div>` : '<p>🌟 כל המשבצות עם 3 כוכבים – אתם מוכנים למבחן!</p>'}</div>`;
   $('pathBack').onclick = () => pathHome();
   app.querySelectorAll('[data-te]').forEach(b => b.onclick = () => { mkS = { all: false }; mkView(+b.dataset.te, 'teach'); });
   app.querySelectorAll('[data-pq]').forEach(b => b.onclick = () => pathQ(+b.dataset.pq));
+  $('pathNew2').onclick = pathNewTrip;
   window.scrollTo(0, 0);
 }
 
