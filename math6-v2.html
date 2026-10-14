@@ -1096,7 +1096,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-diag">© איריס סגל</div><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6833,20 +6833,31 @@ const TRACK = { form: 'https://docs.google.com/forms/d/e/1FAIpQLScbU-3oB6Sx3hsec
 const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל' };
 const trackDevice = () => { try { let d = localStorage.getItem('math-dev'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('math-dev', d); } return d; } catch (e) { return 'x'; } };
 let trackLast = '';
-// משך פעילות: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף
+// זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
+// נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
 const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$)/;
+const ACT_IDLE = 60000, ACT_TAIL = 10000;
 let actCur = null, actPaused = null;
+function actTick() {
+  if (!actCur) return;
+  const now = Date.now();
+  actCur.ms += Math.min(now - actCur.last, ACT_IDLE);
+  actCur.last = now;
+}
+['pointerdown', 'keydown', 'input'].forEach(ev => document.addEventListener(ev, actTick, true));
 function actEnd(keep) {
   if (!actCur) return;
-  const sec = Math.round((Date.now() - actCur.t) / 1000), a = actCur;
+  const a = actCur;
+  const sec = Math.round((a.ms + Math.min(Date.now() - a.last, ACT_TAIL)) / 1000);
   actCur = null;
   if (keep) actPaused = a.label;
   if (sec >= 2) trackSend('משך פעילות', `${a.label} · ${sec}`, true);
 }
-function actStart(label) { actEnd(); actPaused = null; actCur = { label, t: Date.now() }; }
+const actNew = label => ({ label, ms: 0, last: Date.now() });
+function actStart(label) { actEnd(); actPaused = null; actCur = actNew(label); }
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') actEnd(true);
-  else if (actPaused && !actCur) { actCur = { label: actPaused, t: Date.now() }; actPaused = null; }
+  else if (actPaused && !actCur) { actCur = actNew(actPaused); actPaused = null; }
 });
 window.addEventListener('pagehide', () => actEnd());
 function trackSend(action, detail, beacon) {
