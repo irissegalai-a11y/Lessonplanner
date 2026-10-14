@@ -49,8 +49,8 @@
   .note { color: #5f5a50; margin-top: 26px; font-size: 1rem; }
   .credit { margin-top: 40px; font-size: 0.75rem; color: #9a9384; }
   @media (max-width: 480px) { h1 { font-size: 2rem; } .hero::before { inset: -10px -12px; } }
-  .ct-btn { font: inherit; font-size: 0.9rem; font-weight: 600; color: #3d3a33; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; margin-top: 8px; }
-  .ct-btn:hover, .ct-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
+  .ct-btn, .pv-btn { font: inherit; font-size: 0.9rem; font-weight: 600; color: #3d3a33; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; margin-top: 8px; }
+  .ct-btn:hover, .ct-btn:focus-visible, .pv-btn:hover, .pv-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
   .ct-ov { position: fixed; inset: 0; background: rgba(35, 38, 74, 0.55); z-index: 90; display: flex; align-items: center; justify-content: center; padding: 16px; }
   .ct-box { background: #fffdf8; color: #1f1e1c; border: 2.5px solid #1f1e1c; border-radius: 16px; padding: 18px 20px; max-width: 380px; width: 100%; text-align: center; font-size: 1rem; }
   .ct-box h2 { margin: 0 0 6px; font-size: 1.3rem; }
@@ -59,6 +59,11 @@
   .ct-acts a, .ct-acts button { font: inherit; font-size: 0.95rem; font-weight: 600; padding: 6px 14px; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; background: #fff; color: #1f1e1c; text-decoration: none; cursor: pointer; }
   .ct-acts .ct-main { background: #d9482b; color: #fff; border-color: #1f1e1c; }
   .ct-note { font-size: 0.85rem; color: #5f5a50; min-height: 1.2em; margin-top: 6px; }
+  .pv-box { max-width: 460px; text-align: right; }
+  .pv-box h2 { text-align: center; }
+  .pv-body { font-size: 0.95rem; line-height: 1.6; max-height: 65vh; overflow-y: auto; }
+  .pv-body p { margin: 6px 0; } .pv-body ul { margin: 4px 0 8px; padding-inline-start: 22px; }
+  .pv-link { font: inherit; background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; }
 </style>
 </head>
 <body>
@@ -76,7 +81,7 @@
     <a href="math6.html" data-g="6" style="--c:#7fa8d6"><b>ו'</b><span>כיתה ו'</span></a>
   </nav>
   <p class="note">האתר יזכור את הבחירה. אפשר להחליף כיתה בכל רגע – בראש הדף, ליד שם הכיתה.</p>
-  <div class="credit">© איריס סגל<br><button type="button" class="ct-btn">✉️ יצירת קשר</button></div>
+  <div class="credit">© איריס סגל<br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></div>
 </div>
 <script>
   // שומרים את הבחירה, ומעבירים הלאה גם פרמטרים נוספים (למשל ?print)
@@ -118,6 +123,41 @@
     ov.querySelector('#ctCopy').focus();
   };
   document.addEventListener('click', e => { if (e.target.closest('.ct-btn')) open(); });
+})();
+</script>
+<script>
+// כפתור "פרטיות": מה האתר שומר ושולח
+(() => {
+  const open = () => {
+    const ov = document.createElement('div');
+    ov.className = 'ct-ov pv-ov';
+    ov.innerHTML = `<div class="ct-box pv-box" role="dialog" aria-modal="true" aria-labelledby="pvT" data-raw>
+      <h2 id="pvT">🔒 פרטיות – מה נשמר באתר</h2>
+      <div class="pv-body">
+        <p><b>מה נשלח למורה:</b></p>
+        <ul>
+          <li>השם שכתבתם בכניסה (לא חובה – אפשר ללחוץ "בלי שם")</li>
+          <li>הכיתה שבחרתם באתר</li>
+          <li>באילו פעילויות עבדתם – שיעורים, תרגולים, משחקים – וכמה זמן</li>
+          <li>אילו דפים הדפסתם או שמרתם</li>
+          <li>בכרטיס יציאה בכיתה – כמה תשובות נכונות</li>
+          <li>באימון הכפל – רק מי שהקליד את קוד הכיתה – גם ההתקדמות באימון</li>
+        </ul>
+        <p><b>מה לא נשמר:</b> מייל, טלפון, כתובת, תמונות, וגם לא ציונים ותשובות בתרגול, במבחנים ובמשחקים.</p>
+        <p><b>למה:</b> כדי שהמורה תוכל לעקוב אחרי התרגול ולהתאים את ההוראה.</p>
+        <p><b>מי רואה:</b> רק המורה איריס סגל. המידע נשמר בחשבון שלה ולא מועבר לאף אחד.</p>
+        <p><b>במכשיר עצמו:</b> הדפדפן שומר את ההתקדמות שלכם כדי שתוכלו להמשיך מאיפה שעצרתם. זה נשאר אצלכם ולא נשלח.</p>
+        <p><b>מחיקה ושאלות:</b> אפשר לבקש למחוק מידע שנשמר – דרך כפתור "יצירת קשר" בתחתית האתר.</p>
+      </div>
+      <div class="ct-acts"><button type="button" class="ct-main" id="pvClose">הבנתי</button></div></div>`;
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    ov.querySelector('#pvClose').onclick = close;
+    document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); } });
+    ov.querySelector('#pvClose').focus();
+  };
+  document.addEventListener('click', e => { if (e.target.closest('.pv-btn')) open(); });
 })();
 </script>
 </body>

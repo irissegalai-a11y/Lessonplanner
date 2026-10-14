@@ -99,8 +99,8 @@
   .big-actions button { padding: 18px; font-size: 1.2rem; }
   .wscredit { text-align: left; font-size: 7.5pt; font-weight: 300; color: #b5b5b5; line-height: 1; margin: 0 0 2px; }
   .credit { text-align: center; font-size: 0.72rem; font-weight: 300; color: #b3b7c8; margin: 24px auto 12px; padding: 0 16px; }
-  .ct-btn { font: inherit; font-size: 0.9rem; font-weight: 600; color: #3d3a33; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; margin-top: 8px; }
-  .ct-btn:hover, .ct-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
+  .ct-btn, .pv-btn { font: inherit; font-size: 0.9rem; font-weight: 600; color: #3d3a33; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; margin-top: 8px; }
+  .ct-btn:hover, .ct-btn:focus-visible, .pv-btn:hover, .pv-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
   .ct-ov { position: fixed; inset: 0; background: rgba(35, 38, 74, 0.55); z-index: 90; display: flex; align-items: center; justify-content: center; padding: 16px; }
   .ct-box { background: #fffdf8; color: #1f1e1c; border: 2.5px solid #1f1e1c; border-radius: 16px; padding: 18px 20px; max-width: 380px; width: 100%; text-align: center; font-size: 1rem; }
   .ct-box h2 { margin: 0 0 6px; font-size: 1.3rem; }
@@ -109,6 +109,11 @@
   .ct-acts a, .ct-acts button { font: inherit; font-size: 0.95rem; font-weight: 600; padding: 6px 14px; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; background: #fff; color: #1f1e1c; text-decoration: none; cursor: pointer; }
   .ct-acts .ct-main { background: #d9482b; color: #fff; border-color: #1f1e1c; }
   .ct-note { font-size: 0.85rem; color: #5f5a50; min-height: 1.2em; margin-top: 6px; }
+  .pv-box { max-width: 460px; text-align: right; }
+  .pv-box h2 { text-align: center; }
+  .pv-body { font-size: 0.95rem; line-height: 1.6; max-height: 65vh; overflow-y: auto; }
+  .pv-body p { margin: 6px 0; } .pv-body ul { margin: 4px 0 8px; padding-inline-start: 22px; }
+  button.pv-link, button.pv-link:hover { font: inherit; background: none !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; color: inherit; text-decoration: underline; cursor: pointer; padding: 0 !important; margin: 0; min-height: 0; display: inline; transform: none !important; filter: none !important; }
   .timer { font-weight: 800; font-variant-numeric: tabular-nums; background: #eef1ff; color: #2c2c54; border: 1.5px solid #9aa6d8; border-radius: 999px; padding: 2px 12px; cursor: pointer; font-size: 1rem; }
   .timer.warn { background: #fdecea; color: #c0392b; border-color: #e08b80; }
   .simnav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 10px 0 4px; }
@@ -1095,7 +1100,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -1122,6 +1127,41 @@
     ov.querySelector('#ctCopy').focus();
   };
   document.addEventListener('click', e => { if (e.target.closest('.ct-btn')) open(); });
+})();
+</script>
+<script>
+// כפתור "פרטיות": מה האתר שומר ושולח
+(() => {
+  const open = () => {
+    const ov = document.createElement('div');
+    ov.className = 'ct-ov pv-ov';
+    ov.innerHTML = `<div class="ct-box pv-box" role="dialog" aria-modal="true" aria-labelledby="pvT" data-raw>
+      <h2 id="pvT">🔒 פרטיות – מה נשמר באתר</h2>
+      <div class="pv-body">
+        <p><b>מה נשלח למורה:</b></p>
+        <ul>
+          <li>השם שכתבתם בכניסה (לא חובה – אפשר ללחוץ "בלי שם")</li>
+          <li>הכיתה שבחרתם באתר</li>
+          <li>באילו פעילויות עבדתם – שיעורים, תרגולים, משחקים – וכמה זמן</li>
+          <li>אילו דפים הדפסתם או שמרתם</li>
+          <li>בכרטיס יציאה בכיתה – כמה תשובות נכונות</li>
+          <li>באימון הכפל – רק מי שהקליד את קוד הכיתה – גם ההתקדמות באימון</li>
+        </ul>
+        <p><b>מה לא נשמר:</b> מייל, טלפון, כתובת, תמונות, וגם לא ציונים ותשובות בתרגול, במבחנים ובמשחקים.</p>
+        <p><b>למה:</b> כדי שהמורה תוכל לעקוב אחרי התרגול ולהתאים את ההוראה.</p>
+        <p><b>מי רואה:</b> רק המורה איריס סגל. המידע נשמר בחשבון שלה ולא מועבר לאף אחד.</p>
+        <p><b>במכשיר עצמו:</b> הדפדפן שומר את ההתקדמות שלכם כדי שתוכלו להמשיך מאיפה שעצרתם. זה נשאר אצלכם ולא נשלח.</p>
+        <p><b>מחיקה ושאלות:</b> אפשר לבקש למחוק מידע שנשמר – דרך כפתור "יצירת קשר" בתחתית האתר.</p>
+      </div>
+      <div class="ct-acts"><button type="button" class="ct-main" id="pvClose">הבנתי</button></div></div>`;
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    ov.querySelector('#pvClose').onclick = close;
+    document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); } });
+    ov.querySelector('#pvClose').focus();
+  };
+  document.addEventListener('click', e => { if (e.target.closest('.pv-btn, .pv-link')) open(); });
 })();
 </script>
 
@@ -6832,7 +6872,6 @@ let navPopping = false;
    ========================================================= */
 const TRACK = { form: 'https://docs.google.com/forms/d/e/1FAIpQLScbU-3oB6Sx3hsec4cxoQQUWUfSnuvGH8X7DOKLR5hldhe6CA/formResponse', f: { device: 'entry.218291459', grade: 'entry.2065505054', name: 'entry.1804780443', action: 'entry.285567241', detail: 'entry.1501454704' } };
 const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל' };
-const trackDevice = () => { try { let d = localStorage.getItem('math-dev'); if (!d) { d = Math.random().toString(36).slice(2, 10); localStorage.setItem('math-dev', d); } return d; } catch (e) { return 'x'; } };
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
@@ -6865,7 +6904,7 @@ function trackSend(action, detail, beacon) {
   if (!TRACK.form || URLP.has('teacher') || bookOk()) return;
   try {
     const nm = (typeof store !== 'undefined' && store.name) || '';
-    const body = new URLSearchParams({ [TRACK.f.device]: trackDevice(), [TRACK.f.grade]: String(GRADE), [TRACK.f.name]: nm, [TRACK.f.action]: action, [TRACK.f.detail]: String(detail).slice(0, 200) });
+    const body = new URLSearchParams({ [TRACK.f.device]: '', [TRACK.f.grade]: String(GRADE), [TRACK.f.name]: nm, [TRACK.f.action]: action, [TRACK.f.detail]: String(detail).slice(0, 200) });
     fetch(TRACK.form, { method: 'POST', mode: 'no-cors', body, keepalive: !!beacon }).catch(() => {});
   } catch (e) { /* לא חובה */ }
 }
@@ -7688,7 +7727,7 @@ function nextQ() {
 /* ---------- סיכום ---------- */
 function summary() {
   const s = state, n = s.results.length;
-  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
+  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', !s.exit ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
   const label = titleText();
@@ -11045,6 +11084,7 @@ function askName(done) {
   ov.innerHTML = `<div class="modal picker ask-name" role="dialog" aria-modal="true" aria-labelledby="askT">
     <h2 class="center" id="askT">שלום! איך קוראים לך?</h2>
     <p class="center">כתבו <b>שם מלא</b> – שם פרטי ושם משפחה, כדי שהמורה תדע מי תרגל.</p>
+    <p class="center small muted">השם ובאילו פעילויות עבדתם נשמרים אצל המורה בלבד. לא חובה – אפשר ללחוץ "בלי שם". <button type="button" class="pv-link">מה עוד נשמר?</button></p>
     <input id="askNm" class="ask-in" autocomplete="off" maxlength="40" placeholder="שם פרטי ושם משפחה" aria-label="שם מלא">
     <p class="center ask-err" id="askErr" hidden>כתבו גם שם משפחה 🙂</p>
     <div class="actions" style="justify-content:center">
