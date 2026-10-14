@@ -1135,6 +1135,7 @@
   .mk-steps { margin-top: 14px; border-top: 2px dashed var(--line, #ccc); padding-top: 8px; }
   .mk-steps h4 { margin: 0 0 4px; }
   .mk-steps li { margin: 6px 0; line-height: 1.8; }
+  .mk-steps .m { white-space: normal; max-width: 100%; }
   .mk-msg { font-weight: 700; margin-top: 8px; }
   .mk-cells .mk-cell { cursor: pointer; }
   .mk-cells .mk-cell.on { fill: #f2a65a; }
@@ -1179,6 +1180,8 @@
   .path-spot { margin-top: 6px; font-size: 1.05rem; }
   .path-try { padding: 10px; border-radius: 12px; background: rgba(127, 168, 214, 0.2); }
   .path-trophy { font-size: 4rem; }
+  .path-rem { margin-top: 14px; padding: 10px 12px; border: 2px dashed #e2b357; border-radius: 14px; background: rgba(239, 201, 106, 0.14); }
+  .path-rem h4 { margin: 0 0 6px; }
   .path-mini { color: #d4a017; }
 </style>
 </head>
@@ -1186,7 +1189,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10573,15 +10576,9 @@ function pathHome(from) {
   if (from == null) { const c = app.querySelector('.path-tile.cur'); if (c && c.getBoundingClientRect().top > innerHeight) c.scrollIntoView({ block: 'center' }); }
   track('משחק: מסע לאוצר');
 }
-// במסלול – תרגיל אחד בכל משבצת: מסעיפים רבים בוחרים סעיף אחד שעומד בפני עצמו
-function pathOne(q) {
-  const ok = q.parts.filter(p => p.k !== 'self' && p.alone !== false);
-  if (q.parts.length > 1 && ok.length) q.parts = [pick(ok)];
-  return q;
-}
 function pathQ(i, keep) {
   navPush('view');
-  const L = MKQ[GRADE], q = pathOne(mkMake(i));
+  const L = MKQ[GRADE], q = mkMake(i);
   pathS = keep && pathS && pathS.i === i ? Object.assign(pathS, { q }) : { i, q, att: 0 };
   mkS = { all: false, i, mode: 'practice', q };
   app.innerHTML = `
@@ -10589,8 +10586,17 @@ function pathQ(i, keep) {
     <div class="card mk-card"><div class="mk-topic">${q.t}${pathS.att ? ` · <b>ניסיון ${pathS.att + 1}</b>` : ''}</div>${mkQHTML(q, 'practice', i + 1)}
       <div class="mk-steps hidden" id="mkExp"><h4>💡 איך פותרים?</h4><ol>${q.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
       <div class="mk-msg" id="mkMsg"></div>
-      <div class="actions" id="pathActs"><button id="pathCheck">${ic('check')} בדיקה</button></div></div>`;
+      <div class="actions" id="pathActs"><button id="pathCheck">${ic('check')} בדיקה</button><button class="secondary" id="pathRem">💡 תזכורת</button></div>
+      <div class="path-rem hidden" id="pathRemBox"></div></div>`;
   $('pathBack').onclick = () => pathHome();
+  $('pathRem').onclick = () => {
+    const box = $('pathRemBox');
+    if (!box.classList.contains('hidden')) { box.classList.add('hidden'); return; }
+    const ex = mkMake(i);
+    box.innerHTML = `<h4>💡 תזכורת – דוגמה פתורה (עם מספרים אחרים)</h4>${mkQHTML(ex, 'teach', i + 1).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}<div class="mk-steps"><h4>איך פותרים?</h4><ol>${ex.steps.map(s => `<li>${s}</li>`).join('')}</ol></div><p class="small muted">עכשיו נסו לפתור את השאלה שלכם באותה דרך 🙂</p>`;
+    box.classList.remove('hidden');
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
   mkWire();
   $('pathCheck').onclick = () => {
     const r = mkCheck();
@@ -10602,6 +10608,7 @@ function pathQ(i, keep) {
       $('mkExp').classList.add('hidden');
       const spot = (i + 1) % 4 === 0 && i + 1 < L.length ? PATH_SPOTS[((i + 1) / 4 - 1) % PATH_SPOTS.length] : null;
       $('mkMsg').innerHTML = `<div class="path-win"><div class="path-stars">${'★'.repeat(st)}<span>${'★'.repeat(3 - st)}</span></div>${st === 3 ? 'מצוין! נכון כבר בפעם הראשונה 🌟' : st === 2 ? 'כל הכבוד! הצלחתם בניסיון השני 💪' : 'הצלחתם! התמדה משתלמת 👏'}${spot && wasCur ? `<div class="path-spot">${spot[0]} הגעתם ל<b>${spot[1]}</b>!</div>` : ''}${i + 1 === L.length && wasCur ? '<div class="path-spot">🏆 הגעתם לאוצר!</div>' : ''}</div>`;
+      $('pathRemBox').classList.add('hidden');
       $('pathActs').innerHTML = `<button id="pathOn">${i + 1 === L.length ? '🏆 לאוצר' : 'המשך במסלול ←'}</button>`;
       $('pathOn').onclick = () => wasCur ? pathHome(i) : pathHome();
       $('pathOn').focus();
