@@ -1122,6 +1122,9 @@
   .mk-opts.grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
   .mk-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 3px 6px; border-radius: 8px; }
   .mk-ot { flex: 1; min-width: 0; }
+  .mk-draw .mk-dot { cursor: pointer; }
+  .mk-draw .mk-dot:hover { fill: rgba(217, 72, 43, 0.18); }
+  .mk-drawbar { margin-top: 2px; }
   .mk-opt:hover { background: rgba(127, 168, 214, 0.15); }
   .mk-on { font-size: 0.8rem; color: #777; min-width: 1em; }
   .mk-optfig svg { max-width: 170px; }
@@ -1189,7 +1192,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -9720,6 +9723,25 @@ function mkPoly(pts, o = {}) {
   return mkSVG(W, H, s, o.click ? 'mk-sides' : '');
 }
 const mkU = (v, u) => `${v} ${u}`;
+// לוח שרטוט: נקודות על רשת; לוחצים על שתי נקודות ונוצר קו. given = קטעים נתונים, answer = קטעים לתשובה (באדום מקווקו)
+const mkSegKey = sg => sg.map(p => p.join(',')).sort().join('|');
+const mkSegsEq = (a, b) => a.length === b.length && b.every(sg => a.some(x => mkSegKey(x) === mkSegKey(sg)));
+function mkDraw(given, o = {}) {
+  // שוליים של משבצת אחת מכל צד, כדי שהרשת לא "תסגיר" איפה הצורה נגמרת
+  const all = given.flat().concat((o.answer || []).flat(), o.pts || []), mx = Math.max(...all.map(p => p[0])) + 2, my = Math.max(...all.map(p => p[1])) + 2;
+  const u = 30, pad = 18 + u, W = mx * u + 36 - u, H = my * u + 36 - u, X = p => pad + p[0] * u, Y = p => pad + p[1] * u;
+  let s = '';
+  for (let x = -1; x < mx; x++) s += `<line x1="${pad + x * u}" y1="${pad - u}" x2="${pad + x * u}" y2="${pad + (my - 1) * u}" stroke="#e1ddd3"/>`;
+  for (let y = -1; y < my; y++) s += `<line x1="${pad - u}" y1="${pad + y * u}" x2="${pad + (mx - 1) * u}" y2="${pad + y * u}" stroke="#e1ddd3"/>`;
+  given.forEach(([a, b]) => { s += `<line x1="${X(a)}" y1="${Y(a)}" x2="${X(b)}" y2="${Y(b)}" stroke="#111" stroke-width="3" stroke-linecap="round"/>`; });
+  (o.answer || []).forEach(([a, b]) => { s += `<line x1="${X(a)}" y1="${Y(a)}" x2="${X(b)}" y2="${Y(b)}" stroke="#d9482b" stroke-width="3.5" stroke-dasharray="7 5" stroke-linecap="round"/>`; });
+  s += '<g class="mk-user"></g>';
+  for (let x = -1; x < mx; x++) for (let y = -1; y < my; y++) {
+    s += `<circle cx="${pad + x * u}" cy="${pad + y * u}" r="2.6" fill="#8a8373" pointer-events="none"/>`;
+    if (o.click) s += `<circle cx="${pad + x * u}" cy="${pad + y * u}" r="12" fill="transparent" class="mk-dot" data-x="${x}" data-y="${y}"/>`;
+  }
+  return `<svg class="mk-fig${o.click ? ' mk-draw' : ''}" data-u="${u}" data-pad="${pad}" viewBox="0 0 ${W} ${H}" width="${W}" style="max-width:100%;height:auto" role="img">${s}</svg>`;
+}
 
 /* ---------- שאלות לפי כיתה ----------
    כל שאלה: { t: נושא קצר, q: גוף השאלה, parts: [...], steps: [...] }
@@ -9837,22 +9859,34 @@ MKQ[6] = [
       { l: 'ב.', q: 'באיזו אפשרות בחרו הכי הרבה תלמידים?', k: 'choice', opts: cats.map(x => x), a: ix, show: cats[ix] }],
       steps: [`${M(F(1, k))} מ-${M(T)}: ${M(`${T} : ${k} = ${a}`)} תלמידים בחרו ב${cats[0]}`, `השאר: ${M(`${T} – ${a} – ${b} = ${c}`)} בחרו ב${cats[2]}`, `משווים: ${M(a)}, ${M(b)}, ${M(c)} ← הכי הרבה: ${cats[ix]}`] };
   } },
-  { t: 'אלכסוני מרובע', g() {
-    const ty = pick(['kite', 'rhombus', 'rect', 'square']), names = ['ריבוע', 'מלבן', 'מעוין', 'דלתון', 'מקבילית'];
-    let A, B, C, D;
-    if (ty === 'kite') { A = [0, 2]; C = [R(5, 7), 2]; B = [2, 0]; D = [2, 4]; if (Math.random() < .5) { B = [2, -1]; D = [2, 5]; } }
-    else if (ty === 'rhombus') { A = [0, 2]; C = [6, 2]; B = [3, 0]; D = [3, 4]; }
-    else if (ty === 'square') { A = [0, 2]; C = [4, 2]; B = [2, 0]; D = [2, 4]; }
-    else { A = [0, 0]; C = [6, 3]; B = [6, 0]; D = [0, 3]; }
-    const nm = { kite: 'דלתון', rhombus: 'מעוין', rect: 'מלבן', square: 'ריבוע' }[ty];
-    const P = [A, B, C, D], diag = P2 => `<line x1="${P2(A)[0]}" y1="${P2(A)[1]}" x2="${P2(C)[0]}" y2="${P2(C)[1]}" stroke="#111" stroke-width="2.5"/><line x1="${P2(B)[0]}" y1="${P2(B)[1]}" x2="${P2(D)[0]}" y2="${P2(D)[1]}" stroke="#111" stroke-width="2.5"/>`;
-    const figD = () => mkPoly(P, { grid: true, u: 26, hide: true, extra: [diag] });
-    const figS = () => mkPoly(P, { grid: true, u: 26, extra: [diag] });
-    const why = { kite: 'האלכסונים מאונכים, ורק אחד מהם חוצה את השני', rhombus: 'האלכסונים מאונכים וחוצים זה את זה, אבל לא שווים', square: 'האלכסונים מאונכים, חוצים זה את זה ושווים', rect: 'האלכסונים שווים וחוצים זה את זה, אבל לא מאונכים' }[ty];
-    return { q: `הקטעים המסורטטים לפניכם הם <b>אלכסוני מרובע</b>.`, fig: figD, parts: [
-      { l: 'א.', q: 'סרטטו (בדמיון או על דף) את צלעות המרובע – מחברים את קצות האלכסונים.', k: 'self', show: `ככה נראה המרובע:${figS()}` },
-      { l: 'ב.', q: 'מה שם המרובע שאלה אלכסוניו?', k: 'choice', pl: true, opts: names, a: names.indexOf(nm), show: nm }],
-      steps: ['מחברים כל קצה של אלכסון אחד לשני הקצוות של האלכסון השני – מקבלים 4 צלעות.', `בודקים את האלכסונים: ${why}.`, `לכן זה <b>${nm}</b>.`] };
+  { t: 'שרטוט מרובע – לפי אלכסונים או לפי צלעות', g() {
+    const names = ['ריבוע', 'מלבן', 'מעוין', 'דלתון', 'מקבילית'];
+    if (Math.random() < 0.5) {
+      // לפי אלכסונים: מחברים את קצות האלכסונים
+      const ty = pick(['kite', 'rhombus', 'rect', 'square']);
+      let A, B, C, D;
+      if (ty === 'kite') { const t = R(5, 7), up = Math.random() < .5; A = [0, up ? 2 : 3]; C = [t, up ? 2 : 3]; B = [2, 0]; D = [2, up ? 4 : 5]; if (!up) { A = [0, 2]; C = [t, 2]; B = [t - 2, 0]; D = [t - 2, 4]; } }
+      else if (ty === 'rhombus') { A = [0, 2]; C = [6, 2]; B = [3, 0]; D = [3, 4]; }
+      else if (ty === 'square') { A = [0, 2]; C = [4, 2]; B = [2, 0]; D = [2, 4]; }
+      else { const w = R(5, 7), h = R(3, 4); A = [0, 0]; C = [w, h]; B = [w, 0]; D = [0, h]; }
+      const nm = { kite: 'דלתון', rhombus: 'מעוין', rect: 'מלבן', square: 'ריבוע' }[ty];
+      const diags = [[A, C], [B, D]], sides = [[A, B], [B, C], [C, D], [D, A]];
+      const why = { kite: 'האלכסונים מאונכים, ורק אחד מהם חוצה את השני', rhombus: 'האלכסונים מאונכים וחוצים זה את זה, אבל לא שווים', square: 'האלכסונים מאונכים, חוצים זה את זה ושווים', rect: 'האלכסונים שווים וחוצים זה את זה, אבל לא מאונכים' }[ty];
+      return { q: `הקטעים המסורטטים לפניכם הם <b>אלכסוני מרובע</b>.`, parts: [
+        { l: 'א.', q: 'סרטטו את צלעות המרובע.', k: 'draw', fig: () => mkDraw(diags, { click: true }), figPrint: () => mkDraw(diags), a: sides, check: segs => mkSegsEq(segs, sides), show: `${mkDraw(diags, { answer: sides })}` },
+        { l: 'ב.', q: 'מה שם המרובע שאלה אלכסוניו?', k: 'choice', pl: true, opts: names, a: names.indexOf(nm), show: nm }],
+        steps: ['מחברים כל קצה של אלכסון אחד לשני הקצוות של האלכסון השני – מקבלים 4 צלעות.', `בודקים את האלכסונים: ${why}.`, `לכן זה <b>${nm}</b>.`] };
+    }
+    // לפי צלעות נתונות: משלימים את הצורה
+    const sh = pick([['מקבילית', [[0, 3], [4, 3], [6, 0], [2, 0]], 'צלעות נגדיות מקבילות ושוות'], ['מלבן', [[0, 0], [R(4, 6), 0], [0, 0], [0, R(2, 4)]], 'כל הזוויות ישרות, וצלעות נגדיות שוות'], ['ריבוע', [[0, 2], [2, 0], [4, 2], [2, 4]], 'כל הצלעות שוות וכל הזוויות ישרות'], ['מעוין', [[0, 2], [3, 0], [6, 2], [3, 4]], 'כל הצלעות שוות, וצלעות נגדיות מקבילות']]);
+    let V = sh[1];
+    if (sh[0] === 'מלבן') { const w = V[1][0], h = V[3][1]; V = [[0, 0], [w, 0], [w, h], [0, h]]; }
+    const r = R(0, 3), Q = [0, 1, 2, 3].map(k => V[(k + r) % 4]);
+    const given = [[Q[0], Q[1]], [Q[1], Q[2]]], missing = [[Q[2], Q[3]], [Q[3], Q[0]]];
+    return { q: `לפניכם <b>שתי צלעות</b> של ${sh[0]}.`, parts: [
+      { l: 'א.', q: `השלימו את ה${sh[0]} – סרטטו את הצלעות החסרות.`, k: 'draw', fig: () => mkDraw(given, { click: true, pts: V }), figPrint: () => mkDraw(given, { pts: V }), a: missing, check: segs => mkSegsEq(segs, missing), show: `${mkDraw(given, { answer: missing })}` },
+      { l: 'ב.', q: `כמה זוגות של צלעות מקבילות יש ב${sh[0]}?`, k: 'num', a: 2, show: M(2) }],
+      steps: [`ב${sh[0]}: ${sh[2]}.`, 'מהקצה של כל צלע נתונה "הולכים" באותו כיוון ובאותו אורך כמו הצלע שמולה – וכך מוצאים את הקודקוד הרביעי.', 'סופרים משבצות ימינה/שמאלה ולמעלה/למטה, ובודקים שהצלע החדשה מקבילה ושווה לצלע שמולה.'] };
   } },
   { t: 'גובה במשולש', g() {
     const base = R(3, 4), off = pick([-2, 1, base + 2]), h = R(3, 4), A = [0, h], B = [base, h], T = [off, 0];
@@ -9994,7 +10028,7 @@ MKQ[5] = [
     const adj = [(bi + n - 1) % n, (bi + 1) % n], names = ['משולש', 'מרובע', 'מחומש', 'משושה', 'מתומן'];
     return { q: 'לפניכם מצולע.', fig: () => mkPoly(pts, { u: 26, bold: bi, click: true }), figPrint: () => mkPoly(pts, { u: 26, bold: bi }), parts: [
       { l: 'א.', q: 'מה שם המצולע?', k: 'choice', pl: true, opts: names, a: names.indexOf(nm), show: nm },
-      { l: 'ב.', q: 'כמה אלכסונים אפשר לסרטט מקודקוד אחד?', k: 'num', a: n - 3, show: M(n - 3), printQ: 'סרטטו שני אלכסונים במצולע.' },
+      { l: 'ב.', q: 'סרטטו <b>שני</b> אלכסונים במצולע.', k: 'draw', fig: () => mkDraw(pts.map((p, i) => [p, pts[(i + 1) % n]]), { click: true }), printQ: 'סרטטו שני אלכסונים במצולע.', a: [[pts[0], pts[2]], [pts[1], pts[3]]], check: segs => segs.length === 2 && segs.every(sg => { const ia = pts.findIndex(p => p[0] === sg[0][0] && p[1] === sg[0][1]), ib = pts.findIndex(p => p[0] === sg[1][0] && p[1] === sg[1][1]); return ia >= 0 && ib >= 0 && ia !== ib && Math.abs(ia - ib) !== 1 && Math.abs(ia - ib) !== n - 1; }), show: `כל שני קטעים שמחברים קודקודים <b>שאינם שכנים</b>, למשל:${mkDraw(pts.map((p, i) => [p, pts[(i + 1) % n]]), { answer: [[pts[0], pts[2]], [pts[1], pts[3]]] })}` },
       { l: 'ג.', q: 'לחצו בציור על הצלעות <b>הסמוכות</b> לצלע המודגשת (בקו עבה).', printQ: 'סמנו בצבע את הצלעות הסמוכות לצלע המודגשת (בקו עבה).', k: 'sides', a: adj, show: 'שתי הצלעות שנוגעות בקצוות של הצלע המודגשת' }],
       steps: [`סופרים צלעות: ${n} ← ${nm}.`, `אלכסון מחבר שני קודקודים <b>שאינם שכנים</b>. מכל קודקוד: ${M(`${n} – 3 = ${n - 3}`)} אלכסונים.`, 'צלעות סמוכות = צלעות שיש להן קודקוד משותף עם הצלע. לכל צלע יש בדיוק 2 צלעות סמוכות.'] };
   } },
@@ -10288,6 +10322,8 @@ function mkPartHTML(p, pi, mode) {
     if (teach) h += `${p.q2 ? '' : tpl.replace(/\[\[\d\]\]/g, '____')}`;
   } else if (qtxt) h += qtxt;
   if (p.fig && !print) h += `<div class="mk-figbox">${p.fig()}</div>`;
+  if (p.figPrint && print) h += `<div class="mk-figbox">${p.figPrint()}</div>`;
+  if (p.k === 'draw' && !teach && !print) h += '<div class="mk-drawbar"><button type="button" class="ghost" data-clear>↺ ניקוי</button> <span class="small muted">לוחצים על נקודה, ואז על נקודה אחרת – ונוצר קו. לחיצה שוב על אותן שתי נקודות מוחקת את הקו.</span></div>';
   if (!teach && !print) {
     if (p.k === 'num') h += ` <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה">${p.unit ? ` <span class="muted">${p.unit}</span>` : ''}`;
     if (p.k === 'frac') h += ` <span class="mk-frac" dir="ltr"><input class="mk-in w" inputmode="numeric" data-p="${pi}" data-k="w" placeholder="שלם" aria-label="שלמים"><span class="mk-fr"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="n" aria-label="מונה"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="d" aria-label="מכנה"></span></span>`;
@@ -10355,6 +10391,19 @@ function mkView(i, mode) {
 }
 // משבצות לצביעה, צלעות ללחיצה, שנתות ללחיצה
 function mkWire() {
+  app.querySelectorAll('.mk-draw').forEach(svg => {
+    svg._segs = []; let sel = null;
+    const u = +svg.dataset.u, pad = +svg.dataset.pad, g = svg.querySelector('.mk-user'), C = v => pad + v * u;
+    const redraw = () => { g.innerHTML = svg._segs.map(([a, b]) => `<line x1="${C(a[0])}" y1="${C(a[1])}" x2="${C(b[0])}" y2="${C(b[1])}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`).join('') + (sel ? `<circle cx="${C(sel[0])}" cy="${C(sel[1])}" r="7" fill="#d9482b" opacity="0.6"/>` : ''); };
+    svg.querySelectorAll('.mk-dot').forEach(d => d.addEventListener('click', () => {
+      const p = [+d.dataset.x, +d.dataset.y];
+      if (!sel) { sel = p; redraw(); return; }
+      if (sel[0] !== p[0] || sel[1] !== p[1]) { const k = mkSegKey([sel, p]), i = svg._segs.findIndex(x => mkSegKey(x) === k); if (i >= 0) svg._segs.splice(i, 1); else svg._segs.push([sel, p]); }
+      sel = null; redraw();
+    }));
+    const clr = svg.closest('.mk-part') && svg.closest('.mk-part').querySelector('[data-clear]');
+    if (clr) clr.onclick = () => { svg._segs = []; sel = null; redraw(); };
+  });
   app.querySelectorAll('.mk-cell').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
   app.querySelectorAll('.mk-side').forEach(s => s.addEventListener('click', () => { const v = app.querySelector(`[data-sidec="${s.dataset.side}"]`); v.classList.toggle('on'); }));
   app.querySelectorAll('.mk-part').forEach(part => part.querySelectorAll('.mk-tickhit').forEach(t => t.addEventListener('click', () => {
@@ -10379,6 +10428,7 @@ function mkCheck() {
     else if (p.k === 'cells') { const n = app.querySelectorAll('.mk-cell.on').length; res = n ? n === p.a : null; }
     else if (p.k === 'sides') { const s = [...app.querySelectorAll('.mk-sidec.on')].map(x => +x.dataset.sidec).sort(); res = s.length ? s.join() === p.a.slice().sort().join() : null; }
     else if (p.k === 'tick') { const t = part.querySelector('.mk-tick.on'); res = t ? +t.dataset.tick === p.a : null; }
+    else if (p.k === 'draw') { const sv = part.querySelector('.mk-draw'), sg = (sv && sv._segs) || []; res = sg.length ? p.check(sg) : null; }
     else if (p.k === 'self') { fb.innerHTML = `<div class="mk-model">תשובה לדוגמה: ${p.show}<div class="small muted">השוו לתשובה שלכם.</div></div>`; return; }
     tot++;
     if (res === null) { miss++; fb.innerHTML = '<span class="mk-wait">✋ עוד לא עניתם על הסעיף הזה</span>'; return; }
