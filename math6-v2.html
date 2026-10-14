@@ -1096,7 +1096,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-diag">© איריס סגל</div><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 לט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 מ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10499,15 +10499,18 @@ function printBuilder() {
 const BOOK_COUNTS = [0, 4, 6, 8, 10, 12, 15, 20];
 // החוברות נעולות בקוד של המורה (נשמר רק כ"טביעת אצבע", לא הקוד עצמו)
 var BOOK_HASH = 'e1050f14';
-// דף עבודה אחד חינם בכל מכשיר; מהשני והלאה צריך את הקוד
+// עד 2 דפי עבודה ביום בכל מכשיר; מעבר לזה צריך את הקוד
+const WS_PER_DAY = 2;
 function wsGate(fn) {
-  let used = 0;
-  try { used = Number(localStorage.getItem('math-ws-used')) || 0; } catch (e) { /* לא חובה */ }
-  if (bookOk() || used < 1) {
-    try { localStorage.setItem('math-ws-used', String(used + 1)); } catch (e) { /* לא חובה */ }
+  const today = new Date().toLocaleDateString('en-CA');
+  let u = {};
+  try { u = JSON.parse(localStorage.getItem('math-ws-day')) || {}; } catch (e) { /* לא חובה */ }
+  const used = u.d === today ? (u.n || 0) : 0;
+  if (bookOk() || used < WS_PER_DAY) {
+    try { localStorage.setItem('math-ws-day', JSON.stringify({ d: today, n: used + 1 })); } catch (e) { /* לא חובה */ }
     return fn();
   }
-  $('wmsg').innerHTML = `<span class="wslock">🔒 כבר נוצר דף עבודה במכשיר הזה. ליצירת דפים נוספים צריך קוד.
+  $('wmsg').innerHTML = `<span class="wslock">🔒 היום כבר נוצרו ${WS_PER_DAY} דפי עבודה במכשיר הזה. מחר אפשר ליצור עוד – או להקליד קוד.
     <span class="bkcoderow"><input id="wspass" class="tinput" type="password" inputmode="numeric" placeholder="קוד" autocomplete="off"><button class="secondary" type="button" id="wsopen">פתיחה</button></span>
     <span id="wslmsg"></span></span>`;
   const go = () => {
