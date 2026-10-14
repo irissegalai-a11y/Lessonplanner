@@ -49,6 +49,16 @@
   .note { color: #5f5a50; margin-top: 26px; font-size: 1rem; }
   .credit { margin-top: 40px; font-size: 0.75rem; color: #9a9384; }
   @media (max-width: 480px) { h1 { font-size: 2rem; } .hero::before { inset: -10px -12px; } }
+  .ct-btn { font: inherit; font-size: 0.9rem; font-weight: 600; color: #3d3a33; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; margin-top: 8px; }
+  .ct-btn:hover, .ct-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
+  .ct-ov { position: fixed; inset: 0; background: rgba(35, 38, 74, 0.55); z-index: 90; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .ct-box { background: #fffdf8; color: #1f1e1c; border: 2.5px solid #1f1e1c; border-radius: 16px; padding: 18px 20px; max-width: 380px; width: 100%; text-align: center; font-size: 1rem; }
+  .ct-box h2 { margin: 0 0 6px; font-size: 1.3rem; }
+  .ct-mail { direction: ltr; font-weight: 700; font-size: 1.05rem; margin: 10px 0; user-select: all; word-break: break-all; }
+  .ct-acts { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+  .ct-acts a, .ct-acts button { font: inherit; font-size: 0.95rem; font-weight: 600; padding: 6px 14px; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; background: #fff; color: #1f1e1c; text-decoration: none; cursor: pointer; }
+  .ct-acts .ct-main { background: #d9482b; color: #fff; border-color: #1f1e1c; }
+  .ct-note { font-size: 0.85rem; color: #5f5a50; min-height: 1.2em; margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -66,7 +76,7 @@
     <a href="math6.html" data-g="6" style="--c:#7fa8d6"><b>ו'</b><span>כיתה ו'</span></a>
   </nav>
   <p class="note">האתר יזכור את הבחירה. אפשר להחליף כיתה בכל רגע – בראש הדף, ליד שם הכיתה.</p>
-  <div class="credit">© איריס סגל<br>ליצירת קשר: <a href="mailto:iris.segal.ai@gmail.com" dir="ltr" style="color:inherit">iris.segal.ai@gmail.com</a></div>
+  <div class="credit">© איריס סגל<br><button type="button" class="ct-btn">✉️ יצירת קשר</button></div>
 </div>
 <script>
   // שומרים את הבחירה, ומעבירים הלאה גם פרמטרים נוספים (למשל ?print)
@@ -81,6 +91,34 @@
       location.href = 'math6.html' + (s ? '?' + s : '') + location.hash;
     });
   });
+</script>
+<script>
+// כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
+(() => {
+  const MAIL = ['iris.segal.ai', 'gmail.com'].join('@');
+  const open = () => {
+    const ov = document.createElement('div');
+    ov.className = 'ct-ov';
+    ov.innerHTML = `<div class="ct-box" role="dialog" aria-modal="true" aria-labelledby="ctT">
+      <h2 id="ctT">יצירת קשר</h2><div>אפשר לכתוב לאיריס במייל:</div>
+      <div class="ct-mail" data-raw>${MAIL}</div>
+      <div class="ct-acts"><button type="button" class="ct-main" id="ctCopy">העתקת הכתובת</button><a href="mailto:${MAIL}" id="ctSend">שליחת מייל</a><button type="button" id="ctClose">סגירה</button></div>
+      <div class="ct-note" id="ctNote"></div></div>`;
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    ov.querySelector('#ctClose').onclick = close;
+    document.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', esc); } });
+    ov.querySelector('#ctCopy').onclick = () => {
+      const note = ov.querySelector('#ctNote');
+      const done = () => { note.textContent = 'הכתובת הועתקה – אפשר להדביק אותה בג׳ימייל.'; };
+      const fallback = () => { const r = document.createRange(); r.selectNodeContents(ov.querySelector('.ct-mail')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); note.textContent = 'הכתובת מסומנת – לחצו Ctrl+C כדי להעתיק.'; };
+      try { navigator.clipboard.writeText(MAIL).then(done, fallback); } catch (e) { fallback(); }
+    };
+    ov.querySelector('#ctCopy').focus();
+  };
+  document.addEventListener('click', e => { if (e.target.closest('.ct-btn')) open(); });
+})();
 </script>
 </body>
 </html>
