@@ -1114,6 +1114,8 @@
   .mk-frac { display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
   .mk-frac .mk-in { width: 3.2em; }
   .mk-frac .mk-in.w { width: 3.6em; }
+  .m .mk-frac .mk-in { width: 3.2em; } .m .mk-frac .mk-in.w { width: 3.6em; }
+  .m .mk-frac { white-space: normal; }
   .mk-fr { display: inline-flex; flex-direction: column; gap: 2px; }
   .mk-fr .mk-in:first-child { border-bottom-width: 3px; }
   .fr .mk-in { width: 2.6em; padding: 1px 2px; }
@@ -1201,7 +1203,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 סה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 סו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10351,6 +10353,7 @@ const mkNumParse = s => { s = String(s || '').replace(/[,\s]/g, '').replace('−
 function mkFill(tpl, pi, print) {
   return tpl.replace(/\[\[(\d)\]\]/g, (m, k) => print ? '<span class="mk-blank sm"></span>' : `<input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="${k}" aria-label="תשובה">`);
 }
+const mkFracBox = pi => `<span class="mk-frac" dir="ltr"><input class="mk-in w" inputmode="numeric" data-p="${pi}" data-k="w" placeholder="שלם" aria-label="שלמים"><span class="mk-fr"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="n" aria-label="מונה"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="d" aria-label="מכנה"></span></span>`;
 function mkPartHTML(p, pi, mode) {
   const teach = mode === 'teach', print = mode === 'print';
   let h = `<div class="mk-part" data-pi="${pi}">${p.l ? `<span class="mk-l">${p.l}</span> ` : ''}`;
@@ -10361,8 +10364,9 @@ function mkPartHTML(p, pi, mode) {
     h += teach ? '' : mkFill(print && p.printQ ? '' : tpl, pi, print);
     if (p.q2) h += '</div>';
     if (teach) h += `${p.q2 ? '' : tpl.replace(/\[\[\d\]\]/g, '____')}`;
-  } else if (qtxt && p.k === 'num' && !teach && /=\s*<\/span>\s*$/.test(qtxt)) {
-    h += qtxt.replace(/=\s*<\/span>\s*$/, print ? '= <span class="mk-blank sm"></span></span>' : `= <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה"></span>`);
+  } else if (qtxt && (p.k === 'num' || p.k === 'frac') && !teach && /=\s*<\/span>\s*$/.test(qtxt)) {
+    // התשובה נכתבת מיד אחרי סימן השווה, בתוך התרגיל (משמאל לימין)
+    h += qtxt.replace(/=\s*<\/span>\s*$/, print ? '= <span class="mk-blank sm"></span></span>' : p.k === 'frac' ? `= ${mkFracBox(pi)}</span>` : `= <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה"></span>`);
     p = Object.assign({}, p, { inl: true });
   } else if (qtxt) h += qtxt;
   if (p.fig && !print) h += `<div class="mk-figbox">${p.fig()}</div>`;
@@ -10370,14 +10374,14 @@ function mkPartHTML(p, pi, mode) {
   if (p.k === 'draw' && !teach && !print) h += '<div class="mk-drawbar"><button type="button" class="secondary mk-dbtn" data-undo>↶ ביטול הקו האחרון</button><button type="button" class="secondary mk-dbtn" data-clear>🧽 ניקוי הכול</button></div><div class="small muted mk-dhelp">לוחצים על נקודה, ואז על נקודה אחרת – ונוצר קו.</div>';
   if (!teach && !print) {
     if (p.k === 'num' && !p.inl) h += ` <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה">${p.unit ? ` <span class="muted">${p.unit}</span>` : ''}`;
-    if (p.k === 'frac') h += ` <span class="mk-frac" dir="ltr"><input class="mk-in w" inputmode="numeric" data-p="${pi}" data-k="w" placeholder="שלם" aria-label="שלמים"><span class="mk-fr"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="n" aria-label="מונה"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="d" aria-label="מכנה"></span></span>`;
+    if (p.k === 'frac' && !p.inl) h += ` ${mkFracBox(pi)}`;
     if (p.k === 'choice' || p.k === 'multi') h += `<div class="mk-opts${p.grid ? ' grid' : ''}">${p.opts.map((o, i) => `<label class="mk-opt"><input type="${p.k === 'choice' ? 'radio' : 'checkbox'}" name="mkS${pi}" value="${i}" data-p="${pi}"> <span class="mk-on">${i + 1}</span> <span class="mk-ot">${o}</span></label>`).join('')}</div>`;
     if (p.k === 'pair') h += `<div class="mk-fillrow">מספר החרוזים בצבע <select data-p="${pi}" data-k="0"><option value="">בחרו</option>${p.opts.map((o, i) => `<option value="${i}">${o}</option>`).join('')}</select> גדול <b>פי 2</b> ממספר החרוזים בצבע <select data-p="${pi}" data-k="1"><option value="">בחרו</option>${p.opts.map((o, i) => `<option value="${i}">${o}</option>`).join('')}</select></div>`;
     if (p.k === 'self') h += `<textarea class="mk-self" rows="2" data-p="${pi}" placeholder="כתבו כאן את התשובה שלכם"></textarea>`;
   }
   if (print && p.printQ) h += p.k === 'self' ? '<div class="mk-lines"></div>' : '';
   else if (print) {
-    if ((p.k === 'num' && !p.inl) || p.k === 'frac') h += ` <span class="mk-blank"></span>${p.unit ? ' ' + p.unit : ''}`;
+    if ((p.k === 'num' || p.k === 'frac') && !p.inl) h += ` <span class="mk-blank"></span>${p.unit ? ' ' + p.unit : ''}`;
     if ((p.k === 'choice' || p.k === 'multi') && p.pl) h += ' <span class="mk-blank"></span>';
     else if (p.k === 'choice' || p.k === 'multi') h += `<div class="mk-opts${p.grid ? ' grid' : ''}">${p.opts.map((o, i) => `<div class="mk-opt"><span class="ex-check"></span><span class="mk-on">${i + 1}</span> <span class="mk-ot">${o}</span></div>`).join('')}</div>`;
     if (p.k === 'pair') h += `<div>מספר החרוזים בצבע <span class="mk-blank sm"></span> גדול פי 2 ממספר החרוזים בצבע <span class="mk-blank sm"></span>.</div>`;
