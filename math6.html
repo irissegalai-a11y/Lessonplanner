@@ -1194,7 +1194,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -1345,6 +1345,8 @@ const M = s => `<span class="m">${s}</span>`;
 // שבר
 const F = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
 const BOX = '<span class="box">?</span>';
+// שלב פתור: התוצאה נכתבת בתוך התרגיל, מימין לסימן = (ולא בנפרד, משמאל לו)
+const stepAns = (p, a) => /=\s*<\/span>\s*$/.test(p) ? p.replace(/=\s*<\/span>\s*$/, `= <b>${fmt(a)}</b></span>`) : `${p} <b class="m">${fmt(a)}</b>`;
 
 // שבר מצומצם, כשבר מעורב אם צריך
 function FX(n, d, mixed = true) {
@@ -7678,7 +7680,7 @@ function showExample() {
     <div class="exhead">${ic('example')} דוגמה פתורה – שאלה דומה עם מספרים אחרים</div>
     <div class="qtext">${ex.text}</div>
     ${ex.fig || ''}
-    ${ex.steps ? `<ol class="exsteps">${ex.steps.map(s => `<li>${s.p} <b class="m">${fmt(s.a)}</b></li>`).join('')}</ol>` : ''}
+    ${ex.steps ? `<ol class="exsteps">${ex.steps.map(s => `<li>${stepAns(s.p, s.a)}</li>`).join('')}</ol>` : ''}
     <div><b>התשובה:</b> ${correctHTML(ex)}</div>
     <div class="muted">${ex.exp}</div>
     <div class="muted" style="margin-top:6px">עכשיו נסו לפתור את השאלה שלכם באותה דרך.</div>`;
@@ -7764,7 +7766,7 @@ function startGuided(trap) {
 function renderStep() {
   const q = state.qs[state.i], g = state.guide;
   const done = q.steps.slice(0, g.k).map((st, i) =>
-    `<div class="step done">✔ <span class="sn">שלב ${i + 1}:</span> ${st.p} <b class="m">${fmt(st.a)}</b></div>`).join('');
+    `<div class="step done">✔ <span class="sn">שלב ${i + 1}:</span> ${stepAns(st.p, st.a)}</div>`).join('');
   const cur = g.k < q.steps.length ? `
     <div class="step cur">
       ${g.note ? `<div class="snote">${g.note}</div>` : ''}
@@ -10331,12 +10333,15 @@ function mkPartHTML(p, pi, mode) {
     h += teach ? '' : mkFill(print && p.printQ ? '' : tpl, pi, print);
     if (p.q2) h += '</div>';
     if (teach) h += `${p.q2 ? '' : tpl.replace(/\[\[\d\]\]/g, '____')}`;
+  } else if (qtxt && p.k === 'num' && !teach && /=\s*<\/span>\s*$/.test(qtxt)) {
+    h += qtxt.replace(/=\s*<\/span>\s*$/, print ? '= <span class="mk-blank sm"></span></span>' : `= <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה"></span>`);
+    p = Object.assign({}, p, { inl: true });
   } else if (qtxt) h += qtxt;
   if (p.fig && !print) h += `<div class="mk-figbox">${p.fig()}</div>`;
   if (p.figPrint && print) h += `<div class="mk-figbox">${p.figPrint()}</div>`;
   if (p.k === 'draw' && !teach && !print) h += '<div class="mk-drawbar"><button type="button" class="ghost" data-clear>↺ ניקוי</button> <span class="small muted">לוחצים על נקודה, ואז על נקודה אחרת – ונוצר קו. לחיצה שוב על אותן שתי נקודות מוחקת את הקו.</span></div>';
   if (!teach && !print) {
-    if (p.k === 'num') h += ` <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה">${p.unit ? ` <span class="muted">${p.unit}</span>` : ''}`;
+    if (p.k === 'num' && !p.inl) h += ` <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה">${p.unit ? ` <span class="muted">${p.unit}</span>` : ''}`;
     if (p.k === 'frac') h += ` <span class="mk-frac" dir="ltr"><input class="mk-in w" inputmode="numeric" data-p="${pi}" data-k="w" placeholder="שלם" aria-label="שלמים"><span class="mk-fr"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="n" aria-label="מונה"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="d" aria-label="מכנה"></span></span>`;
     if (p.k === 'choice' || p.k === 'multi') h += `<div class="mk-opts${p.grid ? ' grid' : ''}">${p.opts.map((o, i) => `<label class="mk-opt"><input type="${p.k === 'choice' ? 'radio' : 'checkbox'}" name="mkS${pi}" value="${i}" data-p="${pi}"> <span class="mk-on">${i + 1}</span> <span class="mk-ot">${o}</span></label>`).join('')}</div>`;
     if (p.k === 'pair') h += `<div class="mk-fillrow">מספר החרוזים בצבע <select data-p="${pi}" data-k="0"><option value="">בחרו</option>${p.opts.map((o, i) => `<option value="${i}">${o}</option>`).join('')}</select> גדול <b>פי 2</b> ממספר החרוזים בצבע <select data-p="${pi}" data-k="1"><option value="">בחרו</option>${p.opts.map((o, i) => `<option value="${i}">${o}</option>`).join('')}</select></div>`;
@@ -10344,7 +10349,7 @@ function mkPartHTML(p, pi, mode) {
   }
   if (print && p.printQ) h += p.k === 'self' ? '<div class="mk-lines"></div>' : '';
   else if (print) {
-    if (p.k === 'num' || p.k === 'frac') h += ` <span class="mk-blank"></span>${p.unit ? ' ' + p.unit : ''}`;
+    if ((p.k === 'num' && !p.inl) || p.k === 'frac') h += ` <span class="mk-blank"></span>${p.unit ? ' ' + p.unit : ''}`;
     if ((p.k === 'choice' || p.k === 'multi') && p.pl) h += ' <span class="mk-blank"></span>';
     else if (p.k === 'choice' || p.k === 'multi') h += `<div class="mk-opts${p.grid ? ' grid' : ''}">${p.opts.map((o, i) => `<div class="mk-opt"><span class="ex-check"></span><span class="mk-on">${i + 1}</span> <span class="mk-ot">${o}</span></div>`).join('')}</div>`;
     if (p.k === 'pair') h += `<div>מספר החרוזים בצבע <span class="mk-blank sm"></span> גדול פי 2 ממספר החרוזים בצבע <span class="mk-blank sm"></span>.</div>`;
@@ -10493,7 +10498,8 @@ function mul22Long(a, b) {
 }
 function genMul22(kind) {
   kind = kind || pick(['plain', 'plain', 'area', 'word', 'est']);
-  const a = R(13, 89), b = R(12, 79), at = Math.floor(a / 10) * 10, ao = a % 10, bt = Math.floor(b / 10) * 10, bo = b % 10;
+  let a, b; do { a = R(13, 89); b = R(12, 79); } while (a % 10 === 0 || b % 10 === 0);   // בלי עשרות שלמות – אחרת שלב האחדות יוצא 0
+  const at = Math.floor(a / 10) * 10, ao = a % 10, bt = Math.floor(b / 10) * 10, bo = b % 10;
   if (kind === 'area') {
     const k = R(0, 3), vals = [at * bt, ao * bt, at * bo, ao * bo], fig = mul22Area(a, b, true).replace(`class="m22v" data-v="${k}" font-weight="700">${fmt(vals[k])}`, `class="m22v" data-v="${k}" font-weight="700">?`);
     return { type: 'num', text: `במודל השטח של ${M(`${a} × ${b}`)} – מה המספר החסר במלבן שמסומן ב-?<div class="chartwrap">${fig}</div>`, ans: vals[k],
