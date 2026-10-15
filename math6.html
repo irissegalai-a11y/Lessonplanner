@@ -1290,7 +1290,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12952,7 +12952,7 @@ const SC_WORD = {
 };
 // לכל מיומנות: גם סוג השאלות
 const SC_LV = { k: 'lv', type: 'radio', label: 'רמה', o: [['1', 'קלה'], ['2', 'בינונית'], ['3', 'מאתגרת'], ['g', 'מהקל לקשה']] };
-const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', 'תרגילים'], ['word', 'שאלות מילוליות'], ['mix', '3 תרגילים + 2 מילוליות']] };
+const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', 'תרגילים'], ['one', '4 תרגילים + שאלה מילולית'], ['mix', '3 תרגילים + 2 מילוליות'], ['word', 'שאלות מילוליות']] };
 const scOpts = S => S.opts.concat([SC_LV, SC_WQ]);
 // ---- תחומים נוספים למבדקי ההצלחה ----
 const scHe = A => ({ he: scVb(A, 'הוא', 'היא'), got: scVb(A, 'קיבל', 'קיבלה'), gave: scVb(A, 'נתן', 'נתנה'), bought: scVb(A, 'קנה', 'קנתה'), paid: scVb(A, 'שילם', 'שילמה'), ran: scVb(A, 'רץ', 'רצה'), read: scVb(A, 'קרא', 'קראה'), ans: scVb(A, 'ענה', 'ענתה'), ate: scVb(A, 'אכל', 'אכלה') });
@@ -13173,7 +13173,7 @@ function scDefaults(dom, sk) {
   return p;
 }
 const scSkill = c => SCD[c.d] && SCD[c.d].skills[c.s];
-const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם שאלות מילוליות' }[c.p.wq] || '') + ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה'); };
+const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם 2 שאלות מילוליות', one: ' · עם שאלה מילולית' }[c.p.wq] || '') + ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה'); };
 // 5 תרגילים לפי הרמה – בלי שני תרגילים זהים באותו מבדק
 function scGen(c) {
   const S = scSkill(c), wq = c.p.wq || 'ex', key = q => scRender(q, 'key');
@@ -13183,7 +13183,7 @@ function scGen(c) {
     qs = S.gen(c.p);
     for (let i = 1; i < 5; i++) for (let t = 0; t < 25 && qs.slice(0, i).some(x => key(x) === key(qs[i])); t++) qs[i] = (t < 15 ? S.gen(c.p) : (SC_LVL = 'g', S.gen(c.p)))[t < 15 ? i : Math.min(i + (t - 15) % 3, 4)];
   } finally { SC_LVL = 'g'; }
-  return wq === 'ex' ? qs : qs.map((q, i) => wq === 'word' || i >= 3 ? SC_WORD[c.s](q) : q);
+  return wq === 'ex' ? qs : qs.map((q, i) => wq === 'word' || i >= (wq === 'one' ? 4 : 3) ? SC_WORD[c.s](q) : q);
 }
 const scEnc = c => btoa(JSON.stringify(c)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
 const scDec = s => { try { const c = JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/'))); return scSkill(c) ? c : null; } catch (e) { return null; } };
