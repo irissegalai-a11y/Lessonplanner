@@ -1290,7 +1290,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12821,9 +12821,9 @@ function kfPrintBingo(n) {
 // תרגיל = רשימת "אסימונים": טקסט חשבוני, שבר {f:[מונה,מכנה], w:שלם}, משבצת {b:1}, השוואה {c:1}, טקסט עברי {t}.
 // 'B' בתוך שבר = משבצת. סוג הבדיקה: num (כל משבצת – מספר מדויק), fv (שבר שווה בערכו ל-v), cmp (<, >, =).
 const scB = 'B';
-// רמת המבדק: קלה / בינונית / מאתגרת – אילו "מדרגות קושי" מקבלים 5 התרגילים
-let SC_LVL = '2';
-const scIx = () => ({ 1: [0, 0, 1, 1, 2], 2: [0, 1, 2, 3, 4], 3: [2, 3, 3, 4, 4] })[SC_LVL] || [0, 1, 2, 3, 4];
+// רמת המבדק: קלה / בינונית / מאתגרת / מהקל לקשה – אילו "מדרגות קושי" (0–4) מקבלים 5 התרגילים
+let SC_LVL = 'g';
+const scIx = () => ({ 1: [0, 0, 1, 1, 2], 2: [1, 1, 2, 2, 3], 3: [2, 3, 3, 4, 4] })[SC_LVL] || [0, 1, 2, 3, 4];
 const scGcd = (a, b) => { while (b) [a, b] = [b, a % b]; return a; };
 const scLad = (k = 5) => { const L = [[1, 2, 3], [2, 3, 4, 5], [4, 5, 6], [5, 6, 7, 8], [7, 8, 9, 10]], out = []; for (let i = 0; i < k; i++) { const p = L[Math.min(scIx()[i] ?? i, 4)], c = p.filter(x => !out.includes(x)); out.push(pick(c.length ? c : p)); } return out; };
 // לכל אחד מ-5 התרגילים: איזו כפולה (מהקטנה לגדולה) ובאיזה מספר
@@ -12951,7 +12951,7 @@ const SC_WORD = {
       : scW(q, [{ t: `על השולחן ${N} חתיכות עוגה, וכל חתיכה היא` }, scFrac(1, d), { t: 'עוגה. כמה עוגות זה?' }], [{ f: [scB, d], w: scB }], 'עוגות'); }
 };
 // לכל מיומנות: גם סוג השאלות
-const SC_LV = { k: 'lv', type: 'radio', label: 'רמה', o: [['1', 'קלה'], ['2', 'בינונית'], ['3', 'מאתגרת']] };
+const SC_LV = { k: 'lv', type: 'radio', label: 'רמה', o: [['1', 'קלה'], ['2', 'בינונית'], ['3', 'מאתגרת'], ['g', 'מהקל לקשה']] };
 const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', 'תרגילים'], ['word', 'שאלות מילוליות'], ['mix', '3 תרגילים + 2 מילוליות']] };
 const scOpts = S => S.opts.concat([SC_LV, SC_WQ]);
 // ---- תחומים נוספים למבדקי ההצלחה ----
@@ -13169,20 +13169,20 @@ Object.assign(SC_WORD, {
 // הגדרות ברירת מחדל לכל מיומנות
 function scDefaults(dom, sk) {
   const p = {};
-  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'lv' ? '2' : o.o[0][0]; });
+  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'lv' ? 'g' : o.o[0][0]; });
   return p;
 }
 const scSkill = c => SCD[c.d] && SCD[c.d].skills[c.s];
-const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם שאלות מילוליות' }[c.p.wq] || '') + ' · רמה ' + ({ 1: 'קלה', 3: 'מאתגרת' }[c.p.lv] || 'בינונית'); };
+const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם שאלות מילוליות' }[c.p.wq] || '') + ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה'); };
 // 5 תרגילים לפי הרמה – בלי שני תרגילים זהים באותו מבדק
 function scGen(c) {
   const S = scSkill(c), wq = c.p.wq || 'ex', key = q => scRender(q, 'key');
   let qs;
   try {
-    SC_LVL = c.p.lv || '2';
+    SC_LVL = c.p.lv || 'g';
     qs = S.gen(c.p);
-    for (let i = 1; i < 5; i++) for (let t = 0; t < 25 && qs.slice(0, i).some(x => key(x) === key(qs[i])); t++) qs[i] = (t < 15 ? S.gen(c.p) : (SC_LVL = '2', S.gen(c.p)))[t < 15 ? i : Math.min(i + (t - 15) % 3, 4)];
-  } finally { SC_LVL = '2'; }
+    for (let i = 1; i < 5; i++) for (let t = 0; t < 25 && qs.slice(0, i).some(x => key(x) === key(qs[i])); t++) qs[i] = (t < 15 ? S.gen(c.p) : (SC_LVL = 'g', S.gen(c.p)))[t < 15 ? i : Math.min(i + (t - 15) % 3, 4)];
+  } finally { SC_LVL = 'g'; }
   return wq === 'ex' ? qs : qs.map((q, i) => wq === 'word' || i >= 3 ? SC_WORD[c.s](q) : q);
 }
 const scEnc = c => btoa(JSON.stringify(c)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
@@ -13278,7 +13278,7 @@ function succHome() {
   app.innerHTML = `
     <div class="topbar noprint"><span class="title">⭐ מבדקי הצלחה</span><button class="secondary" id="scBack">${ic('home')} חזרה</button></div>
     <div class="card noprint sc-build">
-      <p class="sc-intro">מבדק הצלחה = <b>5 תרגילים קצרים על מיומנות אחת</b>, מהקל אל הקשה. בדף המודפס – 4 מבדקים ברבעים, לגזור. בעמוד השני – דף תשובות.</p>
+      <p class="sc-intro">מבדק הצלחה = <b>5 תרגילים קצרים על מיומנות אחת</b> – ברמה שבוחרים, או מהקל לקשה. בדף המודפס – 4 מבדקים ברבעים, לגזור. בעמוד השני – דף תשובות.</p>
       <div class="sc-opt"><b>בדף:</b> <span class="sc-chips">
         <label class="sc-chip${S.mode === 'same' ? ' on' : ''}"><input type="radio" name="scmode" value="same" ${S.mode === 'same' ? 'checked' : ''}>אותו מבדק ב-4 הרבעים</label>
         <label class="sc-chip${S.mode === 'diff' ? ' on' : ''}"><input type="radio" name="scmode" value="diff" ${S.mode === 'diff' ? 'checked' : ''}>מבדק שונה בכל רבע</label></span></div>
