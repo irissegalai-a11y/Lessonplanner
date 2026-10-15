@@ -1200,7 +1200,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ס</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 סא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -11773,8 +11773,9 @@ function exitHome() {
     <div class="topbar"><span class="title">${ic('clipboard')} כרטיס יציאה</span><button class="secondary" id="exHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how"><b>3 שאלות קצרות</b> על מה שלמדנו היום – קלה, בינונית ומאתגרת. עונים לבד, בלי עזרה. בסוף רואים את התוצאה${kf.report ? ', והיא נשלחת למורה' : ''}.</p></div>
     <h2>מה למדנו היום?</h2>
-    <div class="race-tracks">${gameTopics().map(t => `<button class="race-track" data-ext="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}</div>`;
+    <div class="race-tracks">${gameTopics().map(t => `<button class="race-track" data-ext="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}${GRADE >= 4 ? Object.entries(EXIT_EXTRA).map(([k, E]) => `<button class="race-track" data-exx="${k}"><span class="nm">${E.name}</span></button>`).join('') : ''}</div>`;
   $('exHomeB').onclick = home;
+  app.querySelectorAll('[data-exx]').forEach(b => b.onclick = () => exitExtra(b.dataset.exx));
   app.querySelectorAll('[data-ext]').forEach(b => b.onclick = () => {
     const t = TOPIC[b.dataset.ext];
     const qs = [1, 2, 3].map(lv => mk(t.id, pick(t.levels[lv]), lv));
@@ -11785,13 +11786,14 @@ function exitHome() {
   window.scrollTo(0, 0);
 }
 function exitAfterSummary(s, correct, n) {
-  const t = TOPIC[s.exit];
+  const wrong = s.results.filter(r => !r.ok).map(r => { const d = document.createElement('div'); d.innerHTML = r.q.text; return d.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) + ` (ענה/תה: ${r.a && r.a.raw != null ? r.a.raw : '—'})`; });
+  exitReportBox(TOPIC[s.exit].name, correct, n, wrong);
+}
+// שליחת תוצאת כרטיס היציאה למורה (שם, כיתה וקוד כיתה – פעם אחת)
+function exitReportBox(topicName, correct, n, wrong) {
   const box = document.createElement('div');
   box.className = 'card exit-box';
-  const send = () => {
-    const wrong = s.results.filter(r => !r.ok).map(r => { const d = document.createElement('div'); d.innerHTML = r.q.text; return d.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) + ` (ענה/תה: ${r.a && r.a.raw != null ? r.a.raw : '—'})`; });
-    kfReport({ minutes: '', mastered: `כרטיס יציאה · ${GRADE_NAME[GRADE]} · ${t.name}`, score: `${correct}/${n}`, mistakes: wrong.join(' | ') });
-  };
+  const send = () => kfReport({ minutes: '', mastered: `כרטיס יציאה · ${GRADE_NAME[GRADE]} · ${topicName}`, score: `${correct}/${n}`, mistakes: wrong.join(' | ') });
   if (kf.report) { send(); box.innerHTML = `📤 התוצאה נשלחה למורה (${esc(kf.name)}, ${esc(kf.klass)}).`; }
   else {
     box.innerHTML = `<div class="small"><b>👩‍🏫 רוצים לשלוח את התוצאה למורה?</b> הקלידו שם, כיתה וקוד כיתה (פעם אחת בלבד).</div>
@@ -11806,6 +11808,47 @@ function exitAfterSummary(s, correct, n) {
     Object.assign(kf, { name, klass, report: true }); kfSave(); send();
     box.innerHTML = `📤 התוצאה נשלחה למורה (${esc(name)}, ${esc(klass)}).`;
   };
+}
+// כרטיס יציאה בשרטוט / במרובעים: 3 שאלות (קלה, בינונית, מאתגרת), ניסיון אחד לכל שאלה, בלי רמזים
+const EXIT_EXTRA = {
+  draw: { name: 'שרטוט בגאומטריה', lv: () => [['קו מקביל', 'קו מאונך'], ['גובה במשולש', 'מלבן לפי שטח', 'השלימו את המרובע', 'משולש ישר-זווית'], GRADE >= 5 ? ['משולש לפי שטח', 'מקבילית לפי שטח', 'שרטוט לפי אלכסונים', 'סרטטו טרפז'] : ['שרטוט לפי אלכסונים', 'סרטטו טרפז', 'מלבן לפי היקף ושטח']], list: () => drawPracticeList() },
+  quad: { name: 'מרובעים', lv: () => [['איזה מרובע?', 'נכון או לא נכון?'], ['כל השמות המתאימים', 'חידה – מי אני?', 'היקף מרובע'], ['השלימו את המרובע', 'שרטוט לפי אלכסונים', 'סרטטו טרפז']], list: () => QDQ }
+};
+function exitExtra(kind) {
+  const E = EXIT_EXTRA[kind], L = E.list(), qs = E.lv().map(ts => { const tt = pick(ts.filter(t => L.some(y => y.t === t))), Q = L.find(x => x.t === tt); return mkGender(Object.assign({ t: Q.t }, Q.g())); });
+  const st = { i: 0, ok: 0, wrong: [] };
+  track('כרטיס יציאה', E.name);
+  const show = () => {
+    const q = qs[st.i];
+    mkS = { all: false, i: st.i, mode: 'practice', q };
+    navPush('view');
+    app.innerHTML = `
+      <div class="topbar"><span class="title">${ic('clipboard')} כרטיס יציאה – ${E.name}</span><span class="muted">שאלה ${st.i + 1} מתוך 3</span></div>
+      <div class="card mk-card"><div class="mk-topic">${['קלה', 'בינונית', 'מאתגרת'][st.i]} · עונים לבד, בלי עזרה</div>${mkQHTML(q, 'practice', st.i + 1).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}
+        <div class="mk-steps hidden" id="mkExp"><h4>💡 איך פותרים?</h4><ol>${q.steps.map(x => `<li>${x}</li>`).join('')}</ol></div>
+        <div class="mk-msg" id="mkMsg"></div><div class="actions" id="exActs"><button id="exCheck">${ic('check')} בדיקה</button></div></div>`;
+    mkWire();
+    $('exCheck').onclick = () => {
+      const r = mkCheck();
+      if (r.miss) { $('mkExp').classList.add('hidden'); $('mkMsg').innerHTML = '✋ ענו קודם, ואז לחצו "בדיקה".'; return; }
+      const good = r.ok === r.tot;
+      if (good) st.ok++; else st.wrong.push(q.t);
+      $('mkMsg').innerHTML = good ? '✔ נכון!' : '✘ לא מדויק – ההסבר למטה.';
+      if (good) $('mkExp').classList.add('hidden');
+      $('exActs').innerHTML = `<button id="exNext">${st.i < 2 ? 'לשאלה הבאה ←' : 'לסיכום ←'}</button>`;
+      $('exNext').onclick = () => { st.i++; if (st.i < 3) show(); else done(); };
+    };
+    window.scrollTo(0, 0);
+  };
+  const done = () => {
+    track('כרטיס יציאה – סיום', `${E.name} · ${st.ok}/3`);
+    app.innerHTML = `
+      <div class="topbar"><span class="title">${ic('clipboard')} כרטיס יציאה – ${E.name}</span><button class="secondary" id="exHomeB">${ic('home')} לדף הבית</button></div>
+      <div class="card center"><div class="path-trophy">${st.ok === 3 ? '🌟' : st.ok === 2 ? '💪' : '📚'}</div><h2>${st.ok} מתוך 3 נכונות</h2>${st.wrong.length ? `<p>כדאי לחזור על: ${st.wrong.join(', ')}</p>` : '<p>מצוין – הבנתם את החומר!</p>'}</div>`;
+    $('exHomeB').onclick = home;
+    exitReportBox(E.name, st.ok, 3, st.wrong);
+  };
+  show();
 }
 
 /* =========================================================
