@@ -1200,7 +1200,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ס</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10770,7 +10770,7 @@ const QDQ = [
       steps: ['חושבים על התכונות של כל אחד מהמרובעים.', 'טענה "כל X הוא Y" נכונה רק אם <b>לכל</b> X יש את כל התכונות של Y.', S[2]] };
   } },
   { t: 'זוויות במרובע', min: 5, g() {
-    const k = pick(['מקבילית', 'מעוין', 'טרפז', 'דלתון']), x = R(5, 13) * 5;
+    const k = pick(['מקבילית', 'טרפז']), x = R(5, 13) * 5;   // זוויות בדלתון ובמעוין – הוסרו לבינתיים
     if (k === 'טרפז') return { q: `בטרפז שתי הזוויות <b>שליד אותה שוק</b> (בין שני הבסיסים): אחת מהן ${M(x + '°')}. כמה מעלות הזווית השנייה?`, parts: [{ k: 'num', a: 180 - x, show: M((180 - x) + '°'), unit: 'מעלות' }], steps: ['בטרפז הבסיסים מקבילים.', 'שתי זוויות ליד אותה שוק משלימות זו את זו ל-180°.', M(`180 – ${x} = ${180 - x}`)] };
     if (k === 'דלתון') { const y = R(18, 26) * 5, z = 360 - 2 * x - y; return { q: `בדלתון, הזוויות שבין הצלעות הלא-שוות שוות זו לזו. זווית אחת כזו היא ${M(x + '°')}, והזווית שבראש הדלתון ${M(y + '°')}. כמה מעלות הזווית הרביעית?`, parts: [{ k: 'num', a: z, show: M(z + '°'), unit: 'מעלות' }], steps: ['סכום הזוויות בכל מרובע הוא 360°.', `שתי הזוויות השוות: ${M(`2 × ${x} = ${2 * x}`)}`, M(`360 – ${2 * x} – ${y} = ${z}`)] }; }
     const opp = Math.random() < 0.5;
@@ -10862,6 +10862,7 @@ const dvDot = (u, v) => u[0] * v[0] + u[1] * v[1];
 const dvEq = (a, b) => a[0] === b[0] && a[1] === b[1];
 // מהקטעים (נתונים + משורטטים) – מצולע סגור אחד? מחזיר את הקודקודים לפי הסדר, או null
 function dvCycle(segs) {
+  if (!segs.length) return null;
   const adj = {}, key = p => p.join(',');
   for (const [a, b] of segs) { if (dvEq(a, b)) return null; (adj[key(a)] = adj[key(a)] || []).push(b); (adj[key(b)] = adj[key(b)] || []).push(a); }
   const ks = Object.keys(adj);
@@ -10940,9 +10941,43 @@ const DRQ = [
       steps: ['במלבן כל 4 הזוויות ישרות.', 'מכל קצה של הצלע הנתונה מסרטטים קו <b>מאונך</b> – שני הקווים באותו אורך.', 'מחברים את הקצוות – הצלע הרביעית מקבילה ושווה לצלע הנתונה.'] };
   } }
 ];
+// שטח מצולע לפי קודקודיו (נוסחת השרוך)
+const dvArea = P => Math.abs(P.reduce((s, p, i) => { const q = P[(i + 1) % P.length]; return s + p[0] * q[1] - q[0] * p[1]; }, 0)) / 2;
+const dvLen = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+const dvPerim = P => P.reduce((s, p, i) => s + dvLen(p, P[(i + 1) % P.length]), 0);
+const dvHas = (P, pt) => P.some(p => dvEq(p, pt));
+const dvPar = (a, b, c, d) => dvCross(dvSub(b, a), dvSub(d, c)) === 0;
+// שאלות "נתון חלק מהצורה ונתון שטח/היקף – שרטטו צורה מתאימה"
+const DRQ_DATA = [
+  { t: 'מלבן לפי שטח', g() {
+    const a = R(2, 5), b = R(2, 4), S = a * b, A = [1, 1], B = [1 + a, 1], ex = [[B, [1 + a, 1 + b]], [[1 + a, 1 + b], [1, 1 + b]], [[1, 1 + b], A]];
+    return { q: `הקטע השחור הוא צלע של <b>מלבן</b> ששטחו ${M(S)} משבצות.<br>השלימו את המלבן.`, parts: [{ l: '', k: 'draw', a: ex, fig: () => mkDraw([[A, B]], { click: true, pts: [[1 + a, 1 + b + 1]] }), check: segs => { if (segs.length !== 3) return false; const P = dvCycle([[A, B], ...segs]); return !!P && P.length === 4 && P.every((p, i) => dvRightAt(P, i)) && dvArea(P) === S; }, show: mkDraw([[A, B]], { answer: ex }) }],
+      steps: [`הצלע הנתונה: ${M(a)} משבצות.`, `שטח מלבן = אורך × רוחב, לכן הרוחב: ${M(`${S} : ${a} = ${b}`)} משבצות.`, `משרטטים משני קצות הצלע קווים מאונכים באורך ${M(b)}, ומחברים.`] };
+  } },
+  { t: 'ריבוע לפי שטח', g() {
+    const a = R(2, 4), S = a * a, A = [1, 1], C = [[1, 1], [1 + a, 1], [1 + a, 1 + a], [1, 1 + a]], ex = C.map((p, i) => [p, C[(i + 1) % 4]]);
+    return { q: `שרטטו <b>ריבוע</b> ששטחו ${M(S)} משבצות. אחד הקודקודים שלו בנקודה הירוקה.`, parts: [{ l: '', k: 'draw', a: ex, fig: () => mkDraw([], { click: true, marks: [{ p: A, c: '#2c7a5b' }], pts: [[1 + a + 1, 1 + a + 1]] }), check: segs => { const P = dvCycle(segs); return !!P && P.length === 4 && dvHas(P, A) && P.every((p, i) => dvRightAt(P, i)) && new Set(P.map((p, i) => dvLen(p, P[(i + 1) % 4]).toFixed(6))).size === 1 && dvArea(P) === S; }, show: mkDraw([], { answer: ex, marks: [{ p: A, c: '#2c7a5b' }] }) }],
+      steps: ['בריבוע כל הצלעות שוות, והשטח = צלע × צלע.', `איזה מספר כפול עצמו נותן ${M(S)}? ${M(`${a} × ${a} = ${S}`)}`, `משרטטים ריבוע שצלעו ${M(a)} משבצות, החל מהנקודה הירוקה.`] };
+  } },
+  { t: 'מלבן לפי היקף ושטח', g() {
+    const [a, b] = pick([[4, 3], [5, 2], [6, 2], [4, 2], [5, 3], [6, 1]]), S = a * b, Pm = 2 * (a + b), A = [1, 1], C = [[1, 1], [1 + a, 1], [1 + a, 1 + b], [1, 1 + b]], ex = C.map((p, i) => [p, C[(i + 1) % 4]]);
+    return { q: `שרטטו <b>מלבן</b> ששטחו ${M(S)} משבצות והיקפו ${M(Pm)} ס"מ (כל משבצת = 1 ס"מ). אחד הקודקודים בנקודה הירוקה.`, parts: [{ l: '', k: 'draw', a: ex, fig: () => mkDraw([], { click: true, marks: [{ p: A, c: '#2c7a5b' }], pts: [[1 + Math.max(a, b) + 1, 1 + Math.max(a, b) + 1]] }), check: segs => { const P = dvCycle(segs); return !!P && P.length === 4 && dvHas(P, A) && P.every((p, i) => dvRightAt(P, i)) && dvArea(P) === S && Math.abs(dvPerim(P) - Pm) < 1e-9; }, show: mkDraw([], { answer: ex, marks: [{ p: A, c: '#2c7a5b' }] }) }],
+      steps: [`חצי היקף = אורך + רוחב: ${M(`${Pm} : 2 = ${a + b}`)}`, `מחפשים שני מספרים שסכומם ${M(a + b)} ומכפלתם ${M(S)}: ${M(`${a} + ${b} = ${a + b}`)}, ${M(`${a} × ${b} = ${S}`)}`, `משרטטים מלבן ${M(`${a} × ${b}`)} מהנקודה הירוקה.`] };
+  } },
+  { t: 'משולש לפי שטח', min: 5, g() {
+    const a = pick([2, 4, 6]), h = R(2, 4), S = a * h / 2, A = [1, 1 + h], B = [1 + a, 1 + h], T = [1 + R(0, a), 1], ex = [[B, T], [T, A]];
+    return { q: `הקטע השחור הוא צלע של <b>משולש</b> ששטחו ${M(S)} משבצות.<br>השלימו משולש מתאים. (יש הרבה תשובות נכונות!)`, parts: [{ l: '', k: 'draw', a: ex, fig: () => mkDraw([[A, B]], { click: true, pts: [[1 + a + 1, 0]] }), check: segs => { if (segs.length !== 2) return false; const P = dvCycle([[A, B], ...segs]); return !!P && P.length === 3 && dvArea(P) === S; }, show: `למשל:${mkDraw([[A, B]], { answer: ex })}<div class="small muted">כל קודקוד שנמצא ${h} משבצות מעל הצלע מתאים.</div>` }],
+      steps: ['שטח משולש = בסיס × גובה : 2.', `הבסיס ${M(a)}, לכן: ${M(`${a} × גובה : 2 = ${S}`)} ← הגובה ${M(`${S} × 2 : ${a} = ${h}`)}.`, `הקודקוד השלישי צריך להיות ${M(h)} משבצות מעל הבסיס (או מתחתיו) – בכל מקום לאורך השורה!`] };
+  } },
+  { t: 'מקבילית לפי שטח', min: 5, g() {
+    const a = R(3, 4), h = R(2, 3), S = a * h, sh = R(1, 2), A = [1, 1 + h], B = [1 + a, 1 + h], C = [1 + a + sh, 1], D = [1 + sh, 1], ex = [[B, C], [C, D], [D, A]];
+    return { q: `הקטע השחור הוא צלע של <b>מקבילית</b> ששטחה ${M(S)} משבצות.<br>השלימו מקבילית מתאימה.`, parts: [{ l: '', k: 'draw', a: ex, fig: () => mkDraw([[A, B]], { click: true, pts: [[1 + a + 3, 0]] }), check: segs => { if (segs.length !== 3) return false; const P = dvCycle([[A, B], ...segs]); return !!P && P.length === 4 && dvPar(P[0], P[1], P[3], P[2]) && dvPar(P[1], P[2], P[0], P[3]) && dvArea(P) === S; }, show: `למשל:${mkDraw([[A, B]], { answer: ex })}` }],
+      steps: ['שטח מקבילית = בסיס × גובה (הגובה – המרחק בין הצלעות המקבילות).', `הבסיס ${M(a)}: ${M(`${S} : ${a} = ${h}`)} ← הגובה ${M(h)} משבצות.`, `הצלע שמול הבסיס: באותו אורך (${M(a)}), במקביל, ${M(h)} משבצות מעליו – אפשר להזיז אותה הצידה.`] };
+  } }
+];
 function drawPracticeList() {
   const pickQ = t => QDQ.find(x => x.t === t);
-  return DRQ.concat([pickQ('השלימו את המרובע'), pickQ('שרטוט לפי אלכסונים'), pickQ('סרטטו טרפז')].filter(Boolean));
+  return DRQ.concat(DRQ_DATA.filter(Q => !Q.min || GRADE >= Q.min), [pickQ('השלימו את המרובע'), pickQ('שרטוט לפי אלכסונים'), pickQ('סרטטו טרפז')].filter(Boolean));
 }
 let drS = { n: 0, ok: 0 };
 function drawPracticeHome() {
