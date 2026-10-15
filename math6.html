@@ -1124,7 +1124,10 @@
   .mk-ot { flex: 1; min-width: 0; }
   .mk-draw .mk-dot { cursor: pointer; }
   .mk-draw .mk-dot:hover { fill: rgba(217, 72, 43, 0.18); }
-  .mk-drawbar { margin-top: 2px; }
+  .mk-drawbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+  .mk-dbtn { padding: 8px 14px !important; font-size: 1rem !important; }
+  .mk-dhelp { text-align: center; margin-top: 4px; }
+  svg.mk-draw { touch-action: manipulation; cursor: pointer; }
   .mk-claim { font-size: 1.15rem; font-weight: 700; margin: 8px 0; padding: 8px 12px; border-right: 4px solid #e2b357; background: rgba(239, 201, 106, 0.15); border-radius: 8px; }
   .qd-rem { margin: 6px 0 0; line-height: 1.8; }
   .dcard { text-align: center; }
@@ -1197,7 +1200,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10354,7 +10357,7 @@ function mkPartHTML(p, pi, mode) {
   } else if (qtxt) h += qtxt;
   if (p.fig && !print) h += `<div class="mk-figbox">${p.fig()}</div>`;
   if (p.figPrint && print) h += `<div class="mk-figbox">${p.figPrint()}</div>`;
-  if (p.k === 'draw' && !teach && !print) h += '<div class="mk-drawbar"><button type="button" class="ghost" data-clear>↺ ניקוי</button> <span class="small muted">לוחצים על נקודה, ואז על נקודה אחרת – ונוצר קו. לחיצה שוב על אותן שתי נקודות מוחקת את הקו.</span></div>';
+  if (p.k === 'draw' && !teach && !print) h += '<div class="mk-drawbar"><button type="button" class="secondary mk-dbtn" data-undo>↶ ביטול הקו האחרון</button><button type="button" class="secondary mk-dbtn" data-clear>🧽 ניקוי הכול</button></div><div class="small muted mk-dhelp">לוחצים על נקודה, ואז על נקודה אחרת – ונוצר קו.</div>';
   if (!teach && !print) {
     if (p.k === 'num' && !p.inl) h += ` <input class="mk-in" inputmode="decimal" autocomplete="off" data-p="${pi}" data-k="0" aria-label="תשובה">${p.unit ? ` <span class="muted">${p.unit}</span>` : ''}`;
     if (p.k === 'frac') h += ` <span class="mk-frac" dir="ltr"><input class="mk-in w" inputmode="numeric" data-p="${pi}" data-k="w" placeholder="שלם" aria-label="שלמים"><span class="mk-fr"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="n" aria-label="מונה"><input class="mk-in" inputmode="numeric" data-p="${pi}" data-k="d" aria-label="מכנה"></span></span>`;
@@ -10880,15 +10883,23 @@ function drawWire(root) {
     if (svg._wired) return; svg._wired = true;
     svg._segs = []; let sel = null;
     const u = +svg.dataset.u, pad = +svg.dataset.pad, g = svg.querySelector('.mk-user'), C = v => pad + v * u;
-    const redraw = () => { g.innerHTML = svg._segs.map(([a, b]) => `<line x1="${C(a[0])}" y1="${C(a[1])}" x2="${C(b[0])}" y2="${C(b[1])}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`).join('') + (sel ? `<circle cx="${C(sel[0])}" cy="${C(sel[1])}" r="7" fill="#d9482b" opacity="0.6"/>` : ''); };
-    svg.querySelectorAll('.mk-dot').forEach(d => d.addEventListener('click', () => {
-      const p = [+d.dataset.x, +d.dataset.y];
+    const redraw = () => { g.innerHTML = svg._segs.map(([a, b]) => `<line x1="${C(a[0])}" y1="${C(a[1])}" x2="${C(b[0])}" y2="${C(b[1])}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`).join('') + (sel ? `<circle cx="${C(sel[0])}" cy="${C(sel[1])}" r="10" fill="#d9482b" opacity="0.55"/>` : ''); };
+    // לחיצה בכל מקום ליד נקודה "נתפסת" לנקודה הקרובה – נוח יותר בטלפון
+    const near = e => {
+      const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      const q = pt.matrixTransform(svg.getScreenCTM().inverse()), x = Math.round((q.x - pad) / u), y = Math.round((q.y - pad) / u);
+      if (Math.hypot(q.x - C(x), q.y - C(y)) > u * 0.48 || !svg.querySelector(`.mk-dot[data-x="${x}"][data-y="${y}"]`)) return null;
+      return [x, y];
+    };
+    svg.addEventListener('click', e => {
+      const p = near(e); if (!p) return;
       if (!sel) { sel = p; redraw(); return; }
       if (!dvEq(sel, p)) { const k = mkSegKey([sel, p]), i = svg._segs.findIndex(x => mkSegKey(x) === k); if (i >= 0) svg._segs.splice(i, 1); else svg._segs.push([sel, p]); }
       sel = null; redraw();
-    }));
-    const box = svg.closest('.mk-part'), clr = box && box.querySelector('[data-clear]');
+    });
+    const box = svg.closest('.mk-part'), clr = box && box.querySelector('[data-clear]'), und = box && box.querySelector('[data-undo]');
     if (clr) clr.onclick = () => { svg._segs = []; sel = null; redraw(); };
+    if (und) und.onclick = () => { if (sel) sel = null; else svg._segs.pop(); redraw(); };
   });
 }
 // קטע שמתחיל בנקודה S וכיוונו מקיים תנאי
@@ -10967,7 +10978,7 @@ function drawNext(onlyT) {
 // כרטיסייה עם לוח שרטוט ובדיקה
 function drawCard(given, o, check, okMsg, hint) {
   return {
-    html: `<div class="mk-part dcard">${mkDraw(given, Object.assign({ click: true }, o))}<div class="mk-drawbar"><button type="button" class="ghost" data-clear>↺ ניקוי</button> <span class="small muted">לוחצים על נקודה ואז על נקודה אחרת.</span></div>
+    html: `<div class="mk-part dcard">${mkDraw(given, Object.assign({ click: true }, o))}<div class="mk-drawbar"><button type="button" class="secondary mk-dbtn" data-undo>↶ ביטול הקו האחרון</button><button type="button" class="secondary mk-dbtn" data-clear>🧽 ניקוי הכול</button></div><div class="small muted mk-dhelp">לוחצים על נקודה, ואז על נקודה אחרת – ונוצר קו.</div>
       <div class="lbtns"><button class="secondary" data-dcheck>✔ בדיקה</button><button class="ghost" data-dshow>הראו לי</button></div><div class="dfb" data-dfb></div></div>`,
     setup(root) {
       drawWire(root);
