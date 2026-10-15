@@ -1059,6 +1059,7 @@
   .gswitch { display: inline-flex; align-items: center; gap: 8px; color: #1f1e1c; background: #fffdf8; font-weight: 700; font-size: 1.2rem; text-decoration: none; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; padding: 8px 18px; box-shadow: 3px 4px 0 #1f1e1c; font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; }
   .gswitch:hover, .gswitch:focus-visible { background: #fff; transform: translate(-1px, -1px); box-shadow: 4px 5px 0 #1f1e1c; outline: none; }
   .gswitch svg { width: 22px; height: 22px; }
+  .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; text-align: center; }
   .pvw-btn { font: inherit; font-size: 0.95rem; font-weight: 600; color: #1f1e1c; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; }
   .pvw-btn:hover, .pvw-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
   .pvw-bar { font-size: 0.95rem; background: #fff4c7; border: 2px dashed #1f1e1c; border-radius: 10px; padding: 6px 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
@@ -1211,7 +1212,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12801,6 +12802,9 @@ function askTeacher(done) {
       <button id="tchOk" class="race-go">כניסה ←</button>
       <button id="tchBack" class="ghost">חזרה</button>
     </div>
+    <div class="rq-box"><b>אין לכם קוד?</b> שלחו לאיריס מייל קצר, והיא תשלח לכם את הקוד.
+      <div class="actions" style="justify-content:center"><button type="button" class="secondary" id="tchReq">✉️ בקשת קוד במייל</button><button type="button" class="ghost" id="tchCopy">העתקת הכתובת</button></div>
+      <div class="ct-mail" id="tchMail" data-raw hidden></div><div class="small muted" id="tchNote"></div></div>
   </div>`;
   document.body.appendChild(ov);
   const err = t => { const e = ov.querySelector('#tchErr'); e.textContent = t; e.hidden = false; };
@@ -12818,6 +12822,18 @@ function askTeacher(done) {
     if (document.querySelector('[data-panel]')) home();
   };
   ov.querySelector('#tchBack').onclick = () => { ov.remove(); askRole(done); };
+  const MAIL = ['iris.segal.ai', 'gmail.com'].join('@');
+  const showMail = note => { const m = ov.querySelector('#tchMail'); m.textContent = MAIL; m.hidden = false; ov.querySelector('#tchNote').textContent = note; };
+  ov.querySelector('#tchReq').onclick = () => {
+    const nm = ov.querySelector('#tchNm').value.trim();
+    const body = `שלום איריס,\n\nשמי ${nm || '_____'}, אני מורה ב_____ (בית ספר), ומלמד/ת כיתות _____.\nאשמח לקבל את קוד המורים לאתר "מתרגלים מתמטיקה".\n\nתודה!`;
+    location.href = `mailto:${MAIL}?subject=${encodeURIComponent('בקשת קוד מורים – מתרגלים מתמטיקה')}&body=${encodeURIComponent(body)}`;
+    showMail('אם לא נפתח מייל – אפשר לכתוב לכתובת הזו.');
+  };
+  ov.querySelector('#tchCopy').onclick = () => {
+    showMail('');
+    try { navigator.clipboard.writeText(MAIL).then(() => { ov.querySelector('#tchNote').textContent = 'הכתובת הועתקה ✔'; }, () => {}); } catch (e) { /* לא חובה */ }
+  };
   ov.querySelector('#tchCode').addEventListener('keydown', e => { if (e.key === 'Enter') ov.querySelector('#tchOk').click(); });
   setTimeout(() => ov.querySelector('#tchNm').focus(), 50);
 }

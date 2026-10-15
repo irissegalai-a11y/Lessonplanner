@@ -86,6 +86,7 @@
   .roles .ri { display: block; font-size: 2.2rem; }
   .rl-in { font: inherit; font-size: 1.05rem; width: 100%; padding: 8px 12px; margin: 6px 0; border: 2px solid #1f1e1c; border-radius: 10px; background: #fff; text-align: center; }
   .rl-err { color: #b3261e; font-size: 0.95rem; min-height: 1.3em; margin: 4px 0; }
+  .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; color: #3d3a33; }
   .role-sw { font: inherit; font-size: 0.85rem; background: none; border: none; color: #5f5a50; text-decoration: underline; cursor: pointer; margin-top: 10px; }
   .pv-link { font: inherit; background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; }
 </style>
@@ -167,7 +168,8 @@
       '<input class="rl-in" id="tNm" maxlength="40" autocomplete="off" placeholder="שם ושם משפחה" value="' + esc(nm0) + '">' +
       '<input class="rl-in" id="tCode" type="password" inputmode="numeric" autocomplete="off" placeholder="קוד מורים">' +
       '<div class="rl-err" id="tErr"></div>' +
-      '<div class="ct-acts"><button type="button" class="ct-main" id="tOk">כניסה ←</button><button type="button" id="tBack">חזרה</button></div>',
+      '<div class="ct-acts"><button type="button" class="ct-main" id="tOk">כניסה ←</button><button type="button" id="tBack">חזרה</button></div>' +
+      '<div class="rq-box"><b>אין לכם קוד?</b> שלחו לאיריס מייל קצר, והיא תשלח לכם את הקוד.<div class="ct-acts"><button type="button" id="tReq">✉️ בקשת קוד במייל</button><button type="button" id="tCopy">העתקת הכתובת</button></div><div class="ct-mail" id="tMail" hidden></div><div class="ct-note" id="tNote"></div></div>',
       function (ov, close) {
         var err = function (t) { ov.querySelector('#tErr').textContent = t; };
         ov.querySelector('#tOk').onclick = function () {
@@ -180,6 +182,19 @@
           set('math-role', 't'); set('math-name', nm); close(); next();
         };
         ov.querySelector('#tBack').onclick = close;
+        var MAIL = ['iris.segal.ai', 'gmail.com'].join('@');
+        ov.querySelector('#tReq').onclick = function () {
+          var nm = ov.querySelector('#tNm').value.trim();
+          var body = 'שלום איריס,\n\nשמי ' + (nm || '_____') + ', אני מורה ב_____ (בית ספר), ומלמד/ת כיתות _____.\nאשמח לקבל את קוד המורים לאתר "מתרגלים מתמטיקה".\n\nתודה!';
+          location.href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent('בקשת קוד מורים – מתרגלים מתמטיקה') + '&body=' + encodeURIComponent(body);
+          var m = ov.querySelector('#tMail'); m.textContent = MAIL; m.hidden = false;
+          ov.querySelector('#tNote').textContent = 'אם לא נפתח מייל – אפשר לכתוב לכתובת הזו.';
+        };
+        ov.querySelector('#tCopy').onclick = function () {
+          var m = ov.querySelector('#tMail'), note = ov.querySelector('#tNote');
+          m.textContent = MAIL; m.hidden = false;
+          try { navigator.clipboard.writeText(MAIL).then(function () { note.textContent = 'הכתובת הועתקה ✔'; }, function () {}); } catch (e) {}
+        };
         ov.querySelector('#tCode').onkeydown = function (e) { if (e.key === 'Enter') ov.querySelector('#tOk').click(); };
       });
   }
