@@ -1059,6 +1059,25 @@
   .gswitch { display: inline-flex; align-items: center; gap: 8px; color: #1f1e1c; background: #fffdf8; font-weight: 700; font-size: 1.2rem; text-decoration: none; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; padding: 8px 18px; box-shadow: 3px 4px 0 #1f1e1c; font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; }
   .gswitch:hover, .gswitch:focus-visible { background: #fff; transform: translate(-1px, -1px); box-shadow: 4px 5px 0 #1f1e1c; outline: none; }
   .gswitch svg { width: 22px; height: 22px; }
+  .sc-prog { margin-top: 8px; font-size: 1.05rem; }
+  .sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+  .sc-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 10px 12px; background: #fffdf8; color: #1f1e1c; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; cursor: pointer; font: inherit; }
+  .sc-card:hover, .sc-card:focus-visible { box-shadow: 4px 5px 0 #1f1e1c; transform: translate(-1px, -1px); outline: none; }
+  .sc-card.done { background: #eaf6e4; }
+  .sc-st { font-size: 1.5rem; font-weight: 700; min-height: 1.6rem; }
+  .sc-card.done .sc-st { color: #2f8f55; }
+  .sc-nm { font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; font-weight: 700; font-size: 1.15rem; }
+  .sc-ds { font-size: 0.88rem; color: #5f5a50; }
+  .sc-stars { font-size: 0.95rem; } .sc-stars.big { font-size: 2rem; margin: 4px 0 8px; }
+  .sc-dots { display: flex; gap: 8px; justify-content: center; margin: 4px 0 12px; }
+  .sc-dots span { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #1f1e1c; background: #fffdf8; }
+  .sc-dots span.ok { background: #6fbf73; } .sc-dots span.now { background: #f2c94c; }
+  .sc-q .sc-pre { font-size: 1.15rem; margin-bottom: 10px; color: #3d3a33; }
+  .sc-expr { font-size: 2.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0 14px; }
+  .sc-expr input.sc-in { width: 110px; font-size: 2rem; text-align: center; }
+  .sc-expr input.sc-in.ok { background: #e3f4dc; border-color: #2f8f55; }
+  .sc-msg { min-height: 1.6em; font-size: 1.15rem; margin-bottom: 8px; }
+  .sc-hint { background: #fff4c7; border: 2px dashed #1f1e1c; border-radius: 10px; padding: 6px 12px; margin: 0 auto 6px; max-width: 460px; }
   .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; text-align: center; }
   .pvw-btn { font: inherit; font-size: 0.95rem; font-weight: 600; color: #1f1e1c; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; }
   .pvw-btn:hover, .pvw-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
@@ -1212,7 +1231,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7000,7 +7019,7 @@ const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: '�
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
-const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים|תרגול שרטוט)/;
+const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים|תרגול שרטוט|מבדק הצלחה$)/;
 const ACT_IDLE = 60000, ACT_TAIL = 10000;
 let actCur = null, actPaused = null;
 function actTick() {
@@ -7151,6 +7170,7 @@ function home() {
               </button>` : ''}
           </div>
           <div class="practice-more">
+            ${GRADE >= 2 ? `<button id="succGo">⭐ מבדקי הצלחה<span class="desc">5 תרגילים קצרים על נושא אחד בלוח הכפל – ומקבלים ✔</span></button>` : ''}
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום${staffOn() ? '' : ' – התוצאה נשלחת למורה'}</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -7291,6 +7311,7 @@ function home() {
   app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => showLevelPicker(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   $('mix').onclick = () => showLevelPicker('mix');
+  if ($('succGo')) $('succGo').onclick = succHome;
   $('exitGo').onclick = exitHome;
   $('test').onclick = () => startTest(false);
   $('testfb').onclick = () => startTest(true);
@@ -12732,6 +12753,143 @@ function kfPrintBingo(n) {
     <section class="ws-page wskey"><h2>📋 רשימת הקריאה למורה (לפי הסדר)</h2><ol class="kfp-call">${call.map(c => `<li>${c} <span class="kfp-chk">☐</span></li>`).join('')}</ol></section>`;
 }
 
+/* ---------- מבדקי הצלחה: 5 תרגילים קצרים על נושא אחד, מהקל אל הקשה ---------- */
+// כל מבדק בודק מיומנות אחת. אחרי טעות – רמז וניסיון נוסף, כדי שכמעט תמיד מסיימים בהצלחה.
+const SC_KEY = 'math-succ';
+const scLoad = () => { try { return JSON.parse(localStorage.getItem(SC_KEY)) || {}; } catch (e) { return {}; } };
+const scSave = d => { try { localStorage.setItem(SC_KEY, JSON.stringify(d)); } catch (e) { /* לא חובה */ } };
+// 5 גורמים לכפל, מהקל אל הקשה
+const scLadder = () => { const L = [[1, 2, 3], [2, 3, 4, 5], [4, 5, 6], [5, 6, 7, 8], [7, 8, 9, 10]], out = []; L.forEach(p => { const c = p.filter(x => !out.includes(x)); out.push(pick(c.length ? c : p)); }); return out; };
+// 5 זוגות שונים מלוח הכפל, מסודרים לפי גודל המכפלה
+const scPairs = (lo = 2, hi = 9) => {
+  const seen = new Set(), out = [];
+  while (out.length < 5) { const a = R(lo, hi), b = R(lo, hi), k = Math.min(a, b) + 'x' + Math.max(a, b); if (!seen.has(k)) { seen.add(k); out.push([a, b]); } }
+  return out.sort((x, y) => x[0] * x[1] - y[0] * y[1]);
+};
+const scTable = (k, hint) => () => scLadder().map((n, i) => { const [a, b] = i % 2 ? [k, n] : [n, k]; return { q: `${a} × ${b} =`, a: a * b, hint: hint(n) }; });
+const SC_LIST = [
+  { id: 'x2', name: 'כפל ב-2', desc: 'כפול 2 זה פעמיים אותו מספר', gen: scTable(2, n => `${n} × 2 זה ${n} + ${n}.`) },
+  { id: 'x10', name: 'כפל ב-10', desc: 'מוסיפים אפס בסוף', gen: scTable(10, n => `כשכופלים ב-10 מוסיפים 0 בסוף המספר: ${n} ← ${n}0.`) },
+  { id: 'x5', name: 'כפל ב-5', desc: 'חצי מכפל ב-10', gen: scTable(5, n => `${n} × 10 = ${n * 10}. כפל ב-5 הוא חצי מזה.`) },
+  { id: 'x01', name: 'כפל ב-0 וב-1', desc: 'שני כללים שכדאי לזכור', gen: () => scLadder().map((n, i) => { const k = [1, 0, 1, 0, pick([0, 1])][i], [a, b] = i % 2 ? [k, n] : [n, k]; return { q: `${a} × ${b} =`, a: a * b, hint: k ? 'מספר כפול 1 – נשאר אותו מספר.' : 'כל מספר כפול 0 שווה 0.' }; }) },
+  { id: 'twins', name: 'תרגילים תאומים', desc: 'מחליפים את הסדר – התוצאה לא משתנה', gen: () => scPairs(2, 9).map(([a, b], i) => {
+      const hint = 'בתרגילים תאומים מחליפים את סדר המספרים – והתוצאה לא משתנה.';
+      if (a === b) b = a === 9 ? 8 : a + 1;
+      if (i < 2 || i === 4) return { pre: `${a} × ${b} = ${a * b}`, q: `${b} × ${a} =`, a: a * b, hint };
+      return i === 2 ? { q: `${a} × ${b} = ${b} ×`, a, hint: `${hint} איזה מספר חסר כדי שזה יהיה התאום של ${a} × ${b}?` } : { q: `${b} × ${a} = ${a} ×`, a: b, hint: `${hint} איזה מספר חסר כדי שזה יהיה התאום של ${b} × ${a}?` };
+    }) },
+  { id: 'x3', name: 'כפל ב-3', desc: 'פעמיים ועוד פעם אחת', gen: scTable(3, n => `${n} × 2 = ${n * 2}, ועוד ${n} פעם אחת.`) },
+  { id: 'x4', name: 'כפל ב-4', desc: 'כפול 2, ושוב כפול 2', gen: scTable(4, n => `${n} × 2 = ${n * 2}, ושוב כפול 2.`) },
+  { id: 'x9', name: 'כפל ב-9', desc: 'כפול 10 פחות פעם אחת', gen: scTable(9, n => `${n} × 10 = ${n * 10}, פחות ${n} פעם אחת.`) },
+  { id: 'x678', name: 'כפל ב-6, 7 ו-8', desc: 'העובדות הקשות של הלוח', gen: () => scLadder().map((n, i) => { const k = [6, 7, 8, pick([6, 7, 8]), pick([7, 8])][i], [a, b] = i % 2 ? [k, n] : [n, k]; return { q: `${a} × ${b} =`, a: a * b, hint: `${n} × 5 = ${n * 5}, ועוד ${n} × ${k - 5} = ${n * (k - 5)}.` }; }) },
+  { id: 'sq', name: 'מספר כפול עצמו', desc: '2 × 2, 3 × 3 ... עד 10 × 10', gen: () => scLadder().map(n => ({ q: `${n} × ${n} =`, a: n * n, hint: `זה ${n} פעמים ${n}. אפשר להתחיל מ-${n} × ${Math.max(n - 1, 1)} = ${n * Math.max(n - 1, 1)} ולהוסיף ${n - 1 ? n : 0}.` })) },
+  { id: 'missing', name: 'מספר חסר בכפל', desc: 'כמה פעמים? מוצאים את המספר החסר', gen: () => scPairs(2, 9).map(([a, b]) => ({ q: `${a} × ☐ = ${a * b}`, blank: true, a: b, hint: `סופרים בקפיצות של ${a} עד ${a * b}: כמה קפיצות?` })) },
+  { id: 'family', name: 'משפחת תרגילים', desc: 'מתרגיל כפל אחד – שני תרגילי חילוק', gen: () => scPairs(2, 9).map(([a, b], i) => { const [d, r] = i % 2 ? [a, b] : [b, a]; return { pre: `${a} × ${b} = ${a * b}`, q: `${a * b} : ${d} =`, a: r, hint: `באותה משפחה: ${a} × ${b} = ${a * b}, ולכן ${a * b} : ${d} הוא המספר השני בתרגיל הכפל.` }; }) },
+  { id: 'div', name: 'חילוק בלוח הכפל', desc: 'חילוק הוא כפל הפוך', gen: () => scPairs(2, 9).map(([a, b]) => ({ q: `${a * b} : ${a} =`, a: b, hint: `שואלים: איזה מספר כפול ${a} שווה ${a * b}?` })) }
+];
+const SC = Object.fromEntries(SC_LIST.map(s => [s.id, s]));
+const scPass = r => r && r.best >= 4;
+
+function succHome() {
+  stopSimTimer(); state = null; lessonView = null; navPush('succ');
+  const d = scLoad(), passed = SC_LIST.filter(s => scPass(d[s.id])).length;
+  app.innerHTML = `
+    <div class="topbar"><span class="title">⭐ מבדקי הצלחה</span><button class="secondary" id="scHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="card race-intro"><p class="race-how"><b>5 תרגילים קצרים על נושא אחד</b> – מהקל אל הקשה. טעיתם? מקבלים רמז ועוד ניסיון. 4 נכונות בניסיון הראשון – והנושא מקבל ✔.</p>
+      <div class="sc-prog">עברת <b>${passed}</b> מתוך <b>${SC_LIST.length}</b> מבדקים${passed === SC_LIST.length ? ' – שולט/ת בכל לוח הכפל! 🏆' : ''}</div></div>
+    <h2>לוח הכפל – בוחרים נושא אחד</h2>
+    <div class="sc-grid">${SC_LIST.map(s => { const r = d[s.id]; return `<button class="sc-card${scPass(r) ? ' done' : ''}" data-sc="${s.id}">
+      <span class="sc-st">${scPass(r) ? '✔' : r ? `${r.best}/5` : '☆'}</span><span class="sc-nm">${s.name}</span><span class="sc-ds">${s.desc}</span>${r ? `<span class="sc-stars">${'⭐'.repeat(r.best === 5 ? 3 : r.best === 4 ? 2 : r.best >= 3 ? 1 : 0)}</span>` : ''}</button>`; }).join('')}</div>
+    ${teacherOn() ? `<p class="muted small center">👩‍🏫 קישור למבדק מסוים לתלמידים: לוחצים על המבדק, ובראש המסך יש כפתור "קישור".</p>` : ''}`;
+  $('scHomeB').onclick = home;
+  app.querySelectorAll('[data-sc]').forEach(b => b.onclick = () => succRun(b.dataset.sc));
+  window.scrollTo(0, 0);
+}
+
+function succRun(id) {
+  const S = SC[id];
+  if (!S) return succHome();
+  const qs = S.gen(), st = { i: 0, first: 0, tries: 0, wrong: [] };
+  window.__scQs = qs; // לבדיקות אוטומטיות
+  track('מבדק הצלחה', S.name);
+  navPush('view');
+  const link = location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'succ=' + id;
+  const show = () => {
+    const q = qs[st.i];
+    const input = `<input class="ans sc-in" id="scIn" inputmode="numeric" autocomplete="off" maxlength="4" aria-label="תשובה">`;
+    const expr = q.blank ? q.q.replace('☐', `</span>${input}<span class="m">`) : `${q.q} </span>${input}<span class="m">`;
+    app.innerHTML = `
+      <div class="topbar"><span class="title">⭐ ${S.name}</span><span class="muted">תרגיל ${st.i + 1} מתוך 5</span>${teacherOn() ? `<button class="ghost" id="scLink">🔗 קישור</button>` : ''}</div>
+      <div class="sc-dots">${qs.map((_, k) => `<span class="${k < st.i ? 'ok' : k === st.i ? 'now' : ''}"></span>`).join('')}</div>
+      <div class="card center sc-q">
+        ${q.pre ? `<div class="sc-pre">יודעים ש: ${M(q.pre)}</div>` : ''}
+        <div class="sc-expr" dir="ltr"><span class="m">${expr}</span></div>
+        <div class="sc-msg" id="scMsg"></div>
+        <div class="actions" style="justify-content:center" id="scActs"><button id="scCheck">${ic('check')} בדיקה</button></div>
+        <div class="small muted" id="scLinkMsg"></div>
+      </div>`;
+    const inp = $('scIn');
+    setTimeout(() => inp.focus(), 30);
+    st.tries = 0;
+    const next = () => { st.i++; if (st.i < 5) show(); else done(); };
+    const check = () => {
+      const v = inp.value.trim();
+      if (!v) { $('scMsg').innerHTML = '✋ כתבו תשובה, ואז "בדיקה".'; return; }
+      st.tries++;
+      if (Number(v) === q.a) {
+        if (st.tries === 1) st.first++;
+        inp.disabled = true; inp.classList.add('ok');
+        $('scMsg').innerHTML = pick(['✔ נכון!', '✔ מצוין!', '✔ בדיוק!', '✔ כל הכבוד!']);
+        $('scActs').innerHTML = '';
+        setTimeout(next, 750);
+      } else if (st.tries === 1) {
+        $('scMsg').innerHTML = `<div class="sc-hint">💡 ${q.hint}</div>נסו שוב 🙂`;
+        inp.select();
+      } else {
+        st.wrong.push(q.blank ? q.q.replace('☐', q.a) : `${q.q} ${q.a}`);
+        inp.disabled = true;
+        $('scMsg').innerHTML = `התשובה היא <b>${q.a}</b>. ${M(q.blank ? q.q.replace('☐', q.a) : `${q.q} ${q.a}`)} – נזכור לפעם הבאה 🙂`;
+        $('scActs').innerHTML = `<button id="scNext">${st.i < 4 ? 'לתרגיל הבא ←' : 'לסיכום ←'}</button>`;
+        $('scNext').onclick = next; $('scNext').focus();
+      }
+    };
+    $('scCheck').onclick = check;
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !inp.disabled) check(); });
+    if ($('scLink')) $('scLink').onclick = () => {
+      const msg = t => { $('scLinkMsg').innerHTML = t; };
+      try { navigator.clipboard.writeText(link).then(() => msg('הקישור למבדק הועתק ✔ – אפשר לשלוח אותו לתלמידים.'), () => msg(`<span data-raw dir="ltr">${esc(link)}</span>`)); } catch (e) { msg(`<span data-raw dir="ltr">${esc(link)}</span>`); }
+    };
+    window.scrollTo(0, 0);
+  };
+  const done = () => {
+    const d = scLoad(), prev = d[id], f = st.first;
+    d[id] = { best: Math.max(f, prev ? prev.best : 0), last: f, n: (prev ? prev.n : 0) + 1, day: new Date().toLocaleDateString('en-CA') };
+    scSave(d);
+    track('מבדק הצלחה – סיום', `${S.name} · ${f}/5`);
+    const pass = f >= 4, firstPass = pass && !scPass(prev);
+    app.innerHTML = `
+      <div class="topbar"><span class="title">⭐ ${S.name}</span><button class="secondary" id="scHomeB">${ic('home')} לדף הבית</button></div>
+      <div class="card center sc-end">
+        <div class="path-trophy">${f === 5 ? '🏆' : pass ? '🌟' : f >= 3 ? '💪' : '🌱'}</div>
+        <h2>${f === 5 ? 'מושלם! 5 מתוך 5' : pass ? `${f} מתוך 5 – עברת!` : f >= 3 ? `${f} מתוך 5 – כמעט!` : `${f} מתוך 5 בניסיון הראשון`}</h2>
+        <div class="sc-stars big">${'⭐'.repeat(f === 5 ? 3 : pass ? 2 : f >= 3 ? 1 : 0)}</div>
+        <p>${pass ? `כל הכבוד! את/ה שולט/ת ב<b>${S.name}</b>.${firstPass ? ' הנושא קיבל ✔ ברשימת המבדקים שלך.' : ''}` : f >= 3 ? 'עוד מבדק אחד – ואת/ה שם! 💪' : `כל התרגילים נפתרו בסוף – זה כבר התחלה טובה. בואו ננסה שוב, הפעם עם הטריק:<br><b>${qs[0].hint}</b>`}</p>
+        ${st.wrong.length ? `<p class="small muted">כדאי לזכור: ${st.wrong.map(w => M(w)).join(' · ')}</p>` : ''}
+        <div class="actions" style="justify-content:center">
+          <button id="scAgain">${ic('retry')} עוד מבדק – ${S.name}</button>
+          <button class="secondary" id="scList">⭐ לכל המבדקים</button>
+          ${pass ? '' : `<button class="ghost" id="scLearn">📚 טריקים ללוח הכפל</button>`}
+        </div>
+      </div>`;
+    $('scHomeB').onclick = home;
+    $('scAgain').onclick = () => succRun(id);
+    $('scList').onclick = succHome;
+    if ($('scLearn')) $('scLearn').onclick = () => startLesson('times');
+    window.scrollTo(0, 0);
+  };
+  show();
+}
+
 /* ---------- כניסת מורה (קוד) ---------- */
 // הקוד לא נשמר כאן – רק "טביעת אצבע" שלו. זו לא אבטחה אמיתית, אלא מניעת כניסה מקרית.
 const TEACHER_HASH = '3d9bf467';
@@ -12874,7 +13032,7 @@ function askName(done) {
   if (!first) return;
   if (!teacherCred() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('succ') && GRADE >= 2) { if (SC[URLP.get('succ')]) succRun(URLP.get('succ')); else succHome(); } else home();
 </script>
 </body>
 </html>
