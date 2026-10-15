@@ -1192,7 +1192,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -9729,7 +9729,7 @@ const mkSegsEq = (a, b) => a.length === b.length && b.every(sg => a.some(x => mk
 function mkDraw(given, o = {}) {
   // שוליים של משבצת אחת מכל צד, כדי שהרשת לא "תסגיר" איפה הצורה נגמרת
   const all = given.flat().concat((o.answer || []).flat(), o.pts || []), mx = Math.max(...all.map(p => p[0])) + 2, my = Math.max(...all.map(p => p[1])) + 2;
-  const u = 30, pad = 18 + u, W = mx * u + 36 - u, H = my * u + 36 - u, X = p => pad + p[0] * u, Y = p => pad + p[1] * u;
+  const u = 30, pad = 18 + u, W = mx * u + 36, H = my * u + 36, X = p => pad + p[0] * u, Y = p => pad + p[1] * u;
   let s = '';
   for (let x = -1; x < mx; x++) s += `<line x1="${pad + x * u}" y1="${pad - u}" x2="${pad + x * u}" y2="${pad + (my - 1) * u}" stroke="#e1ddd3"/>`;
   for (let y = -1; y < my; y++) s += `<line x1="${pad - u}" y1="${pad + y * u}" x2="${pad + (mx - 1) * u}" y2="${pad + y * u}" stroke="#e1ddd3"/>`;
@@ -9899,8 +9899,15 @@ MKQ[6] = [
       return `<line x1="${tx}" y1="${ty}" x2="${tx}" y2="${(ty + ay) / 2}" stroke="#111" stroke-width="4"/>`;
     }] });
     const order = shuffle(kinds);
-    return { q: 'לפניכם סרטוטים של 4 משולשים הצבועים באפור.<br>באיזה סרטוט הקטע המודגש הוא <b>גובה</b> לאחת מצלעות המשולש?', parts: [{ k: 'choice', opts: order.map((kd, i) => `<span class="mk-optfig">${draw(kd)}</span>`), a: order.indexOf('ok'), show: `סרטוט ${order.indexOf('ok') + 1}`, grid: true }],
-      steps: ['גובה = קטע שיוצא מ<b>קודקוד</b> ומגיע <b>בזווית ישרה</b> לצלע שמולו (או להמשך שלה).', 'בודקים כל סרטוט: האם הקטע יוצא מקודקוד? האם הוא מאונך לצלע? האם הוא מגיע עד הצלע?', 'כשהמשולש "נוטה" – הגובה יכול ליפול <b>מחוץ</b> למשולש, על המשך הצלע (הקו המקווקו).'] };
+    // סעיף ב: משרטטים בעצמם גובה – לפעמים הוא נופל על המשך הצלע
+    const b2 = R(3, 5), h2 = R(3, 4), o2 = Math.random() < .5 ? R(1, b2 - 1) : b2 + R(1, 2), A2 = [0, h2], B2 = [b2, h2], T2 = [o2, 0], foot = [o2, h2];
+    const tri2 = [[A2, B2], [B2, T2], [T2, A2]], hgt = [T2, foot], ext = o2 > b2 ? [[B2, foot]] : [];
+    return { q: '', parts: [
+      { l: 'א.', q: 'לפניכם סרטוטים של 4 משולשים הצבועים באפור.<br>באיזה סרטוט הקטע המודגש הוא <b>גובה</b> לאחת מצלעות המשולש?', k: 'choice', opts: order.map((kd, i) => `<span class="mk-optfig">${draw(kd)}</span>`), a: order.indexOf('ok'), show: `סרטוט ${order.indexOf('ok') + 1}`, grid: true },
+      { l: 'ב.', q: `סרטטו את <b>הגובה</b> מהקודקוד העליון אל הצלע התחתונה${o2 > b2 ? ' (שימו לב: אולי צריך להמשיך את הצלע)' : ''}.`, k: 'draw', a: [hgt, ...ext], fig: () => mkDraw(tri2, { click: true }), figPrint: () => mkDraw(tri2),
+        check: segs => segs.some(sg => mkSegKey(sg) === mkSegKey(hgt)) && segs.every(sg => mkSegKey(sg) === mkSegKey(hgt) || (sg[0][1] === h2 && sg[1][1] === h2)),
+        show: `קטע ישר למטה מהקודקוד, בזווית ישרה לצלע${o2 > b2 ? ' – על <b>המשך</b> הצלע' : ''}:${mkDraw(tri2, { answer: [hgt, ...ext] })}` }],
+      steps: ['גובה = קטע שיוצא מ<b>קודקוד</b> ומגיע <b>בזווית ישרה</b> לצלע שמולו (או להמשך שלה). כשהצלע אופקית – הגובה הוא קו <b>אנכי</b> (ישר למטה).', 'בודקים כל סרטוט: האם הקטע יוצא מקודקוד? האם הוא מאונך לצלע? האם הוא מגיע עד הצלע?', 'כשהמשולש "נוטה" – הגובה יכול ליפול <b>מחוץ</b> למשולש, על המשך הצלע (הקו המקווקו).'] };
   } },
   { t: 'שטח משולש ישר-זווית', g() {
     const [a, b, c] = pick([[6, 8, 10], [5, 12, 13], [9, 12, 15], [8, 15, 17], [12, 9, 15], [8, 6, 10]]);
