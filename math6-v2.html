@@ -1125,6 +1125,8 @@
   .mk-draw .mk-dot { cursor: pointer; }
   .mk-draw .mk-dot:hover { fill: rgba(217, 72, 43, 0.18); }
   .mk-drawbar { margin-top: 2px; }
+  .mk-claim { font-size: 1.15rem; font-weight: 700; margin: 8px 0; padding: 8px 12px; border-right: 4px solid #e2b357; background: rgba(239, 201, 106, 0.15); border-radius: 8px; }
+  .qd-rem { margin: 6px 0 0; line-height: 1.8; }
   .mk-opt:hover { background: rgba(127, 168, 214, 0.15); }
   .mk-on { font-size: 0.8rem; color: #777; min-width: 1em; }
   .mk-optfig svg { max-width: 170px; }
@@ -1192,7 +1194,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6974,7 +6976,7 @@ const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: '�
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
-const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן)/;
+const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים)/;
 const ACT_IDLE = 60000, ACT_TAIL = 10000;
 let actCur = null, actPaused = null;
 function actTick() {
@@ -7114,6 +7116,7 @@ function home() {
             }).join('')}
           </div>
           <div class="practice-more">
+            ${GRADE >= 4 ? `<button id="quadGo">🔷 תרגול מרובעים<span class="desc">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span></button>` : ''}
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום – התוצאה נשלחת למורה</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -7255,6 +7258,7 @@ function home() {
   $('testfb').onclick = () => startTest(true);
   $('sim').onclick = showSimPicker;
   if ($('mkGo')) $('mkGo').onclick = mkHome;
+  if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('pathGo')) $('pathGo').onclick = () => pathHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
@@ -10700,6 +10704,139 @@ function pathEnd() {
   app.querySelectorAll('[data-te]').forEach(b => b.onclick = () => { mkS = { all: false }; mkView(+b.dataset.te, 'teach'); });
   app.querySelectorAll('[data-pq]').forEach(b => b.onclick = () => pathQ(+b.dataset.pq));
   $('pathNew2').onclick = pathNewTrip;
+  window.scrollTo(0, 0);
+}
+
+
+/* =========================================================
+   תרגול מרובעים: מקבילית, מעוין, טרפז, דלתון (כיתות ד'–ו')
+   משתמש באותו מנגנון של שאלות האימון למבחן (בדיקה, הסבר, שרטוט על לוח נקודות)
+   ========================================================= */
+const QD_ALL = ['ריבוע', 'מלבן', 'מעוין', 'מקבילית', 'טרפז', 'דלתון'];
+const QD_FAM = { 'ריבוע': ['ריבוע', 'מלבן', 'מעוין', 'מקבילית', 'דלתון'], 'מלבן': ['מלבן', 'מקבילית'], 'מעוין': ['מעוין', 'מקבילית', 'דלתון'], 'מקבילית': ['מקבילית'], 'טרפז': ['טרפז'], 'דלתון': ['דלתון'] };
+const QD_WHY = {
+  'מקבילית': 'שני זוגות של צלעות מקבילות; צלעות נגדיות שוות; זוויות נגדיות שוות; האלכסונים חוצים זה את זה',
+  'מעוין': 'כל 4 הצלעות שוות (וגם מקבילית); האלכסונים מאונכים וחוצים זה את זה',
+  'טרפז': 'זוג <b>אחד בלבד</b> של צלעות מקבילות (הבסיסים)',
+  'דלתון': 'שני זוגות של צלעות <b>סמוכות</b> שוות; האלכסונים מאונכים, ורק אחד חוצה את השני',
+  'מלבן': '4 זוויות ישרות; צלעות נגדיות מקבילות ושוות',
+  'ריבוע': '4 צלעות שוות ו-4 זוויות ישרות'
+};
+// מרובע אקראי מסוג נתון, בנקודות שלמות (שיתאים ללוח נקודות)
+function qdShape(k) {
+  let P;
+  if (k === 'מקבילית') { let b, h, s; do { b = R(3, 6); h = R(2, 3); s = R(1, 3); } while (b * b === s * s + h * h); P = [[s, 0], [s + b, 0], [b, h], [0, h]]; }
+  else if (k === 'מעוין') { let m, n; do { m = R(2, 4); n = R(1, 3); } while (m === n); P = [[m, 0], [2 * m, n], [m, 2 * n], [0, n]]; }
+  else if (k === 'טרפז') { const B = R(5, 7), h = R(2, 3), a = R(1, 2), c = R(0, 2); P = [[a, 0], [B - c, 0], [B, h], [0, h]]; if (B - c - a < 2) P[1][0] = a + 2; }
+  else if (k === 'דלתון') { const m = R(2, 3), a = R(1, 2), b = R(3, 4); P = [[m, 0], [2 * m, a], [m, a + b], [0, a]]; }
+  else if (k === 'מלבן') { let w, h; do { w = R(3, 6); h = R(2, 4); } while (w === h); P = [[0, 0], [w, 0], [w, h], [0, h]]; }
+  else { const a = R(2, 3); P = [[0, 0], [a, 0], [a, a], [0, a]]; }
+  if (Math.random() < 0.4) P = P.map(([x, y]) => [y, x]);   // מסובבים לפעמים
+  return P;
+}
+const qdFig = (P, o = {}) => mkPoly(P, Object.assign({ u: 28, grid: true, fill: 'rgba(127,168,214,0.35)' }, o));
+const QDQ = [
+  { t: 'איזה מרובע?', g() {
+    const k = pick(['מקבילית', 'מעוין', 'טרפז', 'דלתון', 'מקבילית', 'טרפז']), P = qdShape(k), opts = ['מקבילית', 'מעוין', 'טרפז', 'דלתון', 'מלבן'];
+    return { q: `מה שם המרובע? (בחרו את השם <b>המדויק</b> ביותר)${qdFig(P)}`, parts: [{ k: 'choice', opts, a: opts.indexOf(k), show: k }],
+      steps: ['בודקים צלעות מקבילות: כמה זוגות יש? (על הרשת – קווים באותו "שיפוע")', 'בודקים צלעות שוות: נגדיות? סמוכות? כולן?', `<b>${k}</b>: ${QD_WHY[k]}.`] };
+  } },
+  { t: 'כל השמות המתאימים', g() {
+    const k = pick(['מעוין', 'ריבוע', 'מלבן', 'מקבילית', 'דלתון', 'טרפז']), P = qdShape(k), ok = QD_FAM[k];
+    return { q: `אילו שמות מתאימים למרובע? (סמנו את <b>כולם</b>)${qdFig(P)}`, parts: [{ k: 'multi', opts: QD_ALL, a: QD_ALL.map((n, i) => i).filter(i => ok.includes(QD_ALL[i])), show: ok.join(', ') }],
+      steps: ['למרובע יכולים להיות כמה שמות – אם הוא מקיים את כל התכונות של משפחה.', `זה <b>${k}</b>.`, k === 'מעוין' ? 'מעוין הוא גם מקבילית (צלעות נגדיות מקבילות) וגם דלתון (זוגות צלעות סמוכות שוות).' : k === 'ריבוע' ? 'ריבוע הוא גם מלבן, גם מעוין, גם מקבילית וגם דלתון!' : k === 'מלבן' ? 'מלבן הוא גם מקבילית.' : `ל${k} אין שמות נוספים מהרשימה.`] };
+  } },
+  { t: 'חידה – מי אני?', g() {
+    const R2 = pick([['יש לי זוג <b>אחד בלבד</b> של צלעות מקבילות.', 'טרפז'], ['יש לי שני זוגות של צלעות <b>סמוכות</b> שוות, אבל הצלעות הנגדיות שלי לא שוות.', 'דלתון'], ['כל הצלעות שלי שוות, אבל אין לי זוויות ישרות.', 'מעוין'], ['הצלעות הנגדיות שלי מקבילות ושוות, אבל הזוויות שלי לא ישרות והצלעות לא כולן שוות.', 'מקבילית'], ['האלכסונים שלי מאונכים, ורק אחד מהם חוצה את השני.', 'דלתון'], ['האלכסונים שלי חוצים זה את זה ומאונכים, אבל הם לא שווים.', 'מעוין'], ['האלכסונים שלי חוצים זה את זה, לא מאונכים ולא שווים.', 'מקבילית']]);
+    const opts = ['מקבילית', 'מעוין', 'טרפז', 'דלתון'];
+    return { q: `🕵️ ${R2[0]}<br>מי אני?`, parts: [{ k: 'choice', opts, a: opts.indexOf(R2[1]), show: R2[1] }],
+      steps: ['קוראים כל רמז ובודקים אילו מרובעים מתאימים לו.', 'מוחקים את מי שלא מתאים לאחד הרמזים.', `התשובה: <b>${R2[1]}</b> – ${QD_WHY[R2[1]]}.`] };
+  } },
+  { t: 'נכון או לא נכון?', g() {
+    const S = pick([['כל מעוין הוא מקבילית.', true, 'במעוין הצלעות הנגדיות מקבילות – לכן הוא מקבילית.'], ['כל מקבילית היא מעוין.', false, 'במקבילית הצלעות לא חייבות להיות כולן שוות.'], ['כל מעוין הוא דלתון.', true, 'במעוין כל הצלעות שוות, אז בוודאי יש שני זוגות של צלעות סמוכות שוות.'], ['כל דלתון הוא מעוין.', false, 'בדלתון הצלעות הנגדיות לא חייבות להיות שוות.'], ['לטרפז יש שני זוגות של צלעות מקבילות.', false, 'לטרפז יש זוג אחד בלבד של צלעות מקבילות.'], ['במקבילית הזוויות הנגדיות שוות.', true, 'זו אחת התכונות של מקבילית.'], ['האלכסונים של מעוין מאונכים זה לזה.', true, 'כן – והם גם חוצים זה את זה.'], ['האלכסונים של מקבילית תמיד שווים.', false, 'רק במלבן (וריבוע) האלכסונים שווים.'], ['ריבוע הוא גם מעוין.', true, 'בריבוע כל הצלעות שוות – כמו במעוין.'], ['בדלתון כל הזוויות שוות.', false, 'בדלתון רק זוג אחד של זוויות נגדיות שוות.']]);
+    return { q: `האם הטענה נכונה?<div class="mk-claim">"${S[0]}"</div>`, parts: [{ k: 'choice', opts: ['נכון', 'לא נכון'], a: S[1] ? 0 : 1, show: S[1] ? 'נכון' : 'לא נכון' }],
+      steps: ['חושבים על התכונות של כל אחד מהמרובעים.', 'טענה "כל X הוא Y" נכונה רק אם <b>לכל</b> X יש את כל התכונות של Y.', S[2]] };
+  } },
+  { t: 'זוויות במרובע', min: 5, g() {
+    const k = pick(['מקבילית', 'מעוין', 'טרפז', 'דלתון']), x = R(5, 13) * 5;
+    if (k === 'טרפז') return { q: `בטרפז שתי הזוויות <b>שליד אותה שוק</b> (בין שני הבסיסים): אחת מהן ${M(x + '°')}. כמה מעלות הזווית השנייה?`, parts: [{ k: 'num', a: 180 - x, show: M((180 - x) + '°'), unit: 'מעלות' }], steps: ['בטרפז הבסיסים מקבילים.', 'שתי זוויות ליד אותה שוק משלימות זו את זו ל-180°.', M(`180 – ${x} = ${180 - x}`)] };
+    if (k === 'דלתון') { const y = R(18, 26) * 5, z = 360 - 2 * x - y; return { q: `בדלתון, הזוויות שבין הצלעות הלא-שוות שוות זו לזו. זווית אחת כזו היא ${M(x + '°')}, והזווית שבראש הדלתון ${M(y + '°')}. כמה מעלות הזווית הרביעית?`, parts: [{ k: 'num', a: z, show: M(z + '°'), unit: 'מעלות' }], steps: ['סכום הזוויות בכל מרובע הוא 360°.', `שתי הזוויות השוות: ${M(`2 × ${x} = ${2 * x}`)}`, M(`360 – ${2 * x} – ${y} = ${z}`)] }; }
+    const opp = Math.random() < 0.5;
+    return { q: `ב${k} זווית אחת היא ${M(x + '°')}. כמה מעלות הזווית ה<b>${opp ? 'נגדית' : 'סמוכה'}</b> לה?`, parts: [{ k: 'num', a: opp ? x : 180 - x, show: M((opp ? x : 180 - x) + '°'), unit: 'מעלות' }],
+      steps: [`ב${k} הזוויות הנגדיות שוות, וזוויות סמוכות משלימות ל-180°.`, opp ? `נגדית ← שווה: ${M(x + '°')}` : `סמוכה ← ${M(`180 – ${x} = ${180 - x}`)}`, 'בדיקה: סכום כל 4 הזוויות הוא 360°.'] };
+  } },
+  { t: 'היקף מרובע', g() {
+    const k = pick(['מקבילית', 'מעוין', 'דלתון', 'טרפז']), a = R(3, 12), b = R(3, 12);
+    if (k === 'מעוין') return { q: `צלע של מעוין היא ${M(a)} ס"מ. מה היקף המעוין?`, parts: [{ k: 'num', a: 4 * a, show: M(4 * a), unit: 'ס"מ' }], steps: ['במעוין כל 4 הצלעות שוות.', M(`4 × ${a} = ${4 * a}`), 'אם ההיקף ידוע – מחלקים ב-4 כדי למצוא צלע.'] };
+    if (k === 'מקבילית') return { q: `במקבילית צלע אחת ${M(a)} ס"מ, והצלע הסמוכה לה ${M(b)} ס"מ. מה היקף המקבילית?`, parts: [{ k: 'num', a: 2 * (a + b), show: M(2 * (a + b)), unit: 'ס"מ' }], steps: ['במקבילית צלעות נגדיות שוות – יש 2 צלעות מכל אורך.', M(`${a} + ${b} + ${a} + ${b} = ${2 * (a + b)}`), `או: ${M(`2 × (${a} + ${b})`)}`] };
+    if (k === 'דלתון') { const P = 2 * (a + b); return { q: `היקף דלתון ${M(P)} ס"מ. אחת הצלעות שלו ${M(a)} ס"מ. מה אורך כל אחת מהצלעות האחרות שאינן שוות לה?`, parts: [{ k: 'num', a: b, show: M(b), unit: 'ס"מ' }], steps: ['בדלתון יש 2 צלעות באורך אחד ו-2 צלעות באורך אחר.', `שתי הצלעות הידועות: ${M(`2 × ${a} = ${2 * a}`)}`, `נשאר ${M(`${P} – ${2 * a} = ${2 * b}`)}, לכל צלע ${M(`${2 * b} : 2 = ${b}`)}`] }; }
+    const c = R(3, 9), d = R(3, 9);
+    return { q: `בטרפז אורכי הבסיסים ${M(a)} ס"מ ו-${M(b)} ס"מ, ואורכי השוקיים ${M(c)} ס"מ ו-${M(d)} ס"מ. מה היקף הטרפז?`, parts: [{ k: 'num', a: a + b + c + d, show: M(a + b + c + d), unit: 'ס"מ' }], steps: ['היקף = סכום כל 4 הצלעות.', M(`${a} + ${b} + ${c} + ${d} = ${a + b + c + d}`), 'בטרפז אין בהכרח צלעות שוות – מחברים את כולן.'] };
+  } },
+  { t: 'השלימו את המרובע', g() {
+    const k = pick(['מקבילית', 'מעוין', 'מקבילית']), V = qdShape(k), r = R(0, 3), Q = [0, 1, 2, 3].map(i => V[(i + r) % 4]);
+    const given = [[Q[0], Q[1]], [Q[1], Q[2]]], missing = [[Q[2], Q[3]], [Q[3], Q[0]]];
+    return { q: `לפניכם <b>שתי צלעות</b> של ${k}.`, parts: [{ l: '', q: `השלימו את ה${k} – סרטטו את הצלעות החסרות.`, k: 'draw', a: missing, fig: () => mkDraw(given, { click: true, pts: V }), check: segs => mkSegsEq(segs, missing), show: mkDraw(given, { answer: missing }) }],
+      steps: [`ב${k} צלעות נגדיות מקבילות ושוות.`, 'מהקצה של כל צלע נתונה "הולכים" כמו הצלע שמולה – אותו מספר משבצות ימינה/שמאלה ולמעלה/למטה.', 'כך מוצאים את הקודקוד הרביעי, ומחברים אליו.'] };
+  } },
+  { t: 'שרטוט לפי אלכסונים', g() {
+    const k = pick(['מעוין', 'דלתון']), V = qdShape(k), diags = [[V[0], V[2]], [V[1], V[3]]], sides = [[V[0], V[1]], [V[1], V[2]], [V[2], V[3]], [V[3], V[0]]];
+    const opts = ['מקבילית', 'מעוין', 'טרפז', 'דלתון'];
+    return { q: 'הקטעים שלפניכם הם <b>אלכסוני מרובע</b>.', parts: [
+      { l: 'א.', q: 'סרטטו את צלעות המרובע.', k: 'draw', a: sides, fig: () => mkDraw(diags, { click: true }), check: segs => mkSegsEq(segs, sides), show: mkDraw(diags, { answer: sides }) },
+      { l: 'ב.', q: 'מה שם המרובע?', k: 'choice', opts, a: opts.indexOf(k), show: k }],
+      steps: ['מחברים כל קצה של אלכסון לשני הקצוות של האלכסון השני.', k === 'מעוין' ? 'האלכסונים מאונכים <b>וחוצים זה את זה</b> ← מעוין.' : 'האלכסונים מאונכים, אבל <b>רק אחד</b> חוצה את השני ← דלתון.', `${QD_WHY[k]}.`] };
+  } },
+  { t: 'סרטטו טרפז', g() {
+    // נתונים בסיס אחד ושוק אחת; משלימים לטרפז (יש כמה תשובות נכונות)
+    const B = R(4, 6), h = R(2, 3), a = R(0, 2), A = [a, h], Bp = [a + B, h], T = [a + B - R(0, 2), 0];
+    const given = [[A, Bp], [Bp, T]];
+    const isPar = (p, q, r, s) => (q[0] - p[0]) * (s[1] - r[1]) - (q[1] - p[1]) * (s[0] - r[0]) === 0;
+    const check = segs => {
+      if (segs.length !== 2) return false;
+      const all = given.concat(segs), deg = {};
+      all.forEach(sg => sg.forEach(p => { const k2 = p.join(','); deg[k2] = (deg[k2] || 0) + 1; }));
+      const vs = Object.keys(deg);
+      if (vs.length !== 4 || vs.some(v => deg[v] !== 2)) return false;
+      const D = vs.map(v => v.split(',').map(Number)).find(p => ![A, Bp, T].some(q => q[0] === p[0] && q[1] === p[1]));
+      if (!D || D[1] === h || (D[0] === T[0] && D[1] === T[1])) return false;
+      const par1 = isPar(A, Bp, T, D), par2 = isPar(Bp, T, D, A);
+      return par1 !== par2;   // בדיוק זוג אחד מקביל
+    };
+    const Dx = [a + 1, 0], ex = [[T, Dx], [Dx, A]];
+    return { q: `לפניכם <b>בסיס</b> ו<b>שוק</b> של טרפז.`, parts: [{ l: '', q: 'השלימו לטרפז: סרטטו את שתי הצלעות החסרות. (יש יותר מתשובה נכונה אחת!)', k: 'draw', a: ex, fig: () => mkDraw(given, { click: true, pts: [[a + B + 2, h]] }), check, show: `למשל:${mkDraw(given, { answer: ex })}<div class="small muted">הבסיס השני צריך להיות <b>מקביל</b> לבסיס הנתון (אופקי), והשוק השנייה – <b>לא</b> מקבילה לשוק הנתונה.</div>` }],
+      steps: ['בטרפז יש זוג <b>אחד</b> של צלעות מקבילות – הבסיסים.', 'הבסיס השני מתחיל בקצה השוק, והולך <b>במקביל</b> לבסיס הנתון (על אותו קו אופקי של הרשת).', 'סוגרים את הצורה. אם יצא שגם השוקיים מקבילות – זו מקבילית, לא טרפז! מקצרים או מאריכים את הבסיס.'] };
+  } }
+];
+let qdS = { n: 0, ok: 0 };
+function quadHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('quad');
+  qdS = { n: 0, ok: 0 };
+  track('תרגול מרובעים');
+  quadNext();
+}
+function quadNext() {
+  const L = QDQ.filter(Q => !Q.min || GRADE >= Q.min), L2 = L.filter(x => x.t !== qdS.last), Q = pick(L2.length ? L2 : L), q = mkGender(Object.assign({ t: Q.t }, Q.g()));
+  qdS.last = Q.t; qdS.n++;
+  mkS = { all: false, i: 0, mode: 'practice', q };
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🔷 תרגול מרובעים</span><button class="secondary" id="qdHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="card mk-card"><div class="mk-topic">${q.t} · שאלה ${qdS.n}${qdS.n > 1 ? ` · נכונות עד עכשיו: ${qdS.ok}` : ''}</div>${mkQHTML(q, 'practice', qdS.n).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}
+      <div class="mk-steps hidden" id="mkExp"><h4>💡 איך פותרים?</h4><ol>${q.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
+      <div class="mk-msg" id="mkMsg"></div>
+      <div class="actions" id="qdActs"><button id="qdCheck">${ic('check')} בדיקה</button><button class="secondary" id="qdHint">💡 תזכורת</button></div>
+      <div class="path-rem hidden" id="qdRem"><b>💡 תזכורת – המרובעים:</b><ul class="qd-rem">${['מקבילית', 'מעוין', 'טרפז', 'דלתון'].map(k => `<li><b>${k}:</b> ${QD_WHY[k]}.</li>`).join('')}</ul></div></div>`;
+  $('qdHomeB').onclick = home;
+  $('qdHint').onclick = () => $('qdRem').classList.toggle('hidden');
+  mkWire();
+  $('qdCheck').onclick = () => {
+    const r = mkCheck();
+    if (r.miss) { $('mkExp').classList.add('hidden'); $('mkMsg').innerHTML = '✋ ענו על כל הסעיפים ואז לחצו "בדיקה".'; return; }
+    if (r.ok === r.tot) qdS.ok++;
+    $('qdActs').innerHTML = `<button id="qdNext">לשאלה הבאה ←</button><button class="secondary" id="qdSame">${ic('retry')} עוד שאלה מאותו סוג</button>`;
+    $('qdNext').onclick = quadNext;
+    $('qdSame').onclick = () => { qdS.last = null; const keep = QDQ.find(x => x.t === q.t); const save = QDQ.slice(); QDQ.splice(0, QDQ.length, keep); quadNext(); QDQ.splice(0, QDQ.length, ...save); };
+  };
   window.scrollTo(0, 0);
 }
 
