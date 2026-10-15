@@ -1122,6 +1122,7 @@
   .mk-opts.grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
   .mk-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 3px 6px; border-radius: 8px; }
   .mk-ot { flex: 1; min-width: 0; }
+  .mk-lines2 { display: inline-block; line-height: 1.9; }
   .mk-draw .mk-dot { cursor: pointer; }
   .mk-draw .mk-dot:hover { fill: rgba(217, 72, 43, 0.18); }
   .mk-drawbar { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
@@ -1200,7 +1201,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 סד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 סה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -9805,13 +9806,13 @@ MKQ[6] = [
   { t: 'אומדן – להסביר בלי לחשב', g() {
     const a = R(3, 6) * 10 + R(1, 8), b = R(3, 7) * 10 + R(1, 8), ta = Math.floor(a / 10) * 10, tb = Math.floor(b / 10) * 10, T = ta * tb, nm = mkName();
     const c = mkChoice([
-      `כי ${M(`${ta} × ${tb} = ${fmt(T)}`)}, והמספרים ${M(a)} ו-${M(b)} גדולים יותר.`,
+      `<span class="mk-lines2">${M(a)} גדול מ-${M(ta)}<br>${M(b)} גדול מ-${M(tb)}<br>${M(`${ta} × ${tb} = ${fmt(T)}`)}<br>לכן ${M(`${a} × ${b}`)} גדול מ-${M(fmt(T))}</span>`,
       `כי כשמחברים את שני המספרים יוצא יותר מ-${M(100)}.`,
       `כי ספרת האחדות של ${M(a)} גדולה מ-${M(1)}.`,
       `כי התוצאה של ${M(`${a} × ${b}`)} היא מספר זוגי.`], 0);
     return { q: `${nm} אמר/ה שגם <b>בלי לחשב</b> את התרגיל ${M(`${a} × ${b}`)} אפשר לדעת שהתוצאה <b>גדולה מ-${fmt(T)}</b>.`, parts: [
       { l: 'א.', q: 'איזה הסבר נכון?', k: 'choice', ...c, show: c.opts[c.a] },
-      { l: 'ב.', q: 'הַסבירו במילים שלכם איך אפשר לדעת זאת.', k: 'self', show: `לוקחים מספרים "עגולים" שקטנים מהמספרים בתרגיל: ${M(ta)} במקום ${M(a)}, ו-${M(tb)} במקום ${M(b)}. ${M(`${ta} × ${tb} = ${fmt(T)}`)}. המספרים האמיתיים גדולים יותר – לכן גם התוצאה האמיתית גדולה מ-${M(fmt(T))}.` }],
+      { l: 'ב.', q: 'הַסבירו במילים שלכם איך אפשר לדעת זאת.', k: 'self', show: `<span class="mk-lines2">במקום ${M(a)} לוקחים ${M(ta)}<br>במקום ${M(b)} לוקחים ${M(tb)}<br>${M(`${ta} × ${tb} = ${fmt(T)}`)}<br>המספרים האמיתיים גדולים יותר,<br>לכן התוצאה גדולה מ-${M(fmt(T))}</span>` }],
       steps: [
         `רוצים לדעת <b>בערך</b> כמה זה ${M(`${a} × ${b}`)}, בלי לחשב עד הסוף.`,
         `מחליפים כל מספר במספר עגול (של עשרות) <b>שקטן ממנו</b>: במקום ${M(a)} לוקחים ${M(ta)}, ובמקום ${M(b)} לוקחים ${M(tb)}.`,
