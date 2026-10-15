@@ -14,9 +14,16 @@
 <script>
   // אתר אחד לכל הכיתות: מי שכבר בחר כיתה – עובר אליה ישר (אלא אם ביקש להחליף)
   (function () {
-    var p = new URLSearchParams(location.search), g = null;
-    try { g = localStorage.getItem('math-grade'); } catch (e) {}
-    if (!p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) {
+    var p = new URLSearchParams(location.search), g = null, ok = false;
+    try {
+      g = localStorage.getItem('math-grade');
+      if (p.has('role')) localStorage.removeItem('math-role');
+      var L = function (k) { return localStorage.getItem(k); };
+      // נכנסים ישר רק מי שכבר בחר/ה: תלמיד/הורה או מורה (עם קוד)
+      ok = L('math-book-key') === 'e1050f14' || L('math-teacher-key') === '3d9bf467' || L('math-role') === 's' || (L('math-role') === 't' && L('math-staff-key') === '1a9e025e');
+    } catch (e) { ok = true; }
+    window.ROLE_OK = ok;
+    if (ok && !p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) {
       if (g !== '6') p.set('grade', g);
       var s = p.toString().replace(/=(&|$)/g, '$1');
       location.replace('math6.html' + (s ? '?' + s : '') + location.hash);
@@ -68,6 +75,16 @@
   .pv-box h2 { text-align: center; }
   .pv-body { font-size: 0.95rem; line-height: 1.6; max-height: 65vh; overflow-y: auto; }
   .pv-body p { margin: 6px 0; } .pv-body ul { margin: 4px 0 8px; padding-inline-start: 22px; }
+  .roles { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+  .roles button {
+    font: inherit; font-family: 'Playpen Sans Hebrew', cursive; font-size: 1.35rem; font-weight: 600; color: #1f1e1c; cursor: pointer;
+    background: #fffdf8; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; padding: 22px 26px; min-width: 230px;
+  }
+  .roles button:hover, .roles button:focus-visible { box-shadow: 4px 5px 0 #1f1e1c; transform: translate(-1px, -1px); outline: none; }
+  .roles .ri { display: block; font-size: 2.2rem; }
+  .rl-in { font: inherit; font-size: 1.05rem; width: 100%; padding: 8px 12px; margin: 6px 0; border: 2px solid #1f1e1c; border-radius: 10px; background: #fff; text-align: center; }
+  .rl-err { color: #b3261e; font-size: 0.95rem; min-height: 1.3em; margin: 4px 0; }
+  .role-sw { font: inherit; font-size: 0.85rem; background: none; border: none; color: #5f5a50; text-decoration: underline; cursor: pointer; margin-top: 10px; }
   .pv-link { font: inherit; background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; }
 </style>
 </head>
@@ -76,6 +93,14 @@
 <div class="wrap">
   <div class="hero"><h1>מתרגלים מתמטיקה</h1></div>
   <div class="sig">מאת <b>איריס סגל</b></div>
+  <section id="roleStep" hidden>
+    <h2>מי נכנס/ת?</h2>
+    <div class="roles">
+      <button type="button" id="rS"><span class="ri">🎒</span>אני תלמיד/ה / הורה</button>
+      <button type="button" id="rT"><span class="ri">👩‍🏫</span>אני מורה</button>
+    </div>
+  </section>
+  <section id="gradeStep">
   <h2>איזו רמת כיתה אתם מתרגלים?</h2>
   <nav class="grades" aria-label="בחירת כיתה">
     <a href="math6.html?grade=1" data-g="1" style="--c:#d9482b"><b>א'</b><span>כיתה א'</span></a>
@@ -86,8 +111,82 @@
     <a href="math6.html" data-g="6" style="--c:#7fa8d6"><b>ו'</b><span>כיתה ו'</span></a>
   </nav>
   <p class="note">האתר יזכור את הבחירה. אפשר להחליף כיתה בכל רגע – בראש הדף, ליד שם הכיתה.</p>
+  <button type="button" class="role-sw" id="roleSw">החלפה: תלמיד/ה / הורה או מורה</button>
+  </section>
   <div class="credit">© איריס סגל<br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></div>
 </div>
+<script>
+// כניסה: תלמיד/הורה או מורה, ואז השם
+(function () {
+  function hash(s) { var x = 0x811c9dc5; for (var i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 0x01000193) >>> 0; } return x.toString(16); }
+  function set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var roleStep = document.getElementById('roleStep'), gradeStep = document.getElementById('gradeStep');
+  var nm0 = ''; try { nm0 = localStorage.getItem('math-name') || ''; } catch (e) {}
+  // אחרי הבחירה: אם כבר נבחרה כיתה – ממשיכים אליה, אחרת בוחרים כיתה
+  function next() {
+    var g = null; try { g = localStorage.getItem('math-grade'); } catch (e) {}
+    var p = new URLSearchParams(location.search); p.delete('role');
+    if (!p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) {
+      if (g !== '6') p.set('grade', g);
+      var s = p.toString().replace(/=(&|$)/g, '$1');
+      location.replace('math6.html' + (s ? '?' + s : ''));
+      return;
+    }
+    roleStep.hidden = true; gradeStep.hidden = false;
+  }
+  function modal(html, wire) {
+    var ov = document.createElement('div');
+    ov.className = 'ct-ov';
+    ov.innerHTML = '<div class="ct-box" role="dialog" aria-modal="true">' + html + '</div>';
+    document.body.appendChild(ov);
+    wire(ov, function () { ov.remove(); });
+    var f = ov.querySelector('input'); if (f) setTimeout(function () { f.focus(); }, 50);
+  }
+  function student() {
+    modal('<h2>שלום! איך קוראים לך?</h2><div>כתבו <b>שם מלא</b> – שם פרטי ושם משפחה, כדי שהמורה תדע מי תרגל.</div>' +
+      '<input class="rl-in" id="sNm" maxlength="40" autocomplete="off" placeholder="שם פרטי ושם משפחה" value="' + esc(nm0) + '">' +
+      '<div class="rl-err" id="sErr"></div><div class="small" style="font-size:.85rem;color:#5f5a50">השם ובאילו פעילויות עבדתם נשמרים אצל המורה בלבד. לא חובה – אפשר ללחוץ "בלי שם".</div>' +
+      '<div class="ct-acts"><button type="button" class="ct-main" id="sOk">כניסה ←</button><button type="button" id="sSkip">בלי שם</button><button type="button" id="sBack">חזרה</button></div>',
+      function (ov, close) {
+        var inp = ov.querySelector('#sNm');
+        ov.querySelector('#sOk').onclick = function () {
+          var nm = inp.value.trim().replace(/\s+/g, ' ');
+          if (nm.split(' ').length < 2) { ov.querySelector('#sErr').textContent = 'כתבו גם שם משפחה 🙂'; inp.focus(); return; }
+          set('math-role', 's'); set('math-name', nm); close(); next();
+        };
+        ov.querySelector('#sSkip').onclick = function () { set('math-role', 's'); try { sessionStorage.setItem('math-noname', '1'); } catch (e) {} close(); next(); };
+        ov.querySelector('#sBack').onclick = close;
+        inp.onkeydown = function (e) { if (e.key === 'Enter') ov.querySelector('#sOk').click(); };
+      });
+  }
+  function teacher() {
+    modal('<h2>👩‍🏫 כניסת מורה</h2><div>כתבו את השם שלכם ואת קוד המורים שקיבלתם מאיריס.</div>' +
+      '<input class="rl-in" id="tNm" maxlength="40" autocomplete="off" placeholder="שם ושם משפחה" value="' + esc(nm0) + '">' +
+      '<input class="rl-in" id="tCode" type="password" inputmode="numeric" autocomplete="off" placeholder="קוד מורים">' +
+      '<div class="rl-err" id="tErr"></div>' +
+      '<div class="ct-acts"><button type="button" class="ct-main" id="tOk">כניסה ←</button><button type="button" id="tBack">חזרה</button></div>',
+      function (ov, close) {
+        var err = function (t) { ov.querySelector('#tErr').textContent = t; };
+        ov.querySelector('#tOk').onclick = function () {
+          var nm = ov.querySelector('#tNm').value.trim().replace(/\s+/g, ' '), code = ov.querySelector('#tCode').value.trim();
+          if (!nm) { err('כתבו את השם 🙂'); return; }
+          if (hash('staff:' + code) === '1a9e025e') set('math-staff-key', '1a9e025e');
+          else if (hash('math6:' + code) === '3d9bf467') set('math-teacher-key', '3d9bf467');
+          else if (hash('book:' + code) === 'e1050f14') set('math-book-key', 'e1050f14');
+          else { err('הקוד לא נכון.'); return; }
+          set('math-role', 't'); set('math-name', nm); close(); next();
+        };
+        ov.querySelector('#tBack').onclick = close;
+        ov.querySelector('#tCode').onkeydown = function (e) { if (e.key === 'Enter') ov.querySelector('#tOk').click(); };
+      });
+  }
+  document.getElementById('rS').onclick = student;
+  document.getElementById('rT').onclick = teacher;
+  document.getElementById('roleSw').onclick = function () { roleStep.hidden = false; gradeStep.hidden = true; };
+  if (!window.ROLE_OK) { roleStep.hidden = false; gradeStep.hidden = true; }
+})();
+</script>
 <script>
   // שומרים את הבחירה, ומעבירים הלאה גם פרמטרים נוספים (למשל ?print)
   var extra = new URLSearchParams(location.search); extra.delete('choose');
@@ -144,6 +243,7 @@
           <li>השם שכתבתם בכניסה (לא חובה – אפשר ללחוץ "בלי שם")</li>
           <li>הכיתה שבחרתם באתר</li>
           <li>באילו פעילויות עבדתם – שיעורים, תרגולים, משחקים – וכמה זמן</li>
+          <li>מורים שנכנסו עם קוד המורים – השם ובאילו פעילויות השתמשו. כרטיסי יציאה שמורה מריצה בכיתה שלה מוצגים רק על המסך ולא נשלחים</li>
           <li>אילו דפים הדפסתם או שמרתם</li>
           <li>בסיום תרגול, מבחן או כרטיס יציאה – כמה תשובות נכונות</li>
           <li>באימון הכפל – רק מי שהקליד את קוד הכיתה – גם ההתקדמות באימון</li>
