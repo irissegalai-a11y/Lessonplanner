@@ -1127,6 +1127,9 @@
   .mk-drawbar { margin-top: 2px; }
   .mk-claim { font-size: 1.15rem; font-weight: 700; margin: 8px 0; padding: 8px 12px; border-right: 4px solid #e2b357; background: rgba(239, 201, 106, 0.15); border-radius: 8px; }
   .qd-rem { margin: 6px 0 0; line-height: 1.8; }
+  .dcard { text-align: center; }
+  .dcard .mk-drawbar, .dcard .lbtns { justify-content: center; }
+  .dfb { margin-top: 6px; min-height: 1.4em; }
   .mk-opt:hover { background: rgba(127, 168, 214, 0.15); }
   .mk-on { font-size: 0.8rem; color: #777; min-width: 1em; }
   .mk-optfig svg { max-width: 170px; }
@@ -1194,7 +1197,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6518,6 +6521,7 @@ function lessonCheck(v, raw) {
 function startLessonPractice(id) {
   const L = LESSONS[id];
   lessonView = null;
+  if (L.customPractice) return L.customPractice();
   const topic = lessonTopic(L);
   startPractice(topic, { retry: lessonPractice(L).map(g => ({ topic, gen: g, lv: 3 })), label: `תרגול: ${L.name}`, lessonId: id });
 }
@@ -6560,7 +6564,7 @@ function masteryLabel(m) {
 const URLP = new URLSearchParams(location.search);
 const PRESET = (() => {
   const ln = URLP.get('learn');
-  if (ln && (LESSONS[ln] || (ln === 'composite' && GRADE >= 5) || (ln === 'mul22' && GRADE >= 4 && GRADE <= 6))) return { learn: ln }; // composite ו-mul22 מוגדרים בהמשך הקובץ
+  if (ln && (LESSONS[ln] || (ln === 'composite' && GRADE >= 5) || (ln === 'mul22' && GRADE >= 4 && GRADE <= 6) || (ln === 'draw' && GRADE >= 4 && GRADE <= 6))) return { learn: ln }; // composite ו-mul22 מוגדרים בהמשך הקובץ
   const t = URLP.get('topic');
   if (!t || !(TOPIC[t] || ['mix', 'test', 'testfb', 'sim'].includes(t))) return null;
   const lv = Number(URLP.get('level')), cnt = Number(URLP.get('count'));
@@ -6978,7 +6982,7 @@ const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: '�
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
-const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים)/;
+const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים|תרגול שרטוט)/;
 const ACT_IDLE = 60000, ACT_TAIL = 10000;
 let actCur = null, actPaused = null;
 function actTick() {
@@ -7118,6 +7122,7 @@ function home() {
             }).join('')}
           </div>
           <div class="practice-more">
+            ${GRADE >= 4 ? `<button id="drawGo">✏️ תרגול שרטוט<span class="desc">משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ושרטוט לפי אלכסונים</span></button>` : ''}
             ${GRADE >= 4 ? `<button id="quadGo">🔷 תרגול מרובעים<span class="desc">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span></button>` : ''}
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום – התוצאה נשלחת למורה</span></button>
@@ -7261,6 +7266,7 @@ function home() {
   $('sim').onclick = showSimPicker;
   if ($('mkGo')) $('mkGo').onclick = mkHome;
   if ($('quadGo')) $('quadGo').onclick = quadHome;
+  if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
   if ($('pathGo')) $('pathGo').onclick = () => pathHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
@@ -9734,13 +9740,14 @@ const mkSegKey = sg => sg.map(p => p.join(',')).sort().join('|');
 const mkSegsEq = (a, b) => a.length === b.length && b.every(sg => a.some(x => mkSegKey(x) === mkSegKey(sg)));
 function mkDraw(given, o = {}) {
   // שוליים של משבצת אחת מכל צד, כדי שהרשת לא "תסגיר" איפה הצורה נגמרת
-  const all = given.flat().concat((o.answer || []).flat(), o.pts || []), mx = Math.max(...all.map(p => p[0])) + 2, my = Math.max(...all.map(p => p[1])) + 2;
+  const all = given.flat().concat((o.answer || []).flat(), o.pts || [], (o.marks || []).map(m => m.p)), mx = Math.max(...all.map(p => p[0])) + 2, my = Math.max(...all.map(p => p[1])) + 2;
   const u = 30, pad = 18 + u, W = mx * u + 36, H = my * u + 36, X = p => pad + p[0] * u, Y = p => pad + p[1] * u;
   let s = '';
   for (let x = -1; x < mx; x++) s += `<line x1="${pad + x * u}" y1="${pad - u}" x2="${pad + x * u}" y2="${pad + (my - 1) * u}" stroke="#e1ddd3"/>`;
   for (let y = -1; y < my; y++) s += `<line x1="${pad - u}" y1="${pad + y * u}" x2="${pad + (mx - 1) * u}" y2="${pad + y * u}" stroke="#e1ddd3"/>`;
   given.forEach(([a, b]) => { s += `<line x1="${X(a)}" y1="${Y(a)}" x2="${X(b)}" y2="${Y(b)}" stroke="#111" stroke-width="3" stroke-linecap="round"/>`; });
   (o.answer || []).forEach(([a, b]) => { s += `<line x1="${X(a)}" y1="${Y(a)}" x2="${X(b)}" y2="${Y(b)}" stroke="#d9482b" stroke-width="3.5" stroke-dasharray="7 5" stroke-linecap="round"/>`; });
+  (o.marks || []).forEach(m => { s += `<circle cx="${X(m.p)}" cy="${Y(m.p)}" r="8" fill="${m.c}" opacity="0.85"/>`; });
   s += '<g class="mk-user"></g>';
   for (let x = -1; x < mx; x++) for (let y = -1; y < my; y++) {
     s += `<circle cx="${pad + x * u}" cy="${pad + y * u}" r="2.6" fill="#8a8373" pointer-events="none"/>`;
@@ -10407,19 +10414,7 @@ function mkView(i, mode) {
 }
 // משבצות לצביעה, צלעות ללחיצה, שנתות ללחיצה
 function mkWire() {
-  app.querySelectorAll('.mk-draw').forEach(svg => {
-    svg._segs = []; let sel = null;
-    const u = +svg.dataset.u, pad = +svg.dataset.pad, g = svg.querySelector('.mk-user'), C = v => pad + v * u;
-    const redraw = () => { g.innerHTML = svg._segs.map(([a, b]) => `<line x1="${C(a[0])}" y1="${C(a[1])}" x2="${C(b[0])}" y2="${C(b[1])}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`).join('') + (sel ? `<circle cx="${C(sel[0])}" cy="${C(sel[1])}" r="7" fill="#d9482b" opacity="0.6"/>` : ''); };
-    svg.querySelectorAll('.mk-dot').forEach(d => d.addEventListener('click', () => {
-      const p = [+d.dataset.x, +d.dataset.y];
-      if (!sel) { sel = p; redraw(); return; }
-      if (sel[0] !== p[0] || sel[1] !== p[1]) { const k = mkSegKey([sel, p]), i = svg._segs.findIndex(x => mkSegKey(x) === k); if (i >= 0) svg._segs.splice(i, 1); else svg._segs.push([sel, p]); }
-      sel = null; redraw();
-    }));
-    const clr = svg.closest('.mk-part') && svg.closest('.mk-part').querySelector('[data-clear]');
-    if (clr) clr.onclick = () => { svg._segs = []; sel = null; redraw(); };
-  });
+  drawWire(app);
   app.querySelectorAll('.mk-cell').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
   app.querySelectorAll('.mk-side').forEach(s => s.addEventListener('click', () => { const v = app.querySelector(`[data-sidec="${s.dataset.side}"]`); v.classList.toggle('on'); }));
   app.querySelectorAll('.mk-part').forEach(part => part.querySelectorAll('.mk-tickhit').forEach(t => t.addEventListener('click', () => {
@@ -10844,6 +10839,167 @@ function quadNext() {
     $('qdSame').onclick = () => { qdS.last = null; const keep = QDQ.find(x => x.t === q.t); const save = QDQ.slice(); QDQ.splice(0, QDQ.length, keep); quadNext(); QDQ.splice(0, QDQ.length, ...save); };
   };
   window.scrollTo(0, 0);
+}
+
+
+/* =========================================================
+   שרטוט בגאומטריה – כרטיסיות לימוד ותרגול שרטוט על לוח נקודות (כיתות ד'–ו')
+   ========================================================= */
+const dvSub = (a, b) => [a[0] - b[0], a[1] - b[1]];
+const dvCross = (u, v) => u[0] * v[1] - u[1] * v[0];
+const dvDot = (u, v) => u[0] * v[0] + u[1] * v[1];
+const dvEq = (a, b) => a[0] === b[0] && a[1] === b[1];
+// מהקטעים (נתונים + משורטטים) – מצולע סגור אחד? מחזיר את הקודקודים לפי הסדר, או null
+function dvCycle(segs) {
+  const adj = {}, key = p => p.join(',');
+  for (const [a, b] of segs) { if (dvEq(a, b)) return null; (adj[key(a)] = adj[key(a)] || []).push(b); (adj[key(b)] = adj[key(b)] || []).push(a); }
+  const ks = Object.keys(adj);
+  if (ks.some(k => adj[k].length !== 2)) return null;
+  const start = ks[0].split(',').map(Number), out = [start];
+  let prev = null, cur = start;
+  for (;;) {
+    const nx = adj[key(cur)].find(p => !prev || !dvEq(p, prev)) || adj[key(cur)][0];
+    if (dvEq(nx, start)) break;
+    if (out.some(p => dvEq(p, nx))) return null;
+    out.push(nx); prev = cur; cur = nx;
+  }
+  return out.length === ks.length ? out : null;
+}
+const dvRightAt = (P, i) => { const n = P.length, a = P[(i + n - 1) % n], b = P[i], c = P[(i + 1) % n]; return dvDot(dvSub(a, b), dvSub(c, b)) === 0; };
+// חיבור לוח השרטוט (לחיצות על נקודות) בתוך אזור נתון
+function drawWire(root) {
+  root.querySelectorAll('.mk-draw').forEach(svg => {
+    if (svg._wired) return; svg._wired = true;
+    svg._segs = []; let sel = null;
+    const u = +svg.dataset.u, pad = +svg.dataset.pad, g = svg.querySelector('.mk-user'), C = v => pad + v * u;
+    const redraw = () => { g.innerHTML = svg._segs.map(([a, b]) => `<line x1="${C(a[0])}" y1="${C(a[1])}" x2="${C(b[0])}" y2="${C(b[1])}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`).join('') + (sel ? `<circle cx="${C(sel[0])}" cy="${C(sel[1])}" r="7" fill="#d9482b" opacity="0.6"/>` : ''); };
+    svg.querySelectorAll('.mk-dot').forEach(d => d.addEventListener('click', () => {
+      const p = [+d.dataset.x, +d.dataset.y];
+      if (!sel) { sel = p; redraw(); return; }
+      if (!dvEq(sel, p)) { const k = mkSegKey([sel, p]), i = svg._segs.findIndex(x => mkSegKey(x) === k); if (i >= 0) svg._segs.splice(i, 1); else svg._segs.push([sel, p]); }
+      sel = null; redraw();
+    }));
+    const box = svg.closest('.mk-part'), clr = box && box.querySelector('[data-clear]');
+    if (clr) clr.onclick = () => { svg._segs = []; sel = null; redraw(); };
+  });
+}
+// קטע שמתחיל בנקודה S וכיוונו מקיים תנאי
+const dvFrom = (segs, S, ok) => segs.length === 1 && segs[0].some(p => dvEq(p, S)) && (() => { const E = dvEq(segs[0][0], S) ? segs[0][1] : segs[0][0]; return ok(dvSub(E, S)); })();
+const DV_DIRS = [[3, 0], [0, 2], [2, 1], [1, 2], [3, 1], [2, -1], [1, -2], [2, 2], [3, -1]];
+const DRQ = [
+  { t: 'קו מקביל', g() {
+    const v = pick(DV_DIRS), P = [1, v[1] < 0 ? 3 : 1], Q = [P[0] + v[0], P[1] + v[1]], S = [P[0] + R(0, 1), P[1] + (v[1] === 0 ? 2 : 0) + (v[0] === 0 ? 0 : 0)];
+    if (v[0] === 0) { S[0] = P[0] + 2; S[1] = P[1]; } else if (v[1] !== 0) { S[0] = P[0] + 3; S[1] = P[1]; }
+    const ex = [S, [S[0] + v[0], S[1] + v[1]]];
+    return { q: `סרטטו קטע <b>מקביל</b> לקטע השחור, שמתחיל בנקודה הירוקה.`, parts: [{ l: '', k: 'draw', a: [ex], fig: () => mkDraw([[P, Q]], { click: true, marks: [{ p: S, c: '#2c7a5b' }], pts: [ex[1], [S[0] + 2 * v[0], S[1] + 2 * v[1]]].filter(p => p[0] >= 0 && p[1] >= 0) }), check: segs => dvFrom(segs, S, w => dvCross(w, v) === 0 && (w[0] || w[1])), show: `למשל:${mkDraw([[P, Q]], { answer: [ex], marks: [{ p: S, c: '#2c7a5b' }] })}` }],
+      steps: [`סופרים בקטע השחור: ${Math.abs(v[0])} משבצות ${v[0] >= 0 ? 'ימינה' : 'שמאלה'}${v[1] ? ` ו-${Math.abs(v[1])} ${v[1] > 0 ? 'למטה' : 'למעלה'}` : ''}.`, 'מהנקודה הירוקה עושים <b>בדיוק אותו דבר</b> – ומחברים.', 'קווים מקבילים הולכים באותו כיוון ולא נפגשים לעולם.'] };
+  } },
+  { t: 'קו מאונך', g() {
+    const v = pick(DV_DIRS), P = [2, 3], Q = [P[0] + v[0], P[1] + v[1]], S = Math.random() < 0.5 ? P : Q, w = [-v[1], v[0]], ex = [S, [S[0] + w[0], S[1] + w[1]]];
+    return { q: `סרטטו קטע <b>מאונך</b> לקטע השחור, שיוצא מהנקודה הירוקה.`, parts: [{ l: '', k: 'draw', a: [ex], fig: () => mkDraw([[P, Q]], { click: true, marks: [{ p: S, c: '#2c7a5b' }], pts: [[S[0] + w[0], S[1] + w[1]], [S[0] - w[0], S[1] - w[1]]].map(p => [Math.max(0, p[0]), Math.max(0, p[1])]) }), check: segs => dvFrom(segs, S, u2 => dvDot(u2, v) === 0 && (u2[0] || u2[1])), show: `למשל:${mkDraw([[P, Q]], { answer: [ex], marks: [{ p: S, c: '#2c7a5b' }] })}` }],
+      steps: ['קו מאונך יוצר <b>זווית ישרה</b> (90°) עם הקו השחור.', v[0] && v[1] ? `הקו השחור: ${Math.abs(v[0])} לצד ו-${Math.abs(v[1])} למעלה/למטה. במאונך <b>מחליפים</b> את המספרים: ${Math.abs(v[1])} לצד ו-${Math.abs(v[0])} למעלה/למטה – ו<b>הופכים</b> כיוון אחד.` : 'קו אופקי ← המאונך לו אנכי (ישר למעלה או למטה), וקו אנכי ← המאונך לו אופקי.', 'בדיקה: אפשר להניח פינה של דף בין שני הקווים – היא צריכה להתאים בדיוק.'] };
+  } },
+  { t: 'גובה במשולש', g() {
+    const b2 = R(3, 5), h2 = R(2, 4), o2 = Math.random() < .5 ? R(1, b2 - 1) : b2 + R(1, 2), A2 = [0, h2], B2 = [b2, h2], T2 = [o2, 0], foot = [o2, h2];
+    const tri2 = [[A2, B2], [B2, T2], [T2, A2]], hgt = [T2, foot], ext = o2 > b2 ? [[B2, foot]] : [];
+    return { q: `סרטטו את <b>הגובה</b> מהקודקוד העליון אל הצלע התחתונה${o2 > b2 ? ' (שימו לב: אולי צריך להמשיך את הצלע)' : ''}.`, parts: [{ l: '', k: 'draw', a: [hgt, ...ext], fig: () => mkDraw(tri2, { click: true }), check: segs => segs.some(sg => mkSegKey(sg) === mkSegKey(hgt)) && segs.every(sg => mkSegKey(sg) === mkSegKey(hgt) || (sg[0][1] === h2 && sg[1][1] === h2)), show: mkDraw(tri2, { answer: [hgt, ...ext] }) }],
+      steps: ['גובה יוצא מ<b>קודקוד</b> ומגיע לצלע שמולו <b>בזווית ישרה</b>.', 'כשהצלע אופקית – הגובה הוא קו אנכי, ישר למטה.', 'אם הקודקוד "בחוץ" – ממשיכים את הצלע (בקו), והגובה נופל על ההמשך.'] };
+  } },
+  { t: 'משולש ישר-זווית', g() {
+    const v = pick([[4, 0], [0, 3], [2, 1], [3, 0]]), A = [1, 1], B = [A[0] + v[0], A[1] + v[1]], w = [-v[1], v[0]];
+    const C2 = [B[0] + w[0], B[1] + w[1]], Cc = C2[0] >= 0 && C2[1] >= 0 ? C2 : [B[0] - w[0], B[1] - w[1]];
+    const ex = [[B, Cc], [Cc, A]];
+    return { q: 'הקטע השחור הוא צלע של משולש. השלימו אותו ל<b>משולש ישר-זווית</b> (סרטטו את שתי הצלעות החסרות).', parts: [{ l: '', k: 'draw', a: ex, fig: () => mkDraw([[A, B]], { click: true, pts: [Cc, [A[0] + 3, A[1] + 3]] }), check: segs => { if (segs.length !== 2) return false; const P = dvCycle([[A, B], ...segs]); return !!P && P.length === 3 && P.some((p, i) => dvRightAt(P, i)); }, show: `למשל:${mkDraw([[A, B]], { answer: ex })}<div class="small muted">יש עוד הרבה תשובות נכונות – העיקר שתהיה זווית ישרה.</div>` }],
+      steps: ['משולש ישר-זווית = יש בו זווית של 90°.', 'מאחד מקצות הקטע מסרטטים קו <b>מאונך</b> לו (על הרשת – אופקי ↔ אנכי, או "מחליפים והופכים" באלכסון).', 'סוגרים את המשולש – מחברים בחזרה לקצה השני.'] };
+  } },
+  { t: 'מלבן מצלע נתונה', g() {
+    const v = pick([[4, 0], [0, 3], [2, 1], [5, 0]]), A = [1, 1], B = [A[0] + v[0], A[1] + v[1]], k = R(2, 3);
+    let W = v[0] && v[1] ? [-v[1], v[0]] : v[0] ? [0, k] : [k, 0];
+    if (A[0] + W[0] < 0 || A[1] + W[1] < 0 || B[0] + W[0] < 0 || B[1] + W[1] < 0) W = [-W[0], -W[1]];
+    const Cq = [B[0] + W[0], B[1] + W[1]], D = [A[0] + W[0], A[1] + W[1]], ex = [[B, Cq], [Cq, D], [D, A]];
+    return { q: 'הקטע השחור הוא צלע של <b>מלבן</b>. השלימו את המלבן (אפשר לבחור את אורך הצלע השנייה).', parts: [{ l: '', k: 'draw', a: ex, fig: () => mkDraw([[A, B]], { click: true, pts: [Cq, D, [B[0] + 1, B[1] + 3]] }), check: segs => { if (segs.length !== 3) return false; const P = dvCycle([[A, B], ...segs]); return !!P && P.length === 4 && P.every((p, i) => dvRightAt(P, i)); }, show: `למשל:${mkDraw([[A, B]], { answer: ex })}` }],
+      steps: ['במלבן כל 4 הזוויות ישרות.', 'מכל קצה של הצלע הנתונה מסרטטים קו <b>מאונך</b> – שני הקווים באותו אורך.', 'מחברים את הקצוות – הצלע הרביעית מקבילה ושווה לצלע הנתונה.'] };
+  } }
+];
+function drawPracticeList() {
+  const pickQ = t => QDQ.find(x => x.t === t);
+  return DRQ.concat([pickQ('השלימו את המרובע'), pickQ('שרטוט לפי אלכסונים'), pickQ('סרטטו טרפז')].filter(Boolean));
+}
+let drS = { n: 0, ok: 0 };
+function drawPracticeHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('draw');
+  drS = { n: 0, ok: 0 };
+  track('תרגול שרטוט');
+  drawNext();
+}
+function drawNext(onlyT) {
+  const L = drawPracticeList(), L2 = L.filter(x => x.t !== drS.last), Q = onlyT ? L.find(x => x.t === onlyT) : pick(L2.length ? L2 : L), q = mkGender(Object.assign({ t: Q.t }, Q.g()));
+  drS.last = Q.t; drS.n++;
+  mkS = { all: false, i: 0, mode: 'practice', q };
+  app.innerHTML = `
+    <div class="topbar"><span class="title">✏️ תרגול שרטוט</span><button class="secondary" id="drHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="card mk-card"><div class="mk-topic">${q.t} · שאלה ${drS.n}${drS.n > 1 ? ` · נכונות עד עכשיו: ${drS.ok}` : ''}</div>${mkQHTML(q, 'practice', drS.n).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}
+      <div class="mk-steps hidden" id="mkExp"><h4>💡 איך משרטטים?</h4><ol>${q.steps.map(s => `<li>${s}</li>`).join('')}</ol></div>
+      <div class="mk-msg" id="mkMsg"></div>
+      <div class="actions" id="drActs"><button id="drCheck">${ic('check')} בדיקה</button><button class="secondary" id="drHint">💡 רמז</button><button class="ghost" id="drLearn">📚 לכרטיסיות הלימוד</button></div></div>`;
+  $('drHomeB').onclick = home;
+  $('drLearn').onclick = () => openLessonModal('draw', 0);
+  $('drHint').onclick = () => $('mkExp').classList.toggle('hidden');
+  mkWire();
+  $('drCheck').onclick = () => {
+    const r = mkCheck();
+    if (r.miss) { $('mkExp').classList.add('hidden'); $('mkMsg').innerHTML = '✋ סרטטו קודם, ואז לחצו "בדיקה".'; return; }
+    if (r.ok === r.tot) drS.ok++;
+    $('drActs').innerHTML = `<button id="drNext">לשאלה הבאה ←</button><button class="secondary" id="drSame">${ic('retry')} עוד שאלה מאותו סוג</button>`;
+    $('drNext').onclick = () => drawNext();
+    $('drSame').onclick = () => drawNext(q.t);
+  };
+  window.scrollTo(0, 0);
+}
+// כרטיסייה עם לוח שרטוט ובדיקה
+function drawCard(given, o, check, okMsg, hint) {
+  return {
+    html: `<div class="mk-part dcard">${mkDraw(given, Object.assign({ click: true }, o))}<div class="mk-drawbar"><button type="button" class="ghost" data-clear>↺ ניקוי</button> <span class="small muted">לוחצים על נקודה ואז על נקודה אחרת.</span></div>
+      <div class="lbtns"><button class="secondary" data-dcheck>✔ בדיקה</button><button class="ghost" data-dshow>הראו לי</button></div><div class="dfb" data-dfb></div></div>`,
+    setup(root) {
+      drawWire(root);
+      const sv = root.querySelector('.mk-draw'), fb = root.querySelector('[data-dfb]');
+      root.querySelector('[data-dcheck]').onclick = () => { const sg = sv._segs || []; fb.innerHTML = !sg.length ? '✋ עוד לא סרטטתם.' : check(sg) ? `<span class="mk-ok">✔ נכון!</span> ${okMsg}` : `<span class="mk-bad">✘ עוד לא.</span> ${hint}`; };
+      root.querySelector('[data-dshow]').onclick = () => { fb.innerHTML = `${mkDraw(given, Object.assign({}, o, { answer: o.answer }))}`; };
+    }
+  };
+}
+if (GRADE >= 4 && GRADE <= 6) {
+  const T1 = [[1, 1], [5, 1]], S1 = [2, 3];
+  const c1 = drawCard([], { marks: [{ p: [1, 2], c: '#2c7a5b' }, { p: [5, 4], c: '#e0703a' }], answer: [[[1, 2], [5, 4]]], pts: [[6, 5]] }, sg => sg.length === 1 && mkSegKey(sg[0]) === mkSegKey([[1, 2], [5, 4]]), 'ככה משרטטים קטע.', 'לחצו על הנקודה הירוקה, ואז על הכתומה.');
+  const vP = [2, 1], c2 = drawCard([[[1, 1], [3, 2]]], { marks: [{ p: [1, 3], c: '#2c7a5b' }], answer: [[[1, 3], [3, 4]]], pts: [[6, 5]] }, sg => dvFrom(sg, [1, 3], w => dvCross(w, vP) === 0 && (w[0] || w[1])), 'הקטעים מקבילים – אותו כיוון בדיוק.', 'סופרים בקטע השחור: 2 ימינה ו-1 למטה. עושים אותו דבר מהנקודה הירוקה.');
+  const c3 = drawCard([[[1, 3], [4, 3]]], { marks: [{ p: [2, 3], c: '#2c7a5b' }], answer: [[[2, 3], [2, 1]]], pts: [[5, 5]] }, sg => dvFrom(sg, [2, 3], w => dvDot(w, [3, 0]) === 0 && (w[0] || w[1])), 'קו אנכי מאונך לקו אופקי.', 'הקו השחור אופקי – לכן המאונך לו הולך ישר למעלה או ישר למטה.');
+  const c3b = drawCard([[[1, 3], [3, 2]]], { marks: [{ p: [3, 2], c: '#2c7a5b' }], answer: [[[3, 2], [4, 4]]], pts: [[5, 5]] }, sg => dvFrom(sg, [3, 2], w => dvDot(w, [2, -1]) === 0 && (w[0] || w[1])), 'החלפתם את המספרים והפכתם כיוון – בדיוק!', 'בקו השחור: 2 ימינה ו-1 למעלה. במאונך: 1 ימינה ו-2 למטה (או 1 שמאלה ו-2 למעלה).');
+  const tri = [[[0, 3], [3, 3]], [[3, 3], [5, 0]], [[5, 0], [0, 3]]];
+  const c4 = drawCard(tri, { answer: [[[5, 0], [5, 3]], [[3, 3], [5, 3]]] }, sg => sg.some(s => mkSegKey(s) === mkSegKey([[5, 0], [5, 3]])) && sg.every(s => mkSegKey(s) === mkSegKey([[5, 0], [5, 3]]) || (s[0][1] === 3 && s[1][1] === 3)), 'הגובה נפל על <b>המשך</b> הצלע – כמו שצריך.', 'הקודקוד העליון "בחוץ". ממשיכים את הצלע התחתונה ימינה, ומורידים קו אנכי מהקודקוד.');
+  const pg = [[[1, 3], [5, 3]], [[5, 3], [6, 1]]];
+  const c5 = drawCard(pg, { answer: [[[6, 1], [2, 1]], [[2, 1], [1, 3]]], pts: [[7, 4]] }, sg => mkSegsEq(sg, [[[6, 1], [2, 1]], [[2, 1], [1, 3]]]), 'זו מקבילית – כל צלע מקבילה ושווה לצלע שמולה.', 'הצלע התחתונה 4 משבצות. גם הצלע העליונה 4 משבצות, באותו כיוון. מוצאים את הקודקוד הרביעי.');
+  const dg = [[[0, 2], [6, 2]], [[3, 0], [3, 4]]];
+  const c6 = drawCard(dg, { answer: [[[0, 2], [3, 0]], [[3, 0], [6, 2]], [[6, 2], [3, 4]], [[3, 4], [0, 2]]] }, sg => mkSegsEq(sg, [[[0, 2], [3, 0]], [[3, 0], [6, 2]], [[6, 2], [3, 4]], [[3, 4], [0, 2]]]), 'יצא מעוין – האלכסונים מאונכים וחוצים זה את זה.', 'מחברים כל קצה של אלכסון אחד לשני הקצוות של האלכסון השני.');
+  Object.assign(LESSONS, {
+    draw: {
+      id: 'draw', name: 'שרטוט בגאומטריה', icon: '✏️', color: '#2f8f55', topic: 'geo', customPractice: drawPracticeHome,
+      desc: 'משרטטים על לוח נקודות: קטע, מקביל, מאונך, גובה, ומרובעים לפי צלעות ואלכסונים',
+      practice: [],
+      cards: [
+        { title: 'משרטטים על לוח נקודות', html: `<p>לוח הנקודות הוא כמו דף משבצות. <b>לוחצים על נקודה, ואז על נקודה אחרת – ונוצר קו.</b> לחיצה שוב על אותן שתי נקודות מוחקת אותו, ו"ניקוי" מוחק הכול.</p><p><b>נסו:</b> סרטטו קטע מהנקודה הירוקה לנקודה הכתומה.</p>${c1.html}`, setup: c1.setup },
+        { title: 'קווים מקבילים', html: `<p><b>מקבילים</b> = הולכים באותו כיוון, ולא נפגשים לעולם (כמו פסי רכבת).</p><div class="rule">💡 על הרשת: סופרים בקו הנתון כמה משבצות <b>לצד</b> וכמה <b>למעלה/למטה</b> – ועושים בדיוק אותו דבר מהנקודה החדשה.</div><p><b>נסו:</b> סרטטו מהנקודה הירוקה קטע מקביל לקטע השחור.</p>${c2.html}`, setup: c2.setup },
+        { title: 'קווים מאונכים', html: `<p><b>מאונכים</b> = נפגשים ב<b>זווית ישרה</b> (90°), כמו פינה של דף.</p><div class="rule">💡 קו אופקי ↔ המאונך לו אנכי.</div><p><b>נסו:</b> מהנקודה הירוקה סרטטו קטע מאונך לקו השחור.</p>${c3.html}`, setup: c3.setup },
+        { title: 'מאונך לקו אלכסוני', html: `<div class="rule">💡 קו שהולך <b>2 ימינה ו-1 למעלה</b> ← המאונך לו הולך <b>1 ימינה ו-2 למטה</b>: <b>מחליפים</b> את המספרים ו<b>הופכים</b> כיוון אחד.</div><p><b>נסו:</b> מהנקודה הירוקה (קצה הקטע) סרטטו קטע מאונך.</p>${c3b.html}`, setup: c3b.setup },
+        { title: 'גובה במשולש', html: `<p><b>גובה</b> יוצא מ<b>קודקוד</b> ומגיע לצלע שמולו <b>בזווית ישרה</b>. כשהצלע אופקית – הגובה אנכי.</p><div class="rule">⚠️ במשולש "נוטה" הגובה נופל <b>מחוץ</b> למשולש – על <b>המשך</b> הצלע.</div><p><b>נסו:</b> סרטטו את הגובה מהקודקוד העליון לצלע התחתונה.</p>${c4.html}`, setup: c4.setup },
+        { title: 'משלימים מקבילית', html: `<p>במקבילית כל צלע <b>מקבילה ושווה</b> לצלע שמולה. לכן אם יש שתי צלעות – אפשר למצוא את הקודקוד הרביעי.</p><p><b>נסו:</b> השלימו את המקבילית.</p>${c5.html}`, setup: c5.setup },
+        { title: 'מרובע לפי אלכסונים', html: `<p>מחברים כל קצה של אלכסון אחד לשני הקצוות של האלכסון השני – ומקבלים 4 צלעות.</p><ul class="recap"><li>אלכסונים מאונכים וחוצים זה את זה ← <b>מעוין</b></li><li>מאונכים, ורק אחד חוצה ← <b>דלתון</b></li><li>שווים וחוצים זה את זה ← <b>מלבן</b></li></ul><p><b>נסו:</b> סרטטו את צלעות המרובע.</p>${c6.html}`, setup: c6.setup },
+        { title: 'כללים לזכור 📌', html: `<ul class="recap"><li><b>מקביל:</b> אותו מספר משבצות לצד ולמעלה/למטה.</li><li><b>מאונך:</b> אופקי ↔ אנכי; באלכסון – מחליפים את המספרים והופכים כיוון.</li><li><b>גובה:</b> מקודקוד, בזווית ישרה לצלע שמולו (או להמשך שלה).</li><li><b>מקבילית:</b> צלעות נגדיות מקבילות ושוות.</li><li><b>טרפז:</b> זוג אחד בלבד של צלעות מקבילות.</li><li><b>לפי אלכסונים:</b> מחברים קצה לקצה.</li></ul>` }
+      ]
+    }
+  });
+  const gi2 = LESSON_ORDER.indexOf('geo');
+  LESSON_ORDER.splice(gi2 >= 0 ? gi2 + 1 : LESSON_ORDER.length, 0, 'draw');
 }
 
 /* =========================================================
