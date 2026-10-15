@@ -22,6 +22,8 @@
       // נכנסים ישר רק מי שכבר בחר/ה: תלמיד/הורה או מורה (עם קוד)
       ok = L('math-book-key') === 'e1050f14' || L('math-teacher-key') === '3d9bf467' || L('math-role') === 's' || (L('math-role') === 't' && L('math-staff-key') === '1a9e025e');
     } catch (e) { ok = true; }
+    // ?role – תמיד מציגים את הבחירה: תלמיד/הורה או מורה
+    if (p.has('role')) ok = false;
     window.ROLE_OK = ok;
     if (ok && !p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) {
       if (g !== '6') p.set('grade', g);
