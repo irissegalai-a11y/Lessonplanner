@@ -185,7 +185,7 @@
         var MAIL = ['iris.segal.ai', 'gmail.com'].join('@');
         ov.querySelector('#tReq').onclick = function () {
           var nm = ov.querySelector('#tNm').value.trim();
-          var body = 'שלום איריס,\n\nשמי ' + (nm || '_____') + ', אני מורה ב_____ (בית ספר), ומלמד/ת כיתות _____.\nאשמח לקבל את קוד המורים לאתר "מתרגלים מתמטיקה".\n\nתודה!';
+          var body = 'שלום איריס,\n\nשמי ' + (nm || '_____') + ', אני מורה ב_____ (בית ספר), ומלמד/ת כיתות _____.\nכתובת המייל שלי: _____\nאשמח לקבל את קוד המורים לאתר "מתרגלים מתמטיקה".\n\nתודה!';
           location.href = 'mailto:' + MAIL + '?subject=' + encodeURIComponent('בקשת קוד מורים – מתרגלים מתמטיקה') + '&body=' + encodeURIComponent(body);
           var m = ov.querySelector('#tMail'); m.textContent = MAIL; m.hidden = false;
           ov.querySelector('#tNote').textContent = 'אם לא נפתח מייל – אפשר לכתוב לכתובת הזו.';
