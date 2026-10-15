@@ -1059,6 +1059,9 @@
   .gswitch { display: inline-flex; align-items: center; gap: 8px; color: #1f1e1c; background: #fffdf8; font-weight: 700; font-size: 1.2rem; text-decoration: none; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; padding: 8px 18px; box-shadow: 3px 4px 0 #1f1e1c; font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; }
   .gswitch:hover, .gswitch:focus-visible { background: #fff; transform: translate(-1px, -1px); box-shadow: 4px 5px 0 #1f1e1c; outline: none; }
   .gswitch svg { width: 22px; height: 22px; }
+  .pvw-btn { font: inherit; font-size: 0.95rem; font-weight: 600; color: #1f1e1c; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; }
+  .pvw-btn:hover, .pvw-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
+  .pvw-bar { font-size: 0.95rem; background: #fff4c7; border: 2px dashed #1f1e1c; border-radius: 10px; padding: 6px 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .navhome { border: 2px solid var(--ink) !important; border-radius: var(--sk1, 12px) !important; background: var(--card, #fff) !important; padding: 6px 14px !important; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   /* איורים בקו יד */
   .ico { width: 1.15em; height: 1.15em; vertical-align: -0.2em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
@@ -1208,7 +1211,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ע</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7092,7 +7095,7 @@ function home() {
       <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
     <div class="subtitle">${SUBTITLE}</div>
-    ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a></div>`}
+    ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${teacherOn() ? '<button type="button" class="pvw-btn" id="pvwOn">👀 תצוגת תלמיד</button>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
     ${PRESET ? `<div class="card banner today">
       <div><div class="today-k">הוכן בשבילך</div><div class="today-t">${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div></div>
       <button id="presetGo">התחילו ←</button>
@@ -7262,6 +7265,8 @@ function home() {
   $('milGo').onclick = () => milHome();
   $('cityGo').onclick = () => cityHome();
   $('gbGo').onclick = gbHome;
+  if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
+  if ($('pvwOff')) $('pvwOff').onclick = () => setPreview(false);
   if ($('exitGo2')) {
     $('exitGo2').onclick = exitHome;
     $('clsOpen').onclick = () => classSub('open');
@@ -12265,9 +12270,12 @@ const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return 
 function irisOk() { return lsGet('math-book-key') === BOOK_HASH || lsGet('math-teacher-key') === '3d9bf467'; }
 // מורה אחרת שהקלידה את קוד המורים
 function staffOn() { return !irisOk() && lsGet('math-role') === 't' && lsGet('math-staff-key') === STAFF_HASH; }
-// מי שבחר/ה "תלמיד/הורה" רואה את אתר התלמידים – גם במכשיר של איריס (תצוגה מקדימה, בלי מעקב)
-function teacherOn() { return lsGet('math-role') !== 's' && (irisOk() || staffOn()); }
-function roleOk() { return teacherOn() || lsGet('math-role') === 's'; }
+// יש במכשיר קוד מורה (של איריס או קוד המורים)
+function teacherCred() { return irisOk() || staffOn(); }
+// מורה רואה את אתר המורים – אלא אם בחר/ה "תלמיד/הורה" או עבר/ה ל"תצוגת תלמיד"
+function teacherOn() { return teacherCred() && lsGet('math-role') !== 's' && lsGet('math-preview') !== '1'; }
+function setPreview(on) { try { if (on) localStorage.setItem('math-preview', '1'); else { localStorage.removeItem('math-preview'); localStorage.setItem('math-role', 't'); } } catch (e) { /* לא חובה */ } homeTab = 'practice'; home(); }
+function roleOk() { return teacherCred() || lsGet('math-role') === 's'; }
 // חוברות והדפסה בלי הגבלה – לאיריס ולמורות
 function bookOk() { return teacherOn(); }
 const BOOK_ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -12848,7 +12856,7 @@ function askName(done) {
   try { noName = !!sessionStorage.getItem('math-noname'); } catch (e) { /* לא חובה */ }
   if (!roleOk() && !URLP.has('kefel')) { setTimeout(() => askRole(logVisit), 300); return; }
   if (!first) return;
-  if (!teacherOn() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
+  if (!teacherCred() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
 if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else home();
 </script>

@@ -187,6 +187,9 @@
   document.getElementById('rT').onclick = teacher;
   document.getElementById('roleSw').onclick = function () { roleStep.hidden = false; gradeStep.hidden = true; };
   if (!window.ROLE_OK) { roleStep.hidden = false; gradeStep.hidden = true; }
+  // ההחלפה בין תלמיד למורה – רק במכשיר שיש בו קוד מורה. תלמידים לא רואים אותה
+  var L = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  if (!(L('math-book-key') === 'e1050f14' || L('math-teacher-key') === '3d9bf467' || L('math-staff-key') === '1a9e025e')) document.getElementById('roleSw').hidden = true;
 })();
 </script>
 <script>
