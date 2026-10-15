@@ -1096,7 +1096,24 @@
   .sc-ql li.w { font-size: 0.74rem; line-height: 1.3; }
   .sc-ql li.w .fr { font-size: 0.85em; }
   .sc-ql.n3 li.w, .sc-ql.n4 li.w { font-size: 0.9rem; line-height: 1.45; }
-  .sc-ql li.t { font-size: 0.95rem; line-height: 1.4; }
+  .sc-ql li.t { font-size: 0.9rem; line-height: 1.35; }
+  .sc-mk { font-size: 0.85rem; line-height: 1.35; }
+  .sc-mk .mkq { margin: 0; padding: 0; border: 0; }
+  .sc-mk .mk-figbox { margin: 2px 0; text-align: center; }
+  .sc-mk svg, .sc-mk .mk-fig { max-height: 23mm; width: auto !important; max-width: 100%; }
+  .sc-mk .mk-opts { display: flex; flex-wrap: wrap; gap: 2px 10px; margin: 2px 0; }
+  .sc-mk .mk-opt { display: inline-flex; align-items: center; gap: 3px; }
+  .sc-mk .mk-opt .ex-check { width: 12px; height: 12px; }
+  .sc-mk .mk-opt { font-size: 0.8rem; }
+  .sc-mk.key svg { max-height: 30mm; }
+  .sc-mk.sm svg { max-height: 120px; }
+  .sc-quarters.halves { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .sc-quarters.halves .sc-ql { flex-direction: row; align-items: flex-start; gap: 18px; }
+  .sc-quarters.halves .sc-ql > li { flex: 1 1 0; min-width: 0; }
+  .sc-quarters.halves .sc-mk svg, .sc-quarters.halves .sc-mk .mk-fig { max-height: 46mm; }
+  .sc-mk { font-size: 0.82rem; }
+  @media screen and (max-width: 640px) { .sc-quarters.halves .sc-ql { flex-direction: column; } }
+  .sc-mkcard .mk-figbox svg { max-width: 100%; }
   .sc-ql:has(li.w) { gap: 4px; margin: 4px 0; }
   /* בהדפסה: 4 רבעים בעמוד אחד בדיוק. במסך – כל רבע בגובה הטבעי שלו */
   @media print { .sc-page:not(.wskey) .sc-quarter { overflow: hidden; } .sc-page:not(.wskey) .sc-quarters { height: 260mm; min-height: 0; } }
@@ -1292,7 +1309,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12955,7 +12972,7 @@ const SC_WORD = {
 // לכל מיומנות: גם סוג השאלות
 const SC_LV = { k: 'lv', type: 'radio', label: 'רמה', o: [['1', 'קלה'], ['2', 'בינונית'], ['3', 'מאתגרת'], ['g', 'מהקל לקשה']] };
 const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', '5 תרגילים'], ['one', '4 תרגילים + שאלה מילולית'], ['one3', '3 תרגילים + שאלה מילולית'], ['word', '3 שאלות מילוליות']] };
-const scOpts = S => S.opts.concat([SC_LV, SC_WQ]);
+const scOpts = S => S.opts.concat(S.noLv ? [] : [SC_LV], S.noWq ? [] : [SC_WQ]);
 // ---- תחומים נוספים למבדקי ההצלחה ----
 const scHe = A => ({ he: scVb(A, 'הוא', 'היא'), got: scVb(A, 'קיבל', 'קיבלה'), gave: scVb(A, 'נתן', 'נתנה'), bought: scVb(A, 'קנה', 'קנתה'), paid: scVb(A, 'שילם', 'שילמה'), ran: scVb(A, 'רץ', 'רצה'), read: scVb(A, 'קרא', 'קראה'), ans: scVb(A, 'ענה', 'ענתה'), ate: scVb(A, 'אכל', 'אכלה') });
 const SC_THINGS = ['מדבקות', 'גולות', 'קלפים', 'סוכריות', 'בולים'];
@@ -13025,7 +13042,7 @@ const SC_MORE = {
       gen: p => scIx().map(i => { const k = p.by[i % p.by.length]; return scTry(() => { const len = i < 2 ? 3 : 4, s = String(R(10 ** (len - 1), 10 ** len - 1)).split(''), j = [2, 4, 5, 10].includes(k) ? len - 1 : R(0, len - 1);
           const from = j === 0 ? 1 : 0; let d = -1; for (let x = from; x <= 9; x++) { s[j] = x; if (Number(s.join('')) % k === 0) { d = x; break; } }
           const pre = s.slice(0, j).join(''), post = s.slice(j + 1).join('');
-          return { x: [{ t: `מה הספרה הקטנה ביותר שאפשר לכתוב במשבצת, כדי שהמספר יתחלק ב-${k}?` }, { br: 1 }, { ltr: [pre, { b: 1 }, post].filter(Boolean) }], rtl: 1, k: 'num', a: [d], hint: SC_DIVR[k], m: { s: s.join(''), j, k, d } }; }, q => q.a[0] >= 0); }) }
+          return { x: [{ t: `הספרה הקטנה ביותר במשבצת, כדי שהמספר יתחלק ב-${k}:` }, { ltr: [pre, { b: 1 }, post].filter(Boolean) }], rtl: 1, k: 'num', a: [d], hint: SC_DIVR[k], m: { s: s.join(''), j, k, d } }; }, q => q.a[0] >= 0); }) }
   } },
   dc: { name: 'מספרים עשרוניים', skills: {
     dc_cmp: { name: 'השוואת עשרוניים', opts: [{ k: 'pl', type: 'radio', label: 'ספרות אחרי הנקודה', o: [['1', 'עשיריות'], ['2', 'מאיות'], ['mix', 'מספר ספרות שונה (0.5 / 0.45)']] }],
@@ -13164,18 +13181,48 @@ Object.assign(SC_WORD, {
     if (rev) return scW(q, [{ t: `ה${thing} ${small === 'גרם' ? 'שוקל' : small === 'דקות' || small === 'שניות' ? 'נמשך' : 'באורך'} ${fmt(n * f)} ${small}. כמה ${big} זה?` }], [{ b: 1 }], big);
     return scW(q, [{ t: `ה${thing} ${small === 'גרם' ? 'שוקל' : small === 'דקות' || small === 'שניות' ? 'נמשך' : 'באורך'} ${n} ${big}${r ? ` ו-${r} ${small}` : ''}. כמה ${small} זה?` }], [{ b: 1 }], small); }
 });
+// ---- גאומטריה ושרטוט: שאלות בפורמט של "אימון למבחן" (צורות, בחירה, שרטוט על לוח נקודות) ----
+const scMkTitles = list => [...new Set(list.filter(Boolean))];
+const SC_DRAW_LINES = ['קו מקביל', 'קו מאונך', 'גובה במשולש'];
+const SC_DRAW_SHAPES = ['משולש ישר-זווית', 'מלבן מצלע נתונה', 'השלימו את המרובע', 'סרטטו טרפז', 'שרטוט לפי אלכסונים'];
+const SC_DRAW_DATA = ['מלבן לפי שטח', 'ריבוע לפי שטח', 'מלבן לפי היקף ושטח', 'משולש לפי שטח', 'מקבילית לפי שטח'];
+const SC_QD = { id: ['איזה מרובע?', 'כל השמות המתאימים'], prop: ['חידה – מי אני?', 'נכון או לא נכון?'], calc: ['זוויות במרובע', 'היקף מרובע'] };
+const scMkPool = () => QDQ.concat(DRQ, DRQ_DATA);
+// שאלות עם ציור/שרטוט תופסות מקום – 2 בכל מבדק, כדי ש-4 מבדקים ייכנסו בדף
+const scMkGen = titles => { const L = scMkPool(), T = titles.filter(t => L.some(Q => Q.t === t)); const order = shuffle(T); return [0, 1].map(i => { const Q = L.find(x => x.t === order[i % order.length]); return { mk: mkGender(Object.assign({ t: Q.t }, Q.g())), k: 'mk', rtl: 1, a: [], t: Q.t }; }); };
+const scTset = (k, label, vals) => ({ k, type: 'tset', label, vals });
+Object.assign(SC_MORE, {
+  gq: { name: 'גאומטריה – מרובעים ומשולשים', skills: {
+    gq_tri: { name: 'סוגי משולשים', noLv: 1, opts: [{ k: 'by', type: 'radio', label: 'לפי', o: [['ang', 'זוויות (חד, ישר, קהה)'], ['side', 'צלעות (שווה-צלעות, שווה-שוקיים, שונה-צלעות)'], ['mix', 'גם וגם']] }],
+      title: p => 'סוגי משולשים · לפי ' + { ang: 'זוויות', side: 'צלעות', mix: 'זוויות וצלעות' }[p.by],
+      gen: p => shuffle([0, 1, 2, 3, 4]).map((r, i) => { const ang = p.by === 'ang' || (p.by === 'mix' && i % 2 === 0);
+        if (ang) { const kind = ['חד-זווית', 'ישר-זווית', 'קהה-זווית'][r % 3]; const v = scTry(() => { const a = kind === 'ישר-זווית' ? 90 : kind === 'קהה-זווית' ? R(19, 30) * 5 : R(10, 17) * 5, b = R(4, Math.min(17, (175 - a) / 5)) * 5; return shuffle([a, b, 180 - a - b]); }, v => v.every(x => x > 0) && (kind === 'חד-זווית' ? v.every(x => x < 90) : true) && v.filter(x => x >= 90).length <= 1);
+          return { x: [{ t: `זוויות המשולש: ${v[0]}°, ${v[1]}°, ${v[2]}°. איזה משולש?` }, { br: 1 }, { ch: ['חד-זווית', 'ישר-זווית', 'קהה-זווית'] }], rtl: 1, k: 'cmp', a: [kind], hint: 'מסתכלים על הזווית הגדולה: פחות מ-90° – חד-זווית, בדיוק 90° – ישר-זווית, יותר מ-90° – קהה-זווית.', m: { v, ang: 1 } }; }
+        const kind = ['שווה-צלעות', 'שווה-שוקיים', 'שונה-צלעות'][r % 3]; const a = R(3, 9); const s = kind === 'שווה-צלעות' ? [a, a, a] : kind === 'שווה-שוקיים' ? scTry(() => [a, a, R(2, 2 * a - 1)], v => v[2] !== a) : scTry(() => [R(3, 9), R(3, 9), R(3, 9)], v => new Set(v).size === 3 && v[0] + v[1] > v[2] && v[0] + v[2] > v[1] && v[1] + v[2] > v[0]);
+        const v = shuffle(s);
+        return { x: [{ t: `צלעות המשולש: ${v[0]}, ${v[1]}, ${v[2]} ס"מ. איזה משולש?` }, { br: 1 }, { ch: ['שווה-צלעות', 'שווה-שוקיים', 'שונה-צלעות'] }], rtl: 1, k: 'cmp', a: [kind], hint: 'כמה צלעות שוות? שלוש – שווה-צלעות, שתיים – שווה-שוקיים, אף אחת – שונה-צלעות.', m: { v, ang: 0 } }; }) },
+    gq_quad: { big: 1, name: 'מרובעים', noLv: 1, noWq: 1, mk: 1, opts: [scTset('ts', 'סוגי שאלות', [...SC_QD.id, ...SC_QD.prop, ...SC_QD.calc])],
+      title: p => 'מרובעים · ' + (p.ts.length >= 5 ? 'כל סוגי השאלות' : p.ts.join(', ')), gen: p => scMkGen(p.ts) }
+  } },
+  dr: { name: 'שרטוט', skills: {
+    dr_lines: { big: 1, name: 'קו מקביל, מאונך וגובה', noLv: 1, noWq: 1, mk: 1, opts: [scTset('ts', 'מה משרטטים?', SC_DRAW_LINES)], title: p => 'שרטוט · ' + (p.ts.length >= 4 ? 'כל הסוגים' : p.ts.join(', ')), gen: p => scMkGen(p.ts) },
+    dr_shapes: { big: 1, name: 'השלמת צורות', noLv: 1, noWq: 1, mk: 1, opts: [scTset('ts', 'מה משרטטים?', SC_DRAW_SHAPES)], title: p => 'שרטוט · ' + (p.ts.length >= 4 ? 'כל הסוגים' : p.ts.join(', ')), gen: p => scMkGen(p.ts) },
+    dr_data: { big: 1, name: 'שרטוט לפי שטח והיקף', noLv: 1, noWq: 1, mk: 1, opts: [scTset('ts', 'מה משרטטים?', SC_DRAW_DATA)], title: p => 'שרטוט · ' + (p.ts.length >= 4 ? 'כל הסוגים' : p.ts.join(', ')), gen: p => scMkGen(p.ts) }
+  } }
+});
+SC_WORD.gq_tri = q => { const { v, ang } = q.m; return Object.assign(scW(q, [{ t: ang ? `גג של בית בנוי בצורת משולש. הזוויות שלו: ${v[0]}°, ${v[1]}° ו-${v[2]}°. איזה משולש זה?` : `לגינה בצורת משולש יש גדר: ${v[0]} מטר, ${v[1]} מטר ו-${v[2]} מטר. איזה משולש זה?` }], [q.x[q.x.length - 1]], ''), { a: q.a }); };
 // סדר התחומים בתפריט
 (() => { const old = Object.assign({}, SCD); Object.keys(SCD).forEach(k => delete SCD[k]);
-  Object.assign(SCD, { as: SC_MORE.as, pv: SC_MORE.pv, mul: old.mul, dv: SC_MORE.dv, frac: old.frac, dc: SC_MORE.dc, pc: SC_MORE.pc, or: SC_MORE.or, ge: SC_MORE.ge, mn: SC_MORE.mn, ms: SC_MORE.ms }); })();
+  Object.assign(SCD, { as: SC_MORE.as, pv: SC_MORE.pv, mul: old.mul, dv: SC_MORE.dv, frac: old.frac, dc: SC_MORE.dc, pc: SC_MORE.pc, or: SC_MORE.or, ge: SC_MORE.ge, gq: SC_MORE.gq, dr: SC_MORE.dr, mn: SC_MORE.mn, ms: SC_MORE.ms }); })();
 
 // הגדרות ברירת מחדל לכל מיומנות
 function scDefaults(dom, sk) {
   const p = {};
-  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'lv' ? 'g' : o.o[0][0]; });
+  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'tset' ? o.vals.filter(t => { const Q = scMkPool().find(x => x.t === t); return Q && (!Q.min || GRADE >= Q.min); }).concat([]).filter((t, i, a) => a.indexOf(t) === i) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'lv' ? 'g' : o.o[0][0]; });
   return p;
 }
 const scSkill = c => SCD[c.d] && SCD[c.d].skills[c.s];
-const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם שאלה מילולית', one: ' · עם שאלה מילולית', one3: ' · עם שאלה מילולית' }[c.p.wq] || '') + ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה'); };
+const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם שאלה מילולית', one: ' · עם שאלה מילולית', one3: ' · עם שאלה מילולית' }[c.p.wq] || '') + (S.noLv ? '' : ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה')); };
 // 5 תרגילים לפי הרמה – בלי שני תרגילים זהים באותו מבדק
 function scGen(c) {
   const S = scSkill(c), wq = c.p.wq || 'ex', key = q => scRender(q, 'key');
@@ -13183,7 +13230,7 @@ function scGen(c) {
   try {
     SC_LVL = c.p.lv || 'g';
     qs = S.gen(c.p);
-    for (let i = 1; i < 5; i++) for (let t = 0; t < 25 && qs.slice(0, i).some(x => key(x) === key(qs[i])); t++) qs[i] = (t < 15 ? S.gen(c.p) : (SC_LVL = 'g', S.gen(c.p)))[t < 15 ? i : Math.min(i + (t - 15) % 3, 4)];
+    for (let i = 1; i < qs.length; i++) for (let t = 0; t < 25 && qs.slice(0, i).some(x => key(x) === key(qs[i])); t++) qs[i] = (t < 15 ? S.gen(c.p) : (SC_LVL = 'g', S.gen(c.p)))[t < 15 ? i : Math.min(i + (t - 15) % 3, qs.length - 1)];
   } finally { SC_LVL = 'g'; }
   // כמה ואיזה: 3 שאלות מילוליות (קל, בינוני, קשה) / שאלה מילולית אחת בסוף + 3 או 4 תרגילים
   if (wq === 'word') return [0, 2, 4].map(i => SC_WORD[c.s](qs[i]));
@@ -13196,6 +13243,7 @@ const scDec = s => { try { const c = JSON.parse(atob(s.replace(/-/g, '+').replac
 
 // ציור תרגיל: mode = 'screen' (משבצות להקלדה) / 'print' (משבצות ריקות) / 'key' (עם התשובות)
 function scRender(q, mode) {
+  if (q.mk) return mode === 'key' ? `<div class="sc-mk key">${q.mk.parts.map(p => `${p.l ? p.l + ' ' : ''}${p.show}`).join(' · ')}</div>` : `<div class="sc-mk">${mkQHTML(Object.assign({}, q.mk, { parts: q.mk.parts.map(p => p.k === 'draw' && !p.figPrint && p.fig ? Object.assign({}, p, { figPrint: p.fig }) : p) }), 'print', 1).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}</div>`;
   let bi = 0;
   const ans = q.k === 'fv' ? scFvShow(q) : q.a;
   const blank = (cls = '') => { const i = bi++; if (String(ans[i]).length > 3) cls += ' wide'; return mode === 'screen' ? `<input class="sc-in${cls}" data-bi="${i}" inputmode="decimal" autocomplete="off" maxlength="10" aria-label="משבצת">` : mode === 'key' ? `<b class="sc-kv">${ans[i] === '' ? '' : ans[i]}</b>` : `<span class="sc-box${cls}"></span>`; };
@@ -13238,6 +13286,7 @@ function scOptHTML(c, o) {
   const v = c.p[o.k];
   if (o.type === 'tables') return `<div class="sc-opt"><b>${o.label}</b> <span class="sc-chips">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(t => `<label class="sc-chip${v.includes(t) ? ' on' : ''}"><input type="checkbox" data-tbl="${t}" ${v.includes(t) ? 'checked' : ''}>${t}</label>`).join('')}<button type="button" class="ghost sc-all" data-taball="1">הכל</button></span></div>`;
   if (o.type === 'set') return `<div class="sc-opt"><b>${o.label}</b> <span class="sc-chips">${o.vals.map(t => `<label class="sc-chip${v.includes(t) ? ' on' : ''}"><input type="checkbox" data-set="${o.k}" value="${t}" ${v.includes(t) ? 'checked' : ''}>${t}</label>`).join('')}</span></div>`;
+  if (o.type === 'tset') return `<div class="sc-opt"><b>${o.label}</b> <span class="sc-chips">${o.vals.map(t => `<label class="sc-chip${v.includes(t) ? ' on' : ''}"><input type="checkbox" data-tset="${o.k}" value="${t}" ${v.includes(t) ? 'checked' : ''}>${t}</label>`).join('')}</span></div>`;
   if (o.type === 'check') return `<div class="sc-opt"><label class="chk"><input type="checkbox" data-chk="${o.k}" ${v ? 'checked' : ''}> ${o.label}</label></div>`;
   return `<div class="sc-opt"><b>${o.label}</b> <span class="sc-chips">${o.o.map(([k, l]) => `<label class="sc-chip${v === k ? ' on' : ''}"><input type="radio" name="sco-${o.k}" data-rad="${o.k}" value="${k}" ${v === k ? 'checked' : ''}>${l}</label>`).join('')}</span></div>`;
 }
@@ -13258,9 +13307,9 @@ function scDialog(dom, start, onOk) {
       <h2 id="scdT">⭐ ${D.name}</h2>
       ${many ? `<div class="sc-sec"><b>מה בודקים?</b><div class="sc-chips sc-skills">${Object.entries(D.skills).map(([k, X]) => `<button type="button" class="sc-chip btn${c.s === k ? ' on' : ''}" data-sk="${k}">${X.name}</button>`).join('')}</div></div>` : ''}
       ${main.length ? `<div class="sc-sec sc-dial"><b>דיוק התוכן</b>${main.map(o => scOptHTML(c, o)).join('')}</div>` : ''}
-      <div class="sc-sec">${scOptHTML(c, lv)}${scOptHTML(c, wq)}</div>
+      ${lv || wq ? `<div class="sc-sec">${lv ? scOptHTML(c, lv) : ''}${wq ? scOptHTML(c, wq) : ''}</div>` : ''}
       <div class="sc-now">📋 <b>${scTitle(c)}</b></div>
-      <div class="sc-sample"><b>לדוגמה:</b> ${(() => { const q = scGen(c)[0]; return `${q.pre ? `<span class="sc-pre">יודעים ש: ${M(q.pre)}</span> ` : ''}${scRender(q, 'print')}`; })()}</div>
+      <div class="sc-sample"><b>לדוגמה:</b> ${(() => { const q = scGen(c)[0]; if (q.mk) return `<div class="sc-mk sm">${scRender(q, 'print')}</div>`; return `${q.pre ? `<span class="sc-pre">יודעים ש: ${M(q.pre)}</span> ` : ''}${scRender(q, 'print')}`; })()}</div>
       <div class="actions" style="justify-content:center"><button id="scdOk" class="race-go">✔ אישור</button><button id="scdNo" class="ghost">ביטול</button></div>
     </div>`;
     const set = nc => { c = nc; draw(); };
@@ -13270,6 +13319,7 @@ function scDialog(dom, start, onOk) {
     ov.querySelectorAll('[data-rad]').forEach(x => x.onchange = () => set({ ...c, p: { ...c.p, [x.dataset.rad]: x.value } }));
     ov.querySelectorAll('[data-set]').forEach(x => x.onchange = () => { const k = x.dataset.set, t = Number(x.value); let V = c.p[k].filter(y => y !== t); if (x.checked) V.push(t); if (!V.length) V = [t]; set({ ...c, p: { ...c.p, [k]: V.sort((a, b) => a - b) } }); });
     ov.querySelectorAll('[data-chk]').forEach(x => x.onchange = () => set({ ...c, p: { ...c.p, [x.dataset.chk]: x.checked } }));
+    ov.querySelectorAll('[data-tset]').forEach(x => x.onchange = () => { const k = x.dataset.tset, t = x.value; let V = c.p[k].filter(y => y !== t); if (x.checked) V.push(t); if (!V.length) V = [t]; const O = scOpts(SCD[dom].skills[c.s]).find(o => o.k === k).vals; set({ ...c, p: { ...c.p, [k]: O.filter(y => V.includes(y)) } }); });
     ov.querySelector('#scdOk').onclick = () => { close(); onOk(c); };
     ov.querySelector('#scdNo').onclick = close;
   };
@@ -13340,7 +13390,11 @@ function scSheet() {
     </div>`;
   const keyQ = i => { mode0 = 'key'; const h = `<div class="sc-quarter key"><div class="sc-qh"><b>🔑 ${one ? 'כל הרבעים (נוסח אחד)' : same ? `נוסח ${VER[i]}'` : `רבע ${i + 1}`}</b></div><div class="sc-qt">${scTitle(cfgOf(i))}</div>
       <ol class="sc-ql n${qsets[i].length}">${qsets[i].map(li).join('')}</ol></div>`; mode0 = 'print'; return h; };
-  $('wsout').innerHTML = `<section class="ws-page sc-page"><div class="sc-quarters">${[0, 1, 2, 3].map(quarter).join('')}</div></section>
+  // שרטוט צריך רשת גדולה: 2 מבדקים בעמוד (חצי עמוד לכל מבדק, המשימות זו לצד זו)
+  const big = S.slots.some((c, i) => i === 0 || !same ? scSkill(cfgOf(i)).big : false);
+  const sheet = big ? [[0, 1], [2, 3]].map(pr => `<section class="ws-page sc-page"><div class="sc-quarters halves">${pr.map(quarter).join('')}</div></section>`).join('')
+    : `<section class="ws-page sc-page"><div class="sc-quarters">${[0, 1, 2, 3].map(quarter).join('')}</div></section>`;
+  $('wsout').innerHTML = `${sheet}
     <section class="ws-page sc-page wskey"><h2>🔑 דף תשובות – מבדקי הצלחה</h2><div class="sc-quarters">${(one ? [0] : [0, 1, 2, 3]).map(keyQ).join('')}</div></section>`;
   $('wsout').dataset.what = 'מבדקי הצלחה: ' + [...new Set(S.slots.map((c, i) => scTitle(cfgOf(i))))].join(' | ');
 }
@@ -13355,6 +13409,7 @@ function succRun(cfg, fromBuilder) {
   const back = () => fromBuilder ? succHome() : home();
   const show = () => {
     const q = qs[st.i];
+    if (q.mk) return showMk(q);
     app.innerHTML = `
       <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">${qs[st.i].word ? 'שאלה' : 'תרגיל'} ${st.i + 1} מתוך ${qs.length}</span><button class="ghost" id="scOut">${ic('home')} יציאה</button></div>
       <div class="sc-name">${name}</div>
@@ -13395,6 +13450,33 @@ function succRun(cfg, fromBuilder) {
     if ($('scCheck')) $('scCheck').onclick = () => check(ins.map(x => x.value.trim()));
     ins.forEach((x, k) => x.addEventListener('keydown', e => { if (e.key === 'Enter' && !x.disabled) { if (k < ins.length - 1 && !ins[k + 1].value) ins[k + 1].focus(); else $('scCheck').click(); } }));
     app.querySelectorAll('.sc-cb').forEach(b => b.onclick = () => { app.querySelectorAll('.sc-cb').forEach(x => x.classList.toggle('sel', x === b)); check([b.dataset.cmp]); });
+    window.scrollTo(0, 0);
+  };
+  // שאלה בפורמט "אימון למבחן" (צורה, בחירה, שרטוט): בדיקה עם mkCheck, רמז = ההסבר, בטעות שנייה – התשובה
+  const showMk = q => {
+    mkS = { all: false, i: st.i, mode: 'practice', q: q.mk };
+    app.innerHTML = `
+      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">שאלה ${st.i + 1} מתוך ${qs.length}</span><button class="ghost" id="scOut">${ic('home')} יציאה</button></div>
+      <div class="sc-name">${name}</div>
+      <div class="sc-dots">${qs.map((_, k) => `<span class="${k < st.i ? 'ok' : k === st.i ? 'now' : ''}"></span>`).join('')}</div>
+      <div class="card mk-card sc-mkcard">${mkQHTML(q.mk, 'practice', st.i + 1).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}
+        <div class="mk-steps hidden" id="mkExp"><h4>💡 רמז – איך פותרים?</h4><ol>${q.mk.steps.map(x => `<li>${x}</li>`).join('')}</ol></div>
+        <div class="mk-msg" id="mkMsg"></div><div class="sc-msg center" id="scMsg"></div>
+        <div class="actions" style="justify-content:center" id="scActs"><button id="scCheck">${ic('check')} בדיקה</button></div></div>`;
+    $('scOut').onclick = back;
+    mkWire();
+    st.tries = 0;
+    const next = () => { st.i++; if (st.i < qs.length) show(); else done(); };
+    $('scCheck').onclick = () => {
+      const r = mkCheck();
+      if (r.miss) { $('mkExp').classList.add('hidden'); $('mkMsg').innerHTML = ''; $('scMsg').innerHTML = '✋ ענו קודם, ואז "בדיקה".'; return; }
+      st.tries++;
+      const good = r.ok === r.tot;
+      $('mkMsg').innerHTML = '';
+      if (good) { if (st.tries === 1) st.first++; $('mkExp').classList.add('hidden'); $('scMsg').innerHTML = pick(['✔ נכון!', '✔ מצוין!', '✔ כל הכבוד!']); $('scActs').innerHTML = ''; setTimeout(next, 900); }
+      else if (st.tries === 1) { app.querySelectorAll('.mk-fb').forEach(x => { x.innerHTML = ''; }); $('scMsg').innerHTML = 'עוד לא – קראו את הרמז ונסו שוב 🙂'; }
+      else { st.wrong.push(q); $('scMsg').innerHTML = 'התשובה מופיעה למעלה – נזכור לפעם הבאה 🙂'; $('scActs').innerHTML = `<button id="scNext">${st.i < qs.length - 1 ? 'לשאלה הבאה ←' : 'לסיכום ←'}</button>`; $('scNext').onclick = next; }
+    };
     window.scrollTo(0, 0);
   };
   const done = () => {
