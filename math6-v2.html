@@ -1309,7 +1309,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12988,6 +12988,30 @@ function scAS(range, sub, cross, lvl) {
   return scTry(() => { const c = R(top <= 10 ? 2 : Math.round(lim / 5), lim); const b = R(1, c - 1), a = c - b; return sub ? { a: c, b, r: a } : { a, b, r: c }; },
     v => { if (top <= 10 || cross === 'mix') return v.r >= 0; const u = sub ? (v.a % 10) < (v.b % 10) : (v.a % 10) + (v.b % 10) >= 10; return cross === 'yes' ? u : !u; });
 }
+const scTset = (k, label, vals) => ({ k, type: 'tset', label, vals });
+// ---- ערך הספרה: כמה סוגי שאלות, ובכל מבדק סוגים שונים ----
+const SC_PV_ST = ['מה ערך הספרה?', 'איזו ספרה במקום?', 'בכמה ישתנה המספר?', 'המספר אחרי החלפת ספרה', 'הוספת עשרות / מאות / אלפים', 'כמה עשרות / מאות שלמות?'];
+const SC_PV_NM = ['אחדות', 'עשרות', 'מאות', 'אלפים', 'עשרות אלפים', 'מאות אלפים'];
+const scPvPlace = pos => pos < 4 ? 'ספרת ה' + SC_PV_NM[pos] : 'ספרת ' + SC_PV_NM[pos];
+function scPvQ(st, range, i) {
+  const len = String(range - 1).length, ds = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, len), N = Number(ds.join(''));
+  let pos = Math.min(len - 1, [0, 1, 1, 2, 3][i] + (len > 4 && i > 2 ? i - 2 : 0));
+  const dig = p => ds[len - 1 - p], P = p => 10 ** p, n = fmt(N), t = x => ({ t: x });
+  const m = { st, N, pos };
+  if (st === 'מה ערך הספרה?') { const d = dig(pos); return { x: [t('במספר'), n, t(`– מה הערך של הספרה ${d}?`), { b: 1 }], rtl: 1, k: 'num', a: [d * P(pos)], hint: `הספרה ${d} נמצאת במקום ה${SC_PV_NM[pos]}: ${d} × ${fmt(P(pos))}.`, m: Object.assign(m, { d }) }; }
+  if (st === 'איזו ספרה במקום?') { const d = dig(pos); return { x: [t('במספר'), n, t(`– מהי ${scPvPlace(pos)}?`), { b: 1 }], rtl: 1, k: 'num', a: [d], hint: 'סופרים מקומות מימין: אחדות, עשרות, מאות, אלפים...', m: Object.assign(m, { d }) }; }
+  if (st === 'בכמה ישתנה המספר?' || st === 'המספר אחרי החלפת ספרה') {
+    const d = dig(pos); let y; do { y = R(0, 9); } while (y === d || (pos === len - 1 && y === 0)); const up = y > d, diff = Math.abs(y - d) * P(pos), N2 = N + (y - d) * P(pos);
+    Object.assign(m, { d, y, up, diff, N2 });
+    if (st === 'בכמה ישתנה המספר?') return { x: [t('במספר'), n, t(`מחליפים את ${scPvPlace(pos)} (${d}) בספרה ${y}. בכמה ${up ? 'יגדל' : 'יקטן'} המספר?`), { b: 1 }], rtl: 1, k: 'num', a: [diff], hint: `${scPvPlace(pos)} שווה ${fmt(P(pos))}. ההפרש בין הספרות: ${Math.abs(y - d)}, ולכן ${Math.abs(y - d)} × ${fmt(P(pos))}.`, m };
+    return { x: [t('במספר'), n, t(`מחליפים את ${scPvPlace(pos)} בספרה ${y}. מה המספר החדש?`), { b: 1 }], rtl: 1, k: 'num', a: [N2], hint: `משנים רק את ${scPvPlace(pos)} – כל שאר הספרות נשארות.`, m };
+  }
+  if (st === 'הוספת עשרות / מאות / אלפים') { pos = Math.max(1, pos); const k = i >= 3 ? R(2, 9) : R(2, Math.max(2, 9 - dig(pos))); const N2 = N + k * P(pos); Object.assign(m, { k, N2, pos });
+    return { x: [t('למספר'), n, t(`מוסיפים ${k} ${SC_PV_NM[pos]}. מה המספר החדש?`), { b: 1 }], rtl: 1, k: 'num', a: [N2], hint: `${k} ${SC_PV_NM[pos]} = ${fmt(k * P(pos))}. מחברים: ${n} + ${fmt(k * P(pos))}.`, m }; }
+  // כמה עשרות / מאות שלמות
+  pos = Math.max(1, Math.min(pos, len - 1)); const c = Math.floor(N / P(pos)); Object.assign(m, { pos, c });
+  return { x: [t('במספר'), n, t(`– כמה ${SC_PV_NM[pos]} שלמות יש?`), { b: 1 }], rtl: 1, k: 'num', a: [c], hint: `מכסים את ${pos === 1 ? 'ספרת האחדות' : `${pos} הספרות הימניות`} – מה שנשאר משמאל הוא מספר ה${SC_PV_NM[pos]}.`, m };
+}
 const SC_MORE = {
   as: { name: 'חיבור וחיסור', skills: {
     as_basic: { name: 'חיבור וחיסור', opts: [{ k: 'range', type: 'radio', label: 'טווח', o: SC_RANGE }, SC_OP, { k: 'cross', type: 'radio', label: 'המרה', o: [['no', 'בלי המרה'], ['yes', 'עם המרה (מעבר עשרת / פריטה)'], ['mix', 'מעורב']] }],
@@ -13006,10 +13030,9 @@ const SC_MORE = {
         return { x: [`${fmt(x)} ${sub ? '−' : '+'} ${fmt(y)} =`, { b: 1 }], k: 'num', a: [r], hint: `חושבים על ${u === 10 ? 'עשרות' : u === 100 ? 'מאות' : 'אלפים'}: ${sub ? `${c} − ${b}` : `${a} + ${b}`} = ${sub ? a : c}.`, m: { a: x, b: y, sub } }; }) }
   } },
   pv: { name: 'מבנה עשרוני', skills: {
-    pv_val: { name: 'ערך הספרה', opts: [{ k: 'range', type: 'radio', label: 'מספרים', o: [['1000', 'עד 1,000'], ['10000', 'עד 10,000'], ['1000000', 'עד מיליון']] }],
-      title: p => `ערך הספרה · ${{ 1000: 'עד 1,000', 10000: 'עד 10,000', 1000000: 'עד מיליון' }[p.range]}`,
-      gen: p => scIx().map(i => { const len = String(Number(p.range) - 1).length; const ds = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, len); const N = Number(ds.join('')); const pos = Math.min(len - 1, [0, 1, 1, 2, 3][i] + (len > 4 && i > 2 ? i - 2 : 0)); const d = ds[len - 1 - pos];
-        return { x: [{ t: 'במספר' }, fmt(N), { t: `– מה הערך של הספרה ${d}?` }, { b: 1 }], rtl: 1, k: 'num', a: [d * 10 ** pos], hint: `הספרה ${d} נמצאת במקום ה${['אחדות', 'עשרות', 'מאות', 'אלפים', 'עשרות האלפים', 'מאות האלפים'][pos]}.`, m: { N, d, pos } }; }) },
+    pv_val: { name: 'ערך הספרה ושינוי ספרה', opts: [{ k: 'range', type: 'radio', label: 'מספרים', o: [['1000', 'עד 1,000'], ['10000', 'עד 10,000'], ['1000000', 'עד מיליון']] }, scTset('st', 'סוגי שאלות (בכל מבדק – סוגים שונים)', SC_PV_ST)],
+      title: p => `ערך הספרה${p.st && p.st.includes('בכמה ישתנה המספר?') ? ' ושינוי ספרה' : ''} · ${{ 1000: 'עד 1,000', 10000: 'עד 10,000', 1000000: 'עד מיליון' }[p.range]}`,
+      gen: p => { const sts = p.st && p.st.length ? p.st : SC_PV_ST; let order = shuffle(sts); return scIx().map((i, j) => { if (j % order.length === 0 && j) order = shuffle(sts); return scPvQ(order[j % order.length], Number(p.range), i); }); } },
     pv_exp: { name: 'פירוק והרכבה', opts: [{ k: 'range', type: 'radio', label: 'מספרים', o: [['1000', 'עד 1,000'], ['10000', 'עד 10,000'], ['1000000', 'עד מיליון']] }, { k: 'type', type: 'radio', label: 'סוג', o: [['comp', 'הרכבה (4,000 + 300 + 7)'], ['dec', 'פירוק (3,456 = 3,000 + ☐ + 50 + 6)'], ['mix', 'מעורב']] }],
       title: p => `${{ comp: 'הרכבת מספרים', dec: 'פירוק לפי ערך המקום', mix: 'פירוק והרכבה' }[p.type]} · ${{ 1000: 'עד 1,000', 10000: 'עד 10,000', 1000000: 'עד מיליון' }[p.range]}`,
       gen: p => scIx().map(i => { const len = Math.min(String(Number(p.range) - 1).length, 3 + Math.floor(i / 2) + (Number(p.range) > 10000 ? 1 : 0));
@@ -13142,7 +13165,14 @@ Object.assign(SC_WORD, {
   as_tens: q => { const { a, b, sub } = q.m, [A] = scTwo(), h = scHe(A);
     return sub ? scW(q, [{ t: `ל${A[0]} היו ${fmt(a)} שקלים. ${h.he} ${h.paid} ${fmt(b)} שקלים על אופניים. כמה שקלים נשארו?` }], [{ b: 1 }], 'שקלים')
       : scW(q, [{ t: `בחיסכון של ${A[0]} היו ${fmt(a)} שקלים, ו${h.he} ${h.got} עוד ${fmt(b)} שקלים ליום ההולדת. כמה שקלים יש עכשיו?` }], [{ b: 1 }], 'שקלים'); },
-  pv_val: q => { const { N, d } = q.m; return scW(q, [{ t: `בעיר יש ${fmt(N)} תושבים. מה הערך של הספרה ${d} במספר הזה?` }], [{ b: 1 }], ''); },
+  pv_val: q => { const m = q.m, n = fmt(m.N), pl = scPvPlace(m.pos);
+    const T = { 'מה ערך הספרה?': [`בעיר יש ${n} תושבים. מה הערך של הספרה ${m.d} במספר התושבים?`, ''],
+      'איזו ספרה במקום?': [`בעיר יש ${n} תושבים. מהי ${pl} במספר התושבים?`, ''],
+      'בכמה ישתנה המספר?': [`במשחק מחשב צברו ${n} נקודות. בטעות הוחלפה ${pl} בספרה ${m.y}. בכמה ${m.up ? 'גדל' : 'קטן'} מספר הנקודות?`, 'נקודות'],
+      'המספר אחרי החלפת ספרה': [`במשחק מחשב צברו ${n} נקודות. בטעות הוחלפה ${pl} בספרה ${m.y}. כמה נקודות מופיעות עכשיו?`, 'נקודות'],
+      'הוספת עשרות / מאות / אלפים': [`בספרייה היו ${n} ספרים, והגיעו עוד ${m.k} ${SC_PV_NM[m.pos]} ספרים. כמה ספרים יש עכשיו?`, 'ספרים'],
+      'כמה עשרות / מאות שלמות?': [`במחסן ${n} עפרונות. אורזים אותם בחבילות של ${fmt(10 ** m.pos)}. כמה חבילות מלאות אפשר לארוז?`, 'חבילות'] }[m.st];
+    return scW(q, [{ t: T[0] }], [{ b: 1 }], T[1]); },
   pv_exp: q => { const { N, parts } = q.m; const desc = parts.map(v => { const L = String(v).length - 1, u = 10 ** L, k = v / u; return u === 1 ? `${k} עפרונות בודדים` : `${k} ${u === 10 ? 'חבילות' : 'ארגזים'} של ${fmt(u)}`; });
     return Object.assign(scW(q, [{ t: `במחסן יש ${desc.slice(0, -1).join(', ')}${desc.length > 1 ? ' ו-' : ''}${desc[desc.length - 1]} (עפרונות). כמה עפרונות יש בסך הכול?` }], [{ b: 1 }], 'עפרונות'), { a: [N] }); },
   pv_cmp: q => { const { A, B } = q.m; return Object.assign(scW(q, [{ t: `בספרייה א' יש ${fmt(A)} ספרים, ובספרייה ב' יש ${fmt(B)} ספרים. באיזו ספרייה יש יותר ספרים?` }], [{ ch: ["ספרייה א'", "ספרייה ב'", 'אותו מספר'] }], ''), { a: [A > B ? "ספרייה א'" : A < B ? "ספרייה ב'" : 'אותו מספר'] }); },
@@ -13190,7 +13220,6 @@ const SC_QD = { id: ['איזה מרובע?', 'כל השמות המתאימים']
 const scMkPool = () => QDQ.concat(DRQ, DRQ_DATA);
 // שאלות עם ציור/שרטוט תופסות מקום – 2 בכל מבדק, כדי ש-4 מבדקים ייכנסו בדף
 const scMkGen = titles => { const L = scMkPool(), T = titles.filter(t => L.some(Q => Q.t === t)); const order = shuffle(T); return [0, 1].map(i => { const Q = L.find(x => x.t === order[i % order.length]); return { mk: mkGender(Object.assign({ t: Q.t }, Q.g())), k: 'mk', rtl: 1, a: [], t: Q.t }; }); };
-const scTset = (k, label, vals) => ({ k, type: 'tset', label, vals });
 Object.assign(SC_MORE, {
   gq: { name: 'גאומטריה – מרובעים ומשולשים', skills: {
     gq_tri: { name: 'סוגי משולשים', noLv: 1, opts: [{ k: 'by', type: 'radio', label: 'לפי', o: [['ang', 'זוויות (חד, ישר, קהה)'], ['side', 'צלעות (שווה-צלעות, שווה-שוקיים, שונה-צלעות)'], ['mix', 'גם וגם']] }],
@@ -13218,7 +13247,7 @@ SC_WORD.gq_tri = q => { const { v, ang } = q.m; return Object.assign(scW(q, [{ t
 // הגדרות ברירת מחדל לכל מיומנות
 function scDefaults(dom, sk) {
   const p = {};
-  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'tset' ? o.vals.filter(t => { const Q = scMkPool().find(x => x.t === t); return Q && (!Q.min || GRADE >= Q.min); }).concat([]).filter((t, i, a) => a.indexOf(t) === i) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'lv' ? 'g' : o.o[0][0]; });
+  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'tset' ? o.vals.filter(t => { const Q = scMkPool().find(x => x.t === t); return !Q || !Q.min || GRADE >= Q.min; }).concat([]).filter((t, i, a) => a.indexOf(t) === i) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'lv' ? 'g' : o.o[0][0]; });
   return p;
 }
 const scSkill = c => SCD[c.d] && SCD[c.d].skills[c.s];
