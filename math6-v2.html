@@ -1059,25 +1059,54 @@
   .gswitch { display: inline-flex; align-items: center; gap: 8px; color: #1f1e1c; background: #fffdf8; font-weight: 700; font-size: 1.2rem; text-decoration: none; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; padding: 8px 18px; box-shadow: 3px 4px 0 #1f1e1c; font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; }
   .gswitch:hover, .gswitch:focus-visible { background: #fff; transform: translate(-1px, -1px); box-shadow: 4px 5px 0 #1f1e1c; outline: none; }
   .gswitch svg { width: 22px; height: 22px; }
-  .sc-prog { margin-top: 8px; font-size: 1.05rem; }
-  .sc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
-  .sc-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 10px 12px; background: #fffdf8; color: #1f1e1c; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; cursor: pointer; font: inherit; }
-  .sc-card:hover, .sc-card:focus-visible { box-shadow: 4px 5px 0 #1f1e1c; transform: translate(-1px, -1px); outline: none; }
-  .sc-card.done { background: #eaf6e4; }
-  .sc-st { font-size: 1.5rem; font-weight: 700; min-height: 1.6rem; }
-  .sc-card.done .sc-st { color: #2f8f55; }
-  .sc-nm { font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; font-weight: 700; font-size: 1.15rem; }
-  .sc-ds { font-size: 0.88rem; color: #5f5a50; }
-  .sc-stars { font-size: 0.95rem; } .sc-stars.big { font-size: 2rem; margin: 4px 0 8px; }
+  .sc-build .sc-intro { margin-top: 0; }
+  .sc-opt { margin: 8px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .sc-chips { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+  .sc-chip { display: inline-flex; align-items: center; gap: 4px; font: inherit; font-size: 0.95rem; padding: 4px 12px; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; background: #fffdf8; color: #1f1e1c; cursor: pointer; }
+  .sc-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .sc-chip.on { background: #f2c94c; font-weight: 700; }
+  .sc-chip:focus-within { outline: 2px solid #4c5fd5; }
+  .sc-dial { border: 2px dashed #d8d0bf; border-radius: 12px; padding: 4px 12px; margin: 8px 0; }
+  .sc-now { margin: 10px 0 4px; font-size: 1.1rem; }
+  .sc-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 8px 0; }
+  .sc-slot { font: inherit; text-align: right; display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border: 2px solid #1f1e1c; border-radius: 10px; background: #fffdf8; cursor: pointer; font-size: 0.9rem; }
+  .sc-slot.on { background: #fff4c7; box-shadow: 3px 3px 0 #1f1e1c; }
+  .sc-quarters { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; min-height: 250mm; }
+  .sc-quarter { border: 1.5px dashed #888; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .sc-quarter.key { min-height: 0; }
+  .wskey .sc-quarters { min-height: 0; }
+  .sc-qh { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 1rem; }
+  .sc-qh .wsline { min-width: 110px; }
+  .sc-qt { font-weight: 700; font-size: 0.95rem; color: #3d3a33; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  .sc-ql { margin: 6px 0; padding-inline-start: 22px; display: flex; flex-direction: column; gap: 12px; font-size: 1.15rem; flex: 1; justify-content: space-around; }
+  .sc-ql .sc-pre { font-size: 0.85rem; color: #555; }
+  .sc-foot { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+  .sc-stamp { border: 2px solid #2f8f55; color: #2f8f55; border-radius: 50%; padding: 10px 8px; font-weight: 700; transform: rotate(-8deg); }
+  .sc-x { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .sc-mix { display: inline-flex; align-items: center; gap: 3px; }
+  .sc-fr > span { min-width: 1.4em; text-align: center; }
+  .sc-box { display: inline-block; width: 2.2em; height: 1.4em; border: 1.5px solid #000; border-radius: 4px; vertical-align: middle; }
+  .sc-box.sm { width: 1.7em; height: 1.2em; }
+  .sc-circ { display: inline-block; width: 1.5em; height: 1.5em; border: 1.5px solid #000; border-radius: 50%; vertical-align: middle; }
+  .sc-kv { color: #b3261e; }
+  .sc-t { font-size: 0.95em; }
+  .sc-name { text-align: center; font-weight: 700; font-size: 1.1rem; margin: 6px 0; }
+  .sc-stars.big { font-size: 2rem; margin: 4px 0 8px; }
   .sc-dots { display: flex; gap: 8px; justify-content: center; margin: 4px 0 12px; }
   .sc-dots span { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #1f1e1c; background: #fffdf8; }
   .sc-dots span.ok { background: #6fbf73; } .sc-dots span.now { background: #f2c94c; }
   .sc-q .sc-pre { font-size: 1.15rem; margin-bottom: 10px; color: #3d3a33; }
-  .sc-expr { font-size: 2.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0 14px; }
-  .sc-expr input.sc-in { width: 110px; font-size: 2rem; text-align: center; }
+  .sc-expr { font-size: 2.1rem; font-weight: 700; margin: 10px 0 14px; }
+  .sc-expr.sm { font-size: 1.2rem; margin: 0; display: inline-block; }
+  .sc-expr input.sc-in { width: 2.6em; font: inherit; font-size: 1.8rem; text-align: center; padding: 2px 4px; border: 2.5px solid #1f1e1c; border-radius: 10px; background: #fff; }
+  .sc-expr input.sc-in.sm { width: 2em; font-size: 1.3rem; padding: 0 2px; }
   .sc-expr input.sc-in.ok { background: #e3f4dc; border-color: #2f8f55; }
+  .sc-cmp { display: inline-flex; gap: 6px; }
+  .sc-cb { font: inherit; font-size: 1.6rem; width: 1.8em; height: 1.8em; border: 2.5px solid #1f1e1c; border-radius: 10px; background: #fffdf8; cursor: pointer; }
+  .sc-cb.sel { background: #f2c94c; }
   .sc-msg { min-height: 1.6em; font-size: 1.15rem; margin-bottom: 8px; }
   .sc-hint { background: #fff4c7; border: 2px dashed #1f1e1c; border-radius: 10px; padding: 6px 12px; margin: 0 auto 6px; max-width: 460px; }
+  @media screen and (max-width: 640px) { .sc-quarters { grid-template-columns: 1fr; min-height: 0; } }
   .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; text-align: center; }
   .pvw-btn { font: inherit; font-size: 0.95rem; font-weight: 600; color: #1f1e1c; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; }
   .pvw-btn:hover, .pvw-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
@@ -1231,7 +1260,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 עה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7170,7 +7199,6 @@ function home() {
               </button>` : ''}
           </div>
           <div class="practice-more">
-            ${GRADE >= 2 ? `<button id="succGo">⭐ מבדקי הצלחה<span class="desc">5 תרגילים קצרים על נושא אחד בלוח הכפל – ומקבלים ✔</span></button>` : ''}
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום${staffOn() ? '' : ' – התוצאה נשלחת למורה'}</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -7258,6 +7286,11 @@ function home() {
             <span class="gc-nm">דפים להדפסה</span>
             <span class="gc-ds">דפי עבודה, דפי תשובות ופתקי יציאה.</span>
           </button>
+          <button class="game-card" id="succGo">
+            <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">⭐</span>
+            <span class="gc-nm">מבדקי הצלחה</span>
+            <span class="gc-ds">5 תרגילים על מיומנות אחת – בוחרים בדיוק מה לבדוק. 4 מבדקים בדף להדפסה, או על המסך ובקישור.</span>
+          </button>
           <button class="game-card" id="exitGo2">
             <span class="gc-ic" style="--gw:rgba(164,140,201,0.6)">${ic('clipboard')}</span>
             <span class="gc-nm">כרטיס יציאה</span>
@@ -7290,6 +7323,7 @@ function home() {
   if ($('pvwOff')) $('pvwOff').onclick = () => setPreview(false);
   if ($('exitGo2')) {
     $('exitGo2').onclick = exitHome;
+    $('succGo').onclick = succHome;
     $('clsOpen').onclick = () => classSub('open');
     $('clsGames').onclick = () => classSub('games');
     $('clsPrint').onclick = () => classSub('print');
@@ -7311,7 +7345,6 @@ function home() {
   app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => showLevelPicker(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   $('mix').onclick = () => showLevelPicker('mix');
-  if ($('succGo')) $('succGo').onclick = succHome;
   $('exitGo').onclick = exitHome;
   $('test').onclick = () => startTest(false);
   $('testfb').onclick = () => startTest(true);
@@ -12753,138 +12786,281 @@ function kfPrintBingo(n) {
     <section class="ws-page wskey"><h2>📋 רשימת הקריאה למורה (לפי הסדר)</h2><ol class="kfp-call">${call.map(c => `<li>${c} <span class="kfp-chk">☐</span></li>`).join('')}</ol></section>`;
 }
 
-/* ---------- מבדקי הצלחה: 5 תרגילים קצרים על נושא אחד, מהקל אל הקשה ---------- */
-// כל מבדק בודק מיומנות אחת. אחרי טעות – רמז וניסיון נוסף, כדי שכמעט תמיד מסיימים בהצלחה.
-const SC_KEY = 'math-succ';
-const scLoad = () => { try { return JSON.parse(localStorage.getItem(SC_KEY)) || {}; } catch (e) { return {}; } };
-const scSave = d => { try { localStorage.setItem(SC_KEY, JSON.stringify(d)); } catch (e) { /* לא חובה */ } };
-// 5 גורמים לכפל, מהקל אל הקשה
-const scLadder = () => { const L = [[1, 2, 3], [2, 3, 4, 5], [4, 5, 6], [5, 6, 7, 8], [7, 8, 9, 10]], out = []; L.forEach(p => { const c = p.filter(x => !out.includes(x)); out.push(pick(c.length ? c : p)); }); return out; };
-// 5 זוגות שונים מלוח הכפל, מסודרים לפי גודל המכפלה
-const scPairs = (lo = 2, hi = 9) => {
-  const seen = new Set(), out = [];
-  while (out.length < 5) { const a = R(lo, hi), b = R(lo, hi), k = Math.min(a, b) + 'x' + Math.max(a, b); if (!seen.has(k)) { seen.add(k); out.push([a, b]); } }
-  return out.sort((x, y) => x[0] * x[1] - y[0] * y[1]);
-};
-const scTable = (k, hint) => () => scLadder().map((n, i) => { const [a, b] = i % 2 ? [k, n] : [n, k]; return { q: `${a} × ${b} =`, a: a * b, hint: hint(n) }; });
-const SC_LIST = [
-  { id: 'x2', name: 'כפל ב-2', desc: 'כפול 2 זה פעמיים אותו מספר', gen: scTable(2, n => `${n} × 2 זה ${n} + ${n}.`) },
-  { id: 'x10', name: 'כפל ב-10', desc: 'מוסיפים אפס בסוף', gen: scTable(10, n => `כשכופלים ב-10 מוסיפים 0 בסוף המספר: ${n} ← ${n}0.`) },
-  { id: 'x5', name: 'כפל ב-5', desc: 'חצי מכפל ב-10', gen: scTable(5, n => `${n} × 10 = ${n * 10}. כפל ב-5 הוא חצי מזה.`) },
-  { id: 'x01', name: 'כפל ב-0 וב-1', desc: 'שני כללים שכדאי לזכור', gen: () => scLadder().map((n, i) => { const k = [1, 0, 1, 0, pick([0, 1])][i], [a, b] = i % 2 ? [k, n] : [n, k]; return { q: `${a} × ${b} =`, a: a * b, hint: k ? 'מספר כפול 1 – נשאר אותו מספר.' : 'כל מספר כפול 0 שווה 0.' }; }) },
-  { id: 'twins', name: 'תרגילים תאומים', desc: 'מחליפים את הסדר – התוצאה לא משתנה', gen: () => scPairs(2, 9).map(([a, b], i) => {
-      const hint = 'בתרגילים תאומים מחליפים את סדר המספרים – והתוצאה לא משתנה.';
-      if (a === b) b = a === 9 ? 8 : a + 1;
-      if (i < 2 || i === 4) return { pre: `${a} × ${b} = ${a * b}`, q: `${b} × ${a} =`, a: a * b, hint };
-      return i === 2 ? { q: `${a} × ${b} = ${b} ×`, a, hint: `${hint} איזה מספר חסר כדי שזה יהיה התאום של ${a} × ${b}?` } : { q: `${b} × ${a} = ${a} ×`, a: b, hint: `${hint} איזה מספר חסר כדי שזה יהיה התאום של ${b} × ${a}?` };
-    }) },
-  { id: 'x3', name: 'כפל ב-3', desc: 'פעמיים ועוד פעם אחת', gen: scTable(3, n => `${n} × 2 = ${n * 2}, ועוד ${n} פעם אחת.`) },
-  { id: 'x4', name: 'כפל ב-4', desc: 'כפול 2, ושוב כפול 2', gen: scTable(4, n => `${n} × 2 = ${n * 2}, ושוב כפול 2.`) },
-  { id: 'x9', name: 'כפל ב-9', desc: 'כפול 10 פחות פעם אחת', gen: scTable(9, n => `${n} × 10 = ${n * 10}, פחות ${n} פעם אחת.`) },
-  { id: 'x678', name: 'כפל ב-6, 7 ו-8', desc: 'העובדות הקשות של הלוח', gen: () => scLadder().map((n, i) => { const k = [6, 7, 8, pick([6, 7, 8]), pick([7, 8])][i], [a, b] = i % 2 ? [k, n] : [n, k]; return { q: `${a} × ${b} =`, a: a * b, hint: `${n} × 5 = ${n * 5}, ועוד ${n} × ${k - 5} = ${n * (k - 5)}.` }; }) },
-  { id: 'sq', name: 'מספר כפול עצמו', desc: '2 × 2, 3 × 3 ... עד 10 × 10', gen: () => scLadder().map(n => ({ q: `${n} × ${n} =`, a: n * n, hint: `זה ${n} פעמים ${n}. אפשר להתחיל מ-${n} × ${Math.max(n - 1, 1)} = ${n * Math.max(n - 1, 1)} ולהוסיף ${n - 1 ? n : 0}.` })) },
-  { id: 'missing', name: 'מספר חסר בכפל', desc: 'כמה פעמים? מוצאים את המספר החסר', gen: () => scPairs(2, 9).map(([a, b]) => ({ q: `${a} × ☐ = ${a * b}`, blank: true, a: b, hint: `סופרים בקפיצות של ${a} עד ${a * b}: כמה קפיצות?` })) },
-  { id: 'family', name: 'משפחת תרגילים', desc: 'מתרגיל כפל אחד – שני תרגילי חילוק', gen: () => scPairs(2, 9).map(([a, b], i) => { const [d, r] = i % 2 ? [a, b] : [b, a]; return { pre: `${a} × ${b} = ${a * b}`, q: `${a * b} : ${d} =`, a: r, hint: `באותה משפחה: ${a} × ${b} = ${a * b}, ולכן ${a * b} : ${d} הוא המספר השני בתרגיל הכפל.` }; }) },
-  { id: 'div', name: 'חילוק בלוח הכפל', desc: 'חילוק הוא כפל הפוך', gen: () => scPairs(2, 9).map(([a, b]) => ({ q: `${a * b} : ${a} =`, a: b, hint: `שואלים: איזה מספר כפול ${a} שווה ${a * b}?` })) }
-];
-const SC = Object.fromEntries(SC_LIST.map(s => [s.id, s]));
-const scPass = r => r && r.best >= 4;
+/* ---------- מבדקי הצלחה (למורים): 5 תרגילים על מיומנות אחת – להדפסה (4 ברבעים) או על המסך ---------- */
+// המורה בוחרת תחום ← מיומנות ← דיוק (למשל: כפולות של 6 ו-7 בלבד, חיבור שברים עם מכנה זהה).
+// תרגיל = רשימת "אסימונים": טקסט חשבוני, שבר {f:[מונה,מכנה], w:שלם}, משבצת {b:1}, השוואה {c:1}, טקסט עברי {t}.
+// 'B' בתוך שבר = משבצת. סוג הבדיקה: num (כל משבצת – מספר מדויק), fv (שבר שווה בערכו ל-v), cmp (<, >, =).
+const scB = 'B';
+const scGcd = (a, b) => { while (b) [a, b] = [b, a % b]; return a; };
+const scLad = (k = 5) => { const L = [[1, 2, 3], [2, 3, 4, 5], [4, 5, 6], [5, 6, 7, 8], [7, 8, 9, 10]], out = []; for (let i = 0; i < k; i++) { const p = L[Math.min(i, 4)], c = p.filter(x => !out.includes(x)); out.push(pick(c.length ? c : p)); } return out; };
+// לכל אחד מ-5 התרגילים: איזו כפולה (מהקטנה לגדולה) ובאיזה מספר
+const scTN = T => { T = T.slice().sort((a, b) => a - b); const ns = scLad(); return ns.map((n, i) => [T[Math.min(Math.floor(i * T.length / 5), T.length - 1)], n]); };
+const scMulHint = (t, n) => t === 2 ? `${n} × 2 זה ${n} + ${n}.` : t === 10 ? 'כפול 10 – מוסיפים 0 בסוף המספר.' : t === 5 ? `${n} × 10 = ${n * 10}, וכפל ב-5 הוא חצי מזה.` : t === 9 ? `${n} × 10 = ${n * 10}, פחות ${n} פעם אחת.` : t === 4 ? `${n} × 2 = ${n * 2}, ושוב כפול 2.` : t === 3 ? `${n} × 2 = ${n * 2}, ועוד ${n} פעם אחת.` : t === 1 ? 'מספר כפול 1 – נשאר אותו מספר.' : `מפרקים: ${n} × 5 = ${n * 5}, ועוד ${n} × ${t - 5} = ${n * (t - 5)}.`;
+const scTablesTxt = T => T.length >= 9 ? 'כל לוח הכפל' : (T.length === 1 ? 'כפולות של ' : 'כפולות של ') + T.slice().sort((a, b) => a - b).join(', ');
+// שבר פשוט אקראי (מצומצם) עם מכנה מתוך הרשימה
+const scProper = dens => { const d = pick(dens); let n; do { n = R(1, d - 1); } while (scGcd(n, d) !== 1 && d > 2); return [n, d]; };
+const scFrac = (n, d) => ({ f: [n, d] });
+const scSimp = (n, d) => { const g = scGcd(n, d); return [n / g, d / g]; };
 
-function succHome() {
-  stopSimTimer(); state = null; lessonView = null; navPush('succ');
-  const d = scLoad(), passed = SC_LIST.filter(s => scPass(d[s.id])).length;
-  app.innerHTML = `
-    <div class="topbar"><span class="title">⭐ מבדקי הצלחה</span><button class="secondary" id="scHomeB">${ic('home')} לדף הבית</button></div>
-    <div class="card race-intro"><p class="race-how"><b>5 תרגילים קצרים על נושא אחד</b> – מהקל אל הקשה. טעיתם? מקבלים רמז ועוד ניסיון. 4 נכונות בניסיון הראשון – והנושא מקבל ✔.</p>
-      <div class="sc-prog">עברת <b>${passed}</b> מתוך <b>${SC_LIST.length}</b> מבדקים${passed === SC_LIST.length ? ' – שולט/ת בכל לוח הכפל! 🏆' : ''}</div></div>
-    <h2>לוח הכפל – בוחרים נושא אחד</h2>
-    <div class="sc-grid">${SC_LIST.map(s => { const r = d[s.id]; return `<button class="sc-card${scPass(r) ? ' done' : ''}" data-sc="${s.id}">
-      <span class="sc-st">${scPass(r) ? '✔' : r ? `${r.best}/5` : '☆'}</span><span class="sc-nm">${s.name}</span><span class="sc-ds">${s.desc}</span>${r ? `<span class="sc-stars">${'⭐'.repeat(r.best === 5 ? 3 : r.best === 4 ? 2 : r.best >= 3 ? 1 : 0)}</span>` : ''}</button>`; }).join('')}</div>
-    ${teacherOn() ? `<p class="muted small center">👩‍🏫 קישור למבדק מסוים לתלמידים: לוחצים על המבדק, ובראש המסך יש כפתור "קישור".</p>` : ''}`;
-  $('scHomeB').onclick = home;
-  app.querySelectorAll('[data-sc]').forEach(b => b.onclick = () => succRun(b.dataset.sc));
-  window.scrollTo(0, 0);
+const SCD = {
+  mul: { name: 'כפל וחילוק', skills: {
+    mult: { name: 'כפולות', opts: [{ k: 'T', type: 'tables', label: 'אילו כפולות?' }],
+      title: p => scTablesTxt(p.T),
+      gen: p => scTN(p.T).map(([t, n], i) => { const [a, b] = i % 2 ? [t, n] : [n, t]; return { x: [`${a} × ${b} =`, { b: 1 }], k: 'num', a: [a * b], hint: scMulHint(t, n) }; }) },
+    twins: { name: 'תרגילים תאומים', opts: [{ k: 'T', type: 'tables', label: 'אילו כפולות?' }],
+      title: p => 'תרגילים תאומים · ' + scTablesTxt(p.T),
+      gen: p => scTN(p.T).map(([t, n], i) => { const hint = 'בתרגילים תאומים מחליפים את סדר המספרים – והתוצאה לא משתנה.';
+        if (i < 2 || i === 4) return { pre: `${n} × ${t} = ${n * t}`, x: [`${t} × ${n} =`, { b: 1 }], k: 'num', a: [n * t], hint };
+        return i === 2 ? { x: [`${n} × ${t} = ${t} ×`, { b: 1 }], k: 'num', a: [n], hint } : { x: [`${t} × ${n} =`, { b: 1 }, `× ${t}`], k: 'num', a: [n], hint }; }) },
+    missing: { name: 'מספר חסר', opts: [{ k: 'T', type: 'tables', label: 'אילו כפולות?' }],
+      title: p => 'מספר חסר · ' + scTablesTxt(p.T),
+      gen: p => scTN(p.T).map(([t, n], i) => ({ x: i % 2 ? [{ b: 1 }, `× ${t} = ${t * n}`] : [`${t} ×`, { b: 1 }, `= ${t * n}`], k: 'num', a: [n], hint: `סופרים בקפיצות של ${t} עד ${t * n}: כמה קפיצות?` })) },
+    family: { name: 'משפחת תרגילים', opts: [{ k: 'T', type: 'tables', label: 'אילו כפולות?' }],
+      title: p => 'משפחת תרגילים · ' + scTablesTxt(p.T),
+      gen: p => scTN(p.T).map(([t, n], i) => { const c = t * n, [d, r] = i % 2 ? [t, n] : [n, t]; return { pre: `${t} × ${n} = ${c}`, x: [`${c} : ${d} =`, { b: 1 }], k: 'num', a: [r], hint: `באותה משפחה: ${t} × ${n} = ${c}. לכן ${c} : ${d} הוא המספר השני בתרגיל הכפל.` }; }) },
+    div: { name: 'חילוק', opts: [{ k: 'T', type: 'tables', label: 'מחלקים ב:' }, { k: 'rem', type: 'radio', label: 'שארית', o: [['no', 'בלי שארית'], ['yes', 'עם שארית'], ['mix', 'גם וגם']] }],
+      title: p => `חילוק ${{ no: 'בלי שארית', yes: 'עם שארית', mix: '(עם ובלי שארית)' }[p.rem]} · ${p.T.length >= 9 ? 'כל הלוח' : 'ב-' + p.T.slice().sort((a, b) => a - b).join(', ')}`,
+      gen: p => { const T = p.T.filter(t => t > 1); const TT = T.length ? T : [2];
+        return scTN(TT).map(([t, n], i) => { const withR = p.rem === 'yes' || (p.rem === 'mix' && i % 2 === 1);
+          if (!withR) return { x: [`${t * n} : ${t} =`, { b: 1 }], k: 'num', a: [n], hint: `איזה מספר כפול ${t} שווה ${t * n}?` };
+          const r = R(1, t - 1), d = t * n + r;
+          return { x: [`${d} : ${t} =`, { b: 1 }, { t: 'שארית' }, { b: 1 }], k: 'num', a: [n, r], hint: `מה הכפולה הכי קרובה של ${t} שלא עוברת את ${d}? כמה נשאר?` }; }); } },
+    tens: { name: 'כפל בעשרות ובמאות', opts: [{ k: 'kind', type: 'radio', label: 'סוג', o: [['t1', '30 × 4'], ['h1', '300 × 6'], ['tt', '40 × 50'], ['mix', 'מעורב']] }],
+      title: p => 'כפל בעשרות ובמאות · ' + { t1: 'עשרות × חד-ספרתי', h1: 'מאות × חד-ספרתי', tt: 'עשרות × עשרות', mix: 'מעורב' }[p.kind],
+      gen: p => scLad().map((n, i) => { const kind = p.kind === 'mix' ? ['t1', 't1', 'h1', 'tt', 'tt'][i] : p.kind, a = R(2, 9);
+        const [x, y] = kind === 't1' ? [a * 10, n] : kind === 'h1' ? [a * 100, n] : [a * 10, n * 10];
+        return { x: [`${x} × ${y} =`, { b: 1 }], k: 'num', a: [x * y], hint: `מחשבים ${a} × ${n} = ${a * n}, ומוסיפים את האפסים: ${kind === 'tt' ? 'שניים' : kind === 'h1' ? 'שניים' : 'אחד'}.` }; }) }
+  } },
+  frac: { name: 'שברים', skills: {
+    eq: { name: 'הרחבה וצמצום', opts: [{ k: 'dir', type: 'radio', label: 'מה מתרגלים?', o: [['up', 'הרחבה'], ['down', 'צמצום'], ['mix', 'גם וגם']] }],
+      title: p => ({ up: 'הרחבת שברים', down: 'צמצום שברים', mix: 'הרחבה וצמצום' })[p.dir],
+      gen: p => [2, 3, 4, 5, 6].map((dmax, i) => { const [n, d] = scProper([2, 3, 4, 5, 6].filter(x => x <= Math.max(3, dmax))), k = [2, 2, 3, 4, 5][i] + (i > 2 ? R(0, 1) : 0);
+        const up = p.dir === 'up' || (p.dir === 'mix' && i % 2 === 0), bd = i === 3;
+        if (up) return { x: [scFrac(n, d), '=', bd ? { f: [n * k, scB] } : { f: [scB, d * k] }], k: 'num', a: [bd ? d * k : n * k], hint: bd ? `בכמה כפלו את המונה ${n}? כופלים גם את המכנה באותו מספר.` : `המכנה ${d} נכפל ב-${k}. כופלים גם את המונה ב-${k}.` };
+        return { x: [scFrac(n * k, d * k), '=', bd ? { f: [n, scB] } : { f: [scB, d] }], k: 'num', a: [bd ? d : n], hint: bd ? `המונה חולק ב-${k}. מחלקים גם את המכנה ב-${k}.` : `המכנה ${d * k} חולק ב-${k}. מחלקים גם את המונה ב-${k}.` }; }) },
+    cmp: { name: 'השוואת שברים', opts: [{ k: 'type', type: 'radio', label: 'אילו שברים?', o: [['den', 'מכנה זהה'], ['num', 'מונה זהה'], ['mult', 'מכנה אחד כפולה של השני'], ['mix', 'מעורב']] }],
+      title: p => 'השוואת שברים · ' + { den: 'מכנה זהה', num: 'מונה זהה', mult: 'מכנים שונים', mix: 'מעורב' }[p.type],
+      gen: p => [0, 1, 2, 3, 4].map(i => { const type = p.type === 'mix' ? ['den', 'den', 'num', 'mult', 'mult'][i] : p.type; let A, B, hint;
+        if (type === 'den') { const d = pick([4, 5, 6, 7, 8, 9, 10, 12]); let a = R(1, d - 1), b = R(1, d - 1); if (i === 4) b = a; else while (b === a) b = R(1, d - 1); A = [a, d]; B = [b, d]; hint = 'כשהמכנה זהה – החלקים באותו גודל. משווים את המונים: יותר חלקים = שבר גדול יותר.'; }
+        else if (type === 'num') { const a = R(1, 5); let d1 = R(a + 1, 12), d2 = R(a + 1, 12); while (d2 === d1) d2 = R(a + 1, 12); A = [a, d1]; B = [a, d2]; hint = 'כשהמונה זהה – לוקחים אותו מספר חלקים. מכנה גדול יותר = חלקים קטנים יותר, ולכן השבר קטן יותר.'; }
+        else { const d = pick([2, 3, 4, 5, 6]), m = pick([2, 3]), D = d * m; const a = R(1, d - 1); let b = R(1, D - 1); if (i === 4) b = a * m; else while (b === a * m) b = R(1, D - 1); [A, B] = Math.random() < 0.5 ? [[a, d], [b, D]] : [[b, D], [a, d]]; hint = `מרחיבים את השבר עם המכנה ${d} למכנה ${D}, ואז משווים את המונים.`; }
+        const s = A[0] * B[1] - B[0] * A[1];
+        return { x: [scFrac(...A), { c: 1 }, scFrac(...B)], k: 'cmp', a: [s > 0 ? '>' : s < 0 ? '<' : '='], hint }; }) },
+    add: { name: 'חיבור וחיסור', opts: [{ k: 'op', type: 'radio', label: 'פעולה', o: [['add', 'חיבור'], ['sub', 'חיסור'], ['both', 'חיבור וחיסור']] }, { k: 'den', type: 'radio', label: 'מכנים', o: [['same', 'מכנה זהה'], ['mult', 'מכנה אחד כפולה של השני'], ['diff', 'מכנים שונים']] }, { k: 'mixed', type: 'check', label: 'עם מספרים מעורבים' }],
+      title: p => `${{ add: 'חיבור', sub: 'חיסור', both: 'חיבור וחיסור' }[p.op]} שברים · ${{ same: 'מכנה זהה', mult: 'מכנה אחד כפולה של השני', diff: 'מכנים שונים' }[p.den]}${p.mixed ? ' · מספרים מעורבים' : ''}`,
+      gen: p => [0, 1, 2, 3, 4].map(i => {
+        const sub = p.op === 'sub' || (p.op === 'both' && i % 2 === 1), small = i < 2;
+        let d1, d2;
+        if (p.den === 'same') { d1 = d2 = pick(small ? [3, 4, 5, 6] : [6, 7, 8, 9, 10, 12]); }
+        else if (p.den === 'mult') { d1 = pick(small ? [2, 3] : [2, 3, 4, 5]); d2 = d1 * pick(small ? [2] : [2, 3]); if (Math.random() < 0.5) [d1, d2] = [d2, d1]; }
+        else { const ps = small ? [[2, 3], [3, 4], [2, 5]] : [[3, 4], [2, 5], [3, 5], [4, 6], [6, 8], [4, 5], [3, 8]]; [d1, d2] = pick(ps); if (Math.random() < 0.5) [d1, d2] = [d2, d1]; }
+        let a = scProper([d1])[0], b = scProper([d2])[0], w1 = 0, w2 = 0;
+        if (p.mixed) { w1 = R(1, 4); w2 = R(1, 3); if (sub) { if (w2 >= w1) w1 = w2 + R(1, 2); } }
+        const L = (w1 * d1 + a) * d2, Rr = (w2 * d2 + b) * d1, D = d1 * d2;
+        if (sub && L <= Rr) { if (p.mixed) w1 += 1 + Math.ceil((Rr - L) / D); else { [a, d1, b, d2] = [b, d2, a, d1]; } }
+        const N1 = (w1 * d1 + a) * d2, N2 = (w2 * d2 + b) * d1;
+        if (sub && N1 === N2) { return SCD.frac.skills.add.gen(Object.assign({}, p, { op: 'add' }))[i]; }
+        const [vn, vd] = scSimp(sub ? N1 - N2 : N1 + N2, D);
+        const t1 = w1 ? { f: [a, d1], w: w1 } : scFrac(a, d1), t2 = w2 ? { f: [b, d2], w: w2 } : scFrac(b, d2);
+        const big = vn >= vd && (p.mixed || vn > vd);
+        const hint = p.den === 'same' ? `המכנה זהה – ${sub ? 'מחסרים' : 'מחברים'} רק את המונים, והמכנה נשאר ${d1}.` : `קודם מביאים למכנה משותף${d1 % d2 === 0 || d2 % d1 === 0 ? ` (${Math.max(d1, d2)})` : ''}, ואז ${sub ? 'מחסרים' : 'מחברים'} את המונים.${p.mixed ? ' את השלמים מחשבים בנפרד.' : ''}`;
+        return { x: [t1, sub ? '−' : '+', t2, '=', big ? { f: [scB, scB], w: scB } : { f: [scB, scB] }], k: 'fv', v: [vn, vd], mixedRes: big, hint };
+      }) },
+    of: { name: 'שבר מכמות', opts: [{ k: 'type', type: 'radio', label: 'אילו שברים?', o: [['unit', 'שבר יסודי (½, ⅓, ¼...)'], ['any', 'כל שבר'], ['mix', 'מעורב']] }],
+      title: p => 'שבר מכמות · ' + { unit: 'שבר יסודי', any: 'כל שבר', mix: 'מעורב' }[p.type],
+      gen: p => [2, 3, 4, 5, 6].map((dm, i) => { const unit = p.type === 'unit' || (p.type === 'mix' && i < 2); const d = pick([2, 3, 4, 5, 6, 8, 10].filter(x => x <= Math.max(4, dm * 2))), n = unit ? 1 : R(1, d - 1), q = R(2, i < 2 ? 5 : 10), N = d * q;
+        return { x: [{ t: 'כמה הם' }, scFrac(n, d), { t: `מ-${N}?` }, { b: 1 }], rtl: 1, k: 'num', a: [n * q], hint: n === 1 ? `מחלקים את ${N} ל-${d} חלקים שווים: ${N} : ${d}.` : `קודם ${scFracTxt(1, d)} מ-${N}: ${N} : ${d} = ${q}. ואז כופלים ב-${n}.` }; }) },
+    mixed: { name: 'מספר מעורב ושבר מדומה', opts: [{ k: 'dir', type: 'radio', label: 'כיוון', o: [['toImp', 'ממעורב לשבר מדומה'], ['toMix', 'משבר מדומה למעורב'], ['both', 'גם וגם']] }],
+      title: p => ({ toImp: 'ממספר מעורב לשבר מדומה', toMix: 'משבר מדומה למספר מעורב', both: 'מספר מעורב ושבר מדומה' })[p.dir],
+      gen: p => [0, 1, 2, 3, 4].map(i => { const toImp = p.dir === 'toImp' || (p.dir === 'both' && i % 2 === 0); const d = pick(i < 2 ? [2, 3, 4] : [3, 4, 5, 6, 8]), n = R(1, d - 1), w = R(1, i < 2 ? 2 : 4), N = w * d + n;
+        return toImp ? { x: [{ f: [n, d], w }, '=', { f: [scB, d] }], k: 'num', a: [N], hint: `בכל שלם יש ${d} חלקים: ${w} × ${d} = ${w * d}, ועוד ${n}.` }
+          : { x: [scFrac(N, d), '=', { f: [scB, d], w: scB }], k: 'num', a: [w, n], hint: `כמה פעמים ${d} נכנס ב-${N}? זה השלם. מה שנשאר – המונה.` }; }) }
+  } }
+};
+const scFracTxt = (n, d) => `${n}/${d}`;
+// הגדרות ברירת מחדל לכל מיומנות
+function scDefaults(dom, sk) {
+  const p = {};
+  (SCD[dom].skills[sk].opts || []).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'check' ? false : o.o[0][0]; });
+  return p;
+}
+const scSkill = c => SCD[c.d] && SCD[c.d].skills[c.s];
+const scTitle = c => { const S = scSkill(c); return S.title(c.p); };
+const scGen = c => scSkill(c).gen(c.p);
+const scEnc = c => btoa(JSON.stringify(c)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+const scDec = s => { try { const c = JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/'))); return scSkill(c) ? c : null; } catch (e) { return null; } };
+
+// ציור תרגיל: mode = 'screen' (משבצות להקלדה) / 'print' (משבצות ריקות) / 'key' (עם התשובות)
+function scRender(q, mode) {
+  let bi = 0;
+  const ans = q.k === 'fv' ? scFvShow(q) : q.a;
+  const blank = (cls = '') => { const i = bi++; return mode === 'screen' ? `<input class="sc-in${cls}" data-bi="${i}" inputmode="numeric" autocomplete="off" maxlength="4" aria-label="משבצת">` : mode === 'key' ? `<b class="sc-kv">${ans[i] === '' ? '' : ans[i]}</b>` : `<span class="sc-box${cls}"></span>`; };
+  const fr = t => {
+    const part = v => v === scB ? blank(' sm') : v;
+    // תשובה שהיא מספר שלם (בלי שבר) – בדף התשובות מציגים רק את השלם
+    if (mode === 'key' && t.w === scB && ans[bi + 1] === '') { const w = ans[bi]; bi += 3; return `<b class="sc-kv">${w}</b>`; }
+    return `<span class="sc-mix">${t.w !== undefined ? `<span class="sc-w">${t.w === scB ? blank(' sm') : t.w}</span>` : ''}<span class="fr sc-fr"><span>${part(t.f[0])}</span><span>${part(t.f[1])}</span></span></span>`;
+  };
+  const tok = t => typeof t === 'string' ? `<span class="m">${t}</span>` : t.f ? fr(t) : t.b ? blank() : t.c ? (mode === 'screen' ? `<span class="sc-cmp">${['<', '=', '>'].map(s => `<button type="button" class="sc-cb" data-cmp="${s}">${s}</button>`).join('')}</span>` : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : '<span class="sc-circ"></span>') : t.t ? `<span class="sc-t">${t.t}</span>` : '';
+  // השוואה ושבר מכמות – בתוך המשפט; כל השאר משמאל לימין
+  const parts = q.x.map(tok);
+  return `<span class="sc-x" dir="${q.rtl ? 'rtl' : 'ltr'}">${parts.join(' ')}</span>`;
+}
+// התשובה לשבר: מספר מעורב אם צריך (שלם, מונה, מכנה), אחרת מונה ומכנה
+function scFvShow(q) {
+  const [n, d] = q.v;
+  if (q.mixedRes) { const w = Math.floor(n / d), r = n % d; return r ? [w, r, d] : [w, '', '']; }
+  return [n, d];
+}
+// בדיקת תשובה מהמסך
+function scCheckAns(q, vals) {
+  if (q.k === 'cmp') return vals[0] === q.a[0];
+  if (q.k === 'num') return vals.every((v, i) => v !== '' && Number(v) === q.a[i]);
+  // fv: שבר שווה בערכו (גם לא מצומצם). מספר מעורב: שלם + שבר
+  let w = 0, n, d;
+  if (q.mixedRes) { [w, n, d] = vals; w = Number(w || 0); if (n === '' && d === '') { n = 0; d = 1; } } else [n, d] = vals;
+  n = Number(n); d = Number(d);
+  if (!d || !Number.isFinite(n) || !Number.isFinite(w)) return false;
+  return (w * d + n) * q.v[1] === q.v[0] * d;
 }
 
-function succRun(id) {
-  const S = SC[id];
-  if (!S) return succHome();
-  const qs = S.gen(), st = { i: 0, first: 0, tries: 0, wrong: [] };
+// ---- מסך הבנייה (מורים): בוחרים מיומנות, רואים את הדף, מדפיסים / מקרינים / שולחים קישור ----
+let scCfg = null;
+function succHome() {
+  if (!teacherOn()) return home();
+  stopSimTimer(); state = null; lessonView = null; navPush('succ');
+  if (!scCfg) { const d0 = 'mul', s0 = 'mult'; const c = { d: d0, s: s0, p: scDefaults(d0, s0) }; scCfg = { mode: 'same', slots: [c, { ...c, p: { ...c.p } }, { ...c, p: { ...c.p } }, { ...c, p: { ...c.p } }], ed: 0 }; }
+  const S = scCfg, cur = S.mode === 'same' ? 0 : S.ed, c = S.slots[cur], dom = SCD[c.d], sk = dom.skills[c.s];
+  const optHTML = o => {
+    const v = c.p[o.k];
+    if (o.type === 'tables') return `<div class="sc-opt"><b>${o.label}</b> <span class="sc-chips">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(t => `<label class="sc-chip${v.includes(t) ? ' on' : ''}"><input type="checkbox" data-tbl="${t}" ${v.includes(t) ? 'checked' : ''}>${t}</label>`).join('')}<button type="button" class="ghost sc-all" data-taball="1">הכל</button></span></div>`;
+    if (o.type === 'check') return `<div class="sc-opt"><label class="chk"><input type="checkbox" data-chk="${o.k}" ${v ? 'checked' : ''}> ${o.label}</label></div>`;
+    return `<div class="sc-opt"><b>${o.label}</b> <span class="sc-chips">${o.o.map(([k, l]) => `<label class="sc-chip${v === k ? ' on' : ''}"><input type="radio" name="sco-${o.k}" data-rad="${o.k}" value="${k}" ${v === k ? 'checked' : ''}>${l}</label>`).join('')}</span></div>`;
+  };
+  app.innerHTML = `
+    <div class="topbar noprint"><span class="title">⭐ מבדקי הצלחה</span><button class="secondary" id="scBack">${ic('home')} חזרה</button></div>
+    <div class="card noprint sc-build">
+      <p class="sc-intro">מבדק הצלחה = <b>5 תרגילים קצרים על מיומנות אחת</b>, מהקל אל הקשה. בדף המודפס – 4 מבדקים ברבעים, לגזור. בעמוד השני – דף תשובות.</p>
+      <div class="sc-opt"><b>בדף:</b> <span class="sc-chips">
+        <label class="sc-chip${S.mode === 'same' ? ' on' : ''}"><input type="radio" name="scmode" value="same" ${S.mode === 'same' ? 'checked' : ''}>אותו מבדק ב-4 הרבעים (מספרים שונים – כל ילד מקבל רבע)</label>
+        <label class="sc-chip${S.mode === 'diff' ? ' on' : ''}"><input type="radio" name="scmode" value="diff" ${S.mode === 'diff' ? 'checked' : ''}>מבדק שונה בכל רבע</label></span></div>
+      ${S.mode === 'diff' ? `<div class="sc-slots">${S.slots.map((x, i) => `<button type="button" class="sc-slot${i === cur ? ' on' : ''}" data-slot="${i}"><b>רבע ${i + 1}</b><span>${scTitle(x)}</span></button>`).join('')}</div>` : ''}
+      <div class="sc-editor">
+        <div class="sc-opt"><b>1. תחום:</b> <span class="sc-chips">${Object.entries(SCD).map(([k, D]) => `<button type="button" class="sc-chip btn${c.d === k ? ' on' : ''}" data-dom="${k}">${D.name}</button>`).join('')}</span></div>
+        <div class="sc-opt"><b>2. מיומנות:</b> <span class="sc-chips">${Object.entries(dom.skills).map(([k, X]) => `<button type="button" class="sc-chip btn${c.s === k ? ' on' : ''}" data-sk="${k}">${X.name}</button>`).join('')}</span></div>
+        <div class="sc-dial"><b>3. דיוק:</b>${sk.opts.map(optHTML).join('')}</div>
+        <div class="sc-now">📋 ${S.mode === 'diff' ? `רבע ${cur + 1}: ` : ''}<b>${scTitle(c)}</b></div>
+      </div>
+      <div class="actions"><button id="scPrint" class="race-go">${ic('printer')} הדפסה</button><button id="scNew" class="secondary">${ic('retry')} מספרים חדשים</button><button id="scPlay" class="secondary">${ic('bulb')} מבדק על המסך${S.mode === 'diff' ? ` (רבע ${cur + 1})` : ''}</button><button id="scLink" class="ghost">🔗 קישור לתלמידים</button></div>
+      <div class="small muted" id="scLinkMsg"></div>
+    </div>
+    <div id="wsout"></div>`;
+  scSheet();
+  $('scBack').onclick = () => { homeTab = 'class'; home(); };
+  const redo = () => succHome();
+  app.querySelectorAll('[name=scmode]').forEach(r => r.onchange = () => { S.mode = r.value; S.ed = 0; redo(); });
+  app.querySelectorAll('[data-slot]').forEach(b => b.onclick = () => { S.ed = Number(b.dataset.slot); redo(); });
+  const setC = nc => { if (S.mode === 'same') S.slots = S.slots.map(() => ({ d: nc.d, s: nc.s, p: JSON.parse(JSON.stringify(nc.p)) })); else S.slots[cur] = nc; redo(); };
+  app.querySelectorAll('[data-dom]').forEach(b => b.onclick = () => { const d = b.dataset.dom, s = Object.keys(SCD[d].skills)[0]; setC({ d, s, p: scDefaults(d, s) }); });
+  app.querySelectorAll('[data-sk]').forEach(b => b.onclick = () => { const s = b.dataset.sk, p = scDefaults(c.d, s); if (c.p.T && p.T) p.T = c.p.T.slice(); setC({ d: c.d, s, p }); });
+  app.querySelectorAll('[data-tbl]').forEach(x => x.onchange = () => { const t = Number(x.dataset.tbl); let T = c.p.T.filter(y => y !== t); if (x.checked) T.push(t); if (!T.length) T = [t]; setC({ ...c, p: { ...c.p, T: T.sort((a, b) => a - b) } }); });
+  app.querySelectorAll('[data-taball]').forEach(x => x.onclick = () => setC({ ...c, p: { ...c.p, T: [2, 3, 4, 5, 6, 7, 8, 9, 10] } }));
+  app.querySelectorAll('[data-rad]').forEach(x => x.onchange = () => setC({ ...c, p: { ...c.p, [x.dataset.rad]: x.value } }));
+  app.querySelectorAll('[data-chk]').forEach(x => x.onchange = () => setC({ ...c, p: { ...c.p, [x.dataset.chk]: x.checked } }));
+  $('scPrint').onclick = () => window.print();
+  $('scNew').onclick = scSheet;
+  $('scPlay').onclick = () => succRun(S.slots[cur], true);
+  $('scLink').onclick = () => {
+    const link = location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'succ=' + scEnc(S.slots[cur]);
+    const msg = t => { $('scLinkMsg').innerHTML = t; };
+    const show = () => msg(`<span data-raw dir="ltr" style="user-select:all;word-break:break-all">${esc(link)}</span>`);
+    try { navigator.clipboard.writeText(link).then(() => msg(`הקישור הועתק ✔ – "${esc(scTitle(S.slots[cur]))}". התלמידים פותרים על המסך.`), show); } catch (e) { show(); }
+  };
+}
+// הדף להדפסה: 4 רבעים + דף תשובות
+function scSheet() {
+  const S = scCfg, qsets = S.slots.map((c, i) => scGen(S.mode === 'same' ? S.slots[0] : c));
+  const cfgOf = i => S.mode === 'same' ? S.slots[0] : S.slots[i];
+  const quarter = i => `<div class="sc-quarter">
+      <div class="sc-qh"><b>⭐ מבדק הצלחה</b><span>שם: <span class="wsline"></span></span></div>
+      <div class="sc-qt">${scTitle(cfgOf(i))}</div>
+      <ol class="sc-ql">${qsets[i].map(q => `<li>${q.pre ? `<div class="sc-pre">יודעים ש: ${M(q.pre)}</div>` : ''}${scRender(q, 'print')}</li>`).join('')}</ol>
+      <div class="sc-foot"><span class="sc-stamp">✔ הצלחתי!</span><span class="sc-self">איך היה לי? 😊 🙂 😐</span></div>
+    </div>`;
+  const keyQ = i => `<div class="sc-quarter key"><div class="sc-qh"><b>🔑 רבע ${i + 1}</b></div><div class="sc-qt">${scTitle(cfgOf(i))}</div>
+      <ol class="sc-ql">${qsets[i].map(q => `<li>${scRender(q, 'key')}</li>`).join('')}</ol></div>`;
+  $('wsout').innerHTML = `<section class="ws-page sc-page"><div class="sc-quarters">${[0, 1, 2, 3].map(quarter).join('')}</div></section>
+    <section class="ws-page sc-page wskey"><h2>🔑 דף תשובות – מבדקי הצלחה</h2><div class="sc-quarters">${[0, 1, 2, 3].map(keyQ).join('')}</div></section>`;
+  $('wsout').dataset.what = 'מבדקי הצלחה: ' + [...new Set(S.slots.map((c, i) => scTitle(cfgOf(i))))].join(' | ');
+}
+
+// ---- מבדק על המסך (גם מקישור לתלמידים) ----
+function succRun(cfg, fromBuilder) {
+  if (!cfg || !scSkill(cfg)) return home();
+  const name = scTitle(cfg), qs = scGen(cfg), st = { i: 0, first: 0, tries: 0, wrong: [] };
   window.__scQs = qs; // לבדיקות אוטומטיות
-  track('מבדק הצלחה', S.name);
+  track('מבדק הצלחה', name);
   navPush('view');
-  const link = location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'succ=' + id;
+  const back = () => fromBuilder ? succHome() : home();
   const show = () => {
     const q = qs[st.i];
-    const input = `<input class="ans sc-in" id="scIn" inputmode="numeric" autocomplete="off" maxlength="4" aria-label="תשובה">`;
-    const expr = q.blank ? q.q.replace('☐', `</span>${input}<span class="m">`) : `${q.q} </span>${input}<span class="m">`;
     app.innerHTML = `
-      <div class="topbar"><span class="title">⭐ ${S.name}</span><span class="muted">תרגיל ${st.i + 1} מתוך 5</span>${teacherOn() ? `<button class="ghost" id="scLink">🔗 קישור</button>` : ''}</div>
+      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">תרגיל ${st.i + 1} מתוך 5</span><button class="ghost" id="scOut">${ic('home')} יציאה</button></div>
+      <div class="sc-name">${name}</div>
       <div class="sc-dots">${qs.map((_, k) => `<span class="${k < st.i ? 'ok' : k === st.i ? 'now' : ''}"></span>`).join('')}</div>
       <div class="card center sc-q">
         ${q.pre ? `<div class="sc-pre">יודעים ש: ${M(q.pre)}</div>` : ''}
-        <div class="sc-expr" dir="ltr"><span class="m">${expr}</span></div>
+        <div class="sc-expr">${scRender(q, 'screen')}</div>
         <div class="sc-msg" id="scMsg"></div>
-        <div class="actions" style="justify-content:center" id="scActs"><button id="scCheck">${ic('check')} בדיקה</button></div>
-        <div class="small muted" id="scLinkMsg"></div>
+        <div class="actions" style="justify-content:center" id="scActs">${q.k === 'cmp' ? '' : `<button id="scCheck">${ic('check')} בדיקה</button>`}</div>
       </div>`;
-    const inp = $('scIn');
-    setTimeout(() => inp.focus(), 30);
+    $('scOut').onclick = back;
+    const ins = [...app.querySelectorAll('.sc-in')];
+    if (ins[0]) setTimeout(() => ins[0].focus(), 30);
     st.tries = 0;
     const next = () => { st.i++; if (st.i < 5) show(); else done(); };
-    const check = () => {
-      const v = inp.value.trim();
-      if (!v) { $('scMsg').innerHTML = '✋ כתבו תשובה, ואז "בדיקה".'; return; }
+    const lock = () => { ins.forEach(x => x.disabled = true); app.querySelectorAll('.sc-cb').forEach(x => x.disabled = true); };
+    const check = vals => {
+      const miss = q.k === 'fv' && q.mixedRes ? (vals[0] === '' && (vals[1] === '' || vals[2] === '')) || ((vals[1] === '') !== (vals[2] === '')) : vals.some(v => v === '');
+      if (miss) { $('scMsg').innerHTML = '✋ השלימו את כל המשבצות, ואז "בדיקה".'; return; }
       st.tries++;
-      if (Number(v) === q.a) {
+      if (scCheckAns(q, vals)) {
         if (st.tries === 1) st.first++;
-        inp.disabled = true; inp.classList.add('ok');
+        lock(); ins.forEach(x => x.classList.add('ok'));
         $('scMsg').innerHTML = pick(['✔ נכון!', '✔ מצוין!', '✔ בדיוק!', '✔ כל הכבוד!']);
         $('scActs').innerHTML = '';
-        setTimeout(next, 750);
+        setTimeout(next, 800);
       } else if (st.tries === 1) {
         $('scMsg').innerHTML = `<div class="sc-hint">💡 ${q.hint}</div>נסו שוב 🙂`;
-        inp.select();
+        if (ins[0]) ins[0].select();
       } else {
-        st.wrong.push(q.blank ? q.q.replace('☐', q.a) : `${q.q} ${q.a}`);
-        inp.disabled = true;
-        $('scMsg').innerHTML = `התשובה היא <b>${q.a}</b>. ${M(q.blank ? q.q.replace('☐', q.a) : `${q.q} ${q.a}`)} – נזכור לפעם הבאה 🙂`;
+        lock();
+        st.wrong.push(q);
+        $('scMsg').innerHTML = `התשובה: <span class="sc-expr sm">${scRender(q, 'key')}</span> – נזכור לפעם הבאה 🙂`;
         $('scActs').innerHTML = `<button id="scNext">${st.i < 4 ? 'לתרגיל הבא ←' : 'לסיכום ←'}</button>`;
         $('scNext').onclick = next; $('scNext').focus();
       }
     };
-    $('scCheck').onclick = check;
-    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !inp.disabled) check(); });
-    if ($('scLink')) $('scLink').onclick = () => {
-      const msg = t => { $('scLinkMsg').innerHTML = t; };
-      try { navigator.clipboard.writeText(link).then(() => msg('הקישור למבדק הועתק ✔ – אפשר לשלוח אותו לתלמידים.'), () => msg(`<span data-raw dir="ltr">${esc(link)}</span>`)); } catch (e) { msg(`<span data-raw dir="ltr">${esc(link)}</span>`); }
-    };
+    if ($('scCheck')) $('scCheck').onclick = () => check(ins.map(x => x.value.trim()));
+    ins.forEach((x, k) => x.addEventListener('keydown', e => { if (e.key === 'Enter' && !x.disabled) { if (k < ins.length - 1 && !ins[k + 1].value) ins[k + 1].focus(); else $('scCheck').click(); } }));
+    app.querySelectorAll('.sc-cb').forEach(b => b.onclick = () => { app.querySelectorAll('.sc-cb').forEach(x => x.classList.toggle('sel', x === b)); check([b.dataset.cmp]); });
     window.scrollTo(0, 0);
   };
   const done = () => {
-    const d = scLoad(), prev = d[id], f = st.first;
-    d[id] = { best: Math.max(f, prev ? prev.best : 0), last: f, n: (prev ? prev.n : 0) + 1, day: new Date().toLocaleDateString('en-CA') };
-    scSave(d);
-    track('מבדק הצלחה – סיום', `${S.name} · ${f}/5`);
-    const pass = f >= 4, firstPass = pass && !scPass(prev);
+    const f = st.first, pass = f >= 4;
+    track('מבדק הצלחה – סיום', `${name} · ${f}/5`);
     app.innerHTML = `
-      <div class="topbar"><span class="title">⭐ ${S.name}</span><button class="secondary" id="scHomeB">${ic('home')} לדף הבית</button></div>
+      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><button class="secondary" id="scOut">${ic('home')} ${fromBuilder ? 'חזרה' : 'לדף הבית'}</button></div>
+      <div class="sc-name">${name}</div>
       <div class="card center sc-end">
         <div class="path-trophy">${f === 5 ? '🏆' : pass ? '🌟' : f >= 3 ? '💪' : '🌱'}</div>
-        <h2>${f === 5 ? 'מושלם! 5 מתוך 5' : pass ? `${f} מתוך 5 – עברת!` : f >= 3 ? `${f} מתוך 5 – כמעט!` : `${f} מתוך 5 בניסיון הראשון`}</h2>
+        <h2>${f === 5 ? 'מושלם! 5 מתוך 5' : pass ? `${f} מתוך 5 – הצלחת!` : f >= 3 ? `${f} מתוך 5 – כמעט!` : `${f} מתוך 5 בניסיון הראשון`}</h2>
         <div class="sc-stars big">${'⭐'.repeat(f === 5 ? 3 : pass ? 2 : f >= 3 ? 1 : 0)}</div>
-        <p>${pass ? `כל הכבוד! את/ה שולט/ת ב<b>${S.name}</b>.${firstPass ? ' הנושא קיבל ✔ ברשימת המבדקים שלך.' : ''}` : f >= 3 ? 'עוד מבדק אחד – ואת/ה שם! 💪' : `כל התרגילים נפתרו בסוף – זה כבר התחלה טובה. בואו ננסה שוב, הפעם עם הטריק:<br><b>${qs[0].hint}</b>`}</p>
-        ${st.wrong.length ? `<p class="small muted">כדאי לזכור: ${st.wrong.map(w => M(w)).join(' · ')}</p>` : ''}
-        <div class="actions" style="justify-content:center">
-          <button id="scAgain">${ic('retry')} עוד מבדק – ${S.name}</button>
-          <button class="secondary" id="scList">⭐ לכל המבדקים</button>
-          ${pass ? '' : `<button class="ghost" id="scLearn">📚 טריקים ללוח הכפל</button>`}
-        </div>
+        <p>${pass ? 'כל הכבוד! את/ה שולט/ת בזה.' : f >= 3 ? 'עוד מבדק אחד – ואת/ה שם! 💪' : `כל התרגילים נפתרו בסוף – זו התחלה טובה. נסו שוב, הפעם עם הרמז:<br><b>${qs[0].hint}</b>`}</p>
+        <div class="actions" style="justify-content:center"><button id="scAgain">${ic('retry')} עוד מבדק כזה</button></div>
       </div>`;
-    $('scHomeB').onclick = home;
-    $('scAgain').onclick = () => succRun(id);
-    $('scList').onclick = succHome;
-    if ($('scLearn')) $('scLearn').onclick = () => startLesson('times');
+    $('scOut').onclick = back;
+    $('scAgain').onclick = () => succRun(cfg, fromBuilder);
     window.scrollTo(0, 0);
   };
   show();
@@ -13032,7 +13208,7 @@ function askName(done) {
   if (!first) return;
   if (!teacherCred() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('succ') && GRADE >= 2) { if (SC[URLP.get('succ')]) succRun(URLP.get('succ')); else succHome(); } else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
 </html>
