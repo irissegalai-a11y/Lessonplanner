@@ -1197,7 +1197,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 נז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7120,10 +7120,18 @@ function home() {
                 <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}</span>
               </button>`;
             }).join('')}
+            ${GRADE >= 4 ? `<button class="topic" style="--c:#2f8f55" id="drawGo">
+                <span class="ic">${TOPICS.length + 1}</span>
+                <span class="nm">שרטוט בגאומטריה</span>
+                <span class="ds">משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ולפי אלכסונים</span>
+              </button>
+              <button class="topic" style="--c:#4c5fd5" id="quadGo">
+                <span class="ic">${TOPICS.length + 2}</span>
+                <span class="nm">מרובעים</span>
+                <span class="ds">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span>
+              </button>` : ''}
           </div>
           <div class="practice-more">
-            ${GRADE >= 4 ? `<button id="drawGo">✏️ תרגול שרטוט<span class="desc">משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ושרטוט לפי אלכסונים</span></button>` : ''}
-            ${GRADE >= 4 ? `<button id="quadGo">🔷 תרגול מרובעים<span class="desc">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span></button>` : ''}
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום – התוצאה נשלחת למורה</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
