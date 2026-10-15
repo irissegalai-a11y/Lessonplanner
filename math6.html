@@ -1208,7 +1208,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 סח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 סט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -1251,6 +1251,7 @@
           <li>השם שכתבתם בכניסה (לא חובה – אפשר ללחוץ "בלי שם")</li>
           <li>הכיתה שבחרתם באתר</li>
           <li>באילו פעילויות עבדתם – שיעורים, תרגולים, משחקים – וכמה זמן</li>
+          <li>מורים שנכנסו עם קוד המורים – השם ובאילו פעילויות השתמשו. כרטיסי יציאה שמורה מריצה בכיתה שלה מוצגים רק על המסך ולא נשלחים</li>
           <li>אילו דפים הדפסתם או שמרתם</li>
           <li>בסיום תרגול, מבחן או כרטיס יציאה – כמה תשובות נכונות</li>
           <li>באימון הכפל – רק מי שהקליד את קוד הכיתה – גם ההתקדמות באימון</li>
@@ -6573,6 +6574,8 @@ function masteryLabel(m) {
    קישור מותאם מהמורה
    ========================================================= */
 const URLP = new URLSearchParams(location.search);
+// כרטיס יציאה מקישור של מורה אחרת (?exit=o): התוצאה רק על המסך – לא נשלח כלום
+const EXIT_OPEN = URLP.get('exit') === 'o';
 const PRESET = (() => {
   const ln = URLP.get('learn');
   if (ln && (LESSONS[ln] || (ln === 'composite' && GRADE >= 5) || (ln === 'mul22' && GRADE >= 4 && GRADE <= 6) || (ln === 'draw' && GRADE >= 4 && GRADE <= 6))) return { learn: ln }; // composite ו-mul22 מוגדרים בהמשך הקובץ
@@ -7019,9 +7022,10 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', () => actEnd());
 function trackSend(action, detail, beacon) {
-  if (!TRACK.form || URLP.has('teacher') || bookOk()) return;
+  if (!TRACK.form || URLP.has('teacher') || irisOk() || EXIT_OPEN) return;
   try {
-    const nm = (typeof store !== 'undefined' && store.name) || '';
+    const nm0 = (typeof store !== 'undefined' && store.name) || '';
+    const nm = staffOn() ? `מורה: ${nm0 || 'ללא שם'}` : nm0;
     const body = new URLSearchParams({ [TRACK.f.device]: '', [TRACK.f.grade]: String(GRADE), [TRACK.f.name]: nm, [TRACK.f.action]: action, [TRACK.f.detail]: String(detail).slice(0, 200) });
     fetch(TRACK.form, { method: 'POST', mode: 'no-cors', body, keepalive: !!beacon }).catch(() => {});
   } catch (e) { /* לא חובה */ }
@@ -7074,7 +7078,7 @@ function home() {
     { id: 'practice', label: 'לתרגל', icon: 'pencil', wash: 'rgba(217,138,154,0.28)' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
-    { id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' },
+    ...(teacherOn() ? [{ id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' }] : []),
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)' },
     { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
   ];
@@ -7144,7 +7148,7 @@ function home() {
           </div>
           <div class="practice-more">
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
-            <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום – התוצאה נשלחת למורה</span></button>
+            <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום${staffOn() ? '' : ' – התוצאה נשלחת למורה'}</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
             ${store.solved ? `<div class="muted">${ic('star')} עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
           </div>
@@ -7213,7 +7217,7 @@ function home() {
             <span class="gc-ds">משרטטים צורות על רשת נקודות – והאתר מחשב שטח והיקף. יש גם משימות!</span>
           </button>
         </section>
-        <section class="panel" data-panel="class" ${homeTab === 'class' ? '' : 'hidden'}>
+        ${teacherOn() ? `<section class="panel" data-panel="class" ${homeTab === 'class' ? '' : 'hidden'}>
           <h2>בכיתה – מקרינים על הלוח</h2>
           <button class="game-card" id="clsOpen">
             <span class="gc-ic" style="--gw:rgba(239,201,106,0.7)">${ic('bulb')}</span>
@@ -7233,9 +7237,9 @@ function home() {
           <button class="game-card" id="exitGo2">
             <span class="gc-ic" style="--gw:rgba(164,140,201,0.6)">${ic('clipboard')}</span>
             <span class="gc-nm">כרטיס יציאה</span>
-            <span class="gc-ds">3 שאלות בסוף השיעור – התוצאה נשלחת אלייך.</span>
+            <span class="gc-ds">3 שאלות בסוף השיעור${staffOn() ? ' – עם קישור לתלמידים. התוצאות מוצגות רק על המסך שלהם.' : ' – התוצאה נשלחת אלייך.'}</span>
           </button>
-        </section>
+        </section>` : ''}
         <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
           <h2>הדפסה</h2>
           <div class="print-links">
@@ -7258,10 +7262,12 @@ function home() {
   $('milGo').onclick = () => milHome();
   $('cityGo').onclick = () => cityHome();
   $('gbGo').onclick = gbHome;
-  $('exitGo2').onclick = exitHome;
-  $('clsOpen').onclick = () => classSub('open');
-  $('clsGames').onclick = () => classSub('games');
-  $('clsPrint').onclick = () => classSub('print');
+  if ($('exitGo2')) {
+    $('exitGo2').onclick = exitHome;
+    $('clsOpen').onclick = () => classSub('open');
+    $('clsGames').onclick = () => classSub('games');
+    $('clsPrint').onclick = () => classSub('print');
+  }
   $('warGo1').onclick = () => warHome('solo');
   $('tfGo0').onclick = () => tfHome();
   if ($('todayGo')) $('todayGo').onclick = sug.go;
@@ -7868,7 +7874,7 @@ function nextQ() {
 /* ---------- סיכום ---------- */
 function summary() {
   const s = state, n = s.results.length;
-  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
+  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
   const label = titleText();
@@ -11819,9 +11825,15 @@ function exitHome() {
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('clipboard')} כרטיס יציאה</span><button class="secondary" id="exHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how"><b>3 שאלות קצרות</b> על מה שלמדנו היום – קלה, בינונית ומאתגרת. עונים לבד, בלי עזרה. בסוף רואים את התוצאה${kf.report ? ', והיא נשלחת למורה' : ''}.</p></div>
+    ${teacherOn() && !EXIT_OPEN ? `<div class="card exit-link"><b>🔗 קישור לתלמידים</b> – שולחים אותו לתלמידים, והם פותחים את כרטיס היציאה בטלפון או במחשב${staffOn() ? '. התוצאות מוצגות רק להם על המסך ולא נשלחות לשום מקום.' : '.'}
+      <div class="kf-join"><input id="exLink" class="tinput" readonly dir="ltr" value="${esc(location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + (staffOn() ? 'exit=o' : 'exit'))}"><button class="secondary" type="button" id="exCopy">העתקה</button></div><div class="small" id="exCopyMsg"></div></div>` : ''}
     <h2>מה למדנו היום?</h2>
     <div class="race-tracks">${gameTopics().map(t => `<button class="race-track" data-ext="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}${GRADE >= 4 ? Object.entries(EXIT_EXTRA).map(([k, E]) => `<button class="race-track" data-exx="${k}"><span class="nm">${E.name}</span></button>`).join('') : ''}</div>`;
   $('exHomeB').onclick = home;
+  if ($('exCopy')) $('exCopy').onclick = () => {
+    const done = () => { $('exCopyMsg').textContent = 'הקישור הועתק ✔'; };
+    try { navigator.clipboard.writeText($('exLink').value).then(done, () => { $('exLink').select(); }); } catch (e) { $('exLink').select(); }
+  };
   app.querySelectorAll('[data-exx]').forEach(b => b.onclick = () => exitExtra(b.dataset.exx));
   app.querySelectorAll('[data-ext]').forEach(b => b.onclick = () => {
     const t = TOPIC[b.dataset.ext];
@@ -11840,6 +11852,7 @@ function exitAfterSummary(s, correct, n) {
 function exitReportBox(topicName, correct, n, wrong) {
   const box = document.createElement('div');
   box.className = 'card exit-box';
+  if (EXIT_OPEN || staffOn()) { box.innerHTML = '📋 התוצאה מוצגת רק כאן, על המסך – היא לא נשלחת לשום מקום.'; app.querySelector('.card').after(box); return; }
   const send = () => kfReport({ minutes: '', mastered: `כרטיס יציאה · ${GRADE_NAME[GRADE]} · ${topicName}`, score: `${correct}/${n}`, mistakes: wrong.join(' | ') });
   if (kf.report) { send(); box.innerHTML = `📤 התוצאה נשלחה למורה (${esc(kf.name)}, ${esc(kf.klass)}).`; }
   else {
@@ -11888,7 +11901,7 @@ function exitExtra(kind) {
     window.scrollTo(0, 0);
   };
   const done = () => {
-    track('כרטיס יציאה – סיום', `${E.name} · ${st.ok}/3`);
+    track('כרטיס יציאה – סיום', staffOn() ? E.name : `${E.name} · ${st.ok}/3`);
     app.innerHTML = `
       <div class="topbar"><span class="title">${ic('clipboard')} כרטיס יציאה – ${E.name}</span><button class="secondary" id="exHomeB">${ic('home')} לדף הבית</button></div>
       <div class="card center"><div class="path-trophy">${st.ok === 3 ? '🌟' : st.ok === 2 ? '💪' : '📚'}</div><h2>${st.ok} מתוך 3 נכונות</h2>${st.wrong.length ? `<p>כדאי לחזור על: ${st.wrong.join(', ')}</p>` : '<p>מצוין – הבנתם את החומר!</p>'}</div>`;
@@ -12245,9 +12258,17 @@ function wsGate(fn) {
   $('wspass').onkeydown = e => { if (e.key === 'Enter') go(); };
   $('wspass').focus();
 }
-function bookOk() {
-  try { return localStorage.getItem('math-book-key') === BOOK_HASH || localStorage.getItem('math-teacher-key') === '3d9bf467'; } catch (e) { return false; }
-}
+// קוד המורים (אחד לכל המורות) – גם הוא נשמר רק כ"טביעת אצבע"
+var STAFF_HASH = '1a9e025e';
+const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+// איריס: קוד המורה או קוד החוברות – לא נשלחים נתונים מהמכשיר
+function irisOk() { return lsGet('math-book-key') === BOOK_HASH || lsGet('math-teacher-key') === '3d9bf467'; }
+// מורה אחרת שהקלידה את קוד המורים
+function staffOn() { return !irisOk() && lsGet('math-role') === 't' && lsGet('math-staff-key') === STAFF_HASH; }
+function teacherOn() { return irisOk() || staffOn(); }
+function roleOk() { return teacherOn() || lsGet('math-role') === 's'; }
+// חוברות והדפסה בלי הגבלה – לאיריס ולמורות
+function bookOk() { return teacherOn(); }
 const BOOK_ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 function bookSeed() { let s = ''; for (let i = 0; i < 5; i++) s += BOOK_ABC[Math.floor(Math.random() * 32)]; return s; }
 function bookEncode(counts, seed) { return `${GRADE}-${counts.map(n => BOOK_COUNTS.indexOf(n)).join('')}-${seed}`; }
@@ -12739,6 +12760,58 @@ function teacherGate() {
 // חשיפה לבדיקות אוטומטיות
 window.__math6 = { TOPICS, LESSONS, check, correctHTML, findTrap, speechText };
 
+// כניסה ראשונה: תלמיד/הורה או מורה
+function askRole(done) {
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = `<div class="modal picker ask-name" role="dialog" aria-modal="true" aria-labelledby="roleT">
+    <h2 class="center" id="roleT">שלום! מי נכנס/ת?</h2>
+    <div class="actions role-acts" style="justify-content:center">
+      <button id="roleS" class="race-go">🎒 אני תלמיד/ה / הורה</button>
+      <button id="roleT2" class="secondary">👩‍🏫 אני מורה</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#roleS').onclick = () => {
+    try { localStorage.setItem('math-role', 's'); } catch (e) { /* לא חובה */ }
+    ov.remove(); askName(done);
+  };
+  ov.querySelector('#roleT2').onclick = () => { ov.remove(); askTeacher(done); };
+}
+// מורה: שם + קוד המורים (או הקוד של איריס)
+function askTeacher(done) {
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = `<div class="modal picker ask-name" role="dialog" aria-modal="true" aria-labelledby="tchT">
+    <h2 class="center" id="tchT">👩‍🏫 כניסת מורה</h2>
+    <p class="center">כתבו את השם שלכם ואת קוד המורים שקיבלתם מאיריס.</p>
+    <input id="tchNm" class="ask-in" autocomplete="off" maxlength="40" placeholder="שם ושם משפחה" aria-label="שם" value="${esc(store.name || '')}">
+    <input id="tchCode" class="ask-in" type="password" inputmode="numeric" autocomplete="off" placeholder="קוד מורים" aria-label="קוד מורים">
+    <p class="center ask-err" id="tchErr" hidden></p>
+    <div class="actions" style="justify-content:center">
+      <button id="tchOk" class="race-go">כניסה ←</button>
+      <button id="tchBack" class="ghost">חזרה</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  const err = t => { const e = ov.querySelector('#tchErr'); e.textContent = t; e.hidden = false; };
+  ov.querySelector('#tchOk').onclick = () => {
+    const nm = ov.querySelector('#tchNm').value.trim().replace(/\s+/g, ' '), code = ov.querySelector('#tchCode').value.trim();
+    if (!nm) { err('כתבו את השם 🙂'); return; }
+    const set = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* לא חובה */ } };
+    if (codeHash('staff:' + code) === STAFF_HASH) set('math-staff-key', STAFF_HASH);
+    else if (codeHash('math6:' + code) === TEACHER_HASH) { set('math-teacher-key', TEACHER_HASH); store.teacherKey = TEACHER_HASH; }
+    else if (codeHash('book:' + code) === BOOK_HASH) set('math-book-key', BOOK_HASH);
+    else { err('הקוד לא נכון.'); return; }
+    set('math-role', 't'); set('math-name', nm);
+    store.name = nm; saveStore(store);
+    ov.remove(); done();
+    if (document.querySelector('[data-panel]')) home();
+  };
+  ov.querySelector('#tchBack').onclick = () => { ov.remove(); askRole(done); };
+  ov.querySelector('#tchCode').addEventListener('keydown', e => { if (e.key === 'Enter') ov.querySelector('#tchOk').click(); });
+  setTimeout(() => ov.querySelector('#tchNm').focus(), 50);
+}
 // כניסה ראשונה: מבקשים מהתלמיד לכתוב את השם (אפשר לדלג), ואז רושמים את הכניסה
 function askName(done) {
   const ov = document.createElement('div');
@@ -12761,18 +12834,22 @@ function askName(done) {
     ov.remove(); done();
   };
   ov.querySelector('#askOk').onclick = () => { const nm = inp.value.trim().replace(/\s+/g, ' '); if (nm.split(' ').length >= 2) close(nm); else { ov.querySelector('#askErr').hidden = false; inp.focus(); } };
-  ov.querySelector('#askSkip').onclick = () => close('');
+  ov.querySelector('#askSkip').onclick = () => { try { sessionStorage.setItem('math-noname', '1'); } catch (e) { /* לא חובה */ } close(''); };
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') ov.querySelector('#askOk').click(); });
   setTimeout(() => inp.focus(), 50);
 }
 (() => {
   let first = false;
   try { first = !sessionStorage.getItem('math-vis'); if (first) sessionStorage.setItem('math-vis', '1'); } catch (e) { /* לא חובה */ }
-  if (!first || URLP.has('teacher')) return;
-  const logVisit = () => { if (!URLP.has('print')) track('כניסה לאתר', GRADE_NAME[GRADE] || ''); };
-  if ((!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
+  if (URLP.has('teacher') || EXIT_OPEN) return;
+  const logVisit = () => { if (first && !URLP.has('print')) track('כניסה לאתר', GRADE_NAME[GRADE] || ''); };
+  let noName = false;
+  try { noName = !!sessionStorage.getItem('math-noname'); } catch (e) { /* לא חובה */ }
+  if (!roleOk() && !URLP.has('kefel')) { setTimeout(() => askRole(logVisit), 300); return; }
+  if (!first) return;
+  if (!teacherOn() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else home();
 </script>
 </body>
 </html>
