@@ -1095,6 +1095,8 @@
   .sc-ql li[dir=ltr] .sc-pre { text-align: left; }
   .sc-ql li.w { font-size: 0.74rem; line-height: 1.3; }
   .sc-ql li.w .fr { font-size: 0.85em; }
+  .sc-ql.n3 li.w, .sc-ql.n4 li.w { font-size: 0.9rem; line-height: 1.45; }
+  .sc-ql li.t { font-size: 0.95rem; line-height: 1.4; }
   .sc-ql:has(li.w) { gap: 4px; margin: 4px 0; }
   /* בהדפסה: 4 רבעים בעמוד אחד בדיוק. במסך – כל רבע בגובה הטבעי שלו */
   @media print { .sc-page:not(.wskey) .sc-quarter { overflow: hidden; } .sc-page:not(.wskey) .sc-quarters { height: 260mm; min-height: 0; } }
@@ -1290,7 +1292,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12952,7 +12954,7 @@ const SC_WORD = {
 };
 // לכל מיומנות: גם סוג השאלות
 const SC_LV = { k: 'lv', type: 'radio', label: 'רמה', o: [['1', 'קלה'], ['2', 'בינונית'], ['3', 'מאתגרת'], ['g', 'מהקל לקשה']] };
-const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', 'תרגילים'], ['one', '4 תרגילים + שאלה מילולית'], ['mix', '3 תרגילים + 2 מילוליות'], ['word', 'שאלות מילוליות']] };
+const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', '5 תרגילים'], ['one', '4 תרגילים + שאלה מילולית'], ['one3', '3 תרגילים + שאלה מילולית'], ['word', '3 שאלות מילוליות']] };
 const scOpts = S => S.opts.concat([SC_LV, SC_WQ]);
 // ---- תחומים נוספים למבדקי ההצלחה ----
 const scHe = A => ({ he: scVb(A, 'הוא', 'היא'), got: scVb(A, 'קיבל', 'קיבלה'), gave: scVb(A, 'נתן', 'נתנה'), bought: scVb(A, 'קנה', 'קנתה'), paid: scVb(A, 'שילם', 'שילמה'), ran: scVb(A, 'רץ', 'רצה'), read: scVb(A, 'קרא', 'קראה'), ans: scVb(A, 'ענה', 'ענתה'), ate: scVb(A, 'אכל', 'אכלה') });
@@ -13173,7 +13175,7 @@ function scDefaults(dom, sk) {
   return p;
 }
 const scSkill = c => SCD[c.d] && SCD[c.d].skills[c.s];
-const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם 2 שאלות מילוליות', one: ' · עם שאלה מילולית' }[c.p.wq] || '') + ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה'); };
+const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם שאלה מילולית', one: ' · עם שאלה מילולית', one3: ' · עם שאלה מילולית' }[c.p.wq] || '') + ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה'); };
 // 5 תרגילים לפי הרמה – בלי שני תרגילים זהים באותו מבדק
 function scGen(c) {
   const S = scSkill(c), wq = c.p.wq || 'ex', key = q => scRender(q, 'key');
@@ -13183,7 +13185,11 @@ function scGen(c) {
     qs = S.gen(c.p);
     for (let i = 1; i < 5; i++) for (let t = 0; t < 25 && qs.slice(0, i).some(x => key(x) === key(qs[i])); t++) qs[i] = (t < 15 ? S.gen(c.p) : (SC_LVL = 'g', S.gen(c.p)))[t < 15 ? i : Math.min(i + (t - 15) % 3, 4)];
   } finally { SC_LVL = 'g'; }
-  return wq === 'ex' ? qs : qs.map((q, i) => wq === 'word' || i >= (wq === 'one' ? 4 : 3) ? SC_WORD[c.s](q) : q);
+  // כמה ואיזה: 3 שאלות מילוליות (קל, בינוני, קשה) / שאלה מילולית אחת בסוף + 3 או 4 תרגילים
+  if (wq === 'word') return [0, 2, 4].map(i => SC_WORD[c.s](qs[i]));
+  if (wq === 'one3') return [qs[0], qs[1], qs[3], SC_WORD[c.s](qs[4])];
+  if (wq === 'one' || wq === 'mix') return qs.map((q, i) => i === 4 ? SC_WORD[c.s](q) : q);
+  return qs;
 }
 const scEnc = c => btoa(JSON.stringify(c)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
 const scDec = s => { try { const c = JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/'))); return scSkill(c) ? c : null; } catch (e) { return null; } };
@@ -13278,7 +13284,7 @@ function succHome() {
   app.innerHTML = `
     <div class="topbar noprint"><span class="title">⭐ מבדקי הצלחה</span><button class="secondary" id="scBack">${ic('home')} חזרה</button></div>
     <div class="card noprint sc-build">
-      <p class="sc-intro">מבדק הצלחה = <b>5 תרגילים קצרים על מיומנות אחת</b> – ברמה שבוחרים, או מהקל לקשה. בדף המודפס – 4 מבדקים ברבעים, לגזור. בעמוד השני – דף תשובות.</p>
+      <p class="sc-intro">מבדק הצלחה = <b>עד 5 תרגילים קצרים על מיומנות אחת</b> – ברמה שבוחרים, או מהקל לקשה. בדף המודפס – 4 מבדקים ברבעים, לגזור. בעמוד השני – דף תשובות.</p>
       <div class="sc-opt"><b>בדף:</b> <span class="sc-chips">
         <label class="sc-chip${S.mode === 'same' ? ' on' : ''}"><input type="radio" name="scmode" value="same" ${S.mode === 'same' ? 'checked' : ''}>אותו מבדק ב-4 הרבעים</label>
         <label class="sc-chip${S.mode === 'diff' ? ' on' : ''}"><input type="radio" name="scmode" value="diff" ${S.mode === 'diff' ? 'checked' : ''}>מבדק שונה בכל רבע</label></span></div>
@@ -13324,16 +13330,16 @@ function scSheet() {
   const VER = ['א', 'ב', 'ג', 'ד'];
   let mode0 = 'print';
   // תרגיל – משמאל לימין (המספור משמאל); שאלה מילולית – מימין לשמאל
-  const li = q => `<li dir="${q.rtl ? 'rtl' : 'ltr'}" class="${q.rtl ? 'w' : ''}">${q.pre ? `<div class="sc-pre" dir="rtl">יודעים ש: ${M(q.pre)}</div>` : ''}${scRender(q, mode0)}</li>`;
+  const li = q => `<li dir="${q.rtl ? 'rtl' : 'ltr'}" class="${q.word ? 'w' : q.rtl ? 't' : ''}">${q.pre ? `<div class="sc-pre" dir="rtl">יודעים ש: ${M(q.pre)}</div>` : ''}${scRender(q, mode0)}</li>`;
   const cfgOf = i => S.mode === 'same' ? S.slots[0] : S.slots[i];
   const quarter = i => `<div class="sc-quarter">
       <div class="sc-qh"><b>⭐ מבדק הצלחה</b><span>שם: <span class="wsline"></span></span></div>
       <div class="sc-qt">${scTitle(cfgOf(i))}${same && S.vers ? ` · נוסח ${VER[i]}'` : ''}</div>
-      <ol class="sc-ql">${qsets[i].map(li).join('')}</ol>
+      <ol class="sc-ql n${qsets[i].length}">${qsets[i].map(li).join('')}</ol>
       <div class="sc-foot"><span class="sc-stamp">✔ הצלחתי!</span><span class="sc-self">איך היה לי? 😊 🙂 😐</span></div>
     </div>`;
   const keyQ = i => { mode0 = 'key'; const h = `<div class="sc-quarter key"><div class="sc-qh"><b>🔑 ${one ? 'כל הרבעים (נוסח אחד)' : same ? `נוסח ${VER[i]}'` : `רבע ${i + 1}`}</b></div><div class="sc-qt">${scTitle(cfgOf(i))}</div>
-      <ol class="sc-ql">${qsets[i].map(li).join('')}</ol></div>`; mode0 = 'print'; return h; };
+      <ol class="sc-ql n${qsets[i].length}">${qsets[i].map(li).join('')}</ol></div>`; mode0 = 'print'; return h; };
   $('wsout').innerHTML = `<section class="ws-page sc-page"><div class="sc-quarters">${[0, 1, 2, 3].map(quarter).join('')}</div></section>
     <section class="ws-page sc-page wskey"><h2>🔑 דף תשובות – מבדקי הצלחה</h2><div class="sc-quarters">${(one ? [0] : [0, 1, 2, 3]).map(keyQ).join('')}</div></section>`;
   $('wsout').dataset.what = 'מבדקי הצלחה: ' + [...new Set(S.slots.map((c, i) => scTitle(cfgOf(i))))].join(' | ');
@@ -13350,7 +13356,7 @@ function succRun(cfg, fromBuilder) {
   const show = () => {
     const q = qs[st.i];
     app.innerHTML = `
-      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">תרגיל ${st.i + 1} מתוך 5</span><button class="ghost" id="scOut">${ic('home')} יציאה</button></div>
+      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">${qs[st.i].word ? 'שאלה' : 'תרגיל'} ${st.i + 1} מתוך ${qs.length}</span><button class="ghost" id="scOut">${ic('home')} יציאה</button></div>
       <div class="sc-name">${name}</div>
       <div class="sc-dots">${qs.map((_, k) => `<span class="${k < st.i ? 'ok' : k === st.i ? 'now' : ''}"></span>`).join('')}</div>
       <div class="card center sc-q">
@@ -13363,7 +13369,7 @@ function succRun(cfg, fromBuilder) {
     const ins = [...app.querySelectorAll('.sc-in')];
     if (ins[0]) setTimeout(() => ins[0].focus(), 30);
     st.tries = 0;
-    const next = () => { st.i++; if (st.i < 5) show(); else done(); };
+    const next = () => { st.i++; if (st.i < qs.length) show(); else done(); };
     const lock = () => { ins.forEach(x => x.disabled = true); app.querySelectorAll('.sc-cb').forEach(x => x.disabled = true); };
     const check = vals => {
       const miss = q.k === 'fv' && q.mixedRes ? (vals[0] === '' && (vals[1] === '' || vals[2] === '')) || ((vals[1] === '') !== (vals[2] === '')) : vals.some(v => v === '');
@@ -13382,7 +13388,7 @@ function succRun(cfg, fromBuilder) {
         lock();
         st.wrong.push(q);
         $('scMsg').innerHTML = `התשובה: <span class="sc-expr sm">${scRender(q, 'key')}</span> – נזכור לפעם הבאה 🙂`;
-        $('scActs').innerHTML = `<button id="scNext">${st.i < 4 ? 'לתרגיל הבא ←' : 'לסיכום ←'}</button>`;
+        $('scActs').innerHTML = `<button id="scNext">${st.i < qs.length - 1 ? 'לשאלה הבאה ←' : 'לסיכום ←'}</button>`;
         $('scNext').onclick = next; $('scNext').focus();
       }
     };
@@ -13392,16 +13398,16 @@ function succRun(cfg, fromBuilder) {
     window.scrollTo(0, 0);
   };
   const done = () => {
-    const f = st.first, pass = f >= 4;
-    track('מבדק הצלחה – סיום', `${name} · ${f}/5`);
+    const f = st.first, N = qs.length, pass = f >= (N >= 4 ? N - 1 : N), near = !pass && f >= N - 2 && f > 0;
+    track('מבדק הצלחה – סיום', `${name} · ${f}/${N}`);
     app.innerHTML = `
       <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><button class="secondary" id="scOut">${ic('home')} ${fromBuilder ? 'חזרה' : 'לדף הבית'}</button></div>
       <div class="sc-name">${name}</div>
       <div class="card center sc-end">
-        <div class="path-trophy">${f === 5 ? '🏆' : pass ? '🌟' : f >= 3 ? '💪' : '🌱'}</div>
-        <h2>${f === 5 ? 'מושלם! 5 מתוך 5' : pass ? `${f} מתוך 5 – הצלחת!` : f >= 3 ? `${f} מתוך 5 – כמעט!` : `${f} מתוך 5 בניסיון הראשון`}</h2>
-        <div class="sc-stars big">${'⭐'.repeat(f === 5 ? 3 : pass ? 2 : f >= 3 ? 1 : 0)}</div>
-        <p>${pass ? 'כל הכבוד! את/ה שולט/ת בזה.' : f >= 3 ? 'עוד מבדק אחד – ואת/ה שם! 💪' : `כל התרגילים נפתרו בסוף – זו התחלה טובה. נסו שוב, הפעם עם הרמז:<br><b>${qs[0].hint}</b>`}</p>
+        <div class="path-trophy">${f === N ? '🏆' : pass ? '🌟' : near ? '💪' : '🌱'}</div>
+        <h2>${f === N ? `מושלם! ${N} מתוך ${N}` : pass ? `${f} מתוך ${N} – הצלחת!` : near ? `${f} מתוך ${N} – כמעט!` : `${f} מתוך ${N} בניסיון הראשון`}</h2>
+        <div class="sc-stars big">${'⭐'.repeat(f === N ? 3 : pass ? 2 : near ? 1 : 0)}</div>
+        <p>${pass ? 'כל הכבוד! את/ה שולט/ת בזה.' : near ? 'עוד מבדק אחד – ואת/ה שם! 💪' : `כל התרגילים נפתרו בסוף – זו התחלה טובה. נסו שוב, הפעם עם הרמז:<br><b>${qs[0].hint}</b>`}</p>
         <div class="actions" style="justify-content:center"><button id="scAgain">${ic('retry')} עוד מבדק כזה</button></div>
       </div>`;
     $('scOut').onclick = back;
