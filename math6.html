@@ -1187,7 +1187,20 @@
   .lp-ptab .lp-notes { width: 28%; }
   .lp-lines { height: 40mm; background-image: repeating-linear-gradient(transparent, transparent 9mm, #bbb 9mm, #bbb calc(9mm + 1px)); }
   @media print { .lp-bar { display: none !important; } body.lp-on { padding-top: 0; } }
-  @media (max-width: 640px) { .lp-tab td:nth-child(4) { font-size: 0.85rem; } .lp-clock { margin-inline-start: 0; } }
+  .lp-plan { max-width: 100%; overflow-x: hidden; }
+  .lp-tab select, .lp-sel input { max-width: 100%; }
+  .lp-sel input { width: 100%; box-sizing: border-box; margin-top: 4px; }
+  /* בטלפון: כל חלק בשיעור הוא "כרטיס" – תיבת סימון, שם, דקות, ומתחת מה עושים */
+  @media (max-width: 640px) {
+    .lp-tab thead { display: none; }
+    .lp-tab, .lp-tab tbody { display: block; width: 100%; }
+    .lp-tab tr { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 10px; padding: 10px 0; border-bottom: 1px solid #e3dccd; }
+    .lp-tab td { display: block; border: 0; padding: 0; min-width: 0; }
+    .lp-tab td:nth-child(4) { grid-column: 1 / -1; font-size: 0.92rem; }
+    .lp-tab td:nth-child(4) select { width: 100%; }
+    .lp-plan h2 { font-size: 1.25rem; }
+    .lp-clock { margin-inline-start: 0; }
+  }
   .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; text-align: center; }
   .pvw-btn { font: inherit; font-size: 0.95rem; font-weight: 600; color: #1f1e1c; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; }
   .pvw-btn:hover, .pvw-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
@@ -1341,7 +1354,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
