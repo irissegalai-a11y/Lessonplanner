@@ -1176,6 +1176,10 @@
   .lp-clock.over { color: #b3261e; }
   .lp-nav { display: flex; gap: 6px; }
   .lp-q { font-size: 1.5rem; line-height: 1.6; }
+  .lp-book { text-align: center; } .lp-bk1 { font-size: 2.2rem; font-weight: 700; } .lp-bk2 { font-size: 2.6rem; font-weight: 800; margin: 14px 0; color: #4c5fd5; }
+  .lp-big { font-size: 1.5rem; line-height: 2; }
+  .lp-thumbs { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; font-size: 4rem; text-align: center; }
+  .lp-thumbs span { display: block; font-size: 1.1rem; max-width: 170px; }
   .lp-tips { font-size: 1.25rem; line-height: 1.8; }
   .lp-ptab { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.95rem; }
   .lp-ptab th, .lp-ptab td { border: 1px solid #999; padding: 6px; text-align: right; vertical-align: top; }
@@ -1337,7 +1341,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13576,8 +13580,13 @@ const LP_STAGES = [
   { id: 'game', name: 'משחקון', ic: '🎲', w: 15 },
   { id: 'learn', name: 'לימוד', ic: '📚', w: 25 },
   { id: 'prac', name: 'תרגול', ic: '✏️', w: 35 },
+  { id: 'book', name: 'עבודה בחוברת', ic: '📖', w: 20 },
   { id: 'sum', name: 'סיכום', ic: '⭐', w: 15 }
 ];
+const LP_BOOKS = ['שבילים פלוס', 'שבילים חדשים', 'חוברת אחרת'];
+// דרכי סיכום – כולן נשארות אצל המורה בכיתה (שום דבר לא נשלח)
+const LP_SUMS = [['board', '3 שאלות בדיקה על הלוח (קלה, בינונית, מאתגרת)'], ['talk', 'סבב שיחה: "היום למדתי... / היה לי קשה... "'], ['thumbs', 'הערכה עצמית: 👍 👌 👎 – כמה הבנתי?'], ['paper', 'מבדק הצלחה מודפס (מדפיסים מראש)']];
+const lpBookPref = () => { try { return localStorage.getItem('math-lp-book') || LP_BOOKS[0]; } catch (e) { return LP_BOOKS[0]; } };
 const LP_GAMES = [['jeo', "ג'פרדי בקבוצות"], ['mil', 'מיליונר בקבוצות'], ['war', 'מלחמת תרגילים בקבוצות'], ['bingo', 'בינגו'], ['cq', 'כיבוש שטחים'], ['tf', 'אמת או שקר']];
 const lpLesson = t => (LESSON_ORDER.includes(t) && LESSONS[t]) ? t : null;
 const lpLoad = () => { try { return JSON.parse(localStorage.getItem(LP_KEY)) || []; } catch (e) { return []; } };
@@ -13585,7 +13594,7 @@ const lpSaveAll = L => { try { localStorage.setItem(LP_KEY, JSON.stringify(L.sli
 let lp = null;
 function lpNew(topic) {
   const T = topic || (TOPICS[0] && TOPICS[0].id);
-  const p = { topic: T, dur: 45, on: { open: 1, game: 1, learn: lpLesson(T) ? 1 : 0, prac: 1, sum: 1 }, min: {}, game: 'jeo', pracN: 8, pracLv: 'mix', note: '' };
+  const p = { topic: T, dur: 45, on: { open: 1, game: 1, learn: lpLesson(T) ? 1 : 0, prac: 1, book: 0, sum: 1 }, min: {}, game: 'jeo', pracN: 8, pracLv: 'mix', note: '', book: lpBookPref(), pages: '', sumType: 'board' };
   lpSplit(p); return p;
 }
 // חלוקת הזמן לפי משקל החלקים שנבחרו
@@ -13600,7 +13609,8 @@ const lpDesc = (p, id) => ({
   game: (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – בוחרים את הנושא במסך המשחק',
   learn: lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
   prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
-  sum: '"מה למדנו היום?" ו-3 שאלות בדיקה (קלה, בינונית, מאתגרת) על הלוח'
+  book: `${p.book || LP_BOOKS[0]}${p.pages ? ` – ${p.pages}` : ' – עמודים: ______'}`,
+  sum: '"מה למדנו היום?" ואז ' + ((LP_SUMS.find(x => x[0] === (p.sumType || 'board')) || LP_SUMS[0])[1])
 })[id];
 
 function lpHome(keep) {
@@ -13624,7 +13634,8 @@ function lpHome(keep) {
         <td><input type="number" class="lp-min" min="0" max="120" data-lpmin="${s.id}" value="${p.on[s.id] ? p.min[s.id] : 0}" ${p.on[s.id] ? '' : 'disabled'} inputmode="numeric"></td>
         <td>${lpDesc(p, s.id)}${s.id === 'game' && p.on.game ? `<div><select id="lpGame">${LP_GAMES.map(([k, n]) => `<option value="${k}" ${p.game === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
           ${s.id === 'prac' && p.on.prac ? `<div class="lp-sel"><select id="lpN">${[4, 6, 8, 10, 12].map(n => `<option ${p.pracN === n ? 'selected' : ''}>${n}</option>`).join('')}</select> תרגילים · <select id="lpLv">${[['mix', 'מהקל לקשה'], ['1', 'קלים'], ['2', 'בינוניים'], ['3', 'מאתגרים']].map(([k, n]) => `<option value="${k}" ${p.pracLv === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
-          ${s.id === 'sum' && p.on.sum ? `<div class="small muted">רוצים גם דף מודפס? <button type="button" class="linkish" id="lpSucc">⭐ הכינו מבדק הצלחה</button></div>` : ''}</td></tr>`; }).join('')}
+          ${s.id === 'book' && p.on.book ? `<div class="lp-sel"><select id="lpBook">${LP_BOOKS.map(b => `<option ${p.book === b ? 'selected' : ''}>${b}</option>`).join('')}</select> <input id="lpPages" class="tinput" maxlength="60" value="${esc(p.pages || '')}" placeholder="חוברת ועמודים, למשל: חוברת 3, עמ' 34–35"></div>` : ''}
+          ${s.id === 'sum' && p.on.sum ? `<div class="lp-sel"><select id="lpSum">${LP_SUMS.map(([k, n]) => `<option value="${k}" ${(p.sumType || 'board') === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>${p.sumType === 'paper' ? `<div class="small muted"><button type="button" class="linkish" id="lpSucc">⭐ להכנת מבדק הצלחה להדפסה</button></div>` : ''}` : ''}</td></tr>`; }).join('')}
       </tbody></table>
       <div class="lp-tot ${tot === p.dur ? '' : 'warn'}">סה"כ ${tot} מתוך ${p.dur} דקות${tot === p.dur ? ' ✔' : ` – ${tot > p.dur ? 'יותר' : 'פחות'} מאורך השיעור`} <button type="button" class="ghost" id="lpFix">חלוקה מחדש לפי הזמן</button></div>
       <div class="sc-opt"><b>הערות לעצמי:</b> <input id="lpNote" class="tinput" style="flex:1;min-width:200px" maxlength="200" value="${esc(p.note || '')}" placeholder="למשל: לחזור על הטעויות מהשיעור הקודם"></div>
@@ -13645,6 +13656,9 @@ function lpHome(keep) {
   if ($('lpN')) $('lpN').onchange = e => { p.pracN = +e.target.value; redo(); };
   if ($('lpLv')) $('lpLv').onchange = e => { p.pracLv = e.target.value; redo(); };
   if ($('lpSucc')) $('lpSucc').onclick = succHome;
+  if ($('lpBook')) $('lpBook').onchange = e => { p.book = e.target.value; try { localStorage.setItem('math-lp-book', p.book); } catch (er) { /* לא חובה */ } redo(); };
+  if ($('lpPages')) { $('lpPages').oninput = e => { p.pages = e.target.value; }; $('lpPages').onchange = () => redo(); }
+  if ($('lpSum')) $('lpSum').onchange = e => { p.sumType = e.target.value; redo(); };
   $('lpNote').oninput = e => { p.note = e.target.value; };
   $('lpNote').onchange = () => lpSheet();
   $('lpFix').onclick = () => { lpSplit(p); redo(); };
@@ -13717,10 +13731,18 @@ function lpStage(k) {
   else if (s.id === 'game') ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome() }[p.game] || jeoHome)();
   else if (s.id === 'learn') startLesson(lpLesson(p.topic));
   else if (s.id === 'prac') { op = { topic: p.topic, label: 'תרגול על הלוח', slides: lpBoardSlides(p.topic, p.pracN, p.pracLv, 'תרגיל'), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
+  else if (s.id === 'book') {
+    op = { topic: p.topic, label: 'עבודה בחוברת', slides: [{ title: '📖 עבודה בחוברת', q: `<div class="lp-book"><div class="lp-bk1">${esc(p.book || LP_BOOKS[0])}</div><div class="lp-bk2">${esc(p.pages || 'פותחים את החוברת בעמוד שהמורה אומרת')}</div><p>עובדים לבד או בזוגות. מי שמסיים/ת – בודק/ת עם החבר/ה.</p></div>`, a: '' }], k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' };
+    opDraw();
+  }
   else if (s.id === 'sum') {
-    const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [];
+    const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [], ty = p.sumType || 'board';
     const recap = { title: 'מה למדנו היום?', q: `<h3 class="center">${T.name}</h3>${tips.length ? `<ul class="lp-tips">${tips.slice(0, 4).map(x => `<li>${x}</li>`).join('')}</ul>` : `<p class="center">${T.desc}</p>`}<p class="center">🗣️ מי יכול/ה להסביר במילים שלו/ה?</p>`, a: '' };
-    op = { topic: p.topic, label: 'סיכום השיעור', slides: [recap].concat(lpBoardSlides(p.topic, 3, 'mix', 'בדיקת הבנה')), k: 0, show: false, back: lpStop, backLabel: '✔ סיום השיעור' };
+    const more = ty === 'board' ? lpBoardSlides(p.topic, 3, 'mix', 'בדיקת הבנה')
+      : ty === 'talk' ? [{ title: 'סבב שיחה', q: '<ul class="lp-tips lp-big"><li>היום למדתי ש...</li><li>היה לי קל / היה לי קשה...</li><li>שאלה שעוד יש לי...</li></ul><p class="center">כל אחד/ת אומר/ת משפט אחד 🙂</p>', a: '' }]
+      : ty === 'thumbs' ? [{ title: 'כמה הבנתי?', q: '<div class="lp-thumbs"><div>👍<span>הבנתי ואני יכול/ה להסביר</span></div><div>👌<span>הבנתי, אבל צריך עוד תרגול</span></div><div>👎<span>עוד לא הבנתי</span></div></div><p class="center">מרימים יד עם התשובה שלכם</p>', a: '' }]
+      : [{ title: 'מבדק הצלחה', q: '<p class="center lp-big">✏️ מחלקים את מבדק ההצלחה המודפס.<br>עונים לבד, בשקט – 5 דקות.</p><p class="center">בסוף: מי שהצליח/ה – חותמת "הצלחתי!" ⭐</p>', a: '' }];
+    op = { topic: p.topic, label: 'סיכום השיעור', slides: [recap].concat(more), k: 0, show: false, back: lpStop, backLabel: '✔ סיום השיעור' };
     opDraw();
   }
   window.scrollTo(0, 0);
