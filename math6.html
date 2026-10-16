@@ -1156,6 +1156,7 @@
   .sc-msg { min-height: 1.6em; font-size: 1.15rem; margin-bottom: 8px; }
   .sc-hint { background: #fff4c7; border: 2px dashed #1f1e1c; border-radius: 10px; padding: 6px 12px; margin: 0 auto 6px; max-width: 460px; }
   @media screen and (max-width: 640px) { .sc-quarters { grid-template-columns: 1fr; grid-template-rows: none; min-height: 0; } }
+  .lp-entry { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0 4px; }
   .lp-tab { width: 100%; border-collapse: collapse; margin: 8px 0; }
   .lp-tab th, .lp-tab td { border-bottom: 1px solid #e3dccd; padding: 6px 6px; text-align: right; vertical-align: top; }
   .lp-tab tr.off td { opacity: 0.45; }
@@ -1375,7 +1376,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7252,7 +7253,6 @@ function home() {
     { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
   ];
   if (!tabs.some(t => t.id === homeTab)) homeTab = 'practice';
-  const sug = PRESET ? null : todaySuggestion();
   app.innerHTML = `
     <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
     <div class="hero-wrap">
@@ -7262,13 +7262,11 @@ function home() {
     </div>
     <div class="subtitle">${SUBTITLE}</div>
     ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${teacherOn() ? '<button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
+    ${teacherOn() ? `<div class="lp-entry"><button type="button" id="lpTop" class="race-go">🗓️ בונים שיעור</button><span class="small muted">פתיח, משחקון, לימוד, תרגול וסיכום – לפי אורך השיעור</span></div>` : ''}
     ${PRESET ? `<div class="card banner today">
       <div><div class="today-k">הוכן בשבילך</div><div class="today-t">${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div></div>
       <button id="presetGo">התחילו ←</button>
-    </div>` : `<div class="card today">
-      <div><div class="today-k">מה עושים היום?</div><div class="today-t">${sug.t}</div><div class="today-d">${sug.d}</div></div>
-      <button id="todayGo">${sug.btn} ←</button>
-    </div>`}
+    </div>` : ''}
     <div class="name-row name-mini"><label for="nm">השם שלי:</label><input id="nm" value="${esc(name)}" placeholder="כתבו את השם שלכם" autocomplete="off"></div>
     <div class="nb">
       <nav class="tabs" role="tablist" aria-label="חלקי האתר">
@@ -7409,11 +7407,6 @@ function home() {
             <span class="gc-nm">כרטיסי הברקה</span>
             <span class="gc-ds">קריאה וזיהוי של מספרים – מקרינים, הכיתה אומרת בקול, והופכים.</span>
           </button>` : ''}
-          <button class="game-card" id="lpGo0">
-            <span class="gc-ic" style="--gw:rgba(127,168,214,0.7)">🗓️</span>
-            <span class="gc-nm">בונים שיעור</span>
-            <span class="gc-ds">פתיח, משחקון, לימוד, תרגול וסיכום – לפי אורך השיעור. מקרינים על הלוח, עם שעון לכל חלק.</span>
-          </button>
           <button class="game-card" id="succGo">
             <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">⭐</span>
             <span class="gc-nm">מבדקי הצלחה</span>
@@ -7452,14 +7445,12 @@ function home() {
   if ($('exitGo2')) {
     $('exitGo2').onclick = exitHome;
     $('succGo').onclick = succHome;
-    $('lpGo0').onclick = () => lpHome();
     $('clsOpen').onclick = () => classSub('open');
     $('clsGames').onclick = () => classSub('games');
     $('clsPrint').onclick = () => classSub('print');
   }
   $('warGo1').onclick = () => warHome('solo');
   $('tfGo0').onclick = () => tfHome();
-  if ($('todayGo')) $('todayGo').onclick = sug.go;
   $('calmBtn').onclick = () => {
     const on = document.documentElement.classList.toggle('calm');
     try { localStorage.setItem('math-calm', on ? '1' : '0'); } catch (e) {}
@@ -7475,6 +7466,7 @@ function home() {
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   $('mix').onclick = () => showLevelPicker('mix');
   if ($('fcGoP')) $('fcGoP').onclick = fcHome;
+  if ($('lpTop')) $('lpTop').onclick = () => lpHome();
   if ($('fcGoC')) $('fcGoC').onclick = fcHome;
   $('exitGo').onclick = exitHome;
   $('test').onclick = () => startTest(false);
