@@ -1413,7 +1413,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קי</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -14014,7 +14014,7 @@ function fcRun(p, only) {
       </button>
       <div class="actions" style="justify-content:center">${st.flip
         ? (TCH ? `<button class="secondary" id="fcSay">🔊 הקראה</button><button id="fcNext" class="race-go">${st.i + 1 < cards.length ? 'הבא ←' : '✔ סיום'}</button>` : `<button class="secondary" id="fcSay">🔊 הקראה</button><button id="fcYes" class="race-go">✔ ידעתי</button><button class="secondary" id="fcNo">✘ עוד לא</button>`)
-        : `<button id="fcFlip" class="race-go">↻ הופכים</button>`}</div>`;
+        : `<button id="fcFlip" class="race-go">↻ הופכים</button>${TCH ? `<button id="fcSkip" class="secondary">${st.i + 1 < cards.length ? 'הבא ←' : '✔ סיום'}</button>` : ''}`}</div>`;
     fsBind();
     $('fcOut').onclick = () => { clearTimeout(st.timer); fcHome(); };
     const flip = () => { if (st.flip) return; st.flip = true; show(); };
@@ -14024,6 +14024,7 @@ function fcRun(p, only) {
     const next = ok => { if (ok) st.yes++; else st.miss.push(c); st.i++; st.flip = false; if (st.i < cards.length) show(); else done(); };
     if ($('fcYes')) { $('fcYes').onclick = () => next(true); $('fcNo').onclick = () => next(false); }
     if ($('fcNext')) $('fcNext').onclick = () => next(true);
+    if ($('fcSkip')) $('fcSkip').onclick = e => { e.stopPropagation(); clearTimeout(st.timer); next(true); }; // מורה: עוברים לכרטיס הבא בלי להפוך
     if ($('fcSay')) $('fcSay').onclick = e => speak(say(c), e.currentTarget);
     window.scrollTo(0, 0);
   };
