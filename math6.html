@@ -1309,7 +1309,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -1354,7 +1354,7 @@
           <li>באילו פעילויות עבדתם – שיעורים, תרגולים, משחקים – וכמה זמן</li>
           <li>מורים שנכנסו עם קוד המורים – השם ובאילו פעילויות השתמשו. כרטיסי יציאה שמורה מריצה בכיתה שלה מוצגים רק על המסך ולא נשלחים</li>
           <li>אילו דפים הדפסתם או שמרתם</li>
-          <li>בסיום תרגול, מבחן או כרטיס יציאה – כמה תשובות נכונות</li>
+          <li>בסיום תרגול, מבחן, כרטיס יציאה ובאימון למבחן – כמה תשובות נכונות</li>
           <li>באימון הכפל – רק מי שהקליד את קוד הכיתה – גם ההתקדמות באימון</li>
         </ul>
         <p><b>מה לא נשמר:</b> מייל, טלפון, כתובת, תמונות, וגם לא התשובות עצמן ולא תוצאות המשחקים.</p>
@@ -10580,7 +10580,11 @@ function mkView(i, mode, fresh) {
     if ($('mkNextStep')) $('mkNextStep').onclick = () => { const h = app.querySelector('.mk-steps li.hidden'); if (h) h.classList.remove('hidden'); if (!app.querySelector('.mk-steps li.hidden')) $('mkNextStep').remove(); };
   } else {
     $('mkToTe').onclick = () => mkView(i, 'teach');
-    $('mkCheck').onclick = mkCheck;
+    // התוצאה של הבדיקה המלאה הראשונה בכל שאלה נשלחת למורה (בלי זמן – רק כמה סעיפים נכונים)
+    $('mkCheck').onclick = () => {
+      const r = mkCheck(), c = mkS.cache[key];
+      if (r && !r.miss && r.tot && c && !c.sent) { c.sent = 1; trackSend('אימון למבחן – תוצאה', `שאלה ${i + 1} · ${q.t} · ${r.ok}/${r.tot}`); }
+    };
     mkWire();
     mkRestoreAns(mkS.cache[key].ans);
   }
