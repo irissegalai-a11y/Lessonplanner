@@ -1470,7 +1470,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7353,7 +7353,7 @@ function home() {
     { id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
-    ...(teacherOn() ? [{ id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' }, { id: 'lp', label: 'בונים שיעור', icon: 'clock', wash: 'rgba(196,170,140,0.30)', go: 'lpTop' }] : []),
+    ...(teacherOn() ? [{ id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' }, { id: 'lp', label: 'בונים שיעור', icon: 'clock', wash: 'rgba(196,170,140,0.30)', go: 'lpTop' }, { id: 'succ', label: 'מבדקי הצלחה', icon: 'star', wash: 'rgba(242,201,76,0.32)', go: 'succTab' }] : []),
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)' },
     { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
   ];
@@ -7562,6 +7562,7 @@ function home() {
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   $('mix').onclick = () => showLevelPicker('mix');
   if ($('lpTop')) $('lpTop').onclick = () => lpHome();
+  if ($('succTab')) $('succTab').onclick = succHome;
   if ($('fcTab')) $('fcTab').onclick = fcHome;
   $('exitTab').onclick = exitHome;
   $('test').onclick = () => startTest(false);
@@ -12264,24 +12265,49 @@ function exitHome() {
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('clipboard')} כרטיס יציאה</span><button class="secondary" id="exHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how"><b>3 שאלות קצרות</b> על מה שלמדנו היום – קלה, בינונית ומאתגרת. עונים לבד, בלי עזרה. בסוף רואים את התוצאה${kf.report ? ', והיא נשלחת למורה' : ''}.</p></div>
-    ${teacherOn() && !EXIT_OPEN ? `<div class="card exit-link"><b>🔗 קישור לתלמידים</b> – שולחים אותו לתלמידים, והם פותחים את כרטיס היציאה בטלפון או במחשב${staffOn() ? '. התוצאות מוצגות רק להם על המסך ולא נשלחות לשום מקום.' : '.'}
-      <div class="kf-join"><input id="exLink" class="tinput" readonly dir="ltr" value="${esc(location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + (staffOn() ? 'exit=o' : 'exit'))}"><button class="secondary" type="button" id="exCopy">העתקה</button></div><div class="small" id="exCopyMsg"></div></div>` : ''}
+    ${teacherOn() && !EXIT_OPEN ? `<div class="card exit-link"><b>🔗 קישור לתלמידים:</b> בוחרים נושא – ומקבלים קישור לכרטיס היציאה <b>בנושא הזה</b>, לשלוח לתלמידים${staffOn() ? '. התוצאות מוצגות רק להם על המסך ולא נשלחות לשום מקום.' : '.'}</div>` : ''}
     <h2>מה למדנו היום?</h2>
     <div class="race-tracks">${gameTopics().map(t => `<button class="race-track" data-ext="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}${GRADE >= 4 ? Object.entries(EXIT_EXTRA).map(([k, E]) => `<button class="race-track" data-exx="${k}"><span class="nm">${E.name}</span></button>`).join('') : ''}</div>`;
   $('exHomeB').onclick = home;
-  if ($('exCopy')) $('exCopy').onclick = () => {
-    const done = () => { $('exCopyMsg').textContent = 'הקישור הועתק ✔'; };
-    try { navigator.clipboard.writeText($('exLink').value).then(done, () => { $('exLink').select(); }); } catch (e) { $('exLink').select(); }
-  };
-  app.querySelectorAll('[data-exx]').forEach(b => b.onclick = () => exitExtra(b.dataset.exx));
-  app.querySelectorAll('[data-ext]').forEach(b => b.onclick = () => {
-    const t = TOPIC[b.dataset.ext];
-    const qs = [1, 2, 3].map(lv => mk(t.id, pick(t.levels[lv]), lv));
-    navPush('view');
-    state = { mode: 'test', topicId: 'test', qs, count: 3, i: 0, results: [], score: 0, exit: t.id };
-    renderQ();
-  });
+  const teach = teacherOn() && !EXIT_OPEN;
+  app.querySelectorAll('[data-exx]').forEach(b => b.onclick = () => teach ? exitLinkDialog('x', b.dataset.exx, EXIT_EXTRA[b.dataset.exx].name) : exitExtra(b.dataset.exx));
+  app.querySelectorAll('[data-ext]').forEach(b => b.onclick = () => teach ? exitLinkDialog('t', b.dataset.ext, TOPIC[b.dataset.ext].name) : exitStart(b.dataset.ext));
   window.scrollTo(0, 0);
+  // קישור לנושא מסוים: התלמיד נכנס ישר לכרטיס היציאה
+  if (!exitHome.auto) { exitHome.auto = 1; const et = URLP.get('et'), ex = URLP.get('ex'); if (et && TOPIC[et]) exitStart(et); else if (ex && EXIT_EXTRA[ex] && GRADE >= 4) exitExtra(ex); }
+}
+function exitStart(id) {
+  const t = TOPIC[id];
+  const qs = [1, 2, 3].map(lv => mk(t.id, pick(t.levels[lv]), lv));
+  navPush('view');
+  state = { mode: 'test', topicId: 'test', qs, count: 3, i: 0, results: [], score: 0, exit: t.id };
+  renderQ();
+}
+// מורה: בוחרים נושא → מתחילים על המסך, או מקבלים קישור לתלמידים לנושא הזה
+const esc2 = x => String(x).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+function exitLinkDialog(kind, id, name) {
+  const link = location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + (staffOn() ? 'exit=o' : 'exit') + '&' + (kind === 't' ? 'et=' : 'ex=') + encodeURIComponent(id);
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', esc); };
+  const esc = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', esc);
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(`כרטיס יציאה – ${name}: ${link}`);
+  ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="exdT">
+    <h2 id="exdT">📋 כרטיס יציאה – ${esc2(name)}</h2>
+    <div class="sc-sec"><b>🔗 קישור לתלמידים בנושא הזה</b>
+      <div class="kf-join"><input id="exLink" class="tinput" readonly dir="ltr" value="${esc2(link)}"><button class="secondary" type="button" id="exCopy">העתקה</button></div>
+      <div class="actions" style="margin-top:6px"><a class="btnlink secondary" href="${esc2(wa)}" target="_blank" rel="noopener">שליחה בוואטסאפ</a></div>
+      <div class="small" id="exCopyMsg"></div></div>
+    <div class="actions" style="justify-content:center"><button id="exNow" class="race-go">▶ להתחיל עכשיו על המסך</button><button id="exNo" class="ghost">↩ חזור</button></div>
+  </div>`;
+  ov.querySelector('#exCopy').onclick = () => {
+    const done = () => { ov.querySelector('#exCopyMsg').textContent = 'הקישור הועתק ✔'; };
+    const inp = ov.querySelector('#exLink');
+    try { navigator.clipboard.writeText(inp.value).then(done, () => { inp.select(); }); } catch (e) { inp.select(); }
+  };
+  ov.querySelector('#exNow').onclick = () => { close(); kind === 't' ? exitStart(id) : exitExtra(id); };
+  ov.querySelector('#exNo').onclick = close;
 }
 function exitAfterSummary(s, correct, n) {
   const wrong = s.results.filter(r => !r.ok).map(r => { const d = document.createElement('div'); d.innerHTML = r.q.text; return d.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) + ` (ענה/תה: ${r.a && r.a.raw != null ? r.a.raw : '—'})`; });
