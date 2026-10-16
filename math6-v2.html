@@ -1378,7 +1378,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13662,6 +13662,8 @@ const lpDesc = (p, id) => ({
   sum: '"מה למדנו היום?" ואז ' + ((LP_SUMS.find(x => x[0] === (p.sumType || 'board')) || LP_SUMS[0])[1])
 })[id];
 
+const lpHead = p => `מערך השיעור – ${TOPIC[p.topic].name} · ${p.dur} דקות · ${LP_KINDS.find(x => x[0] === lpKind(p))[1]}`;
+const lpTotTxt = p => { const tot = lpTotal(p); return `סה"כ ${tot} מתוך ${p.dur} דקות${tot === p.dur ? ' ✔' : ` – ${tot > p.dur ? 'יותר' : 'פחות'} מאורך השיעור`}`; };
 function lpHome(keep) {
   if (!teacherOn()) return home();
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('lp');
@@ -13677,7 +13679,7 @@ function lpHome(keep) {
     <h2 class="noprint">על איזה נושא השיעור?</h2>
     <div class="topics sc-topics noprint">${TOPICS.map((t, i) => `<button class="topic${p.topic === t.id ? ' sc-cur' : ''}" style="--c:${t.color}" data-lpt="${t.id}"><span class="ic">${i + 1}</span><span class="nm">${t.name}</span><span class="ds">${t.desc}</span>${p.topic === t.id ? '<span class="best">✔ נבחר</span>' : ''}</button>`).join('')}</div>
     <div class="card noprint lp-plan">
-      <h2>מערך השיעור – ${TOPIC[p.topic].name} · ${p.dur} דקות · ${LP_KINDS.find(x => x[0] === lpKind(p))[1]}</h2>
+      <h2 id="lpH">${lpHead(p)}</h2>
       <table class="lp-tab"><thead><tr><th></th><th>חלק</th><th>דקות</th><th>מה עושים</th></tr></thead><tbody>
       ${LP_STAGES.map(s => { const dis = s.id === 'learn' && !lpHasLearn(p); return `<tr class="${p.on[s.id] ? '' : 'off'}">
         <td><input type="checkbox" data-lpon="${s.id}" ${p.on[s.id] ? 'checked' : ''} ${dis ? 'disabled' : ''} aria-label="${lpSName(p, s)}"></td>
@@ -13688,7 +13690,7 @@ function lpHome(keep) {
           ${s.id === 'book' && p.on.book ? `<div class="lp-sel"><select id="lpBook">${LP_BOOKS.map(b => `<option ${p.book === b ? 'selected' : ''}>${b}</option>`).join('')}</select> <input id="lpPages" class="tinput" maxlength="60" value="${esc(p.pages || '')}" placeholder="חוברת ועמודים, למשל: חוברת 3, עמ' 34–35"></div>` : ''}
           ${s.id === 'sum' && p.on.sum ? `<div class="lp-sel"><select id="lpSum">${LP_SUMS.map(([k, n]) => `<option value="${k}" ${(p.sumType || 'board') === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>${p.sumType === 'paper' ? `<div class="small muted"><button type="button" class="linkish" id="lpSucc">⭐ להכנת מבדק הצלחה להדפסה</button></div>` : ''}` : ''}</td></tr>`; }).join('')}
       </tbody></table>
-      <div class="lp-tot ${tot === p.dur ? '' : 'warn'}">סה"כ ${tot} מתוך ${p.dur} דקות${tot === p.dur ? ' ✔' : ` – ${tot > p.dur ? 'יותר' : 'פחות'} מאורך השיעור`} <button type="button" class="ghost" id="lpFix">חלוקה מחדש לפי הזמן</button></div>
+      <div class="lp-tot ${tot === p.dur ? '' : 'warn'}" id="lpTot"><span id="lpTotT">${lpTotTxt(p)}</span> <button type="button" class="ghost" id="lpFix">חלוקה מחדש לפי הזמן</button></div>
       <div class="sc-opt"><b>הערות לעצמי:</b> <input id="lpNote" class="tinput" style="flex:1;min-width:200px" maxlength="200" value="${esc(p.note || '')}" placeholder="למשל: לחזור על הטעויות מהשיעור הקודם"></div>
       <div class="actions"><button id="lpGo" class="race-go">▶ מתחילים שיעור</button><button id="lpPrint" class="secondary">${ic('printer')} הדפסת המערך</button><button id="lpSave" class="secondary">💾 שמירה</button></div>
       <div class="small muted" id="lpMsg"></div>
@@ -13699,11 +13701,20 @@ function lpHome(keep) {
   const redo = () => { const y = window.scrollY; lpHome(true); window.scrollTo(0, y); };
   $('lpBack').onclick = () => { homeTab = 'class'; home(); };
   app.querySelectorAll('[data-dur]').forEach(b => b.onclick = () => { p.dur = +b.dataset.dur; lpSplit(p); redo(); });
+  // מעדכנים תוך כדי הקלדה (בטלפון לחיצה על "מתחילים" לא תמיד יוצאת מהשדה, ואז השינוי הלך לאיבוד)
+  const live = () => {
+    app.querySelectorAll('[data-lpmin]').forEach(x => { if (x !== document.activeElement) x.value = p.on[x.dataset.lpmin] ? p.min[x.dataset.lpmin] : 0; });
+    $('lpH').textContent = lpHead(p); $('lpTotT').textContent = lpTotTxt(p); $('lpTot').classList.toggle('warn', lpTotal(p) !== p.dur);
+    app.querySelectorAll('[data-dur]').forEach(b => b.classList.toggle('on', +b.dataset.dur === p.dur));
+    $('lpDur').parentElement.classList.toggle('on', ![45, 90].includes(p.dur));
+    lpSheet();
+  };
+  $('lpDur').oninput = () => { const v = Math.round(+$('lpDur').value); if (v >= 10 && v <= 180) { p.dur = v; lpSplit(p); live(); } };
   $('lpDur').onchange = () => { const v = Math.max(10, Math.min(180, Math.round(+$('lpDur').value || 45))); p.dur = v; lpSplit(p); redo(); };
   app.querySelectorAll('[data-lpt]').forEach(b => b.onclick = () => { p.topic = b.dataset.lpt; if (lpKind(p) === 'first') p.on.learn = lpLesson(p.topic) ? 1 : 0; lpSplit(p); redo(); });
   app.querySelectorAll('[data-lpkind]').forEach(b => b.onclick = () => { lpSetKind(p, b.dataset.lpkind); redo(); });
   app.querySelectorAll('[data-lpon]').forEach(x => x.onchange = () => { p.on[x.dataset.lpon] = x.checked ? 1 : 0; lpSplit(p); redo(); });
-  app.querySelectorAll('[data-lpmin]').forEach(x => x.onchange = () => { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); redo(); });
+  app.querySelectorAll('[data-lpmin]').forEach(x => { x.oninput = () => { if (x.value !== '') { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); live(); } }; x.onchange = () => { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); redo(); }; });
   if ($('lpGame')) $('lpGame').onchange = e => { p.game = e.target.value; redo(); };
   if ($('lpN')) $('lpN').onchange = e => { p.pracN = +e.target.value; redo(); };
   if ($('lpLv')) $('lpLv').onchange = e => { p.pracLv = e.target.value; redo(); };
