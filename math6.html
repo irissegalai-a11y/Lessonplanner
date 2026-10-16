@@ -1008,6 +1008,19 @@
   .op-q .fig { max-height: 34vh; width: auto; max-width: 100%; }
   .op-list { padding-inline-start: 1.4em; }
   .op-list li { margin: 8px 0; }
+  .op-today { font-size: clamp(3rem, 12vw, 6rem); font-weight: 800; text-align: center; margin: 6px 0 10px; color: #4c5fd5; direction: ltr; }
+  .op-claim { margin: 4px 0 6px; color: #3d3a33; }
+  .op-big { font-size: 1.35em; }
+  .op-pair { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 10px 0; direction: ltr; }
+  .op-pair span { font-size: clamp(2rem, 8vw, 3.4rem); font-weight: 800; border: 3px solid #1f1e1c; border-radius: 16px; padding: 8px 22px; background: #fffdf8; }
+  .op-seq { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+  .op-seq span { min-width: 1.8em; text-align: center; font-size: clamp(1.1rem, 4.4vw, 2.4rem); font-weight: 800; border: 2.5px solid #1f1e1c; border-radius: 12px; padding: 6px 6px; background: #fffdf8; }
+  .op-seq span.gap { background: #fff3c4; color: #b3261e; }
+  .op-dots3 { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+  .op-dots3 > div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .op-dots3 svg { height: min(30vw, 150px); width: auto; max-width: 90vw; }
+  .op-kinds { margin: 8px 0 4px; }
+  .lp-opk summary { cursor: pointer; color: #4c5fd5; font-size: 0.9rem; margin-top: 4px; }
   .op-ch { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-size: 0.9em; margin-top: 6px; }
   .op-ch > span { display: block; }
   .op-wrong { margin-top: 10px; padding: 10px 14px; border: 2px dashed #d9482b; border-radius: 12px; background: rgba(217,72,43,0.08); }
@@ -1428,7 +1441,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קטו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קטז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -11447,23 +11460,131 @@ function opOddOne() {
   const nums = shuffle([...yes, no[0]]);
   return { title: 'איזה לא שייך?', q: `<div class="op-nums">${nums.map(n => `<span>${M(fmt(n))}</span>`).join('')}</div><p>איזה מספר לא שייך לאחרים? למה? (יכולות להיות כמה תשובות נכונות – העיקר להסביר!)</p>`, a: `למשל: ${M(fmt(no[0]))} – כי כל השאר <b>${P.name}</b>, והוא לא. מצאתם סיבה אחרת? מצוין – הסבירו אותה!` };
 }
+/* ---- סוגי שקפים לפתיח: המורה בוחרת אילו (וכמה) ---- */
+const opChHTML = q => q.type === 'choice' ? `<div class="op-ch">${q.choices.map((c, k) => `<span><b>${'אבגדהוזח'[k]}.</b> ${c}</span>`).join('')}</div>` : '';
+const OP_MAXN = { 1: 20, 2: 100, 3: 1000, 4: 10000, 5: 100000, 6: 1000000 }[GRADE] || 1000;
+const opRound = n => n < 100 ? 10 : n < 1000 ? 100 : 1000;
+function opToday() {
+  const g = GRADE;
+  let N = g <= 1 ? R(8, 20) : g === 2 ? R(24, 98) : g === 3 ? R(120, 960) : R(1200, 9800);
+  if (g >= 3 && N % 2) N++;
+  const pr = [];
+  pr.push([`כתבו תרגיל <b>חיבור</b> שהתוצאה שלו ${M(fmt(N))}`, `למשל ${M(`${fmt(N - Math.floor(N / 3))} + ${fmt(Math.floor(N / 3))} = ${fmt(N)}`)}`]);
+  pr.push([`כתבו תרגיל <b>חיסור</b> שהתוצאה שלו ${M(fmt(N))}`, `למשל ${M(`${fmt(N + 10)} - 10 = ${fmt(N)}`)}`]);
+  if (g >= 3) { const d = [3, 4, 5, 6, 8, 2].find(x => N % x === 0) || 2; pr.push([`כתבו תרגיל <b>כפל</b> שהתוצאה שלו ${M(fmt(N))}`, `למשל ${M(`${d} × ${fmt(N / d)} = ${fmt(N)}`)}`]); }
+  if (g <= 3) pr.push(['מה המספר שבא <b>לפני</b>? ומה <b>אחרי</b>?', `${M(fmt(N - 1))} ו-${M(fmt(N + 1))}`]);
+  if (g <= 4) pr.push(['זוגי או אי-זוגי? איך יודעים?', `${N % 2 ? 'אי-זוגי' : 'זוגי'} – לפי ספרת האחדות (${N % 10})`]);
+  if (g >= 2) pr.push(['פרקו לפי ערך הספרות', M(expanded(N))]);
+  const r = opRound(N), up = Math.ceil((N + 1) / r) * r;
+  pr.push([`כמה חסר עד ${M(fmt(up))}?`, M(fmt(up - N))]);
+  if (g >= 3) pr.push([`עגלו ל${r === 10 ? 'עשרת' : r === 100 ? 'מאה' : 'אלף'} הקרוב`, M(fmt(Math.round(N / r) * r))]);
+  const ch = shuffle(pr).slice(0, 4);
+  return { title: 'המספר של היום', q: `<div class="op-today">${M(fmt(N))}</div><ol class="op-list">${ch.map(x => `<li>${x[0]}</li>`).join('')}</ol>`, a: `<ol class="op-list">${ch.map(x => `<li>${x[1]}</li>`).join('')}</ol>` };
+}
+function opTF(t, get) {
+  const qs = []; for (let k = 0; k < 40 && qs.length < 3; k++) { const q = get(k < 20 ? 1 : 2, q => q.type === 'num'); if (q.type === 'num' && !qs.some(x => x.text === q.text)) qs.push(q); }
+  if (qs.length < 2) return null;
+  const items = qs.map((q, i) => { const lie = i === 0 ? true : i === 1 ? false : Math.random() < 0.5; const tr = (q.traps || []).find(x => x.v !== q.ans && x.v > 0); const shown = lie ? (tr ? tr.v : q.ans + (q.ans > 10 ? opRound(q.ans) / 10 * R(1, 3) : 1)) : q.ans; return { q, lie, shown }; });
+  const L = shuffle(items);
+  return { title: 'אמת או שקר?', q: `<p>מצביעים: אמת או שקר? ומנמקים!</p><ol class="op-list">${L.map(x => `<li>${x.q.text}${x.q.fig || ''}<div class="op-claim">התשובה היא <b>${M(fmt(x.shown))}${x.q.unit ? ' ' + x.q.unit : ''}</b></div></li>`).join('')}</ol>`,
+    a: `<ol class="op-list">${L.map(x => `<li>${x.lie ? `<b>שקר</b> – התשובה הנכונה: ${correctHTML(x.q)}` : '<b>אמת</b> ✔'}</li>`).join('')}</ol>` };
+}
+function opMany() {
+  const g = GRADE, opts = [];
+  const S = g <= 1 ? R(8, 18) : g === 2 ? R(40, 90) : g === 3 ? R(200, 900) : R(1000, 9000);
+  opts.push(() => ({ q: `מצאו <b>שני מספרים</b> שהסכום שלהם ${M(fmt(S))}`, a: [1, 2, 3, 4].map(k => { const x = Math.round(S * k / 5); return M(`${fmt(x)} + ${fmt(S - x)}`); }).join(' · ') }));
+  const D = g <= 1 ? R(3, 9) : g === 2 ? R(11, 39) : R(25, 250);
+  opts.push(() => ({ q: `מצאו <b>שני מספרים</b> שההפרש ביניהם ${M(fmt(D))}`, a: [10, 25, 50, 100].map(x => M(`${fmt(x + D)} - ${fmt(x)}`)).join(' · ') }));
+  if (g >= 3) { const P = pick([12, 18, 24, 36, 48, 60, 72]); const pairs = []; for (let a = 1; a * a <= P; a++) if (P % a === 0) pairs.push(M(`${a} × ${P / a}`)); opts.push(() => ({ q: `מצאו <b>שני מספרים</b> שהמכפלה שלהם ${M(P)}`, a: pairs.join(' · ') })); }
+  if (g >= 3) { const A = pick([12, 16, 18, 24, 36]); const pairs = []; for (let a = 1; a * a <= A; a++) if (A % a === 0) pairs.push(`${a} על ${A / a}`); opts.push(() => ({ q: `תארו <b>מלבן</b> שהשטח שלו ${M(A)} משבצות. מה האורך והרוחב?`, a: pairs.join(' · ') + ' (וגם ההיקף משתנה!)' })); }
+  if (g >= 4) { const [n, d] = pick([[1, 2], [1, 3], [3, 4], [2, 5]]); opts.push(() => ({ q: `כתבו <b>שברים</b> השווים ל-${M(`${n}/${d}`)}`, a: [2, 3, 4, 10].map(k => M(`${n * k}/${d * k}`)).join(' · ') })); }
+  if (g >= 5) { const a = R(11, 89) / 10; opts.push(() => ({ q: `כתבו <b>מספר עשרוני</b> שנמצא בין ${M(fmt(a))} ל-${M(fmt(Math.round((a + 0.1) * 10) / 10))}`, a: [1, 3, 5, 7].map(k => M(fmt(Math.round((a + k / 100) * 100) / 100))).join(' · ') })); }
+  if (g <= 2) { const T = g === 1 ? 1 : R(2, 8); opts.push(() => ({ q: `כתבו מספרים שיש בהם <b>${T} עשרות</b>`, a: [0, 3, 5, 9].map(u => M(T * 10 + u)).join(' · ') })); }
+  const o = pick(opts)();
+  return { title: 'הרבה תשובות נכונות', q: `<p class="op-big">${o.q}</p><p>כמה תשובות <b>שונות</b> אתם מוצאים? מי מצא תשובה שאף אחד לא חשב עליה?</p>`, a: `למשל: ${o.a}` };
+}
+function opSame() {
+  const g = GRADE, opts = [];
+  const a = g <= 1 ? R(2, 9) : R(12, 89), b = g <= 1 ? R(2, 9) : R(3, 9);
+  opts.push(() => [M(`${a} + ${b}`), M(`${b} + ${a}`), 'אותה תוצאה – בחיבור אפשר להחליף את הסדר. שונה: מאיזה מספר מתחילים.']);
+  opts.push(() => [M(`${a} + ${b}`), M(`${a} - ${b}`), `אותם מספרים. שונה: הפעולה – ${a + b} לעומת ${a - b}.`]);
+  if (g >= 2) { const x = R(1, 9), y = R(1, 9) === x ? (x % 9) + 1 : R(1, 9); if (x !== y) opts.push(() => [M(`${x}${y}`), M(`${y}${x}`), `אותן ספרות. שונה: ערך הספרות – ${x} עשרות לעומת ${y} עשרות.`]); }
+  if (g >= 3) { const x = R(3, 9), y = R(3, 9); opts.push(() => [M(`${x} × ${y}`), M(`${y} × ${x}`), 'אותה תוצאה (חוק החילוף). שונה: כמה קבוצות וכמה בכל קבוצה.']); opts.push(() => [M(`${x} × 10`), M(`${x} + 10`), `שניהם עם ${x} ו-10. שונה: ${x * 10} לעומת ${x + 10}.`]); }
+  if (g >= 4) opts.push(() => [M('1/2'), M('2/4'), 'שווים בגודל. שונה: לכמה חלקים חילקו.']);
+  if (g >= 5) opts.push(() => [M('0.5'), M('0.50'), 'אותו מספר! האפס בסוף לא משנה את הערך.']);
+  const [x, y, ans] = pick(opts)();
+  return { title: 'מה דומה? מה שונה?', q: `<div class="op-pair"><span>${x}</span><span>${y}</span></div><p>מצאו דבר אחד <b>דומה</b> ודבר אחד <b>שונה</b>. מי מוצא יותר?</p>`, a: ans };
+}
+function opEst() {
+  const g = GRADE, rows = [];
+  for (let k = 0; k < 3; k++) {
+    let ex, v;
+    if (g <= 1) { const a = R(3, 9), b = R(3, 9); ex = `${a} + ${b}`; v = a + b; }
+    else if (g === 2) { const a = R(18, 69), b = R(11, 29); ex = `${a} + ${b}`; v = a + b; }
+    else if (g === 3) { const a = R(120, 480), b = R(110, 390); ex = `${a} + ${b}`; v = a + b; }
+    else { const a = R(18, 52), b = R(11, 39); ex = `${a} × ${b}`; v = a * b; }
+    const r = g <= 1 ? 10 : opRound(v), T = Math.round(v / r) * r + (Math.random() < 0.5 ? r / 2 : -r / 2);
+    let TT = Math.max(r / 2, T); if (TT === v) TT += r;
+    rows.push({ ex, v, T: TT });
+  }
+  return { title: 'הערכה – בערך כמה?', q: `<p>בלי לחשב בדיוק! התוצאה <b>גדולה</b> או <b>קטנה</b> מהמספר?</p><ol class="op-list">${rows.map(x => `<li>${M(x.ex)} &nbsp; – יותר או פחות מ-${M(fmt(x.T))}?</li>`).join('')}</ol>`,
+    a: `<ol class="op-list">${rows.map(x => `<li>${x.v > x.T ? 'יותר' : 'פחות'} – ${M(`${x.ex} = ${fmt(x.v)}`)}</li>`).join('')}</ol>` };
+}
+function opRule() {
+  const g = GRADE;
+  let a, step, mul = false;
+  if (g <= 1) { a = R(0, 6); step = pick([1, 2]); }
+  else if (g === 2) { a = R(3, 30); step = pick([2, 5, 10, 3]); }
+  else if (g === 3) { a = R(5, 60); step = pick([4, 6, 25, 50, 9]); }
+  else if (Math.random() < 0.4) { a = R(1, 5); step = 2; mul = true; }
+  else { a = R(10, 200); step = pick([15, 25, 75, 125, -12]); if (step < 0) a += 100; }
+  const seq = Array.from({ length: 6 }, (_, i) => mul ? a * 2 ** i : a + step * i);
+  const miss = [R(2, 3), 5];
+  return { title: 'מה הכלל?', q: `<div class="op-seq" dir="ltr">${seq.map((v, i) => `<span class="${miss.includes(i) ? 'gap' : ''}">${miss.includes(i) ? '?' : fmt(v)}</span>`).join('')}</div><p>מה הכלל של הסדרה? אילו מספרים חסרים?</p>`,
+    a: `הכלל: ${mul ? 'כפול 2 בכל פעם' : step > 0 ? `מוסיפים ${step} בכל פעם` : `מחסירים ${-step} בכל פעם`}. החסרים: ${miss.map(i => M(fmt(seq[i]))).join(' ו-')}` };
+}
+function opDotsSl() {
+  const ns = shuffle([R(3, 6), R(5, 9), R(7, 12)]);
+  return { title: 'כמה יש? בלי לספור!', q: `<p>מסתכלים רגע – ואומרים כמה. בלי לספור אחד-אחד!</p><div class="op-dots3">${ns.map((n, i) => `<div><b>${i + 1}.</b>${i === 0 ? fcDice(n) : fcDots(n)}</div>`).join('')}</div>`, a: `${ns.map((n, i) => `${i + 1}. <b>${n}</b>`).join(' · ')} – איך ראיתם? (למשל: 3 ועוד 2)` };
+}
+const OP_KINDS = [
+  { id: 'warm', name: '🔥 חימום – פותרים בראש', ok: () => true, make: (t, get) => { const w1 = get(1), w2 = get(1); return { title: 'חימום – פותרים בראש', q: `<ol class="op-list"><li>${w1.text}${w1.fig || ''}${opChHTML(w1)}</li><li>${w2.text}${w2.fig || ''}${opChHTML(w2)}</li></ol>`, a: `<ol class="op-list"><li>${correctHTML(w1)} – ${w1.exp}</li><li>${correctHTML(w2)} – ${w2.exp}</li></ol>` }; } },
+  { id: 'today', name: '🔢 המספר של היום', ok: () => true, make: () => opToday() },
+  { id: 'tf', name: '✔✘ אמת או שקר', ok: () => true, make: (t, get) => opTF(t, get) },
+  { id: 'mistake', name: '🕵️ מצאו את הטעות', ok: () => true, make: (t, get) => {
+    let e = null;
+    for (const lv of [1, 2, 2, 3]) { const q = get(lv, q => q.type === 'num' && (q.traps || []).some(tr => tr.m && tr.v !== q.ans)); if (q.type === 'num' && (q.traps || []).some(tr => tr.m)) { e = q; break; } }
+    if (!e) return null;
+    const tr = pick(e.traps.filter(x => x.m && x.v !== e.ans));
+    return { title: 'מצאו את הטעות', q: `${e.text}${e.fig || ''}<div class="op-wrong">תלמיד ענה: <b>${M(fmt(tr.v))}${e.unit ? ' ' + e.unit : ''}</b>. האם הוא צדק? אם לא – מה הטעות שלו?</div>`, a: `<b>לא נכון.</b> התשובה: ${correctHTML(e)}.<br>הטעות: ${tr.m}<br>${e.exp}` }; } },
+  { id: 'odd', name: '🧩 איזה לא שייך?', ok: () => true, make: () => opOddOne() },
+  { id: 'many', name: '💭 הרבה תשובות נכונות', ok: () => true, make: () => opMany() },
+  { id: 'same', name: '⚖️ מה דומה? מה שונה?', ok: () => true, make: () => opSame() },
+  { id: 'est', name: '🎯 הערכה – בערך כמה?', ok: () => true, make: () => opEst() },
+  { id: 'rule', name: '🔍 מה הכלל? (סדרה)', ok: () => true, make: () => opRule() },
+  { id: 'dots', name: '👀 כמה יש? בלי לספור', ok: () => GRADE <= 2, make: () => opDotsSl() },
+  { id: 'chal', name: '🏔️ שאלת אתגר', ok: () => true, make: (t, get) => { const c = get(3); return { title: 'שאלת אתגר', q: `${c.text}${c.fig || ''}${opChHTML(c)}<p class="muted">חשבו לבד דקה, ואז שתפו את בן/בת הזוג בדרך שלכם.</p>`, a: `${correctHTML(c)}<br>${c.exp}` }; } }
+];
+const OP_DEFAULT = ['warm', 'mistake', 'odd', 'chal'];
+const OP_KEY = 'math-op-kinds-g' + GRADE;
+const opKindsPref = () => { try { const v = JSON.parse(localStorage.getItem(OP_KEY)); return Array.isArray(v) && v.length ? v : OP_DEFAULT.slice(); } catch (e) { return OP_DEFAULT.slice(); } };
+const opKindsSave = v => { try { localStorage.setItem(OP_KEY, JSON.stringify(v)); } catch (e) { /* לא חובה */ } };
+const opKindsAvail = () => OP_KINDS.filter(k => k.ok());
+const opMixKinds = () => { const pool = shuffle(opKindsAvail().map(k => k.id).filter(id => id !== 'warm' && id !== 'chal')); return ['warm', ...pool.slice(0, 2), 'chal']; };
+const opKindsSorted = v => opKindsAvail().map(k => k.id).filter(id => v.includes(id));
+// בחירת שקפים: צ'יפים שמדליקים/מכבים, וכפתור "ערבוב"
+const opKindChips = (sel, attr) => `<div class="sc-chips op-kinds">${opKindsAvail().map(k => `<button type="button" class="sc-chip btn${sel.includes(k.id) ? ' on' : ''}" ${attr}="${k.id}">${k.name}</button>`).join('')}<button type="button" class="sc-chip btn" ${attr}="__mix">🎲 ערבוב</button></div>`;
+const opKindToggle = (sel, id) => { if (id === '__mix') return opMixKinds(); const v = sel.includes(id) ? sel.filter(x => x !== id) : sel.concat(id); return opKindsSorted(v.length ? v : [id]); };
 const opName = id => id === 'composite' ? 'שטחים מורכבים' : (OP_SPECIAL.find(x => x.id === id) || TOPIC[id]).name;
-function opBuild(topicId) {
+function opBuild(topicId, kinds) {
   const sp = OP_SPECIAL.find(x => x.id === topicId);
   if (sp) return sp.build().map(sl => ({ ...sl, src: sp.src }));
   if (topicId === 'composite') return opComposite();
   const t = TOPIC[topicId], seen = new Set();
   const get = (lv, cond) => { for (let i = 0; i < 80; i++) { const q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text) && (!cond || cond(q))) { seen.add(q.text); return q; } } return mk(t.id, pick(t.levels[lv]), lv); };
-  const slides = [];
-  const w1 = get(1), w2 = get(1);
-  slides.push({ title: 'חימום – פותרים בראש', q: `<ol class="op-list"><li>${w1.text}${w1.fig || ''}${w1.type === 'choice' ? `<div class="op-ch">${w1.choices.map((c, k) => `<span><b>${'אבגדהוזח'[k]}.</b> ${c}</span>`).join('')}</div>` : ''}</li><li>${w2.text}${w2.fig || ''}${w2.type === 'choice' ? `<div class="op-ch">${w2.choices.map((c, k) => `<span><b>${'אבגדהוזח'[k]}.</b> ${c}</span>`).join('')}</div>` : ''}</li></ol>`, a: `<ol class="op-list"><li>${correctHTML(w1)} – ${w1.exp}</li><li>${correctHTML(w2)} – ${w2.exp}</li></ol>` });
-  let e = null;
-  for (const lv of [1, 2, 2, 3]) { const q = get(lv, q => q.type === 'num' && (q.traps || []).some(tr => tr.m && tr.v !== q.ans)); if (q.type === 'num' && (q.traps || []).some(tr => tr.m)) { e = q; break; } }
-  if (e) { const tr = pick(e.traps.filter(x => x.m && x.v !== e.ans)); slides.push({ title: 'מצאו את הטעות', q: `${e.text}${e.fig || ''}<div class="op-wrong">תלמיד ענה: <b>${M(fmt(tr.v))}${e.unit ? ' ' + e.unit : ''}</b>. האם הוא צדק? אם לא – מה הטעות שלו?</div>`, a: `<b>לא נכון.</b> התשובה: ${correctHTML(e)}.<br>הטעות: ${tr.m}<br>${e.exp}` }); }
-  slides.push(opOddOne());
-  const c = get(3);
-  slides.push({ title: 'שאלת אתגר', q: `${c.text}${c.fig || ''}${c.type === 'choice' ? `<div class="op-ch">${c.choices.map((x, k) => `<span><b>${'אבגדהוזח'[k]}.</b> ${x}</span>`).join('')}</div>` : ''}<p class="muted">חשבו לבד דקה, ואז שתפו את בן/בת הזוג בדרך שלכם.</p>`, a: `${correctHTML(c)}<br>${c.exp}` });
-  return slides;
+  const ks = (kinds && kinds.length ? kinds : OP_DEFAULT).filter(k => OP_KINDS.some(x => x.id === k && x.ok()));
+  const slides = ks.map(k => OP_KINDS.find(x => x.id === k).make(t, get)).filter(Boolean);
+  return slides.length ? slides : [OP_KINDS[0].make(t, get)];
 }
 /* ---------- פתיחים מוכנים לפי מארגן ההוראה: השבר כמנת חילוק (כיתות ה'–ו') ---------- */
 const PIE_COLS = ['#2f8f55', '#7fa8d6', '#d9482b', '#e8b84a', '#8a5cd1', '#d94a8c', '#d9822b', '#6fb3ad'];
@@ -12017,11 +12138,13 @@ function opHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('op');
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור</span><button class="secondary" id="opHomeB">${ic('home')} לדף הבית</button></div>
-    <div class="card race-intro"><p class="race-how">4 שקפים קצרים להקרנה בתחילת השיעור, על הנושא שתבחרו: <b>חימום</b> בראש · <b>מצאו את הטעות</b> · <b>איזה לא שייך?</b> (לשיח) · <b>שאלת אתגר</b>. בכל שקף – קודם חושבים, ואז חושפים את התשובה.</p></div>
+    <div class="card race-intro"><p class="race-how">שקפים קצרים להקרנה בתחילת השיעור, על הנושא שתבחרו. <b>בוחרים אילו שקפים</b> – חימום, המספר של היום, אמת או שקר, הערכה, מה הכלל ועוד – או לוחצים "ערבוב". בכל שקף – קודם חושבים, ואז מציגים את התשובה.</p></div>
+    <div class="card"><b>אילו שקפים?</b> <span class="small muted">(לוחצים כדי להוסיף או להוריד · נשמר לפעם הבאה)</span>${opKindChips(opKindsPref(), 'data-opk')}<div class="small muted" id="opKN">${opKindsPref().length} שקפים</div></div>
     <h2>על איזה נושא השיעור?</h2>
     <div class="race-tracks">${GRADE >= 5 ? `<button class="race-track" data-opt="composite" style="border-color:#2f8f55"><span class="nm">שטחים מורכבים</span><span class="best">חימום, צלע חסרה, מצאו את הטעות, ואתגר</span></button>` : ''}${TOPICS.map(t => `<button class="race-track" data-opt="${t.id}" style="border-color:${t.color}"><span class="nm">${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>`;
   $('opHomeB').onclick = () => classSub('open');
-  app.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => { op = { topic: b.dataset.opt, slides: opBuild(b.dataset.opt), k: 0, show: false }; opDraw(); });
+  app.querySelectorAll('[data-opk]').forEach(b => b.onclick = () => { const y = window.scrollY; opKindsSave(opKindToggle(opKindsPref(), b.dataset.opk)); opHome(); window.scrollTo(0, y); });
+  app.querySelectorAll('[data-opt]').forEach(b => b.onclick = () => { op = { topic: b.dataset.opt, kinds: opKindsPref(), slides: opBuild(b.dataset.opt, opKindsPref()), k: 0, show: false }; opDraw(); });
   window.scrollTo(0, 0);
 }
 function opDraw() {
@@ -12047,7 +12170,7 @@ function opDraw() {
   if ($('opPrev')) $('opPrev').onclick = () => { op.k--; op.show = false; opDraw(); };
   if ($('opShow')) $('opShow').onclick = () => { op.show = true; opDraw(); };
   if ($('opNext')) $('opNext').onclick = () => { op.k++; op.show = false; opDraw(); };
-  if ($('opNew')) $('opNew').onclick = () => { if (op.back) return op.back(); op = { topic: op.topic, slides: opBuild(op.topic), k: 0, show: false }; opDraw(); };
+  if ($('opNew')) $('opNew').onclick = () => { if (op.back) return op.back(); op = { topic: op.topic, kinds: op.kinds, slides: opBuild(op.topic, op.kinds), k: 0, show: false }; opDraw(); };
   window.scrollTo(0, 0);
 }
 
@@ -13700,7 +13823,7 @@ function lpSplit(p) {
 }
 const lpTotal = p => LP_STAGES.reduce((a, s) => a + (p.on[s.id] ? (+p.min[s.id] || 0) : 0), 0);
 const lpDesc = (p, id) => ({
-  open: '4 שקפים: חימום בראש, מצאו את הטעות, איזה לא שייך, ואתגר',
+  open: `${(p.opKinds || OP_DEFAULT).length} שקפים: ${opKindsSorted(p.opKinds || OP_DEFAULT).map(id => OP_KINDS.find(k => k.id === id).name.replace(/^\S+ /, '')).join(', ')}`,
   game: (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – בוחרים את הנושא במסך המשחק',
   learn: lpKind(p) !== 'first' ? 'חזרה קצרה: מה למדנו בשיעור הקודם, ו-2 שאלות חימום' : lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
   prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 23: 'בינוניים ומאתגרים', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
@@ -13731,7 +13854,7 @@ function lpHome(keep) {
         <td><input type="checkbox" data-lpon="${s.id}" ${p.on[s.id] ? 'checked' : ''} ${dis ? 'disabled' : ''} aria-label="${lpSName(p, s)}"></td>
         <td><b>${lpSIc(p, s)} ${lpSName(p, s)}</b></td>
         <td><input type="number" class="lp-min" min="0" max="120" data-lpmin="${s.id}" value="${p.on[s.id] ? p.min[s.id] : 0}" ${p.on[s.id] ? '' : 'disabled'} inputmode="numeric"></td>
-        <td>${lpDesc(p, s.id)}${s.id === 'game' && p.on.game ? `<div><select id="lpGame">${LP_GAMES.map(([k, n]) => `<option value="${k}" ${p.game === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
+        <td>${lpDesc(p, s.id)}${s.id === 'open' && p.on.open ? `<details class="lp-opk"><summary>בחירת שקפים לפתיח</summary>${opKindChips(p.opKinds || OP_DEFAULT, 'data-lpopk')}</details>` : ''}${s.id === 'game' && p.on.game ? `<div><select id="lpGame">${LP_GAMES.map(([k, n]) => `<option value="${k}" ${p.game === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
           ${s.id === 'prac' && p.on.prac ? `<div class="lp-sel"><select id="lpN">${[4, 6, 8, 10, 12].map(n => `<option ${p.pracN === n ? 'selected' : ''}>${n}</option>`).join('')}</select> תרגילים · <select id="lpLv">${[['mix', 'מהקל לקשה'], ['23', 'בינוניים ומאתגרים'], ['1', 'קלים'], ['2', 'בינוניים'], ['3', 'מאתגרים']].map(([k, n]) => `<option value="${k}" ${p.pracLv === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
           ${s.id === 'book' && p.on.book ? `<div class="lp-sel"><select id="lpBook">${LP_BOOKS.map(b => `<option ${p.book === b ? 'selected' : ''}>${b}</option>`).join('')}</select> <input id="lpPages" class="tinput" maxlength="60" value="${esc(p.pages || '')}" placeholder="חוברת ועמודים, למשל: חוברת 3, עמ' 34–35"></div>` : ''}
           ${s.id === 'sum' && p.on.sum ? `<div class="lp-sel"><select id="lpSum">${LP_SUMS.map(([k, n]) => `<option value="${k}" ${(p.sumType || 'board') === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>${p.sumType === 'paper' ? `<div class="small muted"><button type="button" class="linkish" id="lpSucc">⭐ להכנת מבדק הצלחה להדפסה</button></div>` : ''}` : ''}</td></tr>`; }).join('')}
@@ -13762,6 +13885,7 @@ function lpHome(keep) {
   app.querySelectorAll('[data-lpon]').forEach(x => x.onchange = () => { p.on[x.dataset.lpon] = x.checked ? 1 : 0; lpSplit(p); redo(); });
   app.querySelectorAll('[data-lpmin]').forEach(x => { x.oninput = () => { if (x.value !== '') { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); live(); } }; x.onchange = () => { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); redo(); }; });
   if ($('lpGame')) $('lpGame').onchange = e => { p.game = e.target.value; redo(); };
+  app.querySelectorAll('[data-lpopk]').forEach(b => b.onclick = () => { p.opKinds = opKindToggle(p.opKinds || OP_DEFAULT, b.dataset.lpopk); redo(); const d = app.querySelector('.lp-opk'); if (d) d.open = true; });
   if ($('lpN')) $('lpN').onchange = e => { p.pracN = +e.target.value; redo(); };
   if ($('lpLv')) $('lpLv').onchange = e => { p.pracLv = e.target.value; redo(); };
   if ($('lpSucc')) $('lpSucc').onclick = succHome;
@@ -13839,7 +13963,7 @@ function lpStage(k) {
   R0.k = Math.max(0, Math.min(R0.st.length - 1, k)); R0.t0 = Date.now();
   const p = lp, s = R0.st[R0.k], T = TOPIC[p.topic];
   lpBarDraw();
-  if (s.id === 'open') { op = { topic: p.topic, slides: opBuild(p.topic), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
+  if (s.id === 'open') { op = { topic: p.topic, slides: opBuild(p.topic, p.opKinds), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
   else if (s.id === 'game') ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome() }[p.game] || jeoHome)();
   else if (s.id === 'learn' && lpKind(p) !== 'first') {
     const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [];
