@@ -188,6 +188,8 @@
   div.choices > button { display: flex; align-items: center; gap: 10px; justify-content: flex-start; text-align: right; }
   div.choices.pics > button { flex-direction: column; justify-content: center; text-align: center; }
   .chl { font-weight: 800; flex-shrink: 0; }
+  .choices.emo { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); max-width: 420px; }
+  .choices.emo button .cht { font-size: 2.2rem; line-height: 1; }
   .choices button {
     background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: none;
     font-size: 1.2rem; padding: 12px; text-align: center; line-height: 1.6;
@@ -1031,7 +1033,7 @@
   /* תרגול: שתי "עמודות" – שאלה ותשובה / ציור ומשוב. במסך צר הכל אחד מתחת לשני, בסדר הרגיל */
   .qcols { display: flex; flex-direction: column; }
   .qcol-a, .qcol-b { display: contents; }
-  .qcols .qhead { order: 1; } .qcols .qcol-b > .fig, .qcols .qcol-b > .chartwrap { order: 2; } .qcols .answer-area { order: 3; } .qcols .actions { order: 4; } .qcols .fb { order: 5; } .qcols #guide { order: 6; }
+  .qcols .qhead { order: 1; } .qcols .qcol-b > .fig, .qcols .qcol-b > .chartwrap, .qcols .qcol-b > :not(.fb):not(#guide) { order: 2; } .qcols .answer-area { order: 3; } .qcols .actions { order: 4; } .qcols .fb { order: 5; } .qcols #guide { order: 6; }
   .sol { display: flex; flex-direction: column; gap: 6px; text-align: right; }
   .sol-ex { color: #3d3a33; }
   .sol-ans { font-size: 1.12em; padding-top: 6px; border-top: 2px dashed rgba(31,30,28,.25); }
@@ -1045,6 +1047,13 @@
   .op-seq { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
   .op-seq span { min-width: 1.8em; text-align: center; font-size: clamp(1.1rem, 4.4vw, 2.4rem); font-weight: 800; border: 2.5px solid #1f1e1c; border-radius: 12px; padding: 6px 6px; background: #fffdf8; }
   .op-seq span.gap { background: #fff3c4; color: #b3261e; }
+  .op-seq span.empty { background: #fff; border-style: dashed; }
+  .seq1 { margin: 12px 0; } .seq1 span { font-size: clamp(1.5rem, 6vw, 2.4rem); min-width: 2em; }
+  .pat1 { font-size: min(2.6rem, calc((100vw - 90px) / 14)); text-align: center; margin: 12px 0; white-space: nowrap; max-width: 100%; overflow: hidden; direction: rtl; }
+  .qcol-b .pat1 { font-size: min(2.6rem, calc((100vw - 90px) / 14)); }
+  @media (min-width: 1100px) { .qcol-b .pat1 { font-size: 2.2rem; } }
+  .pat1 i { font-style: normal; color: #8a8478; letter-spacing: -2px; }
+  .choices button .cht:only-child, .choices button .cht { font-size: inherit; }
   .op-dots3 { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
   .op-dots3 > div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .op-dots3 svg { height: min(30vw, 150px); width: auto; max-width: 90vw; }
@@ -1211,6 +1220,9 @@
   .sc-expr input.sc-in.sm { width: 2em; font-size: 1.3rem; padding: 0 2px; }
   .sc-expr input.sc-in.ok { background: #e3f4dc; border-color: #2f8f55; }
   .sc-cmp { display: inline-flex; gap: 6px; }
+  .sc-cmp-row { display: flex; justify-content: center; gap: 14px; margin: 14px 0 4px; }
+  .sc-cmp-row .sc-cb { font-size: 2rem; width: 2em; height: 2em; }
+  .sc-expr .sc-slot { width: 1.6em; height: 1.6em; margin: 0 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; color: #4c5fd5; border-width: 2.5px; }
   .sc-cb { font: inherit; font-size: 1.6rem; width: 1.8em; height: 1.8em; border: 2.5px solid #1f1e1c; border-radius: 10px; background: #fffdf8; cursor: pointer; }
   .sc-cb.sel { background: #f2c94c; }
   .sc-msg { min-height: 1.6em; font-size: 1.15rem; margin-bottom: 8px; }
@@ -1473,7 +1485,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -4598,6 +4610,31 @@ function genCompare1(lv = 1) {
   }, M(t), [M(t === a ? b : a)], true);
 }
 
+// סדרה עולה / יורדת: רמה 1 – עד 10, חסר בסוף או באמצע; רמה 2 – עד 20, חסר גם בהתחלה; רמה 3 – קפיצות של 2, או רק מספר אחד נתון
+function genSeq1(lv = 1) {
+  const MX = lv === 1 ? 10 : 20, down = Math.random() < 0.5, st = lv === 3 && Math.random() < 0.6 ? 2 : 1;
+  const a0 = down ? R(4 * st, MX) : R(0, MX - 4 * st), seq = [0, 1, 2, 3, 4].map(k => down ? a0 - k * st : a0 + k * st);
+  const onlyOne = lv === 3 && st === 1;
+  const hole = lv === 1 ? pick([3, 4]) : onlyOne ? pick([0, 1, 3, 4]) : pick([0, 1, 2, 3]);
+  const shown = seq.map((v, k) => k === hole ? '?' : onlyOne && k !== 2 ? '' : String(v));
+  const fig = `<div class="op-seq seq1" dir="ltr">${shown.map(v => `<span class="${v === '?' ? 'gap' : v === '' ? 'empty' : ''}">${v || '&nbsp;'}</span>`).join('')}</div>`;
+  const kind = down ? 'יורדת' : 'עולה', ans = seq[hole], other = down ? ans + 2 * st : ans - 2 * st;
+  return { type: 'num', text: `סדרה <b>${kind}</b>${st === 2 ? ' – קופצים כל פעם ב-2' : ''}: איזה מספר צריך להיות במקום ה-<b>?</b>`, fig, ans,
+    traps: [{ v: other, m: down ? 'בסדרה יורדת המספרים <b>קטנים</b> – סופרים אחורה.' : 'בסדרה עולה המספרים <b>גדלים</b> – סופרים קדימה.' }].filter(t => t.v !== ans && t.v >= 0),
+    hint: down ? `סופרים אחורה${st === 2 ? ' בקפיצות של 2' : ''}.` : `סופרים קדימה${st === 2 ? ' בקפיצות של 2' : ''}.`, exp: M(seq.join(' , ')) };
+}
+// חוקיות: שרשרת חרוזים או שורת פרחים – מה חסר במקום ❓? רמה 1 – א-ב; רמה 2 – א-א-ב; רמה 3 – א-ב-ג / א-ב-ב
+function genPat1(lv = 1) {
+  const bead = Math.random() < 0.5, pool = bead ? ['🔴', '🔵', '🟡', '🟢', '🟣'] : ['🌸', '🌼', '🌷', '🌻'];
+  const U = lv === 1 ? [0, 1] : lv === 2 ? pick([[0, 0, 1], [0, 1]]) : pick([[0, 1, 2], [0, 1, 1]]);
+  const kinds = shuffle(pool).slice(0, Math.max(...U) + 1), unit = U.map(k => kinds[k]);
+  const len = unit.length === 2 ? 8 : 9, seq = Array.from({ length: len }, (_, k) => unit[k % unit.length]);
+  const hole = lv === 1 ? len - 1 : R(2, len - 1);
+  const fig = `<div class="pat1">${seq.map((v, k) => k === hole ? '❓' : v).join(bead ? '<i>─</i>' : ' ')}</div>`;
+  const choices = shuffle(kinds.concat(pool.filter(x => !kinds.includes(x)).slice(0, kinds.length < 3 ? 1 : 0)));
+  return { type: 'choice', text: bead ? 'מה <b>החרוז</b> שחסר בשרשרת במקום ❓?' : 'איזה <b>פרח</b> חסר בשורה במקום ❓?', fig, choices, ans: choices.indexOf(seq[hole]),
+    hint: `מה חוזר על עצמו? ${unit.join(' ')} – ושוב מההתחלה.`, exp: `החוקיות: ${unit.join(' ')} חוזרים שוב ושוב. במקום ❓ – ${seq[hole]}` };
+}
 function genNeighbors1(lv = 1) {
   const max = lv === 1 ? 10 : 20;
   const k = R(0, 2);
@@ -4769,6 +4806,16 @@ const TOPICS1 = [
     tips: ['10 + 4 = 14 – עשר ועוד ארבע.', 'כפולים: 6 + 6 = 12, 7 + 7 = 14.', 'מעבר דרך 10: 8 + 5 → 8 + 2 = 10, ועוד 3 = 13.']
   },
   {
+    id: 'seq1', name: 'סדרות וחוקיות', icon: '📿', color: '#c2577a',
+    desc: 'סדרה עולה ויורדת, שרשרת חרוזים ופרחים',
+    levels: {
+      1: [() => genSeq1(1), () => genSeq1(1), () => genPat1(1)],
+      2: [() => genSeq1(2), () => genSeq1(2), () => genPat1(2)],
+      3: [() => genSeq1(3), () => genSeq1(3), () => genPat1(3)]
+    },
+    tips: ['סדרה עולה – כל מספר גדול מהקודם. סדרה יורדת – כל מספר קטן מהקודם.', 'חוקיות – מחפשים מה חוזר על עצמו, וממשיכים באותו סדר.']
+  },
+  {
     id: 'shapes', name: 'צורות', icon: '🔷', color: '#2f8f55',
     desc: 'משולש, ריבוע, מלבן ועיגול',
     levels: { 1: [genShapes1], 2: [genShapes1], 3: [genShapes1] },
@@ -4785,6 +4832,7 @@ const LEVEL_DESC1 = {
   count: ['סופרים עד 10, גדול וקטן', 'סופרים עד 20, ישר המספרים', 'הסימנים > < ='],
   add10: ['חיבור וחיסור עם ציורים', 'חיבור וחיסור, השלמה ל-10', 'השלמה ובעיות קצרות'],
   add20: ['עשר ועוד, חיבור וחיסור קלים', 'כפולים', 'מעבר דרך 10'],
+  seq1: ['סדרות עד 10, חוקיות א-ב', 'סדרות עד 20, חוקיות א-א-ב', 'קפיצות של 2, חוקיות א-ב-ג'],
   shapes: ['צורות', 'צורות', 'צורות'],
   measure: ['ארוך וקצר', 'אורך ושעון', 'שעון ואורך'],
   mix: ['שאלות קלות מכל הנושאים', 'שאלות בינוניות מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
@@ -7847,7 +7895,8 @@ function inputHTML(q) {
       </span>
     </span>
     <span class="fracin-note">${q.noWhole ? 'כתבו מונה ומכנה.' : 'אם התשובה גדולה מ-1, כתבו אותה כשבר מעורב (שלם + שבר). אם התשובה מספר שלם – כתבו רק בתיבה "שלם".'}</span>`;
-  return `<div class="choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<button data-c="${i}">${chLet(i)} <span class="cht">${c}</span></button>`).join('')}</div>`;
+  const emo = q.choices.every(c => /^\p{Extended_Pictographic}+$/u.test(String(c)));
+  return `<div class="choices${chPics(q.choices) ? ' pics' : ''}${emo ? ' emo' : ''}">${q.choices.map((c, i) => `<button data-c="${i}">${chLet(i)} <span class="cht">${c}</span></button>`).join('')}</div>`;
 }
 
 function titleText() {
@@ -13713,7 +13762,7 @@ function scRender(q, mode) {
     if (mode === 'key' && t.w === scB && ans[bi + 1] === '') { const w = ans[bi]; bi += 3; return `<b class="sc-kv">${w}</b>`; }
     return `<span class="sc-mix">${t.w !== undefined ? `<span class="sc-w">${t.w === scB ? blank(' sm') : t.w}</span>` : ''}<span class="fr sc-fr"><span>${part(t.f[0])}</span><span>${part(t.f[1])}</span></span></span>`;
   };
-  const tok = t => typeof t === 'string' ? `<span class="m">${t}</span>` : t.ltr ? `<span class="sc-seq" dir="ltr">${t.ltr.map(x => typeof x === 'string' ? `<span class="m">${x}</span>` : tok(x)).join('')}</span>` : t.f ? fr(t) : t.b ? blank() : t.br ? '<span class="sc-br"></span>' : t.ch ? (mode === 'screen' ? `<span class="sc-cmp">${t.ch.map(s => `<button type="button" class="sc-cb wide" data-cmp="${s}">${s}</button>`).join('')}</span>` : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : t.ch.map(s => `<span class="sc-chk">☐ ${s}</span>`).join(' ')) : t.c ? (mode === 'screen' ? `<span class="sc-cmp">${['<', '=', '>'].map(s => `<button type="button" class="sc-cb" data-cmp="${s}">${s}</button>`).join('')}</span>` : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : '<span class="sc-circ"></span>') : t.t ? `<span class="sc-t">${t.t.replace(/(\d[\d,.]*)\s?([%°])/g, '<span class="m">$1$2</span>')}</span>` : '';
+  const tok = t => typeof t === 'string' ? `<span class="m">${t}</span>` : t.ltr ? `<span class="sc-seq" dir="ltr">${t.ltr.map(x => typeof x === 'string' ? `<span class="m">${x}</span>` : tok(x)).join('')}</span>` : t.f ? fr(t) : t.b ? blank() : t.br ? '<span class="sc-br"></span>' : t.ch ? (mode === 'screen' ? `<span class="sc-cmp">${t.ch.map(s => `<button type="button" class="sc-cb wide" data-cmp="${s}">${s}</button>`).join('')}</span>` : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : t.ch.map(s => `<span class="sc-chk">☐ ${s}</span>`).join(' ')) : t.c ? (mode === 'screen' ? '<span class="sc-circ sc-slot"></span>' : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : '<span class="sc-circ"></span>') : t.t ? `<span class="sc-t">${t.t.replace(/(\d[\d,.]*)\s?([%°])/g, '<span class="m">$1$2</span>')}</span>` : '';
   // השוואה ושבר מכמות – בתוך המשפט; כל השאר משמאל לימין
   const parts = q.x.map(tok);
   return `<span class="sc-x${q.rtl ? ' word' : ''}" dir="${q.rtl ? 'rtl' : 'ltr'}">${parts.join(' ')}</span>`;
@@ -13880,6 +13929,7 @@ function succRun(cfg, fromBuilder) {
       <div class="card center sc-q">
         ${q.pre ? `<div class="sc-pre">יודעים ש: ${M(q.pre)}</div>` : ''}
         <div class="sc-expr${q.rtl ? ' word' : ''}">${scRender(q, 'screen')}</div>
+        ${q.x.some(t => t && t.c) ? `<div class="sc-cmp sc-cmp-row" dir="ltr" aria-label="בחרו סימן">${['<', '=', '>'].map(s => `<button type="button" class="sc-cb" data-cmp="${s}">${s}</button>`).join('')}</div>` : ''}
         <div class="sc-msg" id="scMsg"></div>
         <div class="actions" style="justify-content:center" id="scActs">${q.k === 'cmp' ? '' : `<button id="scCheck">${ic('check')} בדיקה</button>`}</div>
       </div>`;
@@ -13912,7 +13962,7 @@ function succRun(cfg, fromBuilder) {
     };
     if ($('scCheck')) $('scCheck').onclick = () => check(ins.map(x => x.value.trim()));
     ins.forEach((x, k) => x.addEventListener('keydown', e => { if (e.key === 'Enter' && !x.disabled) { if (k < ins.length - 1 && !ins[k + 1].value) ins[k + 1].focus(); else $('scCheck').click(); } }));
-    app.querySelectorAll('.sc-cb').forEach(b => b.onclick = () => { app.querySelectorAll('.sc-cb').forEach(x => x.classList.toggle('sel', x === b)); check([b.dataset.cmp]); });
+    app.querySelectorAll('.sc-cb').forEach(b => b.onclick = () => { app.querySelectorAll('.sc-cb').forEach(x => x.classList.toggle('sel', x === b)); const sl = app.querySelector('.sc-slot'); if (sl) sl.textContent = b.dataset.cmp; check([b.dataset.cmp]); });
     window.scrollTo(0, 0);
   };
   // שאלה בפורמט "אימון למבחן" (צורה, בחירה, שרטוט): בדיקה עם mkCheck, רמז = ההסבר, בטעות שנייה – התשובה
