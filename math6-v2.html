@@ -1003,7 +1003,8 @@
   .op-q .fig { max-height: 34vh; width: auto; max-width: 100%; }
   .op-list { padding-inline-start: 1.4em; }
   .op-list li { margin: 8px 0; }
-  .op-ch { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 0.9em; }
+  .op-ch { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-size: 0.9em; margin-top: 6px; }
+  .op-ch > span { display: block; }
   .op-wrong { margin-top: 10px; padding: 10px 14px; border: 2px dashed #d9482b; border-radius: 12px; background: rgba(217,72,43,0.08); }
   .op-nums { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 10px 0; }
   .op-nums span { font-family: var(--hand, inherit); font-weight: 700; font-size: clamp(2rem, 5vw, 3.2rem); padding: 6px 22px; border: 2.5px solid #1f1e1c; border-radius: 16px 4px 16px 4px; background: #fffdf8; }
@@ -1413,7 +1414,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -11438,13 +11439,13 @@ function opBuild(topicId) {
   const get = (lv, cond) => { for (let i = 0; i < 80; i++) { const q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text) && (!cond || cond(q))) { seen.add(q.text); return q; } } return mk(t.id, pick(t.levels[lv]), lv); };
   const slides = [];
   const w1 = get(1), w2 = get(1);
-  slides.push({ title: 'חימום – פותרים בראש', q: `<ol class="op-list"><li>${w1.text}${w1.fig || ''}${w1.type === 'choice' ? `<div class="op-ch">${w1.choices.map((c, k) => `<span><b>${'אבגדהוזח'[k]}</b> ${c}</span>`).join('')}</div>` : ''}</li><li>${w2.text}${w2.fig || ''}${w2.type === 'choice' ? `<div class="op-ch">${w2.choices.map((c, k) => `<span><b>${'אבגדהוזח'[k]}</b> ${c}</span>`).join('')}</div>` : ''}</li></ol>`, a: `<ol class="op-list"><li>${correctHTML(w1)} – ${w1.exp}</li><li>${correctHTML(w2)} – ${w2.exp}</li></ol>` });
+  slides.push({ title: 'חימום – פותרים בראש', q: `<ol class="op-list"><li>${w1.text}${w1.fig || ''}${w1.type === 'choice' ? `<div class="op-ch">${w1.choices.map((c, k) => `<span><b>${'אבגדהוזח'[k]}.</b> ${c}</span>`).join('')}</div>` : ''}</li><li>${w2.text}${w2.fig || ''}${w2.type === 'choice' ? `<div class="op-ch">${w2.choices.map((c, k) => `<span><b>${'אבגדהוזח'[k]}.</b> ${c}</span>`).join('')}</div>` : ''}</li></ol>`, a: `<ol class="op-list"><li>${correctHTML(w1)} – ${w1.exp}</li><li>${correctHTML(w2)} – ${w2.exp}</li></ol>` });
   let e = null;
   for (const lv of [1, 2, 2, 3]) { const q = get(lv, q => q.type === 'num' && (q.traps || []).some(tr => tr.m && tr.v !== q.ans)); if (q.type === 'num' && (q.traps || []).some(tr => tr.m)) { e = q; break; } }
   if (e) { const tr = pick(e.traps.filter(x => x.m && x.v !== e.ans)); slides.push({ title: 'מצאו את הטעות', q: `${e.text}${e.fig || ''}<div class="op-wrong">תלמיד ענה: <b>${M(fmt(tr.v))}${e.unit ? ' ' + e.unit : ''}</b>. האם הוא צדק? אם לא – מה הטעות שלו?</div>`, a: `<b>לא נכון.</b> התשובה: ${correctHTML(e)}.<br>הטעות: ${tr.m}<br>${e.exp}` }); }
   slides.push(opOddOne());
   const c = get(3);
-  slides.push({ title: 'שאלת אתגר', q: `${c.text}${c.fig || ''}${c.type === 'choice' ? `<div class="op-ch">${c.choices.map((x, k) => `<span><b>${'אבגדהוזח'[k]}</b> ${x}</span>`).join('')}</div>` : ''}<p class="muted">חשבו לבד דקה, ואז שתפו את בן/בת הזוג בדרך שלכם.</p>`, a: `${correctHTML(c)}<br>${c.exp}` });
+  slides.push({ title: 'שאלת אתגר', q: `${c.text}${c.fig || ''}${c.type === 'choice' ? `<div class="op-ch">${c.choices.map((x, k) => `<span><b>${'אבגדהוזח'[k]}.</b> ${x}</span>`).join('')}</div>` : ''}<p class="muted">חשבו לבד דקה, ואז שתפו את בן/בת הזוג בדרך שלכם.</p>`, a: `${correctHTML(c)}<br>${c.exp}` });
   return slides;
 }
 /* ---------- פתיחים מוכנים לפי מארגן ההוראה: השבר כמנת חילוק (כיתות ה'–ו') ---------- */
