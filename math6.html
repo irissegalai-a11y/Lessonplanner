@@ -1470,7 +1470,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7901,6 +7901,7 @@ function renderQ() {
         ${state.sim && state.i > 0 ? '<button class="secondary" id="prevQ">→ לשאלה הקודמת</button>' : ''}
         ${q.type === 'choice' && practice ? '' : `<button id="go">${state.sim ? (state.i + 1 === total ? 'סיום והגשה' : 'לשאלה הבאה ←') : !practice ? (state.i + 1 === total ? 'סיום והגשה' : 'שמירה והמשך ←') : 'בדיקה ✓'}</button>`}
         ${state.sim && state.i + 1 < total ? '<button class="secondary" id="simDone">🏁 הגשה</button>' : ''}
+        ${!practice && !state.sim ? '<button class="secondary" id="skipQ">🤷 לא יודע/ת – ממשיכים</button>' : ''}
         ${practice ? `<button class="secondary" id="hintBtn">${ic('bulb')} רמז</button>` : ''}
         ${practice && q.gen ? `<button class="secondary" id="exBtn">${ic('example')} דוגמה פתורה</button>` : ''}
         <button class="hidden" id="next">${state.i + 1 === total ? 'לסיכום 🏁' : 'לשאלה הבאה ←'}</button>
@@ -7931,6 +7932,8 @@ function renderQ() {
   // כיתה א': מקריאים כל שאלה אוטומטית (רק אחרי שהילד כבר לחץ משהו בדף – הדפדפן דורש זאת)
   if (GRADE === 1 && !state.sim && $('speakBtn') && canSpeak && (loadVoices(), heVoice) && navigator.userActivation && navigator.userActivation.hasBeenActive) setTimeout(() => { if ($('speakBtn')) $('speakBtn').click(); }, 350);
   if ($('go')) $('go').onclick = submit;
+  // תלמיד שלא יודע: ממשיך לשאלה הבאה בלי להיתקע (נרשם כ"לא ענה")
+  if ($('skipQ')) $('skipQ').onclick = () => { if (state.done) return; state.results.push({ q, a: readAnswer(q), ok: false, outcome: 'shown', skipped: true }); nextQ(); };
   if ($('hintBtn')) $('hintBtn').onclick = showHint;
   if ($('exBtn')) $('exBtn').onclick = showExample;
   $('next').onclick = nextQ;
@@ -9550,6 +9553,29 @@ function apUQ(askPer) {
     ? { text: `מה <b>ההיקף</b> של הצורה? (המידות בס"מ)`, svg, hsvg, ans: P, unit: AP_CM, hint: `שימו לב: לחריץ שתי צלעות פנימיות של ${nd} ס"מ כל אחת.`, exp: `${M(`${a} + ${nd} + ${nw} + ${nd} + ${W - a - nw} + ${H} + ${W} + ${H} = ${P}`)} ס"מ.` }
     : { text: `מה <b>השטח</b> של הצורה? (המידות בס"מ)`, svg, hsvg, ans: A, unit: AP_CM2, hint: 'השלימו למלבן גדול, והורידו את החריץ.', exp: `${M(`${W} × ${H} - ${nw} × ${nd} = ${A}`)} סמ"ר.` };
 }
+// מלבן ששתי פינות חסרות בו: משלימים למלבן גדול ומורידים שני חלקים
+function apTwoCutQ(hide) {
+  for (let t = 0; t < 50; t++) {
+    const W = R(10, 14), H = R(7, 10), a = R(3, 4), b = R(3, H - 3), c = R(3, 4), d = R(3, H - 3), diag = Math.random() < 0.5;
+    if (!diag && a + c > W - 3) continue;
+    if (diag && (b + d > H - 1 || a + c > W - 1)) continue;
+    const pts = diag ? [[0, b], [a, b], [a, 0], [W, 0], [W, H - d], [W - c, H - d], [W - c, H], [0, H]]
+      : [[0, b], [a, b], [a, 0], [W - c, 0], [W - c, d], [W, d], [W, H], [0, H]];
+    const len = diag ? [a, b, W - a, H - d, c, d, W - c, H - b] : [a, b, W - a - c, d, c, H - d, W, H - b];
+    const skip = diag ? -1 : 2; // הצלע העליונה האמצעית – מחשבים לבד
+    let lab = len.map((v, i) => ({ i, t: v })).filter(l => l.i !== skip);
+    if (hide) lab = lab.filter(l => l.i !== (diag ? 7 : 5));
+    const u = Math.min(26, 300 / Math.max(W, H));
+    const cuts = diag ? [[0, 0, a, b], [W - c, H - d, c, d]] : [[0, 0, a, b], [W - c, 0, c, d]];
+    const svg = apSVG(pts, { u, labels: lab, extraPts: [[0, 0], [W, H]] });
+    const hsvg = apSVG(pts, { u, labels: lab, extraPts: [[0, 0], [W, H]], under: cuts.map(r => apRect(r[0], r[1], r[2], r[3], AP_CUT)) });
+    const A = W * H - a * b - c * d;
+    const wh = diag ? `האורך: ${M(`${a} + ${W - a} = ${W}`)}, הרוחב: ${M(`${b} + ${H - b} = ${H}`)}` : `האורך: ${M(W)}, הרוחב: ${M(`${d} + ${H - d} = ${H}`)}`;
+    return { text: `מה <b>השטח</b> של הצורה? (המידות בס"מ) <span class="muted">– חסרים בה שני חלקים</span>`, svg, hsvg, ans: A, unit: AP_CM2,
+      hint: 'השלימו למלבן גדול, ואז הורידו את <b>שני</b> החלקים החסרים.', exp: `${wh}. ${M(`${W} × ${H} - ${a} × ${b} - ${c} × ${d} = ${W * H} - ${a * b} - ${c * d} = ${A}`)} סמ"ר.` };
+  }
+  return apUQ(false);
+}
 function apTriQ() {
   const b = R(4, 12), h = 2 * R(2, 5), off = R(0, b), u = Math.min(30, 280 / Math.max(b, h));
   const pts = [[0, h], [b, h], [off, 0]];
@@ -9835,14 +9861,14 @@ const apAsQ = f => () => { const q = f(); return { type: 'num', text: q.text, fi
 // "שטחים מורכבים" כנושא במשחקים הכיתתיים (ג'פרדי, כיבוש שטחים, מיליונר קבוצתי) – כיתות ה'–ו'
 if (GRADE >= 5) TOPIC.composite = { id: 'composite', name: 'שטחים מורכבים', icon: '🧩', color: '#2f8f55', levels: {
   1: [apAsQ(() => apLQ(false, false)), apAsQ(() => apLQ(false, false)), apAsQ(apFrameQ)],
-  2: [apAsQ(() => apLQ(false, true)), apAsQ(apRoomQ), apAsQ(apFrameQ), apAsQ(() => apUQ(false))],
-  3: [apAsQ(() => apUQ(false)), apAsQ(apPathQ), apAsQ(apRoomQ)]
+  2: [apAsQ(() => apLQ(false, true)), apAsQ(apRoomQ), apAsQ(apFrameQ), apAsQ(() => apUQ(false)), apAsQ(() => apTwoCutQ(false))],
+  3: [apAsQ(() => apUQ(false)), apAsQ(apPathQ), apAsQ(apRoomQ), apAsQ(() => apTwoCutQ(false)), apAsQ(() => apTwoCutQ(true))]
 } };
 // בג'פרדי, כשבוחרים רק "שטחים מורכבים" – הלוח מתחלק ל-4 עמודות משלו
 if (GRADE >= 5) [
   ['compL', 'צורת L', [() => apLQ(false, false)], [() => apLQ(false, false)], [() => apLQ(false, true)]],
   ['compHide', 'צלעות חסרות', [() => apLQ(false, true)], [() => apLQ(false, true), apRoomQ], [() => apLQ(false, true), apRoomQ]],
-  ['compU', 'צורת U', [() => apUQ(false)], [() => apUQ(false)], [() => apUQ(false)]],
+  ['compU', 'חריץ ושני חלקים', [() => apUQ(false)], [() => apUQ(false), () => apTwoCutQ(false)], [() => apTwoCutQ(false), () => apTwoCutQ(true)]],
   ['compGarden', 'גינות ובריכות', [apFrameQ], [apFrameQ, apPathQ], [apPathQ]]
 ].forEach(([id, name, l1, l2, l3]) => { TOPIC[id] = { id, name, icon: '🧩', color: '#2f8f55', levels: { 1: l1.map(apAsQ), 2: l2.map(apAsQ), 3: l3.map(apAsQ) } }; });
 const gameTopics = () => TOPIC.composite ? [TOPIC.composite, ...TOPICS] : TOPICS;
@@ -12004,6 +12030,21 @@ function cmpShape(kind) {
         { name: 'משלימים למלבן ומחסירים', cut: [[a, 0, nw, nd]], expr: `${W} × ${H} - ${nw} × ${nd} = ${W * H} - ${nw * nd} = ${A}` }
       ] };
   }
+  if (kind === 'T2') {
+    const W = R(11, 14), H = R(7, 10), a = R(3, 4), c = R(3, 4), b = R(3, H - 3);
+    let d = R(3, H - 3); if (d === b) d = b < H - 3 ? b + 1 : b - 1;
+    const mid = W - a - c, m = Math.max(b, d);
+    const pts = [[0, b], [a, b], [a, 0], [W - c, 0], [W - c, d], [W, d], [W, H], [0, H]];
+    const A = W * H - a * b - c * d;
+    const side = b < d ? [0, b, a, m - b] : [W - c, d, c, m - d];
+    return { kind, W, H, pts, A, labels: [{ i: 0, t: a }, { i: 1, t: b }, { i: 3, t: d }, { i: 4, t: c }, { i: 5, t: H - d }, { i: 6, t: W }, { i: 7, t: H - b }],
+      missing: `הגובה: ${M(`${b} + ${H - b} = ${H}`)} · הצלע העליונה: ${M(`${W} - ${a} - ${c} = ${mid}`)}`,
+      ways: [
+        { name: 'שלוש עמודות', rects: [[0, b, a, H - b], [a, 0, mid, H], [W - c, d, c, H - d]], expr: `${a} × ${H - b} + ${mid} × ${H} + ${c} × ${H - d} = ${a * (H - b)} + ${mid * H} + ${c * (H - d)} = ${A}` },
+        { name: 'רצועה למטה, ומעליה עוד שני מלבנים', rects: [[0, m, W, H - m], [a, 0, mid, m], side], expr: `${W} × ${H - m} + ${mid} × ${m} + ${side[2]} × ${side[3]} = ${W * (H - m)} + ${mid * m} + ${side[2] * side[3]} = ${A}` },
+        { name: 'משלימים למלבן ומורידים שני חלקים', cut: [[0, 0, a, b], [W - c, 0, c, d]], expr: `${W} × ${H} - ${a} × ${b} - ${c} × ${d} = ${W * H} - ${a * b} - ${c * d} = ${A}` }
+      ] };
+  }
   // מדרגות: שלוש עמודות בגבהים יורדים
   const w1 = R(2, 4), w2 = R(2, 4), w3 = R(2, 4), h3 = R(2, 3), h2 = h3 + R(2, 3), h1 = h2 + R(2, 3), W = w1 + w2 + w3, H = h1;
   const pts = [[0, 0], [w1, 0], [w1, h1 - h2], [w1 + w2, h1 - h2], [w1 + w2, h1 - h3], [W, h1 - h3], [W, h1], [0, h1]];
@@ -12027,7 +12068,7 @@ const cmpWayHTML = (s, w, o) => `<div class="cmp-way"><div class="cmp-fig">${cmp
 
 // ---- פתיח להקרנה: אותה צורה, שלוש דרכים ----
 function cmpOpener() {
-  const s = cmpShape('L'), t = cmpShape(pick(['U', 'S']));
+  const s = cmpShape('L'), t = cmpShape(pick(['U', 'S', 'T2', 'T2']));
   const fig = `<div class="center cmp-big">${cmpSVG(s, null, { max: 360 })}</div>`;
   return [
     { title: 'כמה דרכים?', q: `${fig}<p>המידות בס"מ. <b>איך הייתם מחשבים את השטח?</b> אל תחשבו עדיין – תארו דרך. מי מצא דרך אחרת?</p>`, a: `לפני שמחשבים – מוצאים את הצלעות החסרות!<br>${s.missing}` },
@@ -12166,7 +12207,7 @@ function opComposite() {
     q: `<div class="center cmp-big">${cmpSVG(s, null, { max: 340 })}</div><p>יואב השלים את הצורה למלבן גדול, וחישב:</p><p class="center op-big">${M(`${s.W} × ${s.H} + ${cw} × ${ch} = ${wrongAdd}`)}</p><p><b>מה הטעות של יואב?</b> מה התשובה הנכונה?</p>`,
     a: `${cmpWayHTML(s, w2, { max: 260 })}<p>כשמשלימים למלבן, החלק המקווקו <b>לא שייך</b> לצורה – צריך <b>להחסיר</b> אותו, לא להוסיף!</p>`
   };
-  const t = cmpShape(pick(['U', 'S']));
+  const t = cmpShape(pick(['U', 'S', 'T2', 'T2']));
   const challenge = pick([
     () => sl('אתגר: השביל', apPathQ()),
     () => sl('אתגר: הבריכה בגינה', apFrameQ()),
