@@ -1370,6 +1370,8 @@
   .name-mini input { min-width: 180px; padding: 6px 12px; font-size: 1rem; }
   .nb { display: flex; gap: 22px; align-items: flex-start; }
   .tabs { order: 2; display: flex; flex-direction: column; gap: 10px; width: 150px; flex-shrink: 0; position: sticky; top: 12px; }
+  .tab-grp { font-size: 0.78rem; font-weight: 700; color: #8a8478; margin: 8px 4px -4px; letter-spacing: .3px; }
+  .tab-grp:first-child { margin-top: 0; }
   .panels { order: 1; flex: 1; min-width: 0; }
   .tab { display: flex; align-items: center; gap: 8px; justify-content: flex-start; text-align: right; background: var(--w, #fff); color: var(--ink); border: 2px solid var(--ink); border-radius: 22px 6px 6px 22px; box-shadow: none; padding: 10px 14px; font-size: 1.08rem; }
   .tab:hover { background: var(--w, #fff); box-shadow: 2px 3px 0 var(--ink); transform: none; }
@@ -1384,6 +1386,7 @@
   @media (max-width: 700px) {
     .nb { flex-direction: column; gap: 14px; }
     .tabs { order: 0; flex-direction: row; flex-wrap: wrap; width: auto; position: static; gap: 6px; }
+    .tab-grp { flex-basis: 100%; margin: 6px 2px 0; }
     .tab { border-radius: 14px 14px 4px 4px; padding: 8px 12px; font-size: 1rem; }
     .tab.on { transform: translateY(-3px); }
     .today-t { font-size: 1.4rem; }
@@ -1504,7 +1507,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7416,16 +7419,23 @@ function home() {
   const name = store.name || '';
   const len = store.roundLen || 10;
   const calm = document.documentElement.classList.contains('calm');
+  // תפריט הצד – בשלוש קטגוריות: לומדים ומתרגלים · משחקים ומבחנים · למורה
+  const T = teacherOn();
   const tabs = [
-    { id: 'learn', label: 'ללמוד', icon: 'book', wash: 'rgba(127,168,214,0.32)' },
+    { id: 'learn', label: 'ללמוד', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
     { id: 'practice', label: 'לתרגל', icon: 'pencil', wash: 'rgba(217,138,154,0.28)' },
-    ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
-    { id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
+    ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
+    { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
-    ...(teacherOn() ? [{ id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' }, { id: 'lp', label: 'בונים שיעור', icon: 'clock', wash: 'rgba(196,170,140,0.30)', go: 'lpTop' }, { id: 'succ', label: 'מבדקי הצלחה', icon: 'star', wash: 'rgba(242,201,76,0.32)', go: 'succTab' }] : []),
-    { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)' },
-    { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
+    ...(T ? [] : [{ id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' }, { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }]),
+    ...(T ? [
+      { id: 'lp', label: 'בונים שיעור', icon: 'clock', wash: 'rgba(196,170,140,0.30)', go: 'lpTop', grp: 'למורה' },
+      { id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' },
+      { id: 'succ', label: 'מבדקי הצלחה', icon: 'star', wash: 'rgba(242,201,76,0.32)', go: 'succTab' },
+      { id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' },
+      { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
+    ] : [])
   ];
   if (!tabs.some(t => t.id === homeTab && !t.go)) homeTab = 'practice';
   app.innerHTML = `
@@ -7444,7 +7454,7 @@ function home() {
     <div class="name-row name-mini"><label for="nm">השם שלי:</label><input id="nm" value="${esc(name)}" placeholder="כתבו את השם שלכם" autocomplete="off"></div>
     <div class="nb">
       <nav class="tabs" role="tablist" aria-label="חלקי האתר">
-        ${tabs.map(t => t.go ? `<button type="button" class="tab" id="${t.go}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>` : `<button role="tab" class="tab${t.id === homeTab ? ' on' : ''}" data-tab="${t.id}" aria-selected="${t.id === homeTab}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>`).join('')}
+        ${tabs.map(t => (t.grp ? `<div class="tab-grp" role="presentation">${t.grp}</div>` : '') + (t.go ? `<button type="button" class="tab" id="${t.go}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>` : `<button role="tab" class="tab${t.id === homeTab ? ' on' : ''}" data-tab="${t.id}" aria-selected="${t.id === homeTab}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>`)).join('')}
       </nav>
       <div class="panels">
         <section class="panel" data-panel="learn" ${homeTab === 'learn' ? '' : 'hidden'}>
