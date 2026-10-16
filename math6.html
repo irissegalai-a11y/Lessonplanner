@@ -1008,8 +1008,11 @@
   .op-special { border-color: #e8b84a !important; background: rgba(239,201,106,0.22); }
   .op-q { font-size: clamp(1.3rem, 2.6vw, 1.9rem); line-height: 1.7; }
   .op-q .fig { max-height: 34vh; width: auto; max-width: 100%; }
-  .op-list { padding-inline-start: 1.4em; }
-  .op-list li { margin: 8px 0; }
+  /* בלי מספור – כל סעיף בשורה משלו, עם קו מפריד דק */
+  .op-list { list-style: none; padding: 0; margin: 6px 0; }
+  .op-list li { margin: 0; padding: 10px 0; }
+  .op-list li + li { border-top: 1.5px dashed rgba(31,30,28,.18); }
+  .qhead .qnum { display: none !important; }
   /* מסך רחב (מחשב / מקרן): משתמשים בכל הרוחב, הציור ליד השאלה והתשובה ליד השקף – בלי לגלול */
   @media (min-width: 1100px) {
     .wrap:has(.qlayout), .wrap:has(.op-slide) { max-width: min(1280px, 94vw); }
@@ -1485,7 +1488,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קל</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12288,7 +12291,7 @@ function opDraw() {
   const s = op.slides[op.k], last = op.k === op.slides.length - 1;
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('bulb')} ${op.label || 'פתיח שיעור'} · ${opName(op.topic)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
-    <div class="op-dots">${op.slides.map((x, k) => `<span class="${k === op.k ? 'on' : k < op.k ? 'done' : ''}">${k + 1}. ${x.title}</span>`).join('')}</div>
+    <div class="op-dots">${op.slides.map((x, k) => `<span class="${k === op.k ? 'on' : k < op.k ? 'done' : ''}">${x.title}</span>`).join('')}</div>
     <div class="card op-slide">
       <h2>${s.title}</h2>
       <div class="op-body${op.show && s.a ? ' with-a' : ''}"><div class="op-q">${s.q}</div>
