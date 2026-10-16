@@ -1156,6 +1156,34 @@
   .sc-msg { min-height: 1.6em; font-size: 1.15rem; margin-bottom: 8px; }
   .sc-hint { background: #fff4c7; border: 2px dashed #1f1e1c; border-radius: 10px; padding: 6px 12px; margin: 0 auto 6px; max-width: 460px; }
   @media screen and (max-width: 640px) { .sc-quarters { grid-template-columns: 1fr; grid-template-rows: none; min-height: 0; } }
+  .lp-tab { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  .lp-tab th, .lp-tab td { border-bottom: 1px solid #e3dccd; padding: 6px 6px; text-align: right; vertical-align: top; }
+  .lp-tab tr.off td { opacity: 0.45; }
+  .lp-tab .lp-min { width: 4em; font: inherit; text-align: center; }
+  .lp-tab select { font: inherit; margin-top: 4px; }
+  .lp-tot { margin: 8px 0; font-weight: 700; }
+  .lp-tot.warn { color: #b3261e; }
+  .lp-saved { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lp-sv { display: inline-flex; gap: 2px; align-items: center; }
+  .lp-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 40; background: #fffdf8; border-bottom: 2.5px solid #1f1e1c; box-shadow: 0 3px 0 rgba(0,0,0,.08); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 6px 12px; direction: rtl; }
+  body.lp-on { padding-top: 76px; }
+  .lp-steps { display: flex; gap: 4px; flex-wrap: wrap; }
+  .lp-step { font: inherit; font-size: 0.9rem; border: 2px solid #1f1e1c; border-radius: 10px; background: #fff; color: #1f1e1c; padding: 2px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; line-height: 1.2; }
+  .lp-step small { font-size: 0.7rem; color: #5f5a50; }
+  .lp-step.on { background: #f2c94c; font-weight: 700; }
+  .lp-step.done { background: #e3f4dc; }
+  .lp-clock { font-weight: 700; font-size: 1.05rem; margin-inline-start: auto; }
+  .lp-clock.over { color: #b3261e; }
+  .lp-nav { display: flex; gap: 6px; }
+  .lp-q { font-size: 1.5rem; line-height: 1.6; }
+  .lp-tips { font-size: 1.25rem; line-height: 1.8; }
+  .lp-ptab { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.95rem; }
+  .lp-ptab th, .lp-ptab td { border: 1px solid #999; padding: 6px; text-align: right; vertical-align: top; }
+  .lp-ptab td.c { text-align: center; white-space: nowrap; }
+  .lp-ptab .lp-notes { width: 28%; }
+  .lp-lines { height: 40mm; background-image: repeating-linear-gradient(transparent, transparent 9mm, #bbb 9mm, #bbb calc(9mm + 1px)); }
+  @media print { .lp-bar { display: none !important; } body.lp-on { padding-top: 0; } }
+  @media (max-width: 640px) { .lp-tab td:nth-child(4) { font-size: 0.85rem; } .lp-clock { margin-inline-start: 0; } }
   .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; text-align: center; }
   .pvw-btn { font: inherit; font-size: 0.95rem; font-weight: 600; color: #1f1e1c; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; }
   .pvw-btn:hover, .pvw-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
@@ -1309,7 +1337,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 פט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7337,6 +7365,11 @@ function home() {
             <span class="gc-nm">דפים להדפסה</span>
             <span class="gc-ds">דפי עבודה, דפי תשובות ופתקי יציאה.</span>
           </button>
+          <button class="game-card" id="lpGo0">
+            <span class="gc-ic" style="--gw:rgba(127,168,214,0.7)">🗓️</span>
+            <span class="gc-nm">בונים שיעור</span>
+            <span class="gc-ds">פתיח, משחקון, לימוד, תרגול וסיכום – לפי אורך השיעור. מקרינים על הלוח, עם שעון לכל חלק.</span>
+          </button>
           <button class="game-card" id="succGo">
             <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">⭐</span>
             <span class="gc-nm">מבדקי הצלחה</span>
@@ -7375,6 +7408,7 @@ function home() {
   if ($('exitGo2')) {
     $('exitGo2').onclick = exitHome;
     $('succGo').onclick = succHome;
+    $('lpGo0').onclick = () => lpHome();
     $('clsOpen').onclick = () => classSub('open');
     $('clsGames').onclick = () => classSub('games');
     $('clsPrint').onclick = () => classSub('print');
@@ -11906,11 +11940,11 @@ function opHome() {
   window.scrollTo(0, 0);
 }
 function opDraw() {
-  if (op.k === 0 && !op.show) track(OP_SPECIAL.some(x => x.id === op.topic) ? 'מארגן ההוראה' : 'פתיח שיעור', opName(op.topic));
+  if (op.k === 0 && !op.show && !op.label) track(OP_SPECIAL.some(x => x.id === op.topic) ? 'מארגן ההוראה' : 'פתיח שיעור', opName(op.topic));
   navPush('op');
   const s = op.slides[op.k], last = op.k === op.slides.length - 1;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור · ${opName(op.topic)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('bulb')} ${op.label || 'פתיח שיעור'} · ${opName(op.topic)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
     <div class="op-dots">${op.slides.map((x, k) => `<span class="${k === op.k ? 'on' : k < op.k ? 'done' : ''}">${k + 1}. ${x.title}</span>`).join('')}</div>
     <div class="card op-slide">
       <h2>${s.title}</h2>
@@ -11920,8 +11954,8 @@ function opDraw() {
     </div>
     <div class="actions" style="justify-content:center">
       ${op.k ? '<button class="secondary" id="opPrev">→ הקודם</button>' : ''}
-      ${op.show ? '' : '<button id="opShow" class="secondary">הצגת התשובה</button>'}
-      ${last ? `<button id="opNew" class="race-go">${op.back ? 'חזרה לדף' : 'פתיח חדש'}</button>` : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
+      ${op.show || !s.a ? '' : '<button id="opShow" class="secondary">הצגת התשובה</button>'}
+      ${last ? `<button id="opNew" class="race-go">${op.back ? (op.backLabel || 'חזרה לדף') : 'פתיח חדש'}</button>` : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
     </div>`;
   fsBind();
   $('opBack').onclick = () => { if (op.back) op.back(); else if (OP_SPECIAL.some(x => x.id === op.topic)) classSub('open'); else opHome(); };
@@ -13532,6 +13566,164 @@ function succRun(cfg, fromBuilder) {
     window.scrollTo(0, 0);
   };
   show();
+}
+
+/* ---------- בונים שיעור (למורים): פתיח, משחקון, לימוד, תרגול וסיכום – לפי אורך השיעור ----------
+   הכל מוקרן על הלוח (אין לתלמידים מכשירים בכיתה). בזמן השיעור יש פס עליון עם החלקים ושעון לכל חלק. */
+const LP_KEY = 'math-lp-g' + GRADE;
+const LP_STAGES = [
+  { id: 'open', name: 'פתיח', ic: '💡', w: 10 },
+  { id: 'game', name: 'משחקון', ic: '🎲', w: 15 },
+  { id: 'learn', name: 'לימוד', ic: '📚', w: 25 },
+  { id: 'prac', name: 'תרגול', ic: '✏️', w: 35 },
+  { id: 'sum', name: 'סיכום', ic: '⭐', w: 15 }
+];
+const LP_GAMES = [['jeo', "ג'פרדי בקבוצות"], ['mil', 'מיליונר בקבוצות'], ['war', 'מלחמת תרגילים בקבוצות'], ['bingo', 'בינגו'], ['cq', 'כיבוש שטחים'], ['tf', 'אמת או שקר']];
+const lpLesson = t => (LESSON_ORDER.includes(t) && LESSONS[t]) ? t : null;
+const lpLoad = () => { try { return JSON.parse(localStorage.getItem(LP_KEY)) || []; } catch (e) { return []; } };
+const lpSaveAll = L => { try { localStorage.setItem(LP_KEY, JSON.stringify(L.slice(0, 30))); } catch (e) { /* לא חובה */ } };
+let lp = null;
+function lpNew(topic) {
+  const T = topic || (TOPICS[0] && TOPICS[0].id);
+  const p = { topic: T, dur: 45, on: { open: 1, game: 1, learn: lpLesson(T) ? 1 : 0, prac: 1, sum: 1 }, min: {}, game: 'jeo', pracN: 8, pracLv: 'mix', note: '' };
+  lpSplit(p); return p;
+}
+// חלוקת הזמן לפי משקל החלקים שנבחרו
+function lpSplit(p) {
+  const st = LP_STAGES.filter(s => p.on[s.id]), W = st.reduce((a, s) => a + s.w, 0) || 1;
+  let left = p.dur; st.forEach((s, i) => { const m = i === st.length - 1 ? left : Math.max(2, Math.round(p.dur * s.w / W)); p.min[s.id] = m; left -= m; });
+  LP_STAGES.forEach(s => { if (!p.on[s.id]) p.min[s.id] = 0; });
+}
+const lpTotal = p => LP_STAGES.reduce((a, s) => a + (p.on[s.id] ? (+p.min[s.id] || 0) : 0), 0);
+const lpDesc = (p, id) => ({
+  open: '4 שקפים: חימום בראש, מצאו את הטעות, איזה לא שייך, ואתגר',
+  game: (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – בוחרים את הנושא במסך המשחק',
+  learn: lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
+  prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
+  sum: '"מה למדנו היום?" ו-3 שאלות בדיקה (קלה, בינונית, מאתגרת) על הלוח'
+})[id];
+
+function lpHome(keep) {
+  if (!teacherOn()) return home();
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('lp');
+  if (!lp) lp = lpNew();
+  const p = lp, saved = lpLoad(), tot = lpTotal(p);
+  app.innerHTML = `
+    <div class="topbar noprint"><span class="title">🗓️ בונים שיעור</span><button class="secondary" id="lpBack">${ic('home')} חזרה</button></div>
+    <div class="card noprint"><p class="sc-intro">בוחרים נושא ואורך שיעור – ומקבלים מערך מוכן: <b>פתיח, משחקון, לימוד, תרגול וסיכום</b>. הכל מוקרן על הלוח. אפשר לשנות כל חלק, לשמור ולהדפיס.</p>
+      <div class="sc-opt"><b>אורך השיעור:</b> <span class="sc-chips">${[45, 90].map(d => `<button type="button" class="sc-chip btn${p.dur === d ? ' on' : ''}" data-dur="${d}">${d} דקות</button>`).join('')}
+        <label class="sc-chip${[45, 90].includes(p.dur) ? '' : ' on'}">אחר: <input id="lpDur" type="number" min="10" max="180" value="${p.dur}" style="width:4em" inputmode="numeric"> דק'</label></span></div></div>
+    <h2 class="noprint">על איזה נושא השיעור?</h2>
+    <div class="topics sc-topics noprint">${TOPICS.map((t, i) => `<button class="topic${p.topic === t.id ? ' sc-cur' : ''}" style="--c:${t.color}" data-lpt="${t.id}"><span class="ic">${i + 1}</span><span class="nm">${t.name}</span><span class="ds">${t.desc}</span>${p.topic === t.id ? '<span class="best">✔ נבחר</span>' : ''}</button>`).join('')}</div>
+    <div class="card noprint lp-plan">
+      <h2>מערך השיעור – ${TOPIC[p.topic].name} · ${p.dur} דקות</h2>
+      <table class="lp-tab"><thead><tr><th></th><th>חלק</th><th>דקות</th><th>מה עושים</th></tr></thead><tbody>
+      ${LP_STAGES.map(s => { const dis = s.id === 'learn' && !lpLesson(p.topic); return `<tr class="${p.on[s.id] ? '' : 'off'}">
+        <td><input type="checkbox" data-lpon="${s.id}" ${p.on[s.id] ? 'checked' : ''} ${dis ? 'disabled' : ''} aria-label="${s.name}"></td>
+        <td><b>${s.ic} ${s.name}</b></td>
+        <td><input type="number" class="lp-min" min="0" max="120" data-lpmin="${s.id}" value="${p.on[s.id] ? p.min[s.id] : 0}" ${p.on[s.id] ? '' : 'disabled'} inputmode="numeric"></td>
+        <td>${lpDesc(p, s.id)}${s.id === 'game' && p.on.game ? `<div><select id="lpGame">${LP_GAMES.map(([k, n]) => `<option value="${k}" ${p.game === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
+          ${s.id === 'prac' && p.on.prac ? `<div class="lp-sel"><select id="lpN">${[4, 6, 8, 10, 12].map(n => `<option ${p.pracN === n ? 'selected' : ''}>${n}</option>`).join('')}</select> תרגילים · <select id="lpLv">${[['mix', 'מהקל לקשה'], ['1', 'קלים'], ['2', 'בינוניים'], ['3', 'מאתגרים']].map(([k, n]) => `<option value="${k}" ${p.pracLv === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
+          ${s.id === 'sum' && p.on.sum ? `<div class="small muted">רוצים גם דף מודפס? <button type="button" class="linkish" id="lpSucc">⭐ הכינו מבדק הצלחה</button></div>` : ''}</td></tr>`; }).join('')}
+      </tbody></table>
+      <div class="lp-tot ${tot === p.dur ? '' : 'warn'}">סה"כ ${tot} מתוך ${p.dur} דקות${tot === p.dur ? ' ✔' : ` – ${tot > p.dur ? 'יותר' : 'פחות'} מאורך השיעור`} <button type="button" class="ghost" id="lpFix">חלוקה מחדש לפי הזמן</button></div>
+      <div class="sc-opt"><b>הערות לעצמי:</b> <input id="lpNote" class="tinput" style="flex:1;min-width:200px" maxlength="200" value="${esc(p.note || '')}" placeholder="למשל: לחזור על הטעויות מהשיעור הקודם"></div>
+      <div class="actions"><button id="lpGo" class="race-go">▶ מתחילים שיעור</button><button id="lpPrint" class="secondary">${ic('printer')} הדפסת המערך</button><button id="lpSave" class="secondary">💾 שמירה</button></div>
+      <div class="small muted" id="lpMsg"></div>
+    </div>
+    ${saved.length ? `<div class="card noprint"><h3>מערכים שמורים</h3><div class="lp-saved">${saved.map((x, i) => `<div class="lp-sv"><button type="button" class="secondary" data-lpload="${i}">${esc(TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic)} · ${x.dur} דק' <span class="small muted">${esc(x.saved || '')}</span></button><button type="button" class="ghost" data-lpdel="${i}" aria-label="מחיקה">🗑️</button></div>`).join('')}</div></div>` : ''}
+    <div id="wsout"></div>`;
+  lpSheet();
+  const redo = () => { const y = window.scrollY; lpHome(true); window.scrollTo(0, y); };
+  $('lpBack').onclick = () => { homeTab = 'class'; home(); };
+  app.querySelectorAll('[data-dur]').forEach(b => b.onclick = () => { p.dur = +b.dataset.dur; lpSplit(p); redo(); });
+  $('lpDur').onchange = () => { const v = Math.max(10, Math.min(180, Math.round(+$('lpDur').value || 45))); p.dur = v; lpSplit(p); redo(); };
+  app.querySelectorAll('[data-lpt]').forEach(b => b.onclick = () => { p.topic = b.dataset.lpt; if (!lpLesson(p.topic)) p.on.learn = 0; else if (!p.on.learn) p.on.learn = 1; lpSplit(p); redo(); });
+  app.querySelectorAll('[data-lpon]').forEach(x => x.onchange = () => { p.on[x.dataset.lpon] = x.checked ? 1 : 0; lpSplit(p); redo(); });
+  app.querySelectorAll('[data-lpmin]').forEach(x => x.onchange = () => { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); redo(); });
+  if ($('lpGame')) $('lpGame').onchange = e => { p.game = e.target.value; redo(); };
+  if ($('lpN')) $('lpN').onchange = e => { p.pracN = +e.target.value; redo(); };
+  if ($('lpLv')) $('lpLv').onchange = e => { p.pracLv = e.target.value; redo(); };
+  if ($('lpSucc')) $('lpSucc').onclick = succHome;
+  $('lpNote').oninput = e => { p.note = e.target.value; };
+  $('lpNote').onchange = () => lpSheet();
+  $('lpFix').onclick = () => { lpSplit(p); redo(); };
+  $('lpPrint').onclick = () => { lpSheet(); window.print(); };
+  $('lpSave').onclick = () => { const L = lpLoad(); L.unshift(Object.assign(JSON.parse(JSON.stringify(p)), { saved: new Date().toLocaleDateString('he-IL') })); lpSaveAll(L); redo(); $('lpMsg').textContent = 'המערך נשמר ✔ (במכשיר הזה)'; };
+  app.querySelectorAll('[data-lpload]').forEach(b => b.onclick = () => { const x = lpLoad()[+b.dataset.lpload]; if (x && TOPIC[x.topic]) { lp = JSON.parse(JSON.stringify(x)); delete lp.saved; redo(); } });
+  app.querySelectorAll('[data-lpdel]').forEach(b => b.onclick = () => { const L = lpLoad(); L.splice(+b.dataset.lpdel, 1); lpSaveAll(L); redo(); });
+  $('lpGo').onclick = () => lpRun(0);
+  track('בונים שיעור', TOPIC[p.topic].name);
+  window.scrollTo(0, 0);
+}
+// מערך השיעור להדפסה (דף אחד)
+function lpSheet() {
+  const p = lp; let t = 0;
+  const rows = LP_STAGES.filter(s => p.on[s.id]).map(s => { const a = t; t += +p.min[s.id] || 0; return `<tr><td><b>${s.ic} ${s.name}</b></td><td class="c">${p.min[s.id]}</td><td class="c">${a}–${t}</td><td>${lpDesc(p, s.id)}</td><td class="lp-notes"></td></tr>`; }).join('');
+  $('wsout').innerHTML = `<section class="ws-page lp-print"><div class="wshead"><h1>מערך שיעור – ${TOPIC[p.topic].name}</h1><div class="wsmeta"><span>${GRADE_NAME[GRADE]}</span><span>${p.dur} דקות</span><span>תאריך: <span class="wsline"></span></span><span>כיתה: <span class="wsline"></span></span></div></div>
+    <table class="lp-ptab"><thead><tr><th>חלק</th><th>דקות</th><th>מדקה</th><th>מה עושים</th><th>הערות</th></tr></thead><tbody>${rows}</tbody></table>
+    ${p.note ? `<p><b>הערות:</b> ${esc(p.note)}</p>` : ''}
+    <p class="small">מקרינים מהאתר: בלשונית "בכיתה" ← "בונים שיעור" ← ▶ מתחילים שיעור.</p>
+    <h3>מה הלך טוב / מה לשפר בפעם הבאה</h3><div class="lp-lines"></div></section>`;
+  $('wsout').dataset.what = `מערך שיעור – ${TOPIC[p.topic].name} · ${p.dur} דקות`;
+}
+
+// ---- מהלך השיעור: פס עליון עם החלקים ושעון ----
+let lpRunS = null;
+function lpBarDraw() {
+  const R0 = lpRunS; if (!R0) return;
+  let bar = document.getElementById('lpBar');
+  if (!bar) { bar = document.createElement('div'); bar.id = 'lpBar'; bar.className = 'lp-bar noprint'; document.body.appendChild(bar); document.body.classList.add('lp-on'); }
+  const st = R0.st, cur = st[R0.k], el = Math.floor((Date.now() - R0.t0) / 1000), lim = cur.min * 60, over = el >= lim;
+  const mm = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  bar.innerHTML = `<div class="lp-steps">${st.map((s, i) => `<button type="button" class="lp-step${i === R0.k ? ' on' : i < R0.k ? ' done' : ''}" data-lpgo="${i}">${s.ic} ${s.name}<small>${s.min} דק'</small></button>`).join('')}</div>
+    <div class="lp-clock${over ? ' over' : ''}">${over ? '⏰ הזמן של החלק עבר · ' : '⏱️ '}${mm(el)} / ${mm(lim)}</div>
+    <div class="lp-nav">${R0.k ? '<button type="button" class="secondary" id="lpPrevS">→</button>' : ''}${R0.k < st.length - 1 ? '<button type="button" class="race-go" id="lpNextS">הבא ←</button>' : ''}<button type="button" class="ghost" id="lpEnd">✕ סיום</button></div>`;
+  bar.querySelectorAll('[data-lpgo]').forEach(b => b.onclick = () => lpStage(+b.dataset.lpgo));
+  if (bar.querySelector('#lpPrevS')) bar.querySelector('#lpPrevS').onclick = () => lpStage(R0.k - 1);
+  if (bar.querySelector('#lpNextS')) bar.querySelector('#lpNextS').onclick = () => lpStage(R0.k + 1);
+  bar.querySelector('#lpEnd').onclick = lpStop;
+}
+function lpStop() {
+  if (lpRunS) clearInterval(lpRunS.iv); lpRunS = null;
+  const b = document.getElementById('lpBar'); if (b) b.remove(); document.body.classList.remove('lp-on');
+  lpHome(true);
+}
+function lpRun(k) {
+  const p = lp, st = LP_STAGES.filter(s => p.on[s.id] && (s.id !== 'learn' || lpLesson(p.topic))).map(s => Object.assign({}, s, { min: +p.min[s.id] || 1 }));
+  if (!st.length) return;
+  if (lpRunS) clearInterval(lpRunS.iv);
+  lpRunS = { st, k: 0, t0: Date.now(), iv: setInterval(() => { if (document.getElementById('lpBar')) lpBarDraw(); }, 1000) };
+  track('שיעור מוכן – התחלה', `${TOPIC[p.topic].name} · ${p.dur} דק'`);
+  lpStage(k || 0);
+}
+// הקרנת סדרת שאלות מהנושא (תרגול / בדיקת הבנה) – בעזרת מסך השקפים של הפתיח
+function lpBoardSlides(topicId, n, lvMode, title) {
+  const t = TOPIC[topicId], seen = new Set(), slides = [];
+  for (let i = 0; i < n; i++) {
+    const lv = lvMode === 'mix' ? Math.min(3, 1 + Math.floor(i * 3 / n)) : +lvMode;
+    let q; for (let k = 0; k < 60; k++) { q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text)) break; } seen.add(q.text);
+    const ch = q.type === 'choice' ? `<div class="op-ch">${q.choices.map((c, j) => `<span><b>${'אבגדהוזח'[j]}.</b> ${c}</span>`).join('')}</div>` : '';
+    slides.push({ title: `${title} ${i + 1}`, q: `<div class="lp-q">${q.text}${q.fig || ''}${ch}</div>`, a: `<p><b>התשובה:</b> ${correctHTML(q)}</p>${typeof q.exp === 'string' ? `<p>${q.exp}</p>` : ''}` });
+  }
+  return slides;
+}
+function lpStage(k) {
+  const R0 = lpRunS; if (!R0) return;
+  R0.k = Math.max(0, Math.min(R0.st.length - 1, k)); R0.t0 = Date.now();
+  const p = lp, s = R0.st[R0.k], T = TOPIC[p.topic];
+  lpBarDraw();
+  if (s.id === 'open') { op = { topic: p.topic, slides: opBuild(p.topic), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
+  else if (s.id === 'game') ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome() }[p.game] || jeoHome)();
+  else if (s.id === 'learn') startLesson(lpLesson(p.topic));
+  else if (s.id === 'prac') { op = { topic: p.topic, label: 'תרגול על הלוח', slides: lpBoardSlides(p.topic, p.pracN, p.pracLv, 'תרגיל'), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
+  else if (s.id === 'sum') {
+    const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [];
+    const recap = { title: 'מה למדנו היום?', q: `<h3 class="center">${T.name}</h3>${tips.length ? `<ul class="lp-tips">${tips.slice(0, 4).map(x => `<li>${x}</li>`).join('')}</ul>` : `<p class="center">${T.desc}</p>`}<p class="center">🗣️ מי יכול/ה להסביר במילים שלו/ה?</p>`, a: '' };
+    op = { topic: p.topic, label: 'סיכום השיעור', slides: [recap].concat(lpBoardSlides(p.topic, 3, 'mix', 'בדיקת הבנה')), k: 0, show: false, back: lpStop, backLabel: '✔ סיום השיעור' };
+    opDraw();
+  }
+  window.scrollTo(0, 0);
 }
 
 /* ---------- כניסת מורה (קוד) ---------- */
