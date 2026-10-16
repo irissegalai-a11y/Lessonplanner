@@ -11,6 +11,16 @@
 <meta property="og:description" content="אתר תרגול במתמטיקה לכיתות א'–ו': שיעורים, תרגול, משחקים ודפי עבודה">
 <meta property="og:site_name" content="מתרגלים מתמטיקה – איריס סגל">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://irissegalai-a11y.github.io/Lessonplanner/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="מתרגלים מתמטיקה – איריס סגל">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#fbf8f1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@400;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
@@ -103,6 +113,7 @@
   .big-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
   .big-actions button { padding: 18px; font-size: 1.2rem; }
   .wscredit { text-align: left; font-size: 7.5pt; font-weight: 300; color: #b5b5b5; line-height: 1; margin: 0 0 2px; }
+  .credit .ver { display: none; } html.tch .credit .ver { display: inline; }
   .credit { text-align: center; font-size: 0.72rem; font-weight: 300; color: #b3b7c8; margin: 24px auto 12px; padding: 0 16px; }
   .ct-btn, .pv-btn { font: inherit; font-size: 0.9rem; font-weight: 600; color: #3d3a33; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; margin-top: 8px; }
   .ct-btn:hover, .ct-btn:focus-visible, .pv-btn:hover, .pv-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
@@ -1037,6 +1048,11 @@
   .qcols { display: flex; flex-direction: column; }
   .qcol-a, .qcol-b { display: contents; }
   .qcols .qhead { order: 1; } .qcols .qcol-b > .fig, .qcols .qcol-b > .chartwrap, .qcols .qcol-b > :not(.fb):not(#guide) { order: 2; } .qcols .answer-area { order: 3; } .qcols .actions { order: 4; } .qcols .fb { order: 5; } .qcols #guide { order: 6; }
+  .tch-btns { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 14px 0; }
+  .guide-card { font: inherit; text-align: right; display: flex; flex-direction: column; gap: 6px; padding: 16px; background: #fffdf8; color: #1f1e1c; border: 2.5px solid #1f1e1c; border-radius: 16px; box-shadow: 3px 4px 0 #1f1e1c; cursor: pointer; }
+  .guide-card:hover, .guide-card:focus-visible { background: #fff6d6; color: #1f1e1c; }
+  .guide-card .gd-ic { font-size: 1.8rem; } .guide-card .gd-t { font-weight: 800; font-size: 1.15rem; } .guide-card .gd-d { font-size: 0.95rem; line-height: 1.55; color: #3d3a33; } .guide-card .gd-go { margin-top: auto; color: #4c5fd5; font-weight: 700; font-size: 0.9rem; }
   .sol { display: flex; flex-direction: column; gap: 6px; text-align: right; }
   .sol-ex { color: #3d3a33; }
   .sol-ans { font-size: 1.12em; padding-top: 6px; border-top: 2px dashed rgba(31,30,28,.25); }
@@ -1488,7 +1504,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7420,7 +7436,7 @@ function home() {
       <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
     <div class="subtitle">${SUBTITLE}</div>
-    ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${teacherOn() ? '<button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
+    ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${teacherOn() ? '<span class="tch-btns"><button type="button" class="pvw-btn" id="guideBtn">❓ איך משתמשים?</button><button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button></span>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
     ${PRESET ? `<div class="card banner today">
       <div><div class="today-k">הוכן בשבילך</div><div class="today-t">${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div></div>
       <button id="presetGo">התחילו ←</button>
@@ -7489,7 +7505,7 @@ function home() {
           <h2>${GRADE === 6 ? 'מבדקים' : 'מבחנים'}</h2>
           <div class="big-actions">
             <button id="testPick" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} – 20 שאלות מכל הנושאים<span class="desc">בוחרים: עם משוב תוך כדי, ציון בסוף, או עם שעון</span></button>
-            ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת המבחן<span class="desc">שאלות בסגנון המבחן – הקנייה ותרגול לכל שאלה, ומבחן אימון להדפסה</span></button>` : ''}
+            ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}<span class="desc">שאלות בסגנון ה${GRADE === 6 ? 'מבדק' : 'מבחן'} – הקנייה ותרגול לכל שאלה, ומבחן אימון להדפסה</span></button>` : ''}
           </div>
           ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
         </section>
@@ -7515,7 +7531,7 @@ function home() {
           ${MK_HAS() ? `<button class="game-card" id="pathGo2">
             <span class="gc-ic" style="--gw:rgba(242,201,76,0.6)">🗺️</span>
             <span class="gc-nm">מסע לאוצר</span>
-            <span class="gc-ds">מסלול אימון לקראת המבחן: בכל משבצת שאלה בסגנון המבחן. אוספים כוכבים ומגיעים לאוצר!</span>
+            <span class="gc-ds">מסלול אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}: בכל משבצת שאלה בסגנון ה${GRADE === 6 ? 'מבדק' : 'מבחן'}. אוספים כוכבים ומגיעים לאוצר!</span>
           </button>` : ''}
           <button class="game-card" id="milGo">
             <span class="gc-ic" style="--gw:rgba(226,179,87,0.75)">${ic('star')}</span>
@@ -7580,6 +7596,7 @@ function home() {
   $('cityGo').onclick = () => cityHome();
   $('gbGo').onclick = gbHome;
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
+  if ($('guideBtn')) $('guideBtn').onclick = guideHome;
   if ($('pvwOff')) $('pvwOff').onclick = () => setPreview(false);
   if ($('clsOpen')) {
     $('clsOpen').onclick = () => classSub('open');
@@ -7663,7 +7680,7 @@ function showLevelPicker(topicId) {
   const ov = document.createElement('div');
   ov.className = 'overlay';
   ov.innerHTML = `<div class="modal picker" role="dialog" aria-modal="true">
-    <div class="mtop"><button class="ghost" data-close>✖ ביטול</button></div>
+    <div class="mtop"><button class="ghost" data-close>↩ חזור</button></div>
     <h2 class="center">${title}</h2>
     <p class="center">באיזו רמה תרצו להתחיל?</p>
     <div class="lvlchoices">
@@ -7779,7 +7796,7 @@ function showSimPicker() {
   const ov = document.createElement('div');
   ov.className = 'overlay';
   ov.innerHTML = `<div class="modal picker" role="dialog" aria-modal="true">
-    <div class="mtop"><button class="ghost" data-close>✖ ביטול</button></div>
+    <div class="mtop"><button class="ghost" data-close>↩ חזור</button></div>
     <h2 class="center">⏱️ סימולציה עם שעון</h2>
     <p class="center">20 שאלות מכל הנושאים, בלי רמזים. אפשר לדלג על שאלה ולחזור אליה, ולהגיש מתי שרוצים.<br>כשהזמן נגמר – ${GRADE === 6 ? 'המבדק' : 'המבחן'} מוגש לבד.</p>
     <p class="center"><b>כמה זמן?</b></p>
@@ -8788,7 +8805,7 @@ function jeoBoard() {
   document.querySelectorAll('.overlay').forEach(o => o.remove());
   const left = Object.values(jeo.cells).filter(c => !c.used).length;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('grid')} ג'פרדי כיתתי</span><span class="toollinks">${document.fullscreenEnabled ? `<button class="secondary" id="jFull">${document.fullscreenElement ? 'יציאה ממסך מלא' : 'מסך מלא'}</button>` : ''}<button class="secondary" id="jEnd">סיום המשחק</button><button class="secondary" id="jHome">${ic('home')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('grid')} ג'פרדי כיתתי</span><span class="toollinks">${document.fullscreenEnabled ? `<button class="secondary" id="jFull">${document.fullscreenElement ? 'יציאה ממסך מלא' : 'מסך מלא'}</button>` : ''}<button class="secondary" id="jEnd">סיום המשחק</button><button class="secondary" id="jHome">${ic('close')} יציאה</button></span></div>
     <div class="jeo-turn">התור של: <b style="color:${jeo.teams[jeo.turn].color}">${esc(jeo.teams[jeo.turn].name)}</b></div>
     <div class="jeo-board" style="--cols:${jeo.topics.length}">
       ${jeo.topics.map(tid => `<div class="jeo-head" style="--c:${TOPIC[tid].color}">${TOPIC[tid].name}</div>`).join('')}
@@ -9410,7 +9427,7 @@ function cqBoard() {
   const t = cq.turn, targets = cqTargets(t), counts = cq.teams.map((_, k) => cq.owner.filter(o => o === k).length);
   const free = cq.owner.filter(o => o == null).length;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('flag')} כיבוש שטחים</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="cqEnd">סיום המשחק</button><button class="secondary" id="cqExit">${ic('home')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('flag')} כיבוש שטחים</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="cqEnd">סיום המשחק</button><button class="secondary" id="cqExit">${ic('close')} יציאה</button></span></div>
     <div class="jeo-turn">התור של: <b style="color:${cq.teams[t].color}">${esc(cq.teams[t].name)}</b> <span class="muted small">– בחרו משבצת מסומנת</span></div>
     <div class="cq-wrap">
       <div class="cq-map" style="--n:${cq.n}">
@@ -10801,7 +10818,7 @@ function mkHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('mock');
   const L = MKQ[GRADE];
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('clipboard')} אימון לקראת המבחן</span><button class="secondary" id="mkHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="topbar"><span class="title">${ic('clipboard')} אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}</span><button class="secondary" id="mkHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card"><p>שאלות <b>באותו סגנון</b> של המבחן – עם מספרים חדשים בכל פעם. לכל שאלה שתי אפשרויות:</p>
       <ul class="mk-how"><li><b>📘 הקנייה</b> – רואים שאלה כזו פתורה, צעד אחר צעד.</li><li><b>✏️ תרגול</b> – פותרים לבד, בודקים, ומקבלים הסבר.</li></ul>
       <div class="actions"><button id="mkAll">✏️ כל המבחן ברצף</button><button class="secondary" id="mkPrint">${ic('printer')} מבחן אימון להדפסה</button></div></div>
@@ -11058,7 +11075,7 @@ function pathMap(d, from) {
     <path d="M70 70 Q60 ${H / 2} 80 ${H - 70} Q180 ${H - 40} 290 ${H - 74} Q300 ${H / 2} 288 70 Q180 46 70 70Z" fill="#b9d89a" opacity="0.55" filter="url(#wcwash)"/>
     <path d="${road}" fill="none" stroke="#8a6a3c" stroke-width="16" stroke-linecap="round" opacity="0.35"/>
     <path d="${road}" fill="none" stroke="#fff8e6" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
-    <text x="${P[0][0] + 22}" y="${P[0][1] - 46}" font-size="12" text-anchor="middle" font-weight="700" fill="#5a4320">🚩 יציאה</text>`;
+    <text x="${P[0][0] + 22}" y="${P[0][1] - 46}" font-size="12" text-anchor="middle" font-weight="700" fill="#5a4320">${ic('close')} יציאה</text>`;
   // ציוני דרך בפניות
   for (let r = 0; (r + 1) * 4 < n + 1; r++) {
     const sp = PATH_SPOTS[r % PATH_SPOTS.length], y = 150 + r * 100, x = r % 2 ? 334 : 26;
@@ -11084,7 +11101,7 @@ function pathHome(from) {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('path');
   const d = pathLoad(), n = MKQ[GRADE].length, cur = d.stars.findIndex(s => !s), tot = d.stars.reduce((a, b) => a + b, 0);
   app.innerHTML = `
-    <div class="topbar"><span class="title">🗺️ מסע לאוצר${d.trips > 1 ? ` מספר ${d.trips}` : ''} – אימון לקראת המבחן</span><button class="secondary" id="pathHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="topbar"><span class="title">🗺️ מסע לאוצר${d.trips > 1 ? ` מספר ${d.trips}` : ''} – אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}</span><button class="secondary" id="pathHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card path-head"><p>${cur < 0 ? '🏆 <b>הגעתם לאוצר!</b> לחצו על הגביע לסיכום.' : cur === 0 ? `ינשוף החכמה מחכה לכם בנקודת היציאה. בכל משבצת – שאלה אחת בסגנון המבחן. עונים נכון – ממשיכים הלאה. טעיתם? מקבלים הסבר ושאלה נוספת, בלי לחזור אחורה.` : `אתם במשבצת <b>${cur + 1}</b> מתוך ${n}. לחצו על המשבצת האדומה כדי להמשיך.`}</p>
       <div class="path-stat">⭐ <b>${tot}</b> מתוך ${n * 3} כוכבים · ${d.stars.filter(Boolean).length}/${n} משבצות</div></div>
     <div class="path-wrap">${pathMap(d, from)}</div>
@@ -12817,6 +12834,31 @@ function staffOn() { return !irisOk() && lsGet('math-role') === 't' && lsGet('ma
 function teacherCred() { return irisOk() || staffOn(); }
 // מורה רואה את אתר המורים – אלא אם בחר/ה "תלמיד/הורה" או עבר/ה ל"תצוגת תלמיד"
 function teacherOn() { return teacherCred() && lsGet('math-role') !== 's' && lsGet('math-preview') !== '1'; }
+// מדריך קצר למורה: מה יש באתר, ואיך עושים את הדברים הנפוצים – כל כרטיס פותח את הכלי
+function guideHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('guide');
+  const W = GRADE === 6 ? 'מבדק' : 'מבחן';
+  const G = [
+    ['lp', '🗓️', 'שיעור מוכן בשתי דקות', 'בונים שיעור → בוחרים נושא ואורך → "מתחילים שיעור". הסרגל למעלה מוביל משלב לשלב (פתיח, משחקון, לימוד, תרגול, סיכום) עם שעון.'],
+    ['op', '💡', 'פתיח לתחילת השיעור', 'בכיתה → פתיח שיעור → בוחרים אילו שקפים (אחד או כמה) ואת הנושא. מקרינים, הכיתה חושבת – ו"הצגת התשובה".'],
+    ['exit', '📋', 'כרטיס יציאה בוואטסאפ', 'כרטיס יציאה → בוחרים נושא → "שליחה בוואטסאפ". כל תלמיד עונה על 3 שאלות בטלפון.'],
+    ['succ', '⭐', 'מבדק הצלחה להדפסה', 'מבדקי הצלחה → תחום ומיומנות → רמה → הדפסה: 4 מבדקים בדף. אפשר גם על המסך או בקישור.'],
+    ['games', '🎲', 'משחק לכל הכיתה', 'בכיתה → משחק לכל הכיתה → ג\'פרדי, מיליונר, כיבוש שטחים או בינגו – בקבוצות, על הלוח.'],
+    ['print', '🖨️', 'דפי עבודה וחוברות', 'הדפסה → בוחרים נושאים ורמה → דף עבודה עם דף תשובות, או חוברת עם תוכן עניינים.'],
+    ...(GRADE <= 2 ? [['fc', '⚡', 'כרטיסי הברקה', 'כרטיסי הברקה → בוחרים סוג (מספרים, כמה יש, חיבור וחיסור...) → מקרינים, או מדפיסים 8 בדף.']] : []),
+    ['home', '👧', 'תרגול בבית', `שולחים לכיתה את קישור האתר. התלמידים בוחרים "תלמיד/הורה", ומתרגלים ב"לתרגל" – הרמה מתאימה את עצמה. יש גם "${W}" עם 20 שאלות.`]
+  ];
+  app.innerHTML = `
+    <div class="topbar"><span class="title">❓ איך משתמשים באתר</span><button class="secondary" id="gdBack">${ic('home')} לדף הבית</button></div>
+    <div class="card race-intro"><p class="race-how">האתר מתאים את עצמו לכיתה שבחרתם. כל מה שמסומן כאן זמין לכם כמורים; התלמידים רואים רק תרגול, משחקים ו${W}ים.</p></div>
+    <div class="guide-grid">${G.map(([k, i, t, d]) => `<button type="button" class="guide-card" data-gd="${k}"><span class="gd-ic">${i}</span><span class="gd-t">${t}</span><span class="gd-d">${d}</span><span class="gd-go">לפתוח ←</span></button>`).join('')}</div>
+    <div class="card small muted">🔒 ציונים: תלמידים של מורות שנכנסות עם קוד המורות רואים את התוצאה רק על המסך – שום דבר לא נשלח. · שאלות והצעות: כפתור "יצירת קשר" בתחתית הדף.</div>`;
+  $('gdBack').onclick = home;
+  const go = { lp: () => lpHome(), op: opHome, exit: exitHome, succ: succHome, games: () => classSub('games'), print: () => { homeTab = 'print'; home(); }, fc: fcHome, home: () => { homeTab = 'practice'; home(); } };
+  app.querySelectorAll('[data-gd]').forEach(b => b.onclick = () => go[b.dataset.gd]());
+  try { localStorage.setItem('math-guide-seen', '1'); } catch (e) { /* לא חובה */ }
+  window.scrollTo(0, 0);
+}
 function setPreview(on) { try { if (on) localStorage.setItem('math-preview', '1'); else { localStorage.removeItem('math-preview'); localStorage.setItem('math-role', 't'); } } catch (e) { /* לא חובה */ } homeTab = 'practice'; home(); }
 function roleOk() { return teacherCred() || lsGet('math-role') === 's'; }
 // חוברות והדפסה בלי הגבלה – לאיריס ולמורות
@@ -13853,7 +13895,7 @@ function scDialog(dom, start, onOk) {
       ${lv || wq ? `<div class="sc-sec">${lv ? scOptHTML(c, lv) : ''}${wq ? scOptHTML(c, wq) : ''}</div>` : ''}
       <div class="sc-now">📋 <b>${scTitle(c)}</b></div>
       <div class="sc-sample"><b>לדוגמה:</b> ${(() => { const q = scGen(c)[0]; if (q.mk) return `<div class="sc-mk sm">${scRender(q, 'print')}</div>`; return `${q.pre ? `<span class="sc-pre">יודעים ש: ${M(q.pre)}</span> ` : ''}${scRender(q, 'print')}`; })()}</div>
-      <div class="actions" style="justify-content:center"><button id="scdOk" class="race-go">✔ אישור</button><button id="scdNo" class="ghost">ביטול</button></div>
+      <div class="actions" style="justify-content:center"><button id="scdOk" class="race-go">✔ אישור</button><button id="scdNo" class="ghost">↩ חזור</button></div>
     </div>`;
     const set = nc => { c = nc; draw(); };
     ov.querySelectorAll('[data-sk]').forEach(b => b.onclick = () => { const s = b.dataset.sk, p = scDefaults(dom, s); ['T', 'lv', 'wq'].forEach(k => { if (c.p[k] !== undefined && p[k] !== undefined) p[k] = Array.isArray(c.p[k]) ? c.p[k].slice() : c.p[k]; }); set({ d: dom, s, p }); });
@@ -13954,7 +13996,7 @@ function succRun(cfg, fromBuilder) {
     const q = qs[st.i];
     if (q.mk) return showMk(q);
     app.innerHTML = `
-      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">${qs[st.i].word ? 'שאלה' : 'תרגיל'} ${st.i + 1} מתוך ${qs.length}</span><button class="ghost" id="scOut">${ic('home')} יציאה</button></div>
+      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">${qs[st.i].word ? 'שאלה' : 'תרגיל'} ${st.i + 1} מתוך ${qs.length}</span><button class="ghost" id="scOut">${ic('close')} יציאה</button></div>
       <div class="sc-name">${name}</div>
       <div class="sc-dots">${qs.map((_, k) => `<span class="${k < st.i ? 'ok' : k === st.i ? 'now' : ''}"></span>`).join('')}</div>
       <div class="card center sc-q">
@@ -14000,7 +14042,7 @@ function succRun(cfg, fromBuilder) {
   const showMk = q => {
     mkS = { all: false, i: st.i, mode: 'practice', q: q.mk };
     app.innerHTML = `
-      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">שאלה ${st.i + 1} מתוך ${qs.length}</span><button class="ghost" id="scOut">${ic('home')} יציאה</button></div>
+      <div class="topbar"><span class="title">⭐ מבדק הצלחה</span><span class="muted">שאלה ${st.i + 1} מתוך ${qs.length}</span><button class="ghost" id="scOut">${ic('close')} יציאה</button></div>
       <div class="sc-name">${name}</div>
       <div class="sc-dots">${qs.map((_, k) => `<span class="${k < st.i ? 'ok' : k === st.i ? 'now' : ''}"></span>`).join('')}</div>
       <div class="card mk-card sc-mkcard">${mkQHTML(q.mk, 'practice', st.i + 1).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}
@@ -14622,6 +14664,7 @@ function askName(done) {
   if (!first) return;
   if (!teacherCred() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
+if (teacherCred()) document.documentElement.classList.add('tch');
 if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
