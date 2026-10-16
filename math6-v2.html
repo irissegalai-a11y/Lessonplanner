@@ -1354,7 +1354,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13597,6 +13597,20 @@ const LP_STAGES = [
   { id: 'sum', name: 'סיכום', ic: '⭐', w: 15 }
 ];
 const LP_BOOKS = ['שבילים פלוס', 'שבילים חדשים', 'חוברת אחרת'];
+// סוג השיעור: ראשון בנושא / המשך (חזרה קצרה במקום לימוד, תרגול קשה יותר) / חזרה לפני מבחן (בלי לימוד, הרבה תרגול)
+const LP_KINDS = [['first', 'שיעור ראשון בנושא'], ['cont', 'שיעור המשך'], ['review', 'חזרה לפני מבחן']];
+const LP_W = { first: { open: 10, game: 15, learn: 25, prac: 35, book: 20, sum: 15 }, cont: { open: 10, game: 15, learn: 10, prac: 40, book: 25, sum: 15 }, review: { open: 8, game: 20, learn: 10, prac: 45, book: 20, sum: 15 } };
+const lpKind = p => p.kind || 'first';
+const lpSName = (p, s) => s.id === 'learn' && lpKind(p) !== 'first' ? 'חזרה קצרה' : s.name;
+const lpSIc = (p, s) => s.id === 'learn' && lpKind(p) !== 'first' ? '🔁' : s.ic;
+const lpHasLearn = p => lpKind(p) !== 'first' || !!lpLesson(p.topic);
+function lpSetKind(p, k) {
+  p.kind = k;
+  if (k === 'first') { Object.assign(p, { pracLv: 'mix', pracN: 8, sumType: 'board' }); p.on.learn = lpLesson(p.topic) ? 1 : 0; }
+  if (k === 'cont') { Object.assign(p, { pracLv: '23', pracN: 10, sumType: 'board' }); p.on.learn = 1; }
+  if (k === 'review') { Object.assign(p, { pracLv: 'mix', pracN: 12, sumType: 'paper', game: 'jeo' }); p.on.learn = 0; }
+  lpSplit(p);
+}
 // דרכי סיכום – כולן נשארות אצל המורה בכיתה (שום דבר לא נשלח)
 const LP_SUMS = [['board', '3 שאלות בדיקה על הלוח (קלה, בינונית, מאתגרת)'], ['talk', 'סבב שיחה: "היום למדתי... / היה לי קשה... "'], ['thumbs', 'הערכה עצמית: 👍 👌 👎 – כמה הבנתי?'], ['paper', 'מבדק הצלחה מודפס (מדפיסים מראש)']];
 const lpBookPref = () => { try { return localStorage.getItem('math-lp-book') || LP_BOOKS[0]; } catch (e) { return LP_BOOKS[0]; } };
@@ -13607,21 +13621,21 @@ const lpSaveAll = L => { try { localStorage.setItem(LP_KEY, JSON.stringify(L.sli
 let lp = null;
 function lpNew(topic) {
   const T = topic || (TOPICS[0] && TOPICS[0].id);
-  const p = { topic: T, dur: 45, on: { open: 1, game: 1, learn: lpLesson(T) ? 1 : 0, prac: 1, book: 0, sum: 1 }, min: {}, game: 'jeo', pracN: 8, pracLv: 'mix', note: '', book: lpBookPref(), pages: '', sumType: 'board' };
+  const p = { kind: 'first', topic: T, dur: 45, on: { open: 1, game: 1, learn: lpLesson(T) ? 1 : 0, prac: 1, book: 0, sum: 1 }, min: {}, game: 'jeo', pracN: 8, pracLv: 'mix', note: '', book: lpBookPref(), pages: '', sumType: 'board' };
   lpSplit(p); return p;
 }
 // חלוקת הזמן לפי משקל החלקים שנבחרו
 function lpSplit(p) {
-  const st = LP_STAGES.filter(s => p.on[s.id]), W = st.reduce((a, s) => a + s.w, 0) || 1;
-  let left = p.dur; st.forEach((s, i) => { const m = i === st.length - 1 ? left : Math.max(2, Math.round(p.dur * s.w / W)); p.min[s.id] = m; left -= m; });
+  const wt = LP_W[lpKind(p)], st = LP_STAGES.filter(s => p.on[s.id]), W = st.reduce((a, s) => a + wt[s.id], 0) || 1;
+  let left = p.dur; st.forEach((s, i) => { const m = i === st.length - 1 ? left : Math.max(2, Math.round(p.dur * wt[s.id] / W)); p.min[s.id] = m; left -= m; });
   LP_STAGES.forEach(s => { if (!p.on[s.id]) p.min[s.id] = 0; });
 }
 const lpTotal = p => LP_STAGES.reduce((a, s) => a + (p.on[s.id] ? (+p.min[s.id] || 0) : 0), 0);
 const lpDesc = (p, id) => ({
   open: '4 שקפים: חימום בראש, מצאו את הטעות, איזה לא שייך, ואתגר',
   game: (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – בוחרים את הנושא במסך המשחק',
-  learn: lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
-  prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
+  learn: lpKind(p) !== 'first' ? 'חזרה קצרה: מה למדנו בשיעור הקודם, ו-2 שאלות חימום' : lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
+  prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 23: 'בינוניים ומאתגרים', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
   book: `${p.book || LP_BOOKS[0]}${p.pages ? ` – ${p.pages}` : ' – עמודים: ______'}`,
   sum: '"מה למדנו היום?" ואז ' + ((LP_SUMS.find(x => x[0] === (p.sumType || 'board')) || LP_SUMS[0])[1])
 })[id];
@@ -13635,18 +13649,20 @@ function lpHome(keep) {
     <div class="topbar noprint"><span class="title">🗓️ בונים שיעור</span><button class="secondary" id="lpBack">${ic('home')} חזרה</button></div>
     <div class="card noprint"><p class="sc-intro">בוחרים נושא ואורך שיעור – ומקבלים מערך מוכן: <b>פתיח, משחקון, לימוד, תרגול וסיכום</b>. הכל מוקרן על הלוח. אפשר לשנות כל חלק, לשמור ולהדפיס.</p>
       <div class="sc-opt"><b>אורך השיעור:</b> <span class="sc-chips">${[45, 90].map(d => `<button type="button" class="sc-chip btn${p.dur === d ? ' on' : ''}" data-dur="${d}">${d} דקות</button>`).join('')}
-        <label class="sc-chip${[45, 90].includes(p.dur) ? '' : ' on'}">אחר: <input id="lpDur" type="number" min="10" max="180" value="${p.dur}" style="width:4em" inputmode="numeric"> דק'</label></span></div></div>
+        <label class="sc-chip${[45, 90].includes(p.dur) ? '' : ' on'}">אחר: <input id="lpDur" type="number" min="10" max="180" value="${p.dur}" style="width:4em" inputmode="numeric"> דק'</label></span></div>
+      <div class="sc-opt"><b>איזה שיעור בנושא?</b> <span class="sc-chips">${LP_KINDS.map(([k, n]) => `<button type="button" class="sc-chip btn${lpKind(p) === k ? ' on' : ''}" data-lpkind="${k}">${n}</button>`).join('')}</span></div>
+      <p class="small muted">${{ first: 'לימוד הנושא עם כרטיסי הלמידה, ותרגול מהקל לקשה.', cont: 'במקום לימוד – חזרה קצרה על השיעור הקודם. תרגול ברמה גבוהה יותר, ויותר זמן לתרגול ולחוברת.', review: 'בלי לימוד: משחק חזרה, הרבה תרגול בכל הרמות, ומבדק הצלחה בסיום.' }[lpKind(p)]}</p></div>
     <h2 class="noprint">על איזה נושא השיעור?</h2>
     <div class="topics sc-topics noprint">${TOPICS.map((t, i) => `<button class="topic${p.topic === t.id ? ' sc-cur' : ''}" style="--c:${t.color}" data-lpt="${t.id}"><span class="ic">${i + 1}</span><span class="nm">${t.name}</span><span class="ds">${t.desc}</span>${p.topic === t.id ? '<span class="best">✔ נבחר</span>' : ''}</button>`).join('')}</div>
     <div class="card noprint lp-plan">
-      <h2>מערך השיעור – ${TOPIC[p.topic].name} · ${p.dur} דקות</h2>
+      <h2>מערך השיעור – ${TOPIC[p.topic].name} · ${p.dur} דקות · ${LP_KINDS.find(x => x[0] === lpKind(p))[1]}</h2>
       <table class="lp-tab"><thead><tr><th></th><th>חלק</th><th>דקות</th><th>מה עושים</th></tr></thead><tbody>
-      ${LP_STAGES.map(s => { const dis = s.id === 'learn' && !lpLesson(p.topic); return `<tr class="${p.on[s.id] ? '' : 'off'}">
-        <td><input type="checkbox" data-lpon="${s.id}" ${p.on[s.id] ? 'checked' : ''} ${dis ? 'disabled' : ''} aria-label="${s.name}"></td>
-        <td><b>${s.ic} ${s.name}</b></td>
+      ${LP_STAGES.map(s => { const dis = s.id === 'learn' && !lpHasLearn(p); return `<tr class="${p.on[s.id] ? '' : 'off'}">
+        <td><input type="checkbox" data-lpon="${s.id}" ${p.on[s.id] ? 'checked' : ''} ${dis ? 'disabled' : ''} aria-label="${lpSName(p, s)}"></td>
+        <td><b>${lpSIc(p, s)} ${lpSName(p, s)}</b></td>
         <td><input type="number" class="lp-min" min="0" max="120" data-lpmin="${s.id}" value="${p.on[s.id] ? p.min[s.id] : 0}" ${p.on[s.id] ? '' : 'disabled'} inputmode="numeric"></td>
         <td>${lpDesc(p, s.id)}${s.id === 'game' && p.on.game ? `<div><select id="lpGame">${LP_GAMES.map(([k, n]) => `<option value="${k}" ${p.game === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
-          ${s.id === 'prac' && p.on.prac ? `<div class="lp-sel"><select id="lpN">${[4, 6, 8, 10, 12].map(n => `<option ${p.pracN === n ? 'selected' : ''}>${n}</option>`).join('')}</select> תרגילים · <select id="lpLv">${[['mix', 'מהקל לקשה'], ['1', 'קלים'], ['2', 'בינוניים'], ['3', 'מאתגרים']].map(([k, n]) => `<option value="${k}" ${p.pracLv === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
+          ${s.id === 'prac' && p.on.prac ? `<div class="lp-sel"><select id="lpN">${[4, 6, 8, 10, 12].map(n => `<option ${p.pracN === n ? 'selected' : ''}>${n}</option>`).join('')}</select> תרגילים · <select id="lpLv">${[['mix', 'מהקל לקשה'], ['23', 'בינוניים ומאתגרים'], ['1', 'קלים'], ['2', 'בינוניים'], ['3', 'מאתגרים']].map(([k, n]) => `<option value="${k}" ${p.pracLv === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
           ${s.id === 'book' && p.on.book ? `<div class="lp-sel"><select id="lpBook">${LP_BOOKS.map(b => `<option ${p.book === b ? 'selected' : ''}>${b}</option>`).join('')}</select> <input id="lpPages" class="tinput" maxlength="60" value="${esc(p.pages || '')}" placeholder="חוברת ועמודים, למשל: חוברת 3, עמ' 34–35"></div>` : ''}
           ${s.id === 'sum' && p.on.sum ? `<div class="lp-sel"><select id="lpSum">${LP_SUMS.map(([k, n]) => `<option value="${k}" ${(p.sumType || 'board') === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>${p.sumType === 'paper' ? `<div class="small muted"><button type="button" class="linkish" id="lpSucc">⭐ להכנת מבדק הצלחה להדפסה</button></div>` : ''}` : ''}</td></tr>`; }).join('')}
       </tbody></table>
@@ -13655,14 +13671,15 @@ function lpHome(keep) {
       <div class="actions"><button id="lpGo" class="race-go">▶ מתחילים שיעור</button><button id="lpPrint" class="secondary">${ic('printer')} הדפסת המערך</button><button id="lpSave" class="secondary">💾 שמירה</button></div>
       <div class="small muted" id="lpMsg"></div>
     </div>
-    ${saved.length ? `<div class="card noprint"><h3>מערכים שמורים</h3><div class="lp-saved">${saved.map((x, i) => `<div class="lp-sv"><button type="button" class="secondary" data-lpload="${i}">${esc(TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic)} · ${x.dur} דק' <span class="small muted">${esc(x.saved || '')}</span></button><button type="button" class="ghost" data-lpdel="${i}" aria-label="מחיקה">🗑️</button></div>`).join('')}</div></div>` : ''}
+    ${saved.length ? `<div class="card noprint"><h3>מערכים שמורים</h3><div class="lp-saved">${saved.map((x, i) => `<div class="lp-sv"><button type="button" class="secondary" data-lpload="${i}">${esc(TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic)} · ${x.dur} דק' · ${(LP_KINDS.find(k => k[0] === (x.kind || 'first')) || LP_KINDS[0])[1]} <span class="small muted">${esc(x.saved || '')}</span></button><button type="button" class="ghost" data-lpdel="${i}" aria-label="מחיקה">🗑️</button></div>`).join('')}</div></div>` : ''}
     <div id="wsout"></div>`;
   lpSheet();
   const redo = () => { const y = window.scrollY; lpHome(true); window.scrollTo(0, y); };
   $('lpBack').onclick = () => { homeTab = 'class'; home(); };
   app.querySelectorAll('[data-dur]').forEach(b => b.onclick = () => { p.dur = +b.dataset.dur; lpSplit(p); redo(); });
   $('lpDur').onchange = () => { const v = Math.max(10, Math.min(180, Math.round(+$('lpDur').value || 45))); p.dur = v; lpSplit(p); redo(); };
-  app.querySelectorAll('[data-lpt]').forEach(b => b.onclick = () => { p.topic = b.dataset.lpt; if (!lpLesson(p.topic)) p.on.learn = 0; else if (!p.on.learn) p.on.learn = 1; lpSplit(p); redo(); });
+  app.querySelectorAll('[data-lpt]').forEach(b => b.onclick = () => { p.topic = b.dataset.lpt; if (lpKind(p) === 'first') p.on.learn = lpLesson(p.topic) ? 1 : 0; lpSplit(p); redo(); });
+  app.querySelectorAll('[data-lpkind]').forEach(b => b.onclick = () => { lpSetKind(p, b.dataset.lpkind); redo(); });
   app.querySelectorAll('[data-lpon]').forEach(x => x.onchange = () => { p.on[x.dataset.lpon] = x.checked ? 1 : 0; lpSplit(p); redo(); });
   app.querySelectorAll('[data-lpmin]').forEach(x => x.onchange = () => { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); redo(); });
   if ($('lpGame')) $('lpGame').onchange = e => { p.game = e.target.value; redo(); };
@@ -13686,8 +13703,8 @@ function lpHome(keep) {
 // מערך השיעור להדפסה (דף אחד)
 function lpSheet() {
   const p = lp; let t = 0;
-  const rows = LP_STAGES.filter(s => p.on[s.id]).map(s => { const a = t; t += +p.min[s.id] || 0; return `<tr><td><b>${s.ic} ${s.name}</b></td><td class="c">${p.min[s.id]}</td><td class="c">${a}–${t}</td><td>${lpDesc(p, s.id)}</td><td class="lp-notes"></td></tr>`; }).join('');
-  $('wsout').innerHTML = `<section class="ws-page lp-print"><div class="wshead"><h1>מערך שיעור – ${TOPIC[p.topic].name}</h1><div class="wsmeta"><span>${GRADE_NAME[GRADE]}</span><span>${p.dur} דקות</span><span>תאריך: <span class="wsline"></span></span><span>כיתה: <span class="wsline"></span></span></div></div>
+  const rows = LP_STAGES.filter(s => p.on[s.id]).map(s => { const a = t; t += +p.min[s.id] || 0; return `<tr><td><b>${lpSIc(p, s)} ${lpSName(p, s)}</b></td><td class="c">${p.min[s.id]}</td><td class="c">${a}–${t}</td><td>${lpDesc(p, s.id)}</td><td class="lp-notes"></td></tr>`; }).join('');
+  $('wsout').innerHTML = `<section class="ws-page lp-print"><div class="wshead"><h1>מערך שיעור – ${TOPIC[p.topic].name}${lpKind(p) !== 'first' ? ` (${LP_KINDS.find(x => x[0] === lpKind(p))[1]})` : ''}</h1><div class="wsmeta"><span>${GRADE_NAME[GRADE]}</span><span>${p.dur} דקות</span><span>תאריך: <span class="wsline"></span></span><span>כיתה: <span class="wsline"></span></span></div></div>
     <table class="lp-ptab"><thead><tr><th>חלק</th><th>דקות</th><th>מדקה</th><th>מה עושים</th><th>הערות</th></tr></thead><tbody>${rows}</tbody></table>
     ${p.note ? `<p><b>הערות:</b> ${esc(p.note)}</p>` : ''}
     <p class="small">מקרינים מהאתר: בלשונית "בכיתה" ← "בונים שיעור" ← ▶ מתחילים שיעור.</p>
@@ -13717,7 +13734,7 @@ function lpStop() {
   lpHome(true);
 }
 function lpRun(k) {
-  const p = lp, st = LP_STAGES.filter(s => p.on[s.id] && (s.id !== 'learn' || lpLesson(p.topic))).map(s => Object.assign({}, s, { min: +p.min[s.id] || 1 }));
+  const p = lp, st = LP_STAGES.filter(s => p.on[s.id] && (s.id !== 'learn' || lpHasLearn(p))).map(s => Object.assign({}, s, { name: lpSName(p, s), ic: lpSIc(p, s), min: +p.min[s.id] || 1 }));
   if (!st.length) return;
   if (lpRunS) clearInterval(lpRunS.iv);
   lpRunS = { st, k: 0, t0: Date.now(), iv: setInterval(() => { if (document.getElementById('lpBar')) lpBarDraw(); }, 1000) };
@@ -13728,7 +13745,7 @@ function lpRun(k) {
 function lpBoardSlides(topicId, n, lvMode, title) {
   const t = TOPIC[topicId], seen = new Set(), slides = [];
   for (let i = 0; i < n; i++) {
-    const lv = lvMode === 'mix' ? Math.min(3, 1 + Math.floor(i * 3 / n)) : +lvMode;
+    const lv = lvMode === 'mix' ? Math.min(3, 1 + Math.floor(i * 3 / n)) : lvMode === '23' ? (i < n / 2 ? 2 : 3) : +lvMode;
     let q; for (let k = 0; k < 60; k++) { q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text)) break; } seen.add(q.text);
     const ch = q.type === 'choice' ? `<div class="op-ch">${q.choices.map((c, j) => `<span><b>${'אבגדהוזח'[j]}.</b> ${c}</span>`).join('')}</div>` : '';
     slides.push({ title: `${title} ${i + 1}`, q: `<div class="lp-q">${q.text}${q.fig || ''}${ch}</div>`, a: `<p><b>התשובה:</b> ${correctHTML(q)}</p>${typeof q.exp === 'string' ? `<p>${q.exp}</p>` : ''}` });
@@ -13742,6 +13759,12 @@ function lpStage(k) {
   lpBarDraw();
   if (s.id === 'open') { op = { topic: p.topic, slides: opBuild(p.topic), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
   else if (s.id === 'game') ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome() }[p.game] || jeoHome)();
+  else if (s.id === 'learn' && lpKind(p) !== 'first') {
+    const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [];
+    const recap = { title: 'חזרה – מה למדנו בשיעור הקודם?', q: `<h3 class="center">${T.name}</h3>${tips.length ? `<ul class="lp-tips">${tips.slice(0, 3).map(x => `<li>${x}</li>`).join('')}</ul>` : `<p class="center">${T.desc}</p>`}<p class="center">🗣️ מי זוכר/ת? מי יכול/ה לתת דוגמה?</p>`, a: '' };
+    op = { topic: p.topic, label: 'חזרה קצרה', slides: [recap].concat(lpBoardSlides(p.topic, 2, '1', 'שאלת חזרה')), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' };
+    opDraw();
+  }
   else if (s.id === 'learn') startLesson(lpLesson(p.topic));
   else if (s.id === 'prac') { op = { topic: p.topic, label: 'תרגול על הלוח', slides: lpBoardSlides(p.topic, p.pracN, p.pracLv, 'תרגיל'), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
   else if (s.id === 'book') {
