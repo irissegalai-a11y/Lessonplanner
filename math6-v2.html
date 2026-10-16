@@ -1441,7 +1441,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קטז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -11569,6 +11569,9 @@ const OP_DEFAULT = ['warm', 'mistake', 'odd', 'chal'];
 const OP_KEY = 'math-op-kinds-g' + GRADE;
 const opKindsPref = () => { try { const v = JSON.parse(localStorage.getItem(OP_KEY)); return Array.isArray(v) && v.length ? v : OP_DEFAULT.slice(); } catch (e) { return OP_DEFAULT.slice(); } };
 const opKindsSave = v => { try { localStorage.setItem(OP_KEY, JSON.stringify(v)); } catch (e) { /* לא חובה */ } };
+const OPN_KEY = 'math-op-n-g' + GRADE;
+const opNPref = () => { try { return +localStorage.getItem(OPN_KEY) || 4; } catch (e) { return 4; } };
+const opNChips = (cur, attr) => `<span class="sc-chips">${[1, 2, 3, 4].map(n => `<button type="button" class="sc-chip btn${cur === n ? ' on' : ''}" ${attr}="${n}">${n === 1 ? 'שקף אחד' : n + ' שקפים'}</button>`).join('')}</span>`;
 const opKindsAvail = () => OP_KINDS.filter(k => k.ok());
 const opMixKinds = () => { const pool = shuffle(opKindsAvail().map(k => k.id).filter(id => id !== 'warm' && id !== 'chal')); return ['warm', ...pool.slice(0, 2), 'chal']; };
 const opKindsSorted = v => opKindsAvail().map(k => k.id).filter(id => v.includes(id));
@@ -11576,9 +11579,9 @@ const opKindsSorted = v => opKindsAvail().map(k => k.id).filter(id => v.includes
 const opKindChips = (sel, attr) => `<div class="sc-chips op-kinds">${opKindsAvail().map(k => `<button type="button" class="sc-chip btn${sel.includes(k.id) ? ' on' : ''}" ${attr}="${k.id}">${k.name}</button>`).join('')}<button type="button" class="sc-chip btn" ${attr}="__mix">🎲 ערבוב</button></div>`;
 const opKindToggle = (sel, id) => { if (id === '__mix') return opMixKinds(); const v = sel.includes(id) ? sel.filter(x => x !== id) : sel.concat(id); return opKindsSorted(v.length ? v : [id]); };
 const opName = id => id === 'composite' ? 'שטחים מורכבים' : (OP_SPECIAL.find(x => x.id === id) || TOPIC[id]).name;
-function opBuild(topicId, kinds) {
+function opBuild(topicId, kinds, n) {
   const sp = OP_SPECIAL.find(x => x.id === topicId);
-  if (sp) return sp.build().map(sl => ({ ...sl, src: sp.src }));
+  if (sp) { const sl = sp.build().map(x => ({ ...x, src: sp.src })); return n ? sl.slice(0, n) : sl; }
   if (topicId === 'composite') return opComposite();
   const t = TOPIC[topicId], seen = new Set();
   const get = (lv, cond) => { for (let i = 0; i < 80; i++) { const q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text) && (!cond || cond(q))) { seen.add(q.text); return q; } } return mk(t.id, pick(t.levels[lv]), lv); };
@@ -12065,9 +12068,10 @@ function classSub(kind) {
           <button class="game-card" id="opGo">
             <span class="gc-ic" style="--gw:rgba(239,201,106,0.7)">${ic('bulb')}</span>
             <span class="gc-nm">פתיח שיעור</span>
-            <span class="gc-ds">4 שקפים לתחילת השיעור לפי נושא: חימום, מצאו את הטעות, איזה לא שייך, ואתגר.</span>
+            <span class="gc-ds">שקפים לתחילת השיעור לפי נושא – בוחרים שקף אחד או כמה: חימום, המספר של היום, אמת או שקר, הערכה, מה הכלל ועוד.</span>
           </button>
           ${OP_SPECIAL.length ? `<h3 class="games-sub">לפי מארגן ההוראה</h3>
+          <div class="sc-opt"><b>כמה שקפים?</b> ${opNChips(opNPref(), 'data-opn')}</div>
           <div class="race-tracks">${OP_SPECIAL.map(t => `<button class="race-track op-special" data-org="${t.id}"><span class="nm">⭐ ${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>` : ''}`
     : kind === 'games' ? `
           <button class="game-card" id="jeoGo">
@@ -12112,7 +12116,8 @@ function classSub(kind) {
   $('clsBack').onclick = () => { homeTab = 'class'; home(); };
   const on = (id, fn) => { if ($(id)) $(id).onclick = fn; };
   on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('cmpSheetGo', () => cmpSheetHome());
-  app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { op = { topic: b.dataset.org, slides: opBuild(b.dataset.org), k: 0, show: false }; opDraw(); });
+  app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { const n = opNPref(); op = { topic: b.dataset.org, n, slides: opBuild(b.dataset.org, null, n), k: 0, show: false }; opDraw(); });
+  app.querySelectorAll('[data-opn]').forEach(b => b.onclick = () => { try { localStorage.setItem(OPN_KEY, b.dataset.opn); } catch (e) { /* לא חובה */ } const y = window.scrollY; classSub('open'); window.scrollTo(0, y); });
   window.scrollTo(0, 0);
 }
 
@@ -12139,7 +12144,7 @@ function opHome() {
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('bulb')} פתיח שיעור</span><button class="secondary" id="opHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how">שקפים קצרים להקרנה בתחילת השיעור, על הנושא שתבחרו. <b>בוחרים אילו שקפים</b> – חימום, המספר של היום, אמת או שקר, הערכה, מה הכלל ועוד – או לוחצים "ערבוב". בכל שקף – קודם חושבים, ואז מציגים את התשובה.</p></div>
-    <div class="card"><b>אילו שקפים?</b> <span class="small muted">(לוחצים כדי להוסיף או להוריד · נשמר לפעם הבאה)</span>${opKindChips(opKindsPref(), 'data-opk')}<div class="small muted" id="opKN">${opKindsPref().length} שקפים</div></div>
+    <div class="card"><b>אילו שקפים?</b> <span class="small muted">(אפשר שקף אחד בלבד או כמה – לוחצים כדי להוסיף או להוריד · נשמר לפעם הבאה)</span>${opKindChips(opKindsPref(), 'data-opk')}<div class="small muted" id="opKN">${opKindsPref().length} שקפים</div></div>
     <h2>על איזה נושא השיעור?</h2>
     <div class="race-tracks">${GRADE >= 5 ? `<button class="race-track" data-opt="composite" style="border-color:#2f8f55"><span class="nm">שטחים מורכבים</span><span class="best">חימום, צלע חסרה, מצאו את הטעות, ואתגר</span></button>` : ''}${TOPICS.map(t => `<button class="race-track" data-opt="${t.id}" style="border-color:${t.color}"><span class="nm">${t.name}</span><span class="best">${t.desc}</span></button>`).join('')}</div>`;
   $('opHomeB').onclick = () => classSub('open');
@@ -12170,7 +12175,7 @@ function opDraw() {
   if ($('opPrev')) $('opPrev').onclick = () => { op.k--; op.show = false; opDraw(); };
   if ($('opShow')) $('opShow').onclick = () => { op.show = true; opDraw(); };
   if ($('opNext')) $('opNext').onclick = () => { op.k++; op.show = false; opDraw(); };
-  if ($('opNew')) $('opNew').onclick = () => { if (op.back) return op.back(); op = { topic: op.topic, kinds: op.kinds, slides: opBuild(op.topic, op.kinds), k: 0, show: false }; opDraw(); };
+  if ($('opNew')) $('opNew').onclick = () => { if (op.back) return op.back(); op = { topic: op.topic, kinds: op.kinds, n: op.n, slides: opBuild(op.topic, op.kinds, op.n), k: 0, show: false }; opDraw(); };
   window.scrollTo(0, 0);
 }
 
@@ -13823,7 +13828,7 @@ function lpSplit(p) {
 }
 const lpTotal = p => LP_STAGES.reduce((a, s) => a + (p.on[s.id] ? (+p.min[s.id] || 0) : 0), 0);
 const lpDesc = (p, id) => ({
-  open: `${(p.opKinds || OP_DEFAULT).length} שקפים: ${opKindsSorted(p.opKinds || OP_DEFAULT).map(id => OP_KINDS.find(k => k.id === id).name.replace(/^\S+ /, '')).join(', ')}`,
+  open: p.opSrc && OP_SPECIAL.some(x => x.id === p.opSrc) ? `⭐ ${opName(p.opSrc)} – לפי מארגן ההוראה · ${(p.opN || 4) === 1 ? 'שקף אחד' : (p.opN || 4) + ' שקפים'}` : `${(p.opKinds || OP_DEFAULT).length === 1 ? 'שקף אחד' : (p.opKinds || OP_DEFAULT).length + ' שקפים'}: ${opKindsSorted(p.opKinds || OP_DEFAULT).map(id => OP_KINDS.find(k => k.id === id).name.replace(/^\S+ /, '')).join(', ')}`,
   game: (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – בוחרים את הנושא במסך המשחק',
   learn: lpKind(p) !== 'first' ? 'חזרה קצרה: מה למדנו בשיעור הקודם, ו-2 שאלות חימום' : lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
   prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 23: 'בינוניים ומאתגרים', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
@@ -13854,7 +13859,7 @@ function lpHome(keep) {
         <td><input type="checkbox" data-lpon="${s.id}" ${p.on[s.id] ? 'checked' : ''} ${dis ? 'disabled' : ''} aria-label="${lpSName(p, s)}"></td>
         <td><b>${lpSIc(p, s)} ${lpSName(p, s)}</b></td>
         <td><input type="number" class="lp-min" min="0" max="120" data-lpmin="${s.id}" value="${p.on[s.id] ? p.min[s.id] : 0}" ${p.on[s.id] ? '' : 'disabled'} inputmode="numeric"></td>
-        <td>${lpDesc(p, s.id)}${s.id === 'open' && p.on.open ? `<details class="lp-opk"><summary>בחירת שקפים לפתיח</summary>${opKindChips(p.opKinds || OP_DEFAULT, 'data-lpopk')}</details>` : ''}${s.id === 'game' && p.on.game ? `<div><select id="lpGame">${LP_GAMES.map(([k, n]) => `<option value="${k}" ${p.game === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
+        <td>${lpDesc(p, s.id)}${s.id === 'open' && p.on.open ? `<div class="lp-sel"><select id="lpOpSrc"><option value="">שקפים לפי נושא השיעור</option>${OP_SPECIAL.length ? `<optgroup label="לפי מארגן ההוראה">${OP_SPECIAL.map(x => `<option value="${x.id}" ${p.opSrc === x.id ? 'selected' : ''}>⭐ ${x.name}</option>`).join('')}</optgroup>` : ''}</select></div>${p.opSrc ? `<div class="lp-sel">${opNChips(p.opN || 4, 'data-lpopn')}</div>` : `<details class="lp-opk"><summary>בחירת שקפים לפתיח (אפשר גם שקף אחד)</summary>${opKindChips(p.opKinds || OP_DEFAULT, 'data-lpopk')}</details>`}` : ''}${s.id === 'game' && p.on.game ? `<div><select id="lpGame">${LP_GAMES.map(([k, n]) => `<option value="${k}" ${p.game === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
           ${s.id === 'prac' && p.on.prac ? `<div class="lp-sel"><select id="lpN">${[4, 6, 8, 10, 12].map(n => `<option ${p.pracN === n ? 'selected' : ''}>${n}</option>`).join('')}</select> תרגילים · <select id="lpLv">${[['mix', 'מהקל לקשה'], ['23', 'בינוניים ומאתגרים'], ['1', 'קלים'], ['2', 'בינוניים'], ['3', 'מאתגרים']].map(([k, n]) => `<option value="${k}" ${p.pracLv === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>` : ''}
           ${s.id === 'book' && p.on.book ? `<div class="lp-sel"><select id="lpBook">${LP_BOOKS.map(b => `<option ${p.book === b ? 'selected' : ''}>${b}</option>`).join('')}</select> <input id="lpPages" class="tinput" maxlength="60" value="${esc(p.pages || '')}" placeholder="חוברת ועמודים, למשל: חוברת 3, עמ' 34–35"></div>` : ''}
           ${s.id === 'sum' && p.on.sum ? `<div class="lp-sel"><select id="lpSum">${LP_SUMS.map(([k, n]) => `<option value="${k}" ${(p.sumType || 'board') === k ? 'selected' : ''}>${n}</option>`).join('')}</select></div>${p.sumType === 'paper' ? `<div class="small muted"><button type="button" class="linkish" id="lpSucc">⭐ להכנת מבדק הצלחה להדפסה</button></div>` : ''}` : ''}</td></tr>`; }).join('')}
@@ -13885,6 +13890,8 @@ function lpHome(keep) {
   app.querySelectorAll('[data-lpon]').forEach(x => x.onchange = () => { p.on[x.dataset.lpon] = x.checked ? 1 : 0; lpSplit(p); redo(); });
   app.querySelectorAll('[data-lpmin]').forEach(x => { x.oninput = () => { if (x.value !== '') { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); live(); } }; x.onchange = () => { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); redo(); }; });
   if ($('lpGame')) $('lpGame').onchange = e => { p.game = e.target.value; redo(); };
+  if ($('lpOpSrc')) $('lpOpSrc').onchange = e => { p.opSrc = e.target.value || null; redo(); };
+  app.querySelectorAll('[data-lpopn]').forEach(b => b.onclick = () => { p.opN = +b.dataset.lpopn; redo(); });
   app.querySelectorAll('[data-lpopk]').forEach(b => b.onclick = () => { p.opKinds = opKindToggle(p.opKinds || OP_DEFAULT, b.dataset.lpopk); redo(); const d = app.querySelector('.lp-opk'); if (d) d.open = true; });
   if ($('lpN')) $('lpN').onchange = e => { p.pracN = +e.target.value; redo(); };
   if ($('lpLv')) $('lpLv').onchange = e => { p.pracLv = e.target.value; redo(); };
@@ -13963,7 +13970,7 @@ function lpStage(k) {
   R0.k = Math.max(0, Math.min(R0.st.length - 1, k)); R0.t0 = Date.now();
   const p = lp, s = R0.st[R0.k], T = TOPIC[p.topic];
   lpBarDraw();
-  if (s.id === 'open') { op = { topic: p.topic, slides: opBuild(p.topic, p.opKinds), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
+  if (s.id === 'open') { const src = p.opSrc && OP_SPECIAL.some(x => x.id === p.opSrc) ? p.opSrc : p.topic; op = { topic: src, slides: opBuild(src, p.opKinds, p.opN || 4), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
   else if (s.id === 'game') ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome() }[p.game] || jeoHome)();
   else if (s.id === 'learn' && lpKind(p) !== 'first') {
     const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [];
