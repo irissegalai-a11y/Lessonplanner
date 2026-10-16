@@ -1507,7 +1507,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -14180,10 +14180,10 @@ function lpHome(keep) {
       </tbody></table>
       <div class="lp-tot ${tot === p.dur ? '' : 'warn'}" id="lpTot"><span id="lpTotT">${lpTotTxt(p)}</span> <button type="button" class="ghost" id="lpFix">חלוקה מחדש לפי הזמן</button></div>
       <div class="sc-opt"><b>הערות לעצמי:</b> <input id="lpNote" class="tinput" style="flex:1;min-width:200px" maxlength="200" value="${esc(p.note || '')}" placeholder="למשל: לחזור על הטעויות מהשיעור הקודם"></div>
-      <div class="actions"><button id="lpGo" class="race-go">▶ מתחילים שיעור</button><button id="lpPrint" class="secondary">${ic('printer')} הדפסת המערך</button><button id="lpSave" class="secondary">💾 שמירה</button></div>
+      <div class="actions"><button id="lpGo" class="race-go">▶ מתחילים שיעור</button><button id="lpPrint" class="secondary">${ic('printer')} הדפסת המערך</button><button id="lpSave" class="secondary">💾 שמירה</button><button id="lpLink" class="secondary">🔗 קישור למערך</button></div>
       <div class="small muted" id="lpMsg"></div>
     </div>
-    ${saved.length ? `<div class="card noprint"><h3>מערכים שמורים</h3><div class="lp-saved">${saved.map((x, i) => `<div class="lp-sv"><button type="button" class="secondary" data-lpload="${i}">${esc(TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic)} · ${x.dur} דק' · ${(LP_KINDS.find(k => k[0] === (x.kind || 'first')) || LP_KINDS[0])[1]} <span class="small muted">${esc(x.saved || '')}</span></button><button type="button" class="ghost" data-lpdel="${i}" aria-label="מחיקה">🗑️</button></div>`).join('')}</div></div>` : ''}
+    ${`<div class="card noprint" id="lpSavedCard"><h3>💾 מערכים שמורים</h3>${saved.length ? '' : '<p class="small muted">עוד אין מערכים שמורים. לוחצים "💾 שמירה" – והמערך יופיע כאן (במכשיר ובדפדפן הזה). כדי לפתוח במכשיר אחר – "🔗 קישור למערך".</p>'}<div class="lp-saved">${saved.map((x, i) => `<div class="lp-sv"><button type="button" class="secondary" data-lpload="${i}">${esc(TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic)} · ${x.dur} דק' · ${(LP_KINDS.find(k => k[0] === (x.kind || 'first')) || LP_KINDS[0])[1]} <span class="small muted">${esc(x.saved || '')}</span></button><button type="button" class="ghost" data-lpdel="${i}" aria-label="מחיקה">🗑️</button></div>`).join('')}</div></div>`}
     <div id="wsout"></div>`;
   lpSheet();
   const redo = () => { const y = window.scrollY; lpHome(true); window.scrollTo(0, y); };
@@ -14221,8 +14221,33 @@ function lpHome(keep) {
   app.querySelectorAll('[data-lpload]').forEach(b => b.onclick = () => { const x = lpLoad()[+b.dataset.lpload]; if (x && TOPIC[x.topic]) { lp = JSON.parse(JSON.stringify(x)); delete lp.saved; redo(); } });
   app.querySelectorAll('[data-lpdel]').forEach(b => b.onclick = () => { const L = lpLoad(); L.splice(+b.dataset.lpdel, 1); lpSaveAll(L); redo(); });
   $('lpGo').onclick = () => lpRun(0);
+  $('lpLink').onclick = () => lpLinkDialog(p);
   track('בונים שיעור', TOPIC[p.topic].name);
   window.scrollTo(0, 0);
+}
+// קישור למערך: כל ההגדרות בתוך הקישור – פותחים במכשיר אחר (מחשב הכיתה) או משתפים עם מורה אחרת
+const lpEnc = p => { const o = JSON.parse(JSON.stringify(p)); delete o.saved; const b = btoa(unescape(encodeURIComponent(JSON.stringify(o)))); return b.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const lpDec = c => { try { const b = c.replace(/-/g, '+').replace(/_/g, '/'); const o = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4))))); return o && TOPIC[o.topic] && o.on && o.dur ? o : null; } catch (e) { return null; } };
+function lpLinkDialog(p) {
+  const link = location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'lp=' + lpEnc(p);
+  const name = `${TOPIC[p.topic].name} · ${p.dur} דק'`;
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(`מערך שיעור – ${name}: ${link}`);
+  const mail = 'mailto:?subject=' + encodeURIComponent('מערך שיעור – ' + name) + '&body=' + encodeURIComponent(link);
+  ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="lplT">
+    <h2 id="lplT">🔗 קישור למערך – ${esc2(name)}</h2>
+    <p class="small muted" style="margin-top:0">פותחים את הקישור במחשב הכיתה (או שולחים למורה אחרת) – המערך נפתח מוכן, עם כל ההגדרות. צריך להיות מחוברים כמורה.</p>
+    <div class="kf-join"><input id="lplIn" class="tinput" readonly dir="ltr" value="${esc2(link)}"><button class="secondary" type="button" id="lplCopy">העתקה</button></div>
+    <div class="actions" style="margin-top:8px"><a class="btnlink secondary" href="${esc2(wa)}" target="_blank" rel="noopener">שליחה בוואטסאפ</a><a class="btnlink secondary" href="${esc2(mail)}">שליחה במייל</a></div>
+    <div class="small" id="lplMsg"></div>
+    <div class="actions" style="justify-content:center"><button id="lplNo" class="ghost">↩ חזור</button></div>
+  </div>`;
+  ov.querySelector('#lplCopy').onclick = () => { const inp = ov.querySelector('#lplIn'); const ok = () => { ov.querySelector('#lplMsg').textContent = 'הקישור הועתק ✔'; }; try { navigator.clipboard.writeText(inp.value).then(ok, () => inp.select()); } catch (e) { inp.select(); } };
+  ov.querySelector('#lplNo').onclick = close;
 }
 // מערך השיעור להדפסה (דף אחד)
 function lpSheet() {
@@ -14678,7 +14703,8 @@ function askName(done, tch) {
   else if (!teacherCred() && !noName && noFull && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
 if (teacherCred()) document.documentElement.classList.add('tch');
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
+if (URLP.has('lp') && teacherOn()) { const x = lpDec(URLP.get('lp') || ''); if (x) lp = x; }
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
 </html>
