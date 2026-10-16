@@ -1221,6 +1221,9 @@
   .fc-pic .fc-frame { width: min(40vw, 240px); }
   .fc-pic.sm svg { width: min(60vw, 300px); } .fc-pic.sm .fc-frame { width: min(30vw, 170px); }
   .fc-ask { font-size: 1.6rem; font-weight: 700; }
+  .fc-ex { font-family: 'Assistant', sans-serif; font-weight: 800; font-size: clamp(3.6rem, 16vw, 8rem); line-height: 1.1; white-space: nowrap; }
+  .fc-ex .q { color: #d9482b; } .fc-ex b { color: #2f7a73; }
+  .fc-ex.sm { font-size: clamp(1.8rem, 7vw, 3rem); color: #3d3a33; }
   .fc-timer { position: absolute; bottom: 0; right: 0; height: 8px; background: #f2c94c; width: 100%; animation: fctime linear forwards; }
   @keyframes fctime { from { width: 100%; } to { width: 0; } }
   .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; text-align: center; }
@@ -1376,7 +1379,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7314,7 +7317,7 @@ function home() {
               </button>` : ''}
           </div>
           <div class="practice-more">
-            ${GRADE <= 2 ? `<button id="fcGoP" class="fc-entry">⚡ כרטיסי הברקה<span class="desc">קריאה וזיהוי של מספרים – רואים, אומרים, הופכים</span></button>` : ''}
+            ${GRADE <= 2 ? `<button id="fcGoP" class="fc-entry">⚡ כרטיסי הברקה<span class="desc">קריאת מספרים, חיבור וחיסור, תאומים ושבירת עשרת – רואים, אומרים, הופכים</span></button>` : ''}
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום${staffOn() ? '' : ' – התוצאה נשלחת למורה'}</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -7405,7 +7408,7 @@ function home() {
           ${GRADE <= 2 ? `<button class="game-card" id="fcGoC">
             <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">⚡</span>
             <span class="gc-nm">כרטיסי הברקה</span>
-            <span class="gc-ds">קריאה וזיהוי של מספרים – מקרינים, הכיתה אומרת בקול, והופכים.</span>
+            <span class="gc-ds">מספרים, חיבור וחיסור, תאומים ושבירת עשרת – מקרינים, הכיתה אומרת בקול, והופכים.</span>
           </button>` : ''}
           <button class="game-card" id="succGo">
             <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">⭐</span>
@@ -13809,8 +13812,11 @@ function lpStage(k) {
    צד אחד מראים, ואחרי רגע (או בלחיצה) הופכים: מספר, מילים, וכמות (מסגרת עשר / עשרות ואחדות). */
 const FC_KEY = 'math-fc-g' + GRADE;
 const FC_TYPES = [['num', '🔢 קוראים מספר', 'רואים מספר – אומרים אותו בקול'], ['qty', '🟡 כמה יש?', 'רואים נקודות או עשרות ואחדות – אומרים כמה'], ['word', '🔤 מילה ← מספר', 'קוראים את המספר במילים – אומרים או כותבים בספרות'], ['mix', '🎲 מעורב', 'כל הסוגים יחד']];
-const FC_RANGES = [[10, 'עד 10'], [20, 'עד 20'], [100, 'עד 100'], [1000, 'עד 1,000']];
-const fcPrefs = () => { const d = { type: 'num', range: GRADE <= 1 ? 20 : 100, n: 10, speed: 0 }; try { return Object.assign(d, JSON.parse(localStorage.getItem(FC_KEY)) || {}); } catch (e) { return d; } };
+const FC_EX = [['add', '➕ חיבור וחיסור', 'תרגילים קצרים – עונים בקול לפני שהכרטיס מתהפך'], ['twin', '👯 תאומים', 'כפולים: <span dir="ltr">4 + 4</span>, ומהם חיסור: <span dir="ltr">8 − 4</span>'], ['bridge', '🔟 שבירת עשרת', 'מעבר דרך העשר: <span dir="ltr">8 + 5</span>, <span dir="ltr">13 − 5</span>']];
+const FC_ALL = FC_TYPES.concat(FC_EX), fcIsEx = t => FC_EX.some(x => x[0] === t);
+const FC_RANGES = [[6, 'עד 6'], [10, 'עד 10'], [20, 'עד 20'], [100, 'עד 100'], [1000, 'עד 1,000']];
+const FC_OPS = [[3, 'חיבור וחיסור'], [1, 'רק חיבור'], [2, 'רק חיסור']];
+const fcPrefs = () => { const d = { type: 'num', range: GRADE <= 1 ? 20 : 100, n: 10, speed: 0, op: 3 }; try { return Object.assign(d, JSON.parse(localStorage.getItem(FC_KEY)) || {}); } catch (e) { return d; } };
 const fcSave = p => { try { localStorage.setItem(FC_KEY, JSON.stringify(p)); } catch (e) { /* לא חובה */ } };
 // מסגרת עשר (עד 20) – שתי מסגרות של 2×5
 function fcFrames(n) {
@@ -13828,19 +13834,40 @@ function fcBlocks(n) {
   return `<svg viewBox="0 0 ${Math.max(x, 60)} 58" class="fc-blocks" role="img" aria-label="${n}" dir="ltr">${s}</svg>`;
 }
 const fcQty = n => n <= 20 ? fcFrames(n) : fcBlocks(n);
+// תרגיל להברקה: חיבור/חיסור עד R, תאומים (כפולים), או שבירת עשרת (מעבר דרך העשר, עד 20)
+function fcEx(t, M, op, used) {
+  M = Math.min(M, 20);
+  for (let k = 0; k < 80; k++) {
+    const plus = op === 1 || (op !== 2 && Math.random() < 0.5);
+    let a, b;
+    if (t === 'twin') { const x = R(1, Math.max(1, Math.floor(M / 2))); [a, b] = plus ? [x, x] : [2 * x, x]; }
+    else if (t === 'bridge') { const x = R(2, 9), y = R(Math.max(2, 11 - x), 9); [a, b] = plus ? [x, y] : [x + y, Math.random() < 0.5 ? x : y]; }
+    else if (plus) { a = R(1, M - 1); b = R(1, M - a); }
+    else { a = R(2, M); b = R(1, a - 1); }
+    const key = a + (plus ? '+' : '-') + b;
+    if (used.has(key) && k < 79) continue;
+    used.add(key);
+    return { t, a, b, op: plus ? '+' : '−', r: plus ? a + b : a - b };
+  }
+}
+const fcExTxt = c => `${c.a} ${c.op} ${c.b}`;
 const fcPick = (range, used) => { const lo = range <= 10 ? 0 : 1; for (let k = 0; k < 60; k++) { const v = R(lo, range === 1000 ? 999 : range); if (!used.has(v)) { used.add(v); return v; } } return R(lo, range); };
 
 function fcHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; stopSpeak(); navPush('fc');
-  const p = fcPrefs();
+  const p = fcPrefs(), ex = fcIsEx(p.type);
+  if (ex && p.range > 20) p.range = 20;
   const chips = (key, list, lab) => `<div class="sc-opt"><b>${lab}</b> <span class="sc-chips">${list.map(([v, n]) => `<button type="button" class="sc-chip btn${p[key] === v ? ' on' : ''}" data-fck="${key}" data-fcv="${v}">${n}</button>`).join('')}</span></div>`;
   app.innerHTML = `
     <div class="topbar"><span class="title">⚡ כרטיסי הברקה</span><button class="secondary" id="fcBack">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro"><p class="race-how">כרטיס מופיע – אומרים בקול מה רואים – ו<b>הופכים</b> לבדוק. מתאים גם להקרנה בכיתה.</p></div>
-    <h2>מה מתרגלים?</h2>
+    <h2>קוראים ומזהים מספרים</h2>
     <div class="fc-types">${FC_TYPES.map(([v, n, d]) => `<button type="button" class="fc-type${p.type === v ? ' on' : ''}" data-fct="${v}"><span class="nm">${n}</span><span class="ds">${d}</span></button>`).join('')}</div>
+    <h2>תרגילים בהברקה</h2>
+    <div class="fc-types">${FC_EX.map(([v, n, d]) => `<button type="button" class="fc-type${p.type === v ? ' on' : ''}" data-fct="${v}"><span class="nm">${n}</span><span class="ds">${d}</span></button>`).join('')}</div>
     <div class="card">
-      ${chips('range', FC_RANGES, 'מספרים:')}
+      ${p.type === 'bridge' ? '<div class="sc-opt"><b>מספרים:</b> עד 20 (תמיד עוברים את העשר)</div>' : chips('range', ex ? FC_RANGES.filter(r => r[0] <= 20) : FC_RANGES, ex ? 'התוצאה / המספר הגדול:' : 'מספרים:')}
+      ${ex ? chips('op', FC_OPS, 'פעולה:') : ''}
       ${chips('n', [[10, '10 כרטיסים'], [20, '20 כרטיסים']], 'כמה:')}
       ${chips('speed', [[0, 'הופכים בלחיצה'], [3, 'הברקה – 3 שניות'], [5, '5 שניות']], 'קצב:')}
       <div class="actions"><button id="fcGo" class="race-go">⚡ מתחילים</button></div>
@@ -13853,14 +13880,23 @@ function fcHome() {
 }
 function fcRun(p, only) {
   const used = new Set(), types = ['num', 'qty', 'word'];
-  let cards = only ? only.map(c => Object.assign({}, c)) : Array.from({ length: p.n }, (_, i) => ({ n: fcPick(p.range, used), t: p.type === 'mix' ? types[i % 3] : p.type }));
+  const ex = fcIsEx(p.type), rng = ex ? Math.min(p.range, 20) : p.range;
+  let cards = only ? only.map(c => Object.assign({}, c)) : Array.from({ length: p.n }, (_, i) => ex ? fcEx(p.type, rng, p.op || 3, used) : ({ n: fcPick(p.range, used), t: p.type === 'mix' ? types[i % 3] : p.type }));
   if (!only && p.type === 'mix') cards = shuffle(cards);
   const st = { i: 0, flip: false, yes: 0, miss: [], timer: null };
-  const label = `${(FC_TYPES.find(x => x[0] === p.type) || FC_TYPES[0])[1].replace(/^\S+ /, '')} · ${(FC_RANGES.find(x => x[0] === p.range) || FC_RANGES[1])[1]}`;
+  const label = `${(FC_ALL.find(x => x[0] === p.type) || FC_TYPES[0])[1].replace(/^\S+ /, '')} · ${p.type === 'bridge' ? 'עד 20' : (FC_RANGES.find(x => x[0] === rng) || FC_RANGES[2])[1]}${ex && p.op === 1 ? ' · חיבור' : ex && p.op === 2 ? ' · חיסור' : ''}`;
   track('כרטיסי הברקה', label);
   navPush('view');
-  const front = c => c.t === 'num' ? `<div class="fc-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fc-pic">${fcQty(c.n)}</div><div class="fc-ask">כמה יש?</div>` : `<div class="fc-word" data-raw>${heNum(c.n)}</div>`;
-  const back = c => `<div class="fc-big sm" dir="ltr">${fmt(c.n)}</div><div class="fc-word sm" data-raw>${heNum(c.n)}</div>${c.n > 0 ? `<div class="fc-pic sm">${fcQty(c.n)}</div>` : ''}`;
+  // שבירת עשרת: מראים את הדרך דרך העשר (8 + 2 + 3, ‏13 − 3 − 2)
+  const hint = c => {
+    if (c.t === 'twin') return `<div class="fc-ask">תאומים 👯</div>${c.op === '+' && c.a <= 10 ? `<div class="fc-pic sm">${fcFrames(c.a)}${fcFrames(c.a)}</div>` : ''}`;
+    if (c.t !== 'bridge') return c.r <= 20 && c.r > 0 ? `<div class="fc-pic sm">${fcFrames(c.r)}</div>` : '';
+    if (c.op === '+') { const k = 10 - c.a; return `<div class="fc-ex sm" dir="ltr">${c.a} + ${k} + ${c.b - k} = ${c.r}</div><div class="fc-ask">משלימים לעשר וממשיכים</div>`; }
+    const k = c.a - 10; return `<div class="fc-ex sm" dir="ltr">${c.a} − ${k} − ${c.b - k} = ${c.r}</div><div class="fc-ask">יורדים לעשר וממשיכים</div>`;
+  };
+  const say = c => c.op ? `${heNum(c.a)} ${c.op === '+' ? 'ועוד' : 'פחות'} ${heNum(c.b)} שווה ${heNum(c.r)}` : heNum(c.n);
+  const front = c => c.op ? `<div class="fc-ex" dir="ltr">${fcExTxt(c)} = <span class="q">?</span></div>` : c.t === 'num' ? `<div class="fc-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fc-pic">${fcQty(c.n)}</div><div class="fc-ask">כמה יש?</div>` : `<div class="fc-word" data-raw>${heNum(c.n)}</div>`;
+  const back = c => c.op ? `<div class="fc-ex" dir="ltr">${fcExTxt(c)} = <b>${c.r}</b></div>${hint(c)}` : `<div class="fc-big sm" dir="ltr">${fmt(c.n)}</div><div class="fc-word sm" data-raw>${heNum(c.n)}</div>${c.n > 0 ? `<div class="fc-pic sm">${fcQty(c.n)}</div>` : ''}`;
   const show = () => {
     clearTimeout(st.timer); stopSpeak();
     const c = cards[st.i];
@@ -13881,7 +13917,7 @@ function fcRun(p, only) {
     if ($('fcFlip')) $('fcFlip').onclick = flip;
     if (!st.flip && p.speed) st.timer = setTimeout(flip, p.speed * 1000);
     const next = ok => { if (ok) st.yes++; else st.miss.push(c); st.i++; st.flip = false; if (st.i < cards.length) show(); else done(); };
-    if ($('fcYes')) { $('fcYes').onclick = () => next(true); $('fcNo').onclick = () => next(false); $('fcSay').onclick = e => speak(heNum(c.n), e.currentTarget); }
+    if ($('fcYes')) { $('fcYes').onclick = () => next(true); $('fcNo').onclick = () => next(false); $('fcSay').onclick = e => speak(say(c), e.currentTarget); }
     window.scrollTo(0, 0);
   };
   const done = () => {
@@ -13892,7 +13928,7 @@ function fcRun(p, only) {
       <div class="topbar"><span class="title">⚡ כרטיסי הברקה</span><button class="secondary" id="fcOut">${ic('home')} חזרה</button></div>
       <div class="card center"><div class="path-trophy">${all ? '🏆' : st.yes >= cards.length * 0.7 ? '🌟' : '💪'}</div>
         <h2>ידעתי ${st.yes} מתוך ${cards.length}</h2>
-        ${st.miss.length ? `<p>כדאי לחזור על: <span dir="ltr">${st.miss.map(c => fmt(c.n)).join(', ')}</span></p>` : '<p>כל הכבוד! ידעת את כל הכרטיסים 🎉</p>'}
+        ${st.miss.length ? `<p>כדאי לחזור על: <span dir="ltr">${st.miss.map(c => c.op ? `${fcExTxt(c)} = ${c.r}` : fmt(c.n)).join(', ')}</span></p>` : '<p>כל הכבוד! ידעת את כל הכרטיסים 🎉</p>'}
         <div class="actions" style="justify-content:center">${st.miss.length ? `<button id="fcAgainMiss" class="race-go">🔁 רק מה שעוד לא ידעתי (${st.miss.length})</button>` : ''}<button id="fcAgain" class="secondary">⚡ סבב חדש</button></div></div>`;
     $('fcOut').onclick = fcHome;
     $('fcAgain').onclick = () => fcRun(p);
