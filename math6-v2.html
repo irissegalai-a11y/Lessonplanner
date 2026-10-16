@@ -1209,8 +1209,10 @@
   .fc-type .nm { font-weight: 700; font-size: 1.2rem; } .fc-type .ds { font-size: 0.9rem; color: #5f5a50; }
   .fc-type.on { background: #f2c94c; box-shadow: 3px 4px 0 #1f1e1c; }
   .fc-prog { text-align: center; font-weight: 700; margin: 6px 0; color: #5f5a50; }
-  .fc-card { font: inherit; color: #1f1e1c; display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(92vw, 640px); min-height: 52vh; margin: 8px auto 14px; background: #fffdf8; border: 4px solid #1f1e1c; border-radius: 26px; box-shadow: 6px 8px 0 #1f1e1c; cursor: pointer; position: relative; overflow: hidden; padding: 20px; }
+  .fc-card { font: inherit; color: #1f1e1c; display: flex; flex-direction: column; align-items: center; justify-content: center; width: calc(100% - 8px); max-width: 640px; box-sizing: border-box; min-height: min(52vh, 460px); margin: 8px auto 14px; background: #fffdf8; border: 4px solid #1f1e1c; border-radius: 26px; box-shadow: 6px 8px 0 #1f1e1c; cursor: pointer; position: relative; overflow: hidden; padding: 20px; }
   .fc-card.flipped { background: #eef6ff; animation: fcflip 0.35s ease; }
+  .fc-card:hover, .fc-card:focus, .fc-card:active { background: #fffdf8; color: #1f1e1c; box-shadow: 6px 8px 0 #1f1e1c; transform: none; }
+  .fc-card.flipped:hover, .fc-card.flipped:focus, .fc-card.flipped:active { background: #eef6ff; }
   @keyframes fcflip { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
   .fc-face { display: flex; flex-direction: column; align-items: center; gap: 12px; }
   .fc-big { font-family: 'Assistant', sans-serif; font-weight: 800; font-size: clamp(5rem, 22vw, 11rem); line-height: 1; }
@@ -1222,6 +1224,20 @@
   .fc-pic .fc-frame { width: min(40vw, 240px); }
   .fc-pic.sm svg { width: min(60vw, 300px); } .fc-pic.sm .fc-frame { width: min(30vw, 170px); }
   .fc-ask { font-size: 1.6rem; font-weight: 700; }
+  /* בטלפון: התוכן בכרטיס גדול יותר, והכפתורים בשורה אחת */
+  @media (max-width: 600px) {
+    .fc-card { padding: 14px 10px; }
+    .fc-big.sm { font-size: clamp(4.5rem, 24vw, 7rem); }
+    .fc-word.sm { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+    .fc-pic svg, .fc-pic.sm svg { width: 92%; }
+    .fc-pic .fc-frame, .fc-pic.sm .fc-frame { width: calc(50% - 6px); min-width: 0; }
+    .fc-pic .fc-frame:only-child, .fc-pic.sm .fc-frame:only-child { width: 70%; }
+    .fc-pic { flex-wrap: nowrap; width: 100%; gap: 8px; }
+    .fc-ex { font-size: clamp(3rem, 15vw, 5rem); }
+    .fc-ex.sm { font-size: clamp(1.6rem, 7.5vw, 2.4rem); }
+    .fc-card + .actions { flex-wrap: wrap; gap: 8px; }
+    .fc-card + .actions button { padding: 10px 12px; font-size: 1rem; white-space: nowrap; }
+  }
   .fc-ex { font-family: 'Assistant', sans-serif; font-weight: 800; font-size: clamp(3.6rem, 16vw, 8rem); line-height: 1.1; white-space: nowrap; }
   .fc-ex .q { color: #d9482b; }
   /* כרטיסים להדפסה */
@@ -1392,7 +1408,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
