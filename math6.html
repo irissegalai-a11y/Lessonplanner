@@ -1392,7 +1392,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13866,31 +13866,48 @@ const fcPick = (range, used) => { const lo = range <= 10 ? 0 : 1; for (let k = 0
 
 function fcHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; stopSpeak(); navPush('fc');
-  const p = fcPrefs(), ex = fcIsEx(p.type);
-  if (ex && p.range > 20) p.range = 20;
-  const chips = (key, list, lab) => `<div class="sc-opt"><b>${lab}</b> <span class="sc-chips">${list.map(([v, n]) => `<button type="button" class="sc-chip btn${p[key] === v ? ' on' : ''}" data-fck="${key}" data-fcv="${v}">${n}</button>`).join('')}</span></div>`;
+  const tile = ([v, n, d]) => `<button type="button" class="fc-type" data-fct="${v}"><span class="nm">${n}</span><span class="ds">${d}</span></button>`;
   app.innerHTML = `
     <div class="topbar noprint"><span class="title">⚡ כרטיסי הברקה</span><button class="secondary" id="fcBack">${ic('home')} לדף הבית</button></div>
-    <div class="card race-intro noprint"><p class="race-how">כרטיס מופיע – אומרים בקול מה רואים – ו<b>הופכים</b> לבדוק. מתאים גם להקרנה בכיתה.</p></div>
+    <div class="card race-intro noprint"><p class="race-how">בוחרים סוג כרטיסים – ובחלון שנפתח קובעים טווח וקצב, ומתחילים או מדפיסים.</p></div>
     <h2 class="noprint">קוראים ומזהים מספרים</h2>
-    <div class="fc-types noprint">${FC_TYPES.map(([v, n, d]) => `<button type="button" class="fc-type${p.type === v ? ' on' : ''}" data-fct="${v}"><span class="nm">${n}</span><span class="ds">${d}</span></button>`).join('')}</div>
+    <div class="fc-types noprint">${FC_TYPES.map(tile).join('')}</div>
     <h2 class="noprint">תרגילים בהברקה</h2>
-    <div class="fc-types noprint">${FC_EX.map(([v, n, d]) => `<button type="button" class="fc-type${p.type === v ? ' on' : ''}" data-fct="${v}"><span class="nm">${n}</span><span class="ds">${d}</span></button>`).join('')}</div>
-    <div class="card noprint">
-      ${p.type === 'bridge' ? '<div class="sc-opt"><b>מספרים:</b> עד 20 (תמיד עוברים את העשר)</div>' : chips('range', ex ? FC_RANGES.filter(r => r[0] <= 20) : FC_RANGES, ex ? 'התוצאה / המספר הגדול:' : 'מספרים:')}
+    <div class="fc-types noprint">${FC_EX.map(tile).join('')}</div>
+    <div id="wsout"></div>`;
+  $('fcBack').onclick = home;
+  app.querySelectorAll('[data-fct]').forEach(b => b.onclick = () => fcDialog(b.dataset.fct));
+  window.scrollTo(0, 0);
+}
+// חלון הגדרות לסוג הכרטיסים שנבחר: טווח, פעולה, כמות וקצב – ומשם מתחילים או מדפיסים
+function fcDialog(type) {
+  const p = fcPrefs(); p.type = type;
+  const ex = fcIsEx(type); if (ex && p.range > 20) p.range = 20;
+  const T = FC_ALL.find(x => x[0] === type);
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', esc); };
+  const esc = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', esc);
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  const chips = (key, list, lab) => `<div class="sc-opt"><b>${lab}</b> <span class="sc-chips">${list.map(([v, n]) => `<button type="button" class="sc-chip btn${p[key] === v ? ' on' : ''}" data-fck="${key}" data-fcv="${v}">${n}</button>`).join('')}</span></div>`;
+  const draw = () => {
+    ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="fcdT">
+      <h2 id="fcdT">${T[1]}</h2>
+      <p class="small muted" style="margin-top:0">${T[2]}</p>
+      ${type === 'bridge' ? '<div class="sc-opt"><b>מספרים:</b> עד 20 (תמיד עוברים את העשר)</div>' : chips('range', ex ? FC_RANGES.filter(r => r[0] <= 20) : FC_RANGES, ex ? 'התוצאה / המספר הגדול:' : 'מספרים:')}
       ${ex ? chips('op', FC_OPS, 'פעולה:') : ''}
       ${chips('n', [[10, '10 כרטיסים'], [20, '20 כרטיסים']], 'כמה:')}
       ${chips('speed', [[0, 'הופכים בלחיצה'], [3, 'הברקה – 3 שניות'], [5, '5 שניות']], 'קצב:')}
-      <div class="actions"><button id="fcGo" class="race-go">⚡ מתחילים</button><button id="fcPr" class="secondary">${ic('printer')} כרטיסים להדפסה</button></div>
-      <p class="small muted">בהדפסה: 8 כרטיסים בעמוד, בצד אחד – רק גוזרים.</p>
-    </div>
-    <div id="wsout"></div>`;
-  $('fcBack').onclick = home;
-  app.querySelectorAll('[data-fct]').forEach(b => b.onclick = () => { p.type = b.dataset.fct; fcSave(p); fcHome(); });
-  app.querySelectorAll('[data-fck]').forEach(b => b.onclick = () => { p[b.dataset.fck] = +b.dataset.fcv; fcSave(p); fcHome(); });
-  $('fcGo').onclick = () => fcRun(p);
-  $('fcPr').onclick = () => { fcPrint(p); window.print(); };
-  window.scrollTo(0, 0);
+      <div class="actions" style="justify-content:center"><button id="fcGo" class="race-go">⚡ מתחילים</button><button id="fcPr" class="secondary">${ic('printer')} הדפסה</button><button id="fcNo" class="ghost">ביטול</button></div>
+      <p class="small muted" style="text-align:center">בהדפסה: 8 כרטיסים בעמוד, בצד אחד – רק גוזרים.</p>
+    </div>`;
+    ov.querySelectorAll('[data-fck]').forEach(b => b.onclick = () => { p[b.dataset.fck] = +b.dataset.fcv; fcSave(p); draw(); });
+    ov.querySelector('#fcGo').onclick = () => { fcSave(p); close(); fcRun(p); };
+    ov.querySelector('#fcPr').onclick = () => { fcSave(p); close(); fcPrint(p); window.print(); };
+    ov.querySelector('#fcNo').onclick = close;
+  };
+  draw();
+  setTimeout(() => { const b = ov.querySelector('#fcGo'); if (b) b.focus({ preventScroll: true }); }, 30);
 }
 function fcMake(p, n) {
   const used = new Set(), types = ['num', 'qty', 'word'], ex = fcIsEx(p.type), rng = ex ? Math.min(p.range, 20) : p.range;
