@@ -1226,16 +1226,13 @@
   .fcp-h { font-weight: 700; font-size: 1rem; margin-bottom: 3mm; } .fcp-h span { font-weight: 400; font-size: 0.85rem; color: #555; margin-inline-start: 8px; }
   .fcp-grid { display: grid; grid-template-columns: 1fr 1fr; }
   .fcp-grid { border-top: 1.2px solid #000; border-right: 1.2px solid #000; }
-  .fcp-card { aspect-ratio: 93 / 86; border-left: 1.2px solid #000; border-bottom: 1.2px solid #000; box-sizing: border-box; display: grid; grid-template-rows: 1fr 1fr; container-type: inline-size; break-inside: avoid; }
-  .fcp-f, .fcp-b { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1cqw; padding: 3cqw; overflow: hidden; text-align: center; }
-  .fcp-f { border-bottom: 1.5px dashed #888; }
-  .fcp-b { transform: rotate(180deg); background: #f6f6f6; }
-  .fcp-big { font-weight: 800; font-size: 30cqw; line-height: 1; } .fcp-big.a { font-size: 18cqw; }
-  .fcp-ex { font-weight: 800; font-size: 15cqw; line-height: 1.1; white-space: nowrap; } .fcp-b .fcp-ex { font-size: 12cqw; }
-  .fcp-word { font-weight: 700; font-size: 9cqw; line-height: 1.25; }
-  .fcp-sm { font-size: 7cqw; color: #333; }
-  .fcp-pic { display: flex; gap: 2cqw; justify-content: center; } .fcp-pic svg { height: 30cqw; width: auto; max-width: 88cqw; }
-  .fcp-pic .fc-frame { height: 18cqw; } .fc-ex b { color: #2f7a73; }
+  .fcp-card { aspect-ratio: 93 / 64; border-left: 1.2px solid #000; border-bottom: 1.2px solid #000; box-sizing: border-box; display: grid; container-type: inline-size; break-inside: avoid; }
+  .fcp-f { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1cqw; padding: 3cqw; overflow: hidden; text-align: center; }
+  .fcp-big { font-weight: 800; font-size: 36cqw; line-height: 1; }
+  .fcp-ex { font-weight: 800; font-size: 17cqw; line-height: 1.1; white-space: nowrap; }
+  .fcp-word { font-weight: 700; font-size: 11cqw; line-height: 1.25; }
+  .fcp-pic { display: flex; gap: 2cqw; justify-content: center; } .fcp-pic svg { height: 40cqw; width: auto; max-width: 88cqw; }
+  .fcp-pic .fc-frame { height: 19cqw; } .fc-ex b { color: #2f7a73; }
   .fc-ex.sm { font-size: clamp(1.8rem, 7vw, 3rem); color: #3d3a33; }
   .fc-timer { position: absolute; bottom: 0; right: 0; height: 8px; background: #f2c94c; width: 100%; animation: fctime linear forwards; }
   @keyframes fctime { from { width: 100%; } to { width: 0; } }
@@ -1393,7 +1390,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ק</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13895,7 +13892,7 @@ function fcHome() {
       ${chips('n', [[10, '10 כרטיסים'], [20, '20 כרטיסים']], 'כמה:')}
       ${chips('speed', [[0, 'הופכים בלחיצה'], [3, 'הברקה – 3 שניות'], [5, '5 שניות']], 'קצב:')}
       <div class="actions"><button id="fcGo" class="race-go">⚡ מתחילים</button><button id="fcPr" class="secondary">${ic('printer')} כרטיסים להדפסה</button></div>
-      <p class="small muted">בהדפסה: 6 כרטיסים בעמוד. גוזרים ומקפלים – השאלה מקדימה והתשובה מאחור, כך שהמורה רואה את התשובה כשהכרטיס מופנה לכיתה.</p>
+      <p class="small muted">בהדפסה: 8 כרטיסים בעמוד, בצד אחד – רק גוזרים.</p>
     </div>
     <div id="wsout"></div>`;
   $('fcBack').onclick = home;
@@ -13913,14 +13910,13 @@ function fcMake(p, n) {
 const fcLabel = p => { const ex = fcIsEx(p.type), rng = ex ? Math.min(p.range, 20) : p.range; return `${(FC_ALL.find(x => x[0] === p.type) || FC_TYPES[0])[1].replace(/^\S+ /, '')} · ${p.type === 'bridge' ? 'עד 20' : (FC_RANGES.find(x => x[0] === rng) || FC_RANGES[2])[1]}${ex && p.op === 1 ? ' · חיבור' : ex && p.op === 2 ? ' · חיסור' : ''}`; };
 // דרך העשר בשבירת עשרת: 8 + 2 + 3 = 13 / 13 − 3 − 2 = 8
 const fcPath = c => { if (c.t !== 'bridge') return ''; const k = c.op === '+' ? 10 - c.a : c.a - 10; return c.op === '+' ? `${c.a} + ${k} + ${c.b - k} = ${c.r}` : `${c.a} − ${k} − ${c.b - k} = ${c.r}`; };
-// כרטיסים להדפסה: 6 בעמוד. גוזרים לאורך הקו ומקפלים לאורך המקווקו – התשובה (הפוכה בדף) יוצאת ישרה בגב הכרטיס
+// כרטיסים להדפסה: צד אחד בלבד, 8 בעמוד – רק גוזרים
 function fcPrint(p) {
-  const N = Math.ceil(p.n / 6) * 6, cards = fcMake(p, N), label = fcLabel(p);
+  const N = Math.ceil(p.n / 8) * 8, cards = fcMake(p, N), label = fcLabel(p);
   const front = c => c.op ? `<div class="fcp-ex" dir="ltr">${fcExTxt(c)} = ?</div>` : c.t === 'num' ? `<div class="fcp-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fcp-pic">${fcQty(c.n)}</div>` : `<div class="fcp-word" data-raw>${heNum(c.n)}</div>`;
-  const back = c => c.op ? `<div class="fcp-ex" dir="ltr">${fcExTxt(c)} = <b>${c.r}</b></div>${c.t === 'bridge' ? `<div class="fcp-sm" dir="ltr">${fcPath(c)}</div>` : ''}` : `<div class="fcp-big a" dir="ltr">${fmt(c.n)}</div><div class="fcp-sm" data-raw>${heNum(c.n)}</div>`;
-  const card = c => `<div class="fcp-card"><div class="fcp-f">${front(c)}</div><div class="fcp-b">${back(c)}</div></div>`;
+  const card = c => `<div class="fcp-card"><div class="fcp-f">${front(c)}</div></div>`;
   const pages = [];
-  for (let i = 0; i < N; i += 6) pages.push(`<section class="ws-page fcp-page"><div class="fcp-h">⚡ כרטיסי הברקה · ${label} <span>✂ גוזרים לאורך הקו · מקפלים לאורך המקווקו – התשובה בגב</span></div><div class="fcp-grid">${cards.slice(i, i + 6).map(card).join('')}</div></section>`);
+  for (let i = 0; i < N; i += 8) pages.push(`<section class="ws-page fcp-page"><div class="fcp-h">⚡ כרטיסי הברקה · ${label} <span>✂ גוזרים לאורך הקווים</span></div><div class="fcp-grid">${cards.slice(i, i + 8).map(card).join('')}</div></section>`);
   $('wsout').innerHTML = pages.join('');
   $('wsout').dataset.what = 'כרטיסי הברקה: ' + label;
   track('כרטיסי הברקה – הדפסה', label);
