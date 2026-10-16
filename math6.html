@@ -1408,7 +1408,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7454,6 +7454,11 @@ function home() {
     try { sessionStorage.setItem('math-tab', homeTab); } catch (e) {}
     app.querySelectorAll('[data-tab]').forEach(x => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-selected', on); });
     app.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== homeTab; });
+    // בטלפון התפריט תופס כמה שורות – גוללים ישר לתוכן שנפתח, כדי שלא יצטרכו לחפש אותו למטה
+    if (window.matchMedia('(max-width: 700px)').matches) {
+      const pn = app.querySelector(`[data-panel="${homeTab}"]`);
+      if (pn) { const y = pn.getBoundingClientRect().top + window.scrollY - 10; window.scrollTo({ top: y, behavior: 'smooth' }); }
+    }
   });
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
   $('raceGo').onclick = () => raceHome();
