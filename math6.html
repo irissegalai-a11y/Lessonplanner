@@ -183,7 +183,11 @@
   .fracin input.w { width: 64px; height: 56px; }
   .fracin-note { font-size: 0.9rem; color: var(--muted); width: 100%; }
 
-  .choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; width: 100%; }
+  .choices { display: grid; grid-template-columns: 1fr; gap: 8px; width: 100%; }
+  .choices.pics { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  div.choices > button { display: flex; align-items: center; gap: 10px; justify-content: flex-start; text-align: right; }
+  div.choices.pics > button { flex-direction: column; justify-content: center; text-align: center; }
+  .chl { font-weight: 800; flex-shrink: 0; }
   .choices button {
     background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: none;
     font-size: 1.2rem; padding: 12px; text-align: center; line-height: 1.6;
@@ -405,7 +409,7 @@
   .wsbox { display: inline-block; width: 34px; height: 28px; border: 1.5px solid #000; border-radius: 3px; }
   .wsbox.big { height: 44px; }
   .wsbar { width: 40px; height: 2px; background: #000; }
-  .wschoices { padding-right: 40px; margin-top: 6px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 4px 16px; line-height: 2; }
+  .wschoices { padding-right: 40px; margin-top: 6px; display: grid; grid-template-columns: 1fr; gap: 2px; line-height: 2; }
   .wscheck { font-size: 1.2rem; }
   .wsspace { padding-right: 40px; margin-top: 6px; color: #555; font-size: 0.9rem; }
   .wsspace div { border-bottom: 1px dashed #aaa; height: 1.9em; }
@@ -422,7 +426,8 @@
   .wsnum, .ex-num { width: 28px; height: 28px; font-size: 0.95rem; }
   .ws-page .fig, .ws-page .ex-q .fig { max-width: 100%; width: 100%; max-height: 5.2cm; margin: 2px auto; }
   .wsans, .ex-q .wsans, .wschoices, .ex-choices, .wsspace, .ex-work { padding-right: 0; }
-  .wschoices, .ex-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; line-height: 1.9; font-size: 0.98rem; margin-top: 4px; }
+  .wschoices, .ex-choices { display: grid; grid-template-columns: 1fr; gap: 0; line-height: 1.8; font-size: 0.98rem; margin-top: 4px; }
+  .wschoices.pics, .ex-choices.pics { grid-template-columns: 1fr 1fr; gap: 0 10px; }
   .ex-grid { flex: 0 0 44%; margin: 2px 0; min-height: 2.6cm; }
   .ex-grid.big { min-height: 4cm; }
   .ex-grid.sm { min-height: 2.2cm; }
@@ -807,7 +812,7 @@
   .mil-lf:disabled { opacity: 0.35; text-decoration: line-through; box-shadow: none; }
   .mil-qn { display: flex; justify-content: space-between; align-items: center; color: #5f5a50; margin-bottom: 8px; }
   .mil-qn b { font-family: var(--hand, inherit); font-size: 1.5rem; color: #1f1e1c; }
-  .mil-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .mil-opts { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0; }
   .mil-opt { display: flex; align-items: center; gap: 12px; justify-content: flex-start; text-align: right; background: #fffdf8; color: #1f1e1c; border: 2px solid #1f1e1c; border-radius: 30px 10px 30px 10px; box-shadow: 2px 3px 0 #1f1e1c; font-family: 'Assistant', sans-serif; font-weight: 600; font-size: clamp(1.1rem, 2.2vw, 1.5rem); padding: 10px 16px; min-height: 60px; }
   .mil-opt.sel { background: rgba(239, 201, 106, 0.7); }
   .mil-opt.right { background: rgba(157, 178, 122, 0.75); }
@@ -1036,7 +1041,8 @@
   .jeo-qhead b { font-size: 2rem; }
   .jeo-qtext { font-size: clamp(1.5rem, 3.2vw, 2.3rem); line-height: 1.7; }
   .jeo-q .fig { max-width: 100%; }
-  .jeo-choices { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: clamp(1.2rem, 2.4vw, 1.7rem); }
+  .jeo-choices.pics { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important; }
+  .jeo-choices { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 8px; font-size: clamp(1.2rem, 2.4vw, 1.7rem); }
   .jeo-choices li { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border: 2px solid #1f1e1c; border-radius: 12px; background: #fffdf8; }
   .jl { font-family: var(--hand, inherit); font-weight: 700; width: 1.6em; height: 1.6em; border-radius: 50%; background: #1f1e1c; color: #fbf8f1; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .jeo-tools { display: flex; align-items: center; gap: 14px; margin: 14px 0; }
@@ -1054,7 +1060,15 @@
   .jeo-rank { list-style: none; padding: 0; max-width: 360px; margin: 16px auto; }
   .jeo-rank li { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1.5px dashed #cfc6b4; font-size: 1.2rem; }
   .jeo-rank li b { margin-inline-start: auto; font-family: var(--hand, inherit); font-size: 1.5rem; }
-  @media (max-width: 640px) { .jeo-board { gap: 5px; } .jeo-cell { min-height: 54px; box-shadow: 2px 2px 0 #1f1e1c; } .jeo-head { min-height: 52px; } .jeo-team { min-width: 110px; } }
+  @media (max-width: 640px) {
+    .jeo-cell, body.jeo-full .jeo-cell { font-size: min(6vw, calc(70vw / var(--cols, 6) / 2.2)); min-height: 52px; overflow: hidden; }
+    body.jeo-full .jeo-head { font-size: min(3.6vw, 1rem); }
+    body.jeo-full .wrap { padding-left: 8px; padding-right: 8px; }
+    .lp-bar { padding: 4px 8px; gap: 4px 8px; }
+    .lp-step { font-size: 0.8rem; padding: 2px 7px; }
+    .lp-nav button, .lp-bar #lpEnd { padding: 6px 12px; font-size: 1rem; }
+  }
+  @media (max-width: 640px) { .jeo-board { gap: 5px; } .jeo-cell { box-shadow: 2px 2px 0 #1f1e1c; } .jeo-head { min-height: 52px; } .jeo-team { min-width: 110px; } }
   .gbar { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 12px 0 4px; font-size: 1.2rem; }
   .gbar b { font-size: 1.45rem; }
   .gswitch { display: inline-flex; align-items: center; gap: 8px; color: #1f1e1c; background: #fffdf8; font-weight: 700; font-size: 1.2rem; text-decoration: none; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; padding: 8px 18px; box-shadow: 3px 4px 0 #1f1e1c; font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; }
@@ -1414,7 +1428,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קטו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6665,7 +6679,7 @@ function renderLesson() {
         <div class="qtext">${tr.q}</div>
         <div class="answer-area">
           ${tr.type === 'choice'
-            ? `<div class="choices">${tr.choices.map((x, i) => `<button data-c="${i}">${x}</button>`).join('')}</div>`
+            ? `<div class="choices${chPics(tr.choices) ? ' pics' : ''}">${tr.choices.map((x, i) => `<button data-c="${i}">${chLet(i)} <span class="cht">${x}</span></button>`).join('')}</div>`
             : `<span class="lbl">תשובה:</span><input class="ans" data-ans inputmode="decimal" autocomplete="off" aria-label="תשובה"><button data-check>בדיקה ✓</button>`}
         </div>
         <div class="fb" data-fb aria-live="polite"></div>
@@ -6970,6 +6984,9 @@ function answerHTML(q, a) {
   return M(`${w ? w : ''}${F(n == null ? '?' : n, d == null ? '?' : d)}`);
 }
 
+// אפשרויות בחירה: אות ונקודה (א. ב. ג.), אחת מתחת לשנייה. אפשרויות עם ציורים – בשתי עמודות
+const CH_L = 'אבגדהוזח', chLet = i => `<b class="chl">${CH_L[i]}.</b>`;
+const chPics = list => list.some(c => /<svg|<img|class="fig/.test(String(c)));
 function correctHTML(q) {
   if (q.type === 'num') return M(fmt(q.ans)) + (q.unit ? ' ' + q.unit : '');
   if (q.type === 'choice') return q.choices[q.ans];
@@ -7778,7 +7795,7 @@ function inputHTML(q) {
       </span>
     </span>
     <span class="fracin-note">${q.noWhole ? 'כתבו מונה ומכנה.' : 'אם התשובה גדולה מ-1, כתבו אותה כשבר מעורב (שלם + שבר). אם התשובה מספר שלם – כתבו רק בתיבה "שלם".'}</span>`;
-  return `<div class="choices">${q.choices.map((c, i) => `<button data-c="${i}">${c}</button>`).join('')}</div>`;
+  return `<div class="choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<button data-c="${i}">${chLet(i)} <span class="cht">${c}</span></button>`).join('')}</div>`;
 }
 
 function titleText() {
@@ -7859,7 +7876,7 @@ function renderQ() {
     if ($('prevQ')) $('prevQ').onclick = () => simGo(state.i - 1);
     if ($('simDone')) $('simDone').onclick = simSubmitAsk;
   }
-  if ($('speakBtn')) $('speakBtn').onclick = e => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.join('. ') : ''), e.currentTarget);
+  if ($('speakBtn')) $('speakBtn').onclick = e => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.map((c, i) => CH_L[i] + ', ' + c).join('. ') : ''), e.currentTarget);
   // כיתה א': מקריאים כל שאלה אוטומטית (רק אחרי שהילד כבר לחץ משהו בדף – הדפדפן דורש זאת)
   if (GRADE === 1 && !state.sim && $('speakBtn') && canSpeak && (loadVoices(), heVoice) && navigator.userActivation && navigator.userActivation.hasBeenActive) setTimeout(() => { if ($('speakBtn')) $('speakBtn').click(); }, 350);
   if ($('go')) $('go').onclick = submit;
@@ -8689,7 +8706,7 @@ function jeoOpen(key) {
     <div class="jeo-qhead" style="--c:${t.color}"><span>${t.name}</span><b>${cell.dbl ? `<span class="jx2" dir="ltr">×2</span> ` : ''}${v}</b></div>
     <div class="jeo-qtext">${q.text}</div>
     ${q.fig}
-    ${q.type === 'choice' ? `<ol class="jeo-choices">${q.choices.map((c, i) => `<li><span class="jl">${'אבגדה'[i]}</span>${c}</li>`).join('')}</ol>` : ''}
+    ${q.type === 'choice' ? `<ol class="jeo-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<li>${chLet(i)} <span>${c}</span></li>`).join('')}</ol>` : ''}
     <div class="jeo-tools"><button class="secondary" id="jT">${ic('clock')} 30 שניות</button><span class="jeo-clock" id="jClock"></span></div>
     <div id="jAns" class="jeo-ans" hidden>
       <div class="jeo-right">התשובה: <b>${correctHTML(q)}</b></div>
@@ -8826,7 +8843,7 @@ function milDraw() {
           <div class="jeo-qtext">${q.text}</div>
           ${q.fig}
         </div>
-        <div class="mil-opts">${q.choices.map((c, k) => `<button class="mil-opt${mil.hidden.includes(k) ? ' gone' : ''}" data-mo="${k}" ${mil.hidden.includes(k) ? 'disabled' : ''}><span class="jl">${MIL_L[k]}</span><span>${c}</span></button>`).join('')}</div>
+        <div class="mil-opts">${q.choices.map((c, k) => `<button class="mil-opt${mil.hidden.includes(k) ? ' gone' : ''}" data-mo="${k}" ${mil.hidden.includes(k) ? 'disabled' : ''}>${chLet(k)}<span>${c}</span></button>`).join('')}</div>
         <div id="mlBox"></div>
         <div class="actions" style="justify-content:center" id="mlAct">
           ${mil.i > 0 ? `<button class="ghost" id="mlTake">לפרוש עם ${shekel(MIL_LADDER[mil.i - 1])}</button>` : ''}
@@ -8879,7 +8896,7 @@ function milLock() {
     $('mlAct').innerHTML = `<button id="mlNext">${last ? 'למסך הזכייה ←' : 'לשאלה הבאה ←'}</button>`;
     $('mlNext').onclick = () => { if (last) return milEnd('win'); mil.i++; mil.hidden = []; mil.sel = null; mil.locked = false; milDraw(); };
   } else {
-    $('mlBox').innerHTML = `<div class="fb show bad"><div class="head">לא הפעם... התשובה הנכונה: ${MIL_L[q.ans]}</div>${q.exp}</div>`;
+    $('mlBox').innerHTML = `<div class="fb show bad"><div class="head">לא הפעם... התשובה הנכונה: ${MIL_L[q.ans]}.</div>${q.exp}</div>`;
     $('mlAct').innerHTML = `<button id="mlNext">לסיכום ←</button>`;
     $('mlNext').onclick = () => milEnd('lose');
   }
@@ -8957,9 +8974,9 @@ function mtDraw() {
           <div class="jeo-qtext">${q.text}</div>
           ${q.fig}
         </div>
-        <div class="mil-opts">${q.choices.map((c, k) => `<div class="mil-opt${mt.shown && k === q.ans ? ' right' : ''}${mt.shown && k !== q.ans ? ' dim' : ''}"><span class="jl">${MIL_L[k]}</span><span>${c}</span></div>`).join('')}</div>
+        <div class="mil-opts">${q.choices.map((c, k) => `<div class="mil-opt${mt.shown && k === q.ans ? ' right' : ''}${mt.shown && k !== q.ans ? ' dim' : ''}">${chLet(k)}<span>${c}</span></div>`).join('')}</div>
         ${mt.shown ? `
-          <div class="fb show ok"><div class="head">התשובה הנכונה: ${MIL_L[q.ans]}</div>${q.exp}</div>
+          <div class="fb show ok"><div class="head">התשובה הנכונה: ${MIL_L[q.ans]}.</div>${q.exp}</div>
           <div class="jeo-who">אילו קבוצות ענו נכון? (לחיצה מסמנת)</div>
           <div class="mt-mark">${mt.teams.map((tm, k) => `<button class="mt-tm${mt.right.has(k) ? ' on' : ''}" data-mk="${k}" style="--tc:${tm.color}">${mt.right.has(k) ? '✓ ' : ''}${esc(tm.name)}</button>`).join('')}</div>
           <div class="actions" style="justify-content:center"><button id="mtNext" class="race-go">${last ? 'לתוצאות ←' : 'לשאלה הבאה ←'}</button></div>`
@@ -9325,7 +9342,7 @@ function cqAsk(i) {
     <div class="jeo-qhead" style="--c:${team.color}"><span><b style="color:${team.color}">${esc(team.name)}</b> ${attack ? `תוקפים את השטח של <b style="color:${cq.teams[prev].color}">${esc(cq.teams[prev].name)}</b>` : 'כובשים משבצת'} · ${T.name}</span><b>${'●'.repeat(lv)}</b></div>
     <div class="jeo-qtext">${q.text}</div>
     ${q.fig || ''}
-    ${q.type === 'choice' ? `<ol class="jeo-choices">${q.choices.map((c, k) => `<li><span class="jl">${'אבגדה'[k]}</span>${c}</li>`).join('')}</ol>` : ''}
+    ${q.type === 'choice' ? `<ol class="jeo-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, k) => `<li>${chLet(k)} <span>${c}</span></li>`).join('')}</ol>` : ''}
     <div class="jeo-tools"><button class="secondary" id="cqT">${ic('clock')} 30 שניות</button><span class="jeo-clock" id="cqClock"></span></div>
     <div id="cqAns" class="jeo-ans" hidden>
       <div class="jeo-right">התשובה: <b>${correctHTML(q)}</b></div>
@@ -12246,7 +12263,7 @@ function wsQuestionHTML(q, n) {
   let ans;
   if (q.type === 'num') ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
-  else ans = `<div class="wschoices">${q.choices.map(c => `<div><span class="wscheck">☐</span> ${c}</div>`).join('')}</div>`;
+  else ans = `<div class="wschoices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
   const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
   return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${ans}</div>${grid}</div>`;
@@ -12254,7 +12271,7 @@ function wsQuestionHTML(q, n) {
 
 function examQuestionHTML(q, n) {
   let ans;
-  if (q.type === 'choice') ans = `<div class="ex-choices">${q.choices.map((c, i) => `<div><span class="ex-idx">${i + 1}</span><span class="ex-check"></span> ${c}</div>`).join('')}</div>`;
+  if (q.type === 'choice') ans = `<div class="ex-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
   else ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   const plain = q.text.replace(/<[^>]+>/g, '');
@@ -13789,8 +13806,11 @@ function lpBarDraw() {
   if (bar.querySelector('#lpPrevS')) bar.querySelector('#lpPrevS').onclick = () => lpStage(R0.k - 1);
   if (bar.querySelector('#lpNextS')) bar.querySelector('#lpNextS').onclick = () => lpStage(R0.k + 1);
   bar.querySelector('#lpEnd').onclick = lpStop;
+  // בטלפון הסרגל נשבר לכמה שורות – הדף מתחיל מתחתיו, כדי ששום דבר לא יוסתר
+  document.body.style.paddingTop = (bar.offsetHeight + 8) + 'px';
 }
 function lpStop() {
+  document.body.style.paddingTop = '';
   if (lpRunS) clearInterval(lpRunS.iv); lpRunS = null;
   const b = document.getElementById('lpBar'); if (b) b.remove(); document.body.classList.remove('lp-on');
   lpHome(true);
