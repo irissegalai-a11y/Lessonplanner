@@ -1219,7 +1219,7 @@
   .fc-big.sm { font-size: clamp(3.5rem, 14vw, 6rem); }
   .fc-word { font-size: clamp(2rem, 8vw, 3.6rem); font-weight: 700; text-align: center; line-height: 1.3; }
   .fc-word.sm { font-size: clamp(1.4rem, 5vw, 2.2rem); color: #3d3a33; }
-  .fc-pic { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .fc-pic { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; direction: ltr; }
   .fc-pic svg { width: min(78vw, 440px); height: auto; }
   .fc-pic .fc-frame { width: min(40vw, 240px); }
   .fc-pic.sm svg { width: min(60vw, 300px); } .fc-pic.sm .fc-frame { width: min(30vw, 170px); }
@@ -1249,7 +1249,7 @@
   .fcp-big { font-weight: 800; font-size: 36cqw; line-height: 1; }
   .fcp-ex { font-weight: 800; font-size: 17cqw; line-height: 1.1; white-space: nowrap; }
   .fcp-word { font-weight: 700; font-size: 11cqw; line-height: 1.25; }
-  .fcp-pic { display: flex; gap: 2cqw; justify-content: center; } .fcp-pic svg { height: 40cqw; width: auto; max-width: 88cqw; }
+  .fcp-pic { display: flex; gap: 2cqw; justify-content: center; direction: ltr; } .fcp-pic svg { height: 40cqw; width: auto; max-width: 88cqw; }
   .fcp-pic .fc-frame { height: 19cqw; } .fc-ex b { color: #2f7a73; }
   .fc-ex.sm { font-size: clamp(1.8rem, 7vw, 3rem); color: #3d3a33; }
   .fc-timer { position: absolute; bottom: 0; right: 0; height: 8px; background: #f2c94c; width: 100%; animation: fctime linear forwards; }
@@ -1408,7 +1408,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13850,9 +13850,9 @@ const FC_RANGES = [[6, 'עד 6'], [10, 'עד 10'], [20, 'עד 20'], [100, 'עד 
 const FC_OPS = [[3, 'חיבור וחיסור'], [1, 'רק חיבור'], [2, 'רק חיסור']];
 const fcPrefs = () => { const d = { type: 'num', range: GRADE <= 1 ? 20 : 100, n: 10, speed: 0, op: 3 }; try { return Object.assign(d, JSON.parse(localStorage.getItem(FC_KEY)) || {}); } catch (e) { return d; } };
 const fcSave = p => { try { localStorage.setItem(FC_KEY, JSON.stringify(p)); } catch (e) { /* לא חובה */ } };
-// מסגרת עשר (עד 20) – שתי מסגרות של 2×5
+// מסגרת עשר (עד 20) – שתי מסגרות של 2×5, ממלאים משמאל לימין (המלאה משמאל)
 function fcFrames(n) {
-  const fr = k => { let s = ''; for (let i = 0; i < 10; i++) { const x = 6 + (4 - i % 5) * 34, y = 6 + Math.floor(i / 5) * 34, on = i < k; s += `<rect x="${x}" y="${y}" width="34" height="34" fill="#fff" stroke="#1f1e1c" stroke-width="2"/>${on ? `<circle cx="${x + 17}" cy="${y + 17}" r="11" fill="${i < 5 ? '#d9482b' : '#4c5fd5'}"/>` : ''}`; } return `<svg viewBox="0 0 182 80" class="fc-frame" role="img" aria-label="${k}">${s}</svg>`; };
+  const fr = k => { let s = ''; for (let i = 0; i < 10; i++) { const x = 6 + (i % 5) * 34, y = 6 + Math.floor(i / 5) * 34, on = i < k; s += `<rect x="${x}" y="${y}" width="34" height="34" fill="#fff" stroke="#1f1e1c" stroke-width="2"/>${on ? `<circle cx="${x + 17}" cy="${y + 17}" r="11" fill="${i < 5 ? '#d9482b' : '#4c5fd5'}"/>` : ''}`; } return `<svg viewBox="0 0 182 80" class="fc-frame" role="img" aria-label="${k}">${s}</svg>`; };
   return n <= 10 ? fr(n) : fr(10) + fr(n - 10);
 }
 // עשרות ואחדות (ומאות): לוחות של 100, מוטות של 10, וקוביות בודדות
