@@ -1488,7 +1488,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7488,11 +7488,8 @@ function home() {
         <section class="panel" data-panel="tests" ${homeTab === 'tests' ? '' : 'hidden'}>
           <h2>${GRADE === 6 ? 'מבדקים' : 'מבחנים'}</h2>
           <div class="big-actions">
-            <button id="testfb" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב<span class="desc">20 שאלות מכל הנושאים, עם רמזים ועזרה תוך כדי</span></button>
-            <button id="test" class="secondary">${ic('clipboard')} ${TEST_NAME}<span class="desc">20 שאלות מכל הנושאים – הציון והפתרונות בסוף</span></button>
-            ${MK_HAS() ? `<button id="pathGo">🗺️ מסע לאוצר<span class="desc">מסלול אימון לקראת המבחן – משבצת לכל שאלה, אוספים כוכבים</span></button>` : ''}
+            <button id="testPick" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} – 20 שאלות מכל הנושאים<span class="desc">בוחרים: עם משוב תוך כדי, ציון בסוף, או עם שעון</span></button>
             ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת המבחן<span class="desc">שאלות בסגנון המבחן – הקנייה ותרגול לכל שאלה, ומבחן אימון להדפסה</span></button>` : ''}
-            <button id="sim" class="secondary">${ic('clock')} סימולציה עם שעון<span class="desc">כמו ${GRADE === 6 ? 'במבדק' : 'במבחן'} אמיתי: זמן מוגבל, אפשר לדלג ולחזור לשאלות</span></button>
           </div>
           ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
         </section>
@@ -7553,22 +7550,13 @@ function home() {
             <span class="gc-nm">משחק לכל הכיתה</span>
             <span class="gc-ds">ג'פרדי, כיבוש שטחים, מיליונר, מלחמה ובינגו – בקבוצות.</span>
           </button>
-          <button class="game-card" id="clsPrint">
-            <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('printer')}</span>
-            <span class="gc-nm">דפים להדפסה</span>
-            <span class="gc-ds">דפי עבודה, דפי תשובות ופתקי יציאה.</span>
-          </button>
-          <button class="game-card" id="succGo">
-            <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">⭐</span>
-            <span class="gc-nm">מבדקי הצלחה</span>
-            <span class="gc-ds">5 תרגילים על מיומנות אחת – בוחרים בדיוק מה לבדוק. 4 מבדקים בדף להדפסה, או על המסך ובקישור.</span>
-          </button>
         </section>` : ''}
         <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
           <h2>הדפסה</h2>
           <div class="print-links">
             <a class="btnlink printlink" href="${gq('print')}">${ic('printer')} דפי תרגול ומבחנים<span class="desc">לפי נושאים ורמה, עם דף תשובות</span></a>
             <a class="btnlink printlink" href="${gq('print')}#book">${ic('booklet')} חוברות לפי נושאים<span class="desc">עם תוכן עניינים, דף תשובות וקוד חוברת</span></a>
+            ${GRADE >= 5 && teacherOn() ? `<button type="button" class="btnlink printlink" id="cmpSheetP">${ic('printer')} שטחים מורכבים – דף עבודה ופתקי יציאה<span class="desc">6 צורות על רשת משבצות, דף תשובות ו-4 פתקי יציאה בעמוד</span></button>` : ''}
           </div>
         </section>
       </div>
@@ -7593,11 +7581,9 @@ function home() {
   $('gbGo').onclick = gbHome;
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
   if ($('pvwOff')) $('pvwOff').onclick = () => setPreview(false);
-  if ($('succGo')) {
-    $('succGo').onclick = succHome;
+  if ($('clsOpen')) {
     $('clsOpen').onclick = () => classSub('open');
     $('clsGames').onclick = () => classSub('games');
-    $('clsPrint').onclick = () => classSub('print');
   }
   $('warGo1').onclick = () => warHome('solo');
   $('tfGo0').onclick = () => tfHome();
@@ -7619,13 +7605,11 @@ function home() {
   if ($('succTab')) $('succTab').onclick = succHome;
   if ($('fcTab')) $('fcTab').onclick = fcHome;
   $('exitTab').onclick = exitHome;
-  $('test').onclick = () => startTest(false);
-  $('testfb').onclick = () => startTest(true);
-  $('sim').onclick = showSimPicker;
+  $('testPick').onclick = testPicker;
   if ($('mkGo')) $('mkGo').onclick = mkHome;
   if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
-  if ($('pathGo')) $('pathGo').onclick = () => pathHome();
+  if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
 }
@@ -7756,6 +7740,28 @@ function startPractice(topicId, opt = {}) {
   renderQ();
 }
 
+// בחירת סוג המבחן: עם משוב / ציון בסוף / סימולציה עם שעון
+function testPicker() {
+  const W = GRADE === 6 ? 'מבדק' : 'מבחן';
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="tpT">
+    <h2 id="tpT">${ic('clipboard')} ${W} – איך?</h2>
+    <div class="big-actions">
+      <button id="tpFb" class="secondary">💬 עם משוב<span class="desc">רמזים ועזרה תוך כדי – לומדים מכל שאלה</span></button>
+      <button id="tpEnd" class="secondary">📋 ציון בסוף<span class="desc">בלי עזרה – הציון והפתרונות בסוף, כמו ${W} אמיתי</span></button>
+      <button id="tpSim" class="secondary">${ic('clock')} עם שעון<span class="desc">זמן מוגבל, אפשר לדלג ולחזור לשאלות</span></button>
+    </div>
+    <div class="actions" style="justify-content:center"><button id="tpNo" class="ghost">↩ חזור</button></div>
+  </div>`;
+  ov.querySelector('#tpFb').onclick = () => { close(); startTest(true); };
+  ov.querySelector('#tpEnd').onclick = () => { close(); startTest(false); };
+  ov.querySelector('#tpSim').onclick = () => { close(); showSimPicker(); };
+  ov.querySelector('#tpNo').onclick = close;
+}
 function startTest(withFeedback) {
   navPush('view');
   const qs = buildTest();
