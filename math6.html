@@ -692,7 +692,7 @@
 
     /* מצב רגוע – בלי כתמי צבע ובלי קישוטים */
     /* כיתה א' – אותיות גדולות במסך השאלה */
-    html.g1 .qmain > .qhead .qtext { font-size: 1.65rem; line-height: 2.2; }
+    html.g1 .qmain .qhead .qtext { font-size: 1.65rem; line-height: 2.2; }
     html.g1 .qlayout input.ans { font-size: 1.8rem; }
     html.calm, html.calm body { background-image: none; }
     html.calm body::before, html.calm .hero-wrap::before, html.calm .doodle-line, html.calm .topic .ic::before { display: none; }
@@ -1008,6 +1008,30 @@
   .op-q .fig { max-height: 34vh; width: auto; max-width: 100%; }
   .op-list { padding-inline-start: 1.4em; }
   .op-list li { margin: 8px 0; }
+  /* מסך רחב (מחשב / מקרן): משתמשים בכל הרוחב, הציור ליד השאלה והתשובה ליד השקף – בלי לגלול */
+  @media (min-width: 1100px) {
+    .wrap:has(.qlayout), .wrap:has(.op-slide) { max-width: min(1280px, 94vw); }
+    body:has(.qlayout) .credit, body:has(.op-slide) .credit { display: none; }
+    .qmain .qcols { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); column-gap: 28px; align-items: start; }
+    .qmain .qcol-a, .qmain .qcol-b { display: block; }
+    .qmain .qcol-b .chartwrap svg, .qmain .qcol-b > .fig svg { max-height: 46vh; width: auto; max-width: 100%; }
+    .qcol-b > .fb:first-child, .qcol-b > .fb.show:first-of-type { margin-top: 0; }
+    .qcol-b > .fig, .qcol-b > .chartwrap { margin-top: 0; }
+    .qmain .qhead .qtext { font-size: 1.42rem; line-height: 1.8; }
+    .qmain .choices button { font-size: 1.3rem; padding: 8px 14px; }
+    .qmain .fb { font-size: 1.1rem; }
+    .op-body.with-a { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+    .op-body.with-a .op-a { margin-top: 0; }
+  }
+  @media (min-width: 1100px) and (max-height: 860px) {
+    .op-slide { padding-top: 14px; padding-bottom: 14px; }
+    .op-slide h2 { margin: 0 0 8px; }
+    .op-dots { margin: 2px 0 6px; }
+  }
+  /* תרגול: שתי "עמודות" – שאלה ותשובה / ציור ומשוב. במסך צר הכל אחד מתחת לשני, בסדר הרגיל */
+  .qcols { display: flex; flex-direction: column; }
+  .qcol-a, .qcol-b { display: contents; }
+  .qcols .qhead { order: 1; } .qcols .qcol-b > .fig, .qcols .qcol-b > .chartwrap { order: 2; } .qcols .answer-area { order: 3; } .qcols .actions { order: 4; } .qcols .fb { order: 5; } .qcols #guide { order: 6; }
   .sol { display: flex; flex-direction: column; gap: 6px; text-align: right; }
   .sol-ex { color: #3d3a33; }
   .sol-ans { font-size: 1.12em; padding-top: 6px; border-top: 2px dashed rgba(31,30,28,.25); }
@@ -1446,7 +1470,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קכ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7866,12 +7890,12 @@ function renderQ() {
      <div class="qlayout">
       <div class="qmain">
       <div class="qtag"><span class="qdot" style="--c:${t.color}"></span>${t.name}</div>
+      <div class="qcols"><div class="qcol-a">
       <div class="qhead">
         <span class="qnum" style="background:${t.color}">${state.i + 1}</span>
         <div class="qtext">${q.text}</div>
         ${canSpeak ? `<button class="ghost speak" id="speakBtn" title="הקראת השאלה" aria-label="הקראת השאלה">${ic('speaker')}</button>` : ''}
       </div>
-      ${q.fig || ''}
       <div class="answer-area" id="mainAns">${inputHTML(q)}</div>
       <div class="actions">
         ${state.sim && state.i > 0 ? '<button class="secondary" id="prevQ">→ לשאלה הקודמת</button>' : ''}
@@ -7881,8 +7905,10 @@ function renderQ() {
         ${practice && q.gen ? `<button class="secondary" id="exBtn">${ic('example')} דוגמה פתורה</button>` : ''}
         <button class="hidden" id="next">${state.i + 1 === total ? 'לסיכום 🏁' : 'לשאלה הבאה ←'}</button>
       </div>
+      </div><div class="qcol-b">${q.fig || ''}
       <div class="fb" id="fb" aria-live="polite"></div>
       <div id="guide" aria-live="polite"></div>
+      </div></div>
       </div>
       <aside class="qmargin hidden" id="qmargin" aria-label="הערות בשוליים" aria-live="polite">
         <div id="mhint"></div>
@@ -7900,6 +7926,7 @@ function renderQ() {
     if ($('prevQ')) $('prevQ').onclick = () => simGo(state.i - 1);
     if ($('simDone')) $('simDone').onclick = simSubmitAsk;
   }
+  { const cw = app.querySelector('.qcol-a .qtext > .chartwrap:last-child'), cb = app.querySelector('.qcol-b'); if (cw && cb) cb.prepend(cw); }
   if ($('speakBtn')) $('speakBtn').onclick = e => speak(q.text + (q.type === 'choice' ? '. האפשרויות: ' + q.choices.map((c, i) => CH_L[i] + ', ' + c).join('. ') : ''), e.currentTarget);
   // כיתה א': מקריאים כל שאלה אוטומטית (רק אחרי שהילד כבר לחץ משהו בדף – הדפדפן דורש זאת)
   if (GRADE === 1 && !state.sim && $('speakBtn') && canSpeak && (loadVoices(), heVoice) && navigator.userActivation && navigator.userActivation.hasBeenActive) setTimeout(() => { if ($('speakBtn')) $('speakBtn').click(); }, 350);
@@ -12170,8 +12197,8 @@ function opDraw() {
     <div class="op-dots">${op.slides.map((x, k) => `<span class="${k === op.k ? 'on' : k < op.k ? 'done' : ''}">${k + 1}. ${x.title}</span>`).join('')}</div>
     <div class="card op-slide">
       <h2>${s.title}</h2>
-      <div class="op-q">${s.q}</div>
-      ${op.show ? `<div class="op-a">${s.a}</div>` : ''}
+      <div class="op-body${op.show && s.a ? ' with-a' : ''}"><div class="op-q">${s.q}</div>
+      ${op.show ? `<div class="op-a">${s.a}</div>` : ''}</div>
       ${s.src ? `<div class="op-src">מקור: ${s.src}</div>` : ''}
     </div>
     <div class="actions" style="justify-content:center">
