@@ -1201,6 +1201,27 @@
     .lp-plan h2 { font-size: 1.25rem; }
     .lp-clock { margin-inline-start: 0; }
   }
+  .fc-entry { background: #fff4c7 !important; border-width: 3px !important; }
+  .fc-types { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 12px; }
+  .fc-type { font: inherit; display: flex; flex-direction: column; gap: 4px; padding: 14px; text-align: right; background: #fffdf8; color: #1f1e1c; border: 2.5px solid #1f1e1c; border-radius: 14px; cursor: pointer; }
+  .fc-type .nm { font-weight: 700; font-size: 1.2rem; } .fc-type .ds { font-size: 0.9rem; color: #5f5a50; }
+  .fc-type.on { background: #f2c94c; box-shadow: 3px 4px 0 #1f1e1c; }
+  .fc-prog { text-align: center; font-weight: 700; margin: 6px 0; color: #5f5a50; }
+  .fc-card { font: inherit; color: #1f1e1c; display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(92vw, 640px); min-height: 52vh; margin: 8px auto 14px; background: #fffdf8; border: 4px solid #1f1e1c; border-radius: 26px; box-shadow: 6px 8px 0 #1f1e1c; cursor: pointer; position: relative; overflow: hidden; padding: 20px; }
+  .fc-card.flipped { background: #eef6ff; animation: fcflip 0.35s ease; }
+  @keyframes fcflip { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
+  .fc-face { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .fc-big { font-family: 'Assistant', sans-serif; font-weight: 800; font-size: clamp(5rem, 22vw, 11rem); line-height: 1; }
+  .fc-big.sm { font-size: clamp(3.5rem, 14vw, 6rem); }
+  .fc-word { font-size: clamp(2rem, 8vw, 3.6rem); font-weight: 700; text-align: center; line-height: 1.3; }
+  .fc-word.sm { font-size: clamp(1.4rem, 5vw, 2.2rem); color: #3d3a33; }
+  .fc-pic { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .fc-pic svg { width: min(78vw, 440px); height: auto; }
+  .fc-pic .fc-frame { width: min(40vw, 240px); }
+  .fc-pic.sm svg { width: min(60vw, 300px); } .fc-pic.sm .fc-frame { width: min(30vw, 170px); }
+  .fc-ask { font-size: 1.6rem; font-weight: 700; }
+  .fc-timer { position: absolute; bottom: 0; right: 0; height: 8px; background: #f2c94c; width: 100%; animation: fctime linear forwards; }
+  @keyframes fctime { from { width: 100%; } to { width: 0; } }
   .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; text-align: center; }
   .pvw-btn { font: inherit; font-size: 0.95rem; font-weight: 600; color: #1f1e1c; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 10px 3px 10px 3px; padding: 4px 14px; cursor: pointer; }
   .pvw-btn:hover, .pvw-btn:focus-visible { box-shadow: 2px 3px 0 #1f1e1c; outline: none; }
@@ -1354,7 +1375,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 צד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7142,7 +7163,7 @@ const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: '�
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
-const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים|תרגול שרטוט|מבדק הצלחה$)/;
+const TRACK_TIMED = /^(משחק|כלי|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים|תרגול שרטוט|מבדק הצלחה$|כרטיסי הברקה$)/;
 const ACT_IDLE = 60000, ACT_TAIL = 10000;
 let actCur = null, actPaused = null;
 function actTick() {
@@ -7295,6 +7316,7 @@ function home() {
               </button>` : ''}
           </div>
           <div class="practice-more">
+            ${GRADE <= 2 ? `<button id="fcGoP" class="fc-entry">⚡ כרטיסי הברקה<span class="desc">קריאה וזיהוי של מספרים – רואים, אומרים, הופכים</span></button>` : ''}
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <button id="exitGo" class="secondary">${ic('clipboard')} כרטיס יציאה<span class="desc">3 שאלות על מה שלמדנו היום${staffOn() ? '' : ' – התוצאה נשלחת למורה'}</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -7382,6 +7404,11 @@ function home() {
             <span class="gc-nm">דפים להדפסה</span>
             <span class="gc-ds">דפי עבודה, דפי תשובות ופתקי יציאה.</span>
           </button>
+          ${GRADE <= 2 ? `<button class="game-card" id="fcGoC">
+            <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">⚡</span>
+            <span class="gc-nm">כרטיסי הברקה</span>
+            <span class="gc-ds">קריאה וזיהוי של מספרים – מקרינים, הכיתה אומרת בקול, והופכים.</span>
+          </button>` : ''}
           <button class="game-card" id="lpGo0">
             <span class="gc-ic" style="--gw:rgba(127,168,214,0.7)">🗓️</span>
             <span class="gc-nm">בונים שיעור</span>
@@ -7447,6 +7474,8 @@ function home() {
   app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => showLevelPicker(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   $('mix').onclick = () => showLevelPicker('mix');
+  if ($('fcGoP')) $('fcGoP').onclick = fcHome;
+  if ($('fcGoC')) $('fcGoC').onclick = fcHome;
   $('exitGo').onclick = exitHome;
   $('test').onclick = () => startTest(false);
   $('testfb').onclick = () => startTest(true);
@@ -13784,6 +13813,103 @@ function lpStage(k) {
   window.scrollTo(0, 0);
 }
 
+/* ---------- כרטיסי הברקה: קריאה וזיהוי של מספרים (כיתות א'–ב') ----------
+   צד אחד מראים, ואחרי רגע (או בלחיצה) הופכים: מספר, מילים, וכמות (מסגרת עשר / עשרות ואחדות). */
+const FC_KEY = 'math-fc-g' + GRADE;
+const FC_TYPES = [['num', '🔢 קוראים מספר', 'רואים מספר – אומרים אותו בקול'], ['qty', '🟡 כמה יש?', 'רואים נקודות או עשרות ואחדות – אומרים כמה'], ['word', '🔤 מילה ← מספר', 'קוראים את המספר במילים – אומרים או כותבים בספרות'], ['mix', '🎲 מעורב', 'כל הסוגים יחד']];
+const FC_RANGES = [[10, 'עד 10'], [20, 'עד 20'], [100, 'עד 100'], [1000, 'עד 1,000']];
+const fcPrefs = () => { const d = { type: 'num', range: GRADE <= 1 ? 20 : 100, n: 10, speed: 0 }; try { return Object.assign(d, JSON.parse(localStorage.getItem(FC_KEY)) || {}); } catch (e) { return d; } };
+const fcSave = p => { try { localStorage.setItem(FC_KEY, JSON.stringify(p)); } catch (e) { /* לא חובה */ } };
+// מסגרת עשר (עד 20) – שתי מסגרות של 2×5
+function fcFrames(n) {
+  const fr = k => { let s = ''; for (let i = 0; i < 10; i++) { const x = 6 + (4 - i % 5) * 34, y = 6 + Math.floor(i / 5) * 34, on = i < k; s += `<rect x="${x}" y="${y}" width="34" height="34" fill="#fff" stroke="#1f1e1c" stroke-width="2"/>${on ? `<circle cx="${x + 17}" cy="${y + 17}" r="11" fill="${i < 5 ? '#d9482b' : '#4c5fd5'}"/>` : ''}`; } return `<svg viewBox="0 0 182 80" class="fc-frame" role="img" aria-label="${k}">${s}</svg>`; };
+  return n <= 10 ? fr(n) : fr(10) + fr(n - 10);
+}
+// עשרות ואחדות (ומאות): לוחות של 100, מוטות של 10, וקוביות בודדות
+function fcBlocks(n) {
+  const h = Math.floor(n / 100), t = Math.floor(n % 100 / 10), u = n % 10; let x = 4, s = '';
+  for (let i = 0; i < h; i++) { s += `<rect x="${x}" y="4" width="50" height="50" fill="#f2c94c" stroke="#1f1e1c" stroke-width="1.5"/>`; for (let k = 1; k < 10; k++) s += `<line x1="${x + k * 5}" y1="4" x2="${x + k * 5}" y2="54" stroke="#b8902c" stroke-width="0.6"/><line x1="${x}" y1="${4 + k * 5}" x2="${x + 50}" y2="${4 + k * 5}" stroke="#b8902c" stroke-width="0.6"/>`; x += 56; }
+  for (let i = 0; i < t; i++) { s += `<rect x="${x}" y="4" width="8" height="50" fill="#6fb3ad" stroke="#1f1e1c" stroke-width="1.5"/>`; for (let k = 1; k < 10; k++) s += `<line x1="${x}" y1="${4 + k * 5}" x2="${x + 8}" y2="${4 + k * 5}" stroke="#2f7a73" stroke-width="0.6"/>`; x += 12; }
+  if (u) x += 4;
+  for (let i = 0; i < u; i++) { s += `<rect x="${x + (i % 3) * 10}" y="${44 - Math.floor(i / 3) * 10}" width="8" height="8" fill="#d98a9a" stroke="#1f1e1c" stroke-width="1.2"/>`; }
+  x += u ? 32 : 0;
+  return `<svg viewBox="0 0 ${Math.max(x, 60)} 58" class="fc-blocks" role="img" aria-label="${n}" dir="ltr">${s}</svg>`;
+}
+const fcQty = n => n <= 20 ? fcFrames(n) : fcBlocks(n);
+const fcPick = (range, used) => { const lo = range <= 10 ? 0 : 1; for (let k = 0; k < 60; k++) { const v = R(lo, range === 1000 ? 999 : range); if (!used.has(v)) { used.add(v); return v; } } return R(lo, range); };
+
+function fcHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; stopSpeak(); navPush('fc');
+  const p = fcPrefs();
+  const chips = (key, list, lab) => `<div class="sc-opt"><b>${lab}</b> <span class="sc-chips">${list.map(([v, n]) => `<button type="button" class="sc-chip btn${p[key] === v ? ' on' : ''}" data-fck="${key}" data-fcv="${v}">${n}</button>`).join('')}</span></div>`;
+  app.innerHTML = `
+    <div class="topbar"><span class="title">⚡ כרטיסי הברקה</span><button class="secondary" id="fcBack">${ic('home')} לדף הבית</button></div>
+    <div class="card race-intro"><p class="race-how">כרטיס מופיע – אומרים בקול מה רואים – ו<b>הופכים</b> לבדוק. מתאים גם להקרנה בכיתה.</p></div>
+    <h2>מה מתרגלים?</h2>
+    <div class="fc-types">${FC_TYPES.map(([v, n, d]) => `<button type="button" class="fc-type${p.type === v ? ' on' : ''}" data-fct="${v}"><span class="nm">${n}</span><span class="ds">${d}</span></button>`).join('')}</div>
+    <div class="card">
+      ${chips('range', FC_RANGES, 'מספרים:')}
+      ${chips('n', [[10, '10 כרטיסים'], [20, '20 כרטיסים']], 'כמה:')}
+      ${chips('speed', [[0, 'הופכים בלחיצה'], [3, 'הברקה – 3 שניות'], [5, '5 שניות']], 'קצב:')}
+      <div class="actions"><button id="fcGo" class="race-go">⚡ מתחילים</button></div>
+    </div>`;
+  $('fcBack').onclick = home;
+  app.querySelectorAll('[data-fct]').forEach(b => b.onclick = () => { p.type = b.dataset.fct; fcSave(p); fcHome(); });
+  app.querySelectorAll('[data-fck]').forEach(b => b.onclick = () => { p[b.dataset.fck] = +b.dataset.fcv; fcSave(p); fcHome(); });
+  $('fcGo').onclick = () => fcRun(p);
+  window.scrollTo(0, 0);
+}
+function fcRun(p, only) {
+  const used = new Set(), types = ['num', 'qty', 'word'];
+  let cards = only ? only.map(c => Object.assign({}, c)) : Array.from({ length: p.n }, (_, i) => ({ n: fcPick(p.range, used), t: p.type === 'mix' ? types[i % 3] : p.type }));
+  if (!only && p.type === 'mix') cards = shuffle(cards);
+  const st = { i: 0, flip: false, yes: 0, miss: [], timer: null };
+  const label = `${(FC_TYPES.find(x => x[0] === p.type) || FC_TYPES[0])[1].replace(/^\S+ /, '')} · ${(FC_RANGES.find(x => x[0] === p.range) || FC_RANGES[1])[1]}`;
+  track('כרטיסי הברקה', label);
+  navPush('view');
+  const front = c => c.t === 'num' ? `<div class="fc-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fc-pic">${fcQty(c.n)}</div><div class="fc-ask">כמה יש?</div>` : `<div class="fc-word" data-raw>${heNum(c.n)}</div>`;
+  const back = c => `<div class="fc-big sm" dir="ltr">${fmt(c.n)}</div><div class="fc-word sm" data-raw>${heNum(c.n)}</div>${c.n > 0 ? `<div class="fc-pic sm">${fcQty(c.n)}</div>` : ''}`;
+  const show = () => {
+    clearTimeout(st.timer); stopSpeak();
+    const c = cards[st.i];
+    app.innerHTML = `
+      <div class="topbar"><span class="title">⚡ כרטיסי הברקה · ${label}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="fcOut">${ic('close')} יציאה</button></span></div>
+      <div class="fc-prog">כרטיס ${st.i + 1} מתוך ${cards.length}</div>
+      <button type="button" class="fc-card${st.flip ? ' flipped' : ''}" id="fcCard" aria-label="${st.flip ? 'הצד השני של הכרטיס' : 'לחצו כדי להפוך'}">
+        <div class="fc-face">${st.flip ? back(c) : front(c)}</div>
+        ${!st.flip && p.speed ? `<div class="fc-timer" style="animation-duration:${p.speed}s"></div>` : ''}
+      </button>
+      <div class="actions" style="justify-content:center">${st.flip
+        ? `<button class="secondary" id="fcSay">🔊 הקראה</button><button id="fcYes" class="race-go">✔ ידעתי</button><button class="secondary" id="fcNo">✘ עוד לא</button>`
+        : `<button id="fcFlip" class="race-go">↻ הופכים</button>`}</div>`;
+    fsBind();
+    $('fcOut').onclick = () => { clearTimeout(st.timer); fcHome(); };
+    const flip = () => { if (st.flip) return; st.flip = true; show(); };
+    $('fcCard').onclick = flip;
+    if ($('fcFlip')) $('fcFlip').onclick = flip;
+    if (!st.flip && p.speed) st.timer = setTimeout(flip, p.speed * 1000);
+    const next = ok => { if (ok) st.yes++; else st.miss.push(c); st.i++; st.flip = false; if (st.i < cards.length) show(); else done(); };
+    if ($('fcYes')) { $('fcYes').onclick = () => next(true); $('fcNo').onclick = () => next(false); $('fcSay').onclick = e => speak(heNum(c.n), e.currentTarget); }
+    window.scrollTo(0, 0);
+  };
+  const done = () => {
+    stopSpeak();
+    track('כרטיסי הברקה – סיום', `${label} · ${st.yes}/${cards.length}`);
+    const all = st.yes === cards.length;
+    app.innerHTML = `
+      <div class="topbar"><span class="title">⚡ כרטיסי הברקה</span><button class="secondary" id="fcOut">${ic('home')} חזרה</button></div>
+      <div class="card center"><div class="path-trophy">${all ? '🏆' : st.yes >= cards.length * 0.7 ? '🌟' : '💪'}</div>
+        <h2>ידעתי ${st.yes} מתוך ${cards.length}</h2>
+        ${st.miss.length ? `<p>כדאי לחזור על: <span dir="ltr">${st.miss.map(c => fmt(c.n)).join(', ')}</span></p>` : '<p>כל הכבוד! ידעת את כל הכרטיסים 🎉</p>'}
+        <div class="actions" style="justify-content:center">${st.miss.length ? `<button id="fcAgainMiss" class="race-go">🔁 רק מה שעוד לא ידעתי (${st.miss.length})</button>` : ''}<button id="fcAgain" class="secondary">⚡ סבב חדש</button></div></div>`;
+    $('fcOut').onclick = fcHome;
+    $('fcAgain').onclick = () => fcRun(p);
+    if ($('fcAgainMiss')) $('fcAgainMiss').onclick = () => fcRun(p, st.miss);
+    window.scrollTo(0, 0);
+  };
+  show();
+}
+
 /* ---------- כניסת מורה (קוד) ---------- */
 // הקוד לא נשמר כאן – רק "טביעת אצבע" שלו. זו לא אבטחה אמיתית, אלא מניעת כניסה מקרית.
 const TEACHER_HASH = '3d9bf467';
@@ -13926,7 +14052,7 @@ function askName(done) {
   if (!first) return;
   if (!teacherCred() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
 </html>
