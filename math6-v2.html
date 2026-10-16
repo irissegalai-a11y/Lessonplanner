@@ -1507,7 +1507,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8754,7 +8754,8 @@ function jeoHome() {
   const saved = jeoLoad();
   const live = saved && saved.cells && Object.values(saved.cells).some(c => !c.used);
   let nTeams = 2;
-  const pickTopics = TOPICS.slice(0, 6).map(t => t.id);
+  if (saved && saved.topics) jeoReg(saved.topics);
+  const pickTopics = GAME_PRE && TOPIC[GAME_PRE] ? [GAME_PRE] : TOPICS.slice(0, 6).map(t => t.id);
   const draw = () => {
     app.innerHTML = `
       <div class="topbar"><span class="title">${ic('grid')} ג'פרדי כיתתי</span><button class="secondary" id="jHome">${ic('home')} לדף הבית</button></div>
@@ -8765,7 +8766,7 @@ function jeoHome() {
       <h2>כמה קבוצות?</h2>
       <div class="name-row" style="justify-content:center"><span class="seg">${[2, 3, 4, 5, 6].map(n => `<button data-jn="${n}" class="${n === nTeams ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
       <div class="jeo-teams">${JEO_TEAMS.slice(0, nTeams).map((t, i) => `<label class="jeo-tname" style="--tc:${t.color}"><span class="jdot"></span><input data-jt="${i}" value="${t.name}" maxlength="16" aria-label="שם קבוצה ${i + 1}"></label>`).join('')}</div>
-      <h2>נושאים בלוח <span class="muted small">(עד 6)</span></h2>
+      <h2>נושאים בלוח <span class="muted small">(עד 6)</span></h2>${GAME_PRE && TOPIC[GAME_PRE] ? `<p class="small" style="margin:0 0 6px">📌 לפי נושא השיעור: <b>${TOPIC[GAME_PRE].name}</b> – הלוח יתחלק ל-4 עמודות של שאלות מהנושא</p>` : ''}
       <div class="jeo-topics">${gameTopics().map(t => `<label class="chk"><input type="checkbox" data-jtop="${t.id}" ${pickTopics.includes(t.id) ? 'checked' : ''}> ${t.name}</label>`).join('')}</div>${topicBtns('jtop')}
       <p class="muted small" id="jMsg"></p>
       <div class="actions" style="justify-content:center"><button id="jGo" class="race-go">${live ? 'משחק חדש' : 'מתחילים!'} ←</button></div>`;
@@ -8782,7 +8783,8 @@ function jeoHome() {
     $('jGo').onclick = () => {
       const topics = [...app.querySelectorAll('[data-jtop]:checked')].map(c => c.dataset.jtop);
       if (topics.length === 1 && topics[0] === 'composite') topics.splice(0, 1, 'compL', 'compHide', 'compU', 'compGarden');
-      if (topics.length < 2) { $('jMsg').textContent = 'בחרו לפחות 2 נושאים (או רק "שטחים מורכבים").'; return; }
+      if (topics.length === 1 && TOPIC[topics[0]]) { const b0 = topics[0]; topics.splice(0, 1, ...[0, 1, 2, 3].map(k => jeoSplitId(b0, k))); jeoReg(topics); }
+      if (!topics.length) { $('jMsg').textContent = 'בחרו לפחות נושא אחד.'; return; }
       const teams = [...app.querySelectorAll('[data-jt]')].map((inp, i) => ({ name: inp.value.trim() || JEO_TEAMS[i].name, color: JEO_TEAMS[i].color, score: 0 }));
       jeoStart(teams, topics);
     };
@@ -8903,7 +8905,12 @@ function jeoEnd() {
 /* ---------- משחקי כיתה: כפתור מסך מלא משותף ---------- */
 function fsBtnHTML() { return document.fullscreenEnabled ? `<button class="secondary" id="jFull">${document.fullscreenElement ? 'יציאה ממסך מלא' : 'מסך מלא'}</button>` : ''; }
 function fsBind() { if ($('jFull')) $('jFull').onclick = () => { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else document.documentElement.requestFullscreen().catch(() => {}); }; }
-function topicChecks(attr) { return `<div class="jeo-topics">${gameTopics().map(t => `<label class="chk"><input type="checkbox" data-${attr}="${t.id}" ${t.id === 'composite' ? '' : 'checked'}> ${t.name}</label>`).join('')}</div>${topicBtns(attr)}`; }
+// משחק שנפתח מתוך שיעור: הנושא של השיעור מסומן מראש (ורק הוא)
+let GAME_PRE = null;
+function topicChecks(attr) { return `${GAME_PRE && TOPIC[GAME_PRE] ? `<p class="small" style="margin:0 0 6px">📌 לפי נושא השיעור: <b>${TOPIC[GAME_PRE].name}</b></p>` : ''}<div class="jeo-topics">${gameTopics().map(t => `<label class="chk"><input type="checkbox" data-${attr}="${t.id}" ${GAME_PRE && TOPIC[GAME_PRE] ? (t.id === GAME_PRE ? 'checked' : '') : t.id === 'composite' ? '' : 'checked'}> ${t.name}</label>`).join('')}</div>${topicBtns(attr)}`; }
+// ג'פרדי על נושא אחד: מחלקים אותו ל-4 עמודות (כל עמודה – שאלות אחרות מאותו נושא)
+const jeoSplitId = (tid, k) => `${tid}~${k}`;
+function jeoReg(ids) { (ids || []).forEach(id => { if (TOPIC[id] || !id.includes('~')) return; const [base, k] = id.split('~'), B = TOPIC[base]; if (B) TOPIC[id] = Object.assign({}, B, { id, name: `${B.name} ${['א', 'ב', 'ג', 'ד'][+k] || ''}`.trim() }); }); }
 
 /* =========================================================
    מי רוצה להיות מיליונר? – 15 שאלות בקושי עולה, 3 גלגלי הצלה
@@ -14124,7 +14131,7 @@ function lpSetKind(p, k) {
 // דרכי סיכום – כולן נשארות אצל המורה בכיתה (שום דבר לא נשלח)
 const LP_SUMS = [['board', '3 שאלות בדיקה על הלוח (קלה, בינונית, מאתגרת)'], ['talk', 'סבב שיחה: "היום למדתי... / היה לי קשה... "'], ['thumbs', 'הערכה עצמית: 👍 👌 👎 – כמה הבנתי?'], ['paper', 'מבדק הצלחה מודפס (מדפיסים מראש)']];
 const lpBookPref = () => { try { return localStorage.getItem('math-lp-book') || LP_BOOKS[0]; } catch (e) { return LP_BOOKS[0]; } };
-const LP_GAMES = [['jeo', "ג'פרדי בקבוצות"], ['mil', 'מיליונר בקבוצות'], ['war', 'מלחמת תרגילים בקבוצות'], ['bingo', 'בינגו'], ['cq', 'כיבוש שטחים'], ['tf', 'אמת או שקר']];
+const LP_GAMES = [['jeo', "ג'פרדי בקבוצות – לפי נושא השיעור"], ['mil', 'מיליונר בקבוצות – לפי נושא השיעור'], ['cq', 'כיבוש שטחים – לפי נושא השיעור'], ['war', 'מלחמת תרגילים (חשבון כללי)'], ['bingo', 'בינגו (חשבון כללי)'], ['tf', 'אמת או שקר (כללי)']];
 const lpLesson = t => (LESSON_ORDER.includes(t) && LESSONS[t]) ? t : null;
 const lpLoad = () => { try { return JSON.parse(localStorage.getItem(LP_KEY)) || []; } catch (e) { return []; } };
 const lpSaveAll = L => { try { localStorage.setItem(LP_KEY, JSON.stringify(L.slice(0, 30))); } catch (e) { /* לא חובה */ } };
@@ -14143,7 +14150,7 @@ function lpSplit(p) {
 const lpTotal = p => LP_STAGES.reduce((a, s) => a + (p.on[s.id] ? (+p.min[s.id] || 0) : 0), 0);
 const lpDesc = (p, id) => ({
   open: p.opSrc && OP_SPECIAL.some(x => x.id === p.opSrc) ? `⭐ ${opName(p.opSrc)} – לפי מארגן ההוראה · ${(p.opN || 4) === 1 ? 'שקף אחד' : (p.opN || 4) + ' שקפים'}` : `${(p.opKinds || OP_DEFAULT).length === 1 ? 'שקף אחד' : (p.opKinds || OP_DEFAULT).length + ' שקפים'}: ${opKindsSorted(p.opKinds || OP_DEFAULT).map(id => OP_KINDS.find(k => k.id === id).name.replace(/^\S+ /, '')).join(', ')}`,
-  game: (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – בוחרים את הנושא במסך המשחק',
+  game: ['jeo', 'mil', 'cq'].includes(p.game) ? `${(LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1].replace(/ – .*/, '')} על "${TOPIC[p.topic] ? TOPIC[p.topic].name : ''}" – הנושא מסומן מראש במסך המשחק` : (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – לא לפי נושא השיעור',
   learn: lpKind(p) !== 'first' ? 'חזרה קצרה: מה למדנו בשיעור הקודם, ו-2 שאלות חימום' : lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
   prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 23: 'בינוניים ומאתגרים', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
   book: `${p.book || LP_BOOKS[0]}${p.pages ? ` – ${p.pages}` : ' – עמודים: ______'}`,
@@ -14280,6 +14287,7 @@ function lpBarDraw() {
   document.body.style.paddingTop = (bar.offsetHeight + 8) + 'px';
 }
 function lpStop() {
+  GAME_PRE = null;
   document.body.style.paddingTop = '';
   if (lpRunS) clearInterval(lpRunS.iv); lpRunS = null;
   const b = document.getElementById('lpBar'); if (b) b.remove(); document.body.classList.remove('lp-on');
@@ -14310,7 +14318,7 @@ function lpStage(k) {
   const p = lp, s = R0.st[R0.k], T = TOPIC[p.topic];
   lpBarDraw();
   if (s.id === 'open') { const src = p.opSrc && OP_SPECIAL.some(x => x.id === p.opSrc) ? p.opSrc : p.topic; op = { topic: src, slides: opBuild(src, p.opKinds, p.opN || 4), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
-  else if (s.id === 'game') ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome() }[p.game] || jeoHome)();
+  else if (s.id === 'game') (GAME_PRE = p.topic, ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome() }[p.game] || jeoHome))();
   else if (s.id === 'learn' && lpKind(p) !== 'first') {
     const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [];
     const recap = { title: 'חזרה – מה למדנו בשיעור הקודם?', q: `<h3 class="center">${T.name}</h3>${tips.length ? `<ul class="lp-tips">${tips.slice(0, 3).map(x => `<li>${x}</li>`).join('')}</ul>` : `<p class="center">${T.desc}</p>`}<p class="center">🗣️ מי זוכר/ת? מי יכול/ה לתת דוגמה?</p>`, a: '' };
