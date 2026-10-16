@@ -1413,7 +1413,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13891,14 +13891,26 @@ function fcDots(n) {
   const body = groups.map((k, g) => { const x0 = g * (GW + 30); return (groups.length > 1 ? `<rect x="${x0 + 2}" y="2" width="${GW - 4}" height="${GH - 4}" rx="18" fill="none" stroke="#c9c0ad" stroke-width="2" stroke-dasharray="6 5"/>` : '') + place(k).map(([x, y]) => `<circle cx="${x0 + x}" cy="${y}" r="${r}" fill="${cols[g % 2]}"/>`).join(''); }).join('');
   return `<svg viewBox="0 0 ${W} ${GH}" class="fc-dots" role="img" aria-label="${n}" data-n="${groups.length}">${body}</svg>`;
 }
-const FC_SHAPES = [[0, 'מעורב'], [1, '🎲 קובייה'], [2, '✨ נקודות מפוזרות'], [3, '▦ מסגרת עשר']];
+// ספירת המשך: משמאל מספר, מימין כמה נקודות – ממשיכים לספור מהמספר ולא סופרים הכל מ-1
+function fcCountOn(n) {
+  const b = R(1, Math.min(5, n - 1)), a = n - b, GW = 150, GH = 120, r = 10;
+  const pts = []; for (let t = 0; t < 400 && pts.length < b; t++) { const q = [R(r + 6, GW - r - 6), R(r + 6, GH - r - 6)]; if (pts.every(o => (o[0] - q[0]) ** 2 + (o[1] - q[1]) ** 2 >= (2 * r + 9) ** 2)) pts.push(q); }
+  const x1 = GW + 30;
+  return `<svg viewBox="0 0 ${2 * GW + 30} ${GH}" class="fc-dots" role="img" aria-label="${a} ועוד ${b}" data-n="2">
+    <rect x="2" y="2" width="${GW - 4}" height="${GH - 4}" rx="18" fill="#fff6d6" stroke="#c9a73a" stroke-width="2.5"/>
+    <text x="${GW / 2}" y="${GH / 2 + 26}" text-anchor="middle" font-size="76" font-weight="800" fill="#1f1e1c" font-family="Assistant, Arial, sans-serif">${a}</text>
+    <rect x="${x1 + 2}" y="2" width="${GW - 4}" height="${GH - 4}" rx="18" fill="none" stroke="#c9c0ad" stroke-width="2" stroke-dasharray="6 5"/>
+    ${pts.map(([x, y]) => `<circle cx="${x1 + x}" cy="${y}" r="${r}" fill="#4c5fd5"/>`).join('')}</svg>`;
+}
+const FC_SHAPES = [[0, 'מעורב'], [1, '🎲 קובייה'], [2, '✨ נקודות מפוזרות'], [3, '▦ מסגרת עשר'], [4, '➡️ ספירת המשך']];
 // בוחרים צורה לכרטיס "כמה יש?" – נשמרת בכרטיס, כדי שהצד השני וההדפסה יראו אותה תמונה
 function fcQtyPic(n, shape) {
   if (n > 20) return fcBlocks(n);
   if (n === 0) return fcFrames(0);
-  const opts = shape === 1 ? ['dice'] : shape === 2 ? ['dots'] : shape === 3 ? ['frame'] : n <= 6 ? ['dice', 'dots', 'dots', 'frame'] : n <= 10 ? ['dots', 'dots', 'dice', 'frame'] : ['frame', 'dots', 'dice'];
+  if (shape === 4) return n >= 2 ? fcCountOn(n) : fcDots(n);
+  const opts = shape === 1 ? ['dice'] : shape === 2 ? ['dots'] : shape === 3 ? ['frame'] : n <= 6 ? ['dice', 'dots', 'dots', 'frame'] : n <= 10 ? ['dots', 'dots', 'dice', 'frame', 'on'] : ['frame', 'dots', 'dice', 'on'];
   const k = pick(opts);
-  return k === 'dice' ? fcDice(n) : k === 'dots' ? fcDots(n) : fcFrames(n);
+  return k === 'dice' ? fcDice(n) : k === 'dots' ? fcDots(n) : k === 'on' ? fcCountOn(n) : fcFrames(n);
 }
 // תרגיל להברקה: חיבור/חיסור עד R, תאומים (כפולים), או שבירת עשרת (מעבר דרך העשר, עד 20)
 function fcEx(t, M, op, used) {
