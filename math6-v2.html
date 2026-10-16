@@ -1008,6 +1008,11 @@
   .op-q .fig { max-height: 34vh; width: auto; max-width: 100%; }
   .op-list { padding-inline-start: 1.4em; }
   .op-list li { margin: 8px 0; }
+  .sol { display: flex; flex-direction: column; gap: 6px; text-align: right; }
+  .sol-ex { color: #3d3a33; }
+  .sol-ans { font-size: 1.12em; padding-top: 6px; border-top: 2px dashed rgba(31,30,28,.25); }
+  .sol-ans b, .sol-ex b { white-space: nowrap; }
+  .op-list li .sol { margin-bottom: 8px; }
   .op-today { font-size: clamp(3rem, 12vw, 6rem); font-weight: 800; text-align: center; margin: 6px 0 10px; color: #4c5fd5; direction: ltr; }
   .op-claim { margin: 4px 0 6px; color: #3d3a33; }
   .op-big { font-size: 1.35em; }
@@ -1441,7 +1446,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קיח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7000,6 +7005,12 @@ function answerHTML(q, a) {
 // אפשרויות בחירה: אות ונקודה (א. ב. ג.), אחת מתחת לשנייה. אפשרויות עם ציורים – בשתי עמודות
 const CH_L = 'אבגדהוזח', chLet = i => `<b class="chl">${CH_L[i]}.</b>`;
 const chPics = list => list.some(c => /<svg|<img|class="fig/.test(String(c)));
+// תשובה בשקף: קודם התרגיל (או ההסבר), ומתחתיו – בנפרד וברור – התשובה הסופית
+function solHTML(q) {
+  const ex = typeof q.exp === 'string' ? q.exp.trim() : '';
+  const calc = /=|×|÷|:\s*\d|\d\s*[-+]\s*\d/.test(ex.replace(/<[^>]*>/g, ''));
+  return `<div class="sol">${ex ? `<div class="sol-ex"><b>${calc ? 'תרגיל:' : 'הסבר:'}</b> ${ex}</div>` : ''}<div class="sol-ans"><b>תשובה סופית:</b> ${correctHTML(q)}</div></div>`;
+}
 function correctHTML(q) {
   if (q.type === 'num') return M(fmt(q.ans)) + (q.unit ? ' ' + q.unit : '');
   if (q.type === 'choice') return q.choices[q.ans];
@@ -8722,8 +8733,7 @@ function jeoOpen(key) {
     ${q.type === 'choice' ? `<ol class="jeo-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<li>${chLet(i)} <span>${c}</span></li>`).join('')}</ol>` : ''}
     <div class="jeo-tools"><button class="secondary" id="jT">${ic('clock')} 30 שניות</button><span class="jeo-clock" id="jClock"></span></div>
     <div id="jAns" class="jeo-ans" hidden>
-      <div class="jeo-right">התשובה: <b>${correctHTML(q)}</b></div>
-      ${q.exp ? `<div class="muted">${q.exp}</div>` : ''}
+      <div class="jeo-right">${solHTML(q)}</div>
       <div class="jeo-who">מי ענה נכון?</div>
       <div class="jeo-award">${jeo.teams.map((tm, i) => `<button data-aw="${i}" style="--tc:${tm.color}">${esc(tm.name)} +${v}</button>`).join('')}<button class="secondary" data-aw="-1">אף אחד</button></div>
       <div class="jeo-pen">${jeo.teams.map((tm, i) => `<button class="ghost" data-pen="${i}">${esc(tm.name)} −${v}</button>`).join('')}</div>
@@ -9358,8 +9368,7 @@ function cqAsk(i) {
     ${q.type === 'choice' ? `<ol class="jeo-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, k) => `<li>${chLet(k)} <span>${c}</span></li>`).join('')}</ol>` : ''}
     <div class="jeo-tools"><button class="secondary" id="cqT">${ic('clock')} 30 שניות</button><span class="jeo-clock" id="cqClock"></span></div>
     <div id="cqAns" class="jeo-ans" hidden>
-      <div class="jeo-right">התשובה: <b>${correctHTML(q)}</b></div>
-      ${q.exp ? `<div class="muted">${q.exp}</div>` : ''}
+      <div class="jeo-right">${solHTML(q)}</div>
       <div class="jeo-who">${esc(team.name)} ענו נכון?</div>
       <div class="jeo-award"><button id="cqYes" style="--tc:${team.color}" class="cq-yes">כן – ${attack ? 'השטח עובר אלינו!' : 'כובשים!'}</button><button class="secondary" id="cqNo">לא</button></div>
     </div>
@@ -11548,7 +11557,7 @@ function opDotsSl() {
   return { title: 'כמה יש? בלי לספור!', q: `<p>מסתכלים רגע – ואומרים כמה. בלי לספור אחד-אחד!</p><div class="op-dots3">${ns.map((n, i) => `<div><b>${i + 1}.</b>${i === 0 ? fcDice(n) : fcDots(n)}</div>`).join('')}</div>`, a: `${ns.map((n, i) => `${i + 1}. <b>${n}</b>`).join(' · ')} – איך ראיתם? (למשל: 3 ועוד 2)` };
 }
 const OP_KINDS = [
-  { id: 'warm', name: '🔥 חימום – פותרים בראש', ok: () => true, make: (t, get) => { const w1 = get(1), w2 = get(1); return { title: 'חימום – פותרים בראש', q: `<ol class="op-list"><li>${w1.text}${w1.fig || ''}${opChHTML(w1)}</li><li>${w2.text}${w2.fig || ''}${opChHTML(w2)}</li></ol>`, a: `<ol class="op-list"><li>${correctHTML(w1)} – ${w1.exp}</li><li>${correctHTML(w2)} – ${w2.exp}</li></ol>` }; } },
+  { id: 'warm', name: '🔥 חימום – פותרים בראש', ok: () => true, make: (t, get) => { const w1 = get(1), w2 = get(1); return { title: 'חימום – פותרים בראש', q: `<ol class="op-list"><li>${w1.text}${w1.fig || ''}${opChHTML(w1)}</li><li>${w2.text}${w2.fig || ''}${opChHTML(w2)}</li></ol>`, a: `<ol class="op-list"><li>${solHTML(w1)}</li><li>${solHTML(w2)}</li></ol>` }; } },
   { id: 'today', name: '🔢 המספר של היום', ok: () => true, make: () => opToday() },
   { id: 'tf', name: '✔✘ אמת או שקר', ok: () => true, make: (t, get) => opTF(t, get) },
   { id: 'mistake', name: '🕵️ מצאו את הטעות', ok: () => true, make: (t, get) => {
@@ -11556,14 +11565,14 @@ const OP_KINDS = [
     for (const lv of [1, 2, 2, 3]) { const q = get(lv, q => q.type === 'num' && (q.traps || []).some(tr => tr.m && tr.v !== q.ans)); if (q.type === 'num' && (q.traps || []).some(tr => tr.m)) { e = q; break; } }
     if (!e) return null;
     const tr = pick(e.traps.filter(x => x.m && x.v !== e.ans));
-    return { title: 'מצאו את הטעות', q: `${e.text}${e.fig || ''}<div class="op-wrong">תלמיד ענה: <b>${M(fmt(tr.v))}${e.unit ? ' ' + e.unit : ''}</b>. האם הוא צדק? אם לא – מה הטעות שלו?</div>`, a: `<b>לא נכון.</b> התשובה: ${correctHTML(e)}.<br>הטעות: ${tr.m}<br>${e.exp}` }; } },
+    return { title: 'מצאו את הטעות', q: `${e.text}${e.fig || ''}<div class="op-wrong">תלמיד ענה: <b>${M(fmt(tr.v))}${e.unit ? ' ' + e.unit : ''}</b>. האם הוא צדק? אם לא – מה הטעות שלו?</div>`, a: `<p><b>לא נכון.</b> הטעות: ${tr.m}</p>${solHTML(e)}` }; } },
   { id: 'odd', name: '🧩 איזה לא שייך?', ok: () => true, make: () => opOddOne() },
   { id: 'many', name: '💭 הרבה תשובות נכונות', ok: () => true, make: () => opMany() },
   { id: 'same', name: '⚖️ מה דומה? מה שונה?', ok: () => true, make: () => opSame() },
   { id: 'est', name: '🎯 הערכה – בערך כמה?', ok: () => true, make: () => opEst() },
   { id: 'rule', name: '🔍 מה הכלל? (סדרה)', ok: () => true, make: () => opRule() },
   { id: 'dots', name: '👀 כמה יש? בלי לספור', ok: () => GRADE <= 2, make: () => opDotsSl() },
-  { id: 'chal', name: '🏔️ שאלת אתגר', ok: () => true, make: (t, get) => { const c = get(3); return { title: 'שאלת אתגר', q: `${c.text}${c.fig || ''}${opChHTML(c)}<p class="muted">חשבו לבד דקה, ואז שתפו את בן/בת הזוג בדרך שלכם.</p>`, a: `${correctHTML(c)}<br>${c.exp}` }; } }
+  { id: 'chal', name: '🏔️ שאלת אתגר', ok: () => true, make: (t, get) => { const c = get(3); return { title: 'שאלת אתגר', q: `${c.text}${c.fig || ''}${opChHTML(c)}<p class="muted">חשבו לבד דקה, ואז שתפו את בן/בת הזוג בדרך שלכם.</p>`, a: solHTML(c) }; } }
 ];
 const OP_DEFAULT = ['warm', 'mistake', 'odd', 'chal'];
 const OP_KEY = 'math-op-kinds-g' + GRADE;
@@ -13961,7 +13970,7 @@ function lpBoardSlides(topicId, n, lvMode, title) {
     const lv = lvMode === 'mix' ? Math.min(3, 1 + Math.floor(i * 3 / n)) : lvMode === '23' ? (i < n / 2 ? 2 : 3) : +lvMode;
     let q; for (let k = 0; k < 60; k++) { q = mk(t.id, pick(t.levels[lv]), lv); if (!seen.has(q.text)) break; } seen.add(q.text);
     const ch = q.type === 'choice' ? `<div class="op-ch">${q.choices.map((c, j) => `<span><b>${'אבגדהוזח'[j]}.</b> ${c}</span>`).join('')}</div>` : '';
-    slides.push({ title: `${title} ${i + 1}`, q: `<div class="lp-q">${q.text}${q.fig || ''}${ch}</div>`, a: `<p><b>התשובה:</b> ${correctHTML(q)}</p>${typeof q.exp === 'string' ? `<p>${q.exp}</p>` : ''}` });
+    slides.push({ title: `${title} ${i + 1}`, q: `<div class="lp-q">${q.text}${q.fig || ''}${ch}</div>`, a: solHTML(q) });
   }
   return slides;
 }
