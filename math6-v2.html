@@ -1507,7 +1507,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קלו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -14610,7 +14610,7 @@ function askTeacher(done) {
   const err = t => { const e = ov.querySelector('#tchErr'); e.textContent = t; e.hidden = false; };
   ov.querySelector('#tchOk').onclick = () => {
     const nm = ov.querySelector('#tchNm').value.trim().replace(/\s+/g, ' '), code = ov.querySelector('#tchCode').value.trim();
-    if (!nm) { err('כתבו את השם 🙂'); return; }
+    if (nm.split(' ').length < 2) { err('כתבו שם פרטי ושם משפחה 🙂'); return; }
     const set = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* לא חובה */ } };
     if (codeHash('staff:' + code) === STAFF_HASH) set('math-staff-key', STAFF_HASH);
     else if (codeHash('math6:' + code) === TEACHER_HASH) { set('math-teacher-key', TEACHER_HASH); store.teacherKey = TEACHER_HASH; }
@@ -14638,18 +14638,19 @@ function askTeacher(done) {
   setTimeout(() => ov.querySelector('#tchNm').focus(), 50);
 }
 // כניסה ראשונה: מבקשים מהתלמיד לכתוב את השם (אפשר לדלג), ואז רושמים את הכניסה
-function askName(done) {
+function askName(done, tch) {
   const ov = document.createElement('div');
   ov.className = 'overlay';
   ov.innerHTML = `<div class="modal picker ask-name" role="dialog" aria-modal="true" aria-labelledby="askT">
-    <h2 class="center" id="askT">שלום! איך קוראים לך?</h2>
-    <p class="center">כתבו <b>שם מלא</b> – שם פרטי ושם משפחה, כדי שהמורה תדע מי תרגל.</p>
-    <p class="center small muted">השם ובאילו פעילויות עבדתם נשמרים אצל המורה בלבד. לא חובה – אפשר ללחוץ "בלי שם". <button type="button" class="pv-link">מה עוד נשמר?</button></p>
+    <h2 class="center" id="askT">${tch ? '👩‍🏫 שלום! מה שמך?' : 'שלום! איך קוראים לך?'}</h2>
+    ${tch ? `<p class="center">כתבו <b>שם פרטי ושם משפחה</b> – פעם אחת בלבד. כך איריס יודעת אילו מורות משתמשות באתר.</p>
+    <p class="center small muted">נשמר רק השם ובאילו כלים השתמשתם – לא ציונים של תלמידים. <button type="button" class="pv-link">מה עוד נשמר?</button></p>` : `<p class="center">כתבו <b>שם מלא</b> – שם פרטי ושם משפחה, כדי שהמורה תדע מי תרגל.</p>
+    <p class="center small muted">השם ובאילו פעילויות עבדתם נשמרים אצל המורה בלבד. לא חובה – אפשר ללחוץ "בלי שם". <button type="button" class="pv-link">מה עוד נשמר?</button></p>`}
     <input id="askNm" class="ask-in" autocomplete="off" maxlength="40" placeholder="שם פרטי ושם משפחה" aria-label="שם מלא">
     <p class="center ask-err" id="askErr" hidden>כתבו גם שם משפחה 🙂</p>
     <div class="actions" style="justify-content:center">
       <button id="askOk" class="race-go">שמירה ←</button>
-      <button id="askSkip" class="ghost">בלי שם</button>
+      ${tch ? '' : '<button id="askSkip" class="ghost">בלי שם</button>'}
     </div>
   </div>`;
   document.body.appendChild(ov);
@@ -14659,7 +14660,7 @@ function askName(done) {
     ov.remove(); done();
   };
   ov.querySelector('#askOk').onclick = () => { const nm = inp.value.trim().replace(/\s+/g, ' '); if (nm.split(' ').length >= 2) close(nm); else { ov.querySelector('#askErr').hidden = false; inp.focus(); } };
-  ov.querySelector('#askSkip').onclick = () => { try { sessionStorage.setItem('math-noname', '1'); } catch (e) { /* לא חובה */ } close(''); };
+  if (ov.querySelector('#askSkip')) ov.querySelector('#askSkip').onclick = () => { try { sessionStorage.setItem('math-noname', '1'); } catch (e) { /* לא חובה */ } close(''); };
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') ov.querySelector('#askOk').click(); });
   setTimeout(() => inp.focus(), 50);
 }
@@ -14672,7 +14673,9 @@ function askName(done) {
   try { noName = !!sessionStorage.getItem('math-noname'); } catch (e) { /* לא חובה */ }
   if (!roleOk() && !URLP.has('kefel')) { setTimeout(() => askRole(logVisit), 300); return; }
   if (!first) return;
-  if (!teacherCred() && !noName && (!store.name || store.name.trim().split(/\s+/).length < 2) && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
+  const noFull = !store.name || store.name.trim().split(/\s+/).length < 2;
+  if (staffOn() && !irisOk() && noFull) setTimeout(() => askName(logVisit, true), 300); // מורה עם קוד המורות – שם חובה, פעם אחת
+  else if (!teacherCred() && !noName && noFull && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
 if (teacherCred()) document.documentElement.classList.add('tch');
 if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
