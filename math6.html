@@ -1224,6 +1224,10 @@
   .fc-pic .fc-frame { width: min(40vw, 240px); }
   .fc-pic.sm svg { width: min(60vw, 300px); } .fc-pic.sm .fc-frame { width: min(30vw, 170px); }
   .fc-ask { font-size: 1.6rem; font-weight: 700; }
+  .fc-pic svg.fc-dice, .fc-pic svg.fc-dots { width: auto; max-width: 92%; height: min(36vw, 200px); }
+  .fc-pic svg.fc-dice[data-n="1"] { height: min(44vw, 220px); }
+  .fc-pic.sm svg.fc-dice, .fc-pic.sm svg.fc-dots { height: min(24vw, 120px); }
+  .fcp-pic svg.fc-dice[data-n="1"] { height: 46cqw; }
   /* בטלפון: התוכן בכרטיס גדול יותר, והכפתורים בשורה אחת */
   @media (max-width: 600px) {
     .fc-card { padding: 14px 10px; }
@@ -1233,6 +1237,7 @@
     .fc-pic .fc-frame, .fc-pic.sm .fc-frame { width: calc(50% - 6px); min-width: 0; }
     .fc-pic .fc-frame:only-child, .fc-pic.sm .fc-frame:only-child { width: 70%; }
     .fc-pic { flex-wrap: nowrap; width: 100%; gap: 8px; }
+    .fc-pic svg.fc-dice, .fc-pic svg.fc-dots, .fc-pic.sm svg.fc-dice, .fc-pic.sm svg.fc-dots { width: auto; max-width: 96%; }
     .fc-ex { font-size: clamp(3rem, 15vw, 5rem); }
     .fc-ex.sm { font-size: clamp(1.6rem, 7.5vw, 2.4rem); }
     .fc-card + .actions { flex-wrap: wrap; gap: 8px; }
@@ -1408,7 +1413,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13843,12 +13848,12 @@ function lpStage(k) {
 /* ---------- כרטיסי הברקה: קריאה וזיהוי של מספרים (כיתות א'–ב') ----------
    צד אחד מראים, ואחרי רגע (או בלחיצה) הופכים: מספר, מילים, וכמות (מסגרת עשר / עשרות ואחדות). */
 const FC_KEY = 'math-fc-g' + GRADE;
-const FC_TYPES = [['num', '🔢 קוראים מספר', 'רואים מספר – אומרים אותו בקול'], ['qty', '🟡 כמה יש?', 'רואים נקודות או עשרות ואחדות – אומרים כמה'], ['word', '🔤 מילה ← מספר', 'קוראים את המספר במילים – אומרים או כותבים בספרות'], ['mix', '🎲 מעורב', 'כל הסוגים יחד']];
+const FC_TYPES = [['num', '🔢 קוראים מספר', 'רואים מספר – אומרים אותו בקול'], ['qty', '🟡 כמה יש?', 'קובייה, נקודות מפוזרות או מסגרת עשר – אומרים כמה בלי לספור'], ['word', '🔤 מילה ← מספר', 'קוראים את המספר במילים – אומרים או כותבים בספרות'], ['mix', '🎲 מעורב', 'כל הסוגים יחד']];
 const FC_EX = [['add', '➕ חיבור וחיסור', 'תרגילים קצרים – עונים בקול לפני שהכרטיס מתהפך'], ['twin', '👯 תאומים', 'כפולים: <span dir="ltr">4 + 4</span>, ומהם חיסור: <span dir="ltr">8 − 4</span>'], ['bridge', '🔟 שבירת עשרת', 'מעבר דרך העשר: <span dir="ltr">8 + 5</span>, <span dir="ltr">13 − 5</span>']];
 const FC_ALL = FC_TYPES.concat(FC_EX), fcIsEx = t => FC_EX.some(x => x[0] === t);
 const FC_RANGES = [[6, 'עד 6'], [10, 'עד 10'], [20, 'עד 20'], [100, 'עד 100'], [1000, 'עד 1,000']];
 const FC_OPS = [[3, 'חיבור וחיסור'], [1, 'רק חיבור'], [2, 'רק חיסור']];
-const fcPrefs = () => { const d = { type: 'num', range: GRADE <= 1 ? 20 : 100, n: 10, speed: 0, op: 3 }; try { return Object.assign(d, JSON.parse(localStorage.getItem(FC_KEY)) || {}); } catch (e) { return d; } };
+const fcPrefs = () => { const d = { type: 'num', range: GRADE <= 1 ? 20 : 100, n: 10, speed: 0, op: 3, shape: 0 }; try { return Object.assign(d, JSON.parse(localStorage.getItem(FC_KEY)) || {}); } catch (e) { return d; } };
 const fcSave = p => { try { localStorage.setItem(FC_KEY, JSON.stringify(p)); } catch (e) { /* לא חובה */ } };
 // מסגרת עשר (עד 20) – שתי מסגרות של 2×5, ממלאים משמאל לימין (המלאה משמאל)
 function fcFrames(n) {
@@ -13866,6 +13871,35 @@ function fcBlocks(n) {
   return `<svg viewBox="0 0 ${Math.max(x, 60)} 58" class="fc-blocks" role="img" aria-label="${n}" dir="ltr">${s}</svg>`;
 }
 const fcQty = n => n <= 20 ? fcFrames(n) : fcBlocks(n);
+// קובייה: עד 6 בקובייה אחת; מעל 6 – כמה קוביות (6 + 3...) כדי לחבר בראש
+const DICE_PIPS = { 1: [[2, 2]], 2: [[1, 1], [3, 3]], 3: [[1, 1], [2, 2], [3, 3]], 4: [[1, 1], [3, 1], [1, 3], [3, 3]], 5: [[1, 1], [3, 1], [2, 2], [1, 3], [3, 3]], 6: [[1, 1], [3, 1], [1, 2], [3, 2], [1, 3], [3, 3]] };
+function fcDice(n) {
+  const parts = []; let left = n;
+  while (left > 6) { const k = left > 12 ? 6 : R(Math.max(1, left - 6), Math.min(6, left - 1)); parts.push(k); left -= k; }
+  parts.push(left);
+  const S = 90, G = 16, cols = ['#d9482b', '#4c5fd5', '#2f7a73', '#b8902c'];
+  const die = (k, i) => { const x0 = i * (S + G) + 4; return `<rect x="${x0}" y="4" width="${S}" height="${S}" rx="16" fill="#fff" stroke="#1f1e1c" stroke-width="3"/>${(DICE_PIPS[k] || []).map(([cx, cy]) => `<circle cx="${x0 + cx * S / 4}" cy="${4 + cy * S / 4}" r="9" fill="${cols[i % 4]}"/>`).join('')}`; };
+  const W = parts.length * (S + G) - G + 8;
+  return `<svg viewBox="0 0 ${W} ${S + 8}" class="fc-dice" role="img" aria-label="${n}" data-n="${parts.length}">${parts.map(die).join('')}</svg>`;
+}
+// נקודות מפוזרות באקראי (לסוביטייזינג). מעל 10 – שני מקבצים בצבעים שונים, כדי לחבר בראש
+function fcDots(n) {
+  const groups = n > 10 ? (() => { const a = R(Math.max(2, n - 10), Math.min(10, n - 2)); return [a, n - a]; })() : [n];
+  const GW = 150, GH = 120, r = 10, cols = ['#d9482b', '#4c5fd5'];
+  const place = k => { for (let t = 0; t < 200; t++) { const pts = []; let ok = true; for (let i = 0; i < k && ok; i++) { let p = null; for (let a = 0; a < 300; a++) { const q = [R(r + 4, GW - r - 4), R(r + 4, GH - r - 4)]; if (pts.every(o => (o[0] - q[0]) ** 2 + (o[1] - q[1]) ** 2 >= (2 * r + 7) ** 2)) { p = q; break; } } if (p) pts.push(p); else ok = false; } if (ok) return pts; } return []; };
+  const W = groups.length * GW + (groups.length - 1) * 30;
+  const body = groups.map((k, g) => { const x0 = g * (GW + 30); return (groups.length > 1 ? `<rect x="${x0 + 2}" y="2" width="${GW - 4}" height="${GH - 4}" rx="18" fill="none" stroke="#c9c0ad" stroke-width="2" stroke-dasharray="6 5"/>` : '') + place(k).map(([x, y]) => `<circle cx="${x0 + x}" cy="${y}" r="${r}" fill="${cols[g % 2]}"/>`).join(''); }).join('');
+  return `<svg viewBox="0 0 ${W} ${GH}" class="fc-dots" role="img" aria-label="${n}" data-n="${groups.length}">${body}</svg>`;
+}
+const FC_SHAPES = [[0, 'מעורב'], [1, '🎲 קובייה'], [2, '✨ נקודות מפוזרות'], [3, '▦ מסגרת עשר']];
+// בוחרים צורה לכרטיס "כמה יש?" – נשמרת בכרטיס, כדי שהצד השני וההדפסה יראו אותה תמונה
+function fcQtyPic(n, shape) {
+  if (n > 20) return fcBlocks(n);
+  if (n === 0) return fcFrames(0);
+  const opts = shape === 1 ? ['dice'] : shape === 2 ? ['dots'] : shape === 3 ? ['frame'] : n <= 6 ? ['dice', 'dots', 'dots', 'frame'] : n <= 10 ? ['dots', 'dots', 'dice', 'frame'] : ['frame', 'dots', 'dice'];
+  const k = pick(opts);
+  return k === 'dice' ? fcDice(n) : k === 'dots' ? fcDots(n) : fcFrames(n);
+}
 // תרגיל להברקה: חיבור/חיסור עד R, תאומים (כפולים), או שבירת עשרת (מעבר דרך העשר, עד 20)
 function fcEx(t, M, op, used) {
   M = Math.min(M, 20);
@@ -13917,6 +13951,7 @@ function fcDialog(type) {
       <p class="small muted" style="margin-top:0">${T[2]}</p>
       ${type === 'bridge' ? '<div class="sc-opt"><b>מספרים:</b> עד 20 (תמיד עוברים את העשר)</div>' : chips('range', ex ? FC_RANGES.filter(r => r[0] <= 20) : FC_RANGES, ex ? 'התוצאה / המספר הגדול:' : 'מספרים:')}
       ${ex ? chips('op', FC_OPS, 'פעולה:') : ''}
+      ${type === 'qty' || type === 'mix' ? chips('shape', FC_SHAPES, 'צורה:') : ''}
       ${chips('n', [[10, '10 כרטיסים'], [20, '20 כרטיסים']], 'כמה:')}
       ${chips('speed', [[0, 'הופכים בלחיצה'], [3, 'הברקה – 3 שניות'], [5, '5 שניות']], 'קצב:')}
       <div class="actions" style="justify-content:center"><button id="fcGo" class="race-go">⚡ מתחילים</button><button id="fcPr" class="secondary">${ic('printer')} הדפסה</button><button id="fcNo" class="ghost">↩ חזור</button></div>
@@ -13933,6 +13968,7 @@ function fcDialog(type) {
 function fcMake(p, n) {
   const used = new Set(), types = ['num', 'qty', 'word'], ex = fcIsEx(p.type), rng = ex ? Math.min(p.range, 20) : p.range;
   const cards = Array.from({ length: n }, (_, i) => ex ? fcEx(p.type, rng, p.op || 3, used) : ({ n: fcPick(p.range, used), t: p.type === 'mix' ? types[i % 3] : p.type }));
+  cards.forEach(c => { if (c.t === 'qty') c.pic = fcQtyPic(c.n, p.shape || 0); });
   return p.type === 'mix' ? shuffle(cards) : cards;
 }
 const fcLabel = p => { const ex = fcIsEx(p.type), rng = ex ? Math.min(p.range, 20) : p.range; return `${(FC_ALL.find(x => x[0] === p.type) || FC_TYPES[0])[1].replace(/^\S+ /, '')} · ${p.type === 'bridge' ? 'עד 20' : (FC_RANGES.find(x => x[0] === rng) || FC_RANGES[2])[1]}${ex && p.op === 1 ? ' · חיבור' : ex && p.op === 2 ? ' · חיסור' : ''}`; };
@@ -13941,7 +13977,7 @@ const fcPath = c => { if (c.t !== 'bridge') return ''; const k = c.op === '+' ? 
 // כרטיסים להדפסה: צד אחד בלבד, 8 בעמוד – רק גוזרים
 function fcPrint(p) {
   const N = Math.ceil(p.n / 8) * 8, cards = fcMake(p, N), label = fcLabel(p);
-  const front = c => c.op ? `<div class="fcp-ex" dir="ltr">${fcExTxt(c)} = ?</div>` : c.t === 'num' ? `<div class="fcp-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fcp-pic">${fcQty(c.n)}</div>` : `<div class="fcp-word" data-raw>${heNum(c.n)}</div>`;
+  const front = c => c.op ? `<div class="fcp-ex" dir="ltr">${fcExTxt(c)} = ?</div>` : c.t === 'num' ? `<div class="fcp-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fcp-pic">${c.pic || fcQty(c.n)}</div>` : `<div class="fcp-word" data-raw>${heNum(c.n)}</div>`;
   const card = c => `<div class="fcp-card"><div class="fcp-f">${front(c)}</div></div>`;
   const pages = [];
   for (let i = 0; i < N; i += 8) pages.push(`<section class="ws-page fcp-page"><div class="fcp-h">⚡ כרטיסי הברקה · ${label} <span>✂ גוזרים לאורך הקווים</span></div><div class="fcp-grid">${cards.slice(i, i + 8).map(card).join('')}</div></section>`);
@@ -13963,8 +13999,8 @@ function fcRun(p, only) {
     const k = c.a - 10; return `<div class="fc-ex sm" dir="ltr">${c.a} − ${k} − ${c.b - k} = ${c.r}</div><div class="fc-ask">יורדים לעשר וממשיכים</div>`;
   };
   const say = c => c.op ? `${heNum(c.a)} ${c.op === '+' ? 'ועוד' : 'פחות'} ${heNum(c.b)} שווה ${heNum(c.r)}` : heNum(c.n);
-  const front = c => c.op ? `<div class="fc-ex" dir="ltr">${fcExTxt(c)} = <span class="q">?</span></div>` : c.t === 'num' ? `<div class="fc-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fc-pic">${fcQty(c.n)}</div><div class="fc-ask">כמה יש?</div>` : `<div class="fc-word" data-raw>${heNum(c.n)}</div>`;
-  const back = c => c.op ? `<div class="fc-ex" dir="ltr">${fcExTxt(c)} = <b>${c.r}</b></div>${hint(c)}` : `<div class="fc-big sm" dir="ltr">${fmt(c.n)}</div><div class="fc-word sm" data-raw>${heNum(c.n)}</div>${c.n > 0 ? `<div class="fc-pic sm">${fcQty(c.n)}</div>` : ''}`;
+  const front = c => c.op ? `<div class="fc-ex" dir="ltr">${fcExTxt(c)} = <span class="q">?</span></div>` : c.t === 'num' ? `<div class="fc-big" dir="ltr">${fmt(c.n)}</div>` : c.t === 'qty' ? `<div class="fc-pic">${c.pic || fcQty(c.n)}</div><div class="fc-ask">כמה יש?</div>` : `<div class="fc-word" data-raw>${heNum(c.n)}</div>`;
+  const back = c => c.op ? `<div class="fc-ex" dir="ltr">${fcExTxt(c)} = <b>${c.r}</b></div>${hint(c)}` : `<div class="fc-big sm" dir="ltr">${fmt(c.n)}</div><div class="fc-word sm" data-raw>${heNum(c.n)}</div>${c.n > 0 ? `<div class="fc-pic sm">${c.pic || fcQty(c.n)}</div>` : ''}`;
   const show = () => {
     clearTimeout(st.timer); stopSpeak();
     const c = cards[st.i];
