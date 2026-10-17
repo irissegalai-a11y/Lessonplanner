@@ -1067,10 +1067,14 @@
   .op-seq span { min-width: 1.8em; text-align: center; font-size: clamp(1.1rem, 4.4vw, 2.4rem); font-weight: 800; border: 2.5px solid #1f1e1c; border-radius: 12px; padding: 6px 6px; background: #fffdf8; }
   .op-seq span.gap { background: #fff3c4; color: #b3261e; }
   .op-seq span.empty { background: #fff; border-style: dashed; }
-  .tl-kinds { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
-  .tl-kind { text-align: center; }
-  .tl-kind .desc { display: block; font-size: 0.9rem; font-weight: normal; margin-top: 4px; opacity: 0.85; }
-  .tl-kind.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(76,95,213,0.25); }
+  .tl-kinds { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 12px; }
+  .tl-parts { flex-direction: row; }
+  .tl-parts .tl-part { flex: 1; }
+  .tl-kind, .tl-part { text-align: center; }
+  .tl-kind .desc, .tl-part .desc { display: block; font-size: 0.85rem; font-weight: normal; margin-top: 3px; opacity: 0.85; }
+  .tl-kind.sel, .tl-part.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(76,95,213,0.25); }
+  .tl-lbl { font-weight: 700; font-size: 0.95rem; color: #5f5a50; margin: 6px 0 2px; }
+  @media (max-width: 400px) { .tl-parts .tl-part .desc { display: none; } }
   .champ-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 14px; width: 100%; text-align: right; margin: 0 0 16px; padding: 16px 20px; border: 2.5px solid #1f1e1c; border-radius: 16px; background: linear-gradient(135deg, #fff4c2, #ffe08a); color: #1f1e1c; box-shadow: 3px 3px 0 #1f1e1c; cursor: pointer; font: inherit; }
   .champ-card:hover { background: linear-gradient(135deg, #fff0ad, #ffd666); }
   .champ-card .cc-t { font-size: 1.35rem; font-weight: 800; }
@@ -1528,7 +1532,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -5279,10 +5283,12 @@ function mk(topic, gen, lv) {
   return q;
 }
 
-function buildTest() {
+function buildTest(part) {
   const qs = [];
   for (const [id, n] of Object.entries(TEST_PLAN)) {
-    const lvls = shuffle([1, 2, 3, 2, 3, 1]).slice(0, n);
+    const cnt = part === 'a' ? Math.ceil(n / 2) : part === 'b' ? Math.floor(n / 2) : n;
+    if (!cnt) continue;
+    const lvls = shuffle([1, 2, 3, 2, 3, 1, 2, 3]).slice(0, cnt);
     const used = new Set();
     lvls.forEach(lv => {
       const pool = TOPIC[id].levels[lv];
@@ -7160,10 +7166,12 @@ const PRESET = (() => {
   if (!t || !(TOPIC[t] || ['mix', 'test', 'testfb', 'sim'].includes(t))) return null;
   const lv = Number(URLP.get('level')), cnt = Number(URLP.get('count'));
   const level = [1, 2, 3].includes(lv) ? lv : null;
+  const prt = URLP.get('part');
   return {
     topic: t, level,
     count: cnt >= 3 && cnt <= 30 ? Math.round(cnt) : null,
-    fixed: URLP.get('fixed') === '1' && !!level
+    fixed: URLP.get('fixed') === '1' && !!level,
+    part: (prt === 'a' || prt === 'b') ? prt : null
   };
 })();
 function presetLabel(p) {
@@ -7982,8 +7990,8 @@ const levelBadgeText = () => `${state.fixed ? '🔒 ' : ''}${LEVEL_NAME[state.le
 function startPreset() {
   const p = PRESET;
   if (p.learn) return startLesson(p.learn);
-  if (p.topic === 'test') return startTest(false);
-  if (p.topic === 'testfb') return startTest(true);
+  if (p.topic === 'test') return startTest(false, p.part);
+  if (p.topic === 'testfb') return startTest(true, p.part);
   if (p.topic === 'sim') return showSimPicker();
   startPractice(p.topic, { level: p.level, count: p.count, fixed: p.fixed, hideLevel: p.fixed });
 }
@@ -8007,7 +8015,7 @@ function startPractice(topicId, opt = {}) {
     fixed: !!(opt.fixed || opt.list || opt.retry), hideLevel: !!opt.hideLevel,
     retry: opt.retry || null, list: opt.list || null, label: opt.label || null, lessonId: opt.lessonId || null,
     mixOrder: shuffle(TOPICS.map(t => t.id)),
-    qs: [], i: 0, results: [], run: 0, streak: 0, prevGen: null, m0: masterySnapshot(), tpKind: opt.tp || null
+    qs: [], i: 0, results: [], run: 0, streak: 0, prevGen: null, m0: masterySnapshot(), tpKind: opt.tp || null, tpPart: opt.tpPart || ''
   };
   track('תרגול', titleText());
   renderQ();
@@ -8039,12 +8047,15 @@ function testPicker() {
 function testLinkDialog() {
   const W = GRADE === 6 ? 'מבדק' : 'מבחן';
   const base = location.origin + location.pathname;
-  const mkL = topic => base + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'topic=' + topic;
+  const mkL = (topic, part) => base + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'topic=' + topic + (part && part !== 'full' && topic !== 'sim' ? '&part=' + part : '');
   const kinds = [
     ['testfb', '💬 עם משוב', 'רמזים ועזרה תוך כדי', 'עם משוב'],
     ['test', '📋 ציון בסוף', 'בלי עזרה – הציון והפתרונות בסוף', 'ציון בסוף'],
     ['sim', '⏱️ עם שעון', 'זמן מוגבל, אפשר לדלג ולחזור', 'עם שעון']
   ];
+  const parts = [['full', 'מבדק מלא', '20 שאלות'], ['a', "חלק א׳", '10 שאלות'], ['b', "חלק ב׳", '10 שאלות']];
+  const partName = { full: '', a: " · חלק א׳", b: " · חלק ב׳" };
+  let selKind = null, selPart = 'full';
   const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
   const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
   const onKey = e => { if (e.key === 'Escape') close(); };
@@ -8052,19 +8063,38 @@ function testLinkDialog() {
   ov.addEventListener('click', e => { if (e.target === ov) close(); });
   ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="tlT">
     <h2 id="tlT">🔗 קישור ל${W} לתלמידים</h2>
-    <div class="subtitle">בחרו סוג, העתיקו את הקישור והדביקו אותו בקלאסרום (עדיף כ"שאלה" – כך תדעו מי ענה ומה הציון)</div>
+    <div class="subtitle">בחרו סוג ואורך, העתיקו את הקישור והדביקו אותו בקלאסרום (עדיף כ"שאלה" – כך תדעו מי ענה ומה הציון)</div>
+    <div class="tl-lbl">סוג</div>
     <div class="tl-kinds">${kinds.map(k => `<button type="button" class="secondary tl-kind" data-tk="${k[0]}" data-name="${k[3]}">${k[1]}<span class="desc">${k[2]}</span></button>`).join('')}</div>
+    <div class="tl-lbl">אורך</div>
+    <div class="tl-kinds tl-parts">${parts.map(p => `<button type="button" class="secondary tl-part${p[0] === 'full' ? ' sel' : ''}" data-tp="${p[0]}">${p[1]}<span class="desc">${p[2]}</span></button>`).join('')}</div>
     <div class="sc-sec tl-out" hidden><b>🔗 הקישור – <span id="tlName"></span></b>
       <div class="kf-join"><input id="tlLink" class="tinput" readonly dir="ltr" value=""><button class="secondary" type="button" id="tlCopy">העתקה</button></div>
       <div class="small" id="tlMsg"></div></div>
     <div class="actions" style="justify-content:center"><button id="tlNo" class="ghost">↩ חזור</button></div>
   </div>`;
   const out = ov.querySelector('.tl-out'), inp = ov.querySelector('#tlLink');
-  ov.querySelectorAll('.tl-kind').forEach(b => b.onclick = () => {
-    ov.querySelectorAll('.tl-kind').forEach(x => x.classList.toggle('sel', x === b));
-    inp.value = mkL(b.dataset.tk);
-    ov.querySelector('#tlName').textContent = b.dataset.name;
+  const kindName = () => (kinds.find(k => k[0] === selKind) || [])[3] || '';
+  const refresh = () => {
+    if (!selKind) return;
+    const simNoPart = selKind === 'sim';
+    inp.value = mkL(selKind, selPart);
+    ov.querySelector('#tlName').textContent = kindName() + (simNoPart ? '' : partName[selPart]);
     out.hidden = false; ov.querySelector('#tlMsg').textContent = '';
+  };
+  const syncParts = () => {
+    const off = selKind === 'sim';
+    ov.querySelectorAll('.tl-part').forEach(x => { x.disabled = off; x.style.opacity = off ? '0.4' : ''; });
+  };
+  ov.querySelectorAll('.tl-part').forEach(b => b.onclick = () => {
+    selPart = b.dataset.tp;
+    ov.querySelectorAll('.tl-part').forEach(x => x.classList.toggle('sel', x === b));
+    refresh();
+  });
+  ov.querySelectorAll('.tl-kind').forEach(b => b.onclick = () => {
+    selKind = b.dataset.tk;
+    ov.querySelectorAll('.tl-kind').forEach(x => x.classList.toggle('sel', x === b));
+    syncParts(); refresh();
   });
   ov.querySelector('#tlCopy').onclick = () => {
     const done = () => { ov.querySelector('#tlMsg').textContent = 'הקישור הועתק ✔'; };
@@ -8073,23 +8103,24 @@ function testLinkDialog() {
   ov.querySelector('#tlNo').onclick = close;
 }
 // ---- שמירה אוטומטית והמשך של מבדק שנקטע (ציון בסוף / עם משוב) ----
-const TP_KEY = 'math-test-wip', TP_TTL = 3 * 3600 * 1000;
+const TP_TTL = 24 * 3600 * 1000;
+const tpKey = (kind, part) => `math-test-wip-${kind}-${part || 'f'}`;
 function tpSave() {
   try {
     const st = state; if (!st || !st.tpKind || st.sim) return;
     const full = st.tpKind === 'test' ? st.qs : st.list;
-    const wip = { v: 1, t: Date.now(), grade: GRADE, kind: st.tpKind, label: st.label || null,
+    const wip = { v: 2, t: Date.now(), grade: GRADE, kind: st.tpKind, part: st.tpPart || '', label: st.label || null,
       count: st.count, i: st.i, score: st.score || 0,
       qs: full, res: st.results.map(r => ({ a: r.a, ok: !!r.ok, outcome: r.outcome, skipped: !!r.skipped })) };
-    localStorage.setItem(TP_KEY, JSON.stringify(wip));
+    localStorage.setItem(tpKey(st.tpKind, st.tpPart), JSON.stringify(wip));
   } catch (e) { /* לא חובה */ }
 }
-function tpClear() { try { localStorage.removeItem(TP_KEY); } catch (e) { /* לא חובה */ } }
-function tpLoad() {
+function tpClear(kind, part) { try { localStorage.removeItem(tpKey(kind, part)); } catch (e) { /* לא חובה */ } }
+function tpLoad(kind, part) {
   try {
-    const w = JSON.parse(localStorage.getItem(TP_KEY) || 'null');
+    const w = JSON.parse(localStorage.getItem(tpKey(kind, part)) || 'null');
     if (!w || w.grade !== GRADE || !Array.isArray(w.qs) || w.i >= w.count) return null;
-    if (Date.now() - w.t > TP_TTL) { tpClear(); return null; }
+    if (Date.now() - w.t > TP_TTL) { tpClear(kind, part); return null; }
     return w;
   } catch (e) { return null; }
 }
@@ -8098,28 +8129,30 @@ function tpResume(w) {
   const qs = w.qs;
   const results = (w.res || []).map((r, k) => ({ q: qs[k], a: r.a, ok: r.ok, outcome: r.outcome, skipped: r.skipped }));
   if (w.kind === 'test') {
-    state = { mode: 'test', topicId: 'test', qs, count: w.count, i: w.i, results, score: w.score, tpKind: 'test' };
+    state = { mode: 'test', topicId: 'test', qs, count: w.count, i: w.i, results, score: w.score, tpKind: 'test', tpPart: w.part || '', label: w.label || TEST_NAME };
   } else {
     state = { mode: 'practice', topicId: 'test', level: 1, count: w.count, fixed: true, hideLevel: false,
       retry: null, list: qs, label: w.label, lessonId: null, mixOrder: [], qs, i: w.i, results,
-      run: 0, streak: 0, prevGen: null, m0: masterySnapshot(), tpKind: 'testfb' };
+      run: 0, streak: 0, prevGen: null, m0: masterySnapshot(), tpKind: 'testfb', tpPart: w.part || '' };
   }
   track(w.kind === 'test' ? 'מבחן' : 'תרגול', (w.label || TEST_NAME) + ' – המשך');
   renderQ();
 }
-function startTest(withFeedback) {
+function startTest(withFeedback, part) {
   const kind = withFeedback ? 'testfb' : 'test';
-  const w = tpLoad();
-  if (w && w.kind === kind) return tpResumeAsk(w, () => startTestFresh(withFeedback));
-  startTestFresh(withFeedback);
+  const w = tpLoad(kind, part);
+  if (w) return tpResumeAsk(w, () => startTestFresh(withFeedback, part));
+  startTestFresh(withFeedback, part);
 }
-function startTestFresh(withFeedback) {
-  tpClear();
+function partSuffix(part) { return part === 'a' ? ' · חלק א׳' : part === 'b' ? ' · חלק ב׳' : ''; }
+function startTestFresh(withFeedback, part) {
+  tpClear(withFeedback ? 'testfb' : 'test', part);
   navPush('view');
-  const qs = buildTest();
-  if (withFeedback) return startPractice('test', { list: qs, label: `${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב`, tp: 'testfb' });
-  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0, tpKind: 'test' };
-  track('מבחן', TEST_NAME);
+  const qs = buildTest(part);
+  const W = GRADE === 6 ? 'מבדק' : 'מבחן';
+  if (withFeedback) return startPractice('test', { list: qs, label: `${W} עם משוב${partSuffix(part)}`, tp: 'testfb', tpPart: part || '' });
+  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0, tpKind: 'test', tpPart: part || '', label: `${TEST_NAME}${partSuffix(part)}` };
+  track('מבחן', state.label);
   renderQ();
 }
 function tpResumeAsk(w, fresh) {
@@ -8129,14 +8162,14 @@ function tpResumeAsk(w, fresh) {
   const onKey = e => { if (e.key === 'Escape') close(); };
   document.addEventListener('keydown', onKey);
   ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="tpRT">
-    <h2 id="tpRT">📝 יש ${W} באמצע</h2>
+    <h2 id="tpRT">📝 יש ${W} באמצע${partSuffix(w.part)}</h2>
     <div class="subtitle">הגעת לשאלה ${w.i + 1} מתוך ${w.count}. רוצה להמשיך מאיפה שעצרת?</div>
     <div class="big-actions">
       <button id="tpRCont" class="race-go">▶ המשך מאיפה שעצרתי</button>
       <button id="tpRNew" class="secondary">🔄 התחל ${W} חדש<span class="desc">שאלות חדשות, מההתחלה</span></button>
     </div></div>`;
   ov.querySelector('#tpRCont').onclick = () => { close(); tpResume(w); };
-  ov.querySelector('#tpRNew').onclick = () => { close(); tpClear(); fresh(); };
+  ov.querySelector('#tpRNew').onclick = () => { close(); tpClear(w.kind, w.part); fresh(); };
 }
 
 /* ---------- סימולציה עם שעון ---------- */
@@ -8279,7 +8312,7 @@ function inputHTML(q) {
 function titleText() {
   if (state.exit) return 'כרטיס יציאה – ' + TOPIC[state.exit].name;
   if (state.sim) return 'סימולציה עם שעון';
-  if (state.mode === 'test') return TEST_NAME;
+  if (state.mode === 'test') return state.label || TEST_NAME;
   if (state.label) return state.label;
   if (state.retry) return 'תרגול הטעויות שלי';
   if (state.topicId === 'mix') return 'תרגול מעורב';
@@ -8589,7 +8622,7 @@ function nextQ() {
 /* ---------- סיכום ---------- */
 function summary() {
   const s = state, n = s.results.length;
-  if (s.tpKind) tpClear();
+  if (s.tpKind) tpClear(s.tpKind, s.tpPart);
   track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
