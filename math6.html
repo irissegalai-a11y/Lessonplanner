@@ -1528,7 +1528,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8007,7 +8007,7 @@ function startPractice(topicId, opt = {}) {
     fixed: !!(opt.fixed || opt.list || opt.retry), hideLevel: !!opt.hideLevel,
     retry: opt.retry || null, list: opt.list || null, label: opt.label || null, lessonId: opt.lessonId || null,
     mixOrder: shuffle(TOPICS.map(t => t.id)),
-    qs: [], i: 0, results: [], run: 0, streak: 0, prevGen: null, m0: masterySnapshot()
+    qs: [], i: 0, results: [], run: 0, streak: 0, prevGen: null, m0: masterySnapshot(), tpKind: opt.tp || null
   };
   track('תרגול', titleText());
   renderQ();
@@ -8072,13 +8072,71 @@ function testLinkDialog() {
   };
   ov.querySelector('#tlNo').onclick = close;
 }
+// ---- שמירה אוטומטית והמשך של מבדק שנקטע (ציון בסוף / עם משוב) ----
+const TP_KEY = 'math-test-wip', TP_TTL = 3 * 3600 * 1000;
+function tpSave() {
+  try {
+    const st = state; if (!st || !st.tpKind || st.sim) return;
+    const full = st.tpKind === 'test' ? st.qs : st.list;
+    const wip = { v: 1, t: Date.now(), grade: GRADE, kind: st.tpKind, label: st.label || null,
+      count: st.count, i: st.i, score: st.score || 0,
+      qs: full, res: st.results.map(r => ({ a: r.a, ok: !!r.ok, outcome: r.outcome, skipped: !!r.skipped })) };
+    localStorage.setItem(TP_KEY, JSON.stringify(wip));
+  } catch (e) { /* לא חובה */ }
+}
+function tpClear() { try { localStorage.removeItem(TP_KEY); } catch (e) { /* לא חובה */ } }
+function tpLoad() {
+  try {
+    const w = JSON.parse(localStorage.getItem(TP_KEY) || 'null');
+    if (!w || w.grade !== GRADE || !Array.isArray(w.qs) || w.i >= w.count) return null;
+    if (Date.now() - w.t > TP_TTL) { tpClear(); return null; }
+    return w;
+  } catch (e) { return null; }
+}
+function tpResume(w) {
+  navPush('view');
+  const qs = w.qs;
+  const results = (w.res || []).map((r, k) => ({ q: qs[k], a: r.a, ok: r.ok, outcome: r.outcome, skipped: r.skipped }));
+  if (w.kind === 'test') {
+    state = { mode: 'test', topicId: 'test', qs, count: w.count, i: w.i, results, score: w.score, tpKind: 'test' };
+  } else {
+    state = { mode: 'practice', topicId: 'test', level: 1, count: w.count, fixed: true, hideLevel: false,
+      retry: null, list: qs, label: w.label, lessonId: null, mixOrder: [], qs, i: w.i, results,
+      run: 0, streak: 0, prevGen: null, m0: masterySnapshot(), tpKind: 'testfb' };
+  }
+  track(w.kind === 'test' ? 'מבחן' : 'תרגול', (w.label || TEST_NAME) + ' – המשך');
+  renderQ();
+}
 function startTest(withFeedback) {
+  const kind = withFeedback ? 'testfb' : 'test';
+  const w = tpLoad();
+  if (w && w.kind === kind) return tpResumeAsk(w, () => startTestFresh(withFeedback));
+  startTestFresh(withFeedback);
+}
+function startTestFresh(withFeedback) {
+  tpClear();
   navPush('view');
   const qs = buildTest();
-  if (withFeedback) return startPractice('test', { list: qs, label: `${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב` });
-  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0 };
+  if (withFeedback) return startPractice('test', { list: qs, label: `${GRADE === 6 ? 'מבדק' : 'מבחן'} עם משוב`, tp: 'testfb' });
+  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0, tpKind: 'test' };
   track('מבחן', TEST_NAME);
   renderQ();
+}
+function tpResumeAsk(w, fresh) {
+  const W = GRADE === 6 ? 'מבדק' : 'מבחן';
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="tpRT">
+    <h2 id="tpRT">📝 יש ${W} באמצע</h2>
+    <div class="subtitle">הגעת לשאלה ${w.i + 1} מתוך ${w.count}. רוצה להמשיך מאיפה שעצרת?</div>
+    <div class="big-actions">
+      <button id="tpRCont" class="race-go">▶ המשך מאיפה שעצרתי</button>
+      <button id="tpRNew" class="secondary">🔄 התחל ${W} חדש<span class="desc">שאלות חדשות, מההתחלה</span></button>
+    </div></div>`;
+  ov.querySelector('#tpRCont').onclick = () => { close(); tpResume(w); };
+  ov.querySelector('#tpRNew').onclick = () => { close(); tpClear(); fresh(); };
 }
 
 /* ---------- סימולציה עם שעון ---------- */
@@ -8325,6 +8383,7 @@ function renderQ() {
     if (inputs[0] && window.innerWidth > 600) inputs[0].focus();
   }
   if (state.sim) { simRestore(); updateSimClock(); }
+  if (state.tpKind && !state.sim) tpSave();
 }
 
 function showFb(kind, html) {
@@ -8530,6 +8589,7 @@ function nextQ() {
 /* ---------- סיכום ---------- */
 function summary() {
   const s = state, n = s.results.length;
+  if (s.tpKind) tpClear();
   track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
