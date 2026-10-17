@@ -1067,6 +1067,8 @@
   .op-seq span { min-width: 1.8em; text-align: center; font-size: clamp(1.1rem, 4.4vw, 2.4rem); font-weight: 800; border: 2.5px solid #1f1e1c; border-radius: 12px; padding: 6px 6px; background: #fffdf8; }
   .op-seq span.gap { background: #fff3c4; color: #b3261e; }
   .op-seq span.empty { background: #fff; border-style: dashed; }
+  .tl-kinds { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+  .tl-kind.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
   .champ-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 14px; width: 100%; text-align: right; margin: 0 0 16px; padding: 16px 20px; border: 2.5px solid #1f1e1c; border-radius: 16px; background: linear-gradient(135deg, #fff4c2, #ffe08a); color: #1f1e1c; box-shadow: 3px 3px 0 #1f1e1c; cursor: pointer; font: inherit; }
   .champ-card:hover { background: linear-gradient(135deg, #fff0ad, #ffd666); }
   .champ-card .cc-t { font-size: 1.35rem; font-weight: 800; }
@@ -1524,7 +1526,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7756,6 +7758,7 @@ function home() {
             <button id="testPick" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} – 20 שאלות מכל הנושאים<span class="desc">בוחרים: עם משוב תוך כדי, ציון בסוף, או עם שעון</span></button>
             ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}<span class="desc">שאלות בסגנון ה${GRADE === 6 ? 'מבדק' : 'מבחן'} – הקנייה ותרגול לכל שאלה, ומבחן אימון להדפסה</span></button>` : ''}
           </div>
+          ${teacherOn() ? `<div class="big-actions"><button id="testLink" class="secondary">🔗 קישור ל${GRADE === 6 ? 'מבדק' : 'מבחן'} לתלמידים<span class="desc">בוחרים סוג, מעתיקים קישור ומדביקים בקלאסרום</span></button></div>` : ''}
           ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
         </section>
         <section class="panel" data-panel="games" ${homeTab === 'games' ? '' : 'hidden'}>
@@ -7872,6 +7875,7 @@ function home() {
   if ($('fcTab')) $('fcTab').onclick = fcHome;
   $('exitTab').onclick = exitHome;
   $('testPick').onclick = testPicker;
+  if ($('testLink')) $('testLink').onclick = testLinkDialog;
   if ($('mkGo')) $('mkGo').onclick = mkHome;
   if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
@@ -8028,6 +8032,43 @@ function testPicker() {
   ov.querySelector('#tpEnd').onclick = () => { close(); startTest(false); };
   ov.querySelector('#tpSim').onclick = () => { close(); showSimPicker(); };
   ov.querySelector('#tpNo').onclick = close;
+}
+// מורה: קישור למבדק להדבקה בקלאסרום (בחירת סוג המבדק)
+function testLinkDialog() {
+  const W = GRADE === 6 ? 'מבדק' : 'מבחן';
+  const base = location.origin + location.pathname;
+  const mkL = topic => base + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'topic=' + topic;
+  const kinds = [
+    ['testfb', '💬 עם משוב', 'רמזים ועזרה תוך כדי'],
+    ['test', '📋 ציון בסוף', 'בלי עזרה – הציון והפתרונות בסוף'],
+    ['sim', '⏱️ עם שעון', 'זמן מוגבל, אפשר לדלג ולחזור']
+  ];
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="tlT">
+    <h2 id="tlT">🔗 קישור ל${W} לתלמידים</h2>
+    <div class="subtitle">בחרו סוג, העתיקו את הקישור והדביקו אותו בקלאסרום (עדיף כ"שאלה" – כך תדעו מי ענה ומה הציון)</div>
+    <div class="tl-kinds">${kinds.map(k => `<button type="button" class="secondary tl-kind" data-tk="${k[0]}">${k[1]}<span class="desc">${k[2]}</span></button>`).join('')}</div>
+    <div class="sc-sec tl-out" hidden><b>🔗 הקישור ל<span id="tlName"></span></b>
+      <div class="kf-join"><input id="tlLink" class="tinput" readonly dir="ltr" value=""><button class="secondary" type="button" id="tlCopy">העתקה</button></div>
+      <div class="small" id="tlMsg"></div></div>
+    <div class="actions" style="justify-content:center"><button id="tlNo" class="ghost">↩ חזור</button></div>
+  </div>`;
+  const out = ov.querySelector('.tl-out'), inp = ov.querySelector('#tlLink');
+  ov.querySelectorAll('.tl-kind').forEach(b => b.onclick = () => {
+    ov.querySelectorAll('.tl-kind').forEach(x => x.classList.toggle('sel', x === b));
+    inp.value = mkL(b.dataset.tk);
+    ov.querySelector('#tlName').textContent = b.textContent.replace(/\s+/g, ' ').trim();
+    out.hidden = false; ov.querySelector('#tlMsg').textContent = '';
+  });
+  ov.querySelector('#tlCopy').onclick = () => {
+    const done = () => { ov.querySelector('#tlMsg').textContent = 'הקישור הועתק ✔'; };
+    try { navigator.clipboard.writeText(inp.value).then(done, () => { inp.select(); }); } catch (e) { inp.select(); }
+  };
+  ov.querySelector('#tlNo').onclick = close;
 }
 function startTest(withFeedback) {
   navPush('view');
@@ -8559,7 +8600,9 @@ function summary() {
       </ul>
     </div>` : '';
 
-  const resultText = `${name ? name + ' | ' : ''}${label} | נכון: ${correct} מתוך ${n}${s.mode === 'practice' ? ` (${first} בניסיון ראשון, ${guided} בעזרת פתרון מודרך)` : ''} | ${date}`;
+  const buildResult = () => `${(store.name || '').trim() ? (store.name || '').trim() + ' | ' : ''}${label} | נכון: ${correct} מתוך ${n}${s.mode === 'practice' ? ` (${first} בניסיון ראשון, ${guided} בעזרת פתרון מודרך)` : ''} | ${date}`;
+  const resultText = buildResult();
+  const askTestName = s.mode === 'test' && !s.exit && !teacherOn() && !(store.name || '').trim();
 
   app.innerHTML = `
     <div class="card center">
@@ -8579,6 +8622,7 @@ function summary() {
       ${compare ? `<p class="compare">${compare}</p>` : ''}
       ${growth ? `<div class="growth"><div class="muted">ההתקדמות שלי:</div>${growth}</div>` : ''}
       ${breakdown}
+      ${askTestName ? `<div class="name-row name-mini" style="justify-content:center;margin:8px 0"><label for="sumNm">השם שלי:</label><input id="sumNm" value="" placeholder="כתבו את שמכם" autocomplete="off"></div>` : ''}
       <div class="actions" style="justify-content:center">
         ${missed.length ? `<button id="retryBtn">${ic('retry')} תרגול השאלות שהיו קשות (${missed.length})</button>` : ''}
         <button class="${missed.length ? 'secondary' : ''}" id="again">סבב נוסף ←</button>
@@ -8601,13 +8645,15 @@ function summary() {
   };
   $('homeBtn').onclick = home;
   if ($('champGo2')) $('champGo2').onclick = champStart;
+  if ($('sumNm')) $('sumNm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
   $('copy').onclick = async () => {
     const out = $('copied');
+    const txt = buildResult();
     try {
-      await navigator.clipboard.writeText(resultText);
+      await navigator.clipboard.writeText(txt);
       out.textContent = 'הועתק! אפשר להדביק בתגובה פרטית למורה בקלאסרום.';
     } catch (e) {
-      out.textContent = resultText;
+      out.textContent = txt;
     }
   };
   if (s.exit) exitAfterSummary(s, correct, n);
