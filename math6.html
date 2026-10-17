@@ -1068,7 +1068,9 @@
   .op-seq span.gap { background: #fff3c4; color: #b3261e; }
   .op-seq span.empty { background: #fff; border-style: dashed; }
   .tl-kinds { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
-  .tl-kind.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tl-kind { text-align: center; }
+  .tl-kind .desc { display: block; font-size: 0.9rem; font-weight: normal; margin-top: 4px; opacity: 0.85; }
+  .tl-kind.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(76,95,213,0.25); }
   .champ-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 14px; width: 100%; text-align: right; margin: 0 0 16px; padding: 16px 20px; border: 2.5px solid #1f1e1c; border-radius: 16px; background: linear-gradient(135deg, #fff4c2, #ffe08a); color: #1f1e1c; box-shadow: 3px 3px 0 #1f1e1c; cursor: pointer; font: inherit; }
   .champ-card:hover { background: linear-gradient(135deg, #fff0ad, #ffd666); }
   .champ-card .cc-t { font-size: 1.35rem; font-weight: 800; }
@@ -1526,7 +1528,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8039,9 +8041,9 @@ function testLinkDialog() {
   const base = location.origin + location.pathname;
   const mkL = topic => base + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'topic=' + topic;
   const kinds = [
-    ['testfb', '💬 עם משוב', 'רמזים ועזרה תוך כדי'],
-    ['test', '📋 ציון בסוף', 'בלי עזרה – הציון והפתרונות בסוף'],
-    ['sim', '⏱️ עם שעון', 'זמן מוגבל, אפשר לדלג ולחזור']
+    ['testfb', '💬 עם משוב', 'רמזים ועזרה תוך כדי', 'עם משוב'],
+    ['test', '📋 ציון בסוף', 'בלי עזרה – הציון והפתרונות בסוף', 'ציון בסוף'],
+    ['sim', '⏱️ עם שעון', 'זמן מוגבל, אפשר לדלג ולחזור', 'עם שעון']
   ];
   const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
   const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
@@ -8051,8 +8053,8 @@ function testLinkDialog() {
   ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="tlT">
     <h2 id="tlT">🔗 קישור ל${W} לתלמידים</h2>
     <div class="subtitle">בחרו סוג, העתיקו את הקישור והדביקו אותו בקלאסרום (עדיף כ"שאלה" – כך תדעו מי ענה ומה הציון)</div>
-    <div class="tl-kinds">${kinds.map(k => `<button type="button" class="secondary tl-kind" data-tk="${k[0]}">${k[1]}<span class="desc">${k[2]}</span></button>`).join('')}</div>
-    <div class="sc-sec tl-out" hidden><b>🔗 הקישור ל<span id="tlName"></span></b>
+    <div class="tl-kinds">${kinds.map(k => `<button type="button" class="secondary tl-kind" data-tk="${k[0]}" data-name="${k[3]}">${k[1]}<span class="desc">${k[2]}</span></button>`).join('')}</div>
+    <div class="sc-sec tl-out" hidden><b>🔗 הקישור – <span id="tlName"></span></b>
       <div class="kf-join"><input id="tlLink" class="tinput" readonly dir="ltr" value=""><button class="secondary" type="button" id="tlCopy">העתקה</button></div>
       <div class="small" id="tlMsg"></div></div>
     <div class="actions" style="justify-content:center"><button id="tlNo" class="ghost">↩ חזור</button></div>
@@ -8061,7 +8063,7 @@ function testLinkDialog() {
   ov.querySelectorAll('.tl-kind').forEach(b => b.onclick = () => {
     ov.querySelectorAll('.tl-kind').forEach(x => x.classList.toggle('sel', x === b));
     inp.value = mkL(b.dataset.tk);
-    ov.querySelector('#tlName').textContent = b.textContent.replace(/\s+/g, ' ').trim();
+    ov.querySelector('#tlName').textContent = b.dataset.name;
     out.hidden = false; ov.querySelector('#tlMsg').textContent = '';
   });
   ov.querySelector('#tlCopy').onclick = () => {
