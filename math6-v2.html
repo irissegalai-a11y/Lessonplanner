@@ -1074,6 +1074,11 @@
   .tl-kind .desc, .tl-part .desc { display: block; font-size: 0.85rem; font-weight: normal; margin-top: 3px; opacity: 0.85; }
   .tl-kind.sel, .tl-part.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(76,95,213,0.25); }
   .tl-lbl { font-weight: 700; font-size: 0.95rem; color: #5f5a50; margin: 6px 0 2px; }
+  .semsw { display: inline-flex; align-items: center; gap: 4px; font-size: 0.95rem; color: #3d3a33; }
+  .semsw .semx { font: inherit; font-weight: 700; padding: 3px 12px; border: 2px solid var(--ink, #1f1e1c); border-radius: 999px; background: #fffdf8; color: #3d3a33; box-shadow: none; cursor: pointer; }
+  .semsw .semx.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .semsw .semx:hover { background: #f3f5ff; }
+  .semsw .semx.on:hover { background: var(--accent); }
   @media (max-width: 400px) { .tl-parts .tl-part .desc { display: none; } }
   .champ-card { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 14px; width: 100%; text-align: right; margin: 0 0 16px; padding: 16px 20px; border: 2.5px solid #1f1e1c; border-radius: 16px; background: linear-gradient(135deg, #fff4c2, #ffe08a); color: #1f1e1c; box-shadow: 3px 3px 0 #1f1e1c; cursor: pointer; font: inherit; }
   .champ-card:hover { background: linear-gradient(135deg, #fff0ad, #ffd666); }
@@ -1532,7 +1537,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -1606,6 +1611,11 @@
 const GRADE_PARAMS = new URLSearchParams(location.search);
 const GRADE = ['1', '2', '3', '4', '5'].includes(GRADE_PARAMS.get('grade')) ? Number(GRADE_PARAMS.get('grade')) : 6;
 const NEUTRAL = GRADE_PARAMS.get('neutral') === '1';
+// מחצית הלימוד (א'/ב') – רלוונטי לכיתות ג' ו-ד': מתאים את תחום המספרים והנושאים
+let SEM = 1;
+try { const _sp = GRADE_PARAMS.get('sem'); SEM = _sp === '2' ? 2 : _sp === '1' ? 1 : (localStorage.getItem('math-sem') === '2' ? 2 : 1); } catch (e) { SEM = 1; }
+const SEM_ON = (GRADE === 3 || GRADE === 4);
+const g3big = () => GRADE === 3 && SEM === 2;
 // זוכרים את הכיתה האחרונה – לכתובת הראשית math.html
 try { if (!GRADE_PARAMS.has('teacher')) localStorage.setItem('math-grade', String(GRADE)); } catch (e) {}
 if (GRADE === 1) document.documentElement.classList.add('g1');
@@ -3558,11 +3568,15 @@ const TOPICS4 = [
   },
   {
     id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c',
-    desc: 'הרחבה וצמצום, השוואה, מדומה ↔ מעורב, חיבור וחיסור במכנה שווה',
-    levels: {
-      1: [genExpand, genReduce, () => genFracOfQty(1)],
-      2: [genImproperToMixed, genMixedToImproper, genCompareFrac],
+    desc: SEM === 2 ? 'מספר מעורב, השוואה, חיבור וחיסור במכנה שווה, שבר מכמות' : 'הכרת השבר, מספר מעורב, השוואת שברים',
+    levels: SEM === 2 ? {
+      1: [genImproperToMixed, genMixedToImproper, genCompareFrac],
+      2: [genAddSame, genSubSame, genCompareFrac],
       3: [genAddSame, genSubSame, () => genFracOfQty(1), genCompareFrac]
+    } : {
+      1: [genFracBar3, genImproperToMixed],
+      2: [genMixedToImproper, genCompareFrac],
+      3: [genCompareFrac, genImproperToMixed, genMixedToImproper]
     },
     tips: ['הרחבה/צמצום: כופלים או מחלקים את המונה ואת המכנה באותו מספר.', 'שבר מדומה ← שבר מעורב: מונה : מכנה.', 'חיבור וחיסור עם מכנה שווה: רק המונים משתנים.']
   },
@@ -3614,8 +3628,10 @@ const LEVEL_DESC4 = {
 const RTL = s => `<span class="m" style="direction:rtl">${s}</span>`;
 
 function genCompose3() {
-  const places = shuffle([0, 1, 2, 3]).slice(0, R(2, 3));
-  if (!places.includes(3)) places.push(3);
+  const hi = g3big() ? 3 : 2;
+  const pool = [0, 1, 2, 3].filter(p => p <= hi);
+  const places = shuffle(pool).slice(0, Math.min(pool.length, R(2, hi + 1)));
+  if (!places.includes(hi)) places.push(hi);
   const parts = places.map(p => ({ p, d: R(2, 9) }));
   const val = parts.reduce((s, x) => s + x.d * 10 ** x.p, 0);
   const shown = Math.random() < 0.6 ? parts.slice().sort((a, b) => b.p - a.p) : shuffle(parts);
@@ -3634,7 +3650,7 @@ function genCompose3() {
 function genRound3() {
   const unit = pick([{ v: 10, n: 'לעשרות' }, { v: 100, n: 'למאות' }]);
   let N;
-  do { N = R(100, 9999); } while (N % unit.v === 0);
+  do { N = R(100, g3big() ? 9999 : 999); } while (N % unit.v === 0);
   const ans = Math.round(N / unit.v) * unit.v, down = Math.floor(N / unit.v) * unit.v;
   const nd = Math.floor(N / (unit.v / 10)) % 10;
   return {
@@ -3648,7 +3664,7 @@ function genRound3() {
 
 function genCompare3() {
   for (;;) {
-    const digits = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 4);
+    const digits = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, g3big() ? 4 : 3);
     const set = new Set();
     let guard = 0;
     while (set.size < 4 && guard++ < 50) { const p = shuffle(digits); if (p[0] !== 0) set.add(Number(p.join(''))); }
@@ -3663,7 +3679,7 @@ function genCompare3() {
 }
 
 function genNumberLine3() {
-  const k = R(0, 2);
+  const k = g3big() ? R(0, 2) : pick([0, 2]);
   let a, b, parts;
   if (k === 0) { a = R(0, 9) * 100; b = a + 100; parts = 10; }
   else if (k === 1) { a = R(0, 8) * 1000; b = a + 1000; parts = 10; }
@@ -3684,6 +3700,7 @@ function digitsErr(a, b, op) {
 }
 
 function genAddSub3(lv = 1) {
+  if (!g3big()) lv = 1;
   const op = Math.random() < 0.5 ? '+' : '-';
   let a, b;
   if (lv === 1) { a = R(25, 499); b = R(12, 399); if (op === '+' && a + b > 999) b = 999 - a; }
@@ -3731,7 +3748,7 @@ function genMissing3() {
 function genWordAddSub3() {
   const k = R(0, 2);
   if (k === 0) {
-    const a = R(250, 899), b = R(150, 899);
+    const a = R(250, g3big() ? 899 : 549), b = R(150, g3big() ? 899 : 449);
     return {
       type: 'num', unit: 'תלמידים', text: `בבית הספר לומדים ${a} בנים ו-${b} בנות.<br>כמה תלמידים לומדים בבית הספר?`, ans: a + b,
       traps: [{ v: Math.abs(a - b), m: 'חיסרתם. השאלה היא כמה <b>ביחד</b> – מחברים.' }],
@@ -3739,7 +3756,7 @@ function genWordAddSub3() {
     };
   }
   if (k === 1) {
-    const a = R(800, 2500), b = R(120, 700);
+    const a = R(g3big() ? 800 : 450, g3big() ? 2500 : 999), b = R(120, g3big() ? 700 : 380);
     return {
       type: 'num', unit: 'ספרים', text: `בספרייה היו ${fmt(a)} ספרים. השאילו ${b} ספרים.<br>כמה ספרים נשארו בספרייה?`, ans: a - b,
       traps: [{ v: a + b, m: 'חיברתם. כשמשאילים ספרים – נשארים פחות, אז מחסרים.' }],
@@ -4887,10 +4904,10 @@ const LEVEL_DESC1 = {
 
 const TOPICS3 = [
   {
-    id: 'place', name: 'מספרים עד 10,000', icon: '🔢', color: '#4c5fd5',
+    id: 'place', name: 'מספרים עד ' + (g3big() ? '10,000' : '1,000'), icon: '🔢', color: '#4c5fd5',
     desc: 'ערך הספרה, השוואה, ישר מספרים ועיגול',
     levels: {
-      1: [Object.assign(() => genDigitValue(4), { __learn: { lesson: 'place', card: 1 } }), genCompose3],
+      1: [Object.assign(() => genDigitValue(g3big() ? 4 : 3), { __learn: { lesson: 'place', card: 1 } }), genCompose3],
       2: [genCompare3, genNumberLine3, genRound3],
       3: [genCompose3, genRound3, genNumberLine3, genCompare3]
     },
@@ -4898,7 +4915,7 @@ const TOPICS3 = [
   },
   {
     id: 'addsub', name: 'חיבור וחיסור', icon: '➕', color: '#e0703a',
-    desc: 'חיבור וחיסור במאונך עד 10,000, מספר חסר ובעיות',
+    desc: 'חיבור וחיסור במאונך עד ' + (g3big() ? '10,000' : '1,000') + ', מספר חסר ובעיות',
     levels: {
       1: [() => genAddSub3(1), () => genAddSub3(1), genMissing3],
       2: [() => genAddSub3(2), genMissing3],
@@ -7698,7 +7715,7 @@ function home() {
       <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
     <div class="subtitle">${SUBTITLE}</div>
-    ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${teacherOn() ? '<span class="tch-btns"><button type="button" class="pvw-btn" id="guideBtn">❓ איך משתמשים?</button><button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button></span>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
+    ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${SEM_ON ? `<span class="semsw" role="group" aria-label="מחצית הלימוד">מחצית: <button type="button" class="semx${SEM === 1 ? ' on' : ''}" data-sem="1">א׳</button><button type="button" class="semx${SEM === 2 ? ' on' : ''}" data-sem="2">ב׳</button></span>` : ''}${teacherOn() ? '<span class="tch-btns"><button type="button" class="pvw-btn" id="guideBtn">❓ איך משתמשים?</button><button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button></span>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
     ${PRESET ? `<div class="card banner today">
       <div><div class="today-k">הוכן בשבילך</div><div class="today-t">${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div></div>
       <button id="presetGo">התחילו ←</button>
@@ -7861,6 +7878,7 @@ function home() {
   $('gbGo').onclick = gbHome;
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
   if ($('guideBtn')) $('guideBtn').onclick = guideHome;
+  app.querySelectorAll('.semx').forEach(b => b.onclick = () => { const n = b.dataset.sem; try { localStorage.setItem('math-sem', n); } catch (e) { /* לא חובה */ } const u = new URL(location.href); u.searchParams.set('sem', n); location.href = u.toString(); });
   if ($('pvwOff')) $('pvwOff').onclick = () => setPreview(false);
   if ($('clsOpen')) {
     $('clsOpen').onclick = () => classSub('open');
