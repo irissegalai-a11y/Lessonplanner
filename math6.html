@@ -1103,6 +1103,17 @@
   .b10-card3 { background: linear-gradient(135deg,#e3ecff,#cfe0fb); }
   .b10-card3:hover { background: linear-gradient(135deg,#d6e3fc,#bcd3f7); }
   .b10-card3 .b10c-d { color: #35507a; }
+  .wh-card { text-align: center; border-radius: 18px; background: linear-gradient(160deg,#fff4e6,#ffe0c2); }
+  .wh-ops { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0; }
+  .wh-op { font: inherit; font-size: 1.1rem; padding: 8px 16px; border: 2.5px solid #1f1e1c; border-radius: 12px; background: #fff; cursor: pointer; }
+  .wh-op.on { background: #ffb703; box-shadow: 2px 2px 0 #1f1e1c; }
+  .wh-rng { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; font-size: 1.15rem; font-weight: 700; }
+  .wh-rng input { width: 90px; font: inherit; text-align: center; padding: 6px; border: 2.5px solid #1f1e1c; border-radius: 10px; }
+  .wh-score { display: flex; gap: 14px; justify-content: center; align-items: center; flex-wrap: wrap; font-weight: 700; }
+  .wh-wrap { position: relative; width: min(300px, 80vw); margin: 10px auto 0; }
+  .wh-ptr { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 2rem; color: #b3261e; z-index: 1; line-height: 1; }
+  .wh-svg { width: 100%; height: auto; display: block; pointer-events: none; transition: transform 3s cubic-bezier(.17,.67,.2,1); }
+  .wh-ex { font-size: 2rem; font-weight: 800; margin: 8px 0; }
   .er-card { text-align: center; border-radius: 18px; }
   .er-card h2 { margin: 4px 0 8px; }
   .er-big { font-size: 3rem; line-height: 1.2; }
@@ -1630,7 +1641,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קס</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7927,6 +7938,11 @@ function home() {
             <span class="gc-nm">חדר בריחה מתמטי</span>
             <span class="gc-ds">4 חדרים – הפסקה, סדרות, גיבורת-על וחללית חייזרים. פותרים חידות, אוספים ספרות לקוד ובורחים!</span>
           </button>
+          <button class="game-card" id="whGo0">
+            <span class="gc-ic" style="--gw:rgba(239,138,98,0.55)">🎡</span>
+            <span class="gc-nm">גלגל המזל</span>
+            <span class="gc-ds">בוחרים נושא וטווח מספרים, מסובבים את הגלגל ופותרים את התרגיל שיצא!</span>
+          </button>
           <button class="game-card" id="tfGo0">
             <span class="gc-ic" style="--gw:rgba(127,168,214,0.6)">${ic('check')}</span>
             <span class="gc-nm">אמת או שקר?</span>
@@ -8071,6 +8087,7 @@ function home() {
   if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
   if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
   if ($('erGo0')) $('erGo0').onclick = escapeRoom;
+  if ($('whGo0')) $('whGo0').onclick = wheelGame;
   if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
@@ -12293,6 +12310,100 @@ function erProb(g, op) {
   else if (op === 'frac') { const d = [2, 3, 4, 5, 10][R(0, 4)], n = R(1, d - 1), m = g >= 6 ? R(4, 20) : R(3, 12); x = d * m; a = n * m; y = `<span dir="ltr" class="er-fr">${n}/${d}</span>`; h = `קודם מצאו חלק אחד: ${x} ÷ ${d} = ${m}. אחר כך כפלו ב-${n}.`; }
   else { const p = [10, 20, 25, 50, 75][R(0, 4)]; x = 20 * R(2, 15); y = p; a = x * p / 100; h = `${p}% זה ${{ 10: 'עשירית', 20: 'חמישית', 25: 'רבע', 50: 'חצי', 75: 'שלושה רבעים' }[p]} מהכמות.`; }
   return { x, y, a, h };
+}
+function wheelGame() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('משחק: גלגל המזל');
+  const OPS = [['+', 'חיבור'], ['-', 'חיסור'], ...(GRADE >= 2 ? [['×', 'כפל'], ['÷', 'חילוק']] : [])];
+  let op = '+', lo = 1, hi = 10, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
+  const header = `<div class="topbar"><span class="title">🎡 גלגל המזל</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
+  const COLS = ['#f6c344', '#ef8a62', '#7fb3e0', '#8fd19e', '#c39be0', '#f29ac0', '#6fd3c8', '#f4a259'];
+  const fig = () => {
+    const N = nums.length, R = 140, C = 150, A = 2 * Math.PI / N;
+    const pt = (a, r) => `${(C + r * Math.sin(a)).toFixed(1)},${(C - r * Math.cos(a)).toFixed(1)}`;
+    const fs = Math.max(13, Math.min(28, 150 / N + 10 - 3 * (String(hi).length - 1)));
+    return `<div class="wh-wrap" dir="ltr"><div class="wh-ptr">▼</div><svg viewBox="0 0 300 300" class="wh-svg" id="whSvg" style="transform:rotate(${rot}deg)">
+      ${nums.map((n, i) => `<path d="M${C},${C} L${pt(i * A, R)} A${R},${R} 0 0 1 ${pt((i + 1) * A, R)} Z" fill="${COLS[i % (N % 8 === 1 ? 7 : 8)]}" stroke="#1f1e1c" stroke-width="2"/>
+        <text x="${pt((i + .5) * A, R * .68).split(',')[0]}" y="${pt((i + .5) * A, R * .68).split(',')[1]}" transform="rotate(${((i + .5) * 360 / N).toFixed(1)} ${pt((i + .5) * A, R * .68).replace(',', ' ')})" text-anchor="middle" dominant-baseline="central" font-size="${fs}" font-weight="800" fill="#1f1e1c" data-raw>${n}</text>`).join('')}
+      <circle cx="${C}" cy="${C}" r="16" fill="#1f1e1c"/></svg></div>`;
+  };
+  const setup = () => {
+    app.innerHTML = `${header}
+      <div class="card wh-card">
+        <div class="er-big">🎡</div>
+        <h2>גלגל המזל – הגדרות</h2>
+        <p class="muted">בוחרים נושא וטווח מספרים. הגלגל בוחר מספר אחד, והמספר השני נבחר מאותו טווח.</p>
+        <div class="wh-ops">${OPS.map(([o, t]) => `<button type="button" class="wh-op${o === op ? ' on' : ''}" data-op="${o}"><b dir="ltr">${o}</b> ${t}</button>`).join('')}</div>
+        <div class="wh-rng"><label>מ- <input id="whLo" inputmode="numeric" value="${lo}"></label><label>עד <input id="whHi" inputmode="numeric" value="${hi}"></label></div>
+        <div id="erMsg" class="er-msg bad" aria-live="polite"></div>
+        <div class="actions" style="justify-content:center"><button id="whStart" class="race-go">▶ לגלגל!</button></div>
+      </div>`;
+    $('quit').onclick = home;
+    app.querySelectorAll('.wh-op').forEach(b => b.onclick = () => { op = b.dataset.op; app.querySelectorAll('.wh-op').forEach(x => x.classList.toggle('on', x === b)); });
+    $('whStart').onclick = () => {
+      const n = id => parseInt(($(id).value || '').replace(/\D/g, ''), 10);
+      let a = n('whLo'), b = n('whHi');
+      if (isNaN(a) || isNaN(b)) { $('erMsg').textContent = 'הקלידו שני מספרים.'; return; }
+      if (a > b) [a, b] = [b, a];
+      if (op === '÷' && a === 0) a = 1;
+      if (b > 1000 || b < 1) { $('erMsg').textContent = 'הטווח צריך להיות בין 0 ל-1000.'; return; }
+      lo = a; hi = b;
+      const all = []; for (let v = lo; v <= hi; v++) all.push(v);
+      nums = all.length <= 12 ? all : shuffle(all).slice(0, 12).sort((x, y) => x - y);
+      if (nums.length < 2) nums = [lo, lo];
+      track('גלגל המזל – הגדרה', `${op} ${lo}–${hi}`);
+      ok = tot = streak = 0; play();
+    };
+  };
+  const play = () => {
+    app.innerHTML = `${header}
+      <div class="card wh-card">
+        <div class="wh-score"><span>✅ ${ok} מתוך ${tot}</span>${streak >= 2 ? `<span>🔥 רצף ${streak}</span>` : ''}<button type="button" class="ghost" id="whSet">⚙️ נושא וטווח</button></div>
+        ${fig()}
+        <div id="whQ" class="er-q"></div>
+        <div class="actions" style="justify-content:center"><button id="whSpin" class="race-go">🎡 סובבו!</button></div>
+      </div>`;
+    $('quit').onclick = home;
+    $('whSet').onclick = setup;
+    $('whSpin').onclick = spin;
+  };
+  const spin = () => {
+    const N = nums.length, i = Math.floor(Math.random() * N), seg = 360 / N;
+    const target = 360 - (i + .3 + Math.random() * .4) * seg;
+    rot += 360 * 5 + ((target - rot) % 360 + 360) % 360;
+    $('whSpin').disabled = true; $('whSet').disabled = true;
+    $('whSvg').style.transform = `rotate(${rot}deg)`;
+    const a = nums[i], b = lo + Math.floor(Math.random() * (hi - lo + 1));
+    cur = op === '+' ? { q: `${a} + ${b}`, a: a + b } : op === '-' ? { q: `${Math.max(a, b)} − ${Math.min(a, b)}`, a: Math.abs(a - b) }
+      : op === '×' ? { q: `${a} × ${b}`, a: a * b } : { q: `${a * b} ÷ ${a}`, a: b };
+    setTimeout(ask, 3200);
+  };
+  const ask = () => {
+    $('whSpin').closest('.actions').remove(); $('whSet').disabled = false;
+    $('whQ').innerHTML = `<div dir="ltr" class="wh-ex">${cur.q} = ?</div>
+      <div class="er-ans"><input id="erIn" inputmode="numeric" autocomplete="off" aria-label="תשובה"><button id="erOk" class="race-go">בדיקה</button></div>
+      <div id="erMsg" class="er-msg" aria-live="polite"></div>`;
+    let tries = 0;
+    const check = () => {
+      const v = parseInt(($('erIn').value || '').replace(/\D/g, ''), 10);
+      if (isNaN(v)) return;
+      tries++;
+      if (v === cur.a || tries >= 2) {
+        const good = v === cur.a;
+        tot++; if (good && tries === 1) { ok++; streak++; } else streak = 0;
+        $('erIn').disabled = true; $('erOk').remove();
+        $('erMsg').className = 'er-msg ' + (good ? 'ok' : 'hint');
+        $('erMsg').innerHTML = `${good ? (tries === 1 ? '✅ נכון!' : '✅ נכון, בניסיון השני.') : `התשובה: <b dir="ltr">${cur.q} = ${cur.a}</b>`}<div class="actions" style="justify-content:center"><button id="whAgain" class="race-go">🎡 סיבוב נוסף</button></div>`;
+        $('whAgain').onclick = play; $('whAgain').focus();
+      } else {
+        $('erMsg').className = 'er-msg bad'; $('erMsg').textContent = '❌ לא בדיוק – נסו שוב!'; $('erIn').select();
+      }
+    };
+    $('erOk').onclick = check;
+    $('erIn').onkeydown = e => { if (e.key === 'Enter') check(); };
+    $('erIn').focus();
+  };
+  setup();
 }
 function escapeRoom() {
   stopRace && stopRace(); state = null; lessonView = null; navPush('view');
