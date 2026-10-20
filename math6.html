@@ -1110,9 +1110,11 @@
   .wh-rng { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; font-size: 1.15rem; font-weight: 700; }
   .wh-rng input { width: 90px; font: inherit; text-align: center; padding: 6px; border: 2.5px solid #1f1e1c; border-radius: 10px; }
   .wh-score { display: flex; gap: 14px; justify-content: center; align-items: center; flex-wrap: wrap; font-weight: 700; }
-  .wh-wrap { position: relative; width: min(300px, 80vw); margin: 10px auto 0; }
-  .wh-ptr { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 2rem; color: #b3261e; z-index: 1; line-height: 1; }
+  .wh-fix[hidden] { display: none; }
+  .wh-wrap { position: relative; width: min(300px, 80vw); margin: 0 auto; padding-top: 16px; overflow: hidden; }
+  .wh-ptr { position: absolute; top: 2px; left: 50%; transform: translateX(-50%); font-size: 2rem; color: #b3261e; z-index: 1; line-height: 1; }
   .wh-svg { width: 100%; height: auto; display: block; pointer-events: none; transition: transform 3s cubic-bezier(.17,.67,.2,1); }
+  .wh-tbl { margin: 0 0 6px; font-size: 1.3rem; font-weight: 800; color: #b3541e; }
   .wh-ex { font-size: 2rem; font-weight: 800; margin: 8px 0; }
   .er-card { text-align: center; border-radius: 18px; }
   .er-card h2 { margin: 4px 0 8px; }
@@ -1641,7 +1643,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12315,7 +12317,7 @@ function wheelGame() {
   stopRace && stopRace(); state = null; lessonView = null; navPush('view');
   track('משחק: גלגל המזל');
   const OPS = [['+', 'חיבור'], ['-', 'חיסור'], ...(GRADE >= 2 ? [['×', 'כפל'], ['÷', 'חילוק']] : [])];
-  let op = '+', lo = 1, hi = 10, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
+  let op = '+', lo = 1, hi = 10, fix = null, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
   const header = `<div class="topbar"><span class="title">🎡 גלגל המזל</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
   const COLS = ['#f6c344', '#ef8a62', '#7fb3e0', '#8fd19e', '#c39be0', '#f29ac0', '#6fd3c8', '#f4a259'];
   const fig = () => {
@@ -12334,12 +12336,14 @@ function wheelGame() {
         <h2>גלגל המזל – הגדרות</h2>
         <p class="muted">בוחרים נושא וטווח מספרים. הגלגל בוחר מספר אחד, והמספר השני נבחר מאותו טווח.</p>
         <div class="wh-ops">${OPS.map(([o, t]) => `<button type="button" class="wh-op${o === op ? ' on' : ''}" data-op="${o}"><b dir="ltr">${o}</b> ${t}</button>`).join('')}</div>
+        <div class="wh-rng wh-fix" ${'×÷'.includes(op) ? '' : 'hidden'}><label>מספר קבוע (לא חובה): <input id="whFix" inputmode="numeric" value="${fix || ''}" placeholder="למשל 7"></label></div>
+        <p class="muted wh-fix" ${'×÷'.includes(op) ? '' : 'hidden'}>עם מספר קבוע מתרגלים את לוח הכפל שלו: הגלגל בוחר את המספר השני מתוך הטווח.</p>
         <div class="wh-rng"><label>מ- <input id="whLo" inputmode="numeric" value="${lo}"></label><label>עד <input id="whHi" inputmode="numeric" value="${hi}"></label></div>
         <div id="erMsg" class="er-msg bad" aria-live="polite"></div>
         <div class="actions" style="justify-content:center"><button id="whStart" class="race-go">▶ לגלגל!</button></div>
       </div>`;
     $('quit').onclick = home;
-    app.querySelectorAll('.wh-op').forEach(b => b.onclick = () => { op = b.dataset.op; app.querySelectorAll('.wh-op').forEach(x => x.classList.toggle('on', x === b)); });
+    app.querySelectorAll('.wh-op').forEach(b => b.onclick = () => { op = b.dataset.op; app.querySelectorAll('.wh-op').forEach(x => x.classList.toggle('on', x === b)); app.querySelectorAll('.wh-fix').forEach(x => x.hidden = !'×÷'.includes(op)); });
     $('whStart').onclick = () => {
       const n = id => parseInt(($(id).value || '').replace(/\D/g, ''), 10);
       let a = n('whLo'), b = n('whHi');
@@ -12347,18 +12351,20 @@ function wheelGame() {
       if (a > b) [a, b] = [b, a];
       if (op === '÷' && a === 0) a = 1;
       if (b > 1000 || b < 1) { $('erMsg').textContent = 'הטווח צריך להיות בין 0 ל-1000.'; return; }
+      const f = n('whFix');
+      fix = '×÷'.includes(op) && f >= 1 && f <= 100 ? f : null;
       lo = a; hi = b;
       const all = []; for (let v = lo; v <= hi; v++) all.push(v);
       nums = all.length <= 12 ? all : shuffle(all).slice(0, 12).sort((x, y) => x - y);
       if (nums.length < 2) nums = [lo, lo];
-      track('גלגל המזל – הגדרה', `${op} ${lo}–${hi}`);
+      track('גלגל המזל – הגדרה', `${op} ${lo}–${hi}${fix ? ` · קבוע ${fix}` : ''}`);
       ok = tot = streak = 0; play();
     };
   };
   const play = () => {
     app.innerHTML = `${header}
       <div class="card wh-card">
-        <div class="wh-score"><span>✅ ${ok} מתוך ${tot}</span>${streak >= 2 ? `<span>🔥 רצף ${streak}</span>` : ''}<button type="button" class="ghost" id="whSet">⚙️ נושא וטווח</button></div>
+        ${fix ? `<p class="wh-tbl">לוח ה${op === '×' ? 'כפל' : 'חילוק'} של ${fix}</p>` : ''}<div class="wh-score"><span>✅ ${ok} מתוך ${tot}</span>${streak >= 2 ? `<span>🔥 רצף ${streak}</span>` : ''}<button type="button" class="ghost" id="whSet">⚙️ נושא וטווח</button></div>
         ${fig()}
         <div id="whQ" class="er-q"></div>
         <div class="actions" style="justify-content:center"><button id="whSpin" class="race-go">🎡 סובבו!</button></div>
@@ -12373,7 +12379,7 @@ function wheelGame() {
     rot += 360 * 5 + ((target - rot) % 360 + 360) % 360;
     $('whSpin').disabled = true; $('whSet').disabled = true;
     $('whSvg').style.transform = `rotate(${rot}deg)`;
-    const a = nums[i], b = lo + Math.floor(Math.random() * (hi - lo + 1));
+    const a = fix ? fix : nums[i], b = fix ? nums[i] : lo + Math.floor(Math.random() * (hi - lo + 1));
     cur = op === '+' ? { q: `${a} + ${b}`, a: a + b } : op === '-' ? { q: `${Math.max(a, b)} − ${Math.min(a, b)}`, a: Math.abs(a - b) }
       : op === '×' ? { q: `${a} × ${b}`, a: a * b } : { q: `${a * b} ÷ ${a}`, a: b };
     setTimeout(ask, 3200);
