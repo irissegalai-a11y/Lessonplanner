@@ -1074,6 +1074,17 @@
   .tl-kind .desc, .tl-part .desc { display: block; font-size: 0.85rem; font-weight: normal; margin-top: 3px; opacity: 0.85; }
   .tl-kind.sel, .tl-part.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(76,95,213,0.25); }
   .tl-lbl { font-weight: 700; font-size: 0.95rem; color: #5f5a50; margin: 6px 0 2px; }
+  .topic-search { position: relative; max-width: 560px; margin: 4px auto 14px; }
+  .topic-search > input { width: 100%; font: inherit; font-size: 1.05rem; padding: 11px 16px; border: 2px solid var(--ink, #1f1e1c); border-radius: 14px; background: #fffdf8; box-shadow: 2px 2px 0 rgba(31,30,28,0.12); }
+  .topic-search > input:focus { outline: 3px solid #b8c2f5; }
+  .ts-results { position: absolute; z-index: 40; left: 0; right: 0; margin-top: 6px; background: #fffdf8; border: 2px solid var(--ink, #1f1e1c); border-radius: 14px; box-shadow: 3px 4px 0 rgba(31,30,28,0.18); overflow: hidden; max-height: 340px; overflow-y: auto; }
+  .ts-item { display: flex; align-items: center; gap: 10px; width: 100%; text-align: right; font: inherit; background: transparent; border: none; border-bottom: 1px solid #ece6d9; box-shadow: none; padding: 11px 14px; cursor: pointer; color: var(--ink, #1f1e1c); border-radius: 0; }
+  .ts-item:last-child { border-bottom: none; }
+  .ts-item:hover, .ts-item:focus-visible { background: #f3f5ff; }
+  .ts-dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+  .ts-nm { font-weight: 700; flex: 1; }
+  .ts-tag { font-size: 0.82rem; font-weight: 700; color: #5f5a50; background: #ece6d9; border-radius: 999px; padding: 2px 10px; flex: none; }
+  .ts-none { padding: 14px; text-align: center; color: #8a8478; }
   .semsw { display: inline-flex; align-items: center; gap: 4px; font-size: 0.95rem; color: #3d3a33; }
   .semsw .semx { font: inherit; font-weight: 700; padding: 3px 12px; border: 2px solid var(--ink, #1f1e1c); border-radius: 999px; background: #fffdf8; color: #3d3a33; box-shadow: none; cursor: pointer; }
   .semsw .semx.on { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -1537,7 +1548,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7721,6 +7732,10 @@ function home() {
       <button id="presetGo">התחילו ←</button>
     </div>` : ''}
     <div class="name-row name-mini"><label for="nm">השם שלי:</label><input id="nm" value="${esc(name)}" placeholder="כתבו את השם שלכם" autocomplete="off"></div>
+    <div class="topic-search">
+      <input id="topicSearch" type="search" placeholder="🔎 חיפוש נושא (למשל: שברים, זוויות, עיגול...)" autocomplete="off" aria-label="חיפוש נושא" data-raw>
+      <div class="ts-results" id="tsResults" hidden></div>
+    </div>
     <div class="nb">
       <nav class="tabs" role="tablist" aria-label="חלקי האתר">
         ${tabs.map(t => (t.grp ? `<div class="tab-grp" role="presentation">${t.grp}</div>` : '') + (t.go ? `<button type="button" class="tab" id="${t.go}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>` : `<button role="tab" class="tab${t.id === homeTab ? ' on' : ''}" data-tab="${t.id}" aria-selected="${t.id === homeTab}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>`)).join('')}
@@ -7899,6 +7914,27 @@ function home() {
   });
   app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => showLevelPicker(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
+  // ---- חיפוש נושא: לימוד + תרגול ----
+  (() => {
+    const inp = $('topicSearch'), box = $('tsResults');
+    if (!inp || !box) return;
+    const items = LESSON_ORDER.map(id => LESSONS[id]).map(L => ({ kind: 'lesson', id: L.id, name: L.name, desc: L.desc || '', color: L.color, tag: 'ללמוד', go: () => startLesson(L.id) }))
+      .concat(TOPICS.map(t => ({ kind: 'topic', id: t.id, name: t.name, desc: t.desc || '', color: t.color, tag: 'לתרגל', go: () => showLevelPicker(t.id) })));
+    const norm = x => (x || '').replace(/["'.,!?]/g, '').toLowerCase();
+    const render = q => {
+      const qq = norm(q);
+      if (!qq) { box.hidden = true; box.innerHTML = ''; return; }
+      const hits = items.filter(it => norm(it.name).includes(qq) || norm(it.desc).includes(qq)).slice(0, 12);
+      box.hidden = false;
+      box.innerHTML = hits.length
+        ? hits.map((it, i) => `<button type="button" class="ts-item" data-i="${i}"><span class="ts-dot" style="background:${it.color}"></span><span class="ts-nm">${esc(it.name)}</span><span class="ts-tag">${it.tag}</span></button>`).join('')
+        : '<div class="ts-none">לא נמצא נושא כזה</div>';
+      box.querySelectorAll('.ts-item').forEach(b => b.onclick = () => { box.hidden = true; inp.value = ''; hits[Number(b.dataset.i)].go(); });
+    };
+    inp.addEventListener('input', () => render(inp.value));
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { const first = box.querySelector('.ts-item'); if (first) first.click(); } });
+    document.addEventListener('click', e => { if (!e.target.closest('.topic-search')) { box.hidden = true; } });
+  })();
   $('mix').onclick = () => showLevelPicker('mix');
   if ($('lpTop')) $('lpTop').onclick = () => lpHome();
   if ($('succTab')) $('succTab').onclick = succHome;
