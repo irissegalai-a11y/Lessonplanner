@@ -1094,6 +1094,21 @@
   .b10-set { margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
   .b10-set input { width: 110px; font: inherit; font-size: 1.2rem; text-align: center; padding: 8px; border: 2px solid var(--ink,#1f1e1c); border-radius: 10px; }
   .b10-hint { margin-top: 16px; font-size: 0.95rem; }
+  .b10-card2 { background: linear-gradient(135deg,#fdeede,#f8d9c0); }
+  .b10-card2:hover { background: linear-gradient(135deg,#fbe6d0,#f3ccac); }
+  .b10-card2 .b10c-d { color: #6a4a35; }
+  .b10-exrow { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 10px 0 4px; }
+  .b10-exrow input { width: 90px; font: inherit; font-size: 2rem; font-weight: 800; text-align: center; padding: 6px; border: 2.5px solid var(--ink,#1f1e1c); border-radius: 12px; }
+  .b10-ops { display: flex; flex-direction: column; gap: 6px; }
+  .b10-op { font: inherit; font-size: 1.4rem; font-weight: 800; width: 46px; height: 40px; border: 2.5px solid #1f1e1c; border-radius: 10px; background: #fffdf8; color: #3d3a33; box-shadow: none; cursor: pointer; }
+  .b10-op.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .b10-ex { font-size: clamp(2rem,10vw,3rem); font-weight: 900; color: var(--accent); text-align: center; margin-bottom: 6px; }
+  .b10-cap { font-size: 1.15rem; min-height: 3em; margin: 6px auto; max-width: 540px; }
+  .b10-cap.done { font-weight: 800; color: #2f8f55; font-size: 1.3rem; }
+  .b10-steps { display: flex; justify-content: center; gap: 7px; margin: 10px 0; }
+  .b10-dot { width: 10px; height: 10px; border-radius: 50%; background: #d7cfbf; }
+  .b10-dot.on { background: var(--accent); transform: scale(1.3); }
+  .b10-dot.past { background: #9fb9e0; }
   .vmul { display: inline-flex; flex-direction: column; align-items: flex-end; font-family: 'Heebo', 'Courier New', monospace; font-weight: 800; font-size: clamp(1.7rem, 7vw, 2.4rem); line-height: 1.25; margin: 10px 0; }
   .vmul .vn { letter-spacing: 0.14em; padding: 0 6px; }
   .vmul .vn:last-child { border-bottom: 4px solid #1f1e1c; padding-bottom: 6px; display: flex; align-items: center; gap: 18px; }
@@ -1572,7 +1587,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7802,6 +7817,7 @@ function home() {
           <h2>לתרגל – בחרו נושא</h2>
           ${champCard()}
           ${GRADE <= 3 ? `<button type="button" class="b10-card" id="b10labGo"><span class="b10c-ic">🧱</span><span class="b10c-t">מחולל אבני בסיס עשר</span><span class="b10c-d">מקלידים מספר ורואים אותו באבנים – עשרות ואחדות. אפשר להוסיף ולהוריד ולראות חי.</span></button>` : ''}
+          ${GRADE >= 1 && GRADE <= 3 ? `<button type="button" class="b10-card b10-card2" id="b10twoGo"><span class="b10c-ic">🔁</span><span class="b10c-t">מעבר עשרת – שני מספרים</span><span class="b10c-d">חיבור או חיסור של שני מספרים, צעד-צעד, כולל רגע ההמרה של 10 אחדות לעשרת.</span></button>` : ''}
           <div class="topics">
             ${TOPICS.map((t, i) => {
               const s = store.topics[t.id];
@@ -8003,6 +8019,7 @@ function home() {
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
   if ($('champGo')) $('champGo').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
+  if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
   if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
@@ -11969,6 +11986,83 @@ function drawPracticeList() {
   return DRQ.concat(DRQ_DATA.filter(Q => !Q.min || GRADE >= Q.min), [pickQ('השלימו את המרובע'), pickQ('שרטוט לפי אלכסונים'), pickQ('סרטטו טרפז')].filter(Boolean));
 }
 let drS = { n: 0, ok: 0 };
+// מחולל שני מספרים עם מעבר עשרת: מדגים חיבור/חיסור צעד-צעד, כולל ההמרה 10 אחדות ↔ עשרת
+function framesAdd(a, b) {
+  const ta = Math.floor(a / 10), ua = a % 10, tb = Math.floor(b / 10), ub = b % 10;
+  const F = [];
+  F.push({ t: ta, u: ua, o: {}, cap: `מתחילים מ-<b>${a}</b>. נוסיף <b>${b}</b> — קודם ${ub} אֲחָדוֹת ואז ${tb} עֲשָׂרוֹת.` });
+  F.push({ t: ta, u: ua + ub, o: { addU: ub }, cap: `מוסיפים <b>${ub}</b> אֲחָדוֹת → עכשיו <b>${ua + ub}</b> אֲחָדוֹת.` });
+  let bt = ta, bu = ua + ub;
+  if (bu >= 10) {
+    F.push({ t: ta, u: bu, o: { packU: 10 }, cap: `יש 10 אֲחָדוֹת או יותר — אורזים <b>10 אֲחָדוֹת</b> לעֶשֶׂרֶת אחת. ✨` });
+    bt = ta + 1; bu = bu - 10;
+    F.push({ t: bt, u: bu, o: { addT: 1 }, cap: `המרנו! עֶשֶׂרֶת חדשה (ירוקה), ונשארו <b>${bu}</b> אֲחָדוֹת.` });
+  }
+  F.push({ t: bt + tb, u: bu, o: { addT: tb }, cap: `מוסיפים <b>${tb}</b> עֲשָׂרוֹת.` });
+  F.push({ t: Math.floor((a + b) / 10), u: (a + b) % 10, o: {}, cap: `${M(`${a} + ${b} = ${a + b}`)} ✓`, done: 1 });
+  return F;
+}
+function framesSub(a, b) {
+  const ta = Math.floor(a / 10), ua = a % 10, tb = Math.floor(b / 10), ub = b % 10;
+  const F = [];
+  F.push({ t: ta, u: ua, o: {}, cap: `מתחילים מ-<b>${a}</b>. נוריד <b>${b}</b> — ${ub} אֲחָדוֹת ו-${tb} עֲשָׂרוֹת.` });
+  let bt = ta, bu = ua;
+  if (ua < ub) {
+    F.push({ t: ta, u: ua, o: { packT: 1 }, cap: `אין מספיק אֲחָדוֹת (${ua}) כדי להוריד ${ub}. <b>פורטים עֶשֶׂרֶת אחת</b> (הצהובה).` });
+    bt = ta - 1; bu = ua + 10;
+    F.push({ t: bt, u: bu, o: { addU: 10 }, cap: `פתחנו עֶשֶׂרֶת ל-10 אֲחָדוֹת → <b>${bt}</b> עֲשָׂרוֹת ו-<b>${bu}</b> אֲחָדוֹת.` });
+  }
+  F.push({ t: bt, u: bu, o: { remU: ub }, cap: `מורידים <b>${ub}</b> אֲחָדוֹת (מסומנות ב-✗).` });
+  bu -= ub;
+  F.push({ t: bt, u: bu, o: { remT: tb }, cap: `מורידים <b>${tb}</b> עֲשָׂרוֹת (מסומנות ב-✗).` });
+  F.push({ t: Math.floor((a - b) / 10), u: (a - b) % 10, o: {}, cap: `${M(`${a} − ${b} = ${a - b}`)} ✓`, done: 1 });
+  return F;
+}
+function b10Two() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('כלי: מעבר עשרת');
+  let a = 34, b = 28, op = '+', F = null, fi = 0;
+  const header = `<div class="topbar"><span class="title">🔁 מעבר עשרת – שני מספרים</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
+  const setup = () => {
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="b10-exrow" dir="ltr">
+          <input id="t2a" inputmode="numeric" value="${a}" aria-label="מספר ראשון">
+          <div class="b10-ops"><button type="button" class="b10-op${op === '+' ? ' sel' : ''}" data-op="+">＋</button><button type="button" class="b10-op${op === '-' ? ' sel' : ''}" data-op="-">－</button></div>
+          <input id="t2b" inputmode="numeric" value="${b}" aria-label="מספר שני">
+        </div>
+        <div class="actions" style="justify-content:center"><button id="t2go" class="race-go">▶ הדגמה צעד-צעד</button></div>
+        <p class="b10-hint muted">בחרו שני מספרים ופעולה (עד 99). נראה את החיבור/חיסור באבנים, כולל רגע ה<b>מעבר</b>: 10 אֲחָדוֹת הופכות לעֶשֶׂרֶת, או עֶשֶׂרֶת נפתחת ל-10 אֲחָדוֹת.</p>
+      </div>`;
+    $('quit').onclick = home;
+    app.querySelectorAll('.b10-op').forEach(x => x.onclick = () => { op = x.dataset.op; app.querySelectorAll('.b10-op').forEach(y => y.classList.toggle('sel', y === x)); });
+    $('t2go').onclick = () => {
+      a = Math.max(0, Math.min(99, parseInt(($('t2a').value || '').replace(/\D/g, ''), 10) || 0));
+      b = Math.max(0, Math.min(99, parseInt(($('t2b').value || '').replace(/\D/g, ''), 10) || 0));
+      if (op === '-' && b > a) { const t = a; a = b; b = t; }
+      F = op === '+' ? framesAdd(a, b) : framesSub(a, b); fi = 0; show();
+    };
+  };
+  const show = () => {
+    const f = F[fi];
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="b10-ex" dir="ltr">${M(`${a} ${op === '+' ? '+' : '−'} ${b}`)}</div>
+        <div class="b10-blocks">${b10fig(f.t, f.u, f.o)}</div>
+        <div class="b10-cap ${f.done ? 'done' : ''}">${f.cap}</div>
+        <div class="b10-steps">${F.map((_, i) => `<span class="b10-dot${i === fi ? ' on' : ''}${i < fi ? ' past' : ''}"></span>`).join('')}</div>
+        <div class="actions" style="justify-content:center">
+          ${fi > 0 ? '<button class="secondary" id="t2prev">→ חזרה</button>' : ''}
+          ${fi < F.length - 1 ? '<button id="t2next">הבא ←</button>' : '<button id="t2again" class="race-go">↻ תרגיל חדש</button>'}
+        </div>
+      </div>`;
+    $('quit').onclick = home;
+    if ($('t2next')) $('t2next').onclick = () => { fi++; show(); };
+    if ($('t2prev')) $('t2prev').onclick = () => { fi--; show(); };
+    if ($('t2again')) $('t2again').onclick = setup;
+  };
+  setup();
+}
 // מחולל אבני בסיס עשר – כלי חופשי להמחשה: מקלידים מספר או לוחצים +/- עשרת/אחד ורואים את האבנים חיות
 function b10Lab() {
   stopRace && stopRace(); state = null; lessonView = null; navPush('view');
@@ -14918,13 +15012,13 @@ function fcBlocks(n) {
 
 // אבני בסיס עשר להמחשת חיבור/חיסור: עשרות = מוטות, אחדות = קוביות. פעולה מסומנת: ✗ אדום להסרה, ירוק לתוספת
 function b10fig(T, U, o = {}) {
-  const remT = o.remT || 0, addT = o.addT || 0, remU = o.remU || 0, addU = o.addU || 0;
+  const remT = o.remT || 0, addT = o.addT || 0, remU = o.remU || 0, addU = o.addU || 0, packT = o.packT || 0, packU = o.packU || 0;
   const RW = 18, RH = 90, GAP = 7, Y = 12, CW = 16, CG = 4, colH = 5;
   let x = 6, s = '';
   const totT = T + addT;
   for (let i = 0; i < totT; i++) {
-    const isAdd = i >= T, isRem = !isAdd && i >= T - remT, op = isRem ? 0.3 : 1;
-    s += `<rect x="${x}" y="${Y}" width="${RW}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : '#6fb3ad'}" stroke="#1f1e1c" stroke-width="2" opacity="${op}"/>`;
+    const isAdd = i >= T, isRem = !isAdd && i >= T - remT, isPack = !isAdd && packT && i >= T - packT, op = isRem ? 0.3 : 1;
+    s += `<rect x="${x}" y="${Y}" width="${RW}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#6fb3ad'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 3.5 : 2}" opacity="${op}"/>`;
     for (let k = 1; k < 10; k++) s += `<line x1="${x}" y1="${Y + k * RH / 10}" x2="${x + RW}" y2="${Y + k * RH / 10}" stroke="#2f7a73" stroke-width="0.8" opacity="${op}"/>`;
     if (isRem) s += `<path d="M${x - 3} ${Y - 3} L${x + RW + 3} ${Y + RH + 3} M${x + RW + 3} ${Y - 3} L${x - 3} ${Y + RH + 3}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`;
     if (isAdd) s += `<text x="${x + RW / 2}" y="${Y - 2}" text-anchor="middle" font-size="18" fill="#2f8f55" font-weight="800">+</text>`;
@@ -14933,10 +15027,10 @@ function b10fig(T, U, o = {}) {
   x += 14;
   const totU = U + addU;
   for (let i = 0; i < totU; i++) {
-    const isAdd = i >= U, isRem = !isAdd && i >= U - remU, op = isRem ? 0.3 : 1;
+    const isAdd = i >= U, isRem = !isAdd && i >= U - remU, isPack = !isAdd && packU && i >= U - packU, op = isRem ? 0.3 : 1;
     const col = Math.floor(i / colH), row = i % colH;
     const cx = x + col * (CW + CG), cy = Y + RH - CW - row * (CW + CG);
-    s += `<rect x="${cx}" y="${cy}" width="${CW}" height="${CW}" rx="1.5" fill="${isAdd ? '#8ccf99' : '#d98a9a'}" stroke="#1f1e1c" stroke-width="1.5" opacity="${op}"/>`;
+    s += `<rect x="${cx}" y="${cy}" width="${CW}" height="${CW}" rx="1.5" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#d98a9a'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 2.5 : 1.5}" opacity="${op}"/>`;
     if (isRem) s += `<path d="M${cx - 2} ${cy - 2} L${cx + CW + 2} ${cy + CW + 2} M${cx + CW + 2} ${cy - 2} L${cx - 2} ${cy + CW + 2}" stroke="#d9482b" stroke-width="3" stroke-linecap="round"/>`;
     if (isAdd) s += `<text x="${cx + CW / 2}" y="${cy - 3}" text-anchor="middle" font-size="14" fill="#2f8f55" font-weight="800">+</text>`;
   }
