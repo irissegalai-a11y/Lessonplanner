@@ -1097,6 +1097,13 @@
   .b10-card2 { background: linear-gradient(135deg,#fdeede,#f8d9c0); }
   .b10-card2:hover { background: linear-gradient(135deg,#fbe6d0,#f3ccac); }
   .b10-card2 .b10c-d { color: #6a4a35; }
+  .b10-card3 { background: linear-gradient(135deg,#e3ecff,#cfe0fb); }
+  .b10-card3:hover { background: linear-gradient(135deg,#d6e3fc,#bcd3f7); }
+  .b10-card3 .b10c-d { color: #35507a; }
+  .b10-x { font-size: 1.6rem; font-weight: 800; color: #2f63c9; padding: 0 2px; }
+  .gen-mul { border-color: #2f63c9; background: linear-gradient(135deg,#e3ecff,#cfe0fb); color: #26406e; }
+  .gen-mul:hover { background: linear-gradient(135deg,#d6e3fc,#bcd3f7); }
+  .gen-mul b { color: #2f63c9; }
   .gen-inline { display: flex; align-items: center; gap: 10px; width: 100%; text-align: right; margin: 0 0 14px; padding: 11px 16px; border: 2px dashed #e0703a; border-radius: 14px; background: linear-gradient(135deg,#fdeede,#f8dcc6); cursor: pointer; font: inherit; color: #6a3a20; font-size: 1.02rem; }
   .gen-inline:hover { background: linear-gradient(135deg,#fbe4d2,#f3ccac); }
   .gen-inline .gi-ic { font-size: 1.5rem; }
@@ -1591,7 +1598,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7822,6 +7829,7 @@ function home() {
           ${champCard()}
           ${GRADE <= 3 ? `<button type="button" class="b10-card" id="b10labGo"><span class="b10c-ic">🧱</span><span class="b10c-t">מחולל אבני בסיס עשר</span><span class="b10c-d">מקלידים מספר ורואים אותו באבנים – עשרות ואחדות. אפשר להוסיף ולהוריד ולראות חי.</span></button>` : ''}
           ${GRADE >= 1 && GRADE <= 3 ? `<button type="button" class="b10-card b10-card2" id="b10twoGo"><span class="b10c-ic">🔁</span><span class="b10c-t">מעבר עשרת – שני מספרים</span><span class="b10c-d">חיבור או חיסור של שני מספרים, צעד-צעד, כולל רגע ההמרה של 10 אחדות לעשרת.</span></button>` : ''}
+          ${GRADE >= 4 ? `<button type="button" class="b10-card b10-card3" id="mulAreaGo"><span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span></button>` : ''}
           <div class="topics">
             ${TOPICS.map((t, i) => {
               const s = store.topics[t.id];
@@ -8024,6 +8032,7 @@ function home() {
   if ($('champGo')) $('champGo').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
+  if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
   if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
@@ -8470,9 +8479,11 @@ function renderQ() {
   stopSpeak();
   const tips = practice && TOPIC[state.topicId]
     ? `<details class="tips"><summary>${ic('note')} תזכורת – מה חשוב לזכור בנושא</summary><ul>${t.tips.map(x => `<li>${x}</li>`).join('')}</ul></details>` : '';
-  // כפתור ישיר למחולל האבנים בתוך נושא חיבור וחיסור (כיתות א'–ג')
+  // כפתור ישיר למחולל המתאים בתוך הנושא: אבני בסיס בחיבור/חיסור, שיטת המלבנים בכפל
   const genBtn = practice && state.topicId === 'addsub' && GRADE <= 3
-    ? `<button type="button" class="gen-inline" id="genInline"><span class="gi-ic">🔁</span> <span>רוצים לראות באבנים? פִּתחו את <b>מחולל מעבר העשרת והמאות</b></span></button>` : '';
+    ? `<button type="button" class="gen-inline" id="genInline"><span class="gi-ic">🔁</span> <span>רוצים לראות באבנים? פִּתחו את <b>מחולל מעבר העשרת והמאות</b></span></button>`
+    : practice && state.topicId === 'muldiv' && GRADE >= 4
+    ? `<button type="button" class="gen-inline gen-mul" id="genInline"><span class="gi-ic">▦</span> <span>רוצים לראות את הכפל? פִּתחו את <b>מחולל שיטת המלבנים</b></span></button>` : '';
   const showLevel = practice && !state.hideLevel && !state.list && !state.retry;
   app.innerHTML = `
     <div class="topbar">
@@ -8528,7 +8539,7 @@ function renderQ() {
   $('fontBtn').onclick = cycleFont;
   bindLevelBadge();
   $('quit').onclick = () => { if (confirm('לצאת לתפריט הראשי? ההתקדמות בסבב הזה לא תישמר.')) home(); };
-  if ($('genInline')) $('genInline').onclick = () => { if (!state || confirm('לפתוח את המחולל? ההתקדמות בסבב התרגול הזה לא תישמר.')) b10Two(); };
+  if ($('genInline')) { const openGen = state && state.topicId === 'muldiv' ? mulArea : b10Two; $('genInline').onclick = () => { if (!state || confirm('לפתוח את המחולל? ההתקדמות בסבב התרגול הזה לא תישמר.')) openGen(); }; }
   if (state.sim) {
     $('timer').onclick = () => { state.sim.hide = !state.sim.hide; updateSimClock(); };
     app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => simGo(Number(b.dataset.go)));
@@ -12109,6 +12120,99 @@ function b10Lab() {
     $('b10reset').onclick = () => { n = 0; draw(); };
   };
   draw();
+}
+// שיטת המלבנים (מודל השטח) לכפל: מפרקים כל מספר לעשרות ואחדות ומציירים מלבן מחולק
+function mulParts(n) {
+  const s = [], digs = String(n).split('').reverse();
+  digs.forEach((d, i) => { const v = (+d) * Math.pow(10, i); if (v) s.push(v); });
+  return s.reverse();
+}
+function areaFig(f) {
+  const aP = f.aP, bP = f.bP, reveal = f.reveal, cols = bP.length, rows = aP.length;
+  const CW = 128, CH = 76, LW = 48, TH = 32, PAD = 10;
+  const W = LW + cols * CW + PAD, Hh = TH + rows * CH + PAD, x0 = LW, y0 = TH;
+  const pal = ['#dbe8ff', '#fde4cf', '#dcfce7', '#fce7f3'], palS = ['#2f63c9', '#c2691f', '#258a4e', '#bd3f87'];
+  let s = '';
+  const gx = LW / 2; // מרכז עמודת התוויות משמאל (text-anchor=end לא אמין בהקשר RTL של הדף)
+  if (reveal === -1) {
+    s += `<rect x="${x0}" y="${y0}" width="${cols * CW}" height="${rows * CH}" rx="4" fill="#f4f6ff" stroke="#1f1e1c" stroke-width="2.5"/>`;
+    s += `<text x="${x0 + cols * CW / 2}" y="${TH - 11}" text-anchor="middle" font-size="19" font-weight="800">${bP.reduce((a, c) => a + c, 0)}</text>`;
+    s += `<text x="${gx}" y="${y0 + rows * CH / 2 + 6}" text-anchor="middle" font-size="19" font-weight="800">${aP.reduce((a, c) => a + c, 0)}</text>`;
+    s += `<text x="${x0 + cols * CW / 2}" y="${y0 + rows * CH / 2 + 9}" text-anchor="middle" font-size="26" font-weight="800" fill="#9aa">?</text>`;
+  } else {
+    s += `<text x="${gx}" y="${TH - 11}" text-anchor="middle" font-size="17" font-weight="800" fill="#888">×</text>`;
+    bP.forEach((p, j) => s += `<text x="${x0 + j * CW + CW / 2}" y="${TH - 11}" text-anchor="middle" font-size="18" font-weight="800" fill="#2f63c9">${p}</text>`);
+    aP.forEach((p, i) => s += `<text x="${gx}" y="${y0 + i * CH + CH / 2 + 6}" text-anchor="middle" font-size="18" font-weight="800" fill="#c2691f">${p}</text>`);
+    let k = 0;
+    for (let i = 0; i < rows; i++) for (let j = 0; j < cols; j++) {
+      const x = x0 + j * CW, y = y0 + i * CH, shown = k < reveal, p = aP[i] * bP[j];
+      s += `<rect x="${x}" y="${y}" width="${CW}" height="${CH}" fill="${shown ? pal[k % 4] : '#fafafa'}" stroke="${shown ? palS[k % 4] : '#cfcfcf'}" stroke-width="${shown ? 2.5 : 1.5}" stroke-dasharray="${shown ? '' : '5 4'}"/>`;
+      if (shown) {
+        s += `<text x="${x + CW / 2}" y="${y + CH / 2 - 7}" text-anchor="middle" font-size="15" fill="${palS[k % 4]}">${aP[i]} × ${bP[j]}</text>`;
+        s += `<text x="${x + CW / 2}" y="${y + CH / 2 + 17}" text-anchor="middle" font-size="21" font-weight="800" fill="#1f1e1c">${p}</text>`;
+      }
+      k++;
+    }
+  }
+  return `<div class="chartwrap"><svg viewBox="0 0 ${W} ${Hh}" class="b10 area-fig" role="img" aria-label="שיטת המלבנים" dir="ltr">${s}</svg></div>`;
+}
+function framesMul(a, b) {
+  const aP = mulParts(a), bP = mulParts(b), cols = bP.length, rows = aP.length, cells = [];
+  for (let i = 0; i < rows; i++) for (let j = 0; j < cols; j++) cells.push({ i, j, p: aP[i] * bP[j] });
+  const F = [{ reveal: -1, aP, bP, cap: `מְלַבֵּן בגודל <b>${a}</b> על <b>${b}</b>. השטח שלו = ${M(`${a} × ${b}`)}.` },
+             { reveal: 0, aP, bP, cap: `מפרקים: <b>${a}</b> = ${aP.join(' + ')} · <b>${b}</b> = ${bP.join(' + ')}.` }];
+  let sum = 0;
+  cells.forEach((c, k) => {
+    sum += c.p;
+    const soFar = cells.slice(0, k + 1).map(x => x.p).join(' + ');
+    F.push({ reveal: k + 1, aP, bP, cap: `${M(`${aP[c.i]} × ${bP[c.j]} = ${c.p}`)}${k > 0 ? ` · ביחד עד כה: ${soFar} = <b>${sum}</b>` : ''}` });
+  });
+  const total = a * b;
+  F.push({ reveal: cells.length, aP, bP, done: 1, cap: `מחברים את כל המכפלות: ${cells.map(c => c.p).join(' + ')} = <b>${total}</b>. ${M(`${a} × ${b} = ${total}`)} ✓` });
+  return F;
+}
+function mulArea() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('המחשה: שיטת המלבנים');
+  let a = 14, b = 23, F = null, fi = 0;
+  const header = `<div class="topbar"><span class="title">▦ שיטת המלבנים – כפל</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
+  const setup = () => {
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="b10-exrow" dir="ltr">
+          <input id="maA" inputmode="numeric" value="${a}" aria-label="מספר ראשון">
+          <span class="b10-x">×</span>
+          <input id="maB" inputmode="numeric" value="${b}" aria-label="מספר שני">
+        </div>
+        <div class="actions" style="justify-content:center"><button id="maGo" class="race-go">▶ הדגמה צעד-צעד</button></div>
+        <p class="b10-hint muted">בחרו שני מספרים (עד 99 × 99). נפרק כל מספר ל<b>עשרות ואחדות</b>, נצייר מלבן מחולק, ונראה כל <b>מכפלה חלקית</b> – ואז נחבר הכול.</p>
+      </div>`;
+    $('quit').onclick = home;
+    $('maGo').onclick = () => {
+      a = Math.max(1, Math.min(99, parseInt(($('maA').value || '').replace(/\D/g, ''), 10) || 0));
+      b = Math.max(1, Math.min(99, parseInt(($('maB').value || '').replace(/\D/g, ''), 10) || 0));
+      F = framesMul(a, b); fi = 0; show();
+    };
+  };
+  const show = () => {
+    const f = F[fi];
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="b10-ex" dir="ltr">${M(`${a} × ${b}`)}</div>
+        <div class="b10-blocks">${areaFig(f)}</div>
+        <div class="b10-cap ${f.done ? 'done' : ''}">${f.cap}</div>
+        <div class="b10-steps">${F.map((_, i) => `<span class="b10-dot${i === fi ? ' on' : ''}${i < fi ? ' past' : ''}"></span>`).join('')}</div>
+        <div class="actions" style="justify-content:center">
+          ${fi > 0 ? '<button class="secondary" id="maPrev">→ חזרה</button>' : ''}
+          ${fi < F.length - 1 ? '<button id="maNext">הבא ←</button>' : '<button id="maAgain" class="race-go">↻ תרגיל חדש</button>'}
+        </div>
+      </div>`;
+    $('quit').onclick = home;
+    if ($('maNext')) $('maNext').onclick = () => { fi++; show(); };
+    if ($('maPrev')) $('maPrev').onclick = () => { fi--; show(); };
+    if ($('maAgain')) $('maAgain').onclick = setup;
+  };
+  setup();
 }
 function drawPracticeHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('draw');
