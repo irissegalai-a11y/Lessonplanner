@@ -1548,7 +1548,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7914,22 +7914,35 @@ function home() {
   });
   app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => showLevelPicker(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
-  // ---- חיפוש נושא: לימוד + תרגול ----
+  // ---- חיפוש נושא: לימוד + תרגול + משחקים + מבחנים ----
   (() => {
     const inp = $('topicSearch'), box = $('tsResults');
     if (!inp || !box) return;
-    const items = LESSON_ORDER.map(id => LESSONS[id]).map(L => ({ kind: 'lesson', id: L.id, name: L.name, desc: L.desc || '', color: L.color, tag: 'ללמוד', go: () => startLesson(L.id) }))
-      .concat(TOPICS.map(t => ({ kind: 'topic', id: t.id, name: t.name, desc: t.desc || '', color: t.color, tag: 'לתרגל', go: () => showLevelPicker(t.id) })));
+    const items = [];
+    const add = (el, tag, nameSel) => {
+      if (!el) return;
+      const nmEl = nameSel ? el.querySelector(nameSel) : null;
+      const name = ((nmEl ? nmEl.textContent : el.textContent) || '').replace(/\s+/g, ' ').trim();
+      if (!name) return;
+      const ds = el.querySelector('.ds, .gc-ds, .desc');
+      const color = el.style.getPropertyValue('--c').trim() || '#9d8f63';
+      items.push({ name, desc: ds ? ds.textContent : '', tag, color, el });
+    };
+    app.querySelectorAll('[data-lesson]').forEach(el => add(el, 'ללמוד', '.nm'));
+    app.querySelectorAll('.panel[data-panel="practice"] .topic').forEach(el => add(el, 'לתרגל', '.nm'));
+    app.querySelectorAll('.game-card').forEach(el => add(el, 'משחק', '.gc-nm'));
+    if ($('testPick')) items.push({ name: GRADE === 6 ? 'מבדק' : 'מבחן', desc: '20 שאלות מכל הנושאים · מבחן מבדק', tag: 'מבחן', color: '#a48cc9', el: $('testPick') });
+    if ($('mkGo')) items.push({ name: 'אימון לקראת ה' + (GRADE === 6 ? 'מבדק' : 'מבחן'), desc: 'שאלות בסגנון המבחן', tag: 'מבחן', color: '#a48cc9', el: $('mkGo') });
     const norm = x => (x || '').replace(/["'.,!?]/g, '').toLowerCase();
     const render = q => {
       const qq = norm(q);
       if (!qq) { box.hidden = true; box.innerHTML = ''; return; }
-      const hits = items.filter(it => norm(it.name).includes(qq) || norm(it.desc).includes(qq)).slice(0, 12);
+      const hits = items.filter(it => norm(it.name).includes(qq) || norm(it.desc).includes(qq)).slice(0, 14);
       box.hidden = false;
       box.innerHTML = hits.length
         ? hits.map((it, i) => `<button type="button" class="ts-item" data-i="${i}"><span class="ts-dot" style="background:${it.color}"></span><span class="ts-nm">${esc(it.name)}</span><span class="ts-tag">${it.tag}</span></button>`).join('')
         : '<div class="ts-none">לא נמצא נושא כזה</div>';
-      box.querySelectorAll('.ts-item').forEach(b => b.onclick = () => { box.hidden = true; inp.value = ''; hits[Number(b.dataset.i)].go(); });
+      box.querySelectorAll('.ts-item').forEach(b => b.onclick = () => { box.hidden = true; inp.value = ''; hits[Number(b.dataset.i)].el.click(); });
     };
     inp.addEventListener('input', () => render(inp.value));
     inp.addEventListener('keydown', e => { if (e.key === 'Enter') { const first = box.querySelector('.ts-item'); if (first) first.click(); } });
