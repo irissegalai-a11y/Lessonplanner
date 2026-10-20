@@ -1075,6 +1075,25 @@
   .tl-kind.sel, .tl-part.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(76,95,213,0.25); }
   .tl-lbl { font-weight: 700; font-size: 0.95rem; color: #5f5a50; margin: 6px 0 2px; }
   .b10 { width: 100%; max-width: 360px; height: auto; margin: 6px 0; }
+  .b10-card { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; width: 100%; text-align: right; margin: 0 0 16px; padding: 14px 18px; border: 2.5px solid #1f1e1c; border-radius: 16px; background: linear-gradient(135deg,#eafaf1,#d6f0e0); box-shadow: 3px 3px 0 #1f1e1c; cursor: pointer; font: inherit; color: #1f1e1c; }
+  .b10-card:hover { background: linear-gradient(135deg,#e3f7ec,#c7ebd6); }
+  .b10-card .b10c-ic { grid-row: 1 / span 2; font-size: 2.1rem; align-self: center; }
+  .b10-card .b10c-t { font-size: 1.25rem; font-weight: 800; }
+  .b10-card .b10c-d { font-size: 0.95rem; color: #3a5a48; }
+  .b10lab { text-align: center; }
+  .b10-num { font-size: clamp(2.6rem,12vw,4rem); font-weight: 900; color: var(--accent); font-family: 'Heebo', sans-serif; }
+  .b10-blocks { min-height: 130px; display: flex; align-items: center; justify-content: center; margin: 8px 0 16px; }
+  .b10-blocks .fc-blocks { width: 100%; max-width: 520px; height: auto; }
+  .b10-empty { color: #8a8478; font-size: 1.1rem; }
+  .b10-controls { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .b10-grp { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .b10-lbl { font-weight: 700; color: #3d3a33; }
+  .b10-btn { font: inherit; font-size: 1.5rem; font-weight: 800; width: 52px; height: 48px; border: 2.5px solid #1f1e1c; border-radius: 12px; background: #2f8f55; color: #fff; box-shadow: 2px 2px 0 #1f1e1c; cursor: pointer; }
+  .b10-btn.minus { background: #d9482b; }
+  .b10-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 #1f1e1c; }
+  .b10-set { margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .b10-set input { width: 110px; font: inherit; font-size: 1.2rem; text-align: center; padding: 8px; border: 2px solid var(--ink,#1f1e1c); border-radius: 10px; }
+  .b10-hint { margin-top: 16px; font-size: 0.95rem; }
   .vmul { display: inline-flex; flex-direction: column; align-items: flex-end; font-family: 'Heebo', 'Courier New', monospace; font-weight: 800; font-size: clamp(1.7rem, 7vw, 2.4rem); line-height: 1.25; margin: 10px 0; }
   .vmul .vn { letter-spacing: 0.14em; padding: 0 6px; }
   .vmul .vn:last-child { border-bottom: 4px solid #1f1e1c; padding-bottom: 6px; display: flex; align-items: center; gap: 18px; }
@@ -1553,7 +1572,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7782,6 +7801,7 @@ function home() {
         <section class="panel" data-panel="practice" ${homeTab === 'practice' ? '' : 'hidden'}>
           <h2>לתרגל – בחרו נושא</h2>
           ${champCard()}
+          ${GRADE <= 3 ? `<button type="button" class="b10-card" id="b10labGo"><span class="b10c-ic">🧱</span><span class="b10c-t">מחולל אבני בסיס עשר</span><span class="b10c-d">מקלידים מספר ורואים אותו באבנים – עשרות ואחדות. אפשר להוסיף ולהוריד ולראות חי.</span></button>` : ''}
           <div class="topics">
             ${TOPICS.map((t, i) => {
               const s = store.topics[t.id];
@@ -7982,6 +8002,7 @@ function home() {
   if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
   if ($('champGo')) $('champGo').onclick = champStart;
+  if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
@@ -11948,6 +11969,43 @@ function drawPracticeList() {
   return DRQ.concat(DRQ_DATA.filter(Q => !Q.min || GRADE >= Q.min), [pickQ('השלימו את המרובע'), pickQ('שרטוט לפי אלכסונים'), pickQ('סרטטו טרפז')].filter(Boolean));
 }
 let drS = { n: 0, ok: 0 };
+// מחולל אבני בסיס עשר – כלי חופשי להמחשה: מקלידים מספר או לוחצים +/- עשרת/אחד ורואים את האבנים חיות
+function b10Lab() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('כלי: אבני בסיס עשר');
+  const MAX = GRADE >= 2 ? 999 : 99, HAS100 = GRADE >= 2;
+  let n = 0;
+  const draw = () => {
+    app.innerHTML = `
+      <div class="topbar">
+        <span class="title">🧱 מחולל אבני בסיס עשר</span>
+        <button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button>
+      </div>
+      <div class="card b10lab">
+        <div class="b10-num" aria-live="polite">${fmt(n)}</div>
+        <div class="b10-blocks">${n === 0 ? '<div class="b10-empty">אין אבנים עדיין — הוסיפו עֶשְׂרֶת או אֶחָד 👇</div>' : fcBlocks(n)}</div>
+        <div class="b10-controls">
+          ${HAS100 ? `<div class="b10-grp"><span class="b10-lbl">מֵאוֹת</span><button type="button" class="b10-btn" data-d="100">＋</button><button type="button" class="b10-btn minus" data-d="-100">－</button></div>` : ''}
+          <div class="b10-grp"><span class="b10-lbl">עֲשָׂרוֹת</span><button type="button" class="b10-btn" data-d="10">＋</button><button type="button" class="b10-btn minus" data-d="-10">－</button></div>
+          <div class="b10-grp"><span class="b10-lbl">אֲחָדוֹת</span><button type="button" class="b10-btn" data-d="1">＋</button><button type="button" class="b10-btn minus" data-d="-1">－</button></div>
+        </div>
+        <div class="b10-set">
+          <label for="b10in">מספר:</label>
+          <input id="b10in" inputmode="numeric" autocomplete="off" value="${n}" aria-label="הקלידו מספר">
+          <button type="button" class="secondary" id="b10go">הצגה</button>
+          <button type="button" class="ghost" id="b10reset">איפוס</button>
+        </div>
+        <p class="b10-hint muted">מוט ארוך = <b>עֶשְׂרֶת</b> (10) · קובייה = <b>אֶחָד</b>. אפשר להדגים חיסור: הקלידו 79, ואז לחצו <b>－ עֲשָׂרוֹת</b> ותראו עֶשְׂרֶת יורדת.</p>
+      </div>`;
+    $('quit').onclick = home;
+    app.querySelectorAll('.b10-btn').forEach(b => b.onclick = () => { n = Math.max(0, Math.min(MAX, n + Number(b.dataset.d))); draw(); });
+    const set = () => { const v = parseInt(($('b10in').value || '').replace(/\D/g, ''), 10); n = isNaN(v) ? 0 : Math.max(0, Math.min(MAX, v)); draw(); };
+    $('b10go').onclick = set;
+    $('b10in').addEventListener('keydown', e => { if (e.key === 'Enter') set(); });
+    $('b10reset').onclick = () => { n = 0; draw(); };
+  };
+  draw();
+}
 function drawPracticeHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('draw');
   drS = { n: 0, ok: 0 };
