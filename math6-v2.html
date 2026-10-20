@@ -1103,6 +1103,38 @@
   .b10-card3 { background: linear-gradient(135deg,#e3ecff,#cfe0fb); }
   .b10-card3:hover { background: linear-gradient(135deg,#d6e3fc,#bcd3f7); }
   .b10-card3 .b10c-d { color: #35507a; }
+  .b10-card.er-go { background: linear-gradient(135deg,#2b1f5c,#4b2f8f); color: #fff; }
+  .b10-card.er-go:hover { background: linear-gradient(135deg,#352672,#5a39a8); }
+  .b10-card.er-go .b10c-d { color: #e2dbff; }
+  .er-card { text-align: center; border-radius: 18px; }
+  .er-card h2 { margin: 4px 0 8px; }
+  .er-big { font-size: 3rem; line-height: 1.2; }
+  .er-r0 { background: linear-gradient(160deg,#f3efff,#e2d9ff); }
+  .er-r1 { background: linear-gradient(160deg,#fff6dc,#ffe7a8); }
+  .er-r2 { background: linear-gradient(160deg,#ffe6ef,#fbcadb); }
+  .er-r3 { background: linear-gradient(160deg,#e3f0ff,#c4dcff); }
+  .er-r4 { background: radial-gradient(circle at 20% 15%,#3b3f8c,#141633 70%); color: #f2f2ff; }
+  .er-r4 .er-msg.hint, .er-r4 .er-msg.ok { color: #1f1e1c; }
+  .er-win { background: linear-gradient(160deg,#e6fbef,#c2f0d6); }
+  .er-intro { font-style: italic; opacity: .85; }
+  .er-q { font-size: 1.3rem; font-weight: 700; line-height: 1.6; margin: 14px auto; max-width: 560px; }
+  .er-fr { font-weight: 800; white-space: nowrap; }
+  .er-ans { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .er-ans input { width: 130px; font: inherit; font-size: 1.4rem; text-align: center; padding: 8px; border: 2.5px solid #1f1e1c; border-radius: 12px; }
+  .er-msg { min-height: 1.6em; margin: 12px auto 0; max-width: 560px; font-weight: 700; border-radius: 12px; }
+  .er-msg.bad { color: #b3261e; }
+  .er-msg.hint { background: #fff8d6; padding: 8px 12px; font-weight: 600; }
+  .er-msg.ok { background: #e3f8ea; padding: 10px 12px; }
+  .er-dig { font-size: 1.6rem; color: #2f63c9; }
+  .er-locks { display: flex; gap: 8px; justify-content: center; margin-bottom: 6px; direction: ltr; }
+  .er-lk { width: 42px; height: 42px; display: grid; place-items: center; border: 2.5px solid #1f1e1c; border-radius: 10px; background: #fff; color: #1f1e1c; font-size: 1.3rem; font-weight: 800; }
+  .er-lk.on { box-shadow: 0 0 0 3px #ffb703; }
+  .er-lk.open { background: #c9f2d6; }
+  .er-code { display: flex; gap: 10px; justify-content: center; margin: 10px 0; }
+  .er-cd { width: 52px; height: 62px; font: inherit; font-size: 2rem; font-weight: 800; text-align: center; border: 3px solid #1f1e1c; border-radius: 12px; }
+  .er-stars { font-size: 2.2rem; margin: 4px 0; }
+  .shake { animation: erShake .35s; }
+  @keyframes erShake { 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-4px); } }
   .b10-x { font-size: 1.6rem; font-weight: 800; color: #2f63c9; padding: 0 2px; }
   .gen-mul { border-color: #2f63c9; background: linear-gradient(135deg,#e3ecff,#cfe0fb); color: #26406e; }
   .gen-mul:hover { background: linear-gradient(135deg,#d6e3fc,#bcd3f7); }
@@ -1601,7 +1633,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7833,6 +7865,7 @@ function home() {
           ${GRADE <= 3 ? `<button type="button" class="b10-card" id="b10labGo"><span class="b10c-ic">🧱</span><span class="b10c-t">מחולל אבני בסיס עשר</span><span class="b10c-d">מקלידים מספר ורואים אותו באבנים – עשרות ואחדות. אפשר להוסיף ולהוריד ולראות חי.</span></button>` : ''}
           ${GRADE >= 1 && GRADE <= 3 ? `<button type="button" class="b10-card b10-card2" id="b10twoGo"><span class="b10c-ic">🔁</span><span class="b10c-t">מעבר עשרת – שני מספרים</span><span class="b10c-d">חיבור או חיסור של שני מספרים, צעד-צעד, כולל רגע ההמרה של 10 אחדות לעשרת.</span></button>` : ''}
           ${GRADE >= 4 ? `<button type="button" class="b10-card b10-card3" id="mulAreaGo"><span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span></button>` : ''}
+          <button type="button" class="b10-card er-go" id="erGo0"><span class="b10c-ic">🔐</span><span class="b10c-t">חדר בריחה מתמטי</span><span class="b10c-d">4 חדרים – הפסקה, סדרות, גיבורת-על וחללית חייזרים. פותרים חידות, אוספים ספרות לקוד ובורחים!</span></button>
           <div class="topics">
             ${TOPICS.map((t, i) => {
               const s = store.topics[t.id];
@@ -8036,6 +8069,7 @@ function home() {
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
   if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
+  if ($('erGo0')) $('erGo0').onclick = escapeRoom;
   if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
@@ -12216,6 +12250,148 @@ function mulArea() {
     if ($('maAgain')) $('maAgain').onclick = setup;
   };
   setup();
+}
+const ER_ROOMS = [
+  { ic: '🎒', t: 'ההפסקה הגדולה', cls: 'er-r1', intro: 'הדלת הראשונה נעולה במנעול של בית הספר. נועה ועומר צריכים את עזרתכם!',
+    q: { '+': (x, y) => `נועה אספה ${x} קלפים, ועומר נתן לה עוד ${y}. כמה קלפים יש עכשיו לנועה?`,
+      '-': (x, y) => `בקיוסק של בית הספר היו ${x} ארטיקים. בהפסקה נמכרו ${y}. כמה ארטיקים נשארו?`,
+      '×': (x, y) => `בחנות הצעצועים יש ${y} מדפים, ועל כל מדף ${x} גולות. כמה גולות יש בחנות?`,
+      '÷': (x, y) => `המורה חילקה ${x} מדבקות שווה בשווה ל-${y} ילדים. כמה מדבקות קיבל כל ילד?`,
+      frac: (x, f) => `בשכבה יש ${x} ילדים. ${f} מהם הגיעו היום באופניים. כמה ילדים הגיעו באופניים?`,
+      pct: (x, p) => `לטיול השנתי יצאו ${x} ילדים. ${p}% מהם הביאו כובע. כמה ילדים הביאו כובע?` } },
+  { ic: '📺', t: 'מרתון הסדרות', cls: 'er-r2', intro: 'השלט נתקע! כדי להמשיך לפרק הבא צריך לפצח את קוד הערוץ.',
+    q: { '+': (x, y) => `מאיה צפתה בעונה הראשונה ${x} דקות, ובעונה השנייה עוד ${y} דקות. כמה דקות צפתה בסך הכול?`,
+      '-': (x, y) => `לפרק האחרון של הסדרה היו ${x} לייקים. בגלל תקלה נמחקו ${y} לייקים. כמה לייקים נשארו?`,
+      '×': (x, y) => `בכל פרק של סדרת המסתורין מוסתרים ${x} רמזים. מאיה צפתה ב-${y} פרקים. כמה רמזים ראתה?`,
+      '÷': (x, y) => `הסדרה נמשכת ${x} דקות, והיא מחולקת ל-${y} פרקים שווים. כמה דקות נמשך כל פרק?`,
+      frac: (x, f) => `בסדרה יש ${x} פרקים. מאיה כבר ראתה ${f} מהם. בכמה פרקים צפתה?`,
+      pct: (x, p) => `${x} ילדים ענו על סקר "מה הסדרה האהובה עליכם?". ${p}% בחרו בסדרה מצוירת. כמה ילדים בחרו בה?` } },
+  { ic: '🦸', t: 'מספרינה – גיבורת העל', cls: 'er-r3', intro: 'הנבל "מוחק-המספרים" נעל את המגדל. רק חשבון מדויק ישחרר את מספרינה!',
+    q: { '+': (x, y) => `מספרינה עפה ${x} מטרים מעל העיר, ואז עוד ${y} מטרים למעלה. כמה מטרים עפה בסך הכול?`,
+      '-': (x, y) => `מוחק-המספרים גנב ${x} יהלומים. מספרינה כבר החזירה ${y}. כמה יהלומים עוד צריך להחזיר?`,
+      '×': (x, y) => `מספרינה מצילה ${x} חתולים מעצים בכל יום. כמה חתולים תציל ב-${y} ימים?`,
+      '÷': (x, y) => `מספרינה מחלקת ${x} מגני-כוח שווה בשווה בין ${y} גיבורים. כמה מגנים יקבל כל גיבור?`,
+      frac: (x, f) => `במגדל יש ${x} חלונות שבורים. מספרינה כבר תיקנה ${f} מהם. כמה חלונות תיקנה?`,
+      pct: (x, p) => `בחליפה של מספרינה יש ${x} יחידות אנרגיה. היא השתמשה ב-${p}% מהן. בכמה יחידות השתמשה?` } },
+  { ic: '👽', t: 'חללית החייזרים', cls: 'er-r4', intro: 'זוגלי החייזר נעל את תא הטייס של החללית. פתרו את החידה האחרונה כדי לחזור לכדור הארץ!',
+    q: { '+': (x, y) => `במפת הכוכבים של זוגלי יש ${x} כוכבים, והוא גילה עוד ${y}. כמה כוכבים יש עכשיו במפה?`,
+      '-': (x, y) => `החללית צריכה לטוס ${x} קילומטרים עד הירח. היא כבר טסה ${y}. כמה קילומטרים נשארו?`,
+      '×': (x, y) => `לכל חייזר בכוכב זוגלון יש ${x} אנטנות. כמה אנטנות יש ל-${y} חייזרים?`,
+      '÷': (x, y) => `${x} חייזרים עולים ל-${y} חלליות, מספר שווה בכל חללית. כמה חייזרים בכל חללית?`,
+      frac: (x, f) => `במכל הדלק של החללית ${x} ליטרים. ${f} מהדלק כבר נוצל. כמה ליטרים נוצלו?`,
+      pct: (x, p) => `בצי החלליות יש ${x} חלליות. ${p}% מהן ירוקות. כמה חלליות ירוקות?` } }
+];
+function erProb(g, op) {
+  const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const lv = (...v) => v[Math.min(g, v.length) - 1];
+  let x, y, a, h;
+  if (op === '+') { [x, y] = lv([R(3, 12), 0], [R(15, 60), R(12, 39)], [R(120, 480), R(105, 399)], [R(1200, 4800), R(350, 2900)]); if (g === 1) y = R(2, 20 - x); a = x + y; h = 'חברו לפי ערך המקום: אחדות עם אחדות, עשרות עם עשרות (וכן הלאה).'; }
+  else if (op === '-') { [x, y] = lv([R(10, 20), R(3, 9)], [R(40, 99), R(12, 30)], [R(300, 900), R(110, 290)], [R(2000, 9000), R(500, 1900)]); a = x - y; h = `אפשר לספור קדימה מ-${y} עד ${x}, או לחסר לפי ערך המקום.`; }
+  else if (op === '×') { [x, y] = lv([2, 2], [R(2, 6), [2, 5, 10][R(0, 2)]], [R(3, 9), R(3, 9)], [R(12, 49), R(3, 8)], [R(105, 399), R(3, 8)], [R(13, 49), R(12, 29)]); a = x * y; h = g <= 3 ? `כפל הוא חיבור חוזר: ${y} פעמים ${x}.` : 'פרקו את אחד המספרים (למשל לעשרות ואחדות), כפלו כל חלק וחברו את התוצאות.'; }
+  else if (op === '÷') { const [d, q] = lv([2, 2], [2, 2], [R(2, 9), R(2, 9)], [R(3, 9), R(12, 39)], [R(4, 9), R(21, 99)], [R(12, 25), R(12, 40)]); x = d * q; y = d; a = q; h = `שאלו את עצמכם: איזה מספר כפול ${y} שווה ${x}?`; }
+  else if (op === 'frac') { const d = [2, 3, 4, 5, 10][R(0, 4)], n = R(1, d - 1), m = g >= 6 ? R(4, 20) : R(3, 12); x = d * m; a = n * m; y = `<span dir="ltr" class="er-fr">${n}/${d}</span>`; h = `קודם מצאו חלק אחד: ${x} ÷ ${d} = ${m}. אחר כך כפלו ב-${n}.`; }
+  else { const p = [10, 20, 25, 50, 75][R(0, 4)]; x = 20 * R(2, 15); y = p; a = x * p / 100; h = `${p}% זה ${{ 10: 'עשירית', 20: 'חמישית', 25: 'רבע', 50: 'חצי', 75: 'שלושה רבעים' }[p]} מהכמות.`; }
+  return { x, y, a, h };
+}
+function escapeRoom() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('משחק: חדר בריחה');
+  const g = Math.max(1, Math.min(6, GRADE));
+  const ops = shuffle({ 1: ['+', '-', '+', '-'], 2: ['+', '-', '×', '+'], 3: ['+', '-', '×', '÷'], 4: ['+', '-', '×', '÷'], 5: ['×', '÷', 'frac', '-'], 6: ['frac', 'pct', '×', '÷'] }[g].slice());
+  const P = ER_ROOMS.map((r, i) => { const p = erProb(g, ops[i]); return { ...p, txt: r.q[ops[i]](p.x, p.y), dig: p.a % 10 }; });
+  let ri = 0, miss = 0, hints = 0, t0 = Date.now();
+  const header = `<div class="topbar"><span class="title">🔐 חדר בריחה מתמטי</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
+  const locks = () => `<div class="er-locks">${P.map((p, i) => `<span class="er-lk${i < ri ? ' open' : ''}${i === ri ? ' on' : ''}">${i < ri ? p.dig : '🔒'}</span>`).join('')}</div>`;
+  const intro = () => {
+    app.innerHTML = `${header}
+      <div class="card er-card er-r0">
+        <div class="er-big">🚪🔐</div>
+        <h2>ננעלתם בחדר הבריחה!</h2>
+        <p>לפניכם 4 חדרים: <b>ההפסקה הגדולה, מרתון הסדרות, גיבורת העל ו<span>חללית החייזרים</span></b>. בכל חדר מחכה חידה. כל תשובה נכונה חושפת ספרה אחת – <b>ספרת האחדות של התשובה</b>.</p>
+        <p>אספו 4 ספרות, הקלידו את הקוד במנעול האחרון – וברחתם! ⏱️ השעון מתחיל כשנכנסים.</p>
+        <div class="actions" style="justify-content:center"><button id="erGo" class="race-go">▶ נכנסים!</button></div>
+      </div>`;
+    $('quit').onclick = home;
+    $('erGo').onclick = () => { t0 = Date.now(); room(); };
+  };
+  const room = () => {
+    const r = ER_ROOMS[ri], p = P[ri];
+    let wrong = 0;
+    app.innerHTML = `${header}
+      <div class="card er-card ${r.cls}">
+        ${locks()}
+        <div class="er-big">${r.ic}</div>
+        <h2>חדר ${ri + 1}: ${r.t}</h2>
+        <p class="er-intro">${r.intro}</p>
+        <p class="er-q">${p.txt}</p>
+        <div class="er-ans"><input id="erIn" inputmode="numeric" autocomplete="off" aria-label="תשובה"><button id="erOk" class="race-go">בדיקה</button></div>
+        <div id="erMsg" class="er-msg" aria-live="polite"></div>
+        <div class="actions" style="justify-content:center"><button class="secondary" id="erHint">💡 רמז</button></div>
+      </div>`;
+    $('quit').onclick = home;
+    const showHint = () => { if (!$('erMsg').dataset.h) { hints++; $('erMsg').dataset.h = 1; } $('erMsg').innerHTML = `💡 ${p.h}`; $('erMsg').className = 'er-msg hint'; };
+    $('erHint').onclick = showHint;
+    const check = () => {
+      const v = parseInt(($('erIn').value || '').replace(/\D/g, ''), 10);
+      if (isNaN(v)) return;
+      if (v === p.a) {
+        $('erIn').disabled = true; $('erOk').remove(); $('erHint').remove();
+        $('erMsg').className = 'er-msg ok';
+        $('erMsg').innerHTML = `✅ נכון! ספרת האחדות של ${p.a} היא <b class="er-dig">${p.dig}</b> – זו ספרה מספר ${ri + 1} בקוד.<div class="actions" style="justify-content:center"><button id="erNext" class="race-go">${ri < 3 ? 'לחדר הבא ←' : 'למנעול האחרון 🔐'}</button></div>`;
+        $('erNext').onclick = () => { ri++; ri < 4 ? room() : lock(); };
+        $('erNext').focus();
+      } else {
+        miss++; wrong++;
+        const c = $('erIn').closest('.er-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
+        if (wrong >= 2) showHint();
+        else { $('erMsg').className = 'er-msg bad'; $('erMsg').textContent = '❌ עדיין נעול… נסו שוב!'; }
+        $('erIn').select();
+      }
+    };
+    $('erOk').onclick = check;
+    $('erIn').onkeydown = e => { if (e.key === 'Enter') check(); };
+    $('erIn').focus();
+  };
+  const lock = () => {
+    app.innerHTML = `${header}
+      <div class="card er-card er-r0">
+        ${locks()}
+        <div class="er-big">🔐</div>
+        <h2>המנעול האחרון</h2>
+        <p>הקלידו את 4 הספרות שאספתם, לפי סדר החדרים.</p>
+        <div class="er-code" dir="ltr">${[0, 1, 2, 3].map(i => `<input class="er-cd" maxlength="1" inputmode="numeric" aria-label="ספרה ${i + 1}">`).join('')}</div>
+        <div id="erMsg" class="er-msg" aria-live="polite"></div>
+        <div class="actions" style="justify-content:center"><button id="erOpen" class="race-go">🔓 פתיחה</button></div>
+      </div>`;
+    $('quit').onclick = home;
+    const ins = [...app.querySelectorAll('.er-cd')];
+    ins.forEach((el, i) => {
+      el.oninput = () => { el.value = el.value.replace(/\D/g, '').slice(-1); if (el.value && ins[i + 1]) ins[i + 1].focus(); };
+      el.onkeydown = e => { if (e.key === 'Backspace' && !el.value && ins[i - 1]) ins[i - 1].focus(); if (e.key === 'Enter') $('erOpen').click(); };
+    });
+    $('erOpen').onclick = () => {
+      if (ins.map(el => el.value).join('') === P.map(p => p.dig).join('')) done();
+      else { $('erMsg').className = 'er-msg bad'; $('erMsg').textContent = '❌ הקוד לא נכון. בדקו את הספרות שמעל המנעול – ואת הסדר!'; }
+    };
+    ins[0].focus();
+  };
+  const done = () => {
+    const sec = Math.round((Date.now() - t0) / 1000), mm = Math.floor(sec / 60), ss = String(sec % 60).padStart(2, '0');
+    const stars = miss === 0 && hints === 0 ? 3 : miss + hints <= 3 ? 2 : 1;
+    track('חדר בריחה – סיום', `${mm}:${ss} · ${stars}★`);
+    app.innerHTML = `${header}
+      <div class="card er-card er-win">
+        <div class="er-big">🎉🚪✨</div>
+        <h2>ברחתם!</h2>
+        <p class="er-stars">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</p>
+        <p>זמן: <b dir="ltr">${mm}:${ss}</b> · טעויות: <b>${miss}</b> · רמזים: <b>${hints}</b></p>
+        <p>${stars === 3 ? 'מושלם! בלי טעויות ובלי רמזים 🦸' : 'כל הכבוד! נסו שוב – כל פעם החידות חדשות.'}</p>
+        <div class="actions" style="justify-content:center"><button id="erAgain" class="race-go">↻ חדר בריחה חדש</button></div>
+      </div>`;
+    $('quit').onclick = home;
+    $('erAgain').onclick = escapeRoom;
+  };
+  intro();
 }
 function drawPracticeHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('draw');
