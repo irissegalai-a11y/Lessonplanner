@@ -1587,7 +1587,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -15015,38 +15015,45 @@ function fcBlocks(n) {
 function b10fig(T, U, o = {}) {
   const remT = o.remT || 0, addT = o.addT || 0, remU = o.remU || 0, addU = o.addU || 0, packT = o.packT || 0, packU = o.packU || 0;
   const HH = o.H || 0, addH = o.addH || 0, remH = o.remH || 0, packH = o.packH || 0;
-  const RW = 18, RH = 90, GAP = 7, Y = 12, CW = 16, CG = 4, colH = 5;
-  let x = 6, s = '';
+  const RW = 18, RH = 90, GAP = 7, Y0 = 12, CW = 16, CG = 4, colH = 5;
+  const MAXW = 330, ROWH = RH + 22; // גלישה לשורה שנייה כשיש הרבה אבנים, כדי שיישארו גדולות וברורות
+  let x = 6, y = Y0, maxX = 0, s = '';
+  // אם הפריט הבא לא נכנס ברוחב השורה – יורדים לשורה חדשה (למעט פריט ראשון בשורה)
+  const wrap = w => { if (x > 6 && x + w > MAXW) { maxX = Math.max(maxX, x); x = 6; y += ROWH; } };
   const totH = HH + addH;
   for (let i = 0; i < totH; i++) {
     const isAdd = i >= HH, isRem = !isAdd && i >= HH - remH, isPack = !isAdd && packH && i >= HH - packH, op = isRem ? 0.3 : 1;
-    s += `<rect x="${x}" y="${Y}" width="${RH}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#f2c94c'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 4 : 2}" opacity="${op}"/>`;
-    for (let k = 1; k < 10; k++) s += `<line x1="${x + k * RH / 10}" y1="${Y}" x2="${x + k * RH / 10}" y2="${Y + RH}" stroke="#b8902c" stroke-width="0.6" opacity="${op}"/><line x1="${x}" y1="${Y + k * RH / 10}" x2="${x + RH}" y2="${Y + k * RH / 10}" stroke="#b8902c" stroke-width="0.6" opacity="${op}"/>`;
-    if (isRem) s += `<path d="M${x - 3} ${Y - 3} L${x + RH + 3} ${Y + RH + 3} M${x + RH + 3} ${Y - 3} L${x - 3} ${Y + RH + 3}" stroke="#d9482b" stroke-width="5" stroke-linecap="round"/>`;
-    if (isAdd) s += `<text x="${x + RH / 2}" y="${Y - 2}" text-anchor="middle" font-size="18" fill="#2f8f55" font-weight="800">+</text>`;
+    wrap(RH + GAP + 4);
+    s += `<rect x="${x}" y="${y}" width="${RH}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#f2c94c'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 4 : 2}" opacity="${op}"/>`;
+    for (let k = 1; k < 10; k++) s += `<line x1="${x + k * RH / 10}" y1="${y}" x2="${x + k * RH / 10}" y2="${y + RH}" stroke="#b8902c" stroke-width="0.6" opacity="${op}"/><line x1="${x}" y1="${y + k * RH / 10}" x2="${x + RH}" y2="${y + k * RH / 10}" stroke="#b8902c" stroke-width="0.6" opacity="${op}"/>`;
+    if (isRem) s += `<path d="M${x - 3} ${y - 3} L${x + RH + 3} ${y + RH + 3} M${x + RH + 3} ${y - 3} L${x - 3} ${y + RH + 3}" stroke="#d9482b" stroke-width="5" stroke-linecap="round"/>`;
+    if (isAdd) s += `<text x="${x + RH / 2}" y="${y - 2}" text-anchor="middle" font-size="18" fill="#2f8f55" font-weight="800">+</text>`;
     x += RH + GAP + 4;
   }
   const totT = T + addT;
   for (let i = 0; i < totT; i++) {
     const isAdd = i >= T, isRem = !isAdd && i >= T - remT, isPack = !isAdd && packT && i >= T - packT, op = isRem ? 0.3 : 1;
-    s += `<rect x="${x}" y="${Y}" width="${RW}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#6fb3ad'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 3.5 : 2}" opacity="${op}"/>`;
-    for (let k = 1; k < 10; k++) s += `<line x1="${x}" y1="${Y + k * RH / 10}" x2="${x + RW}" y2="${Y + k * RH / 10}" stroke="#2f7a73" stroke-width="0.8" opacity="${op}"/>`;
-    if (isRem) s += `<path d="M${x - 3} ${Y - 3} L${x + RW + 3} ${Y + RH + 3} M${x + RW + 3} ${Y - 3} L${x - 3} ${Y + RH + 3}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`;
-    if (isAdd) s += `<text x="${x + RW / 2}" y="${Y - 2}" text-anchor="middle" font-size="18" fill="#2f8f55" font-weight="800">+</text>`;
+    wrap(RW + GAP);
+    s += `<rect x="${x}" y="${y}" width="${RW}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#6fb3ad'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 3.5 : 2}" opacity="${op}"/>`;
+    for (let k = 1; k < 10; k++) s += `<line x1="${x}" y1="${y + k * RH / 10}" x2="${x + RW}" y2="${y + k * RH / 10}" stroke="#2f7a73" stroke-width="0.8" opacity="${op}"/>`;
+    if (isRem) s += `<path d="M${x - 3} ${y - 3} L${x + RW + 3} ${y + RH + 3} M${x + RW + 3} ${y - 3} L${x - 3} ${y + RH + 3}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`;
+    if (isAdd) s += `<text x="${x + RW / 2}" y="${y - 2}" text-anchor="middle" font-size="18" fill="#2f8f55" font-weight="800">+</text>`;
     x += RW + GAP;
   }
-  x += 14;
-  const totU = U + addU;
+  const totU = U + addU, uCols = Math.ceil(totU / colH);
+  if (totU) { wrap(14 + uCols * (CW + CG)); x += 14; }
+  const ux = x;
   for (let i = 0; i < totU; i++) {
     const isAdd = i >= U, isRem = !isAdd && i >= U - remU, isPack = !isAdd && packU && i >= U - packU, op = isRem ? 0.3 : 1;
     const col = Math.floor(i / colH), row = i % colH;
-    const cx = x + col * (CW + CG), cy = Y + RH - CW - row * (CW + CG);
+    const cx = ux + col * (CW + CG), cy = y + RH - CW - row * (CW + CG);
     s += `<rect x="${cx}" y="${cy}" width="${CW}" height="${CW}" rx="1.5" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#d98a9a'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 2.5 : 1.5}" opacity="${op}"/>`;
     if (isRem) s += `<path d="M${cx - 2} ${cy - 2} L${cx + CW + 2} ${cy + CW + 2} M${cx + CW + 2} ${cy - 2} L${cx - 2} ${cy + CW + 2}" stroke="#d9482b" stroke-width="3" stroke-linecap="round"/>`;
     if (isAdd) s += `<text x="${cx + CW / 2}" y="${cy - 3}" text-anchor="middle" font-size="14" fill="#2f8f55" font-weight="800">+</text>`;
   }
-  const W = Math.max(x + Math.ceil(totU / colH) * (CW + CG) + 6, 80), H = Y + RH + 16;
-  return `<div class="chartwrap"><svg viewBox="0 0 ${W} ${H}" class="b10" role="img" aria-label="אבני בסיס עשר" dir="ltr">${s}</svg></div>`;
+  x = ux + uCols * (CW + CG);
+  const W = Math.max(maxX, x) + 6, H = y + RH + 16;
+  return `<div class="chartwrap"><svg viewBox="0 0 ${Math.max(W, 80)} ${H}" class="b10" role="img" aria-label="אבני בסיס עשר" dir="ltr">${s}</svg></div>`;
 }
 // שאלת חיבור/חיסור מוחשית עם אבני בסיס עשר (בעיקר עשרות שלמות)
 function genTenBlocks() {
