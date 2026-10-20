@@ -1074,6 +1074,7 @@
   .tl-kind .desc, .tl-part .desc { display: block; font-size: 0.85rem; font-weight: normal; margin-top: 3px; opacity: 0.85; }
   .tl-kind.sel, .tl-part.sel { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(76,95,213,0.25); }
   .tl-lbl { font-weight: 700; font-size: 0.95rem; color: #5f5a50; margin: 6px 0 2px; }
+  .b10 { width: 100%; max-width: 360px; height: auto; margin: 6px 0; }
   .vmul { display: inline-flex; flex-direction: column; align-items: flex-end; font-family: 'Heebo', 'Courier New', monospace; font-weight: 800; font-size: clamp(1.7rem, 7vw, 2.4rem); line-height: 1.25; margin: 10px 0; }
   .vmul .vn { letter-spacing: 0.14em; padding: 0 6px; }
   .vmul .vn:last-child { border-bottom: 4px solid #1f1e1c; padding-bottom: 6px; display: flex; align-items: center; gap: 18px; }
@@ -1552,7 +1553,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קמט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -4471,7 +4472,7 @@ const TOPICS2 = [
     id: 'addsub', name: 'חיבור וחיסור', icon: '➕', color: '#e0703a',
     desc: 'חיבור וחיסור עד 100, מעבר עשרת, מאות ועשרות שלמות',
     levels: {
-      1: [() => genAddSub2(1), () => genAddSub2(1), genMissing2],
+      1: [() => genTenBlocks(), () => genAddSub2(1), genMissing2],
       2: [() => genAddSub2(2), () => genAddSub2(2), genMissing2, genWordAddSub2],
       3: [() => genAddSub2(3), genWordAddSub2, () => genAddSub2(2), genMissing2]
     },
@@ -14855,6 +14856,55 @@ function fcBlocks(n) {
   for (let i = 0; i < u; i++) { s += `<rect x="${x + (i % 3) * 10}" y="${44 - Math.floor(i / 3) * 10}" width="8" height="8" fill="#d98a9a" stroke="#1f1e1c" stroke-width="1.2"/>`; }
   x += u ? 32 : 0;
   return `<svg viewBox="0 0 ${Math.max(x, 60)} 58" class="fc-blocks" role="img" aria-label="${n}" dir="ltr">${s}</svg>`;
+}
+
+// אבני בסיס עשר להמחשת חיבור/חיסור: עשרות = מוטות, אחדות = קוביות. פעולה מסומנת: ✗ אדום להסרה, ירוק לתוספת
+function b10fig(T, U, o = {}) {
+  const remT = o.remT || 0, addT = o.addT || 0, remU = o.remU || 0, addU = o.addU || 0;
+  const RW = 18, RH = 90, GAP = 7, Y = 12, CW = 16, CG = 4, colH = 5;
+  let x = 6, s = '';
+  const totT = T + addT;
+  for (let i = 0; i < totT; i++) {
+    const isAdd = i >= T, isRem = !isAdd && i >= T - remT, op = isRem ? 0.3 : 1;
+    s += `<rect x="${x}" y="${Y}" width="${RW}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : '#6fb3ad'}" stroke="#1f1e1c" stroke-width="2" opacity="${op}"/>`;
+    for (let k = 1; k < 10; k++) s += `<line x1="${x}" y1="${Y + k * RH / 10}" x2="${x + RW}" y2="${Y + k * RH / 10}" stroke="#2f7a73" stroke-width="0.8" opacity="${op}"/>`;
+    if (isRem) s += `<path d="M${x - 3} ${Y - 3} L${x + RW + 3} ${Y + RH + 3} M${x + RW + 3} ${Y - 3} L${x - 3} ${Y + RH + 3}" stroke="#d9482b" stroke-width="4" stroke-linecap="round"/>`;
+    if (isAdd) s += `<text x="${x + RW / 2}" y="${Y - 2}" text-anchor="middle" font-size="18" fill="#2f8f55" font-weight="800">+</text>`;
+    x += RW + GAP;
+  }
+  x += 14;
+  const totU = U + addU;
+  for (let i = 0; i < totU; i++) {
+    const isAdd = i >= U, isRem = !isAdd && i >= U - remU, op = isRem ? 0.3 : 1;
+    const col = Math.floor(i / colH), row = i % colH;
+    const cx = x + col * (CW + CG), cy = Y + RH - CW - row * (CW + CG);
+    s += `<rect x="${cx}" y="${cy}" width="${CW}" height="${CW}" rx="1.5" fill="${isAdd ? '#8ccf99' : '#d98a9a'}" stroke="#1f1e1c" stroke-width="1.5" opacity="${op}"/>`;
+    if (isRem) s += `<path d="M${cx - 2} ${cy - 2} L${cx + CW + 2} ${cy + CW + 2} M${cx + CW + 2} ${cy - 2} L${cx - 2} ${cy + CW + 2}" stroke="#d9482b" stroke-width="3" stroke-linecap="round"/>`;
+    if (isAdd) s += `<text x="${cx + CW / 2}" y="${cy - 3}" text-anchor="middle" font-size="14" fill="#2f8f55" font-weight="800">+</text>`;
+  }
+  const W = Math.max(x + Math.ceil(totU / colH) * (CW + CG) + 6, 80), H = Y + RH + 16;
+  return `<div class="chartwrap"><svg viewBox="0 0 ${W} ${H}" class="b10" role="img" aria-label="אבני בסיס עשר" dir="ltr">${s}</svg></div>`;
+}
+// שאלת חיבור/חיסור מוחשית עם אבני בסיס עשר (בעיקר עשרות שלמות)
+function genTenBlocks() {
+  const T = R(2, 8), U = R(0, 9), a = T * 10 + U;
+  const mode = pick(['subT', 'subT', 'addT', 'subU', 'addU']);
+  if (mode === 'subU' && U === 0) return genTenBlocks();
+  if (mode === 'addT' && T >= 9) return genTenBlocks();
+  let k, ans, o, text, amt, op;
+  if (mode === 'subT') { k = R(1, Math.min(3, T)); ans = a - k * 10; o = { remT: k }; amt = k * 10; op = '−';
+    text = `לפניכם <b>${a}</b> באבני עשרת ואחדות. מורידים <b>${k === 1 ? 'עשרת אחת' : k + ' עשרות'}</b> (${amt}). כמה נשאר?`; }
+  else if (mode === 'addT') { k = R(1, Math.min(3, 9 - T)); ans = a + k * 10; o = { addT: k }; amt = k * 10; op = '+';
+    text = `לפניכם <b>${a}</b>. מוסיפים <b>${k === 1 ? 'עשרת אחת' : k + ' עשרות'}</b> (${amt}). כמה יהיה?`; }
+  else if (mode === 'subU') { k = R(1, U); ans = a - k; o = { remU: k }; amt = k; op = '−';
+    text = `לפניכם <b>${a}</b>. מורידים <b>${k === 1 ? 'אחד' : k + ' אחדות'}</b>. כמה נשאר?`; }
+  else { k = R(1, Math.min(9 - U, 5)); if (k < 1) return genTenBlocks(); ans = a + k; o = { addU: k }; amt = k; op = '+';
+    text = `לפניכם <b>${a}</b>. מוסיפים <b>${k === 1 ? 'אחד' : k + ' אחדות'}</b>. כמה יהיה?`; }
+  return {
+    type: 'num', text, fig: b10fig(T, U, o), ans,
+    hint: /T$/.test(mode) ? 'כל מוט ארוך = עשרת (10). סופרים כמה מוטות נשארו, ומוסיפים את הקוביות (האחדות).' : 'כל קובייה קטנה = אחד. סופרים את הקוביות שנשארו יחד עם העשרות.',
+    exp: `${M(`${a} ${op} ${amt} = ${ans}`)}`
+  };
 }
 const fcQty = n => n <= 20 ? fcFrames(n) : fcBlocks(n);
 // קובייה: עד 6 בקובייה אחת; מעל 6 – כמה קוביות (6 + 3...) כדי לחבר בראש
