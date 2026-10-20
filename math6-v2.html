@@ -1097,6 +1097,10 @@
   .b10-card2 { background: linear-gradient(135deg,#fdeede,#f8d9c0); }
   .b10-card2:hover { background: linear-gradient(135deg,#fbe6d0,#f3ccac); }
   .b10-card2 .b10c-d { color: #6a4a35; }
+  .gen-inline { display: flex; align-items: center; gap: 10px; width: 100%; text-align: right; margin: 0 0 14px; padding: 11px 16px; border: 2px dashed #e0703a; border-radius: 14px; background: linear-gradient(135deg,#fdeede,#f8dcc6); cursor: pointer; font: inherit; color: #6a3a20; font-size: 1.02rem; }
+  .gen-inline:hover { background: linear-gradient(135deg,#fbe4d2,#f3ccac); }
+  .gen-inline .gi-ic { font-size: 1.5rem; }
+  .gen-inline b { color: #c2531f; }
   .b10-exrow { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 10px 0 4px; }
   .b10-exrow input { width: 90px; font: inherit; font-size: 2rem; font-weight: 800; text-align: center; padding: 6px; border: 2.5px solid var(--ink,#1f1e1c); border-radius: 12px; }
   .b10-ops { display: flex; flex-direction: column; gap: 6px; }
@@ -1587,7 +1591,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8466,6 +8470,9 @@ function renderQ() {
   stopSpeak();
   const tips = practice && TOPIC[state.topicId]
     ? `<details class="tips"><summary>${ic('note')} תזכורת – מה חשוב לזכור בנושא</summary><ul>${t.tips.map(x => `<li>${x}</li>`).join('')}</ul></details>` : '';
+  // כפתור ישיר למחולל האבנים בתוך נושא חיבור וחיסור (כיתות א'–ג')
+  const genBtn = practice && state.topicId === 'addsub' && GRADE <= 3
+    ? `<button type="button" class="gen-inline" id="genInline"><span class="gi-ic">🔁</span> <span>רוצים לראות באבנים? פִּתחו את <b>מחולל מעבר העשרת והמאות</b></span></button>` : '';
   const showLevel = practice && !state.hideLevel && !state.list && !state.retry;
   app.innerHTML = `
     <div class="topbar">
@@ -8485,6 +8492,7 @@ function renderQ() {
       <span class="streak">${state.streak >= 2 ? `🔥 ${state.streak} ברצף!` : ''}</span>
     </div>` : ''}
     ${tips}
+    ${genBtn}
     <div class="card">
      <div class="qlayout">
       <div class="qmain">
@@ -8520,6 +8528,7 @@ function renderQ() {
   $('fontBtn').onclick = cycleFont;
   bindLevelBadge();
   $('quit').onclick = () => { if (confirm('לצאת לתפריט הראשי? ההתקדמות בסבב הזה לא תישמר.')) home(); };
+  if ($('genInline')) $('genInline').onclick = () => { if (!state || confirm('לפתוח את המחולל? ההתקדמות בסבב התרגול הזה לא תישמר.')) b10Two(); };
   if (state.sim) {
     $('timer').onclick = () => { state.sim.hide = !state.sim.hide; updateSimClock(); };
     app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => simGo(Number(b.dataset.go)));
