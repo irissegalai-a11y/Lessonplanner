@@ -1587,7 +1587,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -11988,34 +11988,34 @@ function drawPracticeList() {
 let drS = { n: 0, ok: 0 };
 // מחולל שני מספרים עם מעבר עשרת: מדגים חיבור/חיסור צעד-צעד, כולל ההמרה 10 אחדות ↔ עשרת
 function framesAdd(a, b) {
-  const ta = Math.floor(a / 10), ua = a % 10, tb = Math.floor(b / 10), ub = b % 10;
-  const F = [];
-  F.push({ t: ta, u: ua, o: {}, cap: `מתחילים מ-<b>${a}</b>. נוסיף <b>${b}</b> — קודם ${ub} אֲחָדוֹת ואז ${tb} עֲשָׂרוֹת.` });
-  F.push({ t: ta, u: ua + ub, o: { addU: ub }, cap: `מוסיפים <b>${ub}</b> אֲחָדוֹת → עכשיו <b>${ua + ub}</b> אֲחָדוֹת.` });
-  let bt = ta, bu = ua + ub;
-  if (bu >= 10) {
-    F.push({ t: ta, u: bu, o: { packU: 10 }, cap: `יש 10 אֲחָדוֹת או יותר — אורזים <b>10 אֲחָדוֹת</b> לעֶשֶׂרֶת אחת. ✨` });
-    bt = ta + 1; bu = bu - 10;
-    F.push({ t: bt, u: bu, o: { addT: 1 }, cap: `המרנו! עֶשֶׂרֶת חדשה (ירוקה), ונשארו <b>${bu}</b> אֲחָדוֹת.` });
+  let h = Math.floor(a / 100), t = Math.floor(a % 100 / 10), u = a % 10;
+  const hb = Math.floor(b / 100), tb = Math.floor(b % 100 / 10), ub = b % 10;
+  const F = [{ h, t, u, o: {}, cap: `מתחילים מ-<b>${a}</b>. נוסיף <b>${b}</b>.` }];
+  if (ub) {
+    u += ub; F.push({ h, t, u, o: { addU: ub }, cap: `מוסיפים <b>${ub}</b> אֲחָדוֹת → <b>${u}</b> אֲחָדוֹת.` });
+    if (u >= 10) { F.push({ h, t, u, o: { packU: 10 }, cap: `10 אֲחָדוֹת = עֶשֶׂרֶת! אורזים. ✨` }); t += 1; u -= 10; F.push({ h, t, u, o: { addT: 1 }, cap: `עֶשֶׂרֶת חדשה (ירוקה), נשארו <b>${u}</b> אֲחָדוֹת.` }); }
   }
-  F.push({ t: bt + tb, u: bu, o: { addT: tb }, cap: `מוסיפים <b>${tb}</b> עֲשָׂרוֹת.` });
-  F.push({ t: Math.floor((a + b) / 10), u: (a + b) % 10, o: {}, cap: `${M(`${a} + ${b} = ${a + b}`)} ✓`, done: 1 });
+  if (tb) {
+    t += tb; F.push({ h, t, u, o: { addT: tb }, cap: `מוסיפים <b>${tb}</b> עֲשָׂרוֹת → <b>${t}</b> עֲשָׂרוֹת.` });
+    if (t >= 10) { F.push({ h, t, u, o: { packT: 10 }, cap: `10 עֲשָׂרוֹת = מֵאָה! אורזים. ✨` }); h += 1; t -= 10; F.push({ h, t, u, o: { addH: 1 }, cap: `מֵאָה חדשה (ירוקה), נשארו <b>${t}</b> עֲשָׂרוֹת.` }); }
+  }
+  if (hb) { h += hb; F.push({ h, t, u, o: { addH: hb }, cap: `מוסיפים <b>${hb}</b> מֵאוֹת.` }); }
+  const r = a + b; F.push({ h: Math.floor(r / 100), t: Math.floor(r % 100 / 10), u: r % 10, o: {}, cap: `${M(`${a} + ${b} = ${r}`)} ✓`, done: 1 });
   return F;
 }
 function framesSub(a, b) {
-  const ta = Math.floor(a / 10), ua = a % 10, tb = Math.floor(b / 10), ub = b % 10;
-  const F = [];
-  F.push({ t: ta, u: ua, o: {}, cap: `מתחילים מ-<b>${a}</b>. נוריד <b>${b}</b> — ${ub} אֲחָדוֹת ו-${tb} עֲשָׂרוֹת.` });
-  let bt = ta, bu = ua;
-  if (ua < ub) {
-    F.push({ t: ta, u: ua, o: { packT: 1 }, cap: `אין מספיק אֲחָדוֹת (${ua}) כדי להוריד ${ub}. <b>פורטים עֶשֶׂרֶת אחת</b> (הצהובה).` });
-    bt = ta - 1; bu = ua + 10;
-    F.push({ t: bt, u: bu, o: { addU: 10 }, cap: `פתחנו עֶשֶׂרֶת ל-10 אֲחָדוֹת → <b>${bt}</b> עֲשָׂרוֹת ו-<b>${bu}</b> אֲחָדוֹת.` });
+  let h = Math.floor(a / 100), t = Math.floor(a % 100 / 10), u = a % 10;
+  const hb = Math.floor(b / 100), tb = Math.floor(b % 100 / 10), ub = b % 10;
+  const F = [{ h, t, u, o: {}, cap: `מתחילים מ-<b>${a}</b>. נוריד <b>${b}</b>.` }];
+  if (u < ub) {
+    if (t === 0) { F.push({ h, t, u, o: { packH: 1 }, cap: `אין עֲשָׂרוֹת לפרוט — פורטים <b>מֵאָה</b> ל-10 עֲשָׂרוֹת.` }); h -= 1; t += 10; F.push({ h, t, u, o: { addT: 10 }, cap: `מֵאָה → 10 עֲשָׂרוֹת (ירוקות).` }); }
+    F.push({ h, t, u, o: { packT: 1 }, cap: `אין מספיק אֲחָדוֹת (${u}) — פורטים <b>עֶשֶׂרֶת</b> ל-10 אֲחָדוֹת.` }); t -= 1; u += 10; F.push({ h, t, u, o: { addU: 10 }, cap: `עֶשֶׂרֶת → 10 אֲחָדוֹת (ירוקות). עכשיו <b>${t}</b> עֲשָׂרוֹת, <b>${u}</b> אֲחָדוֹת.` });
   }
-  F.push({ t: bt, u: bu, o: { remU: ub }, cap: `מורידים <b>${ub}</b> אֲחָדוֹת (מסומנות ב-✗).` });
-  bu -= ub;
-  F.push({ t: bt, u: bu, o: { remT: tb }, cap: `מורידים <b>${tb}</b> עֲשָׂרוֹת (מסומנות ב-✗).` });
-  F.push({ t: Math.floor((a - b) / 10), u: (a - b) % 10, o: {}, cap: `${M(`${a} − ${b} = ${a - b}`)} ✓`, done: 1 });
+  F.push({ h, t, u, o: { remU: ub }, cap: `מורידים <b>${ub}</b> אֲחָדוֹת (✗).` }); u -= ub;
+  if (t < tb) { F.push({ h, t, u, o: { packH: 1 }, cap: `אין מספיק עֲשָׂרוֹת (${t}) — פורטים <b>מֵאָה</b> ל-10 עֲשָׂרוֹת.` }); h -= 1; t += 10; F.push({ h, t, u, o: { addT: 10 }, cap: `מֵאָה → 10 עֲשָׂרוֹת (ירוקות). עכשיו <b>${t}</b> עֲשָׂרוֹת.` }); }
+  F.push({ h, t, u, o: { remT: tb }, cap: `מורידים <b>${tb}</b> עֲשָׂרוֹת (✗).` }); t -= tb;
+  if (hb) { F.push({ h, t, u, o: { remH: hb }, cap: `מורידים <b>${hb}</b> מֵאוֹת (✗).` }); h -= hb; }
+  const r = a - b; F.push({ h: Math.floor(r / 100), t: Math.floor(r % 100 / 10), u: r % 10, o: {}, cap: `${M(`${a} − ${b} = ${r}`)} ✓`, done: 1 });
   return F;
 }
 function b10Two() {
@@ -12032,13 +12032,14 @@ function b10Two() {
           <input id="t2b" inputmode="numeric" value="${b}" aria-label="מספר שני">
         </div>
         <div class="actions" style="justify-content:center"><button id="t2go" class="race-go">▶ הדגמה צעד-צעד</button></div>
-        <p class="b10-hint muted">בחרו שני מספרים ופעולה (עד 99). נראה את החיבור/חיסור באבנים, כולל רגע ה<b>מעבר</b>: 10 אֲחָדוֹת הופכות לעֶשֶׂרֶת, או עֶשֶׂרֶת נפתחת ל-10 אֲחָדוֹת.</p>
+        <p class="b10-hint muted">בחרו שני מספרים ופעולה (עד ${GRADE >= 3 ? '999' : '99'}). נראה את החיבור/חיסור באבנים, כולל רגע ה<b>מעבר</b>: 10 אֲחָדוֹת הופכות לעֶשֶׂרֶת, או עֶשֶׂרֶת נפתחת ל-10 אֲחָדוֹת.</p>
       </div>`;
     $('quit').onclick = home;
     app.querySelectorAll('.b10-op').forEach(x => x.onclick = () => { op = x.dataset.op; app.querySelectorAll('.b10-op').forEach(y => y.classList.toggle('sel', y === x)); });
     $('t2go').onclick = () => {
-      a = Math.max(0, Math.min(99, parseInt(($('t2a').value || '').replace(/\D/g, ''), 10) || 0));
-      b = Math.max(0, Math.min(99, parseInt(($('t2b').value || '').replace(/\D/g, ''), 10) || 0));
+      const MAX2 = GRADE >= 3 ? 999 : 99;
+      a = Math.max(0, Math.min(MAX2, parseInt(($('t2a').value || '').replace(/\D/g, ''), 10) || 0));
+      b = Math.max(0, Math.min(MAX2, parseInt(($('t2b').value || '').replace(/\D/g, ''), 10) || 0));
       if (op === '-' && b > a) { const t = a; a = b; b = t; }
       F = op === '+' ? framesAdd(a, b) : framesSub(a, b); fi = 0; show();
     };
@@ -12048,7 +12049,7 @@ function b10Two() {
     app.innerHTML = `${header}
       <div class="card b10lab">
         <div class="b10-ex" dir="ltr">${M(`${a} ${op === '+' ? '+' : '−'} ${b}`)}</div>
-        <div class="b10-blocks">${b10fig(f.t, f.u, f.o)}</div>
+        <div class="b10-blocks">${b10fig(f.t, f.u, Object.assign({ H: f.h }, f.o))}</div>
         <div class="b10-cap ${f.done ? 'done' : ''}">${f.cap}</div>
         <div class="b10-steps">${F.map((_, i) => `<span class="b10-dot${i === fi ? ' on' : ''}${i < fi ? ' past' : ''}"></span>`).join('')}</div>
         <div class="actions" style="justify-content:center">
@@ -15013,8 +15014,18 @@ function fcBlocks(n) {
 // אבני בסיס עשר להמחשת חיבור/חיסור: עשרות = מוטות, אחדות = קוביות. פעולה מסומנת: ✗ אדום להסרה, ירוק לתוספת
 function b10fig(T, U, o = {}) {
   const remT = o.remT || 0, addT = o.addT || 0, remU = o.remU || 0, addU = o.addU || 0, packT = o.packT || 0, packU = o.packU || 0;
+  const HH = o.H || 0, addH = o.addH || 0, remH = o.remH || 0, packH = o.packH || 0;
   const RW = 18, RH = 90, GAP = 7, Y = 12, CW = 16, CG = 4, colH = 5;
   let x = 6, s = '';
+  const totH = HH + addH;
+  for (let i = 0; i < totH; i++) {
+    const isAdd = i >= HH, isRem = !isAdd && i >= HH - remH, isPack = !isAdd && packH && i >= HH - packH, op = isRem ? 0.3 : 1;
+    s += `<rect x="${x}" y="${Y}" width="${RH}" height="${RH}" rx="2" fill="${isAdd ? '#8ccf99' : isPack ? '#ffe08a' : '#f2c94c'}" stroke="${isPack ? '#e0a800' : '#1f1e1c'}" stroke-width="${isPack ? 4 : 2}" opacity="${op}"/>`;
+    for (let k = 1; k < 10; k++) s += `<line x1="${x + k * RH / 10}" y1="${Y}" x2="${x + k * RH / 10}" y2="${Y + RH}" stroke="#b8902c" stroke-width="0.6" opacity="${op}"/><line x1="${x}" y1="${Y + k * RH / 10}" x2="${x + RH}" y2="${Y + k * RH / 10}" stroke="#b8902c" stroke-width="0.6" opacity="${op}"/>`;
+    if (isRem) s += `<path d="M${x - 3} ${Y - 3} L${x + RH + 3} ${Y + RH + 3} M${x + RH + 3} ${Y - 3} L${x - 3} ${Y + RH + 3}" stroke="#d9482b" stroke-width="5" stroke-linecap="round"/>`;
+    if (isAdd) s += `<text x="${x + RH / 2}" y="${Y - 2}" text-anchor="middle" font-size="18" fill="#2f8f55" font-weight="800">+</text>`;
+    x += RH + GAP + 4;
+  }
   const totT = T + addT;
   for (let i = 0; i < totT; i++) {
     const isAdd = i >= T, isRem = !isAdd && i >= T - remT, isPack = !isAdd && packT && i >= T - packT, op = isRem ? 0.3 : 1;
