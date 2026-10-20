@@ -1084,6 +1084,9 @@
   .b10-num { font-size: clamp(2.6rem,12vw,4rem); font-weight: 900; color: var(--accent); font-family: 'Heebo', sans-serif; }
   .b10-blocks { min-height: 130px; display: flex; align-items: center; justify-content: center; margin: 8px 0 16px; }
   .b10-blocks .fc-blocks { width: 100%; max-width: 520px; height: auto; }
+  /* מחולל האבנים: גובה קבוע לאזור האבנים כדי שהכפתורים +/− לא יקפצו בטלפון */
+  .blab-blocks { height: 240px; min-height: 240px; overflow: auto; }
+  .blab-blocks .fc-blocks, .blab-blocks .b10 { max-height: 224px; height: auto; }
   .b10-empty { color: #8a8478; font-size: 1.1rem; }
   .b10-controls { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
   .b10-grp { display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -1598,7 +1601,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12098,7 +12101,7 @@ function b10Lab() {
       </div>
       <div class="card b10lab">
         <div class="b10-num" aria-live="polite">${fmt(n)}</div>
-        <div class="b10-blocks">${n === 0 ? '<div class="b10-empty">אין אבנים עדיין — הוסיפו עֶשְׂרֶת או אֶחָד 👇</div>' : fcBlocks(n)}</div>
+        <div class="b10-blocks blab-blocks">${n === 0 ? '<div class="b10-empty">אין אבנים עדיין — הוסיפו עֶשְׂרֶת או אֶחָד 👇</div>' : fcBlocks(n)}</div>
         <div class="b10-controls">
           ${HAS100 ? `<div class="b10-grp"><span class="b10-lbl">מֵאוֹת</span><button type="button" class="b10-btn" data-d="100">＋</button><button type="button" class="b10-btn minus" data-d="-100">－</button></div>` : ''}
           <div class="b10-grp"><span class="b10-lbl">עֲשָׂרוֹת</span><button type="button" class="b10-btn" data-d="10">＋</button><button type="button" class="b10-btn minus" data-d="-10">－</button></div>
