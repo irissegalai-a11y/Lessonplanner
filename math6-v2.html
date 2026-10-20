@@ -1104,17 +1104,15 @@
   .b10-card3:hover { background: linear-gradient(135deg,#d6e3fc,#bcd3f7); }
   .b10-card3 .b10c-d { color: #35507a; }
   .wh-card { text-align: center; border-radius: 18px; background: linear-gradient(160deg,#fff4e6,#ffe0c2); }
-  .wh-ops { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0; }
-  .wh-op { font: inherit; font-size: 1.1rem; padding: 8px 16px; border: 2.5px solid #1f1e1c; border-radius: 12px; background: #fff; cursor: pointer; }
-  .wh-op.on { background: #ffb703; box-shadow: 2px 2px 0 #1f1e1c; }
   .wh-rng { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; font-size: 1.15rem; font-weight: 700; }
   .wh-rng input { width: 90px; font: inherit; text-align: center; padding: 6px; border: 2.5px solid #1f1e1c; border-radius: 10px; }
   .wh-score { display: flex; gap: 14px; justify-content: center; align-items: center; flex-wrap: wrap; font-weight: 700; }
-  .wh-fix[hidden] { display: none; }
   .wh-wrap { position: relative; width: min(300px, 80vw); margin: 0 auto; padding-top: 16px; overflow: hidden; }
   .wh-ptr { position: absolute; top: 2px; left: 50%; transform: translateX(-50%); font-size: 2rem; color: #b3261e; z-index: 1; line-height: 1; }
   .wh-svg { width: 100%; height: auto; display: block; pointer-events: none; transition: transform 3s cubic-bezier(.17,.67,.2,1); }
   .wh-tbl { margin: 0 0 6px; font-size: 1.3rem; font-weight: 800; color: #b3541e; }
+  .wh-sel { font: inherit; font-size: 1.05rem; padding: 6px 8px; border: 2.5px solid #1f1e1c; border-radius: 10px; background: #fff; max-width: 100%; }
+  .wh-rng label { max-width: 100%; }
   .wh-ex { font-size: 2rem; font-weight: 800; margin: 8px 0; }
   .er-card { text-align: center; border-radius: 18px; }
   .er-card h2 { margin: 4px 0 8px; }
@@ -1643,7 +1641,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12316,7 +12314,25 @@ function erProb(g, op) {
 function wheelGame() {
   stopRace && stopRace(); state = null; lessonView = null; navPush('view');
   track('משחק: גלגל המזל');
-  const OPS = [['+', 'חיבור'], ['-', 'חיסור'], ...(GRADE >= 2 ? [['×', 'כפל'], ['÷', 'חילוק']] : [])];
+  const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const PV = [10, 100, 1000], PVN = { 10: 'עשרות', 100: 'מאות', 1000: 'אלפים' };
+  // fx: מספר קבוע (opt = לא חובה, def = ברירת מחדל, pv = רק 10/100/1000). nf: סינון מספרי הגלגל.
+  const TOP = [
+    { id: '+', nm: 'חיבור', g: 1, mk: (a, b) => ({ q: `${a} + ${b}`, a: a + b }) },
+    { id: '-', nm: 'חיסור', g: 1, mk: (a, b) => ({ q: `${Math.max(a, b)} − ${Math.min(a, b)}`, a: Math.abs(a - b) }) },
+    { id: 'miss', nm: 'חיבור עם נעלם (□ + 5 = 12)', g: 1, mk: (a, b) => ({ q: `□ + ${a} = ${a + b}`, a: b }) },
+    { id: 'comp', nm: 'השלמה למספר (למשל ל-10)', g: 1, fx: { lbl: 'משלימים ל:', def: 10 }, nf: (v, f) => v <= f, mk: (a, b, f) => ({ q: `${a} + □ = ${f}`, a: f - a }) },
+    { id: 'dbl', nm: 'כפליים (מספר ועוד אותו מספר)', g: 1, mk: a => ({ q: `${a} + ${a}`, a: 2 * a }) },
+    { id: 'half', nm: 'חצאים', g: 2, nf: v => v % 2 === 0, mk: a => ({ q: `חצי של ${a} = ?`, a: a / 2, rtl: 1 }) },
+    { id: '×', nm: 'כפל', g: 2, fx: { lbl: 'מספר קבוע (לא חובה):', opt: 1, tbl: 'לוח הכפל של' }, mk: (a, b, f) => f ? { q: `${f} × ${a}`, a: f * a } : { q: `${a} × ${b}`, a: a * b } },
+    { id: '÷', nm: 'חילוק', g: 2, fx: { lbl: 'מספר קבוע (לא חובה):', opt: 1, tbl: 'לוח החילוק של' }, nf: v => v > 0, mk: (a, b, f) => f ? { q: `${f * a} ÷ ${f}`, a } : { q: `${a * b} ÷ ${a}`, a: b } },
+    { id: 'rnd', nm: 'עיגול מספרים', g: 2, fx: { lbl: 'מעגלים ל:', def: 10, pv: 1 }, mk: (a, b, f) => ({ q: `עגלו את ${a} ל${PVN[f]}`, a: Math.round(a / f) * f, rtl: 1 }) },
+    { id: 'mmiss', nm: 'כפל עם נעלם (□ × 4 = 28)', g: 3, nf: v => v > 0, mk: (a, b) => ({ q: `□ × ${a} = ${a * b}`, a: b }) },
+    { id: 'x10', nm: 'כפל ב-10, 100, 1000', g: 3, fx: { lbl: 'כופלים ב:', def: 10, pv: 1 }, mk: (a, b, f) => ({ q: `${a} × ${f}`, a: a * f }) },
+    { id: 'ord', nm: 'סדר פעולות (חיבור וכפל)', g: 4, mk: (a, b) => { const c = R(2, 9); return { q: `${b} + ${a} × ${c}`, a: b + a * c }; } },
+    { id: 'sq', nm: 'חזקה שנייה (ריבוע)', g: 5, mk: a => ({ q: `${a}²`, a: a * a }) }
+  ].filter(t => t.g <= Math.max(1, GRADE));
+  const T = () => TOP.find(t => t.id === op);
   let op = '+', lo = 1, hi = 10, fix = null, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
   const header = `<div class="topbar"><span class="title">🎡 גלגל המזל</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
   const COLS = ['#f6c344', '#ef8a62', '#7fb3e0', '#8fd19e', '#c39be0', '#f29ac0', '#6fd3c8', '#f4a259'];
@@ -12334,37 +12350,37 @@ function wheelGame() {
       <div class="card wh-card">
         <div class="er-big">🎡</div>
         <h2>גלגל המזל – הגדרות</h2>
-        <p class="muted">בוחרים נושא וטווח מספרים. הגלגל בוחר מספר אחד, והמספר השני נבחר מאותו טווח.</p>
-        <div class="wh-ops">${OPS.map(([o, t]) => `<button type="button" class="wh-op${o === op ? ' on' : ''}" data-op="${o}"><b dir="ltr">${o}</b> ${t}</button>`).join('')}</div>
-        <div class="wh-rng wh-fix" ${'×÷'.includes(op) ? '' : 'hidden'}><label>מספר קבוע (לא חובה): <input id="whFix" inputmode="numeric" value="${fix || ''}" placeholder="למשל 7"></label></div>
-        <p class="muted wh-fix" ${'×÷'.includes(op) ? '' : 'hidden'}>עם מספר קבוע מתרגלים את לוח הכפל שלו: הגלגל בוחר את המספר השני מתוך הטווח.</p>
+        <p class="muted">בוחרים נושא וטווח מספרים. הגלגל בוחר מספר אחד, ואם צריך מספר שני – גם הוא נבחר מאותו טווח.</p>
+        <div class="wh-rng"><label>נושא: <select id="whTop" class="wh-sel">${TOP.map(t => `<option value="${t.id}"${t.id === op ? ' selected' : ''}>${t.nm}</option>`).join('')}</select></label></div>
+        ${T().fx ? `<div class="wh-rng"><label>${T().fx.lbl} ${T().fx.pv ? `<select id="whFix" class="wh-sel">${PV.map(v => `<option value="${v}"${v === (fix || 10) ? ' selected' : ''}>${v}</option>`).join('')}</select>` : `<input id="whFix" inputmode="numeric" value="${fix || T().fx.def || ''}" placeholder="${T().fx.opt ? 'למשל 7' : ''}">`}</label></div>
+        ${T().fx.opt ? '<p class="muted">עם מספר קבוע מתרגלים את הלוח שלו: הגלגל בוחר את המספר השני מתוך הטווח.</p>' : ''}` : ''}
         <div class="wh-rng"><label>מ- <input id="whLo" inputmode="numeric" value="${lo}"></label><label>עד <input id="whHi" inputmode="numeric" value="${hi}"></label></div>
         <div id="erMsg" class="er-msg bad" aria-live="polite"></div>
         <div class="actions" style="justify-content:center"><button id="whStart" class="race-go">▶ לגלגל!</button></div>
       </div>`;
     $('quit').onclick = home;
-    app.querySelectorAll('.wh-op').forEach(b => b.onclick = () => { op = b.dataset.op; app.querySelectorAll('.wh-op').forEach(x => x.classList.toggle('on', x === b)); app.querySelectorAll('.wh-fix').forEach(x => x.hidden = !'×÷'.includes(op)); });
+    $('whTop').onchange = () => { lo = $('whLo').value; hi = $('whHi').value; op = $('whTop').value; fix = null; setup(); };
     $('whStart').onclick = () => {
       const n = id => parseInt(($(id).value || '').replace(/\D/g, ''), 10);
       let a = n('whLo'), b = n('whHi');
       if (isNaN(a) || isNaN(b)) { $('erMsg').textContent = 'הקלידו שני מספרים.'; return; }
       if (a > b) [a, b] = [b, a];
-      if (op === '÷' && a === 0) a = 1;
       if (b > 1000 || b < 1) { $('erMsg').textContent = 'הטווח צריך להיות בין 0 ל-1000.'; return; }
-      const f = n('whFix');
-      fix = '×÷'.includes(op) && f >= 1 && f <= 100 ? f : null;
+      const t = T(), f = $('whFix') ? n('whFix') : NaN;
+      fix = !t.fx ? null : t.fx.pv ? (PV.includes(f) ? f : 10) : f >= 1 && f <= (t.fx.opt ? 100 : 10000) ? f : t.fx.opt ? null : t.fx.def;
+      const all = []; for (let v = a; v <= b; v++) if (!t.nf || t.nf(v, fix)) all.push(v);
+      if (!all.length) { $('erMsg').textContent = op === 'comp' ? `בטווח צריכים להיות מספרים עד ${fix}.` : 'אין בטווח הזה מספרים מתאימים לנושא. נסו טווח אחר.'; return; }
       lo = a; hi = b;
-      const all = []; for (let v = lo; v <= hi; v++) all.push(v);
       nums = all.length <= 12 ? all : shuffle(all).slice(0, 12).sort((x, y) => x - y);
-      if (nums.length < 2) nums = [lo, lo];
-      track('גלגל המזל – הגדרה', `${op} ${lo}–${hi}${fix ? ` · קבוע ${fix}` : ''}`);
+      if (nums.length < 2) nums = [nums[0], nums[0]];
+      track('גלגל המזל – הגדרה', `${t.nm} ${lo}–${hi}${fix ? ` · ${fix}` : ''}`);
       ok = tot = streak = 0; play();
     };
   };
   const play = () => {
     app.innerHTML = `${header}
       <div class="card wh-card">
-        ${fix ? `<p class="wh-tbl">לוח ה${op === '×' ? 'כפל' : 'חילוק'} של ${fix}</p>` : ''}<div class="wh-score"><span>✅ ${ok} מתוך ${tot}</span>${streak >= 2 ? `<span>🔥 רצף ${streak}</span>` : ''}<button type="button" class="ghost" id="whSet">⚙️ נושא וטווח</button></div>
+        <p class="wh-tbl">${T().fx && T().fx.tbl && fix ? `${T().fx.tbl} ${fix}` : T().nm}</p><div class="wh-score"><span>✅ ${ok} מתוך ${tot}</span>${streak >= 2 ? `<span>🔥 רצף ${streak}</span>` : ''}<button type="button" class="ghost" id="whSet">⚙️ נושא וטווח</button></div>
         ${fig()}
         <div id="whQ" class="er-q"></div>
         <div class="actions" style="justify-content:center"><button id="whSpin" class="race-go">🎡 סובבו!</button></div>
@@ -12379,14 +12395,12 @@ function wheelGame() {
     rot += 360 * 5 + ((target - rot) % 360 + 360) % 360;
     $('whSpin').disabled = true; $('whSet').disabled = true;
     $('whSvg').style.transform = `rotate(${rot}deg)`;
-    const a = fix ? fix : nums[i], b = fix ? nums[i] : lo + Math.floor(Math.random() * (hi - lo + 1));
-    cur = op === '+' ? { q: `${a} + ${b}`, a: a + b } : op === '-' ? { q: `${Math.max(a, b)} − ${Math.min(a, b)}`, a: Math.abs(a - b) }
-      : op === '×' ? { q: `${a} × ${b}`, a: a * b } : { q: `${a * b} ÷ ${a}`, a: b };
+    cur = T().mk(nums[i], R(lo, hi), fix);
     setTimeout(ask, 3200);
   };
   const ask = () => {
     $('whSpin').closest('.actions').remove(); $('whSet').disabled = false;
-    $('whQ').innerHTML = `<div dir="ltr" class="wh-ex">${cur.q} = ?</div>
+    $('whQ').innerHTML = `<div dir="${cur.rtl ? 'rtl' : 'ltr'}" class="wh-ex">${cur.q}${cur.rtl || cur.q.includes('=') ? '' : ' = ?'}</div>
       <div class="er-ans"><input id="erIn" inputmode="numeric" autocomplete="off" aria-label="תשובה"><button id="erOk" class="race-go">בדיקה</button></div>
       <div id="erMsg" class="er-msg" aria-live="polite"></div>`;
     let tries = 0;
@@ -12399,7 +12413,7 @@ function wheelGame() {
         tot++; if (good && tries === 1) { ok++; streak++; } else streak = 0;
         $('erIn').disabled = true; $('erOk').remove();
         $('erMsg').className = 'er-msg ' + (good ? 'ok' : 'hint');
-        $('erMsg').innerHTML = `${good ? (tries === 1 ? '✅ נכון!' : '✅ נכון, בניסיון השני.') : `התשובה: <b dir="ltr">${cur.q} = ${cur.a}</b>`}<div class="actions" style="justify-content:center"><button id="whAgain" class="race-go">🎡 סיבוב נוסף</button></div>`;
+        $('erMsg').innerHTML = `${good ? (tries === 1 ? '✅ נכון!' : '✅ נכון, בניסיון השני.') : `התשובה: <b dir="${cur.rtl ? 'rtl' : 'ltr'}">${cur.q.includes('□') ? cur.q.replace('□', cur.a) : cur.rtl ? cur.a : `${cur.q} = ${cur.a}`}</b>`}<div class="actions" style="justify-content:center"><button id="whAgain" class="race-go">🎡 סיבוב נוסף</button></div>`;
         $('whAgain').onclick = play; $('whAgain').focus();
       } else {
         $('erMsg').className = 'er-msg bad'; $('erMsg').textContent = '❌ לא בדיוק – נסו שוב!'; $('erIn').select();
