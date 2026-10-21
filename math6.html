@@ -1641,7 +1641,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12334,7 +12334,22 @@ function wheelGame() {
     { id: 'sq', nm: 'חזקה שנייה (ריבוע)', g: 5, mk: a => ({ q: `${a}²`, a: a * a }) }
   ].filter(t => t.g <= Math.max(1, GRADE));
   const T = () => TOP.find(t => t.id === op);
-  let op = '+', lo = 1, hi = 10, fix = null, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
+  // טווח ברירת מחדל לפי כיתה ונושא – רוב התלמידים לא משנים אותו
+  const g = Math.max(1, Math.min(6, GRADE));
+  const DEF = id => {
+    const ADD = [[1, 10], [10, 100], [100, 1000], [1000, 100000], [10000, 1000000], [10000, 1000000]][g - 1];
+    const MUL = [[1, 5], [1, 10], [2, 10], [2, 12], [6, 25], [6, 25]][g - 1];
+    if (id === '-' && g === 1) return [1, 20];
+    if (['×', '÷', 'mmiss'].includes(id)) return MUL;
+    if (id === 'comp') return [1, [10, 100, 1000, 1000, 1000, 1000][g - 1]];
+    if (id === 'rnd') return [[11, 999], [11, 999], [101, 1000], [1001, 100000], [10001, 1000000], [10001, 1000000]][g - 1];
+    if (id === 'x10') return g === 3 ? [1, 99] : [10, 999];
+    if (id === 'ord') return g === 4 ? [2, 20] : [5, 50];
+    if (id === 'sq') return [2, 20];
+    return ADD;
+  };
+  const DFIX = { comp: [10, 100, 1000, 1000, 1000, 1000][g - 1], rnd: [10, 10, 100, 1000, 1000, 1000][g - 1] };
+  let op = g <= 2 ? '+' : '×', [lo, hi] = DEF(op), fix = DFIX[op] || null, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
   const header = `<div class="topbar"><span class="title">🎡 גלגל המזל</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
   const COLS = ['#f6c344', '#ef8a62', '#7fb3e0', '#8fd19e', '#c39be0', '#f29ac0', '#6fd3c8', '#f4a259'];
   const fig = () => {
@@ -12362,7 +12377,7 @@ function wheelGame() {
         <div class="actions" style="justify-content:center"><button id="whStart" class="race-go">▶ לגלגל!</button></div>
       </div>`;
     $('quit').onclick = home;
-    $('whTop').onchange = () => { lo = $('whLo').value; hi = $('whHi').value; op = $('whTop').value; fix = null; setup(); };
+    $('whTop').onchange = () => { op = $('whTop').value; [lo, hi] = DEF(op); fix = DFIX[op] || null; setup(); };
     $('whStart').onclick = () => {
       const n = id => parseInt(($(id).value || '').replace(/\D/g, ''), 10);
       let a = n('whLo'), b = n('whHi');
