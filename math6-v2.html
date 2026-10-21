@@ -1641,7 +1641,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12348,7 +12348,18 @@ function wheelGame() {
     if (id === 'sq') return [2, 20];
     return ADD;
   };
+  // רף מינימום: חוסם טווח קל מדי לכיתה (הגבול העליון של הטווח / המספר הקבוע)
+  const MINHI = id => ['×', '÷', 'mmiss'].includes(id) ? [3, 5, 6, 9, 12, 12][g - 1]
+    : id === 'rnd' ? [0, 50, 100, 1000, 10000, 10000][g - 1] : id === 'x10' ? (g >= 5 ? 100 : 10)
+    : id === 'ord' ? (g >= 5 ? 20 : 10) : id === 'sq' ? 10 : id === 'comp' ? 0 : [5, 20, 100, 1000, 10000, 10000][g - 1];
+  const MINFIX = id => id === 'comp' ? [5, 20, 100, 100, 100, 100][g - 1] : ['×', '÷'].includes(id) ? [0, 0, 0, 3, 6, 6][g - 1] : 0;
+  const KITA = 'אבגדהו'[g - 1];
   const DFIX = { comp: [10, 100, 1000, 1000, 1000, 1000][g - 1], rnd: [10, 10, 100, 1000, 1000, 1000][g - 1] };
+  let best = 0, sent = 0;
+  // דיווח תוצאות למעקב: כל 10 תרגילים, ביציאה, בהחלפת נושא ובסגירת הדף
+  const report = beacon => { if (tot > sent) { sent = tot; trackSend('גלגל המזל – תוצאה', `${T().nm} ${lo}–${hi}${fix ? ` · ${fix}` : ''} · ${ok}/${tot} · רצף ${best}`, beacon); } };
+  window.addEventListener('pagehide', () => report(true));
+  window.addEventListener('popstate', () => report());
   let op = g <= 2 ? '+' : '×', [lo, hi] = DEF(op), fix = DFIX[op] || null, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
   const header = `<div class="topbar"><span class="title">🎡 גלגל המזל</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
   const COLS = ['#f6c344', '#ef8a62', '#7fb3e0', '#8fd19e', '#c39be0', '#f29ac0', '#6fd3c8', '#f4a259'];
@@ -12386,13 +12397,17 @@ function wheelGame() {
       if (b > MAX || b < 1) { $('erMsg').textContent = `הטווח צריך להיות בין 0 ל-${MAX.toLocaleString("en-US")}.`; return; }
       const t = T(), f = $('whFix') ? n('whFix') : NaN;
       fix = !t.fx ? null : t.fx.pv ? (t.fx.pv.includes(f) ? f : 10) : f >= 1 && f <= (t.fx.opt ? 100 : 10000) ? f : t.fx.opt ? null : t.fx.def;
+      // עם מספר קבוע בכפל/חילוק (לוח הכפל) – בודקים את המספר הקבוע, והטווח רק צריך לכסות את הלוח
+      const minHi = fix && t.fx.opt ? (g >= 3 ? 10 : 5) : MINHI(op);
+      if (b < minHi) { $('erMsg').textContent = `זה קל מדי לכיתה ${KITA}′ 🙂 הגבול העליון של הטווח צריך להיות לפחות ${minHi.toLocaleString('en-US')}.`; return; }
+      if (fix && fix < MINFIX(op)) { $('erMsg').textContent = `זה קל מדי לכיתה ${KITA}′ 🙂 בחרו מספר קבוע ${MINFIX(op).toLocaleString('en-US')} או יותר.`; return; }
       const all = []; for (let v = a; v <= b; v++) if (!t.nf || t.nf(v, fix)) all.push(v);
       if (!all.length) { $('erMsg').textContent = op === 'comp' ? `בטווח צריכים להיות מספרים עד ${fix}.` : op === 'rnd' ? `לעיגול ל${PVN[fix]} צריך בטווח מספרים גדולים מ-${fix} (למשל ${fix + 1} עד ${Math.min(MAX, fix * 100)}).` : 'אין בטווח הזה מספרים מתאימים לנושא. נסו טווח אחר.'; return; }
       lo = a; hi = b;
       nums = all.length <= 12 ? all : shuffle(all).slice(0, 12).sort((x, y) => x - y);
       if (nums.length < 2) nums = [nums[0], nums[0]];
       track('גלגל המזל – הגדרה', `${t.nm} ${lo}–${hi}${fix ? ` · ${fix}` : ''}`);
-      ok = tot = streak = 0; play();
+      ok = tot = streak = best = sent = 0; play();
     };
   };
   const play = () => {
@@ -12403,8 +12418,8 @@ function wheelGame() {
         <div id="whQ" class="er-q"></div>
         <div class="actions" style="justify-content:center"><button id="whSpin" class="race-go">🎡 סובבו!</button></div>
       </div>`;
-    $('quit').onclick = home;
-    $('whSet').onclick = setup;
+    $('quit').onclick = () => { report(); home(); };
+    $('whSet').onclick = () => { report(); setup(); };
     $('whSpin').onclick = spin;
   };
   const spin = () => {
@@ -12428,7 +12443,8 @@ function wheelGame() {
       tries++;
       if (v === cur.a || tries >= 2) {
         const good = v === cur.a;
-        tot++; if (good && tries === 1) { ok++; streak++; } else streak = 0;
+        tot++; if (good && tries === 1) { ok++; streak++; best = Math.max(best, streak); } else streak = 0;
+        if (tot % 10 === 0) report();
         $('erIn').disabled = true; $('erOk').remove();
         $('erMsg').className = 'er-msg ' + (good ? 'ok' : 'hint');
         $('erMsg').innerHTML = `${good ? (tries === 1 ? '✅ נכון!' : '✅ נכון, בניסיון השני.') : `התשובה: <b dir="${cur.rtl ? 'rtl' : 'ltr'}">${cur.q.includes('□') ? cur.q.replace('□', cur.a) : cur.rtl ? cur.a : `${cur.q} = ${cur.a}`}</b>`}<div class="actions" style="justify-content:center"><button id="whAgain" class="race-go">🎡 סיבוב נוסף</button></div>`;
