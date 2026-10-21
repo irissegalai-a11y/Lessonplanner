@@ -1641,7 +1641,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -12315,7 +12315,8 @@ function wheelGame() {
   stopRace && stopRace(); state = null; lessonView = null; navPush('view');
   track('משחק: גלגל המזל');
   const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
-  const PV = [10, 100, 1000], PVN = { 10: 'עשרות', 100: 'מאות', 1000: 'אלפים' };
+  const PV = [10, 100, 1000], PVR = GRADE >= 4 ? [...PV, 10000] : PV, PVN = { 10: 'עשרות', 100: 'מאות', 1000: 'אלפים', 10000: 'עשרות אלפים' };
+  const MAX = GRADE >= 5 ? 1000000 : GRADE === 4 ? 100000 : 1000;
   // fx: מספר קבוע (opt = לא חובה, def = ברירת מחדל, pv = רק 10/100/1000). nf: סינון מספרי הגלגל.
   const TOP = [
     { id: '+', nm: 'חיבור', g: 1, mk: (a, b) => ({ q: `${a} + ${b}`, a: a + b }) },
@@ -12326,9 +12327,9 @@ function wheelGame() {
     { id: 'half', nm: 'חצאים', g: 2, nf: v => v % 2 === 0, mk: a => ({ q: `חצי של ${a} = ?`, a: a / 2, rtl: 1 }) },
     { id: '×', nm: 'כפל', g: 2, fx: { lbl: 'מספר קבוע (לא חובה):', opt: 1, tbl: 'לוח הכפל של' }, mk: (a, b, f) => f ? { q: `${f} × ${a}`, a: f * a } : { q: `${a} × ${b}`, a: a * b } },
     { id: '÷', nm: 'חילוק', g: 2, fx: { lbl: 'מספר קבוע (לא חובה):', opt: 1, tbl: 'לוח החילוק של' }, nf: v => v > 0, mk: (a, b, f) => f ? { q: `${f * a} ÷ ${f}`, a } : { q: `${a * b} ÷ ${a}`, a: b } },
-    { id: 'rnd', nm: 'עיגול מספרים', g: 2, fx: { lbl: 'מעגלים ל:', def: 10, pv: 1 }, mk: (a, b, f) => ({ q: `עגלו את ${a} ל${PVN[f]}`, a: Math.round(a / f) * f, rtl: 1 }) },
+    { id: 'rnd', nm: 'עיגול מספרים', g: 2, fx: { lbl: 'מעגלים ל:', def: 10, pv: PVR }, nf: (v, f) => v > f && v % f !== 0, mk: (a, b, f) => ({ q: `עגלו את ${a} ל${PVN[f]}`, a: Math.round(a / f) * f, rtl: 1 }) },
     { id: 'mmiss', nm: 'כפל עם נעלם (□ × 4 = 28)', g: 3, nf: v => v > 0, mk: (a, b) => ({ q: `□ × ${a} = ${a * b}`, a: b }) },
-    { id: 'x10', nm: 'כפל ב-10, 100, 1000', g: 3, fx: { lbl: 'כופלים ב:', def: 10, pv: 1 }, mk: (a, b, f) => ({ q: `${a} × ${f}`, a: a * f }) },
+    { id: 'x10', nm: 'כפל ב-10, 100, 1000', g: 3, fx: { lbl: 'כופלים ב:', def: 10, pv: PV }, mk: (a, b, f) => ({ q: `${a} × ${f}`, a: a * f }) },
     { id: 'ord', nm: 'סדר פעולות (חיבור וכפל)', g: 4, mk: (a, b) => { const c = R(2, 9); return { q: `${b} + ${a} × ${c}`, a: b + a * c }; } },
     { id: 'sq', nm: 'חזקה שנייה (ריבוע)', g: 5, mk: a => ({ q: `${a}²`, a: a * a }) }
   ].filter(t => t.g <= Math.max(1, GRADE));
@@ -12339,10 +12340,12 @@ function wheelGame() {
   const fig = () => {
     const N = nums.length, R = 140, C = 150, A = 2 * Math.PI / N;
     const pt = (a, r) => `${(C + r * Math.sin(a)).toFixed(1)},${(C - r * Math.cos(a)).toFixed(1)}`;
-    const fs = Math.max(13, Math.min(28, 150 / N + 10 - 3 * (String(hi).length - 1)));
+    // מספרים ארוכים נכתבים לאורך הרדיוס כדי שייכנסו לפלח
+    const D = String(Math.max(...nums)).length, rad = D >= 4, rr = rad ? R * .58 : R * .68;
+    const fs = rad ? Math.min(22, R * .72 / (.85 * D)) : Math.max(10, Math.min(28, 150 / N + 10, 2 * Math.PI * rr / N / (.85 * D)));
     return `<div class="wh-wrap" dir="ltr"><div class="wh-ptr">▼</div><svg viewBox="0 0 300 300" class="wh-svg" id="whSvg" style="transform:rotate(${rot}deg)">
       ${nums.map((n, i) => `<path d="M${C},${C} L${pt(i * A, R)} A${R},${R} 0 0 1 ${pt((i + 1) * A, R)} Z" fill="${COLS[i % (N % 8 === 1 ? 7 : 8)]}" stroke="#1f1e1c" stroke-width="2"/>
-        <text x="${pt((i + .5) * A, R * .68).split(',')[0]}" y="${pt((i + .5) * A, R * .68).split(',')[1]}" transform="rotate(${((i + .5) * 360 / N).toFixed(1)} ${pt((i + .5) * A, R * .68).replace(',', ' ')})" text-anchor="middle" dominant-baseline="central" font-size="${fs}" font-weight="800" fill="#1f1e1c" data-raw>${n}</text>`).join('')}
+        <text x="${pt((i + .5) * A, rr).split(',')[0]}" y="${pt((i + .5) * A, rr).split(',')[1]}" transform="rotate(${((i + .5) * 360 / N - (rad ? 90 : 0)).toFixed(1)} ${pt((i + .5) * A, rr).replace(',', ' ')})" text-anchor="middle" dominant-baseline="central" font-size="${fs}" font-weight="800" fill="#1f1e1c" data-raw>${n}</text>`).join('')}
       <circle cx="${C}" cy="${C}" r="16" fill="#1f1e1c"/></svg></div>`;
   };
   const setup = () => {
@@ -12350,9 +12353,9 @@ function wheelGame() {
       <div class="card wh-card">
         <div class="er-big">🎡</div>
         <h2>גלגל המזל – הגדרות</h2>
-        <p class="muted">בוחרים נושא וטווח מספרים. הגלגל בוחר מספר אחד, ואם צריך מספר שני – גם הוא נבחר מאותו טווח.</p>
+        <p class="muted">בוחרים נושא וטווח מספרים. הגלגל בוחר מספר אחד, ואם צריך מספר שני – גם הוא נבחר מאותו טווח. אפשר עד ${MAX}.</p>
         <div class="wh-rng"><label>נושא: <select id="whTop" class="wh-sel">${TOP.map(t => `<option value="${t.id}"${t.id === op ? ' selected' : ''}>${t.nm}</option>`).join('')}</select></label></div>
-        ${T().fx ? `<div class="wh-rng"><label>${T().fx.lbl} ${T().fx.pv ? `<select id="whFix" class="wh-sel">${PV.map(v => `<option value="${v}"${v === (fix || 10) ? ' selected' : ''}>${v}</option>`).join('')}</select>` : `<input id="whFix" inputmode="numeric" value="${fix || T().fx.def || ''}" placeholder="${T().fx.opt ? 'למשל 7' : ''}">`}</label></div>
+        ${T().fx ? `<div class="wh-rng"><label>${T().fx.lbl} ${T().fx.pv ? `<select id="whFix" class="wh-sel">${T().fx.pv.map(v => `<option value="${v}"${v === (fix || 10) ? ' selected' : ''}>${v}</option>`).join('')}</select>` : `<input id="whFix" inputmode="numeric" value="${fix || T().fx.def || ''}" placeholder="${T().fx.opt ? 'למשל 7' : ''}">`}</label></div>
         ${T().fx.opt ? '<p class="muted">עם מספר קבוע מתרגלים את הלוח שלו: הגלגל בוחר את המספר השני מתוך הטווח.</p>' : ''}` : ''}
         <div class="wh-rng"><label>מ- <input id="whLo" inputmode="numeric" value="${lo}"></label><label>עד <input id="whHi" inputmode="numeric" value="${hi}"></label></div>
         <div id="erMsg" class="er-msg bad" aria-live="polite"></div>
@@ -12365,11 +12368,11 @@ function wheelGame() {
       let a = n('whLo'), b = n('whHi');
       if (isNaN(a) || isNaN(b)) { $('erMsg').textContent = 'הקלידו שני מספרים.'; return; }
       if (a > b) [a, b] = [b, a];
-      if (b > 1000 || b < 1) { $('erMsg').textContent = 'הטווח צריך להיות בין 0 ל-1000.'; return; }
+      if (b > MAX || b < 1) { $('erMsg').textContent = `הטווח צריך להיות בין 0 ל-${MAX.toLocaleString("en-US")}.`; return; }
       const t = T(), f = $('whFix') ? n('whFix') : NaN;
-      fix = !t.fx ? null : t.fx.pv ? (PV.includes(f) ? f : 10) : f >= 1 && f <= (t.fx.opt ? 100 : 10000) ? f : t.fx.opt ? null : t.fx.def;
+      fix = !t.fx ? null : t.fx.pv ? (t.fx.pv.includes(f) ? f : 10) : f >= 1 && f <= (t.fx.opt ? 100 : 10000) ? f : t.fx.opt ? null : t.fx.def;
       const all = []; for (let v = a; v <= b; v++) if (!t.nf || t.nf(v, fix)) all.push(v);
-      if (!all.length) { $('erMsg').textContent = op === 'comp' ? `בטווח צריכים להיות מספרים עד ${fix}.` : 'אין בטווח הזה מספרים מתאימים לנושא. נסו טווח אחר.'; return; }
+      if (!all.length) { $('erMsg').textContent = op === 'comp' ? `בטווח צריכים להיות מספרים עד ${fix}.` : op === 'rnd' ? `לעיגול ל${PVN[fix]} צריך בטווח מספרים גדולים מ-${fix} (למשל ${fix + 1} עד ${Math.min(MAX, fix * 100)}).` : 'אין בטווח הזה מספרים מתאימים לנושא. נסו טווח אחר.'; return; }
       lo = a; hi = b;
       nums = all.length <= 12 ? all : shuffle(all).slice(0, 12).sort((x, y) => x - y);
       if (nums.length < 2) nums = [nums[0], nums[0]];
