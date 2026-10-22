@@ -1073,6 +1073,11 @@
   .op-seq span { min-width: 1.8em; text-align: center; font-size: clamp(1.1rem, 4.4vw, 2.4rem); font-weight: 800; border: 2.5px solid #1f1e1c; border-radius: 12px; padding: 6px 6px; background: #fffdf8; }
   .op-seq span.gap { background: #fff3c4; color: #b3261e; }
   .op-seq span.empty { background: #fff; border-style: dashed; }
+  /* בדפים להדפסה: סדרה כשורת מספרים עם פסיקים, בלי ריבועים */
+  .seq-plain { direction: ltr; text-align: right; margin: 4px 0 8px; font-size: 1.2rem; white-space: nowrap; }
+  .seq-plain .sq { display: inline-block; min-width: 1.7em; border-bottom: 1.5px solid #1f1e1c; }
+  .seq-plain .sq.q { text-align: center; font-weight: 700; color: #b3261e; }
+  #wsout .pat1 { font-size: 1.3rem; white-space: normal; overflow: visible; text-align: right; margin: 4px 0 6px; }
   .tl-kinds { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 12px; }
   .tl-parts { flex-direction: row; }
   .tl-parts .tl-part { flex: 1; }
@@ -1647,7 +1652,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13827,6 +13832,14 @@ function teacher() {
 /* =========================================================
    דפי עבודה להדפסה
    ========================================================= */
+// סדרה בריבועים (op-seq) → שורת מספרים עם פסיקים, וקו במקום החסר
+function seqPlain(fig) {
+  if (!fig || fig.indexOf('op-seq') < 0) return fig || '';
+  return fig.replace(/<div class="op-seq[^"]*"[^>]*>([\s\S]*?)<\/div>/g, (m, inner) => {
+    const items = [...inner.matchAll(/<span([^>]*)>([\s\S]*?)<\/span>/g)].map(([, at, v]) => /gap/.test(at) || v.trim() === '?' ? '<span class="sq q">?</span>' : /empty/.test(at) ? '<span class="sq"></span>' : v.replace(/&nbsp;/g, '').trim());
+    return `<div class="seq-plain">${items.join(',&nbsp; ')}</div>`;
+  });
+}
 function wsQuestionHTML(q, n) {
   let ans;
   if (q.type === 'num') ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
@@ -13834,7 +13847,7 @@ function wsQuestionHTML(q, n) {
   else ans = `<div class="wschoices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
   const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
-  return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${ans}</div>${grid}</div>`;
+  return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${seqPlain(q.fig)}${ans}</div>${grid}</div>`;
 }
 
 function examQuestionHTML(q, n) {
@@ -13846,7 +13859,7 @@ function examQuestionHTML(q, n) {
   const wordy = q.steps && q.steps.length >= 3 && plain.length > 60;
   const work = wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : '';
   const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
-  return `<div class="ex-q"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>${grid}</div>`;
+  return `<div class="ex-q"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${seqPlain(q.fig)}${work}${ans}</div>${grid}</div>`;
 }
 
 // "תרגילים בלבד": מחוללים של שאלות מילוליות (לפי שם המחולל), ועוד שאלות ארוכות עם יחידה בלי איור
