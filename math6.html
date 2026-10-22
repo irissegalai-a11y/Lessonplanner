@@ -732,6 +732,30 @@
   .game-card { display: grid; grid-template-columns: 64px 1fr; grid-template-areas: "ic nm" "ic ds" "ic st"; gap: 2px 14px; text-align: right; width: 100%; padding: 16px 18px; background: #fffdf8; color: #1f1e1c; border: 2px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; box-shadow: 3px 4px 0 #1f1e1c; }
   .game-card:hover { background: #fff; }
   .game-card + .game-card { margin-top: 14px; }
+  /* חדר בריחה */
+  .esc-lead { text-align: center; margin: 2px 0 14px; }
+  .esc-themes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .esc-theme { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 10px; border: 2.5px solid #1f1e1c; border-radius: 16px; background: color-mix(in srgb, var(--tc) 14%, #fff); box-shadow: 3px 3px 0 #1f1e1c; cursor: pointer; font: inherit; color: #1f1e1c; }
+  .esc-theme:hover { background: color-mix(in srgb, var(--tc) 24%, #fff); }
+  .esc-theme .et-ic { font-size: 2.4rem; }
+  .esc-theme .et-nm { font-size: 1.1rem; font-weight: 800; }
+  .esc-card { border-top: 6px solid var(--tc); }
+  .esc-intro { font-size: 1.12rem; line-height: 1.7; text-align: center; margin: 8px 0 18px; }
+  .esc-bar { display: flex; justify-content: space-between; font-weight: 700; color: var(--tc); margin-bottom: 8px; }
+  .esc-keys { text-align: center; font-size: 1.5rem; min-height: 1.6em; letter-spacing: 2px; }
+  .esc-keys.big { font-size: 2.2rem; margin: 10px 0; }
+  .esc-q { font-size: 1.35rem; font-weight: 700; text-align: center; margin: 10px 0; }
+  .esc-fig { display: flex; justify-content: center; margin: 8px 0; }
+  .esc-ansrow { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 12px 0; }
+  .esc-ansrow .ans { width: 130px; text-align: center; font-size: 1.4rem; }
+  .esc-fb { text-align: center; font-size: 1.1rem; min-height: 1.2em; }
+  .esc-fb.ok { color: #2f8f55; font-weight: 700; }
+  .esc-fb.bad { color: #c2531f; }
+  .esc-door, .esc-win { text-align: center; }
+  .esc-bigemo { font-size: 4rem; margin: 10px 0; }
+  .esc-gate { font-size: 1.5rem; font-weight: 800; color: var(--tc); margin: 6px 0 4px; }
+  .esc-wintxt { font-size: 1.5rem; font-weight: 800; margin: 6px 0; }
+  .esc-score { font-size: 1.15rem; margin: 6px 0 4px; }
   .mem-art { display: flex; gap: 8px; justify-content: center; margin: 4px 0 8px; }
   .mcard-demo { width: 58px; height: 74px; display: flex; align-items: center; justify-content: center; border: 2px solid #1f1e1c; border-radius: 10px 4px 10px 4px; background: #fffdf8; font-weight: 700; font-size: 1rem; }
   .mcard-demo.back, .mc-back { background-color: #f3d58a; background-image: radial-gradient(circle at 30% 30%, rgba(217, 72, 43, 0.35) 0 18%, transparent 19%), radial-gradient(circle at 72% 70%, rgba(127, 168, 214, 0.55) 0 22%, transparent 23%); }
@@ -1601,7 +1625,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קנט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7882,6 +7906,11 @@ function home() {
         <section class="panel" data-panel="games" ${homeTab === 'games' ? '' : 'hidden'}>
           <h2>משחקים</h2>
           <h3 class="games-sub">לבד – במחשב או בטלפון</h3>
+          <button class="game-card" id="escGo">
+            <span class="gc-ic" style="--gw:rgba(106,79,213,0.55)">🔓</span>
+            <span class="gc-nm">חדר בריחה</span>
+            <span class="gc-ds">בוחרים הרפתקה – חלל, גיבורי-על, מסתורין או אוצר – ופותרים תרגילים כדי לפתוח מנעולים ולברוח!</span>
+          </button>
           <button class="game-card" id="raceGo">
             <span class="gc-ic">${ic('flag')}</span>
             <span class="gc-nm">מרוץ נגד השעון</span>
@@ -7961,6 +7990,7 @@ function home() {
   });
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
   $('raceGo').onclick = () => raceHome();
+  if ($('escGo')) $('escGo').onclick = () => escHome();
   $('memGo').onclick = () => memHome();
   $('milGo').onclick = () => milHome();
   $('cityGo').onclick = () => cityHome();
@@ -12216,6 +12246,132 @@ function mulArea() {
     if ($('maAgain')) $('maAgain').onclick = setup;
   };
   setup();
+}
+/* =========================================================
+   חדר בריחה מתמטי – התלמיד בוחר הרפתקה; 4 מנעולים × 3 שאלות
+   שימוש חוזר במנוע השאלות הקיים (TOPIC/levels/mk)
+   ========================================================= */
+const ESC_THEMES = {
+  space: { name: 'חללית תקועה', emoji: '🚀', c: '#4c5fd5', key: '🛸',
+    intro: 'החללית נתקעה על כוכב חייזרים! הפעילו את מערכות החללית – פתרו את התרגילים כדי להמריא ולחזור הביתה.',
+    gate: ['מערכת החמצן פעילה! ✅', 'המנועים דולקים! 🔥', 'המגן מופעל! 🛡️', 'הניווט ננעל על כדור הארץ! 🌍'],
+    doorlbl: 'נעילת מערכת', win: '💫 ההמראה הצליחה! חזרתם הביתה מהחלל!' },
+  hero: { name: 'מטה גיבורי-העל', emoji: '🦸', c: '#d9482b', key: '⚡',
+    intro: 'נבל מסתורי נעל את העיר בקודים! פצחו אותם, גיבורי-על, כדי לסכל את התוכנית ולהציל את התושבים.',
+    gate: ['שער הפלדה נפתח! 🚪', 'מצלמות הנבל כובו! 📴', 'הכספת נפרצה! 💥', 'תוכנית הנבל סוכלה! 🦸'],
+    doorlbl: 'קוד אבטחה', win: '🏆 הצלתם את העיר! אתם גיבורי-על אמיתיים!' },
+  mystery: { name: 'החדר הנעול', emoji: '🔍', c: '#6a4fd5', key: '🗝️',
+    intro: 'ננעלתם בחדר מסתורי. פתרו את החידות, אספו מפתחות ומצאו את הדרך החוצה!',
+    gate: ['המגירה נפתחה! 🗄️', 'הכוננית זזה! 📚', 'הדלת הסודית התגלתה! 🚪', 'המנעול האחרון נפתח! 🔓'],
+    doorlbl: 'מנעול', win: '🎉 יצאתם מהחדר! פיצחתם את כל התעלומה!' },
+  treasure: { name: 'מערת האוצר', emoji: '🗺️', c: '#c98a2b', key: '💎',
+    intro: 'מפה עתיקה מובילה אל אוצר נסתר במערה. פתחו את השערים הנעולים והגיעו אל התיבה!',
+    gate: ['שער האבן נפתח! 🪨', 'הגשר נמתח! 🌉', 'מפל המים נעצר! 💧', 'תיבת האוצר נפתחה! 💰'],
+    doorlbl: 'שער', win: '🏴‍☠️ מצאתם את האוצר! הוא כולו שלכם!' }
+};
+const ESC_LOCKS = 4, ESC_QPL = 3;
+let escG = null;
+function escPickQ(lv) {
+  const list = (typeof TOPICS !== 'undefined' && TOPICS) ? TOPICS.filter(t => t && t.levels) : [];
+  for (let i = 0; i < 50; i++) {
+    const t = pick(list);
+    if (!t) break;
+    const useLv = t.levels[lv] ? lv : (t.levels[2] ? 2 : 1);
+    const pool = t.levels[useLv];
+    if (!pool || !pool.length) continue;
+    const q = mk(t.id, pick(pool), useLv);
+    if (q && q.type === 'num' && typeof q.ans === 'number' && isFinite(q.ans) && !escG.seen.has(q.text)) {
+      escG.seen.add(q.text); return q;
+    }
+  }
+  return null;
+}
+function escHome() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  if (typeof TOPICS === 'undefined' || !TOPICS || !TOPICS.length) {
+    app.innerHTML = `<div class="topbar"><span class="title">🔓 חדר בריחה</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>
+      <div class="card"><p>כדי לשחק בחדר הבריחה צריך קודם לבחור כיתה בדף הבית. 🙂</p></div>`;
+    $('quit').onclick = home; return;
+  }
+  track('משחק: חדר בריחה');
+  app.innerHTML = `<div class="topbar"><span class="title">🔓 חדר בריחה – בחרו הרפתקה</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>
+    <div class="card">
+      <p class="esc-lead">כל הרפתקה = <b>${ESC_LOCKS} מנעולים</b>, ובכל מנעול <b>${ESC_QPL} תרגילים</b>. פותרים, אוספים מפתחות, ובורחים! 🔑</p>
+      <div class="esc-themes">${Object.entries(ESC_THEMES).map(([id, T]) => `<button class="esc-theme" data-th="${id}" style="--tc:${T.c}"><span class="et-ic">${T.emoji}</span><span class="et-nm">${T.name}</span></button>`).join('')}</div>
+    </div>`;
+  $('quit').onclick = home;
+  app.querySelectorAll('.esc-theme').forEach(b => b.onclick = () => escStart(b.dataset.th));
+}
+function escStart(themeId) {
+  escG = { theme: themeId, lock: 0, qIdx: 0, keys: 0, seen: new Set(), q: null };
+  const T = ESC_THEMES[themeId];
+  app.innerHTML = `<div class="topbar"><span class="title">${T.emoji} ${T.name}</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>
+    <div class="card esc-card" style="--tc:${T.c}">
+      <div class="esc-intro">${T.intro}</div>
+      <div class="actions" style="justify-content:center"><button id="escGo2" class="race-go">▶ מתחילים!</button></div>
+    </div>`;
+  $('quit').onclick = home;
+  $('escGo2').onclick = escQuestion;
+}
+function escLv() { return [1, 2, 3, 3][escG.lock] || 2; }
+function escQuestion() {
+  const T = ESC_THEMES[escG.theme];
+  const q = escPickQ(escLv());
+  if (!q) { escOpenDoor(); return; }
+  escG.q = q;
+  const keyTray = ESC_THEMES[escG.theme].key.repeat(escG.keys) || '—';
+  app.innerHTML = `<div class="topbar"><span class="title">${T.emoji} ${T.name}</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>
+    <div class="card esc-card" style="--tc:${T.c}">
+      <div class="esc-bar"><span>🔒 ${T.doorlbl} ${escG.lock + 1} מתוך ${ESC_LOCKS}</span><span>תרגיל ${escG.qIdx + 1}/${ESC_QPL}</span></div>
+      <div class="esc-keys" aria-label="מפתחות שנאספו">${keyTray}</div>
+      <div class="esc-q">${q.text}</div>
+      ${q.fig ? `<div class="esc-fig">${q.fig}</div>` : ''}
+      <div class="esc-ansrow"><input id="escIn" class="ans" inputmode="numeric" autocomplete="off" aria-label="תשובה"><button id="escCk" class="race-go">✓ בדיקה</button></div>
+      <div class="esc-fb" id="escFb"></div>
+    </div>`;
+  $('quit').onclick = home;
+  const inp = $('escIn'); inp.focus();
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); escCheck(); } });
+  $('escCk').onclick = escCheck;
+}
+function escCheck() {
+  if (!escG || !escG.q) return;
+  const inp = $('escIn'), v = parseNum(inp.value);
+  if (v == null || Number.isNaN(v)) { inp.focus(); return; }
+  const fb = $('escFb'), ok = v === escG.q.ans;
+  inp.disabled = true; $('escCk').disabled = true;
+  if (ok) { escG.keys++; fb.className = 'esc-fb ok'; fb.innerHTML = `נכון! ${ESC_THEMES[escG.theme].key} מפתח בכיס.`; }
+  else { fb.className = 'esc-fb bad'; fb.innerHTML = `כמעט! התשובה: <b>${fmt(escG.q.ans)}</b>${escG.q.exp ? ` · ${escG.q.exp}` : ''}`; }
+  fb.innerHTML += `<div class="actions" style="justify-content:center;margin-top:10px"><button id="escNx" class="race-go">${escG.qIdx + 1 < ESC_QPL ? 'הבא ←' : 'נסו לפתוח ←'}</button></div>`;
+  $('escNx').onclick = () => { escG.qIdx++; if (escG.qIdx >= ESC_QPL) escOpenDoor(); else escQuestion(); };
+}
+function escOpenDoor() {
+  const T = ESC_THEMES[escG.theme], last = escG.lock + 1 >= ESC_LOCKS;
+  app.innerHTML = `<div class="topbar"><span class="title">${T.emoji} ${T.name}</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>
+    <div class="card esc-card esc-door" style="--tc:${T.c}">
+      <div class="esc-bigemo">${last ? '🎊' : '🔓'}</div>
+      <div class="esc-gate">${T.gate[escG.lock] || 'המנעול נפתח!'}</div>
+      <div class="esc-keys big">${T.key.repeat(escG.keys) || ''}</div>
+      <div class="actions" style="justify-content:center"><button id="escCont" class="race-go">${last ? '🏁 לסיום!' : 'למנעול הבא ←'}</button></div>
+    </div>`;
+  $('quit').onclick = home;
+  $('escCont').onclick = () => { escG.lock++; escG.qIdx = 0; if (escG.lock >= ESC_LOCKS) escWin(); else escQuestion(); };
+}
+function escWin() {
+  const T = ESC_THEMES[escG.theme], total = ESC_LOCKS * ESC_QPL;
+  app.innerHTML = `<div class="topbar"><span class="title">${T.emoji} ${T.name}</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>
+    <div class="card esc-card esc-win" style="--tc:${T.c}">
+      <div class="esc-bigemo">${T.emoji}</div>
+      <div class="esc-wintxt">${T.win}</div>
+      <div class="esc-score">אספתם <b>${escG.keys}</b> מתוך ${total} מפתחות ${T.key}</div>
+      <div class="actions" style="justify-content:center">
+        <button id="escAgain" class="race-go">↻ הרפתקה חדשה</button>
+        <button id="escHomeB" class="secondary">${ic('home')} לדף הבית</button>
+      </div>
+    </div>`;
+  $('quit').onclick = home;
+  $('escAgain').onclick = escHome;
+  $('escHomeB').onclick = home;
 }
 function drawPracticeHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('draw');
