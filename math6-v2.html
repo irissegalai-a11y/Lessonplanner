@@ -444,6 +444,14 @@
   .ex-grid { flex: 0 0 44%; margin: 2px 0; min-height: 2.6cm; }
   .ex-grid.big { min-height: 4cm; }
   .ex-grid.sm { min-height: 2.2cm; }
+  .wsqs.nogrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; }
+  .wsqs.nogrid .wsq { display: block; padding: 4px 0 6px; }
+  .wsqs.nogrid .qmain { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; }
+  .wsqs.nogrid .qmain > :not(.wsqhead):not(.wsans) { flex-basis: 100%; }
+  .wsqs.nogrid .wsans { margin-top: 0; }
+  .ws-page .wsqs.nogrid .fig, .wsqs.nogrid svg { max-height: 3cm; max-width: 100%; width: auto; }
+  .wsqs.nogrid .wsans .wsline { min-width: 70px; }
+  @media screen and (max-width: 640px) { .wsqs.nogrid { grid-template-columns: 1fr; } }
   .ws-page .wsq .fig, .ws-page .ex-q .fig { max-height: 4.6cm; }
   .wsspace div { height: 1.6em; }
   .wskey ol { columns: 2; column-gap: 8mm; }
@@ -1652,7 +1660,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קע</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13900,13 +13908,13 @@ function seqPlain(fig) {
     return `<div class="seq-plain">${items.join(',&nbsp; ')}</div>`;
   });
 }
-function wsQuestionHTML(q, n) {
+function wsQuestionHTML(q, n, noGrid) {
   let ans;
   if (q.type === 'num') ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
   else ans = `<div class="wschoices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
-  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
+  const grid = noGrid ? '' : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
   return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${seqPlain(q.fig)}${ans}</div>${grid}</div>`;
 }
 
@@ -13995,7 +14003,7 @@ function printBuilder() {
           </select>
         </label>
         <label>מספר שאלות / תרגילים:
-          <select id="wc">${[4, 6, 8, 10, 12, 15, 20, 24, 30].map(n => `<option ${n === 10 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+          <select id="wc">${[4, 6, 8, 10, 12, 15, 20, 24, 30, 40, 50].map(n => `<option ${n === 10 ? 'selected' : ''}>${n}</option>`).join('')}</select>
         </label>
         <label>שאלות מילוליות:
           <select id="wwq">
@@ -14010,6 +14018,7 @@ function printBuilder() {
         <label>כותרת הדף:
           <input id="wt" class="tinput" placeholder="דף תרגול במתמטיקה">
         </label>
+        <label class="chk"><input type="checkbox" id="wgrid" checked> ▦ משבצות חישוב ליד כל שאלה (בלי משבצות – הדף צפוף יותר, בשני טורים)</label>
         <label class="chk"><input type="checkbox" id="wtips" checked> תיבת "תזכורת" עם הכללים בראש הדף</label>
         <label class="chk"><input type="checkbox" id="wkey" checked> דף תשובות למורה (בסוף)</label>
         <label class="chk"><input type="checkbox" id="wexp"> לכלול דרך פתרון בדף התשובות</label>
@@ -14080,6 +14089,7 @@ function printBuilder() {
     const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
     const title = $('wt').value.trim() || (topics.length === 1 ? `דף תרגול – ${TOPIC[topics[0]].name}` : 'דף תרגול במתמטיקה');
     const tips = $('wtips').checked ? `<div class="wstips"><b>📘 תזכורת</b><ul>${topics.flatMap(t => TOPIC[t].tips.slice(0, topics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
+    const noGrid = !$('wgrid').checked;
     const wq = $('wwq').value, drill = wq !== 'auto', nWord = drill ? Number(wq) : 0;
     let wordShort = false;
     const sheets = Array.from({ length: versions }, () => { const a = buildWorksheet(topics, level, count, drill), w = nWord ? buildWordQs(topics, level, nWord) : []; if (w.length < nWord) wordShort = true; return a.concat(w); });
@@ -14091,7 +14101,7 @@ function printBuilder() {
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
         </div>
         ${tips}
-        <div class="wsqs">${qs.map((q, i) => wsQuestionHTML(q, i + 1)).join('')}</div>
+        <div class="wsqs${noGrid ? ' nogrid' : ''}">${qs.map((q, i) => wsQuestionHTML(q, i + 1, noGrid)).join('')}</div>
         <div class="wsfoot">בהצלחה! 🌟</div>
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
