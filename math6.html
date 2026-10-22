@@ -469,6 +469,12 @@
   .kf-new { background: #fff7e0; border: 1.5px dashed #f0b429; border-radius: 12px; padding: 8px 12px; margin-bottom: 6px; }
   .kfp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px; font-size: 1.05rem; line-height: 2.3; direction: ltr; }
   .kfp-grid .wsline { min-width: 40px; width: 40px; }
+  .g2p-grid { font-size: 1.25rem; line-height: 2.5; }
+  .g2p-sec { margin: 6px 0 14px; break-inside: avoid; }
+  .g2p-sec h3 { margin: 4px 0 6px; font-size: 1.1rem; }
+  .g2p-pairs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; font-size: 1.25rem; line-height: 2.6; direction: ltr; }
+  .g2p-pair .wsline { min-width: 40px; width: 40px; }
+  .g2p-arr { margin: 0 10px; color: #888; }
   .kfp-bingo { break-inside: avoid; display: inline-block; vertical-align: top; width: 49%; margin: 6px 0 10px; text-align: center; }
   .kfp-bt { font-weight: 700; margin-bottom: 4px; }
   .kfp-bingo table { border-collapse: collapse; margin: 0 auto; direction: ltr; }
@@ -1067,6 +1073,11 @@
   .op-seq span { min-width: 1.8em; text-align: center; font-size: clamp(1.1rem, 4.4vw, 2.4rem); font-weight: 800; border: 2.5px solid #1f1e1c; border-radius: 12px; padding: 6px 6px; background: #fffdf8; }
   .op-seq span.gap { background: #fff3c4; color: #b3261e; }
   .op-seq span.empty { background: #fff; border-style: dashed; }
+  /* בדפים להדפסה: סדרה כשורת מספרים עם פסיקים, בלי ריבועים */
+  .seq-plain { direction: ltr; text-align: right; margin: 4px 0 8px; font-size: 1.2rem; white-space: nowrap; }
+  .seq-plain .sq { display: inline-block; min-width: 1.7em; border-bottom: 1.5px solid #1f1e1c; }
+  .seq-plain .sq.q { text-align: center; font-weight: 700; color: #b3261e; }
+  #wsout .pat1 { font-size: 1.3rem; white-space: normal; overflow: visible; text-align: right; margin: 4px 0 6px; }
   .tl-kinds { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 12px; }
   .tl-parts { flex-direction: row; }
   .tl-parts .tl-part { flex: 1; }
@@ -1641,7 +1652,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קע</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -4615,6 +4626,26 @@ const TOPICS2 = [
       3: [() => genBarRead(2), () => genBarRead(1)]
     },
     tips: ['קוראים את הכותרת לפני שעונים.', 'בודקים כמה שווה כל קו בציר.']
+  },
+  {
+    id: 'add20', name: 'חיבור וחיסור עד 20', icon: '🔟', color: '#e0703a',
+    desc: 'עשר ועוד, מעבר דרך 10, מספר חסר ובעיות',
+    levels: {
+      1: [() => genAdd20b(1), () => genAdd20b(1), () => genAdd20b(1)],
+      2: [() => genAdd20b(2), () => genAdd20b(2), () => genAdd20b(1)],
+      3: [() => genAdd20b(3), () => genAdd20b(2), () => genWord1(2)]
+    },
+    tips: ['10 + 4 = 14 – עשר ועוד ארבע.', 'מעבר דרך 10: 8 + 5 → 8 + 2 = 10, ועוד 3 = 13.', 'חיסור דרך 10: 13 - 5 → 13 - 3 = 10, ועוד 2 → 8.', 'בודקים חיסור בעזרת חיבור: 13 - 5 = 8 כי 8 + 5 = 13.']
+  },
+  {
+    id: 'twins', name: 'תרגילי תאומים', icon: '👯', color: '#c2508f',
+    desc: 'תאומים (כפולים), כמעט תאומים וחיסור תאומים',
+    levels: {
+      1: [() => genTwins(1), () => genTwins(1), () => genTwins(2)],
+      2: [() => genTwins(2), () => genTwins(3), () => genTwins(1)],
+      3: [() => genTwins(4), () => genTwins(3), () => genTwins(4)]
+    },
+    tips: ['תאומים – אותו מספר פעמיים: 6 + 6 = 12, 7 + 7 = 14.', 'כמעט תאומים: 7 + 8 → 7 + 7 = 14, ועוד 1 = 15.', 'חיסור תאומים: 14 - 7 = 7 – כי 7 + 7 = 14.']
   }
 ];
 const LEVEL_DESC2 = {
@@ -4625,6 +4656,8 @@ const LEVEL_DESC2 = {
   frac: ['איזה חלק צבוע, חצי מול רבע', 'חצי ורבע מכמות', 'שאלות מאתגרות'],
   geo: ['צורות, שעון (שעה וחצי שעה) וכסף', 'שעון עם רבעי שעה, כסף ואורך', 'שאלות מאתגרות בשעון, כסף ואורך'],
   data: ['קריאת דיאגרמה', 'הערך של עמודה', 'השוואה בין עמודות'],
+  add20: ['עשר ועוד, בלי מעבר עשרת', 'מעבר דרך 10 בחיבור ובחיסור', 'מספר חסר ובעיות מילוליות'],
+  twins: ['תאומים וחיסור תאומים', 'כמעט תאומים', 'תאומים מאתגרים ומספר חסר'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 
@@ -4919,6 +4952,88 @@ function genWord1(lv = 1) {
   return { type: 'num', unit: 'עוגיות', text: `על הצלחת היו ${a} עוגיות. דני אכל ${b} עוגיות. כמה עוגיות נשארו?`, ans: a - b, traps: [{ v: a + b, m: 'חיברתם. דני <b>אכל</b> – נשארו פחות.' }], hint: 'אכל – מורידים.', exp: `${M(`${a} - ${b} = ${a - b}`)}` };
 }
 
+/* ---------- כיתה א': מספרים עד 100 ---------- */
+function gen100(lv = 1) {
+  const T = R(2, 9), U = R(0, 9), a = T * 10 + U;
+  if (lv === 1) {
+    const k = R(0, 2);
+    if (k === 0) return { type: 'num', text: 'כמה יש? (מוט ארוך = 10, קובייה = 1)', fig: b10fig(T, U), ans: a, traps: [{ v: T + U, m: 'כל מוט ארוך הוא <b>עשר</b>, לא אחד.' }].filter(t => t.v !== a), hint: 'סופרים את המוטות בעשרות: 10, 20, 30… ואז מוסיפים את הקוביות.', exp: `${T} עשרות ו-${U} יחידות = ${a}` };
+    if (k === 1) return { type: 'num', text: `כתבו את המספר: ${T} עשרות ו-${U} יחידות`, ans: a, traps: [{ v: U * 10 + T, m: 'קודם העשרות, אחר כך היחידות.' }].filter(t => t.v !== a), hint: `${T} עשרות = ${T * 10}. ועוד ${U}.`, exp: `${M(`${T * 10} + ${U} = ${a}`)}` };
+    const s0 = R(1, 5) * 10, miss = R(1, 3), seq = [0, 1, 2, 3, 4].map(i => s0 + 10 * i);
+    return { type: 'num', text: `סופרים בעשרות. איזה מספר חסר? ${M(seq.map((x, i) => i === miss ? '?' : x).join(', '))}`, ans: seq[miss], hint: 'כל פעם מוסיפים 10.', exp: M(seq.join(', ')) };
+  }
+  if (lv === 2) {
+    const k = R(0, 3);
+    if (k === 0) { let b = U * 10 + T; if (b === a || b < 10) b = a + pick([-10, 10, -1, 1].filter(d => a + d >= 10 && a + d <= 99)); const big = Math.max(a, b);
+      return { type: 'num', text: `איזה מספר גדול יותר: ${M(a)} או ${M(b)}?`, ans: big, hint: 'משווים קודם את העשרות.', exp: `${M(`${big} > ${Math.min(a, b)}`)}` }; }
+    if (k === 1) { const n = R(11, 98), after = Math.random() < 0.5; return { type: 'num', text: `איזה מספר בא ${after ? 'אחרי' : 'לפני'} ${M(n)}?`, ans: after ? n + 1 : n - 1, hint: after ? 'אחד יותר.' : 'אחד פחות.', exp: `${M(`${n - 1}, ${n}, ${n + 1}`)}` }; }
+    if (k === 2) { const t = R(2, 9) * 10, s0 = t - R(2, 3), seq = [0, 1, 2, 3, 4].map(i => s0 + i), miss = seq.indexOf(t);
+      return { type: 'num', text: `איזה מספר חסר? ${M(seq.map((x, i) => i === miss ? '?' : x).join(', '))}`, ans: t, traps: [{ v: t - 10, m: 'אחרי ' + (t - 1) + ' עוברים לעשרת הבאה.' }], hint: `אחרי ${t - 1} מגיעה עשרת חדשה.`, exp: M(seq.join(', ')) }; }
+    const s0 = R(1, 4) * 10 + R(1, 9), seq = [0, 1, 2, 3, 4].map(i => s0 + 10 * i), miss = R(1, 4);
+    return { type: 'num', text: `קופצים ב-10. איזה מספר חסר? ${M(seq.map((x, i) => i === miss ? '?' : x).join(', '))}`, ans: seq[miss], hint: 'בכל קפיצה העשרות גדלות ב-1, והיחידות נשארות אותו דבר.', exp: M(seq.join(', ')) };
+  }
+  const k = R(0, 3);
+  if (k === 0) { const x = R(1, 8), y = R(1, 9 - x), add = Math.random() < 0.55;
+    return add ? { type: 'num', text: `פתרו: ${M(`${x * 10} + ${y * 10} =`)}`, ans: (x + y) * 10, hint: `${x} עשרות ועוד ${y} עשרות.`, exp: `${M(`${x * 10} + ${y * 10} = ${(x + y) * 10}`)}` }
+      : { type: 'num', text: `פתרו: ${M(`${(x + y) * 10} - ${y * 10} =`)}`, ans: x * 10, hint: `${x + y} עשרות פחות ${y} עשרות.`, exp: `${M(`${(x + y) * 10} - ${y * 10} = ${x * 10}`)}` }; }
+  if (k === 1) { const u = R(1, 9); return Math.random() < 0.5 ? { type: 'num', text: `פתרו: ${M(`${T * 10} + ${u} =`)}`, ans: T * 10 + u, hint: 'עשרות ועוד יחידות.', exp: `${M(`${T * 10} + ${u} = ${T * 10 + u}`)}` }
+    : { type: 'num', text: `פתרו: ${M(`${T * 10 + u} - ${u} =`)}`, ans: T * 10, hint: 'מורידים את היחידות – נשארות העשרות.', exp: `${M(`${T * 10 + u} - ${u} = ${T * 10}`)}` }; }
+  if (k === 2) { const b = R(1, 9 - T > 0 ? 9 - T : 1) * 10; if (T * 10 + b > 99) return gen100(3);
+    return { type: 'num', text: `פתרו: ${M(`${a} + ${b} =`)}`, ans: a + b, hint: 'מוסיפים לעשרות. היחידות לא משתנות.', exp: `${M(`${a} + ${b} = ${a + b}`)}` }; }
+  const tens = Math.random() < 0.5, n = R(1, 9) * 10 + R(1, 9);
+  return { type: 'num', text: `מה ספרת ה${tens ? 'עשרות' : 'יחידות'} במספר ${M(n)}?`, ans: tens ? Math.floor(n / 10) : n % 10, hint: 'במספר דו-ספרתי: משמאל – העשרות, מימין – היחידות.', exp: `${M(n)} = ${Math.floor(n / 10)} עשרות ו-${n % 10} יחידות` };
+}
+
+/* ---------- כיתה ב': חיבור וחיסור עד 20, תרגילי תאומים ---------- */
+function genAdd20b(lv = 1) {
+  if (lv === 1) {
+    const k = R(0, 3);
+    if (k === 0) { const a = R(1, 9); return { type: 'num', text: `פתרו: ${M(`10 + ${a} =`)}`, ans: 10 + a, traps: [{ v: 1 + a, m: 'עשר ועוד כמה יחידות.' }], hint: '10 ועוד מספר חד-ספרתי: 10 + 3 = 13.', exp: `${M(`10 + ${a} = ${10 + a}`)}` }; }
+    if (k === 1) { const a = R(1, 9); return { type: 'num', text: `פתרו: ${M(`1${a} - ${a} =`)}`, ans: 10, hint: 'מורידים את היחידות – נשאר 10.', exp: `${M(`1${a} - ${a} = 10`)}` }; }
+    if (k === 2) { const u = R(1, 7), b = R(1, 9 - u); return { type: 'num', text: `פתרו: ${M(`${10 + u} + ${b} =`)}`, ans: 10 + u + b, hint: `מחברים יחידות ליחידות: ${u} + ${b}.`, exp: `${M(`${10 + u} + ${b} = ${10 + u + b}`)}` }; }
+    const u = R(3, 9), b = R(1, u); return { type: 'num', text: `פתרו: ${M(`${10 + u} - ${b} =`)}`, ans: 10 + u - b, traps: [{ v: 10 + u + b, m: 'חיברתם. כאן מחסרים.' }], hint: `מורידים מהיחידות: ${u} - ${b}.`, exp: `${M(`${10 + u} - ${b} = ${10 + u - b}`)}` };
+  }
+  if (lv === 2) {
+    if (Math.random() < 0.55) {
+      const a = R(5, 9), b = R(11 - a, 9), r = b - (10 - a);
+      return { type: 'num', text: `פתרו: ${M(`${a} + ${b} =`)}`, ans: a + b,
+        steps: [{ p: `כמה חסר ל-${a} עד 10?`, a: 10 - a }, { p: `נשארו עוד ${r}. ${M(`10 + ${r} =`)}`, a: a + b }],
+        hint: `השלימו קודם ל-10: ${a} + ${10 - a} = 10, ואז הוסיפו עוד ${r}.`, exp: `${M(`${a} + ${10 - a} = 10`)}, ${M(`10 + ${r} = ${a + b}`)}` };
+    }
+    const c = R(11, 17), d = R(c - 9, 9), r = d - (c - 10);
+    return { type: 'num', text: `פתרו: ${M(`${c} - ${d} =`)}`, ans: c - d, traps: [{ v: c + d, m: 'חיברתם. כאן מחסרים.' }],
+      steps: [{ p: `כמה מורידים מ-${c} כדי להגיע ל-10?`, a: c - 10 }, { p: `נשאר להוריד עוד ${r}. ${M(`10 - ${r} =`)}`, a: c - d }],
+      hint: 'יורדים קודם ל-10, ואז ממשיכים.', exp: `${M(`${c} - ${c - 10} = 10`)}, ${M(`10 - ${r} = ${c - d}`)}` };
+  }
+  const k = R(0, 2), a = R(4, 9), b = R(11 - a, 9), c = a + b;
+  if (k === 0) return { type: 'num', text: `איזה מספר חסר? ${M(`${a} + ${BOX} = ${c}`)}`, ans: b, traps: [{ v: a + c, m: 'חיברתם. כמה <b>חסר</b> מ-' + a + ' עד ' + c + '?' }], hint: `כמה חסר מ-${a} עד 10, וכמה מ-10 עד ${c}?`, exp: `${M(`${a} + ${b} = ${c}`)}` };
+  if (k === 1) return { type: 'num', text: `איזה מספר חסר? ${M(`${c} - ${BOX} = ${a}`)}`, ans: b, hint: `כמה צריך להוריד מ-${c} כדי להגיע ל-${a}? אפשר לבדוק בחיבור: ${a} + ? = ${c}.`, exp: `${M(`${c} - ${b} = ${a}`)}` };
+  return { type: 'num', text: `איזה מספר חסר? ${M(`${BOX} - ${b} = ${a}`)}`, ans: c, traps: [{ v: b - a > 0 ? b - a : a - b, m: 'חיסרתם. המספר החסר הוא <b>הגדול</b> – מחברים.' }].filter(t => t.v !== c), hint: `ממה הורידו ${b} ונשאר ${a}? חברו: ${a} + ${b}.`, exp: `${M(`${c} - ${b} = ${a}`)}` };
+}
+function genTwins(lv = 1) {
+  if (lv === 1) {
+    const a = R(2, 10);
+    if (Math.random() < 0.6) return { type: 'num', text: `תאומים 👯 ${M(`${a} + ${a} =`)}`, ans: 2 * a, traps: [{ v: a, m: 'זה רק תאום אחד. מחברים את שניהם.' }], hint: `${a} ועוד ${a} – אותו מספר פעמיים.`, exp: `${M(`${a} + ${a} = ${2 * a}`)}` };
+    return { type: 'num', text: `חיסור תאומים 👯 ${M(`${2 * a} - ${a} =`)}`, ans: a, hint: `איזה מספר ועוד אותו מספר שווה ${2 * a}?`, exp: `${M(`${a} + ${a} = ${2 * a}`)}, לכן ${M(`${2 * a} - ${a} = ${a}`)}` };
+  }
+  if (lv === 2) {
+    const a = R(3, 9), up = Math.random() < 0.65, b = up ? a + 1 : a - 1, t = up ? a : b;
+    return { type: 'num', text: `כמעט תאומים ${M(`${a} + ${b} =`)}`, ans: a + b,
+      steps: [{ p: `מה התאומים הקרובים? ${M(`${t} + ${t} =`)}`, a: 2 * t }, { p: `ועוד 1: ${M(`${2 * t} + 1 =`)}`, a: a + b }],
+      hint: `${t} + ${t} = ${2 * t}, ועוד 1.`, exp: `${M(`${t} + ${t} = ${2 * t}`)}, ${M(`${2 * t} + 1 = ${a + b}`)}` };
+  }
+  if (lv === 3) {
+    const a = R(4, 9), k = R(0, 2);
+    if (k === 0) return { type: 'num', text: `${M(`${a} + ${a} = ${2 * a}`)}. אז כמה זה ${M(`${a} + ${a + 1} =`)}?`, ans: 2 * a + 1, hint: 'אחד המספרים גדל ב-1 – גם התוצאה גדלה ב-1.', exp: `${M(`${a} + ${a + 1} = ${2 * a + 1}`)}` };
+    if (k === 1) return { type: 'num', text: `${M(`${a} + ${a} = ${2 * a}`)}. אז כמה זה ${M(`${a} + ${a - 1} =`)}?`, ans: 2 * a - 1, hint: 'אחד המספרים קטן ב-1 – גם התוצאה קטנה ב-1.', exp: `${M(`${a} + ${a - 1} = ${2 * a - 1}`)}` };
+    return { type: 'num', text: `כמעט תאומים ${M(`${2 * a + 1} - ${a} =`)}`, ans: a + 1, hint: `${a} + ${a + 1} = ${2 * a + 1}.`, exp: `${M(`${a} + ${a + 1} = ${2 * a + 1}`)}, לכן ${M(`${2 * a + 1} - ${a} = ${a + 1}`)}` };
+  }
+  const a = R(3, 10), k = R(0, 2);
+  if (k === 0) return { type: 'num', text: `אותו מספר בשתי המשבצות: ${M(`${BOX} + ${BOX} = ${2 * a}`)}. מה המספר?`, ans: a, traps: [{ v: 2 * a, m: 'זו התוצאה. איזה מספר ועוד אותו מספר נותן ' + (2 * a) + '?' }], hint: `חצי של ${2 * a}.`, exp: `${M(`${a} + ${a} = ${2 * a}`)}` };
+  if (k === 1) { const n = R(2, 9); return { type: 'num', word: 1, unit: 'מדבקות', text: `לשני תאומים יש תיקים זהים, ובכל תיק ${n} מדבקות. כמה מדבקות יש בשני התיקים ביחד?`, ans: 2 * n, hint: `תאומים: ${n} + ${n}.`, exp: `${M(`${n} + ${n} = ${2 * n}`)}` }; }
+  return { type: 'num', text: `איזה מספר חסר? ${M(`${a} + ${BOX} = ${2 * a + 1}`)}`, ans: a + 1, hint: `${a} + ${a} = ${2 * a}. כמה חסר עוד?`, exp: `${M(`${a} + ${a + 1} = ${2 * a + 1}`)}` };
+}
+
 const SHAPE_SVG = {
   'משולש': '<polygon points="60,10 110,100 10,100"/>',
   'ריבוע': '<rect x="15" y="10" width="90" height="90"/>',
@@ -5012,6 +5127,16 @@ const TOPICS1 = [
     desc: 'ארוך וקצר, סופרים יחידות, שעה עגולה',
     levels: { 1: [genLonger1], 2: [genLonger1, genClock1], 3: [genClock1, genLonger1] },
     tips: ['משווים אורך מאותה נקודת התחלה.', 'שעה עגולה – המחוג הגדול על 12.']
+  },
+  {
+    id: 'num100', name: 'מספרים עד 100', icon: '💯', color: '#2c8fb5',
+    desc: 'עשרות ויחידות, השוואה, סדרות, עשרות שלמות',
+    levels: {
+      1: [() => gen100(1), () => gen100(1), () => gen100(2)],
+      2: [() => gen100(2), () => gen100(2), () => gen100(1)],
+      3: [() => gen100(3), () => gen100(3), () => gen100(2)]
+    },
+    tips: ['מוט ארוך = עשרת (10). קובייה קטנה = יחידה (1).', 'במספר 47 יש 4 עשרות ו-7 יחידות.', 'משווים קודם את העשרות. אם הן שוות – משווים את היחידות.', 'עשרות שלמות: 3 עשרות ועוד 2 עשרות הן 5 עשרות, כלומר 50.']
   }
 ];
 const LEVEL_DESC1 = {
@@ -5021,6 +5146,7 @@ const LEVEL_DESC1 = {
   seq1: ['סדרות עד 10, חוקיות א-ב', 'סדרות עד 20, חוקיות א-א-ב', 'קפיצות של 2, חוקיות א-ב-ג'],
   shapes: ['צורות', 'צורות', 'צורות'],
   measure: ['ארוך וקצר', 'אורך ושעון', 'שעון ואורך'],
+  num100: ['סופרים עשרות ויחידות', 'השוואה, לפני ואחרי, סדרות', 'עשרות שלמות, ערך הספרה'],
   mix: ['שאלות קלות מכל הנושאים', 'שאלות בינוניות מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 
@@ -13706,6 +13832,14 @@ function teacher() {
 /* =========================================================
    דפי עבודה להדפסה
    ========================================================= */
+// סדרה בריבועים (op-seq) → שורת מספרים עם פסיקים, וקו במקום החסר
+function seqPlain(fig) {
+  if (!fig || fig.indexOf('op-seq') < 0) return fig || '';
+  return fig.replace(/<div class="op-seq[^"]*"[^>]*>([\s\S]*?)<\/div>/g, (m, inner) => {
+    const items = [...inner.matchAll(/<span([^>]*)>([\s\S]*?)<\/span>/g)].map(([, at, v]) => /gap/.test(at) || v.trim() === '?' ? '<span class="sq q">?</span>' : /empty/.test(at) ? '<span class="sq"></span>' : v.replace(/&nbsp;/g, '').trim());
+    return `<div class="seq-plain">${items.join(',&nbsp; ')}</div>`;
+  });
+}
 function wsQuestionHTML(q, n) {
   let ans;
   if (q.type === 'num') ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
@@ -13713,7 +13847,7 @@ function wsQuestionHTML(q, n) {
   else ans = `<div class="wschoices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
   const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
-  return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${ans}</div>${grid}</div>`;
+  return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${seqPlain(q.fig)}${ans}</div>${grid}</div>`;
 }
 
 function examQuestionHTML(q, n) {
@@ -13725,10 +13859,21 @@ function examQuestionHTML(q, n) {
   const wordy = q.steps && q.steps.length >= 3 && plain.length > 60;
   const work = wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : '';
   const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
-  return `<div class="ex-q"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${q.fig || ''}${work}${ans}</div>${grid}</div>`;
+  return `<div class="ex-q"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${seqPlain(q.fig)}${work}${ans}</div>${grid}</div>`;
 }
 
-function buildWorksheet(topics, level, count) {
+// "תרגילים בלבד": מחוללים של שאלות מילוליות (לפי שם המחולל), ועוד שאלות ארוכות עם יחידה בלי איור
+const WORD_GENS = /genWord|genTakeAway1|genHalfQty2|genMoney[23]|genFracQty3|genFracOfQty|genFracTimesWhole|genBuildings|genBakery|genMeanList\(2|genMeanChange|genMeanAdd|genMeanTarget|genPctWhat|genPctDiscount|genPctWhole|genMul22\('word'/;
+function isWordQ(q) {
+  if (q.word) return true;
+  const src = q.gen ? (q.gen.name && !/^\s*(\(|function)/.test(String(q.gen)) ? q.gen.name : String(q.gen).slice(0, 120)) : '';
+  if (WORD_GENS.test(src)) return true;
+  const raw = String(q.text || q.q || '');
+  if (!q.unit || /<svg/.test(raw)) return false;
+  const t = raw.replace(/<span class="m">[\s\S]*?<\/span>/g, ' ').replace(/<[^>]+>/g, ' ');
+  return (t.match(/[\u05d0-\u05ea]+/g) || []).length >= 12;
+}
+function buildWorksheet(topics, level, count, drill) {
   const qs = [], prev = {};
   for (let i = 0; i < count; i++) {
     const t = topics[i % topics.length];
@@ -13737,9 +13882,30 @@ function buildWorksheet(topics, level, count) {
     let g = pick(pool), guard = 0;
     while (pool.length > 1 && g === prev[t] && guard++ < 10) g = pick(pool);
     prev[t] = g;
-    qs.push(mk(t, g, lv));
+    let q = mk(t, g, lv);
+    // "תרגילים בלבד": מחליפים שאלה מילולית בתרגיל (גם מרמה אחרת של אותו נושא, אם צריך)
+    for (let k = 0; drill && isWordQ(q) && k < 40; k++) {
+      const l2 = k < 25 ? lv : 1 + (k % 3), p2 = TOPIC[t].levels[l2];
+      q = mk(t, pick(p2), l2);
+    }
+    qs.push(q);
   }
   return qs;
+}
+
+// שאלות מילוליות בלבד מהנושאים שנבחרו (לרמה המבוקשת, ואם אין – מרמה אחרת)
+function buildWordQs(topics, level, n) {
+  const out = [], seen = new Set();
+  for (let i = 0, tries = 0; out.length < n && tries < n * 120; tries++) {
+    const t = topics[i % topics.length];
+    const lv0 = level === 'mix' ? Math.min(3, 1 + Math.floor(3 * out.length / n)) : Number(level);
+    const lv = tries % 120 < 60 ? lv0 : 1 + (tries % 3);
+    const q = mk(t, pick(TOPIC[t].levels[lv]), lv);
+    if (tries % 15 === 14) i++;
+    if (!isWordQ(q) || seen.has(q.text)) continue;
+    seen.add(q.text); out.push(q); i++;
+  }
+  return out;
 }
 
 function printBuilder() {
@@ -13768,8 +13934,15 @@ function printBuilder() {
             <option value="3">רמה 3 – מאתגרת</option>
           </select>
         </label>
-        <label>מספר שאלות:
-          <select id="wc">${[6, 8, 10, 12, 15, 20].map(n => `<option ${n === 10 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+        <label>מספר שאלות / תרגילים:
+          <select id="wc">${[4, 6, 8, 10, 12, 15, 20, 24, 30].map(n => `<option ${n === 10 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+        </label>
+        <label>שאלות מילוליות:
+          <select id="wwq">
+            <option value="auto">מעורב – כמו באפליקציה</option>
+            <option value="0">בלי – תרגילים בלבד</option>
+            ${[1, 2, 3, 4, 5, 6, 8, 10].map(n => `<option value="${n}">${n} שאלות מילוליות (בסוף הדף, בנוסף לתרגילים)</option>`).join('')}
+          </select>
         </label>
         <label>מספר נוסחים (כל נוסח עם מספרים אחרים – למשל לשכנים בשולחן):
           <select id="wv"><option>1</option><option>2</option><option>3</option></select>
@@ -13790,6 +13963,20 @@ function printBuilder() {
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
+      ${GRADE <= 2 ? `<div class="card tform">
+        <h2>🔟 חשבון בעל-פה עד 20 – לכיתה</h2>
+        <p class="muted small"><b>אתגר דקה:</b> 40 תרגילים בדף – כמה תספיקו נכון בדקה? <b>דף תאומים:</b> שלושה חלקים – תאומים, חיסור תאומים וכמעט תאומים. (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
+        <label>סוג תרגילים באתגר הדקה:
+          <select id="g2k">
+            <option value="mix">חיבור וחיסור – מעורב</option>
+            <option value="add">חיבור בלבד</option>
+            <option value="sub">חיסור בלבד</option>
+            <option value="cross">מעבר דרך 10 בלבד</option>
+            <option value="twin">תאומים וכמעט תאומים</option>
+          </select>
+        </label>
+        <div class="actions"><button class="secondary" id="g2pc">⚡ דף אתגר דקה עד 20</button><button class="secondary" id="g2pt">👯 דף תרגילי תאומים</button></div>
+      </div>` : ''}
       ${GRADE >= 3 ? `<div class="card tform">
         <h2>⚡ לוח הכפל – לכיתה</h2>
         <p class="muted small"><b>אתגר דקה:</b> 48 תרגילי כפל בדף – כמה תספיקו נכון בדקה? (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.) <b>בינגו כפל:</b> כרטיס שונה לכל תלמיד, ורשימת קריאה למורה.</p>
@@ -13833,7 +14020,9 @@ function printBuilder() {
     const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
     const title = $('wt').value.trim() || (topics.length === 1 ? `דף תרגול – ${TOPIC[topics[0]].name}` : 'דף תרגול במתמטיקה');
     const tips = $('wtips').checked ? `<div class="wstips"><b>📘 תזכורת</b><ul>${topics.flatMap(t => TOPIC[t].tips.slice(0, topics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
-    const sheets = Array.from({ length: versions }, () => buildWorksheet(topics, level, count));
+    const wq = $('wwq').value, drill = wq !== 'auto', nWord = drill ? Number(wq) : 0;
+    let wordShort = false;
+    const sheets = Array.from({ length: versions }, () => { const a = buildWorksheet(topics, level, count, drill), w = nWord ? buildWordQs(topics, level, nWord) : []; if (w.length < nWord) wordShort = true; return a.concat(w); });
     const vname = v => versions > 1 ? ` – נוסח ${letters[v]}` : '';
     let out = sheets.map((qs, v) => `
       <section class="ws-page">
@@ -13851,12 +14040,12 @@ function printBuilder() {
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
-    $('wsout').dataset.what = `דף תרגול: ${topics.map(t => TOPIC[t].name).join(', ')} · ${$('wl').selectedOptions[0].textContent.trim()}${versions > 1 ? ` · ${versions} נוסחים` : ''}`;
+    $('wsout').dataset.what = `דף תרגול: ${topics.map(t => TOPIC[t].name).join(', ')} · ${$('wl').selectedOptions[0].textContent.trim()}${versions > 1 ? ` · ${versions} נוסחים` : ''}${drill ? ` · ${count} תרגילים + ${nWord} מילוליות` : ''}`;
     if (tips) dropTipsIfOverflow();
     paginateSheets();
     $('wprint').classList.remove('hidden');
     $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
-    $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".';
+    $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".' + (wordShort ? ' (בנושאים שנבחרו אין מספיק שאלות מילוליות – נוספו כמה שיש.)' : '');
   });
   $('wexam').onclick = () => wsGate(() => {
     const versions = Number($('wv').value);
@@ -13885,6 +14074,8 @@ function printBuilder() {
   $('wprint').onclick = () => window.print();
   const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
   if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: דף אתגר דקה') && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked)));
+  if ($('g2pc')) $('g2pc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף אתגר דקה') && kfOut(g2PrintChallenge($('g2k').value, Number($('wv').value), $('wkey').checked)));
+  if ($('g2pt')) $('g2pt').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף תאומים') && kfOut(g2PrintTwins(Number($('wv').value), $('wkey').checked)));
   if ($('kfpb')) $('kfpb').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: כרטיסי בינגו') && kfOut(kfPrintBingo(Number($('kfpn').value))));
   $('bkgo').onclick = () => {
     const counts = TOPICS.map(t => Number(app.querySelector(`[data-bk="${t.id}"]`).value));
@@ -14415,6 +14606,55 @@ function kfPrintChallenge(versions, key) {
       <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>תאריך: <span class="wsline"></span></span><span>נכון: <span class="wsline"></span></span></div></div>
       <div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} =`)}<span class="wsline"></span></div>`).join('')}</div></section>`);
     if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – אתגר דקה${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h2><div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} = ${a * b}`)}</div>`).join('')}</div></section>`);
+  }
+  return out.join('');
+}
+/* ---------- להדפסה בכיתה ב': אתגר דקה עד 20 ודף תאומים ---------- */
+function g2Fact(kind) {
+  const add = () => { const a = R(1, 10), b = R(1, 20 - a); return [a, '+', b, a + b]; };
+  const sub = () => { const c = R(5, 20), b = R(1, Math.min(10, c)); return [c, '-', b, c - b]; };
+  const cross = () => { if (Math.random() < 0.5) { const a = R(3, 9), b = R(11 - a, 9); return Math.random() < 0.5 ? [a, '+', b, a + b] : [b, '+', a, a + b]; } const c = R(11, 18), d = R(c - 9, 9); return [c, '-', d, c - d]; };
+  const twin = () => { const a = R(1, 10), k = R(0, 2); return k === 0 ? [a, '+', a, 2 * a] : k === 1 ? [2 * a, '-', a, a] : (a < 10 ? [a, '+', a + 1, 2 * a + 1] : [a, '+', a - 1, 2 * a - 1]); };
+  const f = { add, sub, cross, twin }[kind] || (() => (Math.random() < 0.5 ? add : sub)());
+  return f();
+}
+function g2Uniq(n, gen) {
+  const out = [], seen = new Set();
+  for (let i = 0; out.length < n && i < n * 40; i++) { const q = gen(), k = q.join(' '); if (seen.has(k) && i < n * 30) continue; seen.add(k); out.push(q); }
+  while (out.length < n) out.push(gen());
+  return out;
+}
+function g2PrintChallenge(kind, versions, key) {
+  const names = { mix: 'חיבור וחיסור עד 20', add: 'חיבור עד 20', sub: 'חיסור עד 20', cross: 'מעבר דרך 10', twin: 'תאומים וכמעט תאומים' };
+  const vn = v => versions > 1 ? ' – נוסח ' + 'אבג'[v] : '';
+  const out = [];
+  for (let v = 0; v < versions; v++) {
+    const qs = g2Uniq(40, () => g2Fact(kind));
+    out.push(`<section class="ws-page"><div class="wshead"><h1>⚡ אתגר דקה – ${names[kind] || names.mix}${vn(v)}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>תאריך: <span class="wsline"></span></span><span>נכון: <span class="wsline"></span></span></div></div>
+      <div class="kfp-grid g2p-grid">${qs.map(([a, o, b]) => `<div>${M(`${a} ${o} ${b} =`)}<span class="wsline"></span></div>`).join('')}</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – אתגר דקה${vn(v)}</h2><div class="kfp-grid g2p-grid">${qs.map(([a, o, b, r]) => `<div>${M(`${a} ${o} ${b} = ${r}`)}</div>`).join('')}</div></section>`);
+  }
+  return out.join('');
+}
+function g2PrintTwins(versions, key) {
+  const vn = v => versions > 1 ? ' – נוסח ' + 'אבג'[v] : '';
+  const out = [];
+  for (let v = 0; v < versions; v++) {
+    const d = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), s2 = shuffle([2, 3, 4, 5, 6, 7, 8, 9, 10]).slice(0, 8), nr = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 6);
+    const near = nr.map(a => { const up = Math.random() < 0.6; return [a, up ? a + 1 : a - 1]; });
+    const ln = '<span class="wsline"></span>';
+    const sec1 = d.map(a => [`${a} + ${a} =`, 2 * a]), sec2 = s2.map(a => [`${2 * a} - ${a} =`, a]);
+    const sec3 = near.map(([a, b]) => { const t = Math.min(a, b); return [[`${t} + ${t} =`, 2 * t], [`${a} + ${b} =`, a + b]]; });
+    const page = ans => `
+      <div class="g2p-sec"><h3>1. תאומים 👯 – אותו מספר פעמיים</h3><div class="kfp-grid g2p-grid">${sec1.map(([e, r]) => `<div>${M(e + (ans ? ' ' + r : ''))}${ans ? '' : ln}</div>`).join('')}</div></div>
+      <div class="g2p-sec"><h3>2. חיסור תאומים – חושבים על התאומים</h3><div class="kfp-grid g2p-grid">${sec2.map(([e, r]) => `<div>${M(e + (ans ? ' ' + r : ''))}${ans ? '' : ln}</div>`).join('')}</div></div>
+      <div class="g2p-sec"><h3>3. כמעט תאומים – קודם התאומים, ואז עוד 1</h3><div class="g2p-pairs">${sec3.map(([[e1, r1], [e2, r2]]) => `<div class="g2p-pair">${M(e1 + (ans ? ' ' + r1 : ''))}${ans ? '' : ln}<span class="g2p-arr">➡</span>${M(e2 + (ans ? ' ' + r2 : ''))}${ans ? '' : ln}</div>`).join('')}</div></div>`;
+    out.push(`<section class="ws-page"><div class="wshead"><h1>👯 תרגילי תאומים${vn(v)}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      <div class="wstips"><b>📘 תזכורת</b><ul><li>תאומים: ${M('6 + 6 = 12')}</li><li>חיסור תאומים: ${M('12 - 6 = 6')} – כי ${M('6 + 6 = 12')}</li><li>כמעט תאומים: ${M('6 + 7')} ← ${M('6 + 6 = 12')}, ועוד 1 = 13</li></ul></div>
+      ${page(false)}<div class="wsfoot">בהצלחה! 🌟</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – תרגילי תאומים${vn(v)}</h2>${page(true)}</section>`);
   }
   return out.join('');
 }
