@@ -1641,7 +1641,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קסז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -14652,6 +14652,13 @@ const scOpName = op => ({ add: 'חיבור', sub: 'חיסור', both: 'חיבו�
 function scAS(range, sub, cross, lvl) {
   // lvl = מדרגת הקושי (0–4): ככל שעולה – מספרים גדולים יותר
   const top = Number(range), lim = top === 20 ? [12, 14, 16, 18, 20][lvl] : Math.max(top <= 10 ? 5 : 10, Math.round(top * [0.4, 0.55, 0.7, 0.85, 1][lvl]));
+  if (cross === 'big') {
+    // אחד המחוברים מעל 8 (8 או 9), מעבר עשר, בתחום העשרים
+    const cap = Math.min(top <= 10 ? 20 : top, 20), big = pick([8, 9]);
+    if (sub) { const a = R(11, cap), b = pick([8, 9].filter(x => x < a)); return { a, b, r: a - b }; }
+    const other = R(Math.max(2, 11 - big), Math.min(9, cap - big));
+    return pick([0, 1]) ? { a: big, b: other, r: big + other } : { a: other, b: big, r: big + other };
+  }
   return scTry(() => { const c = R(top <= 10 ? 2 : Math.round(lim / 5), lim); const b = R(1, c - 1), a = c - b; return sub ? { a: c, b, r: a } : { a, b, r: c }; },
     v => { if (top <= 10 || cross === 'mix') return v.r >= 0; const u = sub ? (v.a % 10) < (v.b % 10) : (v.a % 10) + (v.b % 10) >= 10; return cross === 'yes' ? u : !u; });
 }
@@ -14681,8 +14688,8 @@ function scPvQ(st, range, i) {
 }
 const SC_MORE = {
   as: { name: 'חיבור וחיסור', skills: {
-    as_basic: { name: 'חיבור וחיסור', opts: [{ k: 'range', type: 'radio', label: 'טווח', o: SC_RANGE }, SC_OP, { k: 'cross', type: 'radio', label: 'המרה', o: [['no', 'בלי המרה'], ['yes', 'עם המרה (מעבר עשרת / פריטה)'], ['mix', 'מעורב']] }],
-      title: p => `${scOpName(p.op)} ${SC_RANGE.find(r => r[0] === p.range)[1]}${p.range === '10' ? '' : ' · ' + { no: 'בלי המרה', yes: 'עם המרה', mix: 'עם ובלי המרה' }[p.cross]}`,
+    as_basic: { name: 'חיבור וחיסור', opts: [{ k: 'range', type: 'radio', label: 'טווח', o: SC_RANGE }, SC_OP, { k: 'cross', type: 'radio', label: 'המרה', o: [['no', 'בלי המרה'], ['yes', 'עם המרה (מעבר עשרת / פריטה)'], ['mix', 'מעורב'], ['big', 'מחובר מעל 8 (מעבר עשר)']] }],
+      title: p => `${scOpName(p.op)} ${SC_RANGE.find(r => r[0] === p.range)[1]}${p.range === '10' ? '' : ' · ' + { no: 'בלי המרה', yes: 'עם המרה', mix: 'עם ובלי המרה', big: 'מחובר מעל 8' }[p.cross]}`,
       gen: p => scIx().map(i => { const sub = p.op === 'sub' || (p.op === 'both' && i % 2 === 1), v = scAS(p.range, sub, p.cross, i);
         return { x: [`${fmt(v.a)} ${sub ? '−' : '+'} ${fmt(v.b)} =`, { b: 1 }], k: 'num', a: [v.r], hint: sub ? `אפשר לבדוק בחיבור: מה ועוד ${fmt(v.b)} שווה ${fmt(v.a)}?` : Number(p.range) <= 20 ? `משלימים קודם לעשר, ואז מוסיפים את מה שנשאר.` : 'מחברים עשרות לעשרות ואחדות לאחדות.', m: { a: v.a, b: v.b, sub } }; }) },
     as_miss: { name: 'מספר חסר', opts: [{ k: 'range', type: 'radio', label: 'טווח', o: SC_RANGE }, SC_OP],
