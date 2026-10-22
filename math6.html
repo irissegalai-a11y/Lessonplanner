@@ -478,6 +478,12 @@
   .kfp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 14px; font-size: 1.05rem; line-height: 2.3; direction: ltr; }
   .kfp-grid .wsline { min-width: 40px; width: 40px; }
   .g2p-grid { font-size: 1.25rem; line-height: 2.5; }
+  .dr-grid { font-size: 1.1rem; line-height: 2.6; column-gap: 12px; }
+  .dr-grid > div { white-space: nowrap; text-align: left; }
+  .dr-grid .wsline { min-width: 54px; width: 54px; }
+  .dr-grid .wsline.sm { min-width: 28px; width: 28px; }
+  .dr-grid .drr { font-size: 0.85em; }
+  .dr-h { margin: 10px 0 2px; font-size: 1.1rem; border-bottom: 1.5px solid #ddd; padding-bottom: 2px; }
   .g2p-sec { margin: 6px 0 14px; break-inside: avoid; }
   .g2p-sec h3 { margin: 4px 0 6px; font-size: 1.1rem; }
   .g2p-pairs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; font-size: 1.25rem; line-height: 2.6; direction: ltr; }
@@ -1660,7 +1666,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -14032,6 +14038,16 @@ function printBuilder() {
         </div>
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
+      <div class="card tform">
+        <h2>📝 דף תרגילים רציף – תרגיל אחרי תרגיל</h2>
+        <p class="muted small">רק תרגילים, בלי שאלות מילוליות ובלי משבצות – הרבה תרגול בדף אחד. בוחרים תחום אחד או כמה (כל תחום בחלק נפרד). מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.</p>
+        <div class="wstopics drtopics">${DRILLS.filter(d => d.g.includes(GRADE)).map((d, i) => `<label class="chk"><input type="checkbox" value="${d.id}" ${i === 0 ? 'checked' : ''}> ${d.name}</label>`).join('')}</div>
+        <label>תרגילים בכל תחום:
+          <select id="drc">${DRILL_COUNTS.map(n => `<option ${n === 30 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+        </label>
+        <div class="actions"><button class="secondary" id="drgo">📝 יצירת דף תרגילים</button></div>
+        <p class="muted small" id="drmsg"></p>
+      </div>
       ${GRADE <= 2 ? `<div class="card tform">
         <h2>🔟 חשבון בעל-פה עד 20 – לכיתה</h2>
         <p class="muted small"><b>אתגר דקה:</b> 40 תרגילים בדף – כמה תספיקו נכון בדקה? <b>דף תאומים:</b> שלושה חלקים – תאומים, חיסור תאומים וכמעט תאומים. (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
@@ -14144,6 +14160,12 @@ function printBuilder() {
   $('wprint').onclick = () => window.print();
   const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
   if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: דף אתגר דקה') && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked)));
+  $('drgo').onclick = () => {
+    const ids = [...app.querySelectorAll('.drtopics input:checked')].map(x => x.value);
+    if (!ids.length) { $('drmsg').textContent = 'בחרו לפחות תחום אחד 🙂'; return; }
+    $('drmsg').textContent = '';
+    wsGate(() => ($('wsout').dataset.what = 'דף תרגילים: ' + ids.map(i => DRILL[i].name).join(', ')) && kfOut(drillPrint(ids, Number($('drc').value), Number($('wv').value), $('wkey').checked)));
+  };
   if ($('g2pc')) $('g2pc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף אתגר דקה') && kfOut(g2PrintChallenge($('g2k').value, Number($('wv').value), $('wkey').checked)));
   if ($('g2pt')) $('g2pt').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף תאומים') && kfOut(g2PrintTwins(Number($('wv').value), $('wkey').checked)));
   if ($('kfpb')) $('kfpb').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: כרטיסי בינגו') && kfOut(kfPrintBingo(Number($('kfpn').value))));
@@ -14676,6 +14698,93 @@ function kfPrintChallenge(versions, key) {
       <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>תאריך: <span class="wsline"></span></span><span>נכון: <span class="wsline"></span></span></div></div>
       <div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} =`)}<span class="wsline"></span></div>`).join('')}</div></section>`);
     if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – אתגר דקה${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h2><div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} = ${a * b}`)}</div>`).join('')}</div></section>`);
+  }
+  return out.join('');
+}
+/* ---------- דפי תרגילים רציפים: תרגיל אחרי תרגיל, לפי תחום (כל הכיתות) ---------- */
+// כל מחולל מחזיר { e: הביטוי (בתוך M), a: התשובה } – או { h: HTML מלא של התרגיל, a }; rem = חילוק עם שארית
+const drN = (e, a) => ({ e, a: fmt(rnd(a)) });
+const drFS = (n, d) => { const g = gcd(n, d); n /= g; d /= g; if (d === 1) return fmt(n); return n > d ? `${Math.floor(n / d)}${F(n % d, d)}` : F(n, d); };
+const drProper = dens => { const d = pick(dens); let n, k = 0; do { n = R(1, d - 1); } while (gcd(n, d) !== 1 && k++ < 20); return [n, d]; };
+const DRILLS = [
+  { id: 'a10', g: [1], name: 'חיבור עד 10', cols: 4, gen: () => { const a = R(0, 9), b = R(1, 10 - a); return drN(`${a} + ${b}`, a + b); } },
+  { id: 's10', g: [1], name: 'חיסור עד 10', cols: 4, gen: () => { const c = R(2, 10), b = R(1, c); return drN(`${c} - ${b}`, c - b); } },
+  { id: 'as20', g: [1, 2], name: 'חיבור וחיסור עד 20', cols: 4, gen: () => { const [a, o, b, r] = g2Fact('mix'); return drN(`${a} ${o} ${b}`, r); } },
+  { id: 'cross', g: [1, 2], name: 'מעבר דרך 10 (עד 20)', cols: 4, gen: () => { const [a, o, b, r] = g2Fact('cross'); return drN(`${a} ${o} ${b}`, r); } },
+  { id: 'tw', g: [1, 2], name: 'תאומים וכמעט תאומים', cols: 4, gen: () => { const [a, o, b, r] = g2Fact('twin'); return drN(`${a} ${o} ${b}`, r); } },
+  { id: 't100', g: [1, 2], name: 'עשרות שלמות עד 100', cols: 4, gen: () => { const x = R(1, 8), y = R(1, 9 - x); return Math.random() < 0.5 ? drN(`${x * 10} + ${y * 10}`, (x + y) * 10) : drN(`${(x + y) * 10} - ${y * 10}`, x * 10); } },
+  { id: 'a100n', g: [2], name: 'חיבור וחיסור עד 100 – בלי מעבר עשרת', cols: 4, gen: () => {
+    if (Math.random() < 0.5) { const aT = R(1, 8), aU = R(0, 8), bT = R(0, 8 - aT), bU = R(0, 9 - aU), a = aT * 10 + aU, b = bT * 10 + bU; return b < 2 ? DRILL.a100n.gen() : drN(`${a} + ${b}`, a + b); }
+    const cT = R(2, 9), cU = R(1, 9), bT = R(0, cT - 1), bU = R(0, cU), c = cT * 10 + cU, b = bT * 10 + bU; return b < 2 ? DRILL.a100n.gen() : drN(`${c} - ${b}`, c - b); } },
+  { id: 'a100c', g: [2, 3], name: 'חיבור וחיסור עד 100 – עם מעבר עשרת', cols: 4, gen: () => {
+    if (Math.random() < 0.5) { const aU = R(2, 9), bU = R(10 - aU, 9), aT = R(1, 7), bT = R(0, 8 - aT), a = aT * 10 + aU, b = bT * 10 + bU; return drN(`${a} + ${b}`, a + b); }
+    const cT = R(2, 9), cU = R(0, 8), bU = R(cU + 1, 9), bT = R(0, cT - 1), c = cT * 10 + cU, b = bT * 10 + bU; return drN(`${c} - ${b}`, c - b); } },
+  { id: 'mul2510', g: [2], name: 'כפל ב-2, ב-5 וב-10', cols: 4, gen: () => { const t = pick([2, 5, 10]), n = R(1, 10); return Math.random() < 0.5 ? drN(`${n} × ${t}`, n * t) : drN(`${t} × ${n}`, n * t); } },
+  { id: 'mulT', g: [2, 3, 4], name: 'לוח הכפל', cols: 4, gen: () => { const a = R(2, 10), b = R(2, 10); return drN(`${a} × ${b}`, a * b); } },
+  { id: 'divT', g: [2, 3, 4], name: 'חילוק בלוח הכפל', cols: 4, gen: () => { const a = R(2, 10), b = R(1, 10); return drN(`${a * b} : ${a}`, b); } },
+  { id: 'a1000', g: [3], name: 'חיבור וחיסור עד 1,000', cols: 3, gen: () => { if (Math.random() < 0.5) { const a = R(100, 899), b = R(15, 999 - a); return drN(`${a} + ${b}`, a + b); } const c = R(200, 999), b = R(15, c - 20); return drN(`${c} - ${b}`, c - b); } },
+  { id: 'mulTens', g: [3, 4], name: 'כפל בעשרות ובמאות', cols: 4, gen: () => { const n = R(2, 9), t = R(1, 9) * pick([10, 10, 100]); return Math.random() < 0.5 ? drN(`${n} × ${t}`, n * t) : drN(`${t} × ${n}`, n * t); } },
+  { id: 'm2x1', g: [3, 4], name: 'דו-ספרתי × חד-ספרתי', cols: 4, gen: () => { const a = R(12, 99), b = R(2, 9); return drN(`${a} × ${b}`, a * b); } },
+  { id: 'divRem', g: [3, 4, 5], name: 'חילוק עם שארית', cols: 3, gen: () => { const d = R(2, 9), q = R(2, 12), r = R(1, d - 1); return { e: `${d * q + r} : ${d}`, a: String(q), rem: r }; } },
+  { id: 'order', g: [3, 4, 5, 6], name: 'סדר פעולות חשבון', cols: 3, gen: () => {
+    const k = R(0, 4), a = R(2, 20), b = R(2, 9), c = R(2, 9);
+    if (k === 0) return drN(`${a} + ${b} × ${c}`, a + b * c);
+    if (k === 1) return drN(`(${a} + ${b}) × ${c}`, (a + b) * c);
+    if (k === 2) { const x = b * c + R(0, 20); return drN(`${x} - ${b} × ${c}`, x - b * c); }
+    if (k === 3) return drN(`${a} + ${b * c} : ${c}`, a + b);
+    return drN(`${b} × ${c} - ${b * c > a ? a : 1}`, b * c - (b * c > a ? a : 1)); } },
+  { id: 'a10k', g: [4, 5], name: 'חיבור וחיסור במספרים גדולים', cols: 3, gen: () => { if (Math.random() < 0.5) { const a = R(1000, 49999), b = R(100, 49999); return drN(`${fmt(a)} + ${fmt(b)}`, a + b); } const c = R(2000, 99999), b = R(100, c - 100); return drN(`${fmt(c)} - ${fmt(b)}`, c - b); } },
+  { id: 'mBig', g: [4, 5, 6], name: 'רב-ספרתי × חד-ספרתי', cols: 3, gen: () => { const a = R(101, 9999), b = R(2, 9); return drN(`${fmt(a)} × ${b}`, a * b); } },
+  { id: 'dBig', g: [4, 5, 6], name: 'חילוק במספר חד-ספרתי', cols: 3, gen: () => { const d = R(2, 9), q = R(12, 999); return drN(`${fmt(d * q)} : ${d}`, q); } },
+  { id: 'm2x2', g: [4, 5, 6], name: 'דו-ספרתי × דו-ספרתי', cols: 3, gen: () => { const a = R(11, 99), b = R(11, 99); return drN(`${a} × ${b}`, a * b); } },
+  { id: 'mixImp', g: [4, 5], name: 'שבר מדומה ↔ שבר מעורב', cols: 4, gen: () => {
+    const d = R(2, 9);
+    if (Math.random() < 0.5) { let n; do { n = R(d + 1, 5 * d); } while (gcd(n, d) !== 1); return { e: F(n, d), a: `${Math.floor(n / d)}${F(n % d, d)}` }; }
+    const w = R(1, 5); let n; do { n = R(1, d - 1); } while (gcd(n, d) !== 1); return { e: `${w}${F(n, d)}`, a: F(w * d + n, d) }; } },
+  { id: 'fSame', g: [4, 5], name: 'חיבור וחיסור שברים – מכנה זהה', cols: 4, gen: () => {
+    const d = R(3, 12), n1 = R(1, d - 1), n2 = R(1, d - 1);
+    return Math.random() < 0.55 ? { e: `${F(n1, d)} + ${F(n2, d)}`, a: drFS(n1 + n2, d) } : n1 === n2 ? DRILL.fSame.gen() : { e: `${F(Math.max(n1, n2), d)} - ${F(Math.min(n1, n2), d)}`, a: drFS(Math.abs(n1 - n2), d) }; } },
+  { id: 'fSimp', g: [5, 6], name: 'צמצום שברים', cols: 4, gen: () => { const [n, d] = drProper([2, 3, 4, 5, 6, 7, 8, 9]), k = R(2, 6); return { e: F(n * k, d * k), a: F(n, d) }; } },
+  { id: 'fDiff', g: [5, 6], name: 'חיבור וחיסור שברים – מכנים שונים', cols: 3, gen: () => {
+    const D = [2, 3, 4, 5, 6, 8, 10, 12]; let [n1, d1] = drProper(D), [n2, d2] = drProper(D);
+    if (d1 === d2) return DRILL.fDiff.gen();
+    if (Math.random() < 0.55) return { e: `${F(n1, d1)} + ${F(n2, d2)}`, a: drFS(n1 * d2 + n2 * d1, d1 * d2) };
+    if (n1 * d2 < n2 * d1) [n1, d1, n2, d2] = [n2, d2, n1, d1];
+    return n1 * d2 === n2 * d1 ? DRILL.fDiff.gen() : { e: `${F(n1, d1)} - ${F(n2, d2)}`, a: drFS(n1 * d2 - n2 * d1, d1 * d2) }; } },
+  { id: 'dAdd', g: [5, 6], name: 'חיבור וחיסור מספרים עשרוניים', cols: 3, gen: () => {
+    const a = R(11, 9999) / 100, b = R(1, 999) / pick([10, 100]);
+    return Math.random() < 0.5 ? drN(`${fmt(a)} + ${fmt(b)}`, a + b) : drN(`${fmt(Math.max(a, b))} - ${fmt(Math.min(a, b))}`, Math.abs(a - b)); } },
+  { id: 'd10', g: [5, 6], name: 'כפל וחילוק ב-10, ב-100 וב-1,000', cols: 3, gen: () => { const x = R(1, 9999) / pick([10, 100]), p = pick([10, 100, 1000]); return Math.random() < 0.5 ? drN(`${fmt(x)} × ${fmt(p)}`, x * p) : drN(`${fmt(x)} : ${fmt(p)}`, x / p); } },
+  { id: 'fMul', g: [6], name: 'כפל שברים', cols: 4, gen: () => {
+    const [a, b] = drProper([2, 3, 4, 5, 6, 8, 9, 10]);
+    if (Math.random() < 0.4) { const w = R(2, 12); return { e: `${F(a, b)} × ${w}`, a: drFS(a * w, b) }; }
+    const [c, d] = drProper([2, 3, 4, 5, 6, 8, 9, 10]); return { e: `${F(a, b)} × ${F(c, d)}`, a: drFS(a * c, b * d) }; } },
+  { id: 'fDiv', g: [6], name: 'חילוק שברים', cols: 4, gen: () => {
+    const [a, b] = drProper([2, 3, 4, 5, 6, 8, 10]);
+    if (Math.random() < 0.35) { const w = R(2, 6); return { e: `${F(a, b)} : ${w}`, a: drFS(a, b * w) }; }
+    const [c, d] = drProper([2, 3, 4, 5, 6, 8, 10]); return { e: `${F(a, b)} : ${F(c, d)}`, a: drFS(a * d, b * c) }; } },
+  { id: 'dMul', g: [6], name: 'כפל מספרים עשרוניים', cols: 4, gen: () => { const a = R(2, 99) / 10, b = Math.random() < 0.5 ? R(2, 9) : R(2, 9) / 10; return drN(`${fmt(a)} × ${fmt(b)}`, a * b); } },
+  { id: 'pct', g: [6], name: 'אחוז מכמות', cols: 3, gen: () => { const p = pick([10, 20, 25, 50, 75, 5, 30, 40, 60]), base = R(1, 12) * (100 / gcd(p, 100)); return { h: `${M(p + '%')} מ-${M(base)} =`, a: fmt(p * base / 100) }; } }
+];
+const DRILL = Object.fromEntries(DRILLS.map(d => [d.id, d]));
+const DRILL_COUNTS = [12, 16, 20, 24, 30, 40, 48, 60];
+function drillCell(q, key) {
+  if (q.h) return `<div>${q.h} ${key ? `<b>${M(q.a)}</b>` : '<span class="wsline"></span>'}</div>`;
+  if (q.rem) return `<div>${M(q.e + ' =')} ${key ? `<b>${M(q.a)}</b> <span class="drr">שארית <b>${M(q.rem)}</b></span>` : '<span class="wsline"></span> <span class="drr">שארית <span class="wsline sm"></span></span>'}</div>`;
+  return `<div>${M(q.e + ' =')}${key ? ` <b>${M(q.a)}</b>` : '<span class="wsline"></span>'}</div>`;
+}
+function drillPrint(ids, count, versions, key) {
+  const vn = v => versions > 1 ? ' – נוסח ' + 'אבג'[v] : '';
+  const title = ids.length === 1 ? DRILL[ids[0]].name : 'דף תרגילים';
+  const out = [], sets = [];
+  for (let v = 0; v < versions; v++) {
+    const secs = ids.map(id => { const d = DRILL[id], seen = new Set(), qs = []; for (let k = 0; qs.length < count && k < count * 30; k++) { const q = d.gen(), sig = (q.e || q.h) + (q.rem || ''); if (seen.has(sig) && k < count * 20) continue; seen.add(sig); qs.push(q); } return { d, qs }; });
+    sets.push(secs);
+    const sec = keyMode => secs.map(({ d, qs }) => `${ids.length > 1 ? `<h3 class="dr-h">${d.name}</h3>` : ''}<div class="wsqs kfp-grid dr-grid" style="grid-template-columns: repeat(${d.cols}, 1fr)">${qs.map(q => drillCell(q, keyMode)).join('')}</div>`).join('');
+    out.push(`<section class="ws-page"><div class="wshead"><h1>📝 ${title}${vn(v)}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      ${sec(false)}<div class="wsfoot">בהצלחה! 🌟</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – ${title}${vn(v)}</h2>${sec(true)}</section>`);
   }
   return out.join('');
 }
