@@ -4646,6 +4646,26 @@ const TOPICS2 = [
       3: [() => genTwins(4), () => genTwins(3), () => genTwins(4)]
     },
     tips: ['תאומים – אותו מספר פעמיים: 6 + 6 = 12, 7 + 7 = 14.', 'כמעט תאומים: 7 + 8 → 7 + 7 = 14, ועוד 1 = 15.', 'חיסור תאומים: 14 - 7 = 7 – כי 7 + 7 = 14.']
+  },
+  {
+    id: 'num100', name: 'מספרים עד 100', icon: '💯', color: '#2c8fb5',
+    desc: 'עשרות ויחידות, השוואה, סדרות, ערך הספרה',
+    levels: {
+      1: [() => gen100(1), () => gen100(1), () => gen100(2)],
+      2: [() => gen100(2), () => gen100(2), () => gen100(3)],
+      3: [() => gen100(3), () => gen100(2), () => gen100(3)]
+    },
+    tips: ['מוט ארוך = עשרת (10). קובייה קטנה = יחידה (1).', 'במספר 47 יש 4 עשרות ו-7 יחידות.', 'משווים קודם את העשרות. אם הן שוות – משווים את היחידות.']
+  },
+  {
+    id: 'add100', name: 'חיבור וחיסור עד 100', icon: '➕', color: '#d4552f',
+    desc: 'עשרות ויחידות, מעבר עשרת, השלמה לעשרת ובעיות',
+    levels: {
+      1: [() => genAddSub2(1), () => genTenBlocks(), () => gen100(3), () => genAddSub2(1)],
+      2: [() => genAddSub2(2), () => genAddSub2(2), genMissing2],
+      3: [() => genAddSub2(2), genMissing2, genWordAddSub2]
+    },
+    tips: ['מחברים עשרות לעשרות ויחידות ליחידות.', 'מעבר עשרת: 38 + 5 → 38 + 2 = 40, ועוד 3 = 43.', 'בודקים חיסור בעזרת חיבור.']
   }
 ];
 const LEVEL_DESC2 = {
@@ -4658,6 +4678,8 @@ const LEVEL_DESC2 = {
   data: ['קריאת דיאגרמה', 'הערך של עמודה', 'השוואה בין עמודות'],
   add20: ['עשר ועוד, בלי מעבר עשרת', 'מעבר דרך 10 בחיבור ובחיסור', 'מספר חסר ובעיות מילוליות'],
   twins: ['תאומים וחיסור תאומים', 'כמעט תאומים', 'תאומים מאתגרים ומספר חסר'],
+  num100: ['סופרים עשרות ויחידות', 'השוואה, לפני ואחרי, סדרות', 'עשרות שלמות, ערך הספרה'],
+  add100: ['בלי מעבר עשרת, עשרות שלמות', 'עם מעבר עשרת והשלמה לעשרת', 'מעבר עשרת, מספר חסר ובעיות'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 
@@ -6563,7 +6585,7 @@ Object.assign(LESSONS, {
     ]
   }
 });
-LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 1 ? ['count1', 'add1'] : GRADE === 2 ? ['place2', 'addsub2', 'times', 'shapes2', 'timemoney'] : GRADE === 3 ? ['place', 'times', 'divis', 'timemoney', 'angles', 'order'] : GRADE === 4 ? ['place', 'times', 'divis', 'order', 'frac', 'angles', 'geo'] : GRADE === 5 ? ['divis', 'order', 'frac', 'dec', 'angles', 'geo', 'mean'] : ['place', 'order', 'divis', 'frac', 'dec', 'pct', 'geo', 'mean']));
+LESSON_ORDER.splice(0, LESSON_ORDER.length, ...(GRADE === 1 ? ['count1', 'add1'] : GRADE === 2 ? ['place2', 'twins2', 'addsub2', 'times', 'shapes2', 'timemoney'] : GRADE === 3 ? ['place', 'times', 'divis', 'timemoney', 'angles', 'order'] : GRADE === 4 ? ['place', 'times', 'divis', 'order', 'frac', 'angles', 'geo'] : GRADE === 5 ? ['divis', 'order', 'frac', 'dec', 'angles', 'geo', 'mean'] : ['place', 'order', 'divis', 'frac', 'dec', 'pct', 'geo', 'mean']));
 
 // קישור משאלות המבנה העשרוני והמספרים העשרוניים לכרטיסיות
 [[genDigitValue, 'place', 1], [genCompose, 'place', 2], [genHowMany, 'place', 3], [genRound, 'place', 4], [genCompare, 'place', 5],
@@ -7058,6 +7080,44 @@ Object.assign(LESSONS, {
           <li>⚖️ <b>השוואה:</b> קודם המאות, אחר כך העשרות.</li>
           <li>🦘 <b>סדרות:</b> בודקים כמה מוסיפים בכל קפיצה.</li>
         </ul><p class="center"><b>כל הכבוד! סיימתם את כרטיסיות המספרים 🎉</b></p>`
+      }
+    ]
+  },
+  twins2: {
+    id: 'twins2', name: 'חזרה: תרגילי תאומים', icon: '👯', color: '#c2508f', topic: 'twins',
+    desc: 'תאומים, חיסור תאומים וכמעט תאומים',
+    practice: [() => genTwins(1), () => genTwins(1), () => genTwins(2), () => genTwins(3), () => genTwins(2), () => genTwins(4)],
+    cards: [
+      {
+        title: 'מה זה תאומים? 👯',
+        html: `<p><b>תאומים</b> – מחברים את אותו מספר פעמיים:</p>
+          <table class="ftable"><tr><td>${M('1 + 1 = 2')}</td><td>${M('2 + 2 = 4')}</td><td>${M('3 + 3 = 6')}</td></tr>
+          <tr><td>${M('4 + 4 = 8')}</td><td>${M('5 + 5 = 10')}</td><td>${M('6 + 6 = 12')}</td></tr>
+          <tr><td>${M('7 + 7 = 14')}</td><td>${M('8 + 8 = 16')}</td><td>${M('9 + 9 = 18')}</td></tr></table>
+          <div class="rule">💡 התוצאה של תאומים היא תמיד מספר <b>זוגי</b>.</div>`,
+        try: { type: 'num', q: `פתרו: ${M('7 + 7 =')}`, ans: 14, hint: '7 ועוד 7.', exp: M('7 + 7 = 14'), traps: [{ v: 7, m: 'זה רק תאום אחד. מחברים את שניהם.' }] }
+      },
+      {
+        title: 'חיסור תאומים',
+        html: `<p>כשיודעים תאומים – יודעים גם חיסור:</p>
+          <ol class="lsteps"><li>${M('8 + 8 = 16')}</li><li>לכן ${M('16 - 8 = 8')}</li></ol>
+          <div class="rule">💡 מחסרים חצי – ונשאר חצי.</div>`,
+        try: { type: 'num', q: `פתרו: ${M('14 - 7 =')}`, ans: 7, hint: 'איזה מספר ועוד אותו מספר שווה 14?', exp: `${M('7 + 7 = 14')}, לכן ${M('14 - 7 = 7')}` }
+      },
+      {
+        title: 'כמעט תאומים',
+        html: `<p>${M('6 + 7')} – כמעט תאומים! משתמשים בתאומים שאנחנו יודעים:</p>
+          <ol class="lsteps"><li>${M('6 + 6 = 12')}</li><li>7 גדול מ-6 ב-1, אז ועוד 1: ${M('12 + 1 = 13')}</li></ol>
+          <div class="rule">💡 אפשר גם מהגדול: ${M('7 + 7 = 14')}, ופחות 1 = 13.</div>`,
+        try: { type: 'num', q: `פתרו: ${M('8 + 9 =')}`, ans: 17, hint: '8 + 8 = 16, ועוד 1.', exp: `${M('8 + 8 = 16')}, ${M('16 + 1 = 17')}` }
+      },
+      {
+        title: 'כללים לזכור 📌',
+        html: `<ul class="recap">
+          <li>👯 <b>תאומים:</b> אותו מספר פעמיים.</li>
+          <li>➖ <b>חיסור תאומים:</b> ${M('2 + 2 = 4')}, לכן ${M('4 - 2 = 2')}.</li>
+          <li>➕ <b>כמעט תאומים:</b> תאומים ועוד 1.</li>
+        </ul><p class="center"><b>כל הכבוד! סיימתם את החזרה על תרגילי תאומים 🎉</b></p>`
       }
     ]
   },
