@@ -1143,6 +1143,27 @@
   .b10-set { margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
   .b10-set input { width: 110px; font: inherit; font-size: 1.2rem; text-align: center; padding: 8px; border: 2px solid var(--ink,#1f1e1c); border-radius: 10px; }
   .b10-hint { margin-top: 16px; font-size: 0.95rem; }
+  .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; font-size: 0.95rem; color: #5f5a50; margin: 0 0 6px; }
+  .crumbs .crumb { font: inherit; background: none; border: none; box-shadow: none; padding: 2px 4px; color: #2d5fa0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .crumbs .crumb:hover { background: #eef4fb; transform: none; }
+  .crumbs b { color: #1f1e1c; }
+  .crumbs .sep { color: #a39e92; }
+  .bnav { display: none; }
+  @media (max-width: 700px) {
+    .nb .tabs { display: none; }
+    body:has(.bnav) { padding-bottom: 80px; }
+    .bnav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; background: #fffdf8; border-top: 2px solid #1f1e1c; padding: 4px 4px calc(4px + env(safe-area-inset-bottom)); box-shadow: 0 -3px 10px rgba(31, 30, 28, 0.12); }
+    .bnav .bn { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; font: inherit; font-size: 0.8rem; padding: 6px 2px; background: none; border: none; border-radius: 12px; box-shadow: none; color: #5f5a50; }
+    .bnav .bn .ico { width: 24px; height: 24px; }
+    .bnav .bn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .bnav .bn.on { color: #1f1e1c; font-weight: 700; background: rgba(127, 168, 214, 0.28); }
+    .bnav .bn:hover { transform: none; }
+    .bn-sheet { position: absolute; bottom: calc(100% + 6px); left: 8px; right: 8px; background: #fffdf8; border: 2px solid #1f1e1c; border-radius: 14px; padding: 6px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 -4px 16px rgba(31, 30, 28, 0.18); }
+    .bn-sheet[hidden] { display: none; }
+    .bn-sheet .bn-item { display: flex; align-items: center; gap: 10px; text-align: right; font: inherit; font-size: 1.05rem; padding: 10px 12px; background: none; border: none; box-shadow: none; color: #1f1e1c; border-radius: 10px; }
+    .bn-sheet .bn-item:hover { background: #eef4fb; transform: none; }
+    .bn-sheet .bn-item .ico { width: 22px; height: 22px; }
+  }
   .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 4px; }
   .tool-row .tool-chip { font: inherit; font-size: 0.95rem; padding: 5px 12px; border: 2px solid #1f1e1c; border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; }
   .tool-row .tool-chip:hover { background: #eef6f0; }
@@ -1739,7 +1760,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קפט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7464,7 +7485,7 @@ function renderLesson() {
   lv.tries = 0; lv.done = false;
   const tr = c.try;
   lv.box.innerHTML = `
-    ${lv.modal ? '' : `<div class="topbar">
+    ${lv.modal ? '' : `${crumbs(lessonTopic(L), TOPIC[lessonTopic(L)] && TOPIC[lessonTopic(L)].name === L.name ? 'כרטיסיות הסבר' : L.name)}<div class="topbar">
       <span class="title">${L.name}</span>
       <span>כרטיסייה ${lv.k + 1} מתוך ${N}</span>
       <span><button class="ghost" data-font>א+</button><button class="ghost navhome" data-home>${ic('home')} לדף הבית</button></span>
@@ -8125,6 +8146,8 @@ function home() {
   ];
   // במצב מורה "בכיתה" ו"הדפסה" נמצאים בתוך אזור המורה (גם לכפתורי "חזרה" ישנים)
   if (T && (homeTab === 'class' || homeTab === 'print')) homeTab = 'teach';
+  const BN_MAIN = ['practice', 'games', 'tests', 'teach'];
+  const bnMain = tabs.filter(t => BN_MAIN.includes(t.id)), bnMore = tabs.filter(t => !BN_MAIN.includes(t.id));
   if (!tabs.some(t => t.id === homeTab && !t.go)) homeTab = 'practice';
   app.innerHTML = `
     <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
@@ -8303,9 +8326,30 @@ function home() {
         </section>`}
       </div>
     </div>
+    <nav class="bnav" aria-label="ניווט ראשי">
+      ${bnMain.map(t => `<button type="button" class="bn${t.id === homeTab ? ' on' : ''}" data-bn="${t.id}">${ic(t.icon)}<span>${t.label}</span></button>`).join('')}
+      ${bnMore.length ? `<button type="button" class="bn${bnMore.some(t => t.id === homeTab && !t.go) ? ' on' : ''}" id="bnMore" aria-expanded="false">${ic('grid')}<span>עוד</span></button>
+      <div class="bn-sheet" id="bnSheet" hidden>${bnMore.map(t => `<button type="button" class="bn-item" data-bn="${t.id}">${ic(t.icon)}<span>${t.label}</span></button>`).join('')}</div>` : ''}
+    </nav>
   `;
+  // סרגל תחתון בטלפון: כל כפתור "לוחץ" על הלשונית המקבילה בתפריט הרגיל (שמוסתר בטלפון)
+  const bnSync = () => {
+    app.querySelectorAll('.bn[data-bn]').forEach(x => x.classList.toggle('on', x.dataset.bn === homeTab));
+    if ($('bnMore')) $('bnMore').classList.toggle('on', bnMore.some(t => t.id === homeTab && !t.go));
+  };
+  app.querySelectorAll('[data-bn]').forEach(b => b.onclick = () => {
+    const t = tabs.find(x => x.id === b.dataset.bn);
+    if ($('bnSheet')) { $('bnSheet').hidden = true; $('bnMore').setAttribute('aria-expanded', 'false'); }
+    const el = t.go ? $(t.go) : app.querySelector(`.tab[data-tab="${t.id}"]`);
+    if (el) el.click();
+  });
+  if ($('bnMore')) $('bnMore').onclick = e => {
+    e.stopPropagation();
+    const sh = $('bnSheet'); sh.hidden = !sh.hidden; $('bnMore').setAttribute('aria-expanded', String(!sh.hidden));
+  };
   app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
     homeTab = b.dataset.tab;
+    bnSync();
     try { sessionStorage.setItem('math-tab', homeTab); } catch (e) {}
     app.querySelectorAll('[data-tab]').forEach(x => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-selected', on); });
     app.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== homeTab; });
@@ -8379,7 +8423,7 @@ function home() {
     };
     inp.addEventListener('input', () => render(inp.value));
     inp.addEventListener('keydown', e => { if (e.key === 'Enter') { const first = box.querySelector('.ts-item'); if (first) first.click(); } });
-    document.addEventListener('click', e => { if (!e.target.closest('.topic-search')) { box.hidden = true; } });
+    document.addEventListener('click', e => { if (!e.target.closest('.topic-search')) { box.hidden = true; } const sh = $('bnSheet'); if (sh && !sh.hidden && !e.target.closest('.bnav')) { sh.hidden = true; $('bnMore').setAttribute('aria-expanded', 'false'); } });
   })();
   $('mix').onclick = () => showLevelPicker('mix');
   if ($('lpTop')) $('lpTop').onclick = () => lpHome();
@@ -8401,6 +8445,20 @@ function home() {
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
 }
+// פירורי לחם: "כיתה ד' › נושא › רמה" – כל חלק (פרט לאחרון) לחיץ
+function crumbs(topicId, last) {
+  const home0 = `<button type="button" class="crumb" data-crumb="">${NEUTRAL ? 'דף הבית' : GRADE_NAME[GRADE]}</button>`;
+  const t = TOPIC[topicId];
+  const parts = [home0, t ? (last ? `<button type="button" class="crumb" data-crumb="${topicId}">${t.name}</button>` : `<b>${t.name}</b>`) : '', last ? `<b>${last}</b>` : ''].filter(Boolean);
+  return `<nav class="crumbs" aria-label="איפה אני">${parts.join('<span class="sep" aria-hidden="true">›</span>')}</nav>`;
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-crumb]');
+  if (!c) return;
+  if (state && state.mode && !confirm('לצאת מהסבב? ההתקדמות בסבב הזה לא תישמר.')) return;
+  topicBack = c.dataset.crumb || null;
+  home();
+});
 // דף נושא: ① ללמוד ← ② לתרגל ← ③ בודקים את עצמי, ומתחת – כלי המחשה של הנושא
 let topicBack = null;
 const topicLessons = id => LESSON_ORDER.filter(l => lessonTopic(LESSONS[l]) === id);
@@ -8425,6 +8483,7 @@ function topicHome(id) {
   let n = 0;
   const step = h => `<h2 class="tp-h"><span class="tp-n">${++n}</span>${h}</h2>`;
   app.innerHTML = `
+    ${crumbs(id)}
     <div class="topbar">
       <span class="title">${t.icon} ${t.name}</span>
       <button class="ghost navhome" id="quit">${ic('home')} לכל הנושאים</button>
@@ -8917,6 +8976,7 @@ function renderQ() {
     ? `<button type="button" class="gen-inline gen-mul" id="genInline"><span class="gi-ic">▦</span> <span>רוצים לראות את הכפל? פִּתחו את <b>מחולל שיטת המלבנים</b></span></button>` : '';
   const showLevel = practice && !state.hideLevel && !state.list && !state.retry;
   app.innerHTML = `
+    ${practice && TOPIC[state.topicId] ? crumbs(state.topicId, LEVEL_NAME[state.level]) : ''}
     <div class="topbar">
       <span class="title">${titleText()}</span>
       <span>שאלה ${state.i + 1} מתוך ${total}</span>
