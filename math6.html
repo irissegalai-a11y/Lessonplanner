@@ -1696,7 +1696,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -11496,40 +11496,41 @@ MKQ[4] = [
 /* ===== כיתה ב' ===== */
 MKQ[2] = [
   { t: 'מספר – קודם, עוקב ומבנה', g() {
-    const n = R(2, 8) * 10 + R(1, 8);
+    const n = R(1, 8) * 100 + R(0, 9) * 10 + R(1, 8);
+    const h = Math.floor(n / 100), t = Math.floor(n / 10) % 10, u = n % 10;
     return { q: `נָתוּן הַמִּספר: ${M(n)}`, parts: [
       { l: 'א.', q: 'כִּתבו את המספר <b>הקודם</b>.', k: 'num', a: n - 1, show: M(n - 1) },
       { l: 'ב.', q: 'כִּתבו את המספר <b>העוקב</b>.', k: 'num', a: n + 1, show: M(n + 1) },
-      { l: 'ג.', q: 'מכמה עשרות וכמה אחדות מורכב המספר?', q2: M('[[0]] עשרות ו-[[1]] אחדות'), k: 'fill', a: [Math.floor(n / 10), n % 10], show: `${Math.floor(n / 10)} עשרות ו-${n % 10} אחדות` }],
-      steps: [`הקודם = אחד פחות: ${M(n - 1)}`, `העוקב = אחד יותר: ${M(n + 1)}`, `${M(n)} = ${Math.floor(n / 10)} עשרות ו-${n % 10} אחדות`] };
+      { l: 'ג.', q: 'מכמה מאות, עשרות ואחדות מורכב המספר?', q2: M('[[0]] מאות , [[1]] עשרות ו-[[2]] אחדות'), k: 'fill', a: [h, t, u], show: `${h} מאות, ${t} עשרות ו-${u} אחדות` }],
+      steps: [`הקודם = אחד פחות: ${M(n - 1)}`, `העוקב = אחד יותר: ${M(n + 1)}`, `${M(n)} = ${h} מאות, ${t} עשרות ו-${u} אחדות (${heNum(n)})`] };
   } },
   { t: 'השוואת מספרים', g() {
-    const a = R(21, 89); let b; do { b = R(21, 89); } while (b === a); const c = R(30, 69);
+    const a = R(105, 895); let b; do { b = R(105, 895); } while (b === a); const c = R(120, 880);
     return { q: 'כִּתבו את הסימן המתאים: <b>&gt;</b> , <b>&lt;</b> או <b>=</b>', parts: [
       { l: 'א.', q: `${M(a)}  ⬚  ${M(b)}`, k: 'choice', pl: true, opts: ['>', '<', '='], a: a > b ? 0 : 1, show: a > b ? '>' : '<' },
       { l: 'ב.', q: `${M(c)}  ⬚  ${M(c)}`, k: 'choice', pl: true, opts: ['>', '<', '='], a: 2, show: '=' }],
-      steps: ['משווים קודם את העשרות; אם הן שוות – משווים את האחדות.', 'הפתח של הסימן פונה תמיד למספר הגדול.'] };
+      steps: ['משווים קודם את המאות; אם הן שוות – את העשרות, ואז את האחדות.', 'הפתח של הסימן פונה תמיד למספר הגדול.'] };
   } },
   { t: 'סדרות – קפיצות שוות', g() {
-    const s1 = R(2, 20), d1 = pick([2, 5]), s2 = R(60, 90), d2 = 10;
+    const s1 = R(30, 80), d1 = pick([5, 10]), s2 = R(5, 9) * 100 + R(2, 9) * 10, d2 = pick([50, 100]);
     return { q: 'הַסדרות ממשיכות באותן קפיצות. הַשלימו את המספרים החסרים:', parts: [
       { l: 'א.', k: 'fill', q: M(`${s1} , ${s1 + d1} , ${s1 + 2 * d1} , [[0]] , [[1]] , [[2]]`), a: [s1 + 3 * d1, s1 + 4 * d1, s1 + 5 * d1], show: M([3, 4, 5].map(i => s1 + i * d1).join(' , ')) },
       { l: 'ב.', k: 'fill', q: M(`${s2} , ${s2 - d2} , ${s2 - 2 * d2} , [[0]] , [[1]] , [[2]]`), a: [s2 - 3 * d2, s2 - 4 * d2, s2 - 5 * d2], show: M([3, 4, 5].map(i => s2 - i * d2).join(' , ')) }],
       steps: [`א. בכל פעם מוסיפים ${d1}.`, `ב. בכל פעם מחסירים ${d2}.`, 'בודקים: הקפיצה בין כל שני מספרים זהה.'] };
   } },
   { t: 'פתרו את התרגילים', g() {
-    const a = R(21, 54), b = R(13, 99 - a), c = R(45, 89), d = R(11, 30);
-    const u1 = R(6, 9), u2 = R(6, 9), m = pick([2, 5, 10]), k = R(2, 6), dv = pick([2, 5]), q = R(2, 6);
+    const a = R(120, 470), b = R(130, 990 - a), c = R(320, 880), d = R(110, 290);
+    const e = R(24, 58), f = R(25, 39), m = pick([2, 3, 4, 5, 10]), k = R(2, 8), dv = pick([2, 3, 4, 5]), q = R(2, 8);
     return { q: 'פִּתרו את התרגילים:', parts: [
       { l: 'א.', q: M(`${a} + ${b} =`), k: 'num', a: a + b, show: M(a + b) },
       { l: 'ב.', q: M(`${c} – ${d} =`), k: 'num', a: c - d, show: M(c - d) },
-      { l: 'ג.', q: M(`${u1} + ${u2} =`), k: 'num', a: u1 + u2, show: M(u1 + u2) },
+      { l: 'ג.', q: M(`${e} + ${f} =`), k: 'num', a: e + f, show: M(e + f) },
       { l: 'ד.', q: M(`${m} × ${k} =`), k: 'num', a: m * k, show: M(m * k) },
       { l: 'ה.', q: M(`${dv * q} : ${dv} =`), k: 'num', a: q, show: M(q) }],
-      steps: [`א. עשרות עם עשרות, אחדות עם אחדות: ${M(`${a} + ${b} = ${a + b}`)}`, `ג. משלימים קודם ל-10: ${M(`${u1} + ${u2} = ${u1 + u2}`)}`, `ה. ${M(`${q} × ${dv} = ${dv * q}`)}, לכן ${M(`${dv * q} : ${dv} = ${q}`)}`] };
+      steps: [`א. מחברים מאות עם מאות, עשרות עם עשרות ואחדות עם אחדות: ${M(`${a} + ${b} = ${a + b}`)}`, `ב. כשאין מספיק – פורטים עשרת/מאה: ${M(`${c} – ${d} = ${c - d}`)}`, `ה. ${M(`${q} × ${dv} = ${dv * q}`)}, לכן ${M(`${dv * q} : ${dv} = ${q}`)}`] };
   } },
   { t: 'ישר המספרים', g() {
-    const lo = R(2, 7) * 10, hi = lo + R(6, 9), inside = [lo + 2, hi - 2], outside = [lo - R(2, 5), hi + R(2, 5)];
+    const lo = R(6, 24) * 10, hi = lo + R(6, 12), inside = [lo + 2, hi - 2], outside = [lo - R(2, 5), hi + R(2, 5)];
     const opts = shuffle([...inside, ...outside]); const bigEven = hi % 2 === 0 ? hi : hi - 1;
     return { q: `לפניכם ישר מספרים:${mkNumLine(lo - 5, hi + 5, [{ v: lo, lab: lo, big: 1 }, { v: hi, lab: hi, big: 1 }], [lo, hi])}`, parts: [
       { l: 'א.', q: 'סַמנו את המספרים שנמצאים בקטע המֻדגש.', k: 'multi', opts: opts.map(v => M(v)), a: opts.map((v, i) => i).filter(i => opts[i] >= lo && opts[i] <= hi), show: inside.map(v => M(v)).join(', ') },
@@ -11537,46 +11538,46 @@ MKQ[2] = [
       steps: [`הקטע מ-${M(lo)} עד ${M(hi)}.`, 'מספר בקטע – גדול או שווה להתחלה וקטן או שווה לסוף.', `הזוגי הגדול ביותר בקטע: ${M(bigEven)}`] };
   } },
   { t: 'מספר חסר', g() {
-    const a = R(31, 78), r = R(10, a - 5), m = pick([2, 5, 10]), k = R(2, 6);
+    const a = R(150, 780), r = R(50, a - 30), m = pick([2, 3, 4, 5, 10]), k = R(2, 8);
     return { q: 'הַשלימו את המספר החסר:', parts: [
       { l: 'א.', k: 'fill', q: M(`${a} – [[0]] = ${r}`), a: [a - r], show: M(a - r) },
       { l: 'ב.', k: 'fill', q: M(`${m} × [[0]] = ${m * k}`), a: [k], show: M(k) }],
       steps: [`א. כמה מורידים מ-${a} כדי להגיע ל-${r}? ${M(`${a} – ${r} = ${a - r}`)}`, `ב. באיזה מספר כופלים את ${m} כדי לקבל ${m * k}? ${M(k)}`] };
   } },
   { t: 'בעיה מילולית', g() {
-    const N = R(40, 90), k = R(8, 25);
-    return { q: `בספרייה היו ${M(N)} ספרים. תלמידי הכיתה השאילו ${M(k)} ספרים.<br>כמה ספרים נשארו בספרייה?`, parts: [{ k: 'num', a: N - k, show: M(N - k), unit: 'ספרים' }],
+    const N = R(150, 480), k = R(45, 130);
+    return { q: `בספרייה היו ${M(N)} ספרים. תלמידי בית הספר השאילו ${M(k)} ספרים.<br>כמה ספרים נשארו בספרייה?`, parts: [{ k: 'num', a: N - k, show: M(N - k), unit: 'ספרים' }],
       steps: ['מכל הספרים מורידים את אלה שהושאלו.', `${M(`${N} – ${k} = ${N - k}`)}`, `בדיקה: ${M(`${N - k} + ${k} = ${N}`)} ✔`] };
   } },
   { t: 'כסף ועודף', g() {
-    const a = R(12, 40), b = R(8, 30), bill = a + b < 50 ? 50 : 100, nm = mkName(), it = pick([['ספר', 'מחברת'], ['משחק', 'כדור'], ['בובה', 'פאזל']]);
+    const a = R(35, 90), b = R(25, 80), bill = a + b < 100 ? 100 : 200, nm = mkName(), it = pick([['ספר', 'מחברת'], ['משחק', 'כדור'], ['בובה', 'פאזל']]);
     return { q: `${nm} קנה/תה ${it[0]} ב-${M(a)} ש"ח ו${it[1]} ב-${M(b)} ש"ח, ושילם/ה בשטר של ${M(bill)} ש"ח.<br>כמה עודף קיבל/ה?`, parts: [{ k: 'num', a: bill - a - b, show: M(bill - a - b), unit: 'ש"ח' }],
       steps: [`כמה עלו יחד? ${M(`${a} + ${b} = ${a + b}`)}`, `עודף = ${M(`${bill} – ${a + b} = ${bill - a - b}`)}`, `בדיקה: ${M(`${a + b} + ${bill - a - b} = ${bill}`)} ✔`] };
   } },
   { t: 'כפל לפי תמונה', g() {
-    const n = R(2, 5), m = pick([2, 5]), it = pick(['🍎', '⭐', '🧁']);
+    const n = R(2, 5), m = pick([2, 3, 4, 5]), it = pick(['🍎', '⭐', '🧁']);
     const fig = `<div class="mk-plates" dir="ltr">${Array.from({ length: n }, () => `<span class="mk-plate">${it.repeat(m)}</span>`).join('')}</div>`;
     return { q: `כִּתבו תרגיל <b>כפל</b> שמתאים לתמונה, וחַשבו כמה ${it} יש.${fig}`, parts: [{ k: 'fill', q: M('[[0]] × [[1]] = [[2]]'), check: v => ((v[0] === n && v[1] === m) || (v[0] === m && v[1] === n)) && v[2] === n * m, show: M(`${n} × ${m} = ${n * m}`) }],
       steps: [`יש ${n} קבוצות, ובכל אחת ${m}.`, `${M(`${n} × ${m} = ${n * m}`)} (אפשר גם ${M(`${m} × ${n}`)}).`] };
   } },
   { t: 'זוגי ואי-זוגי', g() {
-    const a = R(2, 9) * 10 + pick([0, 2, 4, 6, 8]), b = R(2, 9) * 10 + pick([1, 3, 5, 7, 9]);
+    const a = R(1, 9) * 100 + R(0, 9) * 10 + pick([0, 2, 4, 6, 8]), b = R(1, 9) * 100 + R(0, 9) * 10 + pick([1, 3, 5, 7, 9]);
     return { q: 'ענו על השאלות:', parts: [
       { l: 'א.', q: `האם המספר ${M(a)} זוגי או אי-זוגי?`, k: 'choice', opts: ['זוגי', 'אי-זוגי'], a: 0, show: 'זוגי' },
       { l: 'ב.', q: `האם המספר ${M(b)} זוגי או אי-זוגי?`, k: 'choice', opts: ['זוגי', 'אי-זוגי'], a: 1, show: 'אי-זוגי' }],
-      steps: ['מסתכלים על ספרת האחדות.', 'זוגי – נגמר ב-0, 2, 4, 6, 8.', 'אי-זוגי – נגמר ב-1, 3, 5, 7, 9.'] };
+      steps: ['מסתכלים על ספרת האחדות (הימנית).', 'זוגי – נגמר ב-0, 2, 4, 6, 8.', 'אי-זוגי – נגמר ב-1, 3, 5, 7, 9.'] };
   } },
   { t: 'דיאגרמת עמודות', g() {
     const kinds = ['כלב', 'חתול', 'דג', 'ציפור'];
-    let v; do { v = kinds.map(() => R(2, 9)); } while (new Set(v).size < 4);
+    let v; do { v = kinds.map(() => R(3, 14)); } while (new Set(v).size < 4);
     const s = shuffle([0, 1, 2, 3]), i = v[s[0]] > v[s[1]] ? s[0] : s[1], j = v[s[0]] > v[s[1]] ? s[1] : s[0];
-    return { q: `הדיאגרמה מתארת כמה תלמידים בחרו כל חיית מחמד.${mkBars(v, kinds, 'מספר תלמידים', 1)}`, parts: [
+    return { q: `הדיאגרמה מתארת כמה תלמידים בחרו כל חיית מחמד.${mkBars(v, kinds, 'מספר תלמידים', 2)}`, parts: [
       { l: 'א.', q: 'כמה תלמידים השתתפו בסקר?', k: 'num', a: v.reduce((x, y) => x + y), show: M(v.reduce((x, y) => x + y)) },
       { l: 'ב.', q: `בכמה גדול מספר הבוחרים ב${kinds[i]} ממספר הבוחרים ב${kinds[j]}?`, k: 'num', a: v[i] - v[j], show: M(v[i] - v[j]) }],
       steps: ['קוראים את גובה כל עמודה מול המספרים בצד.', `סך הכול: ${M(v.join(' + ') + ' = ' + v.reduce((x, y) => x + y))}`, `ההפרש: ${M(`${v[i]} – ${v[j]} = ${v[i] - v[j]}`)}`] };
   } },
   { t: 'צורה והיקף', g() {
-    const w = R(3, 8), h = R(2, 6);
+    const w = R(4, 12), h = R(3, 9);
     return { q: `${mkPoly([[0, 0], [4, 0], [4, 3], [0, 3]], { u: 28, labels: [w, h, w, h].map(x => `${x} ס"מ`) })}`, parts: [
       { l: 'א.', q: 'כמה צלעות לצורה, ומה שמה?', k: 'choice', pl: true, opts: ['משולש', 'מרובע', 'מחומש'], a: 1, show: 'מרובע (4 צלעות)' },
       { l: 'ב.', q: 'מה היקף הצורה?', k: 'num', a: 2 * (w + h), show: M(2 * (w + h)), unit: 'ס"מ' }],
