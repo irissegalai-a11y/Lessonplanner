@@ -716,7 +716,7 @@
     /* דף הבית – כותרת עם חתימה, ותוכן עניינים במקום כרטיסים */
     .hero-wrap { text-align: center; position: relative; isolation: isolate; }
     .hero-wrap::before { content: ''; position: absolute; top: -4px; left: 50%; width: 360px; max-width: 90%; height: 92px; transform: translateX(-50%); background: rgba(127, 168, 214, 0.34); border-radius: 48% 52% 44% 56% / 58% 42% 60% 40%; filter: url(#wcwash); z-index: -1; }
-    .hero { display: inline-block; margin: 10px auto 0; font-size: 2.6rem; }
+    .hero { display: inline-block; margin: 6px auto 0; font-size: 2.3rem; }
     .doodle-line { display: block; margin: 0 auto; }
     .sig { font-family: var(--hand); font-size: 1.15rem; display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 4px; }
     .topics { display: flex; flex-direction: column; gap: 0; }
@@ -1319,8 +1319,13 @@
     .lp-nav button, .lp-bar #lpEnd { padding: 6px 12px; font-size: 1rem; }
   }
   @media (max-width: 640px) { .jeo-board { gap: 5px; } .jeo-cell { box-shadow: 2px 2px 0 #1f1e1c; } .jeo-head { min-height: 52px; } .jeo-team { min-width: 110px; } }
-  .gbar { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin: 12px 0 4px; font-size: 1.2rem; }
-  .gbar b { font-size: 1.45rem; }
+  .gbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; margin: 10px 0 12px; font-size: 1.1rem; }
+  .gbar .gname b { font-size: 1.3rem; }
+  .gbar .gswitch { font-size: 0.95rem; padding: 4px 12px; box-shadow: 2px 2px 0 #1f1e1c; }
+  .gbar .gswitch svg { width: 17px; height: 17px; }
+  .gbar .gme { font: inherit; font-size: 0.95rem; padding: 4px 12px; border: 2px dashed #8a8478; border-radius: 999px; background: #fffdf8; color: #3d3a33; box-shadow: none; cursor: pointer; }
+  .gbar .tch-btns, .gbar .pvw-bar { flex-basis: 100%; }
+  .name-mini[hidden], .gbar .gme[hidden] { display: none; }
   .gswitch { display: inline-flex; align-items: center; gap: 8px; color: #1f1e1c; background: #fffdf8; font-weight: 700; font-size: 1.2rem; text-decoration: none; border: 2.5px solid #1f1e1c; border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px; padding: 8px 18px; box-shadow: 3px 4px 0 #1f1e1c; font-family: 'Playpen Sans Hebrew', 'Assistant', cursive; }
   .gswitch:hover, .gswitch:focus-visible { background: #fff; transform: translate(-1px, -1px); box-shadow: 4px 5px 0 #1f1e1c; outline: none; }
   .gswitch svg { width: 22px; height: 22px; }
@@ -1717,7 +1722,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קפז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קפח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8098,13 +8103,11 @@ function home() {
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
     ...(T ? [] : [{ id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' }, { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }]),
     ...(T ? [
-      { id: 'lp', label: 'בונים שיעור', icon: 'clock', wash: 'rgba(196,170,140,0.30)', go: 'lpTop', grp: 'למורה' },
-      { id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' },
-      { id: 'succ', label: 'מבדקי הצלחה', icon: 'star', wash: 'rgba(242,201,76,0.32)', go: 'succTab' },
-      { id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' },
-      { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
+      { id: 'teach', label: 'אזור המורה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)', grp: 'למורה' }
     ] : [])
   ];
+  // במצב מורה "בכיתה" ו"הדפסה" נמצאים בתוך אזור המורה (גם לכפתורי "חזרה" ישנים)
+  if (T && (homeTab === 'class' || homeTab === 'print')) homeTab = 'teach';
   if (!tabs.some(t => t.id === homeTab && !t.go)) homeTab = 'practice';
   app.innerHTML = `
     <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
@@ -8113,13 +8116,13 @@ function home() {
       <svg class="doodle-line" aria-hidden="true" width="300" height="14" viewBox="0 0 300 14"><path d="M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"></path></svg>
       <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
-    <div class="subtitle">${SUBTITLE}</div>
-    ${NEUTRAL ? '' : `<div class="gbar"><span>אתם מתרגלים: <b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${SEM_ON ? `<span class="semsw" role="group" aria-label="מחצית הלימוד">מחצית: <button type="button" class="semx${SEM === 1 ? ' on' : ''}" data-sem="1">א׳</button><button type="button" class="semx${SEM === 2 ? ' on' : ''}" data-sem="2">ב׳</button></span>` : ''}${teacherOn() ? '<span class="tch-btns"><button type="button" class="pvw-btn" id="guideBtn">❓ איך משתמשים?</button><button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button></span>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
+    ${NEUTRAL ? `<div class="subtitle">${SUBTITLE}</div>` : ''}
+    ${NEUTRAL ? '' : `<div class="gbar"><span class="gname"><b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${SEM_ON ? `<span class="semsw" role="group" aria-label="מחצית הלימוד">מחצית: <button type="button" class="semx${SEM === 1 ? ' on' : ''}" data-sem="1">א׳</button><button type="button" class="semx${SEM === 2 ? ' on' : ''}" data-sem="2">ב׳</button></span>` : ''}${name ? `<button type="button" class="gme" id="nmEdit" title="שינוי השם">👋 ${esc(name)} ✎</button>` : ''}${teacherOn() ? '<span class="tch-btns"><button type="button" class="pvw-btn" id="guideBtn">❓ איך משתמשים?</button><button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button></span>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
     ${PRESET ? `<div class="card banner today">
       <div><div class="today-k">הוכן בשבילך</div><div class="today-t">${presetLabel(PRESET)}${PRESET.count && PRESET.topic && !PRESET.topic.startsWith('test') ? ` · ${PRESET.count} שאלות` : ''}</div></div>
       <button id="presetGo">התחילו ←</button>
     </div>` : ''}
-    <div class="name-row name-mini"><label for="nm">השם שלי:</label><input id="nm" value="${esc(name)}" placeholder="כתבו את השם שלכם" autocomplete="off"></div>
+    <div class="name-row name-mini"${name ? ' hidden' : ''}><label for="nm">השם שלי:</label><input id="nm" value="${esc(name)}" placeholder="כתבו את השם שלכם" autocomplete="off"></div>
     <div class="topic-search">
       <input id="topicSearch" type="search" placeholder="🔎 חיפוש נושא (למשל: שברים, זוויות, עיגול...)" autocomplete="off" aria-label="חיפוש נושא" data-raw>
       <div class="ts-results" id="tsResults" hidden></div>
@@ -8252,8 +8255,15 @@ function home() {
             <span class="gc-ds">משרטטים צורות על רשת נקודות – והאתר מחשב שטח והיקף. יש גם משימות!</span>
           </button>
         </section>
-        ${teacherOn() ? `<section class="panel" data-panel="class" ${homeTab === 'class' ? '' : 'hidden'}>
-          <h2>בכיתה – מקרינים על הלוח</h2>
+        ${T ? `<section class="panel" data-panel="teach" ${homeTab === 'teach' ? '' : 'hidden'}>
+          <h2>אזור המורה</h2>
+          <h3 class="games-sub">מתכננים שיעור</h3>
+          <button class="game-card" id="lpTop">
+            <span class="gc-ic" style="--gw:rgba(196,170,140,0.7)">${ic('clock')}</span>
+            <span class="gc-nm">בונים שיעור</span>
+            <span class="gc-ds">בוחרים נושא ואורך – ומקבלים מערך מוכן: פתיח, משחקון, לימוד, תרגול וסיכום.</span>
+          </button>
+          <h3 class="games-sub">בכיתה – מקרינים על הלוח</h3>
           <button class="game-card" id="clsOpen">
             <span class="gc-ic" style="--gw:rgba(239,201,106,0.7)">${ic('bulb')}</span>
             <span class="gc-nm">פתיח שיעור</span>
@@ -8264,8 +8274,25 @@ function home() {
             <span class="gc-nm">משחק לכל הכיתה</span>
             <span class="gc-ds">ג'פרדי, כיבוש שטחים, מיליונר, מלחמה ובינגו – בקבוצות.</span>
           </button>
-        </section>` : ''}
-        <section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
+          <h3 class="games-sub">בודקים מה למדו</h3>
+          <button class="game-card" id="succTab">
+            <span class="gc-ic" style="--gw:rgba(242,201,76,0.7)">${ic('star')}</span>
+            <span class="gc-nm">מבדקי הצלחה</span>
+            <span class="gc-ds">עד 5 תרגילים קצרים על מיומנות אחת.</span>
+          </button>
+          <button class="game-card" id="exitTab">
+            <span class="gc-ic" style="--gw:rgba(150,190,220,0.7)">${ic('note')}</span>
+            <span class="gc-nm">כרטיס יציאה</span>
+            <span class="gc-ds">"מה למדנו היום?" – כמה שאלות קצרות בסוף השיעור.</span>
+          </button>
+          <h3 class="games-sub">הדפסה</h3>
+          <div class="print-links">
+            <a class="btnlink printlink" href="${gq('print')}">${ic('printer')} דפי תרגול ומבחנים<span class="desc">לפי נושאים ורמה, עם דף תשובות</span></a>
+            <a class="btnlink printlink" href="${gq('print')}#book">${ic('booklet')} חוברות לפי נושאים<span class="desc">עם תוכן עניינים, דף תשובות וקוד חוברת</span></a>
+            <a class="btnlink printlink" href="${gq('print')}#wp">${ic('note')} שאלות מילוליות<span class="desc">בוחרים פעולות וסוג מספרים, מהקל אל הקשה</span></a>
+            ${GRADE >= 5 && teacherOn() ? `<button type="button" class="btnlink printlink" id="cmpSheetP">${ic('printer')} שטחים מורכבים – דף עבודה ופתקי יציאה<span class="desc">6 צורות על רשת משבצות, דף תשובות ו-4 פתקי יציאה בעמוד</span></button>` : ''}
+          </div>
+        </section>` : `<section class="panel" data-panel="print" ${homeTab === 'print' ? '' : 'hidden'}>
           <h2>הדפסה</h2>
           <div class="print-links">
             <a class="btnlink printlink" href="${gq('print')}">${ic('printer')} דפי תרגול ומבחנים<span class="desc">לפי נושאים ורמה, עם דף תשובות</span></a>
@@ -8273,7 +8300,7 @@ function home() {
             <a class="btnlink printlink" href="${gq('print')}#wp">${ic('note')} שאלות מילוליות<span class="desc">בוחרים פעולות וסוג מספרים, מהקל אל הקשה</span></a>
             ${GRADE >= 5 && teacherOn() ? `<button type="button" class="btnlink printlink" id="cmpSheetP">${ic('printer')} שטחים מורכבים – דף עבודה ופתקי יציאה<span class="desc">6 צורות על רשת משבצות, דף תשובות ו-4 פתקי יציאה בעמוד</span></button>` : ''}
           </div>
-        </section>
+        </section>`}
       </div>
     </div>
   `;
@@ -8311,6 +8338,7 @@ function home() {
     home();
   };
   $('fontBtn').onclick = cycleFont;
+  if ($('nmEdit')) $('nmEdit').onclick = () => { const r = app.querySelector('.name-mini'); r.hidden = false; $('nmEdit').hidden = true; $('nm').focus(); };
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
   app.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
     store.roundLen = Number(b.dataset.len); saveStore(store);
