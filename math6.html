@@ -1655,6 +1655,14 @@
   .mk-cover .mk-hdr { display: flex; justify-content: space-between; font-weight: 700; }
   .mk-print .mkq { break-inside: avoid; margin-bottom: 16px; }
   .mk-print .mk-h { font-size: 1.05rem; text-decoration: underline; }
+  .mk-pts { font-weight: 600; color: #4c5fd5; text-decoration: none; font-size: 0.9em; }
+  .mk-rubric { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.95rem; }
+  .mk-rubric th, .mk-rubric td { border: 1px solid #333; padding: 5px 8px; text-align: right; vertical-align: top; }
+  .mk-rubric th { background: #eef0ff; }
+  .mk-rubric th:first-child, .mk-rubric td:first-child { text-align: center; width: 3em; font-weight: 700; }
+  .mk-rubric th:last-child, .mk-rubric td:last-child { text-align: center; width: 5em; white-space: nowrap; }
+  .mk-rubric .mk-tot td { font-weight: 800; background: #f7f8ff; }
+  .mk-rubric .mk-ans { line-height: 1.6; }
   .m22v.hid { display: none; }
   .m22long { font-family: monospace; font-size: 1.3rem; border-collapse: collapse; margin: 0 auto; }
   .m22long td { width: 1.1em; text-align: center; padding: 0 1px; }
@@ -1688,7 +1696,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -11732,11 +11740,22 @@ function mkPartHTML(p, pi, mode) {
   h += `<div class="mk-fb" data-fb="${pi}"></div></div>`;
   return h;
 }
-function mkQHTML(q, mode, num) {
+function mkQHTML(q, mode, num, pts) {
   const print = mode === 'print';
   const stem = print && q.printQ ? q.printQ : q.q;
   const fig = print ? (q.figPrint || q.fig) : q.fig;
-  return `<div class="mkq"><h3 class="mk-h">שאלה ${num}</h3>${stem ? `<div class="mk-stem">${stem}</div>` : ''}${fig ? `<div class="mk-figbox">${fig()}</div>` : ''}${print && q.printNoParts ? '' : q.parts.map((p, pi) => mkPartHTML(p, pi, mode)).join('')}</div>`;
+  return `<div class="mkq"><h3 class="mk-h">שאלה ${num}${pts ? ` <span class="mk-pts" data-raw>(${pts} נק׳)</span>` : ''}</h3>${stem ? `<div class="mk-stem">${stem}</div>` : ''}${fig ? `<div class="mk-figbox">${fig()}</div>` : ''}${print && q.printNoParts ? '' : q.parts.map((p, pi) => mkPartHTML(p, pi, mode)).join('')}</div>`;
+}
+// ניקוד לכל שאלה (סה"כ 100), משוקלל לפי מספר הסעיפים/תשובות
+function mkPoints(qs) {
+  const cells = p => p.k === 'fill' && Array.isArray(p.a) ? p.a.length : (p.k === 'multi' && Array.isArray(p.a) ? Math.max(1, p.a.length) : 1);
+  const w = qs.map(q => q.parts.reduce((s, p) => s + cells(p), 0)), tot = w.reduce((a, b) => a + b, 0);
+  const pts = w.map(x => Math.max(1, Math.round(100 * x / tot)));
+  let diff = 100 - pts.reduce((a, b) => a + b, 0);
+  // מתקנים את ההפרש על השאלות הגדולות ביותר כדי שהסכום יהיה בדיוק 100
+  const order = pts.map((_, i) => i).sort((a, b) => w[b] - w[a]);
+  for (let k = 0; diff !== 0 && k < order.length * 4; k++) { const i = order[k % order.length]; if (diff > 0) { pts[i]++; diff--; } else if (pts[i] > 1) { pts[i]--; diff++; } }
+  return pts;
 }
 function mkHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('mock');
@@ -11854,8 +11873,13 @@ function mkPrintView() {
   const cover = `<div class="mk-cover"><div class="mk-hdr"><span>${GRADE_NAME[GRADE]}</span><span>מבחן אימון</span></div>
     <p><b>שם התלמיד/ה:</b> <span class="wsline long"></span> <b>כיתה:</b> <span class="wsline"></span></p>
     <p>תלמידים יקרים,<br>לפניכם <b>מבחן אימון</b> במתמטיקה. לרשותכם 90 דקות.<br>פִּתרו את כל התרגילים וענו על כל השאלות.<br>בחלק מן השאלות הודגשו מילים חשובות. שימו לב למילים אלה.<br>בהצלחה!</p></div>`;
-  const body = `<section class="ws-page mk-print"><div class="wsqs">${cover}${qs.map((q, i) => mkQHTML(q, 'print', i + 1)).join('')}</div></section>`;
-  const key = `<section class="ws-page wskey"><h2>🔑 דף תשובות – מבחן אימון</h2><ol>${qs.map(q => `<li>${q.parts.map(p => `${p.l ? p.l + ' ' : ''}${p.show}`).join(' · ')}</li>`).join('')}</ol></section>`;
+  const pts = mkPoints(qs);
+  const body = `<section class="ws-page mk-print"><div class="wsqs">${cover}${qs.map((q, i) => mkQHTML(q, 'print', i + 1, pts[i])).join('')}</div></section>`;
+  const key = `<section class="ws-page wskey"><h2>🔑 מחוון – מבחן אימון (${GRADE_NAME[GRADE]})</h2>
+    <table class="mk-rubric"><thead><tr><th>שאלה</th><th>תשובה</th><th data-raw>ניקוד</th></tr></thead>
+    <tbody>${qs.map((q, i) => `<tr><td>${i + 1}</td><td class="mk-ans">${q.parts.map(p => `${p.l ? '<b>' + p.l + '</b> ' : ''}${p.show}`).join(' · ')}</td><td data-raw>${pts[i]} נק׳</td></tr>`).join('')}
+    <tr class="mk-tot"><td colspan="2">סה״כ</td><td data-raw>100 נק׳</td></tr></tbody></table>
+    <p class="small muted">בשאלה עם כמה סעיפים אפשר לתת ניקוד חלקי – חלקים שווים לכל סעיף.</p></section>`;
   app.innerHTML = `
     <div class="topbar noprint"><span class="title">${ic('printer')} מבחן אימון להדפסה – ${GRADE_NAME[GRADE]}</span><button class="secondary" id="mkBack">← חזרה</button></div>
     <div class="card noprint"><p>מבחן באותו מבנה ובאותו סגנון כמו המבחן – עם מספרים חדשים. בסוף יש דף תשובות.</p>
