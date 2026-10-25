@@ -1696,7 +1696,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קפ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -16076,11 +16076,7 @@ const SC_SEQ = { name: 'סדרות', skills: {
         const mul = type === 'mul' || (type === 'mix' && j % 2 === 1);
         if (mul) {
           const k = max > 1000 ? pick([2, 3, 4]) : pick([2, 3]);
-          const maxS0 = Math.min(Math.max(2, Math.floor(max / Math.pow(k, 4))), 9);
-          // s0 ≥ 2 ושאינו חזקה של k – כדי שתהיה סדרת "כפל ב-k" ולא סדרת חזקות (2, 4, 8, 16…)
-          const isPow = x => { let y = 1; while (y < x) y *= k; return y === x; };
-          const cand = []; for (let v = 2; v <= maxS0; v++) if (!isPow(v)) cand.push(v);
-          const s0 = cand.length ? pick(cand) : (isPow(2) ? 3 : 2);
+          const s0 = R(1, Math.min(Math.max(1, Math.floor(max / Math.pow(k, 4))), 9));
           const seq = [0, 1, 2, 3, 4].map(t => s0 * Math.pow(k, t));
           const holes = i % 2 ? [3, 4] : [4];
           const x = []; seq.forEach((v, t) => { if (t) x.push(','); x.push(holes.includes(t) ? { b: 1 } : fmt(v)); });
