@@ -1164,6 +1164,16 @@
     .bn-sheet .bn-item:hover { background: #eef4fb; transform: none; }
     .bn-sheet .bn-item .ico { width: 22px; height: 22px; }
   }
+  .cont { margin: 0 0 16px; padding: 16px 20px; }
+  .cont .today-t { font-size: 1.45rem; }
+  .cont button { font-size: 1.15rem; padding: 10px 22px; }
+  .mmeter { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .mm-st { font-size: 0.95rem; padding: 4px 10px; border: 2px dashed #b9b3a6; border-radius: 999px; color: #8a8478; background: #fffdf8; white-space: nowrap; }
+  .mm-st.on { border-style: solid; border-color: var(--c, #1f1e1c); color: #1f1e1c; }
+  .mm-st.cur { background: color-mix(in srgb, var(--c, #e0a800) 18%, #fff); font-weight: 700; box-shadow: 2px 2px 0 #1f1e1c; }
+  .mm-ln { flex: 0 1 18px; min-width: 8px; height: 2px; background: #b9b3a6; }
+  .mm-next { font-size: 0.95rem; color: #5f5a50; }
+  @media (max-width: 420px) { .mmeter { gap: 4px; flex-wrap: nowrap; } .mm-st { font-size: 0.82rem; padding: 3px 7px; } .mm-ln { flex-basis: 10px; min-width: 6px; } }
   .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 4px; }
   .tool-row .tool-chip { font: inherit; font-size: 0.95rem; padding: 5px 12px; border: 2px solid #1f1e1c; border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; }
   .tool-row .tool-chip:hover { background: #eef6f0; }
@@ -1760,7 +1770,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7457,6 +7467,7 @@ let lessonView = null;
 
 function startLesson(id, k = 0) {
   if (!k) track('למידה', (LESSONS[id] && (LESSONS[id].title || LESSONS[id].name)) || id);
+  store.last = { k: 'l', id, at: Date.now() }; saveStore(store);
   navPush('view');
   state = null;
   stopSpeak();
@@ -7610,7 +7621,15 @@ function tstat(id) {
   return store.topics[id] = store.topics[id] || { mastery: 0, level: 1 };
 }
 function masteryLabel(m) {
-  return m >= 80 ? '●●● שולטים' : m >= 40 ? '●●○ מתקדמים' : m > 0 ? '●○○ בדרך' : 'עוד לא התחלנו';
+  return m >= 80 ? '🏆 אלופים' : m >= 40 ? '🥈 מתקדמים' : m > 0 ? '🥉 מתחילים' : 'עוד לא התחלנו';
+}
+// מד שליטה בשלושה שלבים (מתחילים ← מתקדמים ← אלופים) ומה חסר לשלב הבא
+function masteryMeter(m) {
+  const st = m >= 80 ? 3 : m >= 40 ? 2 : m > 0 ? 1 : 0;
+  const steps = [['🥉', 'מתחילים'], ['🥈', 'מתקדמים'], ['🏆', 'אלופים']];
+  const next = st === 0 ? 'פותרים כמה שאלות – וכבר מתחילים!' : st === 1 ? `עוד ${40 - m} נקודות לשלב "מתקדמים"` : st === 2 ? `עוד ${80 - m} נקודות לשלב "אלופים"` : 'כל הכבוד! אתם אלופים בנושא הזה 🎉';
+  return `<div class="mmeter" role="img" aria-label="שלב: ${st ? steps[st - 1][1] : 'עוד לא התחלנו'}">${steps.map((x, i) => `<span class="mm-st${st > i ? ' on' : ''}${st === i + 1 ? ' cur' : ''}">${x[0]} ${x[1]}</span>`).join('<span class="mm-ln" aria-hidden="true"></span>')}</div>
+    <div class="mm-next">${next}</div>`;
 }
 
 /* =========================================================
@@ -8146,6 +8165,7 @@ function home() {
   ];
   // במצב מורה "בכיתה" ו"הדפסה" נמצאים בתוך אזור המורה (גם לכפתורי "חזרה" ישנים)
   if (T && (homeTab === 'class' || homeTab === 'print')) homeTab = 'teach';
+  const cont = !PRESET && !T ? contCard() : null;
   const BN_MAIN = ['practice', 'games', 'tests', 'teach'];
   const bnMain = tabs.filter(t => BN_MAIN.includes(t.id)), bnMore = tabs.filter(t => !BN_MAIN.includes(t.id));
   if (!tabs.some(t => t.id === homeTab && !t.go)) homeTab = 'practice';
@@ -8174,6 +8194,10 @@ function home() {
       <div class="panels">
         <section class="panel" data-panel="practice" ${homeTab === 'practice' ? '' : 'hidden'}>
           <h2>נושאים – לומדים ומתרגלים</h2>
+          ${cont ? `<div class="card banner today cont">
+            <div><div class="today-k">${cont.k}</div><div class="today-t">${cont.t}</div><div class="today-d">${cont.d}</div></div>
+            <button type="button" id="contGo">${cont.btn} ←</button>
+          </div>` : ''}
           ${champCard()}
           <div class="topics">
             ${TOPICS.map((t, i) => {
@@ -8444,6 +8468,7 @@ function home() {
   if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
+  if (cont) $('contGo').onclick = cont.go;
 }
 // פירורי לחם: "כיתה ד' › נושא › רמה" – כל חלק (פרט לאחרון) לחיץ
 function crumbs(topicId, last) {
@@ -8490,8 +8515,8 @@ function topicHome(id) {
     </div>
     <div class="card tp-head" style="--c:${t.color}">
       <div class="ds">${t.desc}</div>
+      ${masteryMeter(m)}
       <div class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></div>
-      <div class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}</div>
     </div>
     ${ls.length ? `<section class="card tp-step">${step('ללמוד – כרטיסיות הסבר')}
       <div class="tp-lessons">${ls.map(l => { const L = LESSONS[l], k = learnedSet(l).size, all = cardsOf(l).length; return `<button type="button" class="tp-lesson" data-tl="${l}"><b>📖 ${L.name}</b><span class="muted">${k ? `✔ ${k} מתוך ${all}` : `${all} כרטיסיות`}</span></button>`; }).join('')}</div>
@@ -8528,18 +8553,36 @@ function topicHome(id) {
 let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
 
 // "מה עושים היום?" – הצעה אחת ברורה לצעד הבא
+// "ממשיכים מאיפה שהפסקתי": הפעילות האחרונה (כרטיסיות או תרגול בנושא), ואם אין – הצעה להיום
+function contCard() {
+  const L = store.last, fresh = L && Date.now() - L.at < 30 * 864e5;
+  const k = 'ממשיכים מאיפה שהפסקתי';
+  if (fresh && L.k === 'l' && LESSONS[L.id] && LESSON_ORDER.includes(L.id)) {
+    const all = cardsOf(L.id).length, done = learnedSet(L.id), tid = lessonTopic(LESSONS[L.id]);
+    if (done.size < all) {
+      const at = [...Array(all).keys()].find(i => !done.has(i)) || 0;
+      return { k, t: `📖 ${LESSONS[L.id].name}`, d: `כרטיסיות הסבר · ${done.size} מתוך ${all}`, btn: 'להמשיך', go: () => { topicBack = TOPIC[tid] ? tid : null; startLesson(L.id, at); } };
+    }
+    if (TOPIC[tid] && ((store.topics[tid] || {}).mastery || 0) < 80) return { k, t: TOPIC[tid].name, d: 'סיימתם את כרטיסיות ההסבר – עכשיו מתרגלים', btn: 'לתרגל', go: () => topicHome(tid) };
+  }
+  if (fresh && L.k === 't' && TOPIC[L.id]) {
+    const st = store.topics[L.id] || {};
+    if ((st.mastery || 0) < 80) return { k, t: TOPIC[L.id].name, d: `${masteryLabel(st.mastery || 0)} · ${LEVEL_NAME[st.level || 1]}`, btn: 'להמשיך', go: () => topicHome(L.id) };
+  }
+  return Object.assign({ k: 'מה עושים היום?' }, todaySuggestion());
+}
 function todaySuggestion() {
   if (GRADE >= 3 && kf.placed && kf.lastDay !== kfToday()) return { t: 'אימון כפל – 5 דקות', d: 'עובדות חדשות, וחזרה על מה שעוד קשה', btn: 'לאימון', go: kfHome };
   const started = TOPICS.filter(t => store.topics[t.id]);
   const learned = LESSON_ORDER.some(id => learnedSet(id).size);
   if (!started.length && !learned) {
     const L = LESSONS[LESSON_ORDER[0]];
-    return { t: `מתחילים: ${L.name}`, d: 'כמה כרטיסיות הסבר קצרות, ואחר כך תרגול', btn: 'להתחיל', go: () => startLesson(L.id) };
+    return { t: `מתחילים: ${L.name}`, d: 'כמה כרטיסיות הסבר קצרות, ואחר כך תרגול', btn: 'להתחיל', go: () => { const tid = lessonTopic(L); topicBack = TOPIC[tid] ? tid : null; startLesson(L.id); } };
   }
   const weak = started.map(t => ({ t, m: store.topics[t.id].mastery || 0 })).filter(x => x.m < 80).sort((a, b) => a.m - b.m)[0];
-  if (weak) return { t: `ממשיכים: ${weak.t.name}`, d: `${masteryLabel(weak.m)} · ${LEVEL_NAME[store.topics[weak.t.id].level || 1]}`, btn: 'להמשיך', go: () => showLevelPicker(weak.t.id) };
+  if (weak) return { t: `ממשיכים: ${weak.t.name}`, d: `${masteryLabel(weak.m)} · ${LEVEL_NAME[store.topics[weak.t.id].level || 1]}`, btn: 'להמשיך', go: () => topicHome(weak.t.id) };
   const next = TOPICS.find(t => !store.topics[t.id]);
-  if (next) return { t: `נושא חדש: ${next.name}`, d: next.desc, btn: 'להתחיל', go: () => showLevelPicker(next.id) };
+  if (next) return { t: `נושא חדש: ${next.name}`, d: next.desc, btn: 'להתחיל', go: () => topicHome(next.id) };
   return { t: 'תרגול מעורב', d: 'שאלות מכל הנושאים', btn: 'להתחיל', go: () => showLevelPicker('mix') };
 }
 
@@ -8635,6 +8678,7 @@ function masterySnapshot() {
 
 function startPractice(topicId, opt = {}) {
   navPush('view');
+  if (TOPIC[topicId]) { store.last = { k: 't', id: topicId, at: Date.now() }; saveStore(store); }
   let level = opt.level;
   if (!level) {
     if (topicId === 'mix') {
