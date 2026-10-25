@@ -1314,6 +1314,28 @@
   .sc-now { margin: 10px 0 4px; font-size: 1.1rem; }
   .sc-topics .topic.sc-cur { box-shadow: 0 0 0 3px #f2c94c, 4px 5px 0 #1f1e1c; }
   .sc-modal { max-width: 640px; }
+  .wp-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 10px; }
+  .tform label.chk.wp-chip { flex-direction: row; align-items: center; gap: 6px; padding: 6px 12px; border: 1.5px solid rgba(0,0,0,0.15); border-radius: 999px; background: var(--card, #fff); cursor: pointer; }
+  .wp-chip:has(input:checked) { border-color: #3d7a6e; background: rgba(61,122,110,0.12); }
+  .wp-chip.off { opacity: 0.5; cursor: default; }
+  .wp-4 { list-style: none; padding: 0; margin: 8px 0 14px; display: grid; gap: 8px; }
+  .wp-4 li, .wp-step { display: flex; gap: 10px; align-items: flex-start; }
+  .wp-step { margin: 10px 0; }
+  .wp-n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #3d7a6e; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; }
+  .wp-means { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .wp-mean { border: 1.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 10px 12px; }
+  .wp-mh { font-size: 1.1rem; margin-bottom: 4px; }
+  .wp-warn { margin-top: 6px; color: #8a4b12; }
+  .wp-ntn { margin: 10px 0 0; }
+  .wp-lvrow { margin: 6px 0; }
+  .wp-exlv.sel { outline: 2px solid #3d7a6e; }
+  .wp-ex .exsteps { margin: 6px 0 0; }
+  mark.wp-q { background: rgba(242,201,76,0.45); padding: 0 3px; border-radius: 4px; color: inherit; }
+  .wp-opbtns { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 14px 0; }
+  .wp-opbtns button { font-size: 1.15rem; }
+  .wp-opbtns button.ok { background: #2f8f55; color: #fff; border-color: #2f8f55; }
+  .wp-opbtns button.bad { background: #c0392b; color: #fff; border-color: #c0392b; }
+  .wp-plink { text-align: center; }
   .sc-modal h2 { margin: 4px 0 10px; text-align: center; }
   .sc-sec { margin: 10px 0; }
   .sc-sec > b { display: block; margin-bottom: 6px; }
@@ -1666,7 +1688,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8015,6 +8037,7 @@ function home() {
   const tabs = [
     { id: 'learn', label: 'ללמוד', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
     { id: 'practice', label: 'לתרגל', icon: 'pencil', wash: 'rgba(217,138,154,0.28)' },
+    { id: 'wp', label: 'שאלות מילוליות', icon: 'note', wash: 'rgba(120,180,160,0.30)' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
@@ -8110,6 +8133,7 @@ function home() {
           </div>
           <p class="muted">באימון: מפה אישית של לוח הכפל, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
         </section>` : ''}
+        ${wpPanelHTML()}
         <section class="panel" data-panel="tests" ${homeTab === 'tests' ? '' : 'hidden'}>
           <h2>${GRADE === 6 ? 'מבדקים' : 'מבחנים'}</h2>
           <div class="big-actions">
@@ -8192,6 +8216,7 @@ function home() {
           <div class="print-links">
             <a class="btnlink printlink" href="${gq('print')}">${ic('printer')} דפי תרגול ומבחנים<span class="desc">לפי נושאים ורמה, עם דף תשובות</span></a>
             <a class="btnlink printlink" href="${gq('print')}#book">${ic('booklet')} חוברות לפי נושאים<span class="desc">עם תוכן עניינים, דף תשובות וקוד חוברת</span></a>
+            <a class="btnlink printlink" href="${gq('print')}#wp">${ic('note')} שאלות מילוליות<span class="desc">בוחרים פעולות וסוג מספרים, מהקל אל הקשה</span></a>
             ${GRADE >= 5 && teacherOn() ? `<button type="button" class="btnlink printlink" id="cmpSheetP">${ic('printer')} שטחים מורכבים – דף עבודה ופתקי יציאה<span class="desc">6 צורות על רשת משבצות, דף תשובות ו-4 פתקי יציאה בעמוד</span></button>` : ''}
           </div>
         </section>
@@ -8210,6 +8235,7 @@ function home() {
     }
   });
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
+  wpBind();
   $('raceGo').onclick = () => raceHome();
   $('memGo').onclick = () => memHome();
   $('milGo').onclick = () => milHome();
@@ -14048,6 +14074,7 @@ function printBuilder() {
         <div class="actions"><button class="secondary" id="drgo">📝 יצירת דף תרגילים</button></div>
         <p class="muted small" id="drmsg"></p>
       </div>
+      ${wpPrintCard()}
       ${GRADE <= 2 ? `<div class="card tform">
         <h2>🔟 חשבון בעל-פה עד 20 – לכיתה</h2>
         <p class="muted small"><b>אתגר דקה:</b> 40 תרגילים בדף – כמה תספיקו נכון בדקה? <b>דף תאומים:</b> שלושה חלקים – תאומים, חיסור תאומים וכמעט תאומים. (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
@@ -14159,6 +14186,7 @@ function printBuilder() {
   });
   $('wprint').onclick = () => window.print();
   const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
+  wpPrintBind(kfOut);
   if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: דף אתגר דקה') && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked)));
   $('drgo').onclick = () => {
     const ids = [...app.querySelectorAll('.drtopics input:checked')].map(x => x.value);
@@ -14700,6 +14728,602 @@ function kfPrintChallenge(versions, key) {
     if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – אתגר דקה${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h2><div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} = ${a * b}`)}</div>`).join('')}</div></section>`);
   }
   return out.join('');
+}
+/* ---------- 📝 שאלות מילוליות: בוחרים פעולות וסוג מספרים, ברמת קושי עולה (לימוד, תרגול והדפסה) ---------- */
+const WP_OPS = [['add', '+', 'חיבור'], ['sub', '-', 'חיסור'], ['mul', '×', 'כפל'], ['div', ':', 'חילוק']];
+const WP_NTS = [['int', 'מספרים שלמים'], ['frac', 'שברים פשוטים'], ['dec', 'מספרים עשרוניים']];
+const WP_OPNAME = Object.fromEntries(WP_OPS.map(o => [o[0], o[2]]));
+const WP_SIGN = Object.fromEntries(WP_OPS.map(o => [o[0], o[1]]));
+// מאיזו כיתה כל שילוב פתוח
+const WP_FROM = { int: { add: 1, sub: 1, mul: 2, div: 2 }, frac: { add: 4, sub: 4, mul: 5, div: 6 }, dec: { add: 4, sub: 4, mul: 5, div: 5 } };
+const wpOk = (op, nt) => GRADE >= WP_FROM[nt][op];
+const WP_GNAME = { 1: "א'", 2: "ב'", 3: "ג'", 4: "ד'", 5: "ה'", 6: "ו'" };
+function wpCfg() {
+  let c = null;
+  try { c = JSON.parse(localStorage.getItem('math-wp') || 'null'); } catch (e) { /* לא חובה */ }
+  c = c || {};
+  const ops = (c.ops || ['add', 'sub', 'mul', 'div']).filter(o => WP_OPNAME[o]);
+  const nts = (c.nts || ['int']).filter(n => WP_FROM[n]);
+  return { ops: ops.length ? ops : ['add'], nts: nts.length ? nts : ['int'], lv: [1, 2, 3].includes(c.lv) ? c.lv : 1 };
+}
+function wpSave(c) { try { localStorage.setItem('math-wp', JSON.stringify(c)); } catch (e) { /* לא חובה */ } }
+// השילובים (פעולה × סוג מספר) שאפשר בכיתה הזו
+const wpCombos = c => c.ops.flatMap(op => c.nts.filter(nt => wpOk(op, nt)).map(nt => [op, nt]));
+
+const WP_PEOPLE = [['דנה', 'f'], ['יואב', 'm'], ['מאיה', 'f'], ['עומר', 'm'], ['נועה', 'f'], ['איתי', 'm'], ['שירה', 'f'], ['אורי', 'm'], ['תמר', 'f'], ['אדם', 'm'], ['ליה', 'f'], ['רון', 'm']];
+function wpWho(not) {
+  let p; do { p = pick(WP_PEOPLE); } while (not && p[0] === not.n);
+  return { n: p[0], f: p[1] === 'f', v: (m, f) => (p[1] === 'f' ? f : m) };
+}
+const wpRange = () => ({ 1: [10, 20, 20], 2: [20, 100, 100], 3: [100, 1000, 500], 4: [500, 5000, 1000], 5: [1000, 10000, 2000], 6: [1000, 50000, 5000] })[GRADE] || [1000, 10000, 2000];
+const wpMax = lv => wpRange()[lv - 1];
+const big = n => n >= 2000;
+// זוגות מספרים לפי פעולה ורמה
+function wpAdd(max) { const a = R(Math.max(1, Math.ceil(max * 0.15)), Math.floor(max * 0.6)), b = R(Math.max(1, Math.ceil(max * 0.1)), max - a); return [a, b]; }
+function wpSub(max) { const c = R(Math.ceil(max * 0.45), max), b = R(Math.max(1, Math.ceil(c * 0.15)), c - 1); return [c, b]; }
+// [גודל קבוצה, מספר קבוצות]
+function wpMul(lv) {
+  const g = GRADE;
+  if (g <= 2) return lv === 1 ? [R(2, 5), R(2, 5)] : [R(2, 10), R(2, 10)];
+  if (g === 3) return lv === 1 ? [R(2, 10), R(2, 10)] : [R(12, 48), R(2, 6)];
+  if (g === 4) return lv === 1 ? [R(12, 60), R(2, 9)] : [R(105, 480), R(2, 9)];
+  return lv === 1 ? [R(12, 85), R(3, 9)] : [R(12, 65), R(11, 35)];
+}
+// [מחולק, מחלק, מנה]
+function wpDiv(lv) {
+  const g = GRADE;
+  let b, c;
+  if (g <= 2) { b = lv === 1 ? R(2, 5) : R(2, 10); c = lv === 1 ? R(2, 5) : R(2, 10); }
+  else if (g === 3) { b = R(2, lv === 1 ? 10 : 6); c = lv === 1 ? R(2, 10) : R(11, 30); }
+  else if (g === 4) { b = R(3, 9); c = lv === 1 ? R(11, 30) : R(21, 160); }
+  else { b = lv === 1 ? R(3, 9) : R(11, 25); c = lv === 1 ? R(21, 160) : R(4, 40); }
+  return [b * c, b, c];
+}
+const wpNum = (o) => Object.assign({ type: 'num', word: true }, o);
+const wpEq = (s) => M(s);
+
+/* ===== מספרים שלמים ===== */
+function wpIntAdd(lv) {
+  const max = wpMax(lv), [a, b] = wpAdd(max), s = a + b, w = wpWho(), w2 = wpWho(w), sm = max <= 1000;
+  if (lv === 1) {
+    const T = [
+      () => [`בבוקר נכנסו לפארק ${fmt(a)} מבקרים, ואחר הצהריים נכנסו עוד ${fmt(b)} מבקרים.<br>כמה מבקרים נכנסו לפארק באותו יום?`, 'מבקרים'],
+      () => [`בספרייה היו ${fmt(a)} ספרים. הספרייה קיבלה עוד ${fmt(b)} ספרים חדשים.<br>כמה ספרים יש עכשיו בספרייה?`, 'ספרים'],
+      ...(sm ? [() => [`${w.n} ${w.v('אסף', 'אספה')} ${a} מדבקות בשבוע הראשון ו-${b} מדבקות בשבוע השני.<br>כמה מדבקות ${w.v('אסף', 'אספה')} בסך הכול?`, 'מדבקות'],
+          () => [`בחווה יש ${a} תרנגולות ו-${b} ברווזים.<br>כמה עופות יש בחווה?`, 'עופות']]
+        : [() => [`מפעל ייצר ${fmt(a)} בקבוקים ביום ראשון ו-${fmt(b)} בקבוקים ביום שני.<br>כמה בקבוקים ייצר המפעל בשני הימים?`, 'בקבוקים'],
+          () => [`מכונית נסעה ${fmt(a)} ק"מ בשנה הראשונה ו-${fmt(b)} ק"מ בשנה השנייה.<br>כמה ק"מ נסעה המכונית בשתי השנים?`, 'ק"מ']])
+    ];
+    const [text, unit] = pick(T)();
+    return wpNum({ ops: ['add'], text, unit, ans: s, hint: 'שני חלקים מצטרפים לשלם אחד – מחברים.', steps: [{ p: wpEq(`${fmt(a)} + ${fmt(b)} =`), a: s }], exp: wpEq(`${fmt(a)} + ${fmt(b)} = ${fmt(s)}`) });
+  }
+  const k = R(0, 2);
+  if (k === 0) return wpNum({ ops: ['add'], unit: 'צפיות', ans: s,
+    text: `לסרטון של ${w.n} יש ${fmt(a)} צפיות. לסרטון של ${w2.n} יש ${fmt(b)} צפיות <b>יותר</b>.<br>כמה צפיות יש לסרטון של ${w2.n}?`,
+    traps: a > b ? [{ v: a - b, m: `לסרטון של ${w2.n} יש <b>יותר</b> צפיות – לכן מחברים.` }] : [],
+    hint: `לסרטון של ${w2.n} יש כמו לסרטון של ${w.n}, ועוד ${fmt(b)}.`, steps: [{ p: wpEq(`${fmt(a)} + ${fmt(b)} =`), a: s }], exp: wpEq(`${fmt(a)} + ${fmt(b)} = ${fmt(s)}`) });
+  if (k === 1) return wpNum({ ops: ['add'], unit: 'נקודות', ans: s,
+    text: `במשחק ${w.n} ${w.v('צבר', 'צברה')} ${fmt(a)} נקודות. זה ${fmt(b)} נקודות <b>פחות</b> ממה ש${w2.v('צבר', 'צברה')} ${w2.n}.<br>כמה נקודות ${w2.v('צבר', 'צברה')} ${w2.n}?`,
+    traps: a > b ? [{ v: a - b, m: `שימו לב: המילה "פחות" מתארת את ${w.n}. ל${w2.n} יש <b>יותר</b> – לכן מחברים.` }] : [],
+    hint: `למי יש יותר נקודות – ל${w.n} או ל${w2.n}?`, steps: [{ p: wpEq(`${fmt(a)} + ${fmt(b)} =`), a: s }], exp: `ל${w2.n} יש יותר: ${wpEq(`${fmt(a)} + ${fmt(b)} = ${fmt(s)}`)}` });
+  return wpNum({ ops: ['add'], unit: '₪', ans: s,
+    text: sm ? `${w.n} ${w.v('הוציא', 'הוציאה')} ${fmt(b)} ₪ על משחק, ו${w.v('נשארו לו', 'נשארו לה')} ${fmt(a)} ₪.<br>כמה כסף היה ל${w.n} לפני הקנייה?`
+      : `העירייה הוציאה ${fmt(b)} ₪ על גן שעשועים, ובקופה נשארו ${fmt(a)} ₪.<br>כמה כסף היה בקופה לפני הבנייה?`,
+    traps: a > b ? [{ v: a - b, m: 'לפני ההוצאה היה יותר כסף מאשר אחריה – לכן מחברים את מה שהוציאו ואת מה שנשאר.' }] : [],
+    hint: 'מה שהיה בהתחלה = מה שהוציאו + מה שנשאר.', steps: [{ p: wpEq(`${fmt(a)} + ${fmt(b)} =`), a: s }], exp: wpEq(`${fmt(b)} + ${fmt(a)} = ${fmt(s)}`) });
+}
+function wpIntSub(lv) {
+  const max = wpMax(lv), [c, b] = wpSub(max), d = c - b, w = wpWho(), w2 = wpWho(w);
+  if (lv === 1) {
+    const T = [
+      () => [`בחנות היו ${fmt(c)} כדורים. נמכרו ${fmt(b)} כדורים.<br>כמה כדורים נשארו בחנות?`, 'כדורים'],
+      () => [`בטיול השתתפו ${fmt(c)} אנשים. ${fmt(b)} מהם היו מבוגרים, והשאר ילדים.<br>כמה ילדים השתתפו בטיול?`, 'ילדים'],
+      () => [`נהג משאית צריך לנסוע ${fmt(c)} ק"מ החודש. עד עכשיו הוא נסע ${fmt(b)} ק"מ.<br>כמה ק"מ נשארו לו לנסוע?`, 'ק"מ'],
+      () => [`במאגר היו ${fmt(c)} ליטרים של מים. השתמשו ב-${fmt(b)} ליטרים.<br>כמה ליטרים נשארו במאגר?`, 'ליטרים']
+    ];
+    const [text, unit] = pick(T)();
+    return wpNum({ ops: ['sub'], text, unit, ans: d, hint: 'מהשלם מורידים חלק – מה שנשאר מוצאים בחיסור.', steps: [{ p: wpEq(`${fmt(c)} - ${fmt(b)} =`), a: d }], exp: wpEq(`${fmt(c)} - ${fmt(b)} = ${fmt(d)}`) });
+  }
+  const k = R(0, 2);
+  if (k === 0) return wpNum({ ops: ['sub'], unit: 'נקודות', ans: d,
+    text: `במשחק מחשב ${w.n} ${w.v('צבר', 'צברה')} ${fmt(c)} נקודות ו${w2.n} ${w2.v('צבר', 'צברה')} ${fmt(b)} נקודות.<br><b>בכמה</b> נקודות יותר ${w.v('צבר', 'צברה')} ${w.n}?`,
+    traps: [{ v: c + b, m: 'השאלה "בכמה יותר" משווה בין שני מספרים – מחפשים את ההפרש, לא את הסכום.' }],
+    hint: 'השוואה – "בכמה יותר?" – פותרים בחיסור: הגדול פחות הקטן.', steps: [{ p: wpEq(`${fmt(c)} - ${fmt(b)} =`), a: d }], exp: wpEq(`${fmt(c)} - ${fmt(b)} = ${fmt(d)}`) });
+  if (k === 1) return wpNum({ ops: ['sub'], unit: 'נקודות', ans: d,
+    text: `המטרה במשחק היא לצבור ${fmt(c)} נקודות. ל${w.n} יש כרגע ${fmt(b)} נקודות.<br>כמה נקודות <b>חסרות</b> ל${w.n} כדי להגיע למטרה?`,
+    traps: [{ v: c + b, m: 'מחפשים כמה חסר עד היעד – זה ההפרש בין היעד למה שיש.' }],
+    hint: `כמה צריך להוסיף ל-${fmt(b)} כדי להגיע ל-${fmt(c)}?`, steps: [{ p: wpEq(`${fmt(c)} - ${fmt(b)} =`), a: d }], exp: wpEq(`${fmt(c)} - ${fmt(b)} = ${fmt(d)}`) });
+  return wpNum({ ops: ['sub'], unit: 'צעדים', ans: d,
+    text: `היום ${w.n} ${w.v('הלך', 'הלכה')} ${fmt(c)} צעדים. זה ${fmt(b)} צעדים <b>יותר</b> ממה ש${w2.n} ${w2.v('הלך', 'הלכה')}.<br>כמה צעדים ${w2.v('הלך', 'הלכה')} ${w2.n}?`,
+    traps: [{ v: c + b, m: `המילה "יותר" מתארת את ${w.n}. ${w2.n} ${w2.v('הלך', 'הלכה')} <b>פחות</b> – לכן מחסרים.` }],
+    hint: `מי ${w.v('הלך', 'הלכה')} פחות? ${w2.n}! כלומר מחסרים.`, steps: [{ p: wpEq(`${fmt(c)} - ${fmt(b)} =`), a: d }], exp: `${w2.n} ${w2.v('הלך', 'הלכה')} פחות: ${wpEq(`${fmt(c)} - ${fmt(b)} = ${fmt(d)}`)}` });
+}
+function wpIntMul(lv) {
+  const [a, b] = wpMul(lv), p = a * b, w = wpWho(), w2 = wpWho(w);
+  if (lv === 1) {
+    const T = [
+      () => [`בכל קופסה יש ${a} עפרונות. יש ${b} קופסאות.<br>כמה עפרונות יש בכל הקופסאות?`, 'עפרונות'],
+      () => [`באולם ${b} שורות, ובכל שורה ${a} כיסאות.<br>כמה כיסאות יש באולם?`, 'כיסאות'],
+      () => [`כרטיס להצגה עולה ${a} ₪. ${w.n} ${w.v('קנה', 'קנתה')} ${b} כרטיסים.<br>כמה ${w.v('שילם', 'שילמה')}?`, '₪']
+    ];
+    const [text, unit] = pick(T)();
+    return wpNum({ ops: ['mul'], text, unit, ans: p, traps: [{ v: a + b, m: 'יש כאן קבוצות שוות – לא מחברים את שני המספרים, אלא כופלים.' }],
+      hint: `${b} קבוצות שוות, בכל אחת ${a}. כפל!`, steps: [{ p: wpEq(`${fmt(a)} × ${b} =`), a: p }], exp: wpEq(`${fmt(a)} × ${b} = ${fmt(p)}`) });
+  }
+  if (R(0, 1)) return wpNum({ ops: ['mul'], unit: 'עמודים', ans: p,
+    text: `${w.n} ${w.v('קרא', 'קראה')} החודש ${fmt(a)} עמודים. ${w2.n} ${w2.v('קרא', 'קראה')} <b>פי ${b}</b> יותר.<br>כמה עמודים ${w2.v('קרא', 'קראה')} ${w2.n}?`,
+    traps: [{ v: a + b, m: `"פי ${b}" פירושו ${b} פעמים הכמות – כפל, לא חיבור.` }],
+    hint: `פי ${b} = ${b} פעמים ${fmt(a)}.`, steps: [{ p: wpEq(`${fmt(a)} × ${b} =`), a: p }], exp: wpEq(`${fmt(a)} × ${b} = ${fmt(p)}`) });
+  return wpNum({ ops: ['mul'], unit: 'סוכריות', ans: p,
+    text: `${w.n} ${w.v('חילק', 'חילקה')} סוכריות שווה בשווה בין ${b} חברים. כל חבר קיבל ${a} סוכריות, ולא נשארו סוכריות.<br>כמה סוכריות היו ל${w.n}?`,
+    traps: [{ v: a + b, m: 'מחפשים את הכמות שהייתה <b>לפני</b> החלוקה – היא גדולה יותר. כמה קיבלו כולם יחד?' }],
+    hint: `${b} חברים, כל אחד קיבל ${a}. כמה קיבלו כולם יחד?`, steps: [{ p: wpEq(`${fmt(a)} × ${b} =`), a: p }], exp: wpEq(`${fmt(a)} × ${b} = ${fmt(p)}`) });
+}
+function wpIntDiv(lv) {
+  const [t, b, c] = wpDiv(lv), w = wpWho(), w2 = wpWho(w);
+  if (lv === 1) {
+    const T = [
+      () => [`${fmt(t)} סוכריות חולקו שווה בשווה בין ${b} ילדים.<br>כמה סוכריות קיבל כל ילד?`, 'סוכריות'],
+      () => [`${b} חברים קנו יחד מתנה ב-${fmt(t)} ₪ ושילמו שווה בשווה.<br>כמה שילם כל אחד?`, '₪'],
+      () => [`המורה סידרה ${fmt(t)} תלמידים ב-${b} קבוצות שוות.<br>כמה תלמידים בכל קבוצה?`, 'תלמידים']
+    ];
+    const [text, unit] = pick(T)();
+    return wpNum({ ops: ['div'], text, unit, ans: c, traps: [{ v: t - b, m: 'מחלקים שווה בשווה – זו פעולת חילוק.' }],
+      hint: `מחלקים ${fmt(t)} ל-${b} חלקים שווים.`, steps: [{ p: wpEq(`${fmt(t)} : ${b} =`), a: c }], exp: wpEq(`${fmt(t)} : ${b} = ${fmt(c)}`) });
+  }
+  const k = R(0, 2);
+  if (k === 0) return wpNum({ ops: ['div'], unit: 'תבניות', ans: c,
+    text: `במאפייה יש ${fmt(t)} ביצים. בכל תבנית נכנסות ${b} ביצים.<br>כמה תבניות מלאות אפשר למלא?`,
+    traps: [{ v: t * b, m: 'מחפשים <b>כמה קבוצות</b> של ' + b + ' יש ב-' + fmt(t) + ' – זה חילוק.' }],
+    hint: `כמה פעמים ${b} "נכנס" ב-${fmt(t)}?`, steps: [{ p: wpEq(`${fmt(t)} : ${b} =`), a: c }], exp: wpEq(`${fmt(t)} : ${b} = ${fmt(c)}`) });
+  if (k === 1) return wpNum({ ops: ['div'], unit: 'גולות', ans: c,
+    text: `ל${w.n} יש ${fmt(t)} גולות. זה <b>פי ${b}</b> יותר ממה שיש ל${w2.n}.<br>כמה גולות יש ל${w2.n}?`,
+    traps: [{ v: t * b, m: `ל${w2.n} יש <b>פחות</b> – ${fmt(t)} הוא פי ${b} מהכמות של ${w2.n}. לכן מחלקים.` }],
+    hint: `איזה מספר כפול ${b} שווה ${fmt(t)}?`, steps: [{ p: wpEq(`${fmt(t)} : ${b} =`), a: c }], exp: wpEq(`${fmt(t)} : ${b} = ${fmt(c)}`) });
+  return wpNum({ ops: ['div'], unit: '', ans: b,
+    text: `${w.n} ${w.v('אסף', 'אספה')} ${fmt(t)} פקקים ו${w2.n} ${w2.v('אסף', 'אספה')} ${fmt(c)} פקקים.<br><b>פי כמה</b> יותר פקקים ${w.v('אסף', 'אספה')} ${w.n}?`,
+    traps: [{ v: t - c, m: '"פי כמה" שואל כמה פעמים מספר אחד נכנס בשני – זה חילוק, לא הפרש.' }],
+    hint: `כמה פעמים ${fmt(c)} נכנס ב-${fmt(t)}?`, steps: [{ p: wpEq(`${fmt(t)} : ${fmt(c)} =`), a: b }], exp: `פי ${wpEq(`${fmt(t)} : ${fmt(c)} = ${b}`)}` });
+}
+// דו-שלביות במספרים שלמים
+function wpInt2(o1, o2) {
+  const key = [o1, o2].sort().join('+'), w = wpWho(), lim = wpMax(2), sm = Math.min(lim, wpMax(3));
+  const two = (text, unit, s1, s2, ans, hint, traps) => wpNum({ ops: [o1, o2], text, unit, ans, hint, traps: traps || [], steps: [s1, s2], exp: `${s1.p.replace(/=\s*<\/span>$/, `= ${fmt(s1.a)}</span>`)}, ואז ${s2.p.replace(/=\s*<\/span>$/, `= ${fmt(s2.a)}</span>`)}` });
+  const S = (e, a) => ({ p: wpEq(`${e} =`), a });
+  if (key === 'add+add') { const [a, b] = wpAdd(sm), c = R(1, Math.max(1, Math.floor(sm * 0.3))); return two(`בתחרות קריאה ${w.n} ${w.v('קרא', 'קראה')} ${fmt(a)} עמודים בשבוע הראשון, ${fmt(b)} עמודים בשבוע השני ו-${fmt(c)} עמודים בשבוע השלישי.<br>כמה עמודים ${w.v('קרא', 'קראה')} בשלושת השבועות?`, 'עמודים', S(`${fmt(a)} + ${fmt(b)}`, a + b), S(`${fmt(a + b)} + ${fmt(c)}`, a + b + c), a + b + c, 'מחברים שניים, ואז מוסיפים את השלישי.'); }
+  if (key === 'sub+sub') { const c = R(Math.ceil(sm * 0.5), sm), b1 = R(1, Math.floor(c * 0.4)), b2 = R(1, Math.floor(c * 0.4)); return two(`ל${w.n} היו ${fmt(c)} מדבקות. ${w.v('הוא', 'היא')} ${w.v('נתן', 'נתנה')} ${fmt(b1)} מדבקות לאח ו-${fmt(b2)} מדבקות לחברה.<br>כמה מדבקות נשארו ל${w.n}?`, 'מדבקות', S(`${fmt(c)} - ${fmt(b1)}`, c - b1), S(`${fmt(c - b1)} - ${fmt(b2)}`, c - b1 - b2), c - b1 - b2, 'מורידים קודם את מה שנתן לאח, ואחר כך את מה שנתן לחברה.', [{ v: c - b1, m: 'שכחתם להוריד גם את מה שניתן לחברה.' }]); }
+  if (key === 'add+sub') { const [a, b] = wpAdd(sm), u = R(Math.max(1, Math.floor((a + b) * 0.2)), a + b - 1); return two(`בספרייה הכיתתית היו ${fmt(a)} ספרים. הגיעו עוד ${fmt(b)} ספרים, ואחר כך התלמידים שאלו ${fmt(u)} ספרים.<br>כמה ספרים נשארו על המדף?`, 'ספרים', S(`${fmt(a)} + ${fmt(b)}`, a + b), S(`${fmt(a + b)} - ${fmt(u)}`, a + b - u), a + b - u, 'קודם כמה ספרים היו אחרי שהגיעו החדשים, ואז מורידים את מה שנשאל.', [{ v: a + b, m: 'זה מספר הספרים לפני שהתלמידים שאלו. כמה נשארו?' }]); }
+  if (key === 'mul+mul') { const x = R(2, 6), y = R(2, GRADE <= 3 ? 5 : 8), z = R(2, GRADE <= 3 ? 5 : 12); return two(`במחסן ${x} ארגזים. בכל ארגז ${y} חבילות, ובכל חבילה ${z} עטים.<br>כמה עטים יש במחסן?`, 'עטים', S(`${x} × ${y}`, x * y), S(`${x * y} × ${z}`, x * y * z), x * y * z, 'קודם כמה חבילות יש בסך הכול, ואז כמה עטים.'); }
+  if (key === 'div+div') { const b = R(2, 5), z = R(2, 5), k = R(2, GRADE <= 3 ? 5 : 12), t = b * z * k; return two(`${fmt(t)} תמונות חולקו שווה בשווה בין ${b} ילדים. כל ילד סידר את התמונות שלו שווה בשווה ב-${z} עמודים באלבום.<br>כמה תמונות יש בכל עמוד?`, 'תמונות', S(`${fmt(t)} : ${b}`, z * k), S(`${z * k} : ${z}`, k), k, 'קודם כמה תמונות קיבל כל ילד, ואז מחלקים לעמודים.'); }
+  if (key === 'add+mul') { const x = R(2, 6), p = R(3, GRADE <= 3 ? 9 : 25), q = R(5, GRADE <= 3 ? 20 : 60); return two(`${w.n} ${w.v('קנה', 'קנתה')} ${x} מחברות ב-${p} ₪ כל אחת, וקלמר ב-${q} ₪.<br>כמה ${w.v('שילם', 'שילמה')} ${w.n} בסך הכול?`, '₪', S(`${x} × ${p}`, x * p), S(`${x * p} + ${q}`, x * p + q), x * p + q, 'קודם מחיר כל המחברות, ואז מוסיפים את הקלמר.', [{ v: p + q, m: `קנו ${x} מחברות – לא אחת.` }]); }
+  if (key === 'mul+sub') { const x = R(2, 6), p = R(3, GRADE <= 3 ? 9 : 40), m = Math.ceil((x * p + R(1, 30)) / 10) * 10; return two(`ל${w.n} היו ${fmt(m)} ₪. ${w.v('הוא', 'היא')} ${w.v('קנה', 'קנתה')} ${x} כרטיסים לסרט, ${p} ₪ לכל כרטיס.<br>כמה כסף נשאר ל${w.n}?`, '₪', S(`${x} × ${p}`, x * p), S(`${fmt(m)} - ${x * p}`, m - x * p), m - x * p, 'קודם כמה עלו כל הכרטיסים, ואז מחסרים מהכסף שהיה.', [{ v: m - p, m: `נקנו ${x} כרטיסים, לא אחד.` }]); }
+  if (key === 'add+div') { const z = R(2, GRADE <= 3 ? 5 : 8), k1 = R(2, 6), k2 = R(2, 6), a = z * k1 + R(0, z - 1), b = z * (k1 + k2) - a; return two(`בכיתה אחת ${a} תלמידים ובכיתה השנייה ${b} תלמידים. כל התלמידים התחלקו לקבוצות של ${z}.<br>כמה קבוצות היו?`, 'קבוצות', S(`${a} + ${b}`, a + b), S(`${a + b} : ${z}`, (a + b) / z), (a + b) / z, 'קודם כמה תלמידים יש בשתי הכיתות יחד.'); }
+  if (key === 'div+sub') { const b = R(2, 6), q = R(2, GRADE <= 3 ? 9 : 30), r = R(1, GRADE <= 3 ? 9 : 30), t = b * (q + r); return two(`${b} אחים קיבלו ${fmt(t)} ₪ וחילקו את הכסף שווה בשווה. כל אחד קנה ספר ב-${q} ₪.<br>כמה כסף נשאר לכל אחד?`, '₪', S(`${fmt(t)} : ${b}`, q + r), S(`${q + r} - ${q}`, r), r, 'קודם כמה קיבל כל אח, ואז מורידים את מחיר הספר.', [{ v: q + r, m: 'זה הכסף שכל אחד קיבל – אבל הוא גם קנה ספר.' }]); }
+  if (key === 'div+mul') { const z = R(2, GRADE <= 3 ? 5 : 9), x = R(2, 6), y = z * R(1, 6); return two(`במאפייה אפו ${x} מגשים, ובכל מגש ${y} עוגיות. אורזים את העוגיות בשקיות של ${z}.<br>כמה שקיות צריך?`, 'שקיות', S(`${x} × ${y}`, x * y), S(`${x * y} : ${z}`, x * y / z), x * y / z, 'קודם כמה עוגיות יש בסך הכול, ואז כמה שקיות.'); }
+  return wpInt2('add', 'sub');
+}
+
+/* ===== שברים פשוטים ===== */
+const wpF = (n, d) => M(F(n, d));
+const wpFrac = o => Object.assign({ type: 'frac', form: 'any', word: true }, o);
+// מונה זר למכנה (שהשבר יוצג מצומצם), בין lo ל-hi
+function wpCo(lo, hi, d) { for (let k = 0; k < 30; k++) { const n = R(lo, Math.max(lo, hi)); if (gcd(n, d) === 1) return n; } return 1; }
+function wpProper(dMin, dMax) { const d = R(dMin, dMax); let n; do { n = R(1, d - 1); } while (gcd(n, d) > 1); return [n, d]; }
+function wpFracAdd(lv) {
+  const w = wpWho(), w2 = wpWho(w);
+  if (lv === 1 || GRADE === 4 && lv === 2 && R(0, 1)) {
+    const d = pick([4, 5, 6, 8, 10]), n1 = wpCo(1, d - 2, d), n2 = wpCo(1, d - n1, d);
+    const ctx = pick([['פיצה', 'מהפיצה', 'אכל', 'אכלה', 'אכלו'], ['עוגה', 'מהעוגה', 'אכל', 'אכלה', 'אכלו'], ['קיר', 'מהקיר', 'צבע', 'צבעה', 'צבעו']]);
+    return wpFrac({ ops: ['add'], ans: { n: n1 + n2, d },
+      text: `${w.n} ${w.v(ctx[2], ctx[3])} ${wpF(n1, d)} ${ctx[1]}, ו${w2.n} ${w2.v(ctx[2], ctx[3])} ${wpF(n2, d)} ${ctx[1]}.<br>איזה חלק ${ctx[1]} ${ctx[4]} ${w.f && w2.f ? 'שתיהן' : 'שניהם'} יחד?`,
+      traps: [{ f: { n: n1 + n2, d: d + d }, m: 'חיברתם גם את המכנים! כשהמכנים שווים – מחברים רק את המונים.' }],
+      hint: 'אותו מכנה – מחברים את המונים, והמכנה נשאר.', steps: [{ p: `${wpEq(`${F(n1, d)} + ${F(n2, d)} = ${F('?', d)}`)} – מהו המונה?`, a: n1 + n2 }],
+      exp: `${wpEq(`${F(n1, d)} + ${F(n2, d)} = ${F(n1 + n2, d)}`)} = ${FX(n1 + n2, d)}` });
+  }
+  if (GRADE === 4) { // מעורבים עם אותו מכנה
+    const d = pick([3, 4, 5, 8]), w1 = R(1, 3), w2n = R(1, 3), a = wpCo(1, d - 1, d), b = wpCo(1, d - 1, d), N = (w1 + w2n) * d + a + b;
+    return wpFrac({ ops: ['add'], ans: { n: N, d },
+      text: `${w.n} ${w.v('רץ', 'רצה')} ${M(`${w1}${F(a, d)}`)} ק"מ בבוקר, ו${M(`${w2n}${F(b, d)}`)} ק"מ בערב.<br>כמה ק"מ ${w.v('רץ', 'רצה')} באותו יום?`,
+      hint: 'מחברים שלמים לשלמים ושברים לשברים. אם השבר יצא גדול מ-1 – מוציאים ממנו שלם.',
+      steps: [{ p: `כמה שלמים? ${wpEq(`${w1} + ${w2n} =`)}`, a: w1 + w2n }, { p: `כמה ${F(1, d)}-ים? ${wpEq(`${a} + ${b} =`)}`, a: a + b }],
+      exp: `${wpEq(`${w1} + ${w2n} = ${w1 + w2n}`)}, ${wpEq(`${F(a, d)} + ${F(b, d)} = ${F(a + b, d)}`)} ← ${FX(N, d)}` });
+  }
+  const [d1, d2] = twoDens(), n1 = wpCo(1, d1 - 1, d1), n2 = wpCo(1, d2 - 1, d2), L = lcm(d1, d2), A = n1 * L / d1, B = n2 * L / d2;
+  const ctx = pick([['ליטר מיץ', 'שתה', 'שתתה', 'ליטר מיץ'], ['ק"מ', 'הלך', 'הלכה', 'ק"מ'], ['שעה', 'קרא', 'קראה', 'שעות']]);
+  return wpFrac({ ops: ['add'], ans: { n: A + B, d: L },
+    text: `בבוקר ${w.n} ${w.v(ctx[1], ctx[2])} ${wpF(n1, d1)} ${ctx[0]}, ואחר הצהריים עוד ${wpF(n2, d2)} ${ctx[0]}.<br>כמה ${ctx[3]} ${w.v(ctx[1], ctx[2])} בסך הכול?`,
+    traps: [{ f: { n: n1 + n2, d: d1 + d2 }, m: 'חיברתם גם את המכנים! קודם מוצאים מכנה משותף, ואז מחברים רק את המונים.' }],
+    hint: `מוצאים מכנה משותף ל-${d1} ול-${d2}.`,
+    steps: [{ p: `מהו המכנה המשותף הקטן ביותר של ${d1} ושל ${d2}?`, a: L }, { p: `הרחיבו: ${wpEq(`${F(n1, d1)} = ${F('?', L)}`)}`, a: A }, { p: `הרחיבו: ${wpEq(`${F(n2, d2)} = ${F('?', L)}`)}`, a: B }, { p: `${wpEq(`${F(A, L)} + ${F(B, L)} = ${F('?', L)}`)}`, a: A + B }],
+    exp: `${wpEq(`${F(A, L)} + ${F(B, L)} = ${F(A + B, L)}`)} = ${FX(A + B, L)}` });
+}
+function wpFracSub(lv) {
+  const w = wpWho();
+  if (lv === 1) {
+    if (R(0, 1)) { const [n, d] = wpProper(3, 10);
+      const ctx = pick([[`מעוגה שלמה אכלו ${wpF(n, d)} מהעוגה.`, 'איזה חלק מהעוגה נשאר?'], [`${w.n} ${w.v('שתל', 'שתלה')} פרחים ב-${wpF(n, d)} מהגינה.`, 'באיזה חלק מהגינה עוד לא נשתלו פרחים?'], [`${w.n} ${w.v('קרא', 'קראה')} ${wpF(n, d)} מהספר.`, 'איזה חלק מהספר עוד לא נקרא?']]);
+      return wpFrac({ ops: ['sub'], ans: { n: d - n, d }, text: `${ctx[0]}<br>${ctx[1]}`,
+        traps: [{ f: { n, d }, m: 'זה החלק שכבר נלקח. שואלים מה <b>נשאר</b>.' }], hint: `השלם הוא ${wpF(d, d)}. מורידים ממנו ${wpF(n, d)}.`,
+        steps: [{ p: `${wpEq(`${F(d, d)} - ${F(n, d)} = ${F('?', d)}`)}`, a: d - n }], exp: wpEq(`1 - ${F(n, d)} = ${F(d, d)} - ${F(n, d)} = ${F(d - n, d)}`) }); }
+    const d = pick([5, 6, 8, 10, 12]), a = wpCo(3, d - 1, d), b = wpCo(1, a - 1, d);
+    return wpFrac({ ops: ['sub'], ans: { n: a - b, d }, text: `בכד היו ${wpF(a, d)} ליטר מים. ${w.n} ${w.v('שתה', 'שתתה')} ${wpF(b, d)} ליטר.<br>כמה ליטר נשארו בכד?`,
+      hint: 'אותו מכנה – מחסרים את המונים.', steps: [{ p: `${wpEq(`${F(a, d)} - ${F(b, d)} = ${F('?', d)}`)}`, a: a - b }], exp: `${wpEq(`${F(a, d)} - ${F(b, d)} = ${F(a - b, d)}`)} = ${FX(a - b, d)}` });
+  }
+  if (GRADE === 4) { const d = pick([3, 4, 5, 8]), W = R(2, 5), a = wpCo(1, d - 2, d), b = wpCo(a + 1, d - 1, d), N = W * d + a - b;
+    return wpFrac({ ops: ['sub'], ans: { n: N, d }, text: `בבקבוק גדול היו ${M(`${W}${F(a, d)}`)} ליטר מיץ. בארוחה שתו ${wpF(b, d)} ליטר.<br>כמה ליטר מיץ נשארו?`,
+      hint: `${F(a, d)} קטן מ-${F(b, d)} – "פורטים" שלם אחד ל-${F(d, d)}.`, steps: [{ p: `כתבו את ${M(`${W}${F(a, d)}`)} כשבר מדומה: ${wpEq(F('?', d))}`, a: W * d + a }, { p: `${wpEq(`${F(W * d + a, d)} - ${F(b, d)} = ${F('?', d)}`)}`, a: N }],
+      exp: `${wpEq(`${F(W * d + a, d)} - ${F(b, d)} = ${F(N, d)}`)} = ${FX(N, d)}` }); }
+  const [d1, d2] = twoDens(), L = lcm(d1, d2), W = R(1, 3), n1 = wpCo(1, d1 - 1, d1), n2 = wpCo(1, d2 - 1, d2), A = (W * d1 + n1) * L / d1, B = n2 * L / d2;
+  return wpFrac({ ops: ['sub'], ans: { n: A - B, d: L }, text: `לחג קנו ${M(`${W}${F(n1, d1)}`)} ק"ג ענבים. אכלו ${wpF(n2, d2)} ק"ג.<br>כמה ק"ג ענבים נשארו?`,
+    hint: `מכנה משותף ל-${d1} ול-${d2}, והפכו את המעורב לשבר מדומה.`,
+    steps: [{ p: `מכנה משותף קטן ביותר של ${d1} ושל ${d2}:`, a: L }, { p: `${M(`${W}${F(n1, d1)}`)} ${wpEq(`= ${F('?', L)}`)}`, a: A }, { p: `${wpEq(`${F(n2, d2)} = ${F('?', L)}`)}`, a: B }, { p: `${wpEq(`${F(A, L)} - ${F(B, L)} = ${F('?', L)}`)}`, a: A - B }],
+    exp: `${wpEq(`${F(A, L)} - ${F(B, L)} = ${F(A - B, L)}`)} = ${FX(A - B, L)}` });
+}
+function wpFracMul(lv) {
+  const w = wpWho();
+  if (lv === 1) {
+    if (R(0, 1)) { const [n, d] = wpProper(2, 8), u = R(2, 9), W = d * u;
+      return wpNum({ ops: ['mul'], unit: 'תלמידים', ans: n * u, text: `בשכבה ${W} תלמידים. ${wpF(n, d)} מהם משתתפים בחוג שחמט.<br>כמה תלמידים משתתפים בחוג?`,
+        hint: `${F(n, d)} מ-${W}: קודם ${F(1, d)} (מחלקים ב-${d}), ואז כופלים ב-${n}.`, steps: [{ p: wpEq(`${W} : ${d} =`), a: u }, { p: wpEq(`${u} × ${n} =`), a: n * u }],
+        exp: `${wpEq(`${F(n, d)} × ${W} = ${W} : ${d} × ${n} = ${n * u}`)}` }); }
+    const [n, d] = wpProper(2, 5), k = R(2, 9);
+    return wpFrac({ ops: ['mul'], ans: { n: n * k, d }, text: `כל אחד מ-${k} ילדים שתה ${wpF(n, d)} כוס חלב.<br>כמה כוסות חלב שתו כל הילדים יחד?`,
+      traps: [{ f: { n: n * k, d: d * k }, m: 'כופלים רק את המונה במספר השלם – המכנה נשאר.' }], hint: `${k} פעמים ${F(n, d)}: כופלים את המונה ב-${k}.`,
+      steps: [{ p: `${wpEq(`${k} × ${F(n, d)} = ${F('?', d)}`)}`, a: n * k }], exp: `${wpEq(`${k} × ${F(n, d)} = ${F(n * k, d)}`)} = ${FX(n * k, d)}` });
+  }
+  if (GRADE === 5) { const d = pick([2, 3, 4, 5]), W = R(1, 3), n = wpCo(1, d - 1, d), k = R(2, 6), N = (W * d + n) * k;
+    return wpFrac({ ops: ['mul'], ans: { n: N, d }, text: `${w.n} ${w.v('רוכב', 'רוכבת')} כל יום ${M(`${W}${F(n, d)}`)} ק"מ באופניים.<br>כמה ק"מ ${w.v('ירכב', 'תרכב')} ב-${k} ימים?`,
+      hint: `כופלים את השלמים ואת השבר ב-${k}, ומחברים.`, steps: [{ p: wpEq(`${W} × ${k} =`), a: W * k }, { p: `${wpEq(`${F(n, d)} × ${k} = ${F('?', d)}`)}`, a: n * k }],
+      exp: `${wpEq(`${W * k} + ${F(n * k, d)}`)} = ${FX(N, d)}` }); }
+  const [n1, d1] = wpProper(2, 6), [n2, d2] = wpProper(2, 6);
+  return wpFrac({ ops: ['mul'], ans: { n: n1 * n2, d: d1 * d2 }, text: `${wpF(n1, d1)} משטח הגינה מכוסה בירקות. ${wpF(n2, d2)} משטח הירקות הם עגבניות.<br>איזה חלק מכל הגינה מכוסה בעגבניות?`,
+    traps: [{ f: { n: n1 * d2 + n2 * d1, d: d1 * d2 }, m: '"חלק מתוך חלק" – זה כפל שברים, לא חיבור.' }], hint: `${F(n2, d2)} מתוך ${F(n1, d1)} = ${F(n2, d2)} × ${F(n1, d1)}. מונה כפול מונה, מכנה כפול מכנה.`,
+    steps: [{ p: `המונה: ${wpEq(`${n1} × ${n2} =`)}`, a: n1 * n2 }, { p: `המכנה: ${wpEq(`${d1} × ${d2} =`)}`, a: d1 * d2 }],
+    exp: `${wpEq(`${F(n2, d2)} × ${F(n1, d1)} = ${F(n1 * n2, d1 * d2)}`)} = ${FX(n1 * n2, d1 * d2)}` });
+}
+function wpFracDiv(lv) {
+  if (lv === 1) { const [n, d] = wpProper(2, 6), k = R(2, 5);
+    return wpFrac({ ops: ['div'], ans: { n, d: d * k }, text: `${wpF(n, d)} ליטר מיץ נמזגו שווה בשווה ל-${k} כוסות.<br>כמה ליטר מיץ יש בכל כוס?`,
+      traps: [{ f: { n: n * k, d }, m: 'כשמחלקים לכמה כוסות, בכל כוס יש <b>פחות</b> – לא יותר.' }], hint: `לחלק ב-${k} זה כמו לכפול ב-${F(1, k)}: כופלים את המכנה ב-${k}.`,
+      steps: [{ p: `${wpEq(`${F(n, d)} : ${k} = ${F(n, '?')}`)} – מהו המכנה?`, a: d * k }], exp: `${wpEq(`${F(n, d)} : ${k} = ${F(n, d * k)}`)} = ${FX(n, d * k)}` }); }
+  if (R(0, 1)) { const d = pick([2, 3, 4, 5, 8]), n = pick([1, 1, 2, 3].filter(x => x < d && gcd(x, d) === 1)), k = R(2, 8), W = n * k;
+    return wpNum({ ops: ['div'], unit: 'חתיכות', ans: k * d, text: `יש סרט באורך ${W} מטרים. חותכים אותו לחתיכות של ${wpF(n, d)} מטר.<br>כמה חתיכות יתקבלו?`,
+      traps: [{ v: W * n / d, m: 'מחפשים כמה פעמים החתיכה "נכנסת" בסרט – זה חילוק: מספר החתיכות גדול מ-' + W + '.' }], hint: `כמה פעמים ${F(n, d)} נכנס ב-${W}?`,
+      steps: [{ p: `${wpEq(`${W} : ${F(n, d)} = ${W} × ${F(d, n)} =`)}`, a: k * d }], exp: wpEq(`${W} : ${F(n, d)} = ${W} × ${F(d, n)} = ${k * d}`) }); }
+  const q = pick([2, 3, 4]), Wn = R(1, 4), a = wpCo(1, q - 1, q), N = Wn * q + a;
+  return wpNum({ ops: ['div'], unit: 'כוסות', ans: N, text: `בקנקן ${MIX(Wn, a, q)} ליטר לימונדה. ממלאים כוסות של ${wpF(1, q)} ליטר.<br>כמה כוסות אפשר למלא?`,
+    traps: [{ v: Wn, m: `בכל ליטר יש ${q} כוסות של ${F(1, q)} ליטר – יש יותר כוסות מליטרים.` }],
+    hint: `כמה כוסות של ${F(1, q)} ליטר יש בליטר אחד? ובכמה ליטרים?`,
+    steps: [{ p: `כמה כוסות ב-${Wn} ליטרים שלמים? ${wpEq(`${Wn} × ${q} =`)}`, a: Wn * q }, { p: `ועוד ${wpF(a, q)} ליטר = ${a} כוסות. סך הכול: ${wpEq(`${Wn * q} + ${a} =`)}`, a: N }],
+    exp: `${MIX(Wn, a, q)} ליטר = ${wpEq(F(N, q))} ליטר – כלומר ${N} כוסות של ${wpF(1, q)} ליטר.` });
+}
+function wpFrac2(o1, o2) {
+  const key = [o1, o2].sort().join('+'), w = wpWho();
+  if ((key.includes('mul') || key.includes('div')) && !(key === 'add+add' || key === 'sub+sub' || key === 'add+sub')) {
+    if (key.includes('div') && GRADE >= 6) { const q = pick([2, 3, 4]), L = R(2, 4), used = R(1, L * q - 1);
+      return wpNum({ ops: ['div', 'sub'], unit: 'כוסות', ans: L * q - used, text: `בקנקן ${L} ליטר מיץ. מוזגים כוסות של ${wpF(1, q)} ליטר. ${used} כוסות כבר נשתו.<br>כמה כוסות מלאות נשארו לשתות?`,
+        hint: `כמה כוסות של ${F(1, q)} ליטר יש ב-${L} ליטר?`, steps: [{ p: wpEq(`${L} : ${F(1, q)} =`), a: L * q }, { p: wpEq(`${L * q} - ${used} =`), a: L * q - used }], exp: `${wpEq(`${L} : ${F(1, q)} = ${L * q}`)}, ${wpEq(`${L * q} - ${used} = ${L * q - used}`)}` }); }
+    const d = pick([3, 4, 5, 6, 8]), n1 = wpCo(1, Math.floor(d / 2), d), n2 = wpCo(1, d - n1 - 1, d), u = R(2, 6), W = d * u;
+    return wpNum({ ops: ['mul', 'sub'], unit: 'תלמידים', ans: W - (n1 + n2) * u, text: `בשכבה ${W} תלמידים. ${wpF(n1, d)} מהם בחוג כדורגל, ו-${wpF(n2, d)} מהם בחוג ריקוד. כל תלמיד בחוג אחד לכל היותר.<br>כמה תלמידים לא משתתפים באף חוג?`,
+      hint: `כמה תלמידים הם ${F(1, d)} מהשכבה?`, steps: [{ p: wpEq(`${W} : ${d} =`), a: u }, { p: `כמה בחוגים? ${wpEq(`${u} × ${n1 + n2} =`)}`, a: (n1 + n2) * u }, { p: wpEq(`${W} - ${(n1 + n2) * u} =`), a: W - (n1 + n2) * u }],
+      exp: `${wpEq(`${F(n1, d)} + ${F(n2, d)} = ${F(n1 + n2, d)}`)} מהשכבה בחוגים = ${(n1 + n2) * u} תלמידים, ולכן ${wpEq(`${W} - ${(n1 + n2) * u} = ${W - (n1 + n2) * u}`)}` });
+  }
+  if (key === 'add+add') { const d = pick([6, 8, 10, 12]), a = wpCo(1, Math.floor(d / 4), d), b = wpCo(1, Math.floor(d / 4), d), c = wpCo(1, d - a - b - 1, d);
+    return wpFrac({ ops: [o1, o2], ans: { n: a + b + c, d }, text: `${w.n} ${w.v('צבע', 'צבעה')} גדר במשך שלושה ימים: ביום הראשון ${wpF(a, d)} מהגדר, ביום השני ${wpF(b, d)} וביום השלישי ${wpF(c, d)}.<br>איזה חלק מהגדר ${w.v('צבע', 'צבעה')} בשלושת הימים?`,
+      hint: 'אותו מכנה – מחברים את שלושת המונים.', steps: [{ p: wpEq(`${a} + ${b} + ${c} =`), a: a + b + c }], exp: `${wpEq(`${F(a + b + c, d)}`)} = ${FX(a + b + c, d)}` }); }
+  if (key === 'sub+sub') { const d = pick([6, 8, 10, 12]), a = wpCo(1, Math.floor(d / 4), d), b = wpCo(1, Math.floor(d / 4), d);
+    return wpFrac({ ops: [o1, o2], ans: { n: d - a - b, d }, text: `מעוגה שלמה אכלו בבוקר ${wpF(a, d)} מהעוגה, ובערב עוד ${wpF(b, d)} מהעוגה.<br>איזה חלק מהעוגה נשאר?`,
+      hint: `העוגה השלמה היא ${F(d, d)}.`, steps: [{ p: `${wpEq(`${F(d, d)} - ${F(a, d)} = ${F('?', d)}`)}`, a: d - a }, { p: `${wpEq(`${F(d - a, d)} - ${F(b, d)} = ${F('?', d)}`)}`, a: d - a - b }], exp: `${wpEq(`1 - ${F(a, d)} - ${F(b, d)} = ${F(d - a - b, d)}`)} = ${FX(d - a - b, d)}` }); }
+  // add+sub – קרא שני ימים, כמה נשאר
+  const [d1, d2] = GRADE === 4 ? [pick([6, 8, 10]), 0] : twoDens(), D2 = d2 || d1, L = lcm(d1, D2), n1 = wpCo(1, Math.max(1, Math.floor(d1 / 3)), d1), n2 = wpCo(1, Math.max(1, Math.floor(D2 / 3)), D2), A = n1 * L / d1, B = n2 * L / D2;
+  if (A + B >= L) return wpFrac2(o1, o2);
+  return wpFrac({ ops: [o1, o2], ans: { n: L - A - B, d: L }, text: `${w.n} ${w.v('קרא', 'קראה')} ספר. ביום ראשון ${w.v('קרא', 'קראה')} ${wpF(n1, d1)} מהספר, וביום שני ${wpF(n2, D2)} מהספר.<br><b>איזה חלק מהספר נשאר לקרוא?</b>`,
+    traps: [{ f: { n: A + B, d: L }, m: 'זה החלק שכבר נקרא. השאלה היא כמה <b>נשאר</b>.' }], hint: `קודם כמה ${w.v('קרא', 'קראה')} בשני הימים, ואז מחסרים מהשלם.`,
+    steps: [...(d1 !== D2 ? [{ p: `מכנה משותף ל-${d1} ול-${D2}:`, a: L }] : []), { p: `${wpEq(`${F(A, L)} + ${F(B, L)} = ${F('?', L)}`)}`, a: A + B }, { p: `${wpEq(`${F(L, L)} - ${F(A + B, L)} = ${F('?', L)}`)}`, a: L - A - B }],
+    exp: `${wpEq(`${F(A, L)} + ${F(B, L)} = ${F(A + B, L)}`)}, נשאר ${wpEq(`${F(L, L)} - ${F(A + B, L)} = ${F(L - A - B, L)}`)} = ${FX(L - A - B, L)}` });
+}
+
+/* ===== מספרים עשרוניים ===== */
+const wpD = (lo, hi, pl) => rnd(R(lo * 10 ** pl, hi * 10 ** pl) / 10 ** pl);
+const wpDn = (o) => wpNum(o);
+const dS = x => fmt(x);
+function wpDecAdd(lv) {
+  const w = wpWho();
+  if (lv === 1) { const a = wpD(3, 40, 1), b = wpD(2, 30, 1), s = rnd(a + b);
+    return wpDn({ ops: ['add'], unit: '₪', ans: s, text: `${w.n} ${w.v('קנה', 'קנתה')} ספר ב-${dS(a)} ₪ ומחברת ב-${dS(b)} ₪.<br>כמה ${w.v('שילם', 'שילמה')} בסך הכול?`,
+      hint: 'מחברים במאונך – נקודה מתחת לנקודה.', steps: [{ p: wpEq(`${dS(a)} + ${dS(b)} =`), a: s }], exp: wpEq(`${dS(a)} + ${dS(b)} = ${dS(s)}`) }); }
+  const a = wpD(1, 9, 2), b = wpD(1, 9, 1), s = rnd(a + b), w2 = wpWho(w);
+  if (R(0, 1)) return wpDn({ ops: ['add'], unit: 'ק"ג', ans: s, text: `בשקית אחת ${dS(a)} ק"ג תפוחים, ובשקית שנייה ${dS(b)} ק"ג אגסים.<br>כמה ק"ג פירות יש בשתי השקיות?`,
+    traps: [{ v: rnd(a + b / 10), m: 'סדרו נקודה מתחת לנקודה: עשיריות מתחת לעשיריות.' }], hint: `אפשר להוסיף 0: ${dS(b)} = ${b.toFixed(2)}.`, steps: [{ p: wpEq(`${a.toFixed(2)} + ${b.toFixed(2)} =`), a: s }], exp: wpEq(`${a.toFixed(2)} + ${b.toFixed(2)} = ${dS(s)}`) });
+  return wpDn({ ops: ['add'], unit: 'מטר', ans: s, text: `בתחרות קפיצה ${w.n} ${w.v('קפץ', 'קפצה')} ${dS(a)} מטר. ${w2.n} ${w2.v('קפץ', 'קפצה')} ${dS(b)} מטר <b>יותר</b> מ${w.n}.<br>כמה מטרים ${w2.v('קפץ', 'קפצה')} ${w2.n}?`,
+    traps: a > b ? [{ v: rnd(a - b), m: `${w2.n} ${w2.v('קפץ', 'קפצה')} יותר – מחברים.` }] : [], hint: 'מחברים – נקודה מתחת לנקודה.', steps: [{ p: wpEq(`${a.toFixed(2)} + ${b.toFixed(2)} =`), a: s }], exp: wpEq(`${dS(a)} + ${dS(b)} = ${dS(s)}`) });
+}
+function wpDecSub(lv) {
+  const w = wpWho(), w2 = wpWho(w);
+  if (lv === 1) { const bill = pick([20, 50, 100]), p = wpD(bill * 0.2, bill * 0.9, 1), r = rnd(bill - p);
+    return wpDn({ ops: ['sub'], unit: '₪', ans: r, text: `${w.n} ${w.v('קנה', 'קנתה')} כדור ב-${dS(p)} ₪ ו${w.v('שילם', 'שילמה')} בשטר של ${bill} ₪.<br>כמה עודף ${w.v('קיבל', 'קיבלה')}?`,
+      hint: `${bill} = ${bill}.0 – כותבים נקודה מתחת לנקודה ומחסרים.`, steps: [{ p: wpEq(`${bill} - ${dS(p)} =`), a: r }], exp: wpEq(`${bill} - ${dS(p)} = ${dS(r)}`) }); }
+  const a = wpD(2, 6, 2), b = rnd(a - wpD(0.3, Math.min(1.9, a - 0.2), 1)), d = rnd(a - b);
+  return wpDn({ ops: ['sub'], unit: 'מטר', ans: d, text: `${w.n} ${w.v('קפץ', 'קפצה')} לרוחק ${dS(a)} מטר, ו${w2.n} ${w2.v('קפץ', 'קפצה')} ${dS(b)} מטר.<br><b>בכמה</b> מטרים ${w.n} ${w.v('קפץ', 'קפצה')} יותר רחוק?`,
+    traps: [{ v: rnd(a + b), m: '"בכמה יותר" – מחפשים הפרש, כלומר חיסור.' }], hint: 'השוואה – הגדול פחות הקטן, נקודה מתחת לנקודה.', steps: [{ p: wpEq(`${a.toFixed(2)} - ${b.toFixed(2)} =`), a: d }], exp: wpEq(`${dS(a)} - ${dS(b)} = ${dS(d)}`) });
+}
+function wpDecMul(lv) {
+  const w = wpWho();
+  if (lv === 1) { const p = wpD(1, 15, 1), k = R(2, 9), s = rnd(p * k);
+    return wpDn({ ops: ['mul'], unit: '₪', ans: s, text: `מחיר מחברת ${dS(p)} ₪. ${w.n} ${w.v('קנה', 'קנתה')} ${k} מחברות.<br>כמה ${w.v('שילם', 'שילמה')}?`,
+      traps: [{ v: rnd(p + k), m: `${k} מחברות באותו מחיר – כפל.` }], hint: `${k} × ${dS(p)}: כופלים כרגיל ומוסיפים את הנקודה.`, steps: [{ p: wpEq(`${k} × ${dS(p)} =`), a: s }], exp: wpEq(`${k} × ${dS(p)} = ${dS(s)}`) }); }
+  if (GRADE === 5) { const t = pick([10, 100]), x = wpD(0.1, 3, 2), s = rnd(x * t);
+    return wpDn({ ops: ['mul'], unit: 'ק"ג', ans: s, text: `קופסת שימורים שוקלת ${dS(x)} ק"ג.<br>כמה ישקלו ${t} קופסאות כאלה?`,
+      hint: `כפל ב-${t}: הנקודה זזה ${t === 10 ? 'מקום אחד' : 'שני מקומות'} ימינה.`, steps: [{ p: wpEq(`${dS(x)} × ${t} =`), a: s }], exp: wpEq(`${dS(x)} × ${t} = ${dS(s)}`) }); }
+  const kg = pick([0.5, 1.5, 2.5, 0.25, 0.75, 1.2, 2.4]), pr = wpD(4, 30, 1), s = rnd(kg * pr);
+  return wpDn({ ops: ['mul'], unit: '₪', ans: s, text: `קילוגרם גבינה עולה ${dS(pr)} ₪. ${w.n} ${w.v('קנה', 'קנתה')} ${dS(kg)} ק"ג גבינה.<br>כמה ${w.v('שילם', 'שילמה')}?`,
+    hint: 'מחיר ליחידה × כמות. כופלים בלי נקודות, ואז סופרים כמה ספרות אחרי הנקודה יש בשני הגורמים יחד.', steps: [{ p: wpEq(`${dS(kg)} × ${dS(pr)} =`), a: s }], exp: wpEq(`${dS(kg)} × ${dS(pr)} = ${dS(s)}`) });
+}
+function wpDecDiv(lv) {
+  if (lv === 1) { const k = R(2, 6), q = wpD(1.1, 15, 1), t = rnd(q * k);
+    return wpDn({ ops: ['div'], unit: '₪', ans: q, text: `${k} חברים הזמינו פיצה ב-${dS(t)} ₪ ושילמו שווה בשווה.<br>כמה שילם כל אחד?`,
+      traps: [{ v: rnd(t * k), m: 'מחלקים את המחיר בין החברים – כל אחד משלם פחות מהמחיר הכולל.' }], hint: `${dS(t)} : ${k} – מחלקים כרגיל, הנקודה נשארת במקומה.`, steps: [{ p: wpEq(`${dS(t)} : ${k} =`), a: q }], exp: wpEq(`${dS(t)} : ${k} = ${dS(q)}`) }); }
+  if (GRADE === 5) { const t = pick([10, 100]), x = wpD(0.5, 9, 1), s = rnd(x / t);
+    return wpDn({ ops: ['div'], unit: 'ק"ג', ans: s, text: `ארגז ובו ${t} שקיות סוכר זהות שוקל ${dS(x)} ק"ג (בלי משקל הארגז).<br>כמה שוקלת שקית אחת?`,
+      hint: `חילוק ב-${t}: הנקודה זזה ${t === 10 ? 'מקום אחד' : 'שני מקומות'} שמאלה.`, steps: [{ p: wpEq(`${dS(x)} : ${t} =`), a: s }], exp: wpEq(`${dS(x)} : ${t} = ${dS(s)}`) }); }
+  const piece = pick([0.2, 0.25, 0.5, 0.4, 0.75, 1.5]), k = R(3, 16), L = rnd(piece * k);
+  return wpDn({ ops: ['div'], unit: 'חתיכות', ans: k, text: `חבל באורך ${dS(L)} מטר נחתך לחתיכות של ${dS(piece)} מטר.<br>כמה חתיכות התקבלו?`,
+    traps: [{ v: rnd(L * piece), m: 'מחפשים כמה פעמים החתיכה נכנסת בחבל – חילוק.' }], hint: `מכפילים את שני המספרים ב-${piece * 10 % 1 ? 100 : 10} כדי להיפטר מהנקודה, ואז מחלקים.`,
+    steps: [{ p: wpEq(`${dS(L)} : ${dS(piece)} =`), a: k }], exp: wpEq(`${dS(L)} : ${dS(piece)} = ${k}`) });
+}
+function wpDec2(o1, o2) {
+  const key = [o1, o2].sort().join('+'), w = wpWho(), S = (e, a) => ({ p: wpEq(`${e} =`), a });
+  const two = (ops, text, unit, s1, s2, ans, hint) => wpDn({ ops, text, unit, ans, hint, steps: [s1, s2], exp: `${s1.p.replace(/=\s*<\/span>$/, `= ${dS(s1.a)}</span>`)}, ${s2.p.replace(/=\s*<\/span>$/, `= ${dS(s2.a)}</span>`)}` });
+  const bill = x => [20, 50, 100, 200].find(b => b > x + 1) || 200;
+  if (key === 'mul+sub' || key === 'mul+mul') { const k = R(2, 5), p = wpD(2, 15, 1), t = rnd(k * p), B = bill(t), c = rnd(B - t);
+    return two(['mul', 'sub'], `${w.n} ${w.v('קנה', 'קנתה')} ${k} ספרים ב-${dS(p)} ₪ כל אחד, ו${w.v('שילם', 'שילמה')} בשטר של ${B} ₪.<br>כמה עודף ${w.v('קיבל', 'קיבלה')}?`, '₪', S(`${k} × ${dS(p)}`, t), S(`${B} - ${dS(t)}`, c), c, 'קודם כמה עלו כל הספרים.'); }
+  if (key === 'add+mul') { const k = R(2, 5), p = wpD(2, 12, 1), q = wpD(3, 20, 1), t = rnd(k * p), s = rnd(t + q);
+    return two(['mul', 'add'], `${w.n} ${w.v('קנה', 'קנתה')} ${k} מחברות ב-${dS(p)} ₪ כל אחת וקלמר ב-${dS(q)} ₪.<br>כמה ${w.v('שילם', 'שילמה')} בסך הכול?`, '₪', S(`${k} × ${dS(p)}`, t), S(`${dS(t)} + ${dS(q)}`, s), s, 'קודם מחיר כל המחברות, ואז מוסיפים את הקלמר.'); }
+  if (key.includes('div')) { const k = R(2, 4), per = wpD(0.8, 3, 1), tot = rnd(per * k), a = wpD(0.3, Math.max(0.4, tot - 0.3), 1), b = rnd(tot - a);
+    if (b < 0.2) return wpDec2(o1, o2);
+    return two(['add', 'div'], `קנו ${dS(a)} ק"ג תפוחים ו-${dS(b)} ק"ג תפוזים. חילקו את כל הפירות שווה בשווה ל-${k} סלסלות.<br>כמה ק"ג פירות יש בכל סלסלה?`, 'ק"ג', S(`${dS(a)} + ${dS(b)}`, tot), S(`${dS(tot)} : ${k}`, per), per, 'קודם כמה ק"ג פירות יש בסך הכול.'); }
+  if (key === 'add+add') { const a = wpD(2, 15, 1), b = wpD(2, 15, 1), c = wpD(2, 15, 1), s = rnd(a + b + c);
+    return two(['add', 'add'], `בקנייה בשוק: ירקות ב-${dS(a)} ₪, פירות ב-${dS(b)} ₪ ולחם ב-${dS(c)} ₪.<br>כמה עלתה הקנייה?`, '₪', S(`${dS(a)} + ${dS(b)}`, rnd(a + b)), S(`${dS(rnd(a + b))} + ${dS(c)}`, s), s, 'מחברים שניים, ואז את השלישי.'); }
+  if (key === 'sub+sub') { const a = wpD(5, 30, 1), b = wpD(2, 20, 1), B = bill(a + b), r1 = rnd(B - a), r2 = rnd(r1 - b);
+    return two(['sub', 'sub'], `ל${w.n} היו ${B} ₪. ${w.v('הוא', 'היא')} ${w.v('קנה', 'קנתה')} חולצה ב-${dS(a)} ₪, ואחר כך כובע ב-${dS(b)} ₪.<br>כמה כסף נשאר ל${w.n}?`, '₪', S(`${B} - ${dS(a)}`, r1), S(`${dS(r1)} - ${dS(b)}`, r2), r2, 'מורידים קודם את מחיר החולצה, ואז את מחיר הכובע.'); }
+  const a = wpD(5, 30, 1), b = wpD(2, 20, 1), s = rnd(a + b), B = bill(s), c = rnd(B - s);
+  return two(['add', 'sub'], `${w.n} ${w.v('קנה', 'קנתה')} חולצה ב-${dS(a)} ₪ וכובע ב-${dS(b)} ₪, ו${w.v('שילם', 'שילמה')} בשטר של ${B} ₪.<br>כמה עודף ${w.v('קיבל', 'קיבלה')}?`, '₪', S(`${dS(a)} + ${dS(b)}`, s), S(`${B} - ${dS(s)}`, c), c, 'קודם כמה עלו שני הפריטים, ואז מחסרים מהשטר.');
+}
+const WP_GEN = {
+  int: { add: wpIntAdd, sub: wpIntSub, mul: wpIntMul, div: wpIntDiv, two: wpInt2 },
+  frac: { add: wpFracAdd, sub: wpFracSub, mul: wpFracMul, div: wpFracDiv, two: wpFrac2 },
+  dec: { add: wpDecAdd, sub: wpDecSub, mul: wpDecMul, div: wpDecDiv, two: wpDec2 }
+};
+// שאלה אחת: רמה 1–2 = שלב אחד, רמה 3 = שני שלבים (שתי פעולות מהנבחרות)
+function wpGen(op, nt, lv, cfg) {
+  let q;
+  if (lv === 3) {
+    const c = cfg || wpCfg(), others = c.ops.filter(o => wpOk(o, nt));
+    const o2 = pick(others.length ? others : [op]);
+    q = WP_GEN[nt].two(op, o2);
+  } else q = WP_GEN[nt][op](lv);
+  if (q.unit === '') delete q.unit;
+  q.nt = nt;
+  return q;
+}
+const WP_TIPS = ['קוראים את כל השאלה, ומדמיינים את הסיפור.', 'מסמנים: מה ידוע? מה שואלים?', 'בוחרים פעולה לפי <b>המשמעות</b> – לא לפי מילה אחת ("יותר" לא תמיד חיבור!).', 'פותרים, ובודקים שהתשובה הגיונית. כותבים תשובה עם יחידות.'];
+const WP_TOPIC = { id: 'wp', name: 'שאלות מילוליות', icon: '📝', color: '#3d7a6e', desc: 'חיבור, חיסור, כפל וחילוק בסיפורים', levels: { 1: [], 2: [], 3: [] }, tips: WP_TIPS };
+function wpArm(c) {
+  const cb = wpCombos(c);
+  [1, 2, 3].forEach(lv => { WP_TOPIC.levels[lv] = cb.map(([op, nt]) => { const g = () => wpGen(op, nt, lv, c); return g; }); });
+  return cb.length;
+}
+TOPIC.wp = WP_TOPIC;
+wpArm(wpCfg());
+// רשימת שאלות מדורגת (להדפסה): מהקל אל הקשה, בלי כפילויות
+function wpList(c, level, n) {
+  const cb = wpCombos(c), out = [], seen = new Set();
+  for (let i = 0, k = 0; out.length < n && k < n * 40; k++) {
+    const lv = level === 'mix' ? Math.min(3, 1 + Math.floor(3 * out.length / n)) : Number(level);
+    const [op, nt] = cb[(i + R(0, cb.length - 1)) % cb.length];
+    const g = () => wpGen(op, nt, lv, c), q = mk('wp', g, lv);
+    if (seen.has(q.text)) continue;
+    seen.add(q.text); out.push(q); i++;
+  }
+  return out;
+}
+// תיבות הבחירה (פעולות / סוג מספרים) – משותף לדף הבית ולדף ההדפסה
+function wpPickHTML(c, pre) {
+  const opBox = WP_OPS.map(([id, s, nm]) => { const any = WP_NTS.some(([nt]) => wpOk(id, nt)); return `<label class="chk wp-chip${any ? '' : ' off'}"><input type="checkbox" data-${pre}op="${id}" ${c.ops.includes(id) && any ? 'checked' : ''} ${any ? '' : 'disabled'}> <b class="m">${s}</b> ${nm}${any ? '' : ` <span class="small muted">(מכיתה ${WP_GNAME[WP_FROM.int[id]]})</span>`}</label>`; }).join('');
+  const ntBox = WP_NTS.map(([id, nm]) => { const any = WP_OPS.some(([op]) => wpOk(op, id)); return `<label class="chk wp-chip${any ? '' : ' off'}"><input type="checkbox" data-${pre}nt="${id}" ${c.nts.includes(id) && any ? 'checked' : ''} ${any ? '' : 'disabled'}> ${nm}${any ? '' : ` <span class="small muted">(מכיתה ${WP_GNAME[WP_FROM[id].add]})</span>`}</label>`; }).join('');
+  return `<div class="lbl2">פעולות:</div><div class="wp-chips">${opBox}</div><div class="lbl2">סוג המספרים:</div><div class="wp-chips">${ntBox}</div>`;
+}
+function wpRead(root, pre) {
+  const ops = [...root.querySelectorAll(`[data-${pre}op]`)].filter(x => x.checked).map(x => x.dataset[pre + 'op']);
+  const nts = [...root.querySelectorAll(`[data-${pre}nt]`)].filter(x => x.checked).map(x => x.dataset[pre + 'nt']);
+  return { ops, nts };
+}
+// הודעה אם השילוב שנבחר לא קיים בכיתה (למשל חילוק שברים לפני כיתה ו')
+function wpWhy(c) {
+  if (!c.ops.length) return 'בחרו לפחות פעולה אחת 🙂';
+  if (!c.nts.length) return 'בחרו לפחות סוג מספרים אחד 🙂';
+  if (!wpCombos(c).length) return `בכיתה ${WP_GNAME[GRADE]} עוד אין ${c.ops.map(o => WP_OPNAME[o]).join('/')} ב${c.nts.map(n => WP_NTS.find(x => x[0] === n)[1]).join('/')}. נסו שילוב אחר.`;
+  return '';
+}
+function wpMissing(c) {
+  const miss = c.ops.flatMap(op => c.nts.filter(nt => !wpOk(op, nt)).map(nt => `${WP_OPNAME[op]} ב${WP_NTS.find(x => x[0] === nt)[1]} (מכיתה ${WP_GNAME[WP_FROM[nt][op]]})`));
+  return miss.length ? 'לא נכלל בכיתה הזו: ' + miss.join(' · ') : '';
+}
+// לשונית "שאלות מילוליות" בדף הבית
+function wpPanelHTML() {
+  const c = wpCfg();
+  return `<section class="panel" data-panel="wp" ${homeTab === 'wp' ? '' : 'hidden'}>
+    <h2>שאלות מילוליות</h2>
+    <p class="muted">בוחרים פעולות וסוג מספרים – ולומדים, מתרגלים או מדפיסים. ברמה 1 – שלב אחד, ברמה 2 – שלב אחד עם ניסוח מאתגר ("פי", "בכמה יותר", מילים מטעות), וברמה 3 – שאלות של שני שלבים.</p>
+    <div class="card tform wp-form" id="wpForm">
+      ${wpPickHTML(c, 'w')}
+      <label>מתחילים ב:
+        <select id="wpLv">${[1, 2, 3].map(n => `<option value="${n}" ${n === c.lv ? 'selected' : ''}>${'⭐'.repeat(n)} רמה ${n}${n === 1 ? ' – שלב אחד' : n === 2 ? ' – ניסוח מאתגר' : ' – שני שלבים'}</option>`).join('')}</select>
+      </label>
+      <p class="small muted">בתרגול הרמה עולה מעצמה אחרי שתי תשובות נכונות ברצף.</p>
+      <p class="small muted" id="wpMiss">${wpMissing(c)}</p>
+      <p class="small" id="wpMsg" role="status"></p>
+    </div>
+    <div class="big-actions">
+      <button id="wpLearn" class="secondary">${ic('book')} ללמוד – איך פותרים?<span class="desc">4 צעדים, איך בוחרים פעולה, ודוגמאות פתורות צעד אחר צעד</span></button>
+      <button id="wpPlay">${ic('pencil')} לתרגל<span class="desc">10 שאלות, עם רמזים ועזרה צעד-צעד</span></button>
+      <button id="wpOpQ" class="secondary">🎯 מה הפעולה?<span class="desc">משחק קצר: קוראים סיפור ובוחרים את הפעולה המתאימה</span></button>
+      <a class="btnlink secondary wp-plink" href="${gq('print')}#wp">${ic('printer')} דף להדפסה<span class="desc">דף מדורג מהקל אל הקשה, עם דף תשובות</span></a>
+    </div>
+  </section>`;
+}
+function wpBind() {
+  const f = $('wpForm');
+  if (!f) return;
+  const sync = () => {
+    const r = wpRead(f, 'w'), c = { ops: r.ops, nts: r.nts, lv: Number($('wpLv').value) };
+    if (c.ops.length && c.nts.length) wpSave(c);
+    $('wpMiss').textContent = wpMissing(c);
+    $('wpMsg').textContent = '';
+    return c;
+  };
+  f.querySelectorAll('input,select').forEach(x => x.onchange = sync);
+  const ready = () => { const c = sync(), why = wpWhy(c); if (why) { $('wpMsg').textContent = why; return null; } wpArm(c); return c; };
+  $('wpPlay').onclick = () => { const c = ready(); if (c) startPractice('wp', { level: c.lv }); };
+  $('wpLearn').onclick = () => { const c = ready(); if (c) wpLearn(c); };
+  $('wpOpQ').onclick = () => { const c = ready(); if (c) wpOpGame(c); };
+  app.querySelector('.wp-plink').onclick = () => sync();
+}
+// ---- ללמוד: חלון עם צעדי פתרון, משמעות הפעולות ודוגמה פתורה ----
+const WP_MEAN = {
+  add: ['מצרפים חלקים לשלם, מוסיפים, "בסך הכול", "יחד".', 'זהירות: "פחות מ..." יכול להיות חיבור – כששואלים על מי שיש לו <b>יותר</b>.'],
+  sub: ['מורידים ובודקים כמה נשאר, מחפשים כמה חסר, משווים: "בכמה יותר / פחות?".', 'זהירות: "יותר מ..." יכול להיות חיסור – כששואלים על מי שיש לו <b>פחות</b>.'],
+  mul: ['קבוצות שוות: "בכל אחד... יש...", מחיר × כמות, "פי 3 יותר", "חלק מתוך חלק" בשברים.', 'זהירות: "פי" זה לא "עוד"! פי 3 = שלוש פעמים, לא עוד 3.'],
+  div: ['מחלקים שווה בשווה (כמה בכל קבוצה?), כמה קבוצות יש (כמה פעמים נכנס?), "פי כמה?".', 'זהירות: אם יש <b>פי</b> והכמות שמחפשים קטנה יותר – מחלקים.']
+};
+const WP_NTNOTE = { int: '', frac: '<li><b>בשברים:</b> מחברים ומחסרים רק עם מכנה משותף. "חלק מתוך כמות" = כפל.</li>', dec: '<li><b>בעשרוניים:</b> בחיבור ובחיסור – נקודה מתחת לנקודה. בכסף: 2 ספרות אחרי הנקודה הן אגורות.</li>' };
+function wpLearn(c) {
+  track('למידה', 'שאלות מילוליות');
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); stopSpeak(); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  const cb = wpCombos(c);
+  ov.innerHTML = `<div class="modal sc-modal wp-learn" role="dialog" aria-modal="true" aria-labelledby="wpLT">
+    <h2 id="wpLT">${ic('book')} איך פותרים שאלה מילולית?</h2>
+    <ol class="wp-4">${WP_TIPS.map((t, i) => `<li><span class="wp-n">${i + 1}</span><span>${t}</span></li>`).join('')}</ol>
+    <h3>איך יודעים איזו פעולה?</h3>
+    <div class="wp-means">${c.ops.filter(o => cb.some(x => x[0] === o)).map(o => `<div class="wp-mean"><div class="wp-mh"><b class="m">${WP_SIGN[o]}</b> ${WP_OPNAME[o]}</div><div>${WP_MEAN[o][0]}</div><div class="small wp-warn">⚠️ ${WP_MEAN[o][1]}</div></div>`).join('')}</div>
+    ${c.nts.some(n => WP_NTNOTE[n] && cb.some(x => x[1] === n)) ? `<ul class="wp-ntn">${c.nts.filter(n => cb.some(x => x[1] === n)).map(n => WP_NTNOTE[n]).join('')}</ul>` : ''}
+    <h3>דוגמה פתורה – צעד אחר צעד</h3>
+    <div class="wp-lvrow">רמה: ${[1, 2, 3].map(n => `<button type="button" class="ghost wp-exlv${n === c.lv ? ' sel' : ''}" data-exlv="${n}">${'⭐'.repeat(n)}</button>`).join('')}</div>
+    <div class="card wp-ex" id="wpEx" aria-live="polite"></div>
+    <div class="actions" style="justify-content:center"><button id="wpExNew" class="secondary">${ic('shuffle')} דוגמה אחרת</button><button id="wpGoPr">${ic('pencil')} לתרגול ←</button><button id="wpLX" class="ghost">↩ סגירה</button></div>
+  </div>`;
+  let lv = c.lv, ex = null, k = 0;
+  const draw = () => {
+    const box = ov.querySelector('#wpEx'), st = ex.steps || [];
+    const ops = (ex.ops || []).map(o => `<b class="m">${WP_SIGN[o]}</b> ${WP_OPNAME[o]}`).join(' ואז ');
+    const parts = [`<div class="wp-step"><span class="wp-n">1</span><span><b>מה ידוע? מה שואלים?</b> קוראים שוב. השאלה עצמה מסומנת – כל השאר הוא מה שידוע.</span></div>`,
+      `<div class="wp-step"><span class="wp-n">2</span><span><b>איזו פעולה?</b> ${ops}${ex.hint ? ` – ${ex.hint}` : ''}</span></div>`,
+      `<div class="wp-step"><span class="wp-n">3</span><span><b>פותרים:</b>${st.length ? `<ol class="exsteps">${st.map(s => `<li>${stepAns(s.p, s.a)}</li>`).join('')}</ol>` : ` ${ex.exp}`}</span></div>`,
+      `<div class="wp-step"><span class="wp-n">4</span><span><b>התשובה:</b> ${correctHTML(ex)}${ex.traps && ex.traps[0] ? `<div class="small wp-warn">💡 טעות נפוצה: ${ex.traps[0].m}</div>` : ''}</span></div>`];
+    const cut = ex.text.lastIndexOf('<br>'), qt = cut < 0 ? ex.text : `${ex.text.slice(0, cut)}<br><mark class="wp-q">${ex.text.slice(cut + 4)}</mark>`;
+    box.innerHTML = `<div class="qtext">${qt}</div>${parts.slice(0, k).join('')}${k < 4 ? `<div class="actions"><button type="button" id="wpStep">${k ? 'לצעד הבא ←' : 'מתחילים לפתור ←'}</button></div>` : ''}`;
+    if (ov.querySelector('#wpStep')) ov.querySelector('#wpStep').onclick = () => { k++; draw(); };
+  };
+  const fresh = () => { const [op, nt] = pick(cb); ex = wpGen(op, nt, lv, c); k = 0; draw(); };
+  ov.querySelectorAll('[data-exlv]').forEach(b => b.onclick = () => { lv = Number(b.dataset.exlv); ov.querySelectorAll('[data-exlv]').forEach(x => x.classList.toggle('sel', x === b)); fresh(); });
+  ov.querySelector('#wpExNew').onclick = fresh;
+  ov.querySelector('#wpGoPr').onclick = () => { close(); startPractice('wp', { level: lv }); };
+  ov.querySelector('#wpLX').onclick = close;
+  fresh();
+}
+// ---- 🎯 מה הפעולה? 8 סיפורים, בוחרים פעולה (בלי לחשב) ----
+function wpOpGame(c) {
+  const cb = wpCombos(c).filter(([op]) => op), ops = [...new Set(cb.map(x => x[0]))];
+  track('משחק', 'שאלות מילוליות – מה הפעולה?');
+  const ov = document.createElement('div'); ov.className = 'overlay sc-ov'; document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  const N = 8;
+  let i = 0, score = 0, cur = null, answered = false;
+  const choicesOps = ops.length >= 2 ? ops : WP_OPS.map(o => o[0]).filter(o => GRADE >= WP_FROM.int[o]);
+  const next = () => {
+    const [op, nt] = pick(cb);
+    cur = wpGen(op, nt, Math.random() < 0.55 ? 2 : 1, c); answered = false;
+    ov.querySelector('.modal').innerHTML = `<h2>🎯 מה הפעולה? <span class="small muted">${i + 1} מתוך ${N} · נכון: ${score}</span></h2>
+      <p class="small muted">לא צריך לחשב – רק לבחור איזו פעולה פותרת את הסיפור.</p>
+      <div class="card"><div class="qtext">${cur.text}</div></div>
+      <div class="wp-opbtns">${choicesOps.map(o => `<button type="button" class="secondary" data-op="${o}"><b class="m">${WP_SIGN[o]}</b> ${WP_OPNAME[o]}</button>`).join('')}</div>
+      <div class="fb" id="wpOpFb" aria-live="polite"></div>
+      <div class="actions" style="justify-content:center"><button id="wpOpNext" class="hidden">${i + 1 === N ? 'לסיכום 🏁' : 'לסיפור הבא ←'}</button><button id="wpOpX" class="ghost">↩ יציאה</button></div>`;
+    ov.querySelectorAll('[data-op]').forEach(b => b.onclick = () => {
+      if (answered) return;
+      answered = true;
+      const ok = b.dataset.op === cur.ops[0];
+      if (ok) score++;
+      ov.querySelectorAll('[data-op]').forEach(x => { x.disabled = true; if (x.dataset.op === cur.ops[0]) x.classList.add('ok'); });
+      if (!ok) b.classList.add('bad');
+      const fb = ov.querySelector('#wpOpFb');
+      fb.className = 'fb show ' + (ok ? 'ok' : 'bad');
+      fb.innerHTML = `${ok ? '✅ נכון!' : `❌ הפעולה המתאימה: <b>${WP_OPNAME[cur.ops[0]]}</b>.`} ${(cur.traps && cur.traps[0] && !ok ? cur.traps[0].m : cur.hint) || ''}<div class="small">החישוב: ${cur.exp}</div>`;
+      ov.querySelector('#wpOpNext').classList.remove('hidden');
+    });
+    ov.querySelector('#wpOpNext').onclick = () => { i++; if (i < N) next(); else done(); };
+    ov.querySelector('#wpOpX').onclick = close;
+  };
+  const done = () => {
+    ov.querySelector('.modal').innerHTML = `<h2>🏁 ${score} מתוך ${N}</h2><p>${score === N ? 'מושלם! אתם יודעים לבחור פעולה 🌟' : score >= N - 2 ? 'יפה מאוד! 👏' : 'כדאי לחזור ל"ללמוד" ולקרוא שוב על משמעות הפעולות.'}</p>
+      <div class="actions" style="justify-content:center"><button id="wpOpAgain">${ic('retry')} עוד סבב</button><button id="wpOpPr" class="secondary">${ic('pencil')} לתרגול עם חישוב</button><button id="wpOpX2" class="ghost">↩ סגירה</button></div>`;
+    ov.querySelector('#wpOpAgain').onclick = () => { i = 0; score = 0; next(); };
+    ov.querySelector('#wpOpPr').onclick = () => { close(); startPractice('wp', { level: c.lv }); };
+    ov.querySelector('#wpOpX2').onclick = close;
+  };
+  ov.innerHTML = '<div class="modal sc-modal wp-opg" role="dialog" aria-modal="true"></div>';
+  next();
+}
+// ---- כרטיס בדף ההדפסה ----
+function wpPrintCard() {
+  const c = wpCfg();
+  return `<div class="card tform" id="wpcard">
+    <h2>📝 שאלות מילוליות</h2>
+    <p class="muted small">בוחרים פעולות וסוג מספרים. במדורג – מהקל (שלב אחד) אל הקשה (שני שלבים). מספר הנוסחים, משבצות החישוב, התזכורת ודף התשובות – לפי הבחירה למעלה.</p>
+    ${wpPickHTML(c, 'p')}
+    <label>רמה:
+      <select id="wppl"><option value="mix">מדורגת – מהקל אל הקשה</option><option value="1">רמה 1 – שלב אחד</option><option value="2">רמה 2 – ניסוח מאתגר</option><option value="3">רמה 3 – שני שלבים</option></select>
+    </label>
+    <label>מספר שאלות:
+      <select id="wppc">${[4, 6, 8, 10, 12, 15, 20].map(n => `<option ${n === 8 ? 'selected' : ''}>${n}</option>`).join('')}</select>
+    </label>
+    <div class="actions"><button class="secondary" id="wppgo">📝 יצירת דף שאלות מילוליות</button></div>
+    <p class="muted small" id="wppmsg">${wpMissing(c)}</p>
+  </div>`;
+}
+function wpPrintBind(out) {
+  if (!$('wppgo')) return;
+  const card = $('wpcard');
+  card.querySelectorAll('input').forEach(x => x.onchange = () => { const r = wpRead(card, 'p'); $('wppmsg').textContent = wpMissing({ ops: r.ops, nts: r.nts }); });
+  $('wppgo').onclick = () => {
+    const r = wpRead(card, 'p'), c = { ops: r.ops, nts: r.nts, lv: wpCfg().lv }, why = wpWhy(c);
+    if (why) { $('wppmsg').textContent = why; return; }
+    if (c.ops.length && c.nts.length) wpSave(c);
+    const level = $('wppl').value, n = Number($('wppc').value), versions = Number($('wv').value), noGrid = !$('wgrid').checked;
+    const lvName = $('wppl').selectedOptions[0].textContent.trim();
+    const title = $('wt').value.trim() || 'שאלות מילוליות';
+    const vn = v => versions > 1 ? ' – נוסח ' + 'אבג'[v] : '';
+    wsGate(() => {
+      const sheets = Array.from({ length: versions }, () => wpList(c, level, n));
+      const tips = $('wtips').checked ? `<div class="wstips"><b>📘 איך פותרים?</b><ul>${WP_TIPS.map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
+      let html = sheets.map((qs, v) => `<section class="ws-page"><div class="wshead"><h1>${esc(title)}${vn(v)}</h1>
+        <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+        ${tips}<div class="wsqs${noGrid ? ' nogrid' : ''}">${qs.map((q, i) => wsQuestionHTML(q, i + 1, noGrid)).join('')}</div><div class="wsfoot">בהצלחה! 🌟</div></section>`).join('');
+      if ($('wkey').checked) html += sheets.map((qs, v) => `<section class="ws-page wskey"><h2>🔑 דף תשובות – ${esc(title)}${vn(v)}</h2>
+        <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol></section>`).join('');
+      $('wsout').dataset.what = `שאלות מילוליות: ${c.ops.map(o => WP_OPNAME[o]).join(', ')} · ${c.nts.map(x => WP_NTS.find(y => y[0] === x)[1]).join(', ')} · ${lvName}`;
+      out(html);
+      if (tips) dropTipsIfOverflow();
+      $('wppmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה יוצרת דף חדש.';
+    });
+  };
+  if (location.hash === '#wp') setTimeout(() => card.scrollIntoView({ block: 'start' }), 50);
 }
 /* ---------- דפי תרגילים רציפים: תרגיל אחרי תרגיל, לפי תחום (כל הכיתות) ---------- */
 // כל מחולל מחזיר { e: הביטוי (בתוך M), a: התשובה } – או { h: HTML מלא של התרגיל, a }; rem = חילוק עם שארית
