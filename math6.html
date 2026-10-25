@@ -1696,7 +1696,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קעח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -16062,9 +16062,40 @@ Object.assign(SC_MORE, {
   } }
 });
 SC_WORD.gq_tri = q => { const { v, ang } = q.m; return Object.assign(scW(q, [{ t: ang ? `גג של בית בנוי בצורת משולש. הזוויות שלו: ${v[0]}°, ${v[1]}° ו-${v[2]}°. איזה משולש זה?` : `לגינה בצורת משולש יש גדר: ${v[0]} מטר, ${v[1]} מטר ו-${v[2]} מטר. איזה משולש זה?` }], [q.x[q.x.length - 1]], ''), { a: q.a }); };
+// סדרות (כיתות ג'–ו'): קפיצות שוות (חיבור/חיסור) וכפל
+const SC_SEQR = { k: 'range', type: 'radio', label: 'מספרים', o: [['1000', 'עד 1,000'], ['10000', 'עד 10,000']] };
+const scSeqMax = p => Number(p.range) || 1000;
+const SC_SEQ = { name: 'סדרות', skills: {
+  seq: { name: 'סדרת מספרים', noWq: 1,
+    opts: [{ k: 'type', type: 'radio', label: 'סוג הסדרה', o: [['add', 'קפיצות שוות (חיבור/חיסור)'], ['mul', 'כפל (×)'], ['mix', 'מעורב']] }, SC_SEQR, { k: 'dir', type: 'radio', label: 'כיוון (בקפיצות שוות)', o: [['mix', 'עולה ויורדת'], ['up', 'עולה'], ['down', 'יורדת']] }],
+    title: p => `סדרות · ${{ add: 'קפיצות שוות', mul: 'כפל', mix: 'מעורב' }[p.type || 'add']} · עד ${fmt(scSeqMax(p))}`,
+    gen: p => { const max = scSeqMax(p), type = p.type || 'add', dir = p.dir || 'mix';
+      const addSteps = max > 1000 ? [50, 100, 250, 500, 1000] : [5, 10, 25, 50, 100];
+      const holesA = [[3, 4], [1, 3], [0, 1], [4], [2, 4]];
+      return scIx().map((i, j) => {
+        const mul = type === 'mul' || (type === 'mix' && j % 2 === 1);
+        if (mul) {
+          const k = max > 1000 ? pick([2, 3, 4]) : pick([2, 3]);
+          const s0 = R(1, Math.min(Math.max(1, Math.floor(max / Math.pow(k, 4))), 9));
+          const seq = [0, 1, 2, 3, 4].map(t => s0 * Math.pow(k, t));
+          const holes = i % 2 ? [3, 4] : [4];
+          const x = []; seq.forEach((v, t) => { if (t) x.push(','); x.push(holes.includes(t) ? { b: 1 } : fmt(v)); });
+          return { x, k: 'num', a: holes.map(t => seq[t]), hint: `סדרת כפל: בכל צעד כופלים ב-${k}.`, m: { s0, k, mul: 1, h: holes.join('') } };
+        }
+        const down = dir === 'down' || (dir === 'mix' && j % 2 === 1);
+        const st = pick(addSteps), span = 4 * st;
+        let a0 = down ? R(span, max) : R(0, max - span);
+        a0 = Math.round(a0 / st) * st;
+        a0 = down ? Math.max(span, Math.min(a0, max)) : Math.min(max - span, Math.max(0, a0));
+        const seq = [0, 1, 2, 3, 4].map(t => down ? a0 - t * st : a0 + t * st);
+        const holes = holesA[Math.min(i, 4)];
+        const x = []; seq.forEach((v, t) => { if (t) x.push(','); x.push(holes.includes(t) ? { b: 1 } : fmt(v)); });
+        return { x, k: 'num', a: holes.map(t => seq[t]), hint: (down ? 'סדרה יורדת – כל מספר קטן ' : 'סדרה עולה – כל מספר גדול ') + `ב-${fmt(st)} מהקודם.`, m: { a0, st, down, h: holes.join('') } };
+      }); } }
+} };
 // סדר התחומים בתפריט
 (() => { const old = Object.assign({}, SCD); Object.keys(SCD).forEach(k => delete SCD[k]);
-  Object.assign(SCD, { n1: old.n1, as: SC_MORE.as, pv: SC_MORE.pv, mul: old.mul, dv: SC_MORE.dv, frac: old.frac, dc: SC_MORE.dc, pc: SC_MORE.pc, or: SC_MORE.or, ge: SC_MORE.ge, gq: SC_MORE.gq, dr: SC_MORE.dr, mn: SC_MORE.mn, ms: SC_MORE.ms }); })();
+  Object.assign(SCD, { n1: old.n1, as: SC_MORE.as, pv: SC_MORE.pv, sq: SC_SEQ, mul: old.mul, dv: SC_MORE.dv, frac: old.frac, dc: SC_MORE.dc, pc: SC_MORE.pc, or: SC_MORE.or, ge: SC_MORE.ge, gq: SC_MORE.gq, dr: SC_MORE.dr, mn: SC_MORE.mn, ms: SC_MORE.ms }); })();
 
 // הגדרות ברירת מחדל לכל מיומנות
 // טווח ברירת מחדל לפי השכבה: א' – עד 10, ב' – עד 100, ג' – עד 1,000 (אם קיים באפשרויות)
@@ -16134,7 +16165,7 @@ function scCheckAns(q, vals) {
 // ---- מסך הבנייה (מורים): בוחרים מיומנות, רואים את הדף, מדפיסים / מקרינים / שולחים קישור ----
 let scCfg = null;
 // אילו תחומים מתאימים לכל שכבה
-const SCD_G = { n1: [1, 2], as: [1, 6], pv: [2, 6], mul: [2, 6], dv: [4, 6], frac: [3, 6], dc: [5, 6], pc: [5, 6], or: [3, 6], ge: [3, 6], gq: [3, 6], dr: [4, 6], mn: [5, 6], ms: [3, 6] };
+const SCD_G = { n1: [1, 2], as: [1, 6], pv: [2, 6], sq: [3, 6], mul: [2, 6], dv: [4, 6], frac: [3, 6], dc: [5, 6], pc: [5, 6], or: [3, 6], ge: [3, 6], gq: [3, 6], dr: [4, 6], mn: [5, 6], ms: [3, 6] };
 const scDomOk = k => { const g = SCD_G[k]; return !g || (GRADE >= g[0] && GRADE <= g[1]); };
 const SC_COLORS = ['#d9482b', '#e2b357', '#7fa8d6', '#2f8f55', '#d98a9a', '#4c5fd5', '#9db27a', '#a48cc9', '#6fb3ad', '#c77d3a', '#5f8fbf'];
 // אפשרויות הדיוק (בחלון): כפולות, רמה, סוג שאלות וכו'
