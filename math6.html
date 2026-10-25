@@ -1143,6 +1143,23 @@
   .b10-set { margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
   .b10-set input { width: 110px; font: inherit; font-size: 1.2rem; text-align: center; padding: 8px; border: 2px solid var(--ink,#1f1e1c); border-radius: 10px; }
   .b10-hint { margin-top: 16px; font-size: 0.95rem; }
+  .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 4px; }
+  .tool-row .tool-chip { font: inherit; font-size: 0.95rem; padding: 5px 12px; border: 2px solid #1f1e1c; border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; }
+  .tool-row .tool-chip:hover { background: #eef6f0; }
+  .tp-head { border-top: 6px solid var(--c); display: flex; flex-direction: column; gap: 8px; }
+  .tp-head .ds { color: var(--muted); }
+  .tp-head .best { color: var(--c); font-weight: 600; font-size: 0.95rem; }
+  .tp-head .mbar { display: block; height: 8px; border-radius: 99px; background: #eceae4; overflow: hidden; }
+  .tp-head .mbar span { display: block; height: 100%; background: var(--c); }
+  .tp-step { margin-top: 16px; }
+  .tp-h { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 1.3rem; }
+  .tp-n { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #1f1e1c; color: #fff; font-size: 1.1rem; flex-shrink: 0; }
+  .tp-lessons { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .tp-lesson { display: flex; flex-direction: column; gap: 2px; text-align: right; padding: 12px 16px; background: #eef4fb; color: #1f1e1c; border: 2px solid #1f1e1c; box-shadow: 2px 3px 0 #1f1e1c; font-size: 1.05rem; }
+  .tp-lesson .muted { font-size: 0.9rem; font-weight: normal; }
+  .tp-check { width: 100%; padding: 14px; font-size: 1.15rem; }
+  .tp-check .desc { display: block; font-size: 0.9rem; font-weight: normal; margin-top: 2px; }
+  .tp-step .b10-card:last-child { margin-bottom: 0; }
   .b10-card2 { background: linear-gradient(135deg,#fdeede,#f8d9c0); }
   .b10-card2:hover { background: linear-gradient(135deg,#fbe6d0,#f3ccac); }
   .b10-card2 .b10c-d { color: #6a4a35; }
@@ -1722,7 +1739,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קפח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קפט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8088,14 +8105,14 @@ function home() {
   state = null;
   lessonView = null;
   stopSpeak();
+  if (topicBack) { const id = topicBack; topicBack = null; return topicHome(id); }
   const name = store.name || '';
   const len = store.roundLen || 10;
   const calm = document.documentElement.classList.contains('calm');
   // תפריט הצד – בשלוש קטגוריות: לומדים ומתרגלים · משחקים ומבחנים · למורה
   const T = teacherOn();
   const tabs = [
-    { id: 'learn', label: 'ללמוד', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
-    { id: 'practice', label: 'לתרגל', icon: 'pencil', wash: 'rgba(217,138,154,0.28)' },
+    { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
     { id: 'wp', label: 'שאלות מילוליות', icon: 'note', wash: 'rgba(120,180,160,0.30)' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
@@ -8132,27 +8149,9 @@ function home() {
         ${tabs.map(t => (t.grp ? `<div class="tab-grp" role="presentation">${t.grp}</div>` : '') + (t.go ? `<button type="button" class="tab" id="${t.go}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>` : `<button role="tab" class="tab${t.id === homeTab ? ' on' : ''}" data-tab="${t.id}" aria-selected="${t.id === homeTab}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>`)).join('')}
       </nav>
       <div class="panels">
-        <section class="panel" data-panel="learn" ${homeTab === 'learn' ? '' : 'hidden'}>
-          <h2>ללמוד – כרטיסיות הסבר</h2>
-          <div class="topics">
-            ${LESSON_ORDER.map(id => LESSONS[id]).map((L, i) => {
-              const n = learnedSet(L.id).size;
-              return `<button class="topic" style="--c:${L.color}" data-lesson="${L.id}">
-                <span class="ic">${i + 1}</span>
-                <span class="nm">${L.name}</span>
-                <span class="ds">${L.desc}</span>
-                <span class="mbar"><span style="width:${n / cardsOf(L.id).length * 100}%"></span></span>
-                <span class="best">${n ? `✔ ${n} מתוך ${cardsOf(L.id).length}` : `${cardsOf(L.id).length} כרטיסיות`}</span>
-              </button>`;
-            }).join('')}
-          </div>
-        </section>
         <section class="panel" data-panel="practice" ${homeTab === 'practice' ? '' : 'hidden'}>
-          <h2>לתרגל – בחרו נושא</h2>
+          <h2>נושאים – לומדים ומתרגלים</h2>
           ${champCard()}
-          ${GRADE <= 3 ? `<button type="button" class="b10-card" id="b10labGo"><span class="b10c-ic">🧱</span><span class="b10c-t">מחולל אבני בסיס עשר</span><span class="b10c-d">מקלידים מספר ורואים אותו באבנים – עשרות ואחדות. אפשר להוסיף ולהוריד ולראות חי.</span></button>` : ''}
-          ${GRADE >= 1 && GRADE <= 3 ? `<button type="button" class="b10-card b10-card2" id="b10twoGo"><span class="b10c-ic">🔁</span><span class="b10c-t">מעבר עשרת – שני מספרים</span><span class="b10c-d">חיבור או חיסור של שני מספרים, צעד-צעד, כולל רגע ההמרה של 10 אחדות לעשרת.</span></button>` : ''}
-          ${GRADE >= 4 ? `<button type="button" class="b10-card b10-card3" id="mulAreaGo"><span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span></button>` : ''}
           <div class="topics">
             ${TOPICS.map((t, i) => {
               const s = store.topics[t.id];
@@ -8162,7 +8161,7 @@ function home() {
                 <span class="nm">${t.name}</span>
                 <span class="ds">${t.desc}</span>
                 <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
-                <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}</span>
+                <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}${topicLessons(t.id).length ? ' · 📖 יש הסבר' : ''}</span>
               </button>`;
             }).join('')}
             ${GRADE >= 4 ? `<button class="topic" style="--c:#2f8f55" id="drawGo">
@@ -8176,6 +8175,7 @@ function home() {
                 <span class="ds">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span>
               </button>` : ''}
           </div>
+          ${toolRow()}
           <div class="practice-more">
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -8344,7 +8344,7 @@ function home() {
     store.roundLen = Number(b.dataset.len); saveStore(store);
     app.querySelectorAll('.seg button').forEach(x => x.classList.toggle('sel', x === b));
   });
-  app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => showLevelPicker(b.dataset.t));
+  app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => topicHome(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   // ---- חיפוש נושא: לימוד + תרגול + משחקים + מבחנים ----
   (() => {
@@ -8360,8 +8360,9 @@ function home() {
       const color = el.style.getPropertyValue('--c').trim() || '#9d8f63';
       items.push({ name, desc: ds ? ds.textContent : '', tag, color, el });
     };
-    app.querySelectorAll('[data-lesson]').forEach(el => add(el, 'ללמוד', '.nm'));
-    app.querySelectorAll('.panel[data-panel="practice"] .topic').forEach(el => add(el, 'לתרגל', '.nm'));
+    LESSON_ORDER.forEach(id => { const L = LESSONS[id]; items.push({ name: L.name, desc: L.desc, tag: 'ללמוד', color: L.color, el: { click: () => startLesson(id) } }); });
+    app.querySelectorAll('.panel[data-panel="practice"] .topic').forEach(el => add(el, 'נושא', '.nm'));
+    app.querySelectorAll('.tool-row .tool-chip').forEach(el => add(el, 'כלי המחשה'));
     app.querySelectorAll('.game-card').forEach(el => add(el, 'משחק', '.gc-nm'));
     if ($('testPick')) items.push({ name: GRADE === 6 ? 'מבדק' : 'מבחן', desc: '20 שאלות מכל הנושאים · מבחן מבדק', tag: 'מבחן', color: '#a48cc9', el: $('testPick') });
     if ($('mkGo')) items.push({ name: 'אימון לקראת ה' + (GRADE === 6 ? 'מבדק' : 'מבחן'), desc: 'שאלות בסגנון המבחן', tag: 'מבחן', color: '#a48cc9', el: $('mkGo') });
@@ -8400,6 +8401,71 @@ function home() {
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
 }
+// דף נושא: ① ללמוד ← ② לתרגל ← ③ בודקים את עצמי, ומתחת – כלי המחשה של הנושא
+let topicBack = null;
+const topicLessons = id => LESSON_ORDER.filter(l => lessonTopic(LESSONS[l]) === id);
+const TOOL_CARDS = [
+  { id: 'b10labGo', on: GRADE <= 3, topics: ['place', 'num100'], go: () => b10Lab(), chip: '🧱 אבני בסיס עשר',
+    html: `<span class="b10c-ic">🧱</span><span class="b10c-t">מחולל אבני בסיס עשר</span><span class="b10c-d">מקלידים מספר ורואים אותו באבנים – עשרות ואחדות. אפשר להוסיף ולהוריד ולראות חי.</span>` },
+  { id: 'b10twoGo', cls: 'b10-card2', on: GRADE <= 3, topics: ['addsub', 'add20', 'add100'], go: () => b10Two(), chip: '🔁 מעבר עשרת',
+    html: `<span class="b10c-ic">🔁</span><span class="b10c-t">מעבר עשרת – שני מספרים</span><span class="b10c-d">חיבור או חיסור של שני מספרים, צעד-צעד, כולל רגע ההמרה של 10 אחדות לעשרת.</span>` },
+  { id: 'mulAreaGo', cls: 'b10-card3', on: GRADE >= 4, topics: ['mul22'], go: () => mulArea(), chip: '▦ שיטת המלבנים',
+    html: `<span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span>` }
+].filter(c => c.on);
+const toolRow = () => TOOL_CARDS.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${TOOL_CARDS.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
+function topicHome(id) {
+  const t = TOPIC[id];
+  if (!t) return home();
+  if (typeof stopRace === 'function') stopRace();
+  state = null; lessonView = null; stopSpeak();
+  navPush('topic');
+  window.scrollTo(0, 0);
+  const s = store.topics[id], m = s ? s.mastery : 0, cur = currentLevel(id);
+  const ls = topicLessons(id), tools = TOOL_CARDS.filter(c => c.topics.includes(id));
+  let n = 0;
+  const step = h => `<h2 class="tp-h"><span class="tp-n">${++n}</span>${h}</h2>`;
+  app.innerHTML = `
+    <div class="topbar">
+      <span class="title">${t.icon} ${t.name}</span>
+      <button class="ghost navhome" id="quit">${ic('home')} לכל הנושאים</button>
+    </div>
+    <div class="card tp-head" style="--c:${t.color}">
+      <div class="ds">${t.desc}</div>
+      <div class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></div>
+      <div class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}</div>
+    </div>
+    ${ls.length ? `<section class="card tp-step">${step('ללמוד – כרטיסיות הסבר')}
+      <div class="tp-lessons">${ls.map(l => { const L = LESSONS[l], k = learnedSet(l).size, all = cardsOf(l).length; return `<button type="button" class="tp-lesson" data-tl="${l}"><b>📖 ${L.name}</b><span class="muted">${k ? `✔ ${k} מתוך ${all}` : `${all} כרטיסיות`}</span></button>`; }).join('')}</div>
+    </section>` : ''}
+    <section class="card tp-step">${step('לתרגל – בחרו רמה')}
+      <div class="lvlchoices">
+        ${[1, 2, 3].map(k => `<button class="lvlchoice${k === cur ? ' cur' : ''}" data-pick="${k}">
+          <span class="stars3">${'⭐'.repeat(k)}</span>
+          <span class="lname">${LEVEL_NAME[k]} – ${LEVEL_TAG[k]}</span>
+          <span class="ldesc">${LEVEL_DESC[id][k - 1]}</span>
+          ${k === cur ? `<span class="ltag">${s ? '📍 הרמה שלך' : '👍 מומלץ להתחלה'}</span>` : ''}
+        </button>`).join('')}
+      </div>
+      <label class="lockrow"><input type="checkbox" id="tpLock"> 🔒 להישאר ברמה שבחרתי לאורך כל הסבב (בלי עלייה או ירידה אוטומטית)</label>
+    </section>
+    <section class="card tp-step">${step('בודקים את עצמי')}
+      <button type="button" class="tp-check" id="tpCheck">✅ סבב בדיקה קצר<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, בלי שינוי רמה – רואים כמה כבר יודעים</span></button>
+    </section>
+    ${tools.length ? `<section class="card tp-step"><h2 class="tp-h">🧰 כלי המחשה</h2>
+      ${tools.map(c => `<button type="button" class="b10-card${c.cls ? ' ' + c.cls : ''}" data-tool="${c.id}">${c.html}</button>`).join('')}
+    </section>` : ''}
+  `;
+  const go = f => () => { topicBack = id; f(); };
+  $('quit').onclick = () => { topicBack = null; home(); };
+  app.querySelectorAll('[data-tl]').forEach(b => b.onclick = go(() => startLesson(b.dataset.tl)));
+  app.querySelectorAll('[data-pick]').forEach(b => b.onclick = go(() => {
+    const level = Number(b.dataset.pick);
+    tstat(id).level = level; saveStore(store);
+    startPractice(id, { level, fixed: $('tpLock').checked });
+  }));
+  $('tpCheck').onclick = go(() => startPractice(id, { level: cur, count: 5, fixed: true }));
+  app.querySelectorAll('[data-tool]').forEach(b => b.onclick = go(TOOL_CARDS.find(c => c.id === b.dataset.tool).go));
+}
 let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
 
 // "מה עושים היום?" – הצעה אחת ברורה לצעד הבא
@@ -8431,6 +8497,8 @@ const LEVEL_DESC6 = {
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 const LEVEL_DESC = GRADE === 1 ? LEVEL_DESC1 : GRADE === 2 ? LEVEL_DESC2 : GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
+// נושא בלי תיאורי רמות (למשל סדרות בכיתה ג') – תיאור כללי, כדי שבחירת הרמה לא תיכשל
+TOPICS.forEach(t => { if (!LEVEL_DESC[t.id]) LEVEL_DESC[t.id] = ['תרגילים קלים להתחלה', 'תרגילים בינוניים', 'תרגילים מאתגרים']; });
 if (TOPIC.mul22) LEVEL_DESC.mul22 = ['מודל השטח ותרגילים', 'תרגילים ובעיות מילוליות', 'בעיות, אומדן ותרגילים'];
 const LEVEL_TAG = { 1: 'בסיסית', 2: 'בינונית', 3: 'מאתגרת' };
 
