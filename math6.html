@@ -912,6 +912,10 @@
   .bg-hist { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 8px; font-size: 1.15rem; }
   .bg-hist span { padding: 2px 10px; border: 1.5px dashed #cfc6b4; border-radius: 10px; }
   .tf-s { font-size: clamp(1.8rem, 4.6vw, 3.2rem); font-weight: 700; line-height: 1.5; margin: 18px 0; }
+  .tf-s .tf-q { font-size: 0.6em; font-weight: 400; }
+  .tf-s .tf-claim { margin-top: 10px; }
+  .bg-ex.bg-q { font-size: clamp(1.4rem, 3.6vw, 2.2rem); font-weight: 400; line-height: 1.5; }
+  .wc-val .wc-q { display: block; font-size: 0.55em; font-weight: 400; line-height: 1.4; }
   .tf-vote { display: flex; justify-content: center; gap: 18px; margin: 8px 0; }
   .tf-vote button { color: #1f1e1c; box-shadow: 3px 4px 0 #1f1e1c; min-height: 56px; }
   .tf-vote button:disabled { opacity: 0.55; box-shadow: none; }
@@ -1777,7 +1781,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10010,6 +10014,12 @@ function fsBtnHTML() { return document.fullscreenEnabled ? `<button class="secon
 function fsBind() { if ($('jFull')) $('jFull').onclick = () => { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else document.documentElement.requestFullscreen().catch(() => {}); }; }
 // משחק שנפתח מתוך שיעור: הנושא של השיעור מסומן מראש (ורק הוא)
 let GAME_PRE = null;
+// שאלות מנושא השיעור (לבינגו, מלחמת תרגילים ואמת או שקר): רק שאלות שמתאימות למשחק (ok)
+function gamePool(id, ok, tries = 400) { const T = TOPIC[id], out = [], seen = new Set(); if (!T) return out;
+  for (let i = 0; i < tries; i++) { const lv = 1 + i % 3, L = T.levels[lv]; if (!L || !L.length) continue; let q; try { q = mk(id, pick(L), lv); } catch (e) { continue; } if (seen.has(q.text) || !ok(q)) continue; seen.add(q.text); out.push(q); }
+  return out; }
+const gameNum = q => q.type === 'num' && typeof q.ans === 'number' && Number.isFinite(q.ans);
+const gamePreHTML = (ok, what) => GAME_PRE && TOPIC[GAME_PRE] ? `<p class="small center" style="margin:0 0 8px">📌 לפי נושא השיעור: <b>${TOPIC[GAME_PRE].name}</b>${ok ? '' : ` – בנושא הזה אין מספיק ${what}, ולכן המשחק בחשבון כללי`}</p>` : '';
 // בשיעור מוכן: מציעים להמשיך משחק שמור רק אם הוא באותו נושא של השיעור
 const gameSameTopic = ids => !GAME_PRE || (Array.isArray(ids) && ids.length > 0 && ids.every(id => String(id).split('~')[0] === GAME_PRE));
 function topicChecks(attr) { return `${GAME_PRE && TOPIC[GAME_PRE] ? `<p class="small" style="margin:0 0 6px">📌 לפי נושא השיעור: <b>${TOPIC[GAME_PRE].name}</b></p>` : ''}<div class="jeo-topics">${gameTopics().map(t => `<label class="chk"><input type="checkbox" data-${attr}="${t.id}" ${GAME_PRE && TOPIC[GAME_PRE] ? (t.id === GAME_PRE ? 'checked' : '') : t.id === 'composite' ? '' : 'checked'}> ${t.name}</label>`).join('')}</div>${topicBtns(attr)}`; }
@@ -10283,30 +10293,36 @@ const BINGO_TRACKS = RACE_TRACKS.filter(t => !['a10', 'div'].includes(t.id));
 function bingoHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('bingo');
   let size = 3, track = BINGO_TRACKS[0].id;
+  // בשיעור מוכן: התרגילים מנושא השיעור (שאלות עם תשובה מספרית, כל תשובה פעם אחת)
+  const pre = GAME_PRE && TOPIC[GAME_PRE] ? (() => { const m = new Map(); gamePool(GAME_PRE, gameNum, 1500).forEach(q => { if (!m.has(q.ans)) m.set(q.ans, q); }); return [...m.values()]; })() : null;
+  const preOk = pre && pre.length >= 11;
+  if (preOk) track = 'pre';
   const draw = () => {
     app.innerHTML = `
       <div class="topbar"><span class="title">${ic('grid')} בינגו כיתתי</span><button class="secondary" id="bgHome">${ic('home')} לדף הבית</button></div>
       <div class="card race-intro"><p class="race-how">כל תלמיד מצייר לוח במחברת וממלא אותו במספרים מהרשימה. על המסך מופיעים תרגילים – מי שיש לו את התשובה בלוח, מסמן אותה. <b>שורה מלאה = בינגו!</b></p></div>
-      <h2>על מה משחקים?</h2>
-      <div class="race-tracks">${BINGO_TRACKS.map(t => `<button class="race-track${t.id === track ? ' sel' : ''}" data-bt="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}</div>
-      <div class="name-row" style="justify-content:center;margin-top:14px"><span class="lbl2">גודל הלוח:</span><span class="seg">${(GRADE === 1 ? [3] : [3, 4]).map(n => `<button data-bs="${n}" class="${n === size ? 'sel' : ''}">${n} × ${n}</button>`).join('')}</span></div>
+      ${gamePreHTML(!pre || preOk, 'שאלות עם תשובה מספרית')}
+      ${preOk ? '' : `<h2>על מה משחקים?</h2>`}
+      <div class="race-tracks"${preOk ? ' hidden' : ''}>${BINGO_TRACKS.map(t => `<button class="race-track${t.id === track ? ' sel' : ''}" data-bt="${t.id}"><span class="nm">${t.name}</span></button>`).join('')}</div>
+      <div class="name-row" style="justify-content:center;margin-top:14px"><span class="lbl2">גודל הלוח:</span><span class="seg">${(GRADE === 1 || (preOk && pre.length < 18) ? [3] : [3, 4]).map(n => `<button data-bs="${n}" class="${n === size ? 'sel' : ''}">${n} × ${n}</button>`).join('')}</span></div>
       <div class="actions" style="justify-content:center"><button id="bgGo" class="race-go">ליצירת רשימת המספרים ←</button></div>`;
     $('bgHome').onclick = home;
     app.querySelectorAll('[data-bt]').forEach(b => b.onclick = () => { track = b.dataset.bt; draw(); });
     app.querySelectorAll('[data-bs]').forEach(b => b.onclick = () => { size = Number(b.dataset.bs); draw(); });
-    $('bgGo').onclick = () => bingoStart(track, size);
+    $('bgGo').onclick = () => bingoStart(track, size, preOk ? pre : null);
   };
   draw();
   window.scrollTo(0, 0);
 }
-function bingoStart(track, size) {
+function bingoStart(track, size, pre) {
   const want = size === 3 ? 18 : 30, byAns = new Map();
-  for (let i = 0; i < 4000 && byAns.size < want; i++) { const q = raceQ(track); if (!byAns.has(q.ans)) byAns.set(q.ans, q); }
+  if (pre) shuffle(pre.slice()).slice(0, want).forEach(q => byAns.set(q.ans, { t: '', ans: q.ans, html: `${q.text}${q.fig || ''}` }));
+  for (let i = 0; !pre && i < 4000 && byAns.size < want; i++) { const q = raceQ(track); if (!byAns.has(q.ans)) byAns.set(q.ans, q); }
   const pool = [...byAns.values()];
   bingo = { track, size, pool, order: shuffle(pool.slice()), k: -1, show: false };
   const nums = pool.map(q => q.ans).sort((a, b) => a - b);
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('grid')} בינגו – ${RACE_TRACKS.find(t => t.id === track).name}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="bgBack">${ic('close')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('grid')} בינגו – ${bingoName(track)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="bgBack">${ic('close')} יציאה</button></span></div>
     <div class="card center">
       <h2>ציירו לוח ${size} × ${size} במחברת</h2>
       <p class="race-how">בחרו <b>${size * size}</b> מספרים מהרשימה וכתבו אותם בלוח – כל מספר פעם אחת, באיזה סדר שרוצים.</p>
@@ -10317,6 +10333,7 @@ function bingoStart(track, size) {
   $('bgBack').onclick = bingoHome;
   $('bgCall').onclick = bingoNext;
 }
+const bingoName = tr => tr === 'pre' && GAME_PRE && TOPIC[GAME_PRE] ? TOPIC[GAME_PRE].name : (RACE_TRACKS.find(t => t.id === tr) || RACE_TRACKS[0]).name;
 function bingoNext() {
   bingo.k++;
   if (bingo.k >= bingo.order.length) bingo.k = bingo.order.length - 1;
@@ -10326,10 +10343,10 @@ function bingoDraw() {
   navPush('bingo');
   const b = bingo, q = b.order[b.k], done = b.order.slice(0, b.k + 1);
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('grid')} בינגו – ${RACE_TRACKS.find(t => t.id === b.track).name}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="bgBack">${ic('close')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('grid')} בינגו – ${bingoName(b.track)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="bgBack">${ic('close')} יציאה</button></span></div>
     <div class="card center bg-call">
       <div class="muted">תרגיל ${b.k + 1} מתוך ${b.order.length}</div>
-      <div class="bg-ex">${M(`${q.t} ${BOX}`)}</div>
+      <div class="bg-ex${q.html ? ' bg-q' : ''}">${q.html || M(`${q.t} ${BOX}`)}</div>
       <div class="actions" style="justify-content:center">
         ${b.k + 1 < b.order.length ? `<button id="bgNext" class="race-go">התרגיל הבא ←</button>` : '<b>אלה כל התרגילים!</b>'}
         <button class="secondary" id="bgShow">${b.show ? 'הסתרת התשובות' : 'בינגו! – בדיקה'}</button>
@@ -10337,7 +10354,7 @@ function bingoDraw() {
     </div>
     <div class="card">
       <div class="muted">התרגילים שכבר היו:${b.show ? ' (עם התשובות – לבדיקת הלוח של מי שאמר בינגו)' : ''}</div>
-      <div class="bg-hist">${done.slice().reverse().map(x => `<span>${M(b.show ? `${x.t} ${fmt(x.ans)}` : x.t.replace(/\s*=$/, ''))}</span>`).join('')}</div>
+      <div class="bg-hist">${done.slice().reverse().map(x => x.html ? `<span>${b.show ? `שאלה ${b.order.indexOf(x) + 1}: ${M(fmt(x.ans))}` : `שאלה ${b.order.indexOf(x) + 1}`}</span>` : `<span>${M(b.show ? `${x.t} ${fmt(x.ans)}` : x.t.replace(/\s*=$/, ''))}</span>`).join('')}</div>
     </div>`;
   fsBind();
   $('bgBack').onclick = () => { if (confirm('לצאת מהבינגו?')) bingoHome(); };
@@ -10379,6 +10396,23 @@ const TF_FACTS = {
     ['שטח ריבוע שצלעו 3 ס"מ הוא 12 סמ"ר.', false, `${M('3 × 3 = 9')} – השטח 9 סמ"ר (12 זה ההיקף).`]
   ]
 };
+// טענה מתוך שאלה של נושא השיעור: "התשובה היא ..." – נכונה או שגויה (טעות נפוצה מהשאלה, אם יש)
+function tfTopicStatement(id) {
+  for (let k = 0; k < 40; k++) {
+    const lv = R(1, 3), L = TOPIC[id].levels[lv]; if (!L || !L.length) continue;
+    const q = mk(id, pick(L), lv), u = q.unit ? ' ' + q.unit : '', truth = Math.random() < 0.5;
+    let right, wrong, why = '';
+    if (q.type === 'choice' && q.choices && q.choices.length > 1) { right = q.choices[q.ans]; wrong = pick(q.choices.filter((c, i) => i !== q.ans)); }
+    else if (gameNum(q)) {
+      const tr = (q.traps || []).find(t => typeof t.v === 'number' && Number.isFinite(t.v) && t.v >= 0 && Math.abs(t.v - q.ans) > 1e-9);
+      const near = [q.ans + 1, q.ans - 1, q.ans + 10, q.ans * 10, q.ans / 10, q.ans + 100].map(rnd).filter(v => v >= 0 && Math.abs(v - q.ans) > 1e-9 && (Number.isInteger(q.ans) ? Number.isInteger(v) : true));
+      if (!tr && !near.length) continue;
+      right = M(fmt(q.ans)) + u; wrong = M(fmt(tr ? tr.v : pick(near))) + u; if (tr) why = tr.m;
+    } else continue;
+    return { s: `<div class="tf-q">${q.text}${q.fig || ''}</div><div class="tf-claim">טענה: התשובה היא <b>${truth ? right : wrong}</b></div>`, t: truth, e: truth ? `נכון! התשובה: ${right}.` : `לא נכון – התשובה: ${right}.${why ? ` <span class="small">(${why})</span>` : ''}` };
+  }
+  return tfStatement();
+}
 function tfStatement() {
   const g = GRADE, r = Math.random();
   const facts = g <= 2 ? TF_FACTS.low : g <= 4 ? TF_FACTS.mid : TF_FACTS.high;
@@ -10414,6 +10448,7 @@ function tfHome() {
   const draw = () => {
     app.innerHTML = `
       <div class="topbar"><span class="title">${ic('check')} אמת או שקר?</span><button class="secondary" id="tfHome">${ic('home')} לדף הבית</button></div>
+      ${gamePreHTML(true)}
       <div class="card race-intro"><p class="race-how">על המסך מופיעה <b>טענה</b>. קראו אותה היטב והחליטו: <b>אמת</b> או <b>שקר</b>? אחרי כל תשובה תראו אם צדקתם, עם הסבר.</p></div>
       <div class="name-row" style="justify-content:center"><span class="lbl2">כמה טענות?</span><span class="seg">${[5, 10, 15].map(k => `<button data-tn="${k}" class="${k === n ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
       <div class="actions" style="justify-content:center"><button id="tfGo" class="race-go">מתחילים! ←</button></div>`;
@@ -10421,7 +10456,7 @@ function tfHome() {
     app.querySelectorAll('[data-tn]').forEach(b => b.onclick = () => { n = Number(b.dataset.tn); draw(); });
     $('tfGo').onclick = () => {
       const list = [], seen = new Set();
-      for (let i = 0; list.length < n && i < 500; i++) { const st = tfStatement(); if (!seen.has(st.s)) { seen.add(st.s); list.push(st); } }
+      for (let i = 0; list.length < n && i < 500; i++) { const st = GAME_PRE && TOPIC[GAME_PRE] ? tfTopicStatement(GAME_PRE) : tfStatement(); if (!seen.has(st.s)) { seen.add(st.s); list.push(st); } }
       tf = { list, k: 0, shown: false, pick: null, right: 0, answered: 0 };
       tfDraw();
     };
@@ -10923,6 +10958,11 @@ const WAR_ROUNDS = 12;
 // זוג קלפים מאותה "משפחה" כדי שיהיה אפשר להשוות; לפעמים שווים – ואז מלחמה!
 function warPair() {
   const g = GRADE, eq = Math.random() < 0.15;
+  // בשיעור מוכן: קלפים עם שאלות קצרות מנושא השיעור
+  if (war && war.pool) { const P = war.pool, a = pick(P), same = P.filter(q => q !== a && Math.abs(q.ans - a.ans) < 1e-9), diff = P.filter(q => Math.abs(q.ans - a.ans) > 1e-9);
+    const b = eq && same.length ? pick(same) : pick(diff.length ? diff : P.filter(q => q !== a));
+    const card = q => ({ html: `<span class="wc-q">${q.text}</span>`, val: q.ans, how: `${q.text} ← ${M(fmt(q.ans))}${q.unit ? ' ' + q.unit : ''}` });
+    return [card(a), card(b)]; }
   if (g >= 5 && Math.random() < 0.4) {
     const pool = [...MEM_FD.map(f => ({ n: f[0], d: f[1], v: f[0] / f[1] })), ...(g === 6 ? MEM_PCT.map(f => ({ n: f[0], d: f[1], v: f[0] / f[1] })) : [])];
     const show = x => { const r = R(0, g === 6 ? 2 : 1); return r === 0 ? F(x.n, x.d) : r === 1 ? M(fmt(rnd(x.v))) : M(fmt(rnd(x.v * 100)) + '%'); };
@@ -10943,8 +10983,13 @@ function warHome(mode) {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('war');
   const teams = mode === 'teams';
   let n1 = teams ? 'קבוצה א' : 'אני', n2 = teams ? 'קבוצה ב' : 'המחשב';
+  war = null;
+  // בשיעור מוכן: שאלות קצרות בלי איור, עם תשובה מספרית – כדי שאפשר יהיה להשוות בין שני קלפים
+  const warPool = GAME_PRE && TOPIC[GAME_PRE] ? gamePool(GAME_PRE, q => gameNum(q) && !q.fig && q.text.replace(/<[^>]+>/g, '').length <= 70, 600) : [];
+  const warOk = new Set(warPool.map(q => q.ans)).size >= 6;
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('cards')} מלחמת תרגילים${teams ? ' – קבוצות' : ''}</span><button class="secondary" id="wHome">${ic('home')} לדף הבית</button></div>
+    ${gamePreHTML(!GAME_PRE || warOk, 'שאלות קצרות עם תשובה מספרית')}
     <div class="card race-intro">
       <h2 style="margin-top:0">איך משחקים?</h2>
       <div class="cq-rules">
@@ -10963,7 +11008,8 @@ function warHome(mode) {
   $('wHome').onclick = home;
   $('wGo').onclick = () => {
     if (teams) { n1 = $('wn1').value.trim() || 'קבוצה א'; n2 = $('wn2').value.trim() || 'קבוצה ב'; }
-    war = { teams, names: [n1, n2], won: [0, 0], round: 0, judge: 0, pot: 0, pair: warPair(), phase: 'pick', choice: null, warNow: false };
+    war = { teams, names: [n1, n2], won: [0, 0], round: 0, judge: 0, pot: 0, pool: warOk ? warPool : null, phase: 'pick', choice: null, warNow: false };
+    war.pair = warPair();
     warDraw();
   };
   window.scrollTo(0, 0);
@@ -16843,7 +16889,7 @@ function lpSetKind(p, k) {
 // דרכי סיכום – כולן נשארות אצל המורה בכיתה (שום דבר לא נשלח)
 const LP_SUMS = [['board', '3 שאלות בדיקה על הלוח (קלה, בינונית, מאתגרת)'], ['talk', 'סבב שיחה: "היום למדתי... / היה לי קשה... "'], ['thumbs', 'הערכה עצמית: 👍 👌 👎 – כמה הבנתי?'], ['paper', 'מבדק הצלחה מודפס (מדפיסים מראש)']];
 const lpBookPref = () => { try { return localStorage.getItem('math-lp-book') || LP_BOOKS[0]; } catch (e) { return LP_BOOKS[0]; } };
-const LP_GAMES = [['jeo', "ג'פרדי בקבוצות – לפי נושא השיעור"], ['mil', 'מיליונר בקבוצות – לפי נושא השיעור'], ['cq', 'כיבוש שטחים – לפי נושא השיעור'], ['war', 'מלחמת תרגילים (חשבון כללי)'], ['bingo', 'בינגו (חשבון כללי)'], ['tf', 'אמת או שקר (כללי)']];
+const LP_GAMES = [['jeo', "ג'פרדי בקבוצות – לפי נושא השיעור"], ['mil', 'מיליונר בקבוצות – לפי נושא השיעור'], ['cq', 'כיבוש שטחים – לפי נושא השיעור'], ['war', 'מלחמת תרגילים – לפי נושא השיעור'], ['bingo', 'בינגו – לפי נושא השיעור'], ['tf', 'אמת או שקר – לפי נושא השיעור']];
 const lpLesson = t => (LESSON_ORDER.includes(t) && LESSONS[t]) ? t : null;
 const lpLoad = () => { try { return JSON.parse(localStorage.getItem(LP_KEY)) || []; } catch (e) { return []; } };
 const lpSaveAll = L => { try { localStorage.setItem(LP_KEY, JSON.stringify(L.slice(0, 30))); } catch (e) { /* לא חובה */ } };
@@ -16862,7 +16908,7 @@ function lpSplit(p) {
 const lpTotal = p => LP_STAGES.reduce((a, s) => a + (p.on[s.id] ? (+p.min[s.id] || 0) : 0), 0);
 const lpDesc = (p, id) => ({
   open: p.opSrc && OP_SPECIAL.some(x => x.id === p.opSrc) ? `⭐ ${opName(p.opSrc)} – לפי מארגן ההוראה · ${(p.opN || 4) === 1 ? 'שקף אחד' : (p.opN || 4) + ' שקפים'}` : `${(p.opKinds || OP_DEFAULT).length === 1 ? 'שקף אחד' : (p.opKinds || OP_DEFAULT).length + ' שקפים'}: ${opKindsSorted(p.opKinds || OP_DEFAULT).map(id => OP_KINDS.find(k => k.id === id).name.replace(/^\S+ /, '')).join(', ')}`,
-  game: ['jeo', 'mil', 'cq'].includes(p.game) ? `${(LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1].replace(/ – .*/, '')} על "${TOPIC[p.topic] ? TOPIC[p.topic].name : ''}" – הנושא מסומן מראש במסך המשחק` : (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – לא לפי נושא השיעור',
+  game: LP_GAMES.some(g => g[0] === p.game) ? `${(LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1].replace(/ – .*/, '')} על "${TOPIC[p.topic] ? TOPIC[p.topic].name : ''}" – הנושא מסומן מראש במסך המשחק` : (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – לא לפי נושא השיעור',
   learn: lpKind(p) !== 'first' ? 'חזרה קצרה: מה למדנו בשיעור הקודם, ו-2 שאלות חימום' : lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
   prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 23: 'בינוניים ומאתגרים', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
   book: `${p.book || LP_BOOKS[0]}${p.pages ? ` – ${p.pages}` : ' – עמודים: ______'}`,
@@ -16902,7 +16948,7 @@ function lpHome(keep) {
       <div class="actions"><button id="lpGo" class="race-go">▶ מתחילים שיעור</button><button id="lpPrint" class="secondary">${ic('printer')} הדפסת המערך</button><button id="lpSave" class="secondary">💾 שמירה</button><button id="lpLink" class="secondary">🔗 קישור למערך</button></div>
       <div class="small muted" id="lpMsg"></div>
     </div>
-    ${`<div class="card noprint" id="lpSavedCard"><h3>💾 מערכים שמורים</h3>${saved.length ? '' : '<p class="small muted">עוד אין מערכים שמורים. לוחצים "💾 שמירה" – והמערך יופיע כאן (במכשיר ובדפדפן הזה). כדי לפתוח במכשיר אחר – "🔗 קישור למערך".</p>'}<div class="lp-saved">${saved.map((x, i) => `<div class="lp-sv"><button type="button" class="secondary" data-lpload="${i}">${esc(TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic)} · ${x.dur} דק' · ${(LP_KINDS.find(k => k[0] === (x.kind || 'first')) || LP_KINDS[0])[1]} <span class="small muted">${esc(x.saved || '')}</span></button><button type="button" class="ghost" data-lpdel="${i}" aria-label="מחיקה">🗑️</button></div>`).join('')}</div></div>`}
+    ${`<div class="card noprint" id="lpSavedCard"><h3>💾 מערכים שמורים</h3>${saved.length ? '' : '<p class="small muted">עוד אין מערכים שמורים. לוחצים "💾 שמירה" – והמערך יופיע כאן (במכשיר ובדפדפן הזה). כדי לפתוח במכשיר אחר – "🔗 קישור למערך".</p>'}<div class="lp-saved">${saved.map((x, i) => `<div class="lp-sv"><button type="button" class="secondary" data-lpload="${i}">${esc(TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic)} · ${x.dur} דק' · ${(LP_KINDS.find(k => k[0] === (x.kind || 'first')) || LP_KINDS[0])[1]} <span class="small muted">${esc(x.saved || '')}</span></button><button type="button" class="ghost" data-lpdel="${i}" aria-label="מחיקת המערך">🗑️ מחיקה</button></div>`).join('')}</div>${saved.length > 1 ? '<p class="small" style="margin:10px 0 0"><button type="button" class="ghost" id="lpDelAll">🗑️ מחיקת כל המערכים השמורים</button></p>' : ''}</div>`}
     <div id="wsout"></div>`;
   lpSheet();
   const redo = () => { const y = window.scrollY; lpHome(true); window.scrollTo(0, y); };
@@ -16936,9 +16982,10 @@ function lpHome(keep) {
   $('lpNote').onchange = () => lpSheet();
   $('lpFix').onclick = () => { lpSplit(p); redo(); };
   $('lpPrint').onclick = () => { lpSheet(); window.print(); };
-  $('lpSave').onclick = () => { const L = lpLoad(); L.unshift(Object.assign(JSON.parse(JSON.stringify(p)), { saved: new Date().toLocaleDateString('he-IL') })); lpSaveAll(L); redo(); $('lpMsg').textContent = 'המערך נשמר ✔ (במכשיר הזה)'; };
+  $('lpSave').onclick = () => { const key = x => { const y = JSON.parse(JSON.stringify(x)); delete y.saved; return JSON.stringify(y); }, L = lpLoad().filter(x => key(x) !== key(p)); L.unshift(Object.assign(JSON.parse(JSON.stringify(p)), { saved: new Date().toLocaleDateString('he-IL') })); lpSaveAll(L); redo(); $('lpMsg').textContent = 'המערך נשמר ✔ (במכשיר הזה)'; };
   app.querySelectorAll('[data-lpload]').forEach(b => b.onclick = () => { const x = lpLoad()[+b.dataset.lpload]; if (x && TOPIC[x.topic]) { lp = JSON.parse(JSON.stringify(x)); delete lp.saved; redo(); } });
-  app.querySelectorAll('[data-lpdel]').forEach(b => b.onclick = () => { const L = lpLoad(); L.splice(+b.dataset.lpdel, 1); lpSaveAll(L); redo(); });
+  app.querySelectorAll('[data-lpdel]').forEach(b => b.onclick = () => { const L = lpLoad(), x = L[+b.dataset.lpdel]; if (!x || !confirm(`למחוק את המערך "${TOPIC[x.topic] ? TOPIC[x.topic].name : x.topic}"${x.saved ? ` (${x.saved})` : ''}?`)) return; L.splice(+b.dataset.lpdel, 1); lpSaveAll(L); redo(); });
+  if ($('lpDelAll')) $('lpDelAll').onclick = () => { if (confirm('למחוק את כל המערכים השמורים במכשיר הזה?')) { lpSaveAll([]); redo(); } };
   $('lpGo').onclick = () => lpRun(0);
   $('lpLink').onclick = () => lpLinkDialog(p);
   track('בונים שיעור', TOPIC[p.topic].name);
