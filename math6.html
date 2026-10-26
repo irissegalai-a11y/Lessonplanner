@@ -1441,6 +1441,10 @@
   .sc-ql.n3 li.w, .sc-ql.n4 li.w { font-size: 0.9rem; line-height: 1.45; }
   .sc-ql li.t { font-size: 0.9rem; line-height: 1.35; }
   .sc-mk { font-size: 0.85rem; line-height: 1.35; }
+  .wp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .wp-head h2 { margin: 0; }
+  .sc-bars { display: block; margin: 4px auto; text-align: center; }
+  .sc-bars svg { max-width: 100%; height: auto; }
   .sc-mk .mkq { margin: 0; padding: 0; border: 0; }
   .sc-mk .mk-figbox { margin: 2px 0; text-align: center; }
   .sc-mk svg, .sc-mk .mk-fig { max-height: 23mm; width: auto !important; max-width: 100%; }
@@ -1773,7 +1777,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8156,7 +8160,6 @@ function home() {
   const T = teacherOn();
   const tabs = [
     { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
-    { id: 'wp', label: 'שאלות מילוליות', icon: 'note', wash: 'rgba(120,180,160,0.30)' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
@@ -8171,7 +8174,9 @@ function home() {
   const cont = !PRESET && !T ? contCard() : null;
   const BN_MAIN = ['practice', 'games', 'tests', 'teach'];
   const bnMain = tabs.filter(t => BN_MAIN.includes(t.id)), bnMore = tabs.filter(t => !BN_MAIN.includes(t.id));
-  if (!tabs.some(t => t.id === homeTab && !t.go)) homeTab = 'practice';
+  // "שאלות מילוליות" – נושא בתוך "נושאים" (לא לשונית בסרגל): הסרגל מסמן את "נושאים"
+  if (homeTab !== 'wp' && !tabs.some(t => t.id === homeTab && !t.go)) homeTab = 'practice';
+  const navTab = homeTab === 'wp' ? 'practice' : homeTab;
   app.innerHTML = `
     <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
     <div class="hero-wrap">
@@ -8192,7 +8197,7 @@ function home() {
     </div>
     <div class="nb">
       <nav class="tabs" role="tablist" aria-label="חלקי האתר">
-        ${tabs.map(t => (t.grp ? `<div class="tab-grp" role="presentation">${t.grp}</div>` : '') + (t.go ? `<button type="button" class="tab" id="${t.go}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>` : `<button role="tab" class="tab${t.id === homeTab ? ' on' : ''}" data-tab="${t.id}" aria-selected="${t.id === homeTab}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>`)).join('')}
+        ${tabs.map(t => (t.grp ? `<div class="tab-grp" role="presentation">${t.grp}</div>` : '') + (t.go ? `<button type="button" class="tab" id="${t.go}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>` : `<button role="tab" class="tab${t.id === navTab ? ' on' : ''}" data-tab="${t.id}" aria-selected="${t.id === navTab}" style="--w:${t.wash}">${ic(t.icon)}<span>${t.label}</span></button>`)).join('')}
       </nav>
       <div class="panels">
         <section class="panel" data-panel="practice" ${homeTab === 'practice' ? '' : 'hidden'}>
@@ -8224,6 +8229,11 @@ function home() {
                 <span class="nm">מרובעים</span>
                 <span class="ds">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span>
               </button>` : ''}
+            <button class="topic" style="--c:#3d7a6e" id="wpGo">
+              <span class="ic">${TOPICS.length + (GRADE >= 4 ? 3 : 1)}</span>
+              <span class="nm">שאלות מילוליות</span>
+              <span class="ds">בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים</span>
+            </button>
           </div>
           ${toolRow()}
           <div class="practice-more">
@@ -8354,14 +8364,14 @@ function home() {
       </div>
     </div>
     <nav class="bnav" aria-label="ניווט ראשי">
-      ${bnMain.map(t => `<button type="button" class="bn${t.id === homeTab ? ' on' : ''}" data-bn="${t.id}">${ic(t.icon)}<span>${t.label}</span></button>`).join('')}
+      ${bnMain.map(t => `<button type="button" class="bn${t.id === navTab ? ' on' : ''}" data-bn="${t.id}">${ic(t.icon)}<span>${t.label}</span></button>`).join('')}
       ${bnMore.length ? `<button type="button" class="bn${bnMore.some(t => t.id === homeTab && !t.go) ? ' on' : ''}" id="bnMore" aria-expanded="false">${ic('grid')}<span>עוד</span></button>
       <div class="bn-sheet" id="bnSheet" hidden>${bnMore.map(t => `<button type="button" class="bn-item" data-bn="${t.id}">${ic(t.icon)}<span>${t.label}</span></button>`).join('')}</div>` : ''}
     </nav>
   `;
   // סרגל תחתון בטלפון: כל כפתור "לוחץ" על הלשונית המקבילה בתפריט הרגיל (שמוסתר בטלפון)
   const bnSync = () => {
-    app.querySelectorAll('.bn[data-bn]').forEach(x => x.classList.toggle('on', x.dataset.bn === homeTab));
+    app.querySelectorAll('.bn[data-bn]').forEach(x => x.classList.toggle('on', x.dataset.bn === (homeTab === 'wp' ? 'practice' : homeTab)));
     if ($('bnMore')) $('bnMore').classList.toggle('on', bnMore.some(t => t.id === homeTab && !t.go));
   };
   app.querySelectorAll('[data-bn]').forEach(b => b.onclick = () => {
@@ -8387,6 +8397,15 @@ function home() {
     }
   });
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
+  const wpShow = on => {
+    homeTab = on ? 'wp' : 'practice';
+    try { sessionStorage.setItem('math-tab', homeTab); } catch (e) {}
+    app.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== homeTab; });
+    const el = on ? app.querySelector('[data-panel="wp"]') : $('wpGo');
+    if (el) window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 10) });
+  };
+  if ($('wpGo')) $('wpGo').onclick = () => wpShow(true);
+  if ($('wpBack')) $('wpBack').onclick = () => wpShow(false);
   wpBind();
   $('raceGo').onclick = () => raceHome();
   $('memGo').onclick = () => memHome();
@@ -15554,7 +15573,7 @@ function wpMissing(c) {
 function wpPanelHTML() {
   const c = wpCfg();
   return `<section class="panel" data-panel="wp" ${homeTab === 'wp' ? '' : 'hidden'}>
-    <h2>שאלות מילוליות</h2>
+    <div class="wp-head"><h2>שאלות מילוליות</h2><button type="button" class="ghost" id="wpBack">${ic('book')} חזרה לנושאים</button></div>
     <p class="muted">בוחרים פעולות וסוג מספרים – ולומדים, מתרגלים או מדפיסים. ברמה 1 – שלב אחד, ברמה 2 – שלב אחד עם ניסוח מאתגר ("פי", "בכמה יותר", מילים מטעות), וברמה 3 – שאלות של שני שלבים.</p>
     <div class="card tform wp-form" id="wpForm">
       ${wpPickHTML(c, 'w')}
@@ -16076,12 +16095,13 @@ const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex',
 // מתאימים לשכבה: טווחי מספרים שלא עוברים את מה שלומדים בכיתה, ומיומנויות של כיתות גבוהות מוסתרות
 const SC_GMAX = { 1: 100, 2: 1000, 3: 10000 }[GRADE] || 1000000;
 const scOptG = o => {
+  if (o.type === 'set' && o.k === 'by' && GRADE <= 4) return Object.assign({}, o, { vals: o.vals.filter(v => (GRADE <= 3 ? [2, 5, 10] : [2, 3, 5, 9, 10]).includes(v)) });
   if (o.type !== 'radio' || (o.k !== 'range' && o.k !== 'size')) return o;
   const max = o.o === SC_RANGE && GRADE <= 1 ? 20 : SC_GMAX;
   const keep = o.o.filter(([v]) => { const n = Number(v); return isNaN(n) || (o.k === 'size' ? n * 10 : n) <= max; });
   return keep.length === o.o.length ? o : Object.assign({}, o, { o: keep.length ? keep : o.o.slice(0, 1) });
 };
-const scSkOk = S => !S.minG || GRADE >= S.minG;
+const scSkOk = S => (!S.minG || GRADE >= S.minG) && (!S.maxG || GRADE <= S.maxG);
 const scSkills = D => Object.entries(D.skills).filter(([, S]) => scSkOk(S));
 const scOpts = S => S.opts.map(scOptG).concat(S.noLv ? [] : [SC_LV], S.noWq ? [] : [SC_WQ]);
 // ---- תחומים נוספים למבדקי ההצלחה ----
@@ -16389,9 +16409,118 @@ const SC_SEQ = { name: 'סדרות', skills: {
         return { x, k: 'num', a: holes.map(t => seq[t]), hint: (down ? 'סדרה יורדת – כל מספר קטן ' : 'סדרה עולה – כל מספר גדול ') + `ב-${fmt(st)} מהקודם.`, m: { a0, st, down, h: holes.join('') } };
       }); } }
 } };
-// סדר התחומים בתפריט
+
+// ---- התאמה לנושאי הלימוד: תחומים ומיומנויות שהיו חסרים ----
+// כפל דו-ספרתי בחד-ספרתי (מכיתה ג')
+const SC_MUL21 = { name: 'כפל דו-ספרתי בחד-ספרתי', noWq: 1, opts: [],
+  title: () => 'כפל דו-ספרתי בחד-ספרתי',
+  gen: () => scIx().map(i => { const a = scTry(() => R([11, 12, 21, 31, 41][i], [19, 29, 49, 79, 99][i]), x => x % 10 !== 0), b = R(2 + Math.min(i, 3), 9);
+    return { x: [`${a} × ${b} =`, { b: 1 }], k: 'num', a: [a * b], hint: `מפרקים: ${a - a % 10} × ${b} = ${(a - a % 10) * b}, ועוד ${a % 10} × ${b} = ${(a % 10) * b}. מחברים.`, m: { a, b } }; }) };
+// זוגי ואי-זוגי (כיתות ב'–ג')
+const SC_EOR = { k: 'range', type: 'radio', label: 'מספרים', o: [['20', 'עד 20'], ['100', 'עד 100'], ['1000', 'עד 1,000'], ['10000', 'עד 10,000']] };
+const scEoN = (p, i) => { const top = Number(p.range) || 100, lim = Math.max(10, Math.round(top * [0.25, 0.45, 0.65, 0.85, 1][i])); return R(Math.max(1, Math.round(lim / 4)), lim); };
+const SC_EO = { name: 'זוגי ואי-זוגי', skills: {
+  eo_yn: { name: 'זוגי או אי-זוגי?', noWq: 1, opts: [SC_EOR], title: p => `זוגי או אי-זוגי · עד ${fmt(Number(p.range))}`,
+    gen: p => scIx().map(i => { const n = scEoN(p, i);
+      return { x: [{ t: 'המספר' }, fmt(n), { t: 'הוא:' }, { br: 1 }, { ch: ['זוגי', 'אי-זוגי'] }], rtl: 1, k: 'cmp', a: [n % 2 ? 'אי-זוגי' : 'זוגי'], hint: 'מסתכלים רק על ספרת האחדות: 0, 2, 4, 6, 8 – זוגי. 1, 3, 5, 7, 9 – אי-זוגי.', m: { n } }; }) },
+  eo_next: { name: 'הזוגי / האי-זוגי הבא', noWq: 1, opts: [SC_EOR], title: p => `המספר הזוגי / האי-זוגי הבא · עד ${fmt(Number(p.range))}`,
+    gen: p => scIx().map((i, j) => { const n = scEoN(p, i) + 2, ev = j % 2 === 0, after = i < 3 || j % 2 === 0, par = ev ? 0 : 1;
+      const r = after ? ((n + 1) % 2 === par ? n + 1 : n + 2) : ((n - 1) % 2 === par ? n - 1 : n - 2);
+      return { x: [{ t: `המספר ה${ev ? 'זוגי' : 'אי-זוגי'} ש${after ? 'אחרי' : 'לפני'}` }, fmt(n), { t: 'הוא' }, { b: 1 }], rtl: 1, k: 'num', a: [r], hint: 'זוגי ואי-זוגי מתחלפים: זוגי, אי-זוגי, זוגי... סופרים צעד אחד או שניים.', m: { n, ev, after } }; }) },
+  eo_sum: { name: 'סכום של זוגיים ואי-זוגיים', minG: 3, noWq: 1, opts: [], title: () => 'סכום של זוגיים ואי-זוגיים',
+    gen: () => scIx().map(i => { const big = i >= 2, a = R(big ? 100 : 11, big ? 999 : 99), b = R(big ? 100 : 11, big ? 999 : 99);
+      return { x: [{ t: 'הסכום' }, `${a} + ${b}`, { t: 'הוא:' }, { br: 1 }, { ch: ['זוגי', 'אי-זוגי'] }], rtl: 1, k: 'cmp', a: [(a + b) % 2 ? 'אי-זוגי' : 'זוגי'], hint: 'זוגי + זוגי = זוגי · אי-זוגי + אי-זוגי = זוגי · זוגי + אי-זוגי = אי-זוגי.', m: { a, b } }; }) }
+} };
+// צורות, מדידה, שעון וכסף (כיתות א'–ג')
+const SC_POLY = [['משולש', 'משולשים', 3], ['ריבוע', 'ריבועים', 4], ['מלבן', 'מלבנים', 4], ['מחומש', 'מחומשים', 5], ['משושה', 'משושים', 6], ['מתומן', 'מתומנים', 8]];
+const scHrs = d => d === 1 ? 'שעה' : d === 2 ? 'שעתיים' : `${d} שעות`;
+const scHh = x => ((x - 1) % 12 + 12) % 12 + 1;
+const SC_LEN_IT = ['העיפרון', 'המחק', 'הסרגל', 'החבל', 'המכחול', 'הטוש'];
+const SC_SH = { name: 'צורות, מדידה, שעון וכסף', skills: {
+  sh_poly: { name: 'צלעות וקודקודים', noWq: 1, opts: [], title: () => 'צורות · צלעות וקודקודים',
+    gen: () => { const L = SC_POLY.slice(0, GRADE <= 1 ? 3 : GRADE === 2 ? 5 : 6);
+      return scIx().map((i, j) => { const what = j % 2 ? 'קודקודים' : 'צלעות', one = what === 'צלעות' ? 'צלע' : 'קודקוד';
+        if (i >= 3) { const [A, B] = shuffle(L.slice()).slice(0, 2); return { x: [{ t: `ל${A[0]} ול${B[0]} יש ביחד` }, { b: 1 }, { t: what }], rtl: 1, k: 'num', a: [A[2] + B[2]], hint: `סופרים ל${A[0]} (${A[2]}) ול${B[0]}, ומחברים.`, m: { A: A[0], B: B[0], what } }; }
+        const [nm, , n] = pick(L); return { x: [{ t: `ל${nm} יש` }, { b: 1 }, { t: what }], rtl: 1, k: 'num', a: [n], hint: `סופרים ומסמנים כל ${one} שכבר ספרנו.`, m: { nm, what } }; }); } },
+  sh_clock: { name: 'שעון וזמן', noWq: 1, opts: [], title: () => GRADE <= 1 ? 'שעון · שעות עגולות' : 'שעון וזמן',
+    gen: () => scIx().map((i, j) => { const h = R(1, 11);
+      if (GRADE <= 1 || i <= 1) {
+        if (GRADE <= 1 && i >= 3) { const d = R(2, 5); return { x: [{ t: `מהשעה ${h}:00 עד השעה ${scHh(h + d)}:00 עברו` }, { b: 1 }, { t: 'שעות' }], rtl: 1, k: 'num', a: [d], hint: 'סופרים שעה-שעה על השעון.', m: { h, d, t: 'span' } }; }
+        const d = R(1, i ? 4 : 2), back = j % 2 === 1 && i > 0;
+        return { x: [{ t: `עכשיו השעה ${h}:00. ${back ? 'לפני' : 'בעוד'} ${scHrs(d)} השעה ${back ? 'הייתה' : 'תהיה'}` }, { ltr: [{ b: 1 }, ':00'] }], rtl: 1, k: 'num', a: [scHh(back ? h - d : h + d)], hint: `מזיזים את המחוג הקטן ${d} ${d === 1 ? 'מספר' : 'מספרים'} ${back ? 'אחורה' : 'קדימה'}.`, m: { h, d, back } };
+      }
+      if (i === 2) { const half = j % 2 === 0; return half ? { x: [{ t: `עכשיו השעה ${h}:30. בעוד חצי שעה השעה תהיה` }, { ltr: [{ b: 1 }, ':00'] }], rtl: 1, k: 'num', a: [scHh(h + 1)], hint: 'חצי שעה = 30 דקות. 30 ועוד 30 דקות = שעה שלמה.', m: { h, t: 'h' } }
+        : { x: [{ t: `עכשיו השעה ${h}:00. בעוד שעה וחצי השעה תהיה` }, { ltr: [{ b: 1 }, ':30'] }], rtl: 1, k: 'num', a: [scHh(h + 1)], hint: 'קודם שעה שלמה קדימה, ואז עוד חצי שעה.', m: { h, t: 'h2' } }; }
+      if (i === 3) { const [nm, v] = pick(GRADE >= 3 ? [['חצי שעה', 30], ['רבע שעה', 15], ['שלושה רבעי שעה', 45], ['שעה וחצי', 90], ['שעתיים', 120]] : [['חצי שעה', 30], ['רבע שעה', 15], ['שעה', 60], ['שעה וחצי', 90]]);
+        return { x: [{ t: `ב${nm} יש` }, { b: 1 }, { t: 'דקות' }], rtl: 1, k: 'num', a: [v], hint: 'בשעה 60 דקות. בחצי שעה – 30, ברבע שעה – 15.', m: { nm } }; }
+      const m1 = GRADE >= 3 ? pick([0, 15, 30, 45]) : 0, len = GRADE >= 3 ? pick([30, 45, 60, 75, 90]) : pick([30, 60, 90]), e = h * 60 + m1 + len, hm = (H, M) => `${scHh(H)}:${String(M).padStart(2, '0')}`;
+      return { x: [{ t: `מהשעה ${hm(h, m1)} עד השעה ${hm(Math.floor(e / 60), e % 60)} עברו` }, { b: 1 }, { t: 'דקות' }], rtl: 1, k: 'num', a: [len], hint: 'מתקדמים עד השעה העגולה הבאה, ואז ממשיכים. בשעה 60 דקות.', m: { h, m1, len } }; }) },
+  sh_len: { name: 'אורך', noWq: 1, opts: [], title: () => 'מדידת אורך והשוואה',
+    gen: () => scIx().map(i => { const [A, B] = shuffle(SC_LEN_IT.slice()).slice(0, 2), top = GRADE <= 1 ? 20 : 60, a = R(Math.round(top / 2), top), b = scTry(() => R(2, top - 2), x => x !== a && Math.abs(x - a) >= 2);
+      if (i <= 1) return { x: [{ t: `${A} באורך ${a} ס"מ, ו${B} באורך ${b} ס"מ. מי ארוך יותר?` }, { br: 1 }, { ch: [A, B] }], rtl: 1, k: 'cmp', a: [a > b ? A : B], hint: 'משווים את המספרים: מספר גדול יותר = ארוך יותר.', m: { a, b, A } };
+      if (i <= 3 || GRADE <= 1) return { x: [{ t: `${A} באורך ${a} ס"מ, ו${B} באורך ${b} ס"מ. בכמה ס"מ ${a > b ? A : B} ארוך יותר?` }, { b: 1 }, { t: 'ס"מ' }], rtl: 1, k: 'num', a: [Math.abs(a - b)], hint: 'מהגדול מחסרים את הקטן – או משלימים מהקטן לגדול.', m: { a, b, A, d: 1 } };
+      const r = R(5, 95); return { x: ['1', { t: `מטר ו-${r} ס"מ =` }, { b: 1 }, { t: 'ס"מ' }], rtl: 1, k: 'num', a: [100 + r], hint: 'במטר אחד יש 100 ס"מ.', m: { r } }; }) },
+  sh_money: { name: 'כסף', minG: 2, noWq: 1, opts: [], title: () => 'כסף · שקלים ועודף',
+    gen: () => scIx().map(i => { const sh = v => v === 1 ? 'שקל אחד' : `${v} שקלים`, coin = (k, v) => k === 1 ? `מטבע אחד של ${sh(v)}` : `${k} מטבעות של ${sh(v)}`;
+      if (i <= 1) { const T = shuffle([1, 2, 5, 10]).slice(0, i + 2), K = T.map(() => R(1, 3)); return { x: [{ t: `יש לי ${T.map((v, k) => (k ? (K[k] === 1 ? ' ו' : ' ו-') : '') + coin(K[k], v)).join('')}. כמה כסף יש לי?` }, { b: 1 }, { t: 'שקלים' }], rtl: 1, k: 'num', a: [T.reduce((s, v, k) => s + v * K[k], 0)], hint: 'מחשבים כל סוג מטבע לחוד, ואז מחברים.', m: { T, K } }; }
+      if (i === 2) { const bill = GRADE >= 3 ? pick([20, 50, 100]) : pick([10, 20]), c = R(Math.round(bill / 4), bill - 1); return { x: [{ t: `קניתי ב-${c} שקלים ושילמתי בשטר של ${bill} שקלים. כמה עודף אקבל?` }, { b: 1 }, { t: 'שקלים' }], rtl: 1, k: 'num', a: [bill - c], hint: `משלימים מ-${c} עד ${bill}.`, m: { c, bill } }; }
+      if (i === 3) { const pr = R(2, GRADE >= 3 ? 9 : 5), n = R(2, GRADE >= 3 ? 6 : 4); return { x: [{ t: `מחברת עולה ${pr} שקלים. כמה עולות ${n} מחברות?` }, { b: 1 }, { t: 'שקלים' }], rtl: 1, k: 'num', a: [pr * n], hint: `${n} פעמים ${pr} שקלים.`, m: { pr, n } }; }
+      if (GRADE >= 3) { const sh = R(1, 9), ag = pick([10, 20, 50, 90]); return { x: [`${sh}`, { t: `שקלים ו-${ag} אגורות =` }, { b: 1 }, { t: 'אגורות' }], rtl: 1, k: 'num', a: [sh * 100 + ag], hint: 'בשקל אחד יש 100 אגורות.', m: { sh, ag } }; }
+      const v = pick([2, 5]), n = R(2, 5); return { x: [{ t: `כמה מטבעות של ${v} שקלים צריך כדי לשלם ${v * n} שקלים?` }, { b: 1 }], rtl: 1, k: 'num', a: [n], hint: `סופרים בקפיצות של ${v} עד ${v * n}.`, m: { v, n } }; }) }
+} };
+// שטחים מורכבים (כיתות ה'–ו')
+const SC_CM = { name: 'שטחים מורכבים', skills: {
+  cm_cut: { name: 'חיבור וגזירה של מלבנים', noWq: 1, opts: [], title: () => 'שטחים מורכבים · חיבור וגזירה של מלבנים',
+    gen: () => scIx().map(i => { const a = R(6, 8 + 2 * i), b = R(4, 6 + i);
+      if (i <= 1) { const c = R(2, 6), d = R(2, 5); return { x: [{ t: `צורה בנויה ממלבן שצלעותיו ${a} ס"מ ו-${b} ס"מ, וממלבן שצלעותיו ${c} ס"מ ו-${d} ס"מ. מה שטח הצורה?` }, { b: 1 }, { t: 'סמ"ר' }], rtl: 1, k: 'num', a: [a * b + c * d], hint: `מחשבים כל מלבן לחוד: ${a} × ${b} ועוד ${c} × ${d}.`, m: { a, b, c, d } }; }
+      const c = R(1, Math.min(a, b) - 2);
+      if (i <= 3) return { x: [{ t: `ממלבן שצלעותיו ${a} ס"מ ו-${b} ס"מ גזרו בפינה ריבוע שצלעו ${c} ס"מ. מה שטח הצורה שנשארה?` }, { b: 1 }, { t: 'סמ"ר' }], rtl: 1, k: 'num', a: [a * b - c * c], hint: `שטח המלבן השלם (${a} × ${b}) פחות שטח הריבוע שגזרו (${c} × ${c}).`, m: { a, b, c } };
+      return { x: [{ t: `ממלבן שצלעותיו ${a} ס"מ ו-${b} ס"מ גזרו בפינה ריבוע שצלעו ${c} ס"מ. מה היקף הצורה שנשארה?` }, { b: 1 }, { t: 'ס"מ' }], rtl: 1, k: 'num', a: [2 * (a + b)], hint: 'גזירת ריבוע מהפינה לא משנה את ההיקף: שתי צלעות יצאו, ושתי צלעות באותו אורך נכנסו במקומן.', m: { a, b, c, per: 1 } }; }) },
+  cm_path: { name: 'שביל ומסגרת', noWq: 1, opts: [], title: () => 'שטחים מורכבים · שביל ומסגרת',
+    gen: () => scIx().map(i => { const a = R(4, 6 + 2 * i), b = R(3, 3 + i), w = i >= 3 ? pick([1, 2]) : 1, A = a + 2 * w, B = b + 2 * w, intro = `סביב בריכה מלבנית שאורכה ${a} מטר ורוחבה ${b} מטר יש שביל ברוחב ${w} מטר.`;
+      if (i === 0) return { x: [{ t: `${intro} מה האורך של הבריכה יחד עם השביל?` }, { b: 1 }, { t: 'מטר' }], rtl: 1, k: 'num', a: [A], hint: `השביל משני הצדדים: ${a} + ${w} + ${w}.`, m: { a, b, w, q: 0 } };
+      if (i === 1) return { x: [{ t: `${intro} מה השטח של הבריכה יחד עם השביל?` }, { b: 1 }, { t: 'מ"ר' }], rtl: 1, k: 'num', a: [A * B], hint: `האורך עם השביל ${A} מטר, והרוחב ${B} מטר.`, m: { a, b, w, q: 1 } };
+      return { x: [{ t: `${intro} מה שטח השביל?` }, { b: 1 }, { t: 'מ"ר' }], rtl: 1, k: 'num', a: [A * B - a * b], hint: `השטח הגדול (${A} × ${B}) פחות שטח הבריכה (${a} × ${b}).`, m: { a, b, w, q: 2 } }; }) }
+} };
+// חקר נתונים: קריאת דיאגרמת עמודות (כיתות ב'–ו')
+const SC_DT_TH = [
+  { t: 'הפרי האהוב על ילדי הכיתה', c: ['תפוח', 'בננה', 'ענבים', 'אבטיח'], one: c => `כמה ילדים בחרו ב${c}?`, more: (a, b) => `בכמה ילדים יותר בחרו ב${a} מאשר ב${b}?`, all: 'כמה ילדים השתתפו בסקר בסך הכול?', two: (a, b) => `כמה ילדים בחרו ב${a} או ב${b}?`, u: 'ילדים' },
+  { t: 'ספרים שהושאלו מהספרייה', c: ['ראשון', 'שני', 'שלישי', 'רביעי'], one: c => `כמה ספרים הושאלו ביום ${c}?`, more: (a, b) => `בכמה ספרים יותר הושאלו ביום ${a} מאשר ביום ${b}?`, all: 'כמה ספרים הושאלו בסך הכול בארבעת הימים?', two: (a, b) => `כמה ספרים הושאלו בימים ${a} ו${b} יחד?`, u: 'ספרים' },
+  { t: 'החיה האהובה על ילדי השכבה', c: ['כלב', 'חתול', 'ארנב', 'תוכי'], one: c => `כמה ילדים בחרו ב${c}?`, more: (a, b) => `בכמה ילדים יותר בחרו ב${a} מאשר ב${b}?`, all: 'כמה ילדים השתתפו בסקר בסך הכול?', two: (a, b) => `כמה ילדים בחרו ב${a} או ב${b}?`, u: 'ילדים' }];
+// דיאגרמת עמודות קטנה (SVG). ב-RTL – רק text-anchor="middle"
+function scBars(B) {
+  const W = 236, H = 132, L = 30, T = 8, Bt = 22, n = B.v.length, cw = (W - L - 6) / n, y = v => T + (H - T - Bt) * (1 - v / B.M);
+  let g = '';
+  for (let v = 0; v <= B.M; v += B.st) g += `<line x1="${L}" x2="${W - 4}" y1="${y(v)}" y2="${y(v)}" stroke="#bbb" stroke-width="${v ? 0.6 : 1.2}"${v ? ' stroke-dasharray="3 2"' : ''}/>${(v / B.st) % (B.M / B.st > 6 ? 2 : 1) ? '' : `<text x="${L / 2}" y="${y(v) + 3.5}" font-size="10" text-anchor="middle" fill="#444">${v}</text>`}`;
+  B.v.forEach((v, k) => { const x = L + cw * (n - 1 - k) + cw * 0.2; g += `<rect x="${x}" y="${y(v)}" width="${cw * 0.6}" height="${y(0) - y(v)}" fill="${['#7fa8d6', '#e2b357', '#9db27a', '#d98a9a'][k % 4]}" stroke="#1f1e1c" stroke-width="1"/><text x="${x + cw * 0.3}" y="${H - 7}" font-size="11" text-anchor="middle" fill="#1f1e1c">${B.c[k]}</text>`; });
+  return `<span class="sc-bars"><svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${B.t}: ${B.c.map((c, k) => c + ' ' + B.v[k]).join(', ')}">${g}</svg></span>`;
+}
+const SC_DT_READ = { name: 'קריאת דיאגרמה', big: 1, noWq: 1, opts: [], title: () => 'חקר נתונים · קריאת דיאגרמת עמודות',
+  gen: () => { const ix = scIx(), [st, M] = GRADE <= 2 ? [1, 10] : GRADE === 3 ? [2, 20] : GRADE === 4 ? [5, 50] : [10, 100];
+    return [ix[0], ix[2], ix[4]].map(i => { const th = pick(SC_DT_TH), v = scTry(() => th.c.map(() => R(1, M / st) * st), v => new Set(v).size === v.length), bars = { bars: { t: th.t, c: th.c, v, M, st } };
+      const [p, q] = shuffle([0, 1, 2, 3]).slice(0, 2), [hi, lo] = v[p] > v[q] ? [p, q] : [q, p], intro = { t: `בדיאגרמה: ${th.t}.` };
+      if (i <= 1) return { x: [intro, bars, { t: th.one(th.c[p]) }, { b: 1 }, { t: th.u }], rtl: 1, k: 'num', a: [v[p]], hint: 'מהעמודה הולכים ישר שמאלה אל הקו של המספרים.', m: { v, p, ty: 0 } };
+      if (i <= 3) return { x: [intro, bars, { t: th.more(th.c[hi], th.c[lo]) }, { b: 1 }, { t: th.u }], rtl: 1, k: 'num', a: [v[hi] - v[lo]], hint: 'קוראים את שתי העמודות, ומחסרים: הגדולה פחות הקטנה.', m: { v, p, q, ty: 1 } };
+      return GRADE % 2 ? { x: [intro, bars, { t: th.all }, { b: 1 }, { t: th.u }], rtl: 1, k: 'num', a: [v.reduce((s, x) => s + x, 0)], hint: 'קוראים את כל העמודות ומחברים.', m: { v, ty: 2 } }
+        : { x: [intro, bars, { t: th.two(th.c[p], th.c[q]) }, { b: 1 }, { t: th.u }], rtl: 1, k: 'num', a: [v[p] + v[q]], hint: 'קוראים את שתי העמודות ומחברים.', m: { v, p, q, ty: 3 } }; }); } };
+SC_MORE.mn = { name: 'חקר נתונים', skills: { dt_read: SC_DT_READ, mn_mean: Object.assign(SC_MORE.mn.skills.mn_mean, { minG: 5 }), mn_miss: Object.assign(SC_MORE.mn.skills.mn_miss, { minG: 5 }) } };
+// ראשוני או פריק (ה'–ו'), כפל עשרוני במספר שלם (ו'), איזה אחוז זה (ו')
+const scPrime = n => { if (n < 2) return false; for (let d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; };
+SC_MORE.dv.skills.dv_pr = { name: 'ראשוני או פריק?', minG: 5, noWq: 1, opts: [], title: () => 'מספר ראשוני או פריק',
+  gen: () => scIx().map((i, j) => { const lim = [20, 30, 50, 80, 100][i], n = scTry(() => R(4, lim), x => scPrime(x) === (j % 2 === 0) && x % 2 + x % 5 > 0);
+    return { x: [{ t: 'המספר' }, `${n}`, { t: 'הוא:' }, { br: 1 }, { ch: ['ראשוני', 'פריק'] }], rtl: 1, k: 'cmp', a: [scPrime(n) ? 'ראשוני' : 'פריק'], hint: 'ראשוני מתחלק רק ב-1 ובעצמו. מנסים לחלק ב-2, 3, 5, 7.', m: { n } }; }) };
+SC_MORE.dc.skills.dc_mulint = { name: 'כפל עשרוני במספר שלם', minG: 6, noWq: 1, opts: [], title: () => 'כפל מספר עשרוני במספר שלם',
+  gen: () => scIx().map(i => { const x = i < 2 ? scD(R(1, 9) / 10) : i < 4 ? scD(R(1, 9) + R(1, 9) / 10) : scD(R(1, 9) + R(1, 99) / 100), n = R(2, i < 2 ? 5 : 9);
+    return { x: [`${x} × ${n} =`, { b: 1 }], k: 'num', a: [scD(x * n)], hint: 'כופלים בלי הנקודה, ובתוצאה שמים את הנקודה כך שיהיו אותו מספר ספרות אחריה.', m: { x, n } }; }) };
+SC_MORE.pc.skills.pc_what = { name: 'איזה אחוז זה?', minG: 6, noWq: 1, opts: [], title: () => 'איזה אחוז זה?',
+  gen: () => scIx().map(i => { const N = pick(i < 2 ? [10, 20, 50, 100] : i < 4 ? [25, 40, 200] : [80, 300, 500]), P = pick([10, 20, 25, 30, 40, 50, 60, 75].filter(P => N * P % 100 === 0)), k = N * P / 100;
+    return { x: [`${fmt(k)}`, { t: `מתוך ${fmt(N)} הם` }, { b: 1 }, '%'], rtl: 1, k: 'num', a: [P], hint: `כותבים כשבר ${fmt(k)}/${fmt(N)}, ומרחיבים או מצמצמים למכנה 100.`, m: { k, N } }; }) };
+// סדר התחומים בתפריט – לפי סדר נושאי הלימוד. "כפל דו-ספרתי בדו-ספרתי" – תחום נפרד, כמו בנושאים
 (() => { const old = Object.assign({}, SCD); Object.keys(SCD).forEach(k => delete SCD[k]);
-  Object.assign(SCD, { n1: old.n1, as: SC_MORE.as, pv: SC_MORE.pv, sq: SC_SEQ, mul: old.mul, dv: SC_MORE.dv, frac: old.frac, dc: SC_MORE.dc, pc: SC_MORE.pc, or: SC_MORE.or, ge: SC_MORE.ge, gq: SC_MORE.gq, dr: SC_MORE.dr, mn: SC_MORE.mn, ms: SC_MORE.ms }); })();
+  const { mult, twins, missing, family, div, tens, mul22, ldiv } = old.mul.skills;
+  const mul = { name: old.mul.name, skills: { mult, twins, missing, family, div, tens, mul21: SC_MUL21, ldiv } };
+  const m2 = { name: 'כפל דו-ספרתי בדו-ספרתי', skills: { mul22 } };
+  Object.assign(SCD, { n1: old.n1, as: SC_MORE.as, pv: SC_MORE.pv, eo: SC_EO, sq: SC_SEQ, mul, m2, dv: SC_MORE.dv, frac: old.frac, dc: SC_MORE.dc, pc: SC_MORE.pc, or: SC_MORE.or, ge: SC_MORE.ge, cm: SC_CM, gq: SC_MORE.gq, dr: SC_MORE.dr, sh: SC_SH, ms: SC_MORE.ms, mn: SC_MORE.mn }); })();
 
 // הגדרות ברירת מחדל לכל מיומנות
 // טווח ברירת מחדל לפי השכבה: א' – עד 10, ב' – עד 100, ג' – עד 1,000 (אם קיים באפשרויות)
@@ -16419,7 +16548,7 @@ function scGen(c) {
   return qs;
 }
 const scEnc = c => btoa(JSON.stringify(c)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
-const scDec = s => { try { const c = JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/'))); return scSkill(c) ? c : null; } catch (e) { return null; } };
+const scDec = s => { try { const c = JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/'))); if (c.d === 'mul' && c.s === 'mul22') c.d = 'm2'; return scSkill(c) ? c : null; } catch (e) { return null; } };
 
 // ציור תרגיל: mode = 'screen' (משבצות להקלדה) / 'print' (משבצות ריקות) / 'key' (עם התשובות)
 function scRender(q, mode) {
@@ -16433,7 +16562,7 @@ function scRender(q, mode) {
     if (mode === 'key' && t.w === scB && ans[bi + 1] === '') { const w = ans[bi]; bi += 3; return `<b class="sc-kv">${w}</b>`; }
     return `<span class="sc-mix">${t.w !== undefined ? `<span class="sc-w">${t.w === scB ? blank(' sm') : t.w}</span>` : ''}<span class="fr sc-fr"><span>${part(t.f[0])}</span><span>${part(t.f[1])}</span></span></span>`;
   };
-  const tok = t => typeof t === 'string' ? `<span class="m">${t}</span>` : t.ltr ? `<span class="sc-seq" dir="ltr">${t.ltr.map(x => typeof x === 'string' ? `<span class="m">${x}</span>` : tok(x)).join('')}</span>` : t.f ? fr(t) : t.b ? blank() : t.br ? '<span class="sc-br"></span>' : t.ch ? (mode === 'screen' ? `<span class="sc-cmp">${t.ch.map(s => `<button type="button" class="sc-cb wide" data-cmp="${s}">${s}</button>`).join('')}</span>` : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : t.ch.map(s => `<span class="sc-chk">☐ ${s}</span>`).join(' ')) : t.c ? (mode === 'screen' ? '<span class="sc-circ sc-slot"></span>' : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : '<span class="sc-circ"></span>') : t.t ? `<span class="sc-t">${t.t.replace(/(\d[\d,.]*)\s?([%°])/g, '<span class="m">$1$2</span>')}</span>` : '';
+  const tok = t => typeof t === 'string' ? `<span class="m">${t}</span>` : t.ltr ? `<span class="sc-seq" dir="ltr">${t.ltr.map(x => typeof x === 'string' ? `<span class="m">${x}</span>` : tok(x)).join('')}</span>` : t.bars ? scBars(t.bars) : t.f ? fr(t) : t.b ? blank() : t.br ? '<span class="sc-br"></span>' : t.ch ? (mode === 'screen' ? `<span class="sc-cmp">${t.ch.map(s => `<button type="button" class="sc-cb wide" data-cmp="${s}">${s}</button>`).join('')}</span>` : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : t.ch.map(s => `<span class="sc-chk">☐ ${s}</span>`).join(' ')) : t.c ? (mode === 'screen' ? '<span class="sc-circ sc-slot"></span>' : mode === 'key' ? `<b class="sc-kv">${q.a[0]}</b>` : '<span class="sc-circ"></span>') : t.t ? `<span class="sc-t">${t.t.replace(/(\d[\d,.]*)\s?([%°])/g, '<span class="m">$1$2</span>')}</span>` : '';
   // השוואה ושבר מכמות – בתוך המשפט; כל השאר משמאל לימין
   const parts = q.x.map(tok);
   return `<span class="sc-x${q.rtl ? ' word' : ''}" dir="${q.rtl ? 'rtl' : 'ltr'}">${parts.join(' ')}</span>`;
@@ -16461,7 +16590,7 @@ function scCheckAns(q, vals) {
 // ---- מסך הבנייה (מורים): בוחרים מיומנות, רואים את הדף, מדפיסים / מקרינים / שולחים קישור ----
 let scCfg = null;
 // אילו תחומים מתאימים לכל שכבה
-const SCD_G = { n1: [1, 2], as: [1, 6], pv: [2, 6], sq: [3, 6], mul: [2, 6], dv: [4, 6], frac: [3, 6], dc: [5, 6], pc: [5, 6], or: [3, 6], ge: [3, 6], gq: [3, 6], dr: [4, 6], mn: [5, 6], ms: [3, 6] };
+const SCD_G = { n1: [1, 2], as: [1, 6], pv: [2, 6], eo: [2, 3], sq: [3, 6], mul: [2, 6], m2: [4, 6], dv: [3, 6], frac: [3, 6], dc: [5, 6], pc: [6, 6], or: [3, 6], ge: [3, 6], cm: [5, 6], gq: [3, 6], dr: [4, 6], sh: [1, 3], ms: [3, 6], mn: [2, 6] };
 const scDomOk = k => { const g = SCD_G[k]; return !g || (GRADE >= g[0] && GRADE <= g[1]); };
 const SC_COLORS = ['#d9482b', '#e2b357', '#7fa8d6', '#2f8f55', '#d98a9a', '#4c5fd5', '#9db27a', '#a48cc9', '#6fb3ad', '#c77d3a', '#5f8fbf'];
 // אפשרויות הדיוק (בחלון): כפולות, רמה, סוג שאלות וכו'
