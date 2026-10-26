@@ -1777,7 +1777,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -9855,7 +9855,7 @@ function stopJeoTimer() { if (jeoTimer) clearInterval(jeoTimer); jeoTimer = null
 function jeoHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('jeo');
   const saved = jeoLoad();
-  const live = saved && saved.cells && Object.values(saved.cells).some(c => !c.used);
+  const live = saved && saved.cells && Object.values(saved.cells).some(c => !c.used) && gameSameTopic(saved.topics);
   let nTeams = 2;
   if (saved && saved.topics) jeoReg(saved.topics);
   const pickTopics = GAME_PRE && TOPIC[GAME_PRE] ? [GAME_PRE] : TOPICS.slice(0, 6).map(t => t.id);
@@ -10010,6 +10010,8 @@ function fsBtnHTML() { return document.fullscreenEnabled ? `<button class="secon
 function fsBind() { if ($('jFull')) $('jFull').onclick = () => { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else document.documentElement.requestFullscreen().catch(() => {}); }; }
 // משחק שנפתח מתוך שיעור: הנושא של השיעור מסומן מראש (ורק הוא)
 let GAME_PRE = null;
+// בשיעור מוכן: מציעים להמשיך משחק שמור רק אם הוא באותו נושא של השיעור
+const gameSameTopic = ids => !GAME_PRE || (Array.isArray(ids) && ids.length > 0 && ids.every(id => String(id).split('~')[0] === GAME_PRE));
 function topicChecks(attr) { return `${GAME_PRE && TOPIC[GAME_PRE] ? `<p class="small" style="margin:0 0 6px">📌 לפי נושא השיעור: <b>${TOPIC[GAME_PRE].name}</b></p>` : ''}<div class="jeo-topics">${gameTopics().map(t => `<label class="chk"><input type="checkbox" data-${attr}="${t.id}" ${GAME_PRE && TOPIC[GAME_PRE] ? (t.id === GAME_PRE ? 'checked' : '') : t.id === 'composite' ? '' : 'checked'}> ${t.name}</label>`).join('')}</div>${topicBtns(attr)}`; }
 // ג'פרדי על נושא אחד: מחלקים אותו ל-4 עמודות (כל עמודה – שאלות אחרות מאותו נושא)
 const jeoSplitId = (tid, k) => `${tid}~${k}`;
@@ -10491,7 +10493,7 @@ const CQ_RULES = () => `
 function cqHome() {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('cq');
   const saved = cqLoad();
-  const live = saved && saved.owner && saved.owner.some(o => o == null);
+  const live = saved && saved.owner && saved.owner.some(o => o == null) && gameSameTopic(saved.topics);
   let nTeams = 2, size = 6;
   const names = JEO_TEAMS.map(t => t.name);
   const draw = () => {
@@ -14145,7 +14147,7 @@ function exitReportBox(topicName, correct, n, wrong) {
   box.className = 'card exit-box';
   if (EXIT_OPEN || staffOn()) { box.innerHTML = '📋 התוצאה מוצגת רק כאן, על המסך – היא לא נשלחת לשום מקום.'; app.querySelector('.card').after(box); return; }
   const send = () => kfReport({ minutes: '', mastered: `כרטיס יציאה · ${GRADE_NAME[GRADE]} · ${topicName}`, score: `${correct}/${n}`, mistakes: wrong.join(' | ') });
-  if (kf.report) { send(); box.innerHTML = `📤 התוצאה נשלחה למורה (${esc(kf.name)}, ${esc(kf.klass)}).`; }
+  if (kf.report) { send(); box.innerHTML = `📤 התוצאה נשלחה למורה · בשם: <b>${esc(kf.name)}</b>, כיתה ${esc(kf.klass)}`; }
   else {
     box.innerHTML = `<div class="small"><b>👩‍🏫 רוצים לשלוח את התוצאה למורה?</b> הקלידו שם, כיתה וקוד כיתה (פעם אחת בלבד).</div>
       <div class="kf-join"><input id="exName" class="tinput" placeholder="שם ושם משפחה" value="${esc(kf.name || store.name || '')}"><input id="exKlass" class="tinput" placeholder="כיתה (למשל ו1)" value="${esc(kf.klass || '')}"><input id="exCode" class="tinput" placeholder="קוד כיתה" inputmode="numeric" autocomplete="off"><button class="secondary" id="exJoin">שליחה למורה</button></div>
@@ -14157,7 +14159,7 @@ function exitReportBox(topicName, correct, n, wrong) {
     if (!name || !klass) { $('exMsg').textContent = 'כתבו שם וכיתה 🙂'; return; }
     if (codeHash('kefel:' + code) !== KF_CLASS_HASH) { $('exMsg').textContent = 'הקוד לא נכון. בדקו עם המורה.'; return; }
     Object.assign(kf, { name, klass, report: true }); kfSave(); send();
-    box.innerHTML = `📤 התוצאה נשלחה למורה (${esc(name)}, ${esc(klass)}).`;
+    box.innerHTML = `📤 התוצאה נשלחה למורה · בשם: <b>${esc(name)}</b>, כיתה ${esc(klass)}`;
   };
 }
 // כרטיס יציאה בשרטוט / במרובעים: 3 שאלות (קלה, בינונית, מאתגרת), ניסיון אחד לכל שאלה, בלי רמזים
