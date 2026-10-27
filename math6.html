@@ -979,6 +979,39 @@
   .city-top { padding: 8px 14px; }
   .city-q { text-align: center; }
   .city-q .qtext { font-size: 1.35rem; }
+  /* ---------- מעבדת העשרוניים ---------- */
+  .dl-kit { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 10px; margin: 10px auto; max-width: 560px; text-align: center; }
+  .dl-col { border: 2px dashed #cfc6b4; border-radius: 12px; padding: 8px 6px; display: flex; flex-direction: column; gap: 6px; align-items: center; min-width: 0; }
+  .dl-ch { font-weight: 700; direction: rtl; }
+  .dl-pcs { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; align-content: flex-start; min-height: 46px; }
+  .dl-pcs.c1, .dl-pcs.c2 { max-width: 100px; }
+  .dl-pc.dl-w { width: 44px; height: 44px; }
+  .dl-pc.dl-t { width: 7px; height: 44px; }
+  .dl-pc.dl-h { width: 7px; height: 7px; }
+  .dl-pc.new { animation: dlpop 0.5s ease; }
+  @keyframes dlpop { from { transform: scale(0.3); opacity: 0.2; } }
+  .dl-btns { display: flex; flex-direction: column; gap: 4px; width: 100%; margin-top: auto; }
+  .dl-act { font-size: 0.85rem; padding: 5px 6px; direction: rtl; }
+  .dl-kitbox { margin-top: 12px; }
+  .dl-kitmsg { margin: 4px 0 0; }
+  .dl-vert { margin: 12px auto; border-collapse: collapse; font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .dl-vert td { width: 1.05em; height: 1.45em; text-align: center; padding: 0 1px; border: 0; background: none; }
+  .dl-vert td.dl-dot { width: 0.45em; }
+  .dl-vert tr.dl-res td { border-top: 2.5px solid #1f1e1c; color: #2c7a5b; }
+  .dl-vert tr.dl-res td:not(.dl-dot):empty { background: rgba(127, 168, 214, 0.14); box-shadow: inset 0 0 0 2px var(--card, #fffdf8); }
+  .dl-coins { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .dl-coin { width: 30px; height: 30px; border-radius: 50%; border: 2px dashed #cfc6b4; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; }
+  .dl-coin.g { background: #e8b84a; border: 2px solid #1f1e1c; }
+  .dl-coin.s { background: #d9d6cf; border: 2px solid #1f1e1c; }
+  .dl-coin.x { background: #f1ece2; border-style: solid; }
+  .dl-steps { text-align: right; margin: 8px 0 0; padding-inline-start: 22px; line-height: 1.7; }
+  .dl-modes .game-card + .game-card { margin-top: 12px; }
+  @media (max-width: 480px) {
+    .dl-kit { gap: 5px; } .dl-col { padding: 6px 3px; }
+    .dl-pc.dl-w { width: 34px; height: 34px; } .dl-pc.dl-t { width: 5px; height: 34px; } .dl-pc.dl-h { width: 5px; height: 5px; }
+    .dl-pcs.c1, .dl-pcs.c2 { max-width: 80px; } .dl-act { font-size: 0.74rem; padding: 4px 3px; } .dl-vert { font-size: 1.45rem; }
+    .dl-coins { gap: 4px; } .dl-coin { width: 25px; height: 25px; font-size: 0.85rem; }
+  }
   .ap-figbox { display: flex; justify-content: center; margin: 10px 0; }
   .ap-figbox .ap-fig { width: auto; height: auto; max-width: min(100%, 440px); max-height: 42vh; margin: 0; }
   .war-score { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0 12px; }
@@ -1783,7 +1816,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAQ00lEQVR4nN2be7BfVXXHP2vvfc75ve4zIS9IeEiEEl4FH9gCDihabUt9FKa1jjqloAQ7aDtTO2NmUlBnHEeHUSsBdGxttU5Jy7TDKIqOGZERy0MJ1FSKvBIJgcBNcu/9vc7Ze6/+cX6/+8rvhgtDNcmaOXNvss5+rLX3Xuu7vvseYYDorZdZuXxrANCHrh7LM/uHqvp7Meg5weuaqFo3YHxUNCpJYlCd34cAISrx16SPkWiMNI2V3dbJT0XkO+1uuH30zC37Ftq0sJ/5xutlVmRreP4nfzZcGx67VtArKhV3PED0Ee8jUfXXbuBS9EYE5wzGGVDo5uGpGONXWlMHvrD8vG9M9m1b1AG6bbOTi67zUw998JJKNdniKumrupNdosaoiKJqEBH5DRn4YnoFUFVEoqiKc9YktQRf+F92WvnGoTNv/l7fxn4/ZqHxzYev3litZXdaMa+ammj5bu5VRIyAlZ7xh6sI0JujFRHTzb0emGh5i5xcrWV3Tm6/eqNcdJ3XbZvd3DYz27754FUfqo3Xt7SnulGjooo5nFb45eqtlShGqA5lZmqiefXw2bfc1LfZ6K3lL63tGy9M65Utnek8xKBiRAxHiRgjJgaVznQeqvXKltb2jReKbA1662VWVDcbtk9X20n74SxzJ3Y7PohgRQ+fFXxF9IAqIas4W+Th8SyvnMlZjbYRuS5O6fQ11eHKic1m7mNUG4IS4lH2BCVGtc1m7rOh7KSmNDeKXBdF/3tjY7IIO7LMHdfNg0ovMM54UCFxsriHjzC9QsxSJ3nudw05s8FNx/D2oeFsbaddxDQxZm4H5kW22BGqNzGG2Gik69qt4m3OiLlUjGiZ5+d3ojr/WShHql4RFSuqwjuMwmtiEQXVoybqv6iomlhEQeRcEwNrvI9weGOcV1RERAofQVnjFK31sf2RIiXsLc93jIqqMqCsOaTEqCDUnBHsoKay4PmN6qU0OsbyIDtnSJ0FIMSIMUKeR3xUjAjGgOih+6fs1zofFGP0kEDCxN+sHl/+HKoniBX27evy+PNt9k/mAKxcXmXV8iqNoZSi42l1AomVQ/YPZfHk+p4dNIHYy6OD9MyZoH0Z7ZekVyiCkqZCreL4/j172HrHk2z/xT6em+iQFxEBalXHsStrvPG1K/jTPziRU04cYXIqJ6qymH0z40xt/5C+VKgZo+KMAYG8CBgjGCNLbr9UfV5Esswy1fJsuuFn3Pa9XXgfqWSWxBmMEVRLpFcUkU43sHy8wt9euYErLl/P9HSBqpIO6L8v7qXm0RiVes3Rann2Txc0qo7GcEK76ZfUfqn6qEqaWvbsbfP+j/2Yn+6YYNlYhukFhaKIFEXEWiF1BmcN9aqj2w185FP3s38y56+v2MD+A13UDR4fwA3+78HifWRoNOP2O3fyyZseJs8j1YrjvZeeyJWXr6coIq9UMjUiRFWuuf5eHnxkHyuWVfAhkntluuUZG0mpVxOmmgX7JnOG6gkRsFY4ZlmFT3/555x16jgXnbeSTjdgFpnYkh3gfWRoJOOB7c9zzfX30skjldTQydt8asvDvPX8NZxwbJ1OvvhgS5UQlMZoyi1ff4S77ntuxvjCK5XMcv2VG3jrBWuoppapZsG/f3cnN37zf2e2eh/Qf+lfHuHC165ADpEil+SAwkeGhlMee3KSv/j4PfigDNcdMSqVzLBsJKNascTIIQcDmIHbi7ymlKvYnCz4xu1PUKs6Qi+IicAt172ei9+8ljCZU/jI8rGMTX9zLoWPfPHrjzA2khKCUqs6HvrFPp741TTrjx+ivcguMAvz8dzcC+CDMjSa8cjjB/iTj97F7r1tqhWLD+WMOt3A2tV1Vi2vUISIkUX66mEVSQxiBXoGHYQHVKlWLI8+OclTu5tUMoMxMN3yvPuSdVx80XFM7mmR55EQlE43ECa7vO8dJzE2nOJ9CeqsEaZbnqf3tGZI0kF2msXq56JQCh8ZG8340U/28O4P/5Cdz7Ro1BwhlMsoUjro2JVVsAbv48C+vFc0MWhQiudahFZBdIL3A94NSgSe39dl4kCOKhSF0up43vSGVYSO75EbOgOMut3AivEqa1fXyYuAGJnJMpPNgtgjdwY97qA8LEIMSpYZKi7hC//0P3zmKztQVRrVWeNntmxU1q6qo5Rnt7/J+nk+BMVVDc2H9nLgtkfR6QKcYex9p5GeMkZoeaydn6fbLc8Zp4zy9gvXcN/DL5Akhve/41X87rkraDc9IszA4L5xxgqVzBDjnKNkhGrFoSUZMvDUucTJvDwcIzTqjj1723z8hgf5j+/vYriRYIwpO5EFKUWE41bVsM6QJgbbA9b9etyIkqSW9t1PU+ycwo1X8HtbdO/dQ/3M5UgeD8IBqrBsJONrn/4dntrdpFFzrF5Ro/Dltncis/1HpZpaJlue5/d1ca48XqGXrk9YU8cIpInFDKh35+GAfu599Kkp3vNXP+KxnVMsG83K887BDIv2fl91TBVC7PNu8wzp8/WmkSBpid9NZvEHusQ8zntvrhRFeZyOX1PHOUOr4xFk3gKolrvOVRw/vf+5mSMK0OkGXnvGMo4/tk6nGw5euJ7M84lGSKqOu+9/jkeemOylH8U5w1SzYKielMHO93eCkjjD2HAKcbHArogIdjgrt1cvnMfpHO30LmniAq/RC5AC3TyQFxEjsjjGUOVrtz02ExOMlCjyXZeso1Ips8hiMs8BIhC7gXNOG2ekkeCDYo2wd6LD+uOH+OYNF3DCsQ26vZQSI2SpLUFI1FkPaM+ofuS3ghvLmHnBCLHlwUm5MyoOsVIGr9Qyl5mSQxheeGV0JOOObb/iO3fvZriRANBsezasH+Fdb1nHdLPAmsU8twAHGCO0256zThvnnZes4+Z/fZTlYxlX/PHJbNp4JmPDCXsnOjgnM5E4TSyV1PTuC3vpzQkmdcRugHYkTOWld015dMQIseM5cNujxDygzYLY8sSOZ+xd66luWI52D4bWcyVEpVa1/OqZJps+v53Eza5l4ZWPf/B0RkdS9h/o4jK7OBSeVy9L6YQiD3zqI2dz9m+NcdJxDS46fw1FJzA1VSzg1krIaq2Zjf5OCAdyXvj24xR7moSmRzse7QZMxZY7Q0CDMrVt18y44gyx5Zm88ylqG5aDCNIjauatn5QnyTlDiHDN9fey85kmw40EEWHvCx02vufVvO3N65jc18HZQ0MzFwbUyyGUZ/uKy9ZTdAOT+7sYU2LzEHWWPVNmYoEPSvARqikHtu3kwB1PYofTGSQkfYQ0R2wjYe7+FhH8ZE7R8RgZzBdELUkPl1g2bv4v7rrvWZaNZiAwsb/Lm96wik3XnElzslsGyTiY75hxwOB6XPAh8sJEB4A0MaDaW/HZaCpSTsgHnQEmJiqhWWAbCaaeoCX3dnAIFoidgOah7NQKeKW+fhQSQ+gEos7hC5D+PR9parn2E/dy6x1PMT6aoQov7O9y9qlj3Ph3rwcts0iZJcrsJCIMCgUH4YDZ+QnWloO63vmyttx6ff5chBLlaemkGBRnhdqpy5j+wS40dsuVd4JJbMnd9QKjFpH0pBEqpy3D1RLsSIodyUiPGyrprMQQdJYv8F6pVBzGCtd+8j6+fvsTLB/NCLHMFOefs4Jv3nABQ+MVQrOgXrGzOy6z0I20256FN54viQ9wVqikFo39HSDkRaTZ9oiUgTG0PbVzVrDyw2dTTObYsYx0OENqCXu/8hDF7iam4oi5Jz15lNHLT8G0C0DQqGge0F7a6o9bFEqt5phuea7e/BO+9cOnWT4Hn1gjrF1d57q/f4jdz7bIe6tfr1pGh1OOW1njovNWcc6Gcbrd+SX7kqrB/jl3zpZVXz849fL0VLMoV7ovUWm8bjUBJXgl6W1xO5RSxOky6Bnwz7cJk100D2VcmVuF9SREZXQs44mdU1y16R4e+PkEy8cyvJ9dMeeEf/vuUxRFxDkz08UsHaZ89h928M+fOZ9LLlhDa05qXDIfEBWMlTLnax9wCIVX9h3IyxQ39/1WUQ4elegMUnWYRtKjsEtDY8uDgjEGHXA+Q1QatYQfP/AcV226h2df6DA+kuF9nF2c3s/hRoIRmel/7lwSZ3j2+TZ33/8cb734uHnKpTNCClhhdDgtj0Bv5BCUvROdElLNHXUhR2gFW0sg9nRGCAe6ZZDslcdzJSpkieXpZ1tcteke9k50e+AslqsnJXINUYlBiTHOUg29dN6nyEOIdItYVq06f6j5OGDuhBc8faPGR9LZVaS8oHhmb3tm68qg9gJEqLx6jKkf7CRO5eAj1dOWYVILPh40B0XJMsuTT0/zwv6ckaEeMrXC5HRBCEqaGuoVR62RUK3YMhBHpZuXBGmnW8LoVjtw4bkruPTNaynaHjsHGwzEAX0D5ubhvqeXjWbz3jMi7NrTJBaxhxMGtLdCbBVkZx3D8o++hmJPk3RljeTkUXzbIwOutxVotjynnDjM6mOqPLZrimpm6XQDf/SmtbzlgjWsGM9YOV5hfDSjklmclZJK7zHEU82C/VM5IsLp60epVmyPH4T+n4otggMG8PZR0RBLZtbIzFZKnLDrmRZ5p4Su/YLkoPZacgfZqeNUTl8GQfG9OBHNgDQskBfK6HDKZz92Dp/76g6sFd55yTree+lJJKmh6AYKX94MhaD9DEsltYwOJaxcVgEpU3SrHeh0SrKkP0c4JA6Yf78upiyM1q0qy1NjBY1QyRy79jSZmi4Y7QWofkAfdD+vPkJRoknpbdlFxzdKXkQufsMq3vi6laBgM0t7uiDvBiKKRkjTg+8lVEu2KsaIanl0nJt7QHsOWCoOEIRu23P6KaOcvG6In+2YoN7LzaeeNEy16gg+DuYD5vY/J9VpfPF7AwFaLT8z6dgJWFuCNCJEWbzULUtqKTHKImMsOQuIgO+xLF/+xHn8422P0c4DJx7b4PK3HU+WWYr8lbsXmCvGzMYIO/Aq9+WLTD740q7GVEtu3mQOevk4+Eh3gfGLtT9c9H15STdDUG6pdieg7VCSnrF0yJH65xUvDQf0xPZpZ5nBNANXYLH2h4O+L0vGAUebfsYBS8YBR5l+xgFLxQFHm37GASFqdIpZCh9w1OkhGGtM04gsLMaOejFlIG8ZMex2zjCvxDvKRVU1cQZVdhuB+01iFJH44k2PEhGJJjEKPGAEbteoAjrLSh3NjwCoaFQRw3+6qsi3mtPFzjSza7u5j9LjTX/Tefr/S69ozFInzeliZ8PKt42cfuN0jPFLSS2REDT28+bc+/d5/174HEl6hRA0JrVEfIxfktNvnC4/mdkzXe1OtB9O5n4yw+FdzLwcvfY+mel2/RPV8eoZrGq0DVt3iKz+XDN6PhAVpGRXdGEOPdKfEFTFCFFRvP+ArP5ck607xMjlW4PqZbZ21o13tZudqyuN1ForGlWPmqwQo0ZjRSuN1Obt7tW1s265S7X8lLYMeLI16LbNbvjsW25qHWhvdKkz1WpioqrXIxgfqKpGVV+tJiZJrbQm2hvrZ958s27b7Pqf0M5+I3TRdX7bts2ufsZNWzrt4pIQ9ZdD4zWXZU5UNSqEI8EZWk4yqJbRfmS85kLUX3ba/i31s2/asm3Bp7MHlcr9Lyr33v3nQ0PLan9J1Cuzij0BEUIR8SHS/4urwy3IGSM4a7C92+xuNzwZVb/c3Nf54jHnf3XqRT+ennHC3M/nf3btaF6Jv68a3q7IuRp1jarWjYg5nBwQo0YRaYpht8ADzsm3ppru22O//fn9C22aK/8HVWM9Ob9eVBoAAAAASUVORK5CYII="><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8078,7 +8111,7 @@ let navPopping = false;
    כל עוד TRACK.form ריק – לא נשלח כלום
    ========================================================= */
 const TRACK = { form: 'https://docs.google.com/forms/d/e/1FAIpQLScbU-3oB6Sx3hsec4cxoQQUWUfSnuvGH8X7DOKLR5hldhe6CA/formResponse', f: { device: 'entry.218291459', grade: 'entry.2065505054', name: 'entry.1804780443', action: 'entry.285567241', detail: 'entry.1501454704' } };
-const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל' };
+const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', dlab: 'משחק: מעבדת העשרוניים', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל' };
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
@@ -8261,7 +8294,7 @@ function home() {
           <h2>${GRADE === 6 ? 'מבדקים' : 'מבחנים'}</h2>
           <div class="big-actions">
             <button id="testPick" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} – 20 שאלות מכל הנושאים<span class="desc">בוחרים: עם משוב תוך כדי, ציון בסוף, או עם שעון</span></button>
-            ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}<span class="desc">שאלות בסגנון ה${GRADE === 6 ? 'מבדק' : 'מבחן'} – הקנייה ותרגול לכל שאלה, ומבחן אימון להדפסה</span></button>` : ''}
+            ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}<span class="desc">שאלות בסגנון ה${GRADE === 6 ? 'מבדק' : 'מבחן'} – הקנייה ותרגול לכל שאלה</span></button>` : ''}
           </div>
           ${teacherOn() ? `<div class="big-actions"><button id="testLink" class="secondary">🔗 קישור ל${GRADE === 6 ? 'מבדק' : 'מבחן'} לתלמידים<span class="desc">בוחרים סוג, מעתיקים קישור ומדביקים בקלאסרום</span></button></div>` : ''}
           ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
@@ -8310,6 +8343,11 @@ function home() {
             <span class="gc-nm">מלחמת תרגילים – מול המחשב</span>
             <span class="gc-ds">שני קלפים עם תרגילים – איזה גדול יותר? צדקתם – לוקחים את הקלפים!</span>
           </button>
+          ${GRADE >= 4 ? `<button class="game-card" id="dlGo">
+            <span class="gc-ic" style="--gw:rgba(44,122,91,0.5)">🧪</span>
+            <span class="gc-nm">מעבדת העשרוניים</span>
+            <span class="gc-ds">מהות, חיבור עם המרה וחיסור עם פריטה – עם קוביות שאפשר לפרוט ולקבץ. אוספים כוכבי זהב!</span>
+          </button>` : ''}
           <button class="game-card" id="cityGo">
             <span class="gc-ic" style="--gw:rgba(226,179,87,0.7)">${ic('grid')}</span>
             <span class="gc-nm">בונים עיר – שטח והיקף</span>
@@ -8417,6 +8455,7 @@ function home() {
   $('memGo').onclick = () => memHome();
   $('milGo').onclick = () => milHome();
   $('cityGo').onclick = () => cityHome();
+  if ($('dlGo')) $('dlGo').onclick = () => dlHome();
   $('gbGo').onclick = gbHome;
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
   if ($('guideBtn')) $('guideBtn').onclick = guideHome;
@@ -10953,6 +10992,237 @@ function cityEnd() {
 }
 
 /* =========================================================
+   מעבדת העשרוניים – מהות, חיבור עם המרה וחיסור עם פריטה (כיתות ד'–ו')
+   10 אתגרים · קוביות עזר: פורטים שלם ל-10 עשיריות, עשירית ל-10 מאיות, ומקבצים בחזרה
+   ========================================================= */
+let dlab = null;
+const DL_MODES = [['mix', '🎲', 'מעורב', 'קצת מכל דבר – מהקל אל הקשה'], ['val', '🔍', 'מהות', 'שלמים, עשיריות ומאיות: מה כל ספרה שווה?'], ['add', '➕', 'חיבור עם המרה', '10 מאיות = עשירית אחת, 10 עשיריות = שלם אחד'], ['sub', '➖', 'חיסור עם פריטה', 'פורטים שלם ל-10 עשיריות, עשירית ל-10 מאיות']];
+const DL_PL = ['שלמים', 'עשיריות', 'מאיות'], DL_ONE = ['שלם אחד', 'עשירית אחת', 'מאית אחת'];
+const dlP = x => { const c = Math.round(x * 100); return [Math.floor(c / 100), Math.floor(c / 10) % 10, c % 10]; };
+const dlV = p => rnd(p[0] + p[1] / 10 + p[2] / 100);
+const dlPl = x => (String(rnd(x)).split('.')[1] || '').length;
+// ---- הקוביות: שלם = ריבוע 10×10, עשירית = מוט, מאית = קובייה קטנה ----
+const DL_CLR = ['#2f5bd3', '#d9822b', '#2c7a5b'];
+function dlPiece(c, cls) {
+  const k = DL_CLR[c];
+  if (c === 0) { let g = ''; for (let i = 1; i < 10; i++) g += `<path d="M${i * 4} 0V40M0 ${i * 4}H40" stroke="#fffdf8" stroke-width="0.6"/>`; return `<svg class="dl-pc dl-w${cls || ''}" viewBox="0 0 40 40"><rect width="40" height="40" fill="${k}" fill-opacity="0.75"/>${g}<rect width="40" height="40" fill="none" stroke="#1f1e1c" stroke-width="1.6"/></svg>`; }
+  if (c === 1) { let g = ''; for (let i = 1; i < 10; i++) g += `<path d="M0 ${i * 4}H4" stroke="#fffdf8" stroke-width="0.6"/>`; return `<svg class="dl-pc dl-t${cls || ''}" viewBox="0 0 4 40"><rect width="4" height="40" fill="${k}" fill-opacity="0.8"/>${g}<rect width="4" height="40" fill="none" stroke="#1f1e1c" stroke-width="0.7"/></svg>`; }
+  return `<svg class="dl-pc dl-h${cls || ''}" viewBox="0 0 4 4"><rect width="4" height="4" fill="${k}" fill-opacity="0.85" stroke="#1f1e1c" stroke-width="0.5"/></svg>`;
+}
+const dlPcs = (c, n, fresh) => Array.from({ length: n }, (_, i) => dlPiece(c, fresh && i >= n - fresh ? ' new' : '')).join('');
+function dlBlocks(p) {
+  return `<div class="dl-kit dl-show" dir="ltr">${[0, 1, 2].map(c => `<div class="dl-col"><div class="dl-ch">${DL_PL[c]}: <b>${p[c]}</b></div><div class="dl-pcs c${c}">${dlPcs(c, p[c]) || '<span class="muted small">אין</span>'}</div></div>`).join('')}</div>`;
+}
+// ---- תרגיל במאונך: נקודה מתחת לנקודה ----
+function dlVert(a, b, op, ans) {
+  const p = Math.max(dlPl(a), dlPl(b), ans == null ? 0 : dlPl(ans), 1);
+  const row = (x, pad) => { const [i, d = ''] = String(rnd(x)).split('.'); return [i, (d + pad.repeat(p)).slice(0, p)]; };
+  const rows = [row(a, ' '), row(b, ' ')], ar = ans == null ? null : row(ans, '0');
+  const iw = Math.max(...rows.map(r => r[0].length), ar ? ar[0].length : 0) + 1;
+  const line = ([i, d], sign) => {
+    const cells = (sign || '').padEnd(iw - i.length, ' ').split('').concat(i.split(''), ['.'], d.split(''));
+    return `<tr>${cells.map(ch => `<td${ch === '.' ? ' class="dl-dot"' : ''}>${ch === ' ' ? '' : ch}</td>`).join('')}</tr>`;
+  };
+  const blank = `<tr class="dl-res">${Array(iw + 1 + p).fill(0).map((_, k) => `<td${k === iw ? ' class="dl-dot"' : ''}>${k === iw ? '.' : ''}</td>`).join('')}</tr>`;
+  return `<table class="dl-vert" dir="ltr"><tbody>${line(rows[0])}${line(rows[1], op === 'add' ? '+' : '−')}${ar ? line(ar).replace('<tr>', '<tr class="dl-res">') : blank}</tbody></table>`;
+}
+// ---- הסבר טור אחר טור ----
+function dlAddExp(a, b) {
+  const A = dlP(a), B = dlP(b), out = []; let carry = 0;
+  for (let c = 2; c >= 1; c--) {
+    const s = A[c] + B[c] + carry, part = `${A[c]} + ${B[c]}${carry ? ' + 1' : ''} = ${s}`;
+    if (s >= 10) out.push(`<b>${DL_PL[c]}:</b> ${M(part)} – כותבים ${M(s - 10)}, ו-10 ${DL_PL[c]} = ${DL_ONE[c - 1]}: מעבירים לטור ה${DL_PL[c - 1]}.`);
+    else out.push(`<b>${DL_PL[c]}:</b> ${M(part)}.`);
+    carry = s >= 10 ? 1 : 0;
+  }
+  out.push(`<b>שלמים:</b> ${M(`${A[0]} + ${B[0]}${carry ? ' + 1' : ''} = ${A[0] + B[0] + carry}`)}.`);
+  return `<ol class="dl-steps">${out.map(x => `<li>${x}</li>`).join('')}</ol>`;
+}
+function dlSubExp(a, b) {
+  const T = dlP(a), B = dlP(b), out = [];
+  for (let c = 2; c >= 0; c--) {
+    if (T[c] < B[c]) {
+      let j = c - 1; while (T[j] === 0) j--;
+      const chain = [];
+      // פריטה (גם דרך אפס: בטור הביניים נשאר 9)
+      for (let k = j; k < c; k++) { chain.push(`${DL_ONE[k]} ← 10 ${DL_PL[k + 1]}`); T[k] -= 1; T[k + 1] += 10; }
+      out.push(`<b>${DL_PL[c]}:</b> ${M(`${T[c] - 10} − ${B[c]}`)} אי אפשר – פורטים: ${chain.join(', ')}. עכשיו ${M(`${T[c]} − ${B[c]} = ${T[c] - B[c]}`)}.`);
+    } else out.push(`<b>${DL_PL[c]}:</b> ${M(`${T[c]} − ${B[c]} = ${T[c] - B[c]}`)}.`);
+  }
+  return `<ol class="dl-steps">${out.map(x => `<li>${x}</li>`).join('')}</ol>`;
+}
+// ---- מחוללים ----
+function dlAddQ(d) {
+  let a, b, k = 0;
+  do {
+    const A = [R(0, 4), R(1, 9), R(1, 9)], B = [R(0, 4), R(1, 9), R(1, 9)];
+    if (d === 2 && Math.random() < 0.5) A[2] = 0; // 3.6 + 1.85
+    a = dlV(A); b = dlV(B);
+    const ch = A[2] + B[2] >= 10, ct = A[1] + B[1] + (ch ? 1 : 0) >= 10;
+    if (d === 0 && ch && !ct) break;
+    if (d === 1 && ch && ct) break;
+    if (d === 2 && ct) break;
+  } while (k++ < 300);
+  const s = rnd(a + b);
+  return { kind: 'add', text: `חשבו במאונך: ${M(`${fmt(a)} + ${fmt(b)}`)}`, a, b, ans: s, vert: dlVert(a, b, 'add'), vertA: dlVert(a, b, 'add', s),
+    kit: { start: dlP(a).map((x, i) => x + dlP(b)[i]) }, hint: 'מתחילים מהמאיות. כשיש 10 או יותר – 10 מאיות הופכות לעשירית אחת, ו-10 עשיריות לשלם אחד.', exp: dlAddExp(a, b) };
+}
+function dlSubQ(d) {
+  let a, b, k = 0;
+  do {
+    let A = [R(2, 8), R(0, 9), R(0, 9)], B = [R(0, 3), R(0, 9), R(1, 9)];
+    if (d === 2) { const z = R(0, 2); if (z === 0) A = [A[0], 0, 0]; else if (z === 1) A = [A[0], 0, R(0, 6)]; else A = [A[0], R(1, 8), 0]; }
+    a = dlV(A); b = dlV(B);
+    if (b >= a || b < 0.11) continue;
+    const bh = A[2] < B[2], bt = A[1] - (bh ? 1 : 0) < B[1];
+    if (d === 0 && bh && !bt && A[1] > 0) break;
+    if (d === 1 && bt && A[1] > 0) break;
+    if (d === 2 && (bh || bt)) break;
+  } while (k++ < 400);
+  const r = rnd(a - b);
+  return { kind: 'sub', text: `חשבו במאונך: ${M(`${fmt(a)} − ${fmt(b)}`)}`, a, b, ans: r, vert: dlVert(a, b, 'sub'), vertA: dlVert(a, b, 'sub', r),
+    kit: { start: dlP(a), remove: dlP(b) }, hint: Number.isInteger(a) ? `${fmt(a)} = ${a.toFixed(2)}: משלימים אפסים, ואז פורטים – שלם ל-10 עשיריות, עשירית ל-10 מאיות.` : 'מתחילים מהמאיות. אם למעלה יש פחות – פורטים: עשירית אחת ← 10 מאיות (או שלם אחד ← 10 עשיריות).', exp: dlSubExp(a, b) };
+}
+function dlValQ(d, t) {
+  const T = t != null ? t : R(0, 5);
+  if (T === 0) { const p = [R(d ? 0 : 1, 3), d && Math.random() < 0.4 ? 0 : R(1, 9), R(d ? 0 : 1, 9)]; if (!p[1] && !p[2]) p[2] = 4; const v = dlV(p);
+    return { kind: 'val', text: 'איזה מספר מוצג בקוביות?', fig: dlBlocks(p), ans: v, hint: 'סופרים: כמה שלמים (ריבועים גדולים), כמה עשיריות (מוטות) וכמה מאיות (קוביות קטנות). אם אין עשיריות – כותבים 0 במקומן.', exp: `${p[0]} שלמים, ${p[1]} עשיריות ו-${p[2]} מאיות = ${M(fmt(v))}` }; }
+  if (T === 1) { const c = Math.random() < 0.5 ? 1 : 2, p = [R(0, 3), R(0, 9), R(0, 9)]; p[c] = R(11, 19); if (c === 1) p[2] = R(0, 9); const v = dlV(p);
+    return { kind: 'val', text: `${p[0]} שלמים, ${p[1]} עשיריות ו-${p[2]} מאיות.<br>איזה מספר זה?`, fig: dlBlocks(p), ans: v, hint: `10 ${DL_PL[c]} = ${DL_ONE[c - 1]}. קודם מקבצים!`, exp: `${M(p[c])} ${DL_PL[c]} = ${DL_ONE[c - 1]} ועוד ${M(p[c] - 10)} ${DL_PL[c]}. לכן המספר הוא ${M(fmt(v))}.` }; }
+  if (T === 2) { if (Math.random() < 0.5) { const w = R(1, 9), t = R(1, 9), v = rnd(w + t / 10);
+      return { kind: 'val', text: `כמה <b>עשיריות</b> יש בסך הכול במספר ${M(fmt(v))}?`, ans: w * 10 + t, hint: 'בכל שלם יש 10 עשיריות.', exp: `${M(w)} שלמים = ${M(w * 10)} עשיריות, ועוד ${M(t)}: ${M(w * 10 + t)} עשיריות.` }; }
+    const t = R(1, 9);
+    return { kind: 'val', text: `${M(`0.${t}`)} = ? <b>מאיות</b>`, ans: t * 10, hint: 'בכל עשירית יש 10 מאיות.', exp: `${M(t)} עשיריות = ${M(t * 10)} מאיות, כי ${M(`0.${t} = 0.${t}0`)}.` }; }
+  if (T === 3) { const p = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3), c = R(1, 2), v = dlV(p), val = rnd(p[c] / 10 ** c);
+    return { kind: 'val', text: `מה <b>הערך</b> של הספרה ${M(p[c])} במספר ${M(fmt(v))}?<br><span class="small muted">כתבו כמספר, למשל 0.3</span>`, ans: val, hint: 'באיזה טור הספרה – עשיריות או מאיות?', exp: `הספרה ${M(p[c])} בטור ה${DL_PL[c]}, ולכן הערך שלה ${M(fmt(val))}.` }; }
+  if (T === 4) { const p = [R(1, 9), Math.random() < 0.35 ? 0 : R(1, 9), R(1, 9)], v = dlV(p), parts = [p[0], p[1] ? `0.${p[1]}` : null, `0.0${p[2]}`].filter(Boolean);
+    return { kind: 'val', text: `${M(`${parts.join(' + ')} = ?`)}`, ans: v, hint: p[1] ? 'כל מחובר בטור שלו: שלמים, עשיריות, מאיות.' : 'אין עשיריות – כותבים 0 בטור העשיריות.', exp: `${M(`${parts.join(' + ')} = ${fmt(v)}`)}` }; }
+  const up = Math.random() < 0.5, step = pick([0.1, 0.01]);
+  const base = step === 0.1 ? (up ? rnd(R(1, 8) + 0.9 + R(1, 9) / 100) : rnd(R(1, 8) + R(1, 9) / 100)) : (up ? rnd(R(1, 8) + R(0, 8) / 10 + 0.09) : rnd(R(1, 8) + R(1, 9) / 10));
+  const v = rnd(base + (up ? step : -step));
+  return { kind: 'val', text: `איזה מספר <b>${up ? 'גדול' : 'קטן'}</b> ב-${M(fmt(step))} מ-${M(fmt(base))}?`, ans: v, hint: up ? `${step === 0.1 ? '10 עשיריות' : '10 מאיות'} הופכות ל${step === 0.1 ? 'שלם' : 'עשירית'}!` : `אם אין מה להוריד בטור – פורטים.`, exp: `${M(`${fmt(base)} ${up ? '+' : '−'} ${fmt(step)} = ${fmt(v)}`)}` };
+}
+function dlPlan(mode) {
+  const lv = i => (i < 4 ? 0 : i < 7 ? 1 : 2);
+  if (mode === 'val') { const ts = shuffle([0, 0, 1, 1, 2, 3, 4, 5, 5, 3]); return ts.map((t, i) => dlValQ(lv(i), t)); }
+  if (mode === 'add') return Array.from({ length: 10 }, (_, i) => dlAddQ(lv(i)));
+  if (mode === 'sub') return Array.from({ length: 10 }, (_, i) => dlSubQ(lv(i)));
+  const seq = ['val', 'add', 'sub', 'val', 'add', 'sub', 'val', 'add', 'sub', 'sub'];
+  return seq.map((k, i) => (k === 'val' ? dlValQ(lv(i)) : k === 'add' ? dlAddQ(lv(i)) : dlSubQ(lv(i))));
+}
+// ---- מסכים ----
+const dlCoins = c => `<div class="dl-coins">${c.map(x => `<span class="dl-coin${x === 2 ? ' g' : x === 1 ? ' s' : x === 0 ? ' x' : ''}">${x === 2 ? '★' : x === 1 ? '☆' : ''}</span>`).join('')}</div>`;
+function dlHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('dlab');
+  const d = (store.dlab = store.dlab || {});
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים</span><button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="card race-intro">
+      ${dlBlocks([1, 3, 5])}
+      <p class="race-how">10 אתגרים בשברים עשרוניים, מהקל אל הקשה. נכון בניסיון ראשון – <b>כוכב זהב</b>, בניסיון שני – כוכב כסף.<br>יש <b>קוביות עזר</b>: פורטים שלם ל-10 עשיריות, עשירית ל-10 מאיות – ומקבצים בחזרה.</p>
+    </div>
+    <div class="dl-modes">${DL_MODES.map(([id, icn, nm, ds]) => `<button class="game-card dl-mode" data-dlm="${id}"><span class="gc-ic">${icn}</span><span class="gc-nm">${nm}</span><span class="gc-ds">${ds}</span>${d[id] ? `<span class="gc-st">${ic('star')} השיא: ${d[id]} כוכבי זהב</span>` : ''}</button>`).join('')}</div>`;
+  $('dlHomeB').onclick = home;
+  app.querySelectorAll('[data-dlm]').forEach(b => b.onclick = () => dlStart(b.dataset.dlm));
+  window.scrollTo(0, 0);
+}
+function dlStart(mode) {
+  dlab = { mode, qs: dlPlan(mode), i: 0, tries: 0, coins: Array(10).fill(-1), kit: null };
+  dlDraw();
+}
+function dlDraw() {
+  navPush('dlab');
+  const q = dlab.qs[dlab.i];
+  dlab.kit = null;
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים</span><span class="toollinks"><span class="muted">אתגר ${dlab.i + 1} מתוך 10</span><button class="secondary" id="dlQuit">${ic('close')} יציאה</button></span></div>
+    <div class="card dl-top">${dlCoins(dlab.coins)}</div>
+    <div class="card city-q dl-q">
+      <div class="qtext">${q.text}</div>
+      ${q.fig || ''}
+      <div id="dlVert">${q.vert || ''}</div>
+      <div class="answer-area" style="justify-content:center"><span class="lbl">תשובה:</span><input id="ans" class="ans" inputmode="decimal" autocomplete="off" aria-label="תשובה" dir="ltr"><button id="dlCheck">בדיקה ✓</button></div>
+      <div class="actions" style="justify-content:center">${q.kit ? `<button class="secondary" id="dlKitB">🧱 קוביות עזר</button>` : ''}<button class="secondary" id="dlHint">${ic('bulb')} רמז</button></div>
+      <div id="dlKit"></div>
+      <div id="dlFb"></div>
+    </div>`;
+  $('dlQuit').onclick = () => { if (confirm('לצאת מהמשחק?')) dlHome(); };
+  const inp = $('ans'); inp.focus();
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); dlCheck(); } });
+  $('dlCheck').onclick = dlCheck;
+  $('dlHint').onclick = () => { $('dlFb').innerHTML = `<div class="fb show hint">${ic('bulb')} ${q.hint}</div>`; };
+  if ($('dlKitB')) $('dlKitB').onclick = () => { if (dlab.kit) return; dlab.kit = { p: q.kit.start.slice(), rem: q.kit.remove ? q.kit.remove.slice() : null, fresh: [0, 0, 0] }; dlKitDraw(); $('dlKitB').disabled = true; };
+  window.scrollTo(0, 0);
+}
+// קוביות עזר: פריטה, קיבוץ, ובחיסור – הורדה של מה שמחסרים
+function dlKitDraw() {
+  const k = dlab.kit, q = dlab.qs[dlab.i], p = k.p;
+  const btn = (act, c, label, ok, tip) => `<button type="button" class="ghost dl-act" data-act="${act}" data-c="${c}" title="${tip}" aria-label="${tip}" ${ok ? '' : 'disabled'}>${label}</button>`;
+  const cols = [0, 1, 2].map(c => {
+    const b = [];
+    if (c < 2) b.push(btn('brk', c, '🔨 פורטים 1 ל-10', p[c] > 0, `פורטים ${DL_ONE[c]} ל-10 ${DL_PL[c + 1]}`));
+    if (c > 0) b.push(btn('grp', c, '🧲 מקבצים 10 ל-1', p[c] >= 10, `מקבצים 10 ${DL_PL[c]} ל${DL_ONE[c - 1]}`));
+    if (k.rem) b.push(btn('rem', c, `➖ מורידים 1 (עוד ${k.rem[c]})`, k.rem[c] > 0 && p[c] > 0, `מורידים ${DL_ONE[c]}`));
+    return `<div class="dl-col"><div class="dl-ch">${DL_PL[c]}: <b>${p[c]}</b></div><div class="dl-pcs c${c}">${dlPcs(c, p[c], k.fresh[c]) || '<span class="muted small">אין</span>'}</div><div class="dl-btns">${b.join('')}</div></div>`;
+  }).join('');
+  const done = k.rem ? k.rem.every(x => x === 0) : p[1] < 10 && p[2] < 10;
+  const need = k.rem ? `צריך להוריד: ${k.rem.map((x, c) => `${x} ${DL_PL[c]}`).join(', ')}` : 'כל הקוביות של שני המספרים יחד. כשיש 10 או יותר – מקבצים!';
+  $('dlKit').innerHTML = `<div class="card dl-kitbox"><p class="small">${q.kind === 'sub' ? `מתחילים מ-${M(fmt(q.a))}. ` : ''}${need}</p><div class="dl-kit" dir="ltr">${cols}</div>
+    <p class="small dl-kitmsg">${done ? `✅ מה שיש עכשיו בקוביות: ${p.map((x, c) => `${x} ${DL_PL[c]}`).join(', ')} – כתבו את המספר!` : 'שימו לב: פריטה וקיבוץ לא משנים את הערך – רק את הצורה.'}</p></div>`;
+  k.fresh = [0, 0, 0];
+  $('dlKit').querySelectorAll('[data-act]').forEach(b => b.onclick = () => {
+    const c = Number(b.dataset.c), a = b.dataset.act;
+    if (a === 'brk') { p[c]--; p[c + 1] += 10; k.fresh[c + 1] = 10; }
+    else if (a === 'grp') { p[c] -= 10; p[c - 1]++; k.fresh[c - 1] = 1; }
+    else { p[c]--; k.rem[c]--; }
+    dlKitDraw();
+  });
+}
+function dlCheck() {
+  const q = dlab.qs[dlab.i], v = parseNum($('ans').value);
+  if (v == null) { $('dlFb').innerHTML = '<div class="fb show hint">כתבו תשובה ואז לחצו "בדיקה".</div>'; return; }
+  if (Number.isNaN(v)) { $('dlFb').innerHTML = '<div class="fb show hint">כתבו מספר בלבד, למשל 2.45</div>'; return; }
+  const ok = Math.abs(v - q.ans) < 1e-6;
+  dlab.tries++;
+  if (!ok && dlab.tries < 2) {
+    const A = dlP(q.a || 0), B = dlP(q.b || 0), near = x => Math.abs(v - x) < 1e-6 && !near0(x), near0 = x => Math.abs(x - q.ans) < 1e-6;
+    const zeroTip = q.kind === 'sub' && near(dlV(A.map((x, i) => Math.abs(x - B[i])))) ? 'נראה שבכל טור חיסרתם את הקטן מהגדול. כשלמעלה יש פחות – פורטים! '
+      : q.kind === 'add' && near(dlV(A.map((x, i) => (i ? (x + B[i]) % 10 : x + B[i])))) ? 'שכחתם להעביר: 10 מאיות הן עשירית, ו-10 עשיריות הן שלם. ' : '';
+    $('dlFb').innerHTML = `<div class="fb show bad"><div class="head">לא בדיוק... נסו שוב</div>${ic('bulb')} ${zeroTip}${q.hint}</div>`; return;
+  }
+  dlab.coins[dlab.i] = ok ? (dlab.tries === 1 ? 2 : 1) : 0;
+  $('dlCheck').disabled = true; $('ans').disabled = true; $('dlHint').disabled = true; if ($('dlKitB')) $('dlKitB').disabled = true;
+  if (q.vertA) $('dlVert').innerHTML = q.vertA;
+  const last = dlab.i === 9;
+  $('dlFb').innerHTML = `<div class="fb show ${ok ? 'ok' : 'info'}"><div class="head">${ok ? (dlab.tries === 1 ? '⭐ מצוין! כוכב זהב!' : 'נכון! כוכב כסף.') : `התשובה: ${M(fmt(q.ans))}`}</div>${q.exp}</div>
+    <div class="actions" style="justify-content:center"><button id="dlNext">${last ? 'לסיכום ←' : 'לאתגר הבא ←'}</button></div>`;
+  document.querySelector('.dl-top').innerHTML = dlCoins(dlab.coins);
+  $('dlNext').onclick = () => { if (last) return dlEnd(); dlab.i++; dlab.tries = 0; dlDraw(); };
+  $('dlNext').focus();
+}
+function dlEnd() {
+  const gold = dlab.coins.filter(x => x === 2).length, silver = dlab.coins.filter(x => x === 1).length;
+  const d = (store.dlab = store.dlab || {}), rec = gold > (d[dlab.mode] || 0);
+  if (rec) d[dlab.mode] = gold; saveStore(store);
+  const kinds = { val: 'מהות', add: 'חיבור', sub: 'חיסור' }, miss = {};
+  dlab.qs.forEach((q, i) => { if (dlab.coins[i] < 2) miss[q.kind] = (miss[q.kind] || 0) + 1; });
+  const tip = Object.keys(miss).sort((a, b) => miss[b] - miss[a])[0];
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים</span><button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></div>
+    <div class="card center race-end${rec ? ' rec' : ''}">
+      <h2>סיימתם את המעבדה!</h2>
+      ${dlCoins(dlab.coins)}
+      <div class="race-final"><b>${gold}</b><span>כוכבי זהב${silver ? ` ו-${silver} כוכבי כסף` : ''}</span></div>
+      <p class="compare">${rec ? `${ic('star')} שיא חדש!` : `השיא שלכם: ${d[dlab.mode]} כוכבי זהב.`}</p>
+      ${tip && dlab.mode === 'mix' ? `<p class="muted">כדאי לתרגל עוד: <b>${kinds[tip]}</b>.</p>` : ''}
+      <div class="actions" style="justify-content:center"><button id="dlAgain">${ic('retry')} עוד סבב</button><button class="secondary" id="dlModes">בחירת סוג אחר</button></div>
+    </div>`;
+  $('dlHomeB').onclick = home;
+  $('dlAgain').onclick = () => dlStart(dlab.mode);
+  $('dlModes').onclick = dlHome;
+}
+
+/* =========================================================
    מלחמת תרגילים – כמו "מלחמה" בקלפים: איזה קלף גדול יותר?
    ========================================================= */
 let war = null;
@@ -12094,11 +12364,10 @@ function mkHome() {
     <div class="topbar"><span class="title">${ic('clipboard')} אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}</span><button class="secondary" id="mkHomeB">${ic('home')} לדף הבית</button></div>
     <div class="card"><p>שאלות <b>באותו סגנון</b> של המבחן – עם מספרים חדשים בכל פעם. לכל שאלה שתי אפשרויות:</p>
       <ul class="mk-how"><li><b>📘 הקנייה</b> – רואים שאלה כזו פתורה, צעד אחר צעד.</li><li><b>✏️ תרגול</b> – פותרים לבד, בודקים, ומקבלים הסבר.</li></ul>
-      <div class="actions"><button id="mkAll">✏️ כל המבחן ברצף</button><button class="secondary" id="mkPrint">${ic('printer')} מבחן אימון להדפסה</button></div></div>
+      <div class="actions"><button id="mkAll">✏️ כל המבחן ברצף</button></div></div>
     <div class="mk-list">${L.map((Q, i) => `<div class="mk-item"><span class="mk-n">${i + 1}</span><span class="mk-t">${Q.t}</span><span class="mk-btns"><button class="secondary" data-mk="${i}" data-mode="teach">📘 הקנייה</button><button data-mk="${i}" data-mode="practice">✏️ תרגול</button></span></div>`).join('')}</div>`;
   $('mkHomeB').onclick = home;
   $('mkAll').onclick = () => { mkS = { all: true }; mkView(0, 'practice'); };
-  $('mkPrint').onclick = mkPrintView;
   app.querySelectorAll('[data-mk]').forEach(b => b.onclick = () => { mkS = { all: false }; mkView(+b.dataset.mk, b.dataset.mode); });
   track('אימון למבחן');
   window.scrollTo(0, 0);
@@ -12196,31 +12465,6 @@ function mkCheck() {
   $('mkExp').classList.remove('hidden');
   $('mkMsg').innerHTML = tot ? `${ok === tot ? '🌟 כל הכבוד!' : ''} ${ok} מתוך ${tot} סעיפים נכונים.` : '';
   return { ok, tot, miss };
-}
-function mkPrintView() {
-  navPush('view');
-  const L = MKQ[GRADE], qs = L.map((Q, i) => mkMake(i));
-  const cover = `<div class="mk-cover"><div class="mk-hdr"><span>${GRADE_NAME[GRADE]}</span><span>מבחן אימון</span></div>
-    <p><b>שם התלמיד/ה:</b> <span class="wsline long"></span> <b>כיתה:</b> <span class="wsline"></span></p>
-    <p>תלמידים יקרים,<br>לפניכם <b>מבחן אימון</b> במתמטיקה. לרשותכם 90 דקות.<br>פִּתרו את כל התרגילים וענו על כל השאלות.<br>בחלק מן השאלות הודגשו מילים חשובות. שימו לב למילים אלה.<br>בהצלחה!</p></div>`;
-  const pts = mkPoints(qs);
-  const body = `<section class="ws-page mk-print"><div class="wsqs">${cover}${qs.map((q, i) => mkQHTML(q, 'print', i + 1, pts[i])).join('')}</div></section>`;
-  const key = `<section class="ws-page wskey"><h2>🔑 מחוון – מבחן אימון (${GRADE_NAME[GRADE]})</h2>
-    <table class="mk-rubric"><thead><tr><th>שאלה</th><th>תשובה</th><th data-raw>ניקוד</th></tr></thead>
-    <tbody>${qs.map((q, i) => `<tr><td>${i + 1}</td><td class="mk-ans">${q.parts.map(p => `${p.l ? '<b>' + p.l + '</b> ' : ''}${p.show}`).join(' · ')}</td><td data-raw>${pts[i]} נק׳</td></tr>`).join('')}
-    <tr class="mk-tot"><td colspan="2">סה״כ</td><td data-raw>100 נק׳</td></tr></tbody></table>
-    <p class="small muted">בשאלה עם כמה סעיפים אפשר לתת ניקוד חלקי – חלקים שווים לכל סעיף.</p></section>`;
-  app.innerHTML = `
-    <div class="topbar noprint"><span class="title">${ic('printer')} מבחן אימון להדפסה – ${GRADE_NAME[GRADE]}</span><button class="secondary" id="mkBack">← חזרה</button></div>
-    <div class="card noprint"><p>מבחן באותו מבנה ובאותו סגנון כמו המבחן – עם מספרים חדשים. בסוף יש דף תשובות.</p>
-      <div class="actions"><button id="mkDoPrint">${ic('printer')} הדפסה / שמירה כ-PDF</button><button class="secondary" id="mkNew">${ic('retry')} מבחן חדש (מספרים אחרים)</button></div></div>
-    <div id="wsout">${body}${key}</div>`;
-  $('wsout').dataset.what = `מבחן אימון – ${GRADE_NAME[GRADE]}`;
-  $('mkBack').onclick = mkHome;
-  $('mkNew').onclick = mkPrintView;
-  $('mkDoPrint').onclick = () => window.print();
-  paginateSheets();
-  window.scrollTo(0, 0);
 }
 
 /* =========================================================
@@ -17680,7 +17924,7 @@ function askName(done, tch) {
 })();
 if (teacherCred()) document.documentElement.classList.add('tch');
 if (URLP.has('lp') && teacherOn()) { const x = lpDec(URLP.get('lp') || ''); if (x) lp = x; }
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('dlab') && GRADE >= 4) dlHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
 </html>
