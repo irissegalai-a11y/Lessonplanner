@@ -835,6 +835,7 @@
   @keyframes rBad { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
   .race-in input { font-size: 2rem; width: 170px; text-align: center; }
   .race-pad { display: grid; grid-template-columns: repeat(3, 76px); gap: 8px; justify-content: center; margin: 14px auto 4px; }
+  .race-pad.dec [data-k="ok"] { grid-column: 1 / -1; }
   .race-pad button { font-size: 1.6rem; min-height: 56px; padding: 0; font-family: 'Assistant', sans-serif; font-weight: 700; }
   .race-skip { margin-top: 4px; }
   .race-count { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; font-size: 6rem; font-weight: 700; background: rgba(251, 248, 241, 0.88); border-radius: inherit; font-family: var(--hand, inherit); }
@@ -1816,7 +1817,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8321,7 +8322,7 @@ function home() {
           <button class="game-card" id="whGo0">
             <span class="gc-ic" style="--gw:rgba(239,138,98,0.55)">🎡</span>
             <span class="gc-nm">גלגל המזל</span>
-            <span class="gc-ds">בוחרים נושא וטווח מספרים, מסובבים את הגלגל ופותרים את התרגיל שיצא!</span>
+            <span class="gc-ds">בוחרים נושא וטווח מספרים${GRADE >= 4 ? ' – גם מספרים עשרוניים' : ''}, מסובבים את הגלגל ופותרים את התרגיל שיצא!</span>
           </button>
           <button class="game-card" id="tfGo0">
             <span class="gc-ic" style="--gw:rgba(127,168,214,0.6)">${ic('check')}</span>
@@ -9527,11 +9528,13 @@ const RACE_TRACKS = GRADE === 1 ? [
 ] : GRADE <= 4 ? [
   { id: 'a100', name: 'חיבור וחיסור עד 100' },
   { id: 'mul', name: 'לוח הכפל' },
-  { id: 'div', name: 'חילוק' }
+  { id: 'div', name: 'חילוק' },
+  ...(GRADE === 4 ? [{ id: 'dec', name: 'חיבור וחיסור עשרוניים' }] : [])
 ] : [
   { id: 'mul', name: 'לוח הכפל' },
   { id: 'div', name: 'חילוק' },
-  { id: 'mental', name: 'חשבון בראש' }
+  { id: 'mental', name: 'חשבון בראש' },
+  { id: 'dec', name: 'חיבור וחיסור עשרוניים' }
 ];
 function raceQ(track) {
   let a, b;
@@ -9551,6 +9554,16 @@ function raceQ(track) {
     }
     case 'x2510': a = pick([2, 5, 10]); b = R(1, 10); return Math.random() < 0.5 ? { t: `${a} × ${b} =`, ans: a * b } : { t: `${b} × ${a} =`, ans: a * b };
     case 'mul': a = R(2, 10); b = R(2, 10); return { t: `${a} × ${b} =`, ans: a * b };
+    case 'dec': {
+      // חשבון בראש בעשרוניים: עשיריות (גם מעבר שלם), השלמה ל-1, ובכיתה ה'–ו' גם מאיות
+      const k = R(0, GRADE >= 5 ? 5 : 3), t = () => R(1, 9) / 10;
+      if (k === 0) { a = t(); b = t(); return { t: `${fmt(a)} + ${fmt(b)} =`, ans: rnd(a + b) }; }
+      if (k === 1) { a = rnd(R(1, 9) + t()); b = t(); return a * 10 % 10 >= b * 10 ? { t: `${fmt(a)} - ${fmt(b)} =`, ans: rnd(a - b) } : { t: `${fmt(a)} + ${fmt(b)} =`, ans: rnd(a + b) }; }
+      if (k === 2) { a = t(); return { t: `1 - ${fmt(a)} =`, ans: rnd(1 - a) }; }
+      if (k === 3) { a = rnd(R(2, 9) + R(1, 4) / 10); b = rnd(R(5, 9) / 10); return { t: `${fmt(a)} - ${fmt(b)} =`, ans: rnd(a - b) }; }
+      if (k === 4) { const [x, y] = pick([[0.25, 0.75], [0.4, 0.6], [0.35, 0.65], [0.15, 0.85], [0.45, 0.55], [0.05, 0.95], [0.2, 0.8]]); return Math.random() < 0.5 ? { t: `${fmt(x)} + ${fmt(y)} =`, ans: 1 } : { t: `1 - ${fmt(x)} =`, ans: y }; }
+      a = rnd(R(1, 5) + R(1, 9) / 100); b = rnd(R(1, 9) / 100); return { t: `${fmt(a)} + ${fmt(b)} =`, ans: rnd(a + b) };
+    }
     case 'div': a = R(2, 10); b = R(2, 10); return { t: `${a * b} : ${a} =`, ans: b };
     case 'mental': {
       const k = R(0, 4);
@@ -9606,8 +9619,8 @@ function raceStart(trackId) {
       </div>
       <div id="rTrack"></div>
       <div class="race-q" id="rQ"></div>
-      <div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : 'inputmode="numeric"'} autocomplete="off" aria-label="תשובה"></div>
-      <div class="race-pad" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button><button data-k="ok" aria-label="בדיקה">✓</button></div>
+      <div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : `inputmode="${trackId === 'dec' ? 'decimal' : 'numeric'}"`} autocomplete="off" aria-label="תשובה" dir="ltr"></div>
+      <div class="race-pad${trackId === 'dec' ? ' dec' : ''}" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}${trackId === 'dec' ? '<button class="secondary" data-k="." aria-label="נקודה עשרונית">.</button><button class="secondary" data-k="0">0</button><button class="secondary" data-k="del" aria-label="מחיקה">⌫</button>' : '<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button>'}<button data-k="ok" aria-label="בדיקה">✓</button></div>
       <button class="ghost race-skip" id="rSkip">דילוג ←</button>
       <div class="race-count" id="rCount"></div>
     </div>`;
@@ -9737,15 +9750,18 @@ const MEM_DECKS = GRADE === 1 ? [
   { id: 'x2510', name: 'כפל ב-2, ב-5 וב-10' }
 ] : GRADE <= 4 ? [
   { id: 'mul', name: 'לוח הכפל' },
-  { id: 'div', name: 'חילוק' }
+  { id: 'div', name: 'חילוק' },
+  ...(GRADE === 4 ? [{ id: 'dsum', name: 'חיבור וחיסור עשרוניים' }] : [])
 ] : GRADE === 5 ? [
   { id: 'mul', name: 'לוח הכפל' },
   { id: 'fdec', name: 'שבר ומספר עשרוני' },
-  { id: 'feq', name: 'שברים שווים' }
+  { id: 'feq', name: 'שברים שווים' },
+  { id: 'dsum', name: 'חיבור וחיסור עשרוניים' }
 ] : [
   { id: 'mul', name: 'לוח הכפל' },
   { id: 'fdec', name: 'שבר ומספר עשרוני' },
-  { id: 'pct', name: 'שבר ואחוזים' }
+  { id: 'pct', name: 'שבר ואחוזים' },
+  { id: 'dsum', name: 'חיבור וחיסור עשרוניים' }
 ];
 const MEM_FD = [[1, 2, '0.5'], [1, 4, '0.25'], [3, 4, '0.75'], [1, 5, '0.2'], [2, 5, '0.4'], [3, 5, '0.6'], [4, 5, '0.8'], [1, 10, '0.1'], [3, 10, '0.3'], [7, 10, '0.7'], [9, 10, '0.9'], [1, 20, '0.05'], [1, 8, '0.125'], [3, 20, '0.15']];
 const MEM_PCT = [[1, 2, 50], [1, 4, 25], [3, 4, 75], [1, 5, 20], [2, 5, 40], [3, 5, 60], [1, 10, 10], [3, 10, 30], [7, 10, 70], [1, 20, 5], [1, 25, 4], [1, 100, 1], [9, 10, 90], [4, 5, 80]];
@@ -9762,6 +9778,14 @@ function memPairs(deck, n) {
       case 'x2510': { const x = pick([2, 5, 10]), y = R(2, 10); key = x * y; a = M(`${x} × ${y}`); b = M(x * y); eq = `${x} × ${y} = ${x * y}`; break; }
       case 'mul': { const x = R(3, 9), y = R(3, 9); key = x * y; a = M(`${x} × ${y}`); b = M(x * y); eq = `${x} × ${y} = ${x * y}`; break; }
       case 'div': { const x = R(2, 9), y = R(2, 10); key = y; a = M(`${x * y} : ${x}`); b = M(y); eq = `${x * y} : ${x} = ${y}`; break; }
+      case 'dsum': {
+        // תרגיל ↔ תוצאה. בכיתה ד' עשיריות; בכיתה ה'–ו' גם מאיות. תוצאות שונות זו מזו (key)
+        const P = GRADE >= 5 && Math.random() < 0.5 ? 100 : 10, x = R(1, 3 * P) / P, y = R(1, 2 * P) / P;
+        if (Math.random() < 0.5) { const s = rnd(x + y); key = fmt(s); a = M(`${fmt(x)} + ${fmt(y)}`); b = M(fmt(s)); eq = `${fmt(x)} + ${fmt(y)} = ${fmt(s)}`; }
+        else { const big = rnd(x + y); key = fmt(x); a = M(`${fmt(big)} - ${fmt(y)}`); b = M(fmt(x)); eq = `${fmt(big)} - ${fmt(y)} = ${fmt(x)}`; }
+        if (Number.isInteger(rnd(x)) || Number.isInteger(rnd(y))) continue;
+        break;
+      }
       case 'fdec': { const f = pick(MEM_FD); key = f[2]; a = F(f[0], f[1]); b = M(f[2]); eq = `${F(f[0], f[1])} = ${f[2]}`; break; }
       case 'pct': { const f = pick(MEM_PCT); key = f[2]; a = F(f[0], f[1]); b = M(f[2] + '%'); eq = `${F(f[0], f[1])} = ${f[2]}%`; break; }
       case 'feq': { const f = pick([[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 6], [5, 6], [3, 8]]), k = R(2, 4); key = f[0] / f[1]; a = F(f[0], f[1]); b = F(f[0] * k, f[1] * k); eq = `${F(f[0], f[1])} = ${F(f[0] * k, f[1] * k)}`; break; }
@@ -13235,12 +13259,21 @@ function wheelGame() {
     { id: 'mmiss', nm: 'כפל עם נעלם (□ × 4 = 28)', g: 3, nf: v => v > 0, mk: (a, b) => ({ q: `□ × ${a} = ${a * b}`, a: b }) },
     { id: 'x10', nm: 'כפל ב-10, 100, 1000', g: 3, fx: { lbl: 'כופלים ב:', def: 10, pv: PV }, mk: (a, b, f) => ({ q: `${a} × ${f}`, a: a * f }) },
     { id: 'ord', nm: 'סדר פעולות (חיבור וכפל)', g: 4, mk: (a, b) => { const c = R(2, 9); return { q: `${b} + ${a} × ${c}`, a: b + a * c }; } },
-    { id: 'sq', nm: 'חזקה שנייה (ריבוע)', g: 5, mk: a => ({ q: `${a}²`, a: a * a }) }
+    { id: 'sq', nm: 'חזקה שנייה (ריבוע)', g: 5, mk: a => ({ q: `${a}²`, a: a * a }) },
+    // מספרים עשרוניים: בגלגל מספרים עשרוניים בטווח (החלק השלם מ-עד), עם ספרה אחת או שתיים אחרי הנקודה
+    { id: 'd+', nm: 'חיבור עשרוניים', g: 4, dec: 1, mk: (a, b) => ({ q: `${fmt(a)} + ${fmt(b)}`, a: rnd(a + b) }) },
+    { id: 'd-', nm: 'חיסור עשרוניים', g: 4, dec: 1, mk: (a, b) => ({ q: `${fmt(Math.max(a, b))} − ${fmt(Math.min(a, b))}`, a: rnd(Math.abs(a - b)) }) },
+    { id: 'd1', nm: 'השלמה לשלם הבא (0.35 + □ = 1)', g: 4, dec: 1, mk: a => { const w = Math.floor(a) + 1; return { q: `${fmt(a)} + □ = ${w}`, a: rnd(w - a) }; } },
+    { id: 'drw', nm: 'עיגול עשרוני למספר שלם', g: 5, dec: 1, mk: a => ({ q: `עגלו את ${fmt(a)} למספר שלם`, a: Math.round(rnd(a)), rtl: 1 }) },
+    { id: 'drt', nm: 'עיגול עשרוני לעשיריות', g: 5, dec: 1, pl: 2, mk: a => ({ q: `עגלו את ${fmt(a)} לעשיריות`, a: rnd(Math.round(rnd(a * 10)) / 10), rtl: 1 }) },
+    { id: 'dx10', nm: 'עשרוני × 10, 100, 1000', g: 5, dec: 1, fx: { lbl: 'כופלים ב:', def: 10, pv: PV }, mk: (a, b, f) => ({ q: `${fmt(a)} × ${f}`, a: rnd(a * f) }) },
+    { id: 'dd10', nm: 'עשרוני ÷ 10, 100, 1000', g: 5, dec: 1, fx: { lbl: 'מחלקים ב:', def: 10, pv: PV }, mk: (a, b, f) => ({ q: `${fmt(a)} ÷ ${f}`, a: rnd(a / f) }) }
   ].filter(t => t.g <= Math.max(1, GRADE));
   const T = () => TOP.find(t => t.id === op);
   // טווח ברירת מחדל לפי כיתה ונושא – רוב התלמידים לא משנים אותו
   const g = Math.max(1, Math.min(6, GRADE));
   const DEF = id => {
+    if ((TOP.find(t => t.id === id) || {}).dec) return id === 'd1' || id === 'dx10' || id === 'dd10' ? [0, g === 4 ? 5 : 9] : [0, g === 4 ? 9 : 20];
     const ADD = [[1, 10], [10, 100], [100, 1000], [1000, 100000], [10000, 1000000], [10000, 1000000]][g - 1];
     const MUL = [[1, 5], [1, 10], [2, 10], [2, 12], [6, 25], [6, 25]][g - 1];
     if (id === '-' && g === 1) return [1, 20];
@@ -13258,13 +13291,17 @@ function wheelGame() {
     : id === 'ord' ? (g >= 5 ? 20 : 10) : id === 'sq' ? 10 : id === 'comp' ? 0 : [5, 20, 100, 1000, 10000, 10000][g - 1];
   const MINFIX = id => id === 'comp' ? [5, 20, 100, 100, 100, 100][g - 1] : ['×', '÷'].includes(id) ? [0, 0, 0, 3, 6, 6][g - 1] : 0;
   const KITA = 'אבגדהו'[g - 1];
-  const DFIX = { comp: [10, 100, 1000, 1000, 1000, 1000][g - 1], rnd: [10, 10, 100, 1000, 1000, 1000][g - 1] };
+  const DFIX = { comp: [10, 100, 1000, 1000, 1000, 1000][g - 1], rnd: [10, 10, 100, 1000, 1000, 1000][g - 1], dx10: 10, dd10: 10 };
   let best = 0, sent = 0;
   // דיווח תוצאות למעקב: כל 10 תרגילים, ביציאה, בהחלפת נושא ובסגירת הדף
   const report = beacon => { if (tot > sent) { sent = tot; trackSend('גלגל המזל – תוצאה', `${T().nm} ${lo}–${hi}${fix ? ` · ${fix}` : ''} · ${ok}/${tot} · רצף ${best}`, beacon); } };
   window.addEventListener('pagehide', () => report(true));
   window.addEventListener('popstate', () => report());
   let op = g <= 2 ? '+' : '×', [lo, hi] = DEF(op), fix = DFIX[op] || null, nums = [], rot = 0, ok = 0, tot = 0, streak = 0, cur = null;
+  // עשרוניים: כמה ספרות אחרי הנקודה, ומספר עשרוני אקראי בטווח (לא שלם; בעיגול לעשיריות – עם מאיות)
+  const PL0 = () => T().pl || (g >= 5 ? 2 : 1);
+  let pl = PL0();
+  const dRand = () => { const P = 10 ** pl; let v, k = 0; do { v = rnd(R(lo * P, (hi + 1) * P - 1) / P); } while ((Number.isInteger(v) || (T().pl === 2 && Number.isInteger(rnd(v * 10)))) && k++ < 40); return v; };
   const header = `<div class="topbar"><span class="title">🎡 גלגל המזל</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
   const COLS = ['#f6c344', '#ef8a62', '#7fb3e0', '#8fd19e', '#c39be0', '#f29ac0', '#6fd3c8', '#f4a259'];
   const fig = () => {
@@ -13284,7 +13321,8 @@ function wheelGame() {
         <div class="er-big">🎡</div>
         <h2>גלגל המזל – הגדרות</h2>
         <p class="muted">בוחרים נושא וטווח מספרים. הגלגל בוחר מספר אחד, ואם צריך מספר שני – גם הוא נבחר מאותו טווח. אפשר עד ${MAX}.</p>
-        <div class="wh-rng"><label>נושא: <select id="whTop" class="wh-sel">${TOP.map(t => `<option value="${t.id}"${t.id === op ? ' selected' : ''}>${t.nm}</option>`).join('')}</select></label></div>
+        <div class="wh-rng"><label>נושא: <select id="whTop" class="wh-sel">${(o => TOP.some(t => t.dec) ? `<optgroup label="מספרים שלמים">${TOP.filter(t => !t.dec).map(o).join('')}</optgroup><optgroup label="מספרים עשרוניים">${TOP.filter(t => t.dec).map(o).join('')}</optgroup>` : TOP.map(o).join(''))(t => `<option value="${t.id}"${t.id === op ? ' selected' : ''}>${t.nm}</option>`)}</select></label></div>
+        ${T().dec ? `<p class="muted">בגלגל יופיעו מספרים עשרוניים. הטווח הוא של <b>החלק השלם</b> – למשל 0 עד 9 נותן מספרים כמו 3.7 או 8.25.</p>${T().pl ? '' : `<div class="wh-rng"><label>ספרות אחרי הנקודה: <select id="whPl" class="wh-sel"><option value="1"${pl === 1 ? ' selected' : ''}>אחת – עשיריות (3.7)</option><option value="2"${pl === 2 ? ' selected' : ''}>שתיים – מאיות (3.75)</option></select></label></div>`}` : ''}
         ${T().fx ? `<div class="wh-rng"><label>${T().fx.lbl} ${T().fx.pv ? `<select id="whFix" class="wh-sel">${T().fx.pv.map(v => `<option value="${v}"${v === (fix || 10) ? ' selected' : ''}>${v}</option>`).join('')}</select>` : `<input id="whFix" inputmode="numeric" value="${fix || T().fx.def || ''}" placeholder="${T().fx.opt ? 'למשל 7' : ''}">`}</label></div>
         ${T().fx.opt ? '<p class="muted">עם מספר קבוע מתרגלים את הלוח שלו: הגלגל בוחר את המספר השני מתוך הטווח.</p>' : ''}` : ''}
         <div class="wh-rng"><label>מ- <input id="whLo" inputmode="numeric" value="${lo}"></label><label>עד <input id="whHi" inputmode="numeric" value="${hi}"></label></div>
@@ -13292,12 +13330,24 @@ function wheelGame() {
         <div class="actions" style="justify-content:center"><button id="whStart" class="race-go">▶ לגלגל!</button></div>
       </div>`;
     $('quit').onclick = home;
-    $('whTop').onchange = () => { op = $('whTop').value; [lo, hi] = DEF(op); fix = DFIX[op] || null; setup(); };
+    $('whTop').onchange = () => { op = $('whTop').value; [lo, hi] = DEF(op); fix = DFIX[op] || null; pl = PL0(); setup(); };
     $('whStart').onclick = () => {
       const n = id => parseInt(($(id).value || '').replace(/\D/g, ''), 10);
       let a = n('whLo'), b = n('whHi');
       if (isNaN(a) || isNaN(b)) { $('erMsg').textContent = 'הקלידו שני מספרים.'; return; }
       if (a > b) [a, b] = [b, a];
+      if (T().dec) {
+        const t = T();
+        if (b > 1000) { $('erMsg').textContent = 'בעשרוניים – החלק השלם עד 1,000.'; return; }
+        if (t.fx) { const f = n('whFix'); fix = t.fx.pv.includes(f) ? f : 10; }
+        pl = t.pl || ($('whPl') ? Number($('whPl').value) : pl);
+        lo = a; hi = b;
+        const set = new Set(); for (let k = 0; set.size < 8 && k < 400; k++) set.add(dRand());
+        nums = [...set].sort((x, y) => x - y);
+        if (nums.length < 2) { $('erMsg').textContent = 'הרחיבו את הטווח.'; return; }
+        track('גלגל המזל – הגדרה', `${t.nm} ${lo}–${hi} · ${pl} ספרות${fix ? ` · ${fix}` : ''}`);
+        ok = tot = streak = best = sent = 0; play(); return;
+      }
       if (b > MAX || b < 1) { $('erMsg').textContent = `הטווח צריך להיות בין 0 ל-${MAX.toLocaleString("en-US")}.`; return; }
       const t = T(), f = $('whFix') ? n('whFix') : NaN;
       fix = !t.fx ? null : t.fx.pv ? (t.fx.pv.includes(f) ? f : 10) : f >= 1 && f <= (t.fx.opt ? 100 : 10000) ? f : t.fx.opt ? null : t.fx.def;
@@ -13332,26 +13382,29 @@ function wheelGame() {
     rot += 360 * 5 + ((target - rot) % 360 + 360) % 360;
     $('whSpin').disabled = true; $('whSet').disabled = true;
     $('whSvg').style.transform = `rotate(${rot}deg)`;
-    cur = T().mk(nums[i], R(lo, hi), fix);
+    let b2 = R(lo, hi);
+    if (T().dec) { let k = 0; do { b2 = dRand(); } while (b2 === nums[i] && k++ < 20); }
+    cur = T().mk(nums[i], b2, fix);
     setTimeout(ask, 3200);
   };
   const ask = () => {
     $('whSpin').closest('.actions').remove(); $('whSet').disabled = false;
     $('whQ').innerHTML = `<div dir="${cur.rtl ? 'rtl' : 'ltr'}" class="wh-ex">${cur.q}${cur.rtl || cur.q.includes('=') ? '' : ' = ?'}</div>
-      <div class="er-ans"><input id="erIn" inputmode="numeric" autocomplete="off" aria-label="תשובה"><button id="erOk" class="race-go">בדיקה</button></div>
+      <div class="er-ans"><input id="erIn" inputmode="${T().dec ? 'decimal' : 'numeric'}" autocomplete="off" aria-label="תשובה" dir="ltr"><button id="erOk" class="race-go">בדיקה</button></div>
       <div id="erMsg" class="er-msg" aria-live="polite"></div>`;
     let tries = 0;
     const check = () => {
-      const v = parseInt(($('erIn').value || '').replace(/\D/g, ''), 10);
-      if (isNaN(v)) return;
+      const v = parseNum($('erIn').value);
+      if (v == null || Number.isNaN(v)) return;
       tries++;
-      if (v === cur.a || tries >= 2) {
-        const good = v === cur.a;
+      const right = Math.abs(v - cur.a) < 1e-9;
+      if (right || tries >= 2) {
+        const good = right;
         tot++; if (good && tries === 1) { ok++; streak++; best = Math.max(best, streak); } else streak = 0;
         if (tot % 10 === 0) report();
         $('erIn').disabled = true; $('erOk').remove();
         $('erMsg').className = 'er-msg ' + (good ? 'ok' : 'hint');
-        $('erMsg').innerHTML = `${good ? (tries === 1 ? '✅ נכון!' : '✅ נכון, בניסיון השני.') : `התשובה: <b dir="${cur.rtl ? 'rtl' : 'ltr'}">${cur.q.includes('□') ? cur.q.replace('□', cur.a) : cur.rtl ? cur.a : `${cur.q} = ${cur.a}`}</b>`}<div class="actions" style="justify-content:center"><button id="whAgain" class="race-go">🎡 סיבוב נוסף</button></div>`;
+        $('erMsg').innerHTML = `${good ? (tries === 1 ? '✅ נכון!' : '✅ נכון, בניסיון השני.') : `התשובה: <b dir="${cur.rtl ? 'rtl' : 'ltr'}">${cur.q.includes('□') ? cur.q.replace('□', fmt(cur.a)) : cur.rtl ? fmt(cur.a) : `${cur.q} = ${fmt(cur.a)}`}</b>`}<div class="actions" style="justify-content:center"><button id="whAgain" class="race-go">🎡 סיבוב נוסף</button></div>`;
         $('whAgain').onclick = play; $('whAgain').focus();
       } else {
         $('erMsg').className = 'er-msg bad'; $('erMsg').textContent = '❌ לא בדיוק – נסו שוב!'; $('erIn').select();
