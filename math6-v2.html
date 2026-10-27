@@ -980,6 +980,17 @@
   .city-top { padding: 8px 14px; }
   .city-q { text-align: center; }
   .city-q .qtext { font-size: 1.35rem; }
+  /* ---------- פאזל התאמה ---------- */
+  .tz-board { position: relative; margin: 6mm auto 0; direction: ltr; }
+  .tz-svg polygon { fill: #fff; stroke: #1f1e1c; stroke-width: 1.3; stroke-dasharray: 5 3; }
+  .tz-key .tz-svg polygon { stroke-dasharray: none; fill: #fffdf8; }
+  .tz-l { position: absolute; white-space: nowrap; text-align: center; font-weight: 700; line-height: 1.1; font-family: 'Assistant', Arial, sans-serif; }
+  .tz-l .fr { font-size: 0.95em; }
+  .tz-id { position: absolute; transform: translate(-50%, -50%); font-size: 7pt; color: #b5ae9f; font-family: Arial, sans-serif; }
+  .tz-key .tz-id { font-size: 9pt; color: #d9482b; font-weight: 700; }
+  .tz-how { margin: 2mm 0 0; }
+  .tz-pairs { columns: 2; font-size: 10pt; margin-top: 6mm; }
+  .tz-pairs li { margin: 1mm 0; } .tz-pr { display: inline-block; unicode-bidi: isolate; }
   /* ---------- מעבדת העשרוניים ---------- */
   .dl-kit { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 10px; margin: 10px auto; max-width: 560px; text-align: center; }
   .dl-col { border: 2px dashed #cfc6b4; border-radius: 12px; padding: 8px 6px; display: flex; flex-direction: column; gap: 6px; align-items: center; min-width: 0; }
@@ -1817,7 +1828,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10118,9 +10129,52 @@ function fsBtnHTML() { return document.fullscreenEnabled ? `<button class="secon
 function fsBind() { if ($('jFull')) $('jFull').onclick = () => { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); else document.documentElement.requestFullscreen().catch(() => {}); }; }
 // משחק שנפתח מתוך שיעור: הנושא של השיעור מסומן מראש (ורק הוא)
 let GAME_PRE = null;
+// שאלות קצרות למשחקים (בינגו, מלחמת תרגילים) בנושאים שהשאלות שלהם הן בחירה או עם ציור: תשובה מספרית, בלי ציור
+const gq1 = (text, ans, exp) => ({ type: 'num', text, ans, hint: '', exp: exp || M(fmt(ans)) });
+const GAME_SHAPES = [['משולש', 3], ['ריבוע', 4], ['מלבן', 4], ['מחומש', 5], ['משושה', 6]];
+const GAME_EXTRA = {
+  seq1: lv => { const st = pick(lv === 1 ? [1, 2] : [2, 5, 10]), up = Math.random() < 0.7, mx = lv === 1 ? 20 : 100;
+    const a = up ? R(0, Math.max(0, Math.floor((mx - 4 * st) / st))) * st : R(4, Math.floor(mx / st)) * st, t = [0, 1, 2, 3].map(i => up ? a + i * st : a - i * st), nx = up ? a + 4 * st : a - 4 * st;
+    return gq1(`מהו המספר הבא? ${M(t.join(', ') + ', ?')}`, nx, `בכל צעד ${up ? '+' : '−'}${st}`); },
+  shapes: lv => { const A = pick(GAME_SHAPES), B = pick(GAME_SHAPES), k = R(0, lv === 1 ? 1 : 3), w = k % 2 ? 'קודקודים' : 'צלעות';
+    if (k < 2) return gq1(`כמה ${w} יש ל${A[0]}?`, A[1]);
+    const n = R(2, 3); return Math.random() < 0.5 ? gq1(`כמה ${w} יש ל-${n} ${A[0] === 'משולש' ? 'משולשים' : A[0] === 'ריבוע' ? 'ריבועים' : A[0] === 'מלבן' ? 'מלבנים' : A[0] === 'מחומש' ? 'מחומשים' : 'משושים'} יחד?`, n * A[1]) : gq1(`כמה ${w} יש ל${A[0]} ול${B[0]} יחד?`, A[1] + B[1]); },
+  measure: lv => { const k = R(0, 2);
+    if (k === 0) { const h = R(1, 9), d = R(1, 3); return gq1(`השעה ${h}:00. מה השעה בעוד ${d} שעות?`, h + d); }
+    if (k === 1) { const a = R(2, 12), b = R(1, 20 - a); return gq1(`סרט של ${a} ס"מ ועוד סרט של ${b} ס"מ. כמה ס"מ יחד?`, a + b); }
+    const a = R(8, 20), b = R(1, a - 2); return gq1(`עיפרון באורך ${a} ס"מ ועט באורך ${b} ס"מ. בכמה ס"מ העיפרון ארוך יותר?`, a - b); },
+  data: lv => {
+    if (GRADE >= 5 && Math.random() < 0.5) { const m = R(5, 20) * 5, d = R(1, 4) * 5, v = shuffle([m - d, m, m + d]); return gq1(`מהו הממוצע של ${M(v.join(', '))}?`, m, `${M(`(${v.join(' + ')}) : 3 = ${m}`)}`); }
+    const st = GRADE <= 2 ? 1 : GRADE === 3 ? 1 : 5, mx = GRADE <= 2 ? 9 : GRADE === 3 ? 25 : 60;
+    const N = shuffle(['תפוח', 'בננה', 'ענבים', 'תות', 'אבטיח']).slice(0, 3), V = N.map(() => R(1, Math.floor(mx / st)) * st);
+    const tbl = N.map((n, i) => `${n} ${V[i]}`).join(', '), k = R(0, 1);
+    if (k === 0) return gq1(`הצבעה: ${tbl}. כמה הצביעו בסך הכול?`, V[0] + V[1] + V[2]);
+    const [i, j] = V[0] === V[1] ? [0, 2] : [0, 1], [hi, lo] = V[i] > V[j] ? [i, j] : [j, i];
+    return V[hi] === V[lo] ? gq1(`הצבעה: ${tbl}. כמה הצביעו בסך הכול?`, V[0] + V[1] + V[2]) : gq1(`הצבעה: ${tbl}. בכמה יותר בחרו ב${N[hi]} מב${N[lo]}?`, V[hi] - V[lo]); },
+  divis: lv => {
+    if (GRADE <= 3) { const n = R(11, 99), k = R(0, 3);
+      if (k === 0) return gq1(`מהו המספר הזוגי הבא אחרי ${n}?`, n % 2 ? n + 1 : n + 2);
+      if (k === 1) return gq1(`מהו המספר האי-זוגי הבא אחרי ${n}?`, n % 2 ? n + 2 : n + 1);
+      if (k === 2) return gq1(`מהו המספר הזוגי שלפני ${n}?`, n % 2 ? n - 1 : n - 2);
+      const x = 2 * R(3, 15); return gq1(`כמה מספרים זוגיים יש מ-1 עד ${x}?`, x / 2); }
+    const d = pick([2, 3, 4, 5, 9, 10]), a = R(20, 90);
+    if (Math.random() < 0.6) { let x = a + 1; while (x % d) x++; return gq1(`מהו המספר הקטן ביותר שגדול מ-${a} ומתחלק ב-${d}?`, x); }
+    let x = a - 1; while (x % d) x--; return gq1(`מהו המספר הגדול ביותר שקטן מ-${a} ומתחלק ב-${d}?`, x); },
+  frac: lv => { const k = R(0, 2);
+    if (k === 0) { const d = pick([2, 3, 4, 5, 10]), n = R(1, d - 1), q = d * R(2, 8); return gq1(`כמה זה ${M(F(n, d))} מ-${q}?`, n * q / d, `${M(`${q} : ${d} × ${n} = ${n * q / d}`)}`); }
+    if (k === 1) { const d = pick([2, 3, 4, 5]), n = R(1, d - 1), m = R(2, 4); return gq1(`${M(`${F(n, d)} = ${F('?', d * m)}`)}`, n * m); }
+    const d = pick([2, 3, 4, 5, 8]), w = R(1, 4); return gq1(`כמה ${{ 2: 'חצאים', 3: 'שלישים', 4: 'רבעים', 5: 'חמישיות', 8: 'שמיניות' }[d]} יש ב-${w} שלמים?`, w * d); },
+  geo: lv => { const a = R(2, 12), b = R(2, 12), k = R(0, GRADE >= 6 ? 4 : GRADE === 5 ? 3 : 1);
+    if (k === 0) return gq1(`מהו ההיקף של מלבן ${a} על ${b} ס"מ?`, 2 * (a + b), M(`2 × (${a} + ${b}) = ${2 * (a + b)}`));
+    if (k === 1) return gq1(`מהו השטח של מלבן ${a} על ${b} ס"מ?`, a * b, M(`${a} × ${b} = ${a * b}`));
+    if (k === 2) { const x = R(3, 12) * 5, y = R(3, 18 - x / 5) * 5; return 180 - x - y > 0 ? gq1(`במשולש זוויות של ${x}° ו-${y}°. מהי הזווית השלישית?`, 180 - x - y, M(`180 − ${x} − ${y} = ${180 - x - y}`)) : gq1(`מהו השטח של מלבן ${a} על ${b} ס"מ?`, a * b); }
+    if (k === 3) return gq1(`מקבילית: בסיס ${a} ס"מ, גובה ${b} ס"מ. מהו השטח?`, a * b, M(`${a} × ${b} = ${a * b}`));
+    const h = 2 * R(1, 6); return gq1(`משולש: בסיס ${a} ס"מ, גובה ${h} ס"מ. מהו השטח?`, a * h / 2, M(`${a} × ${h} : 2 = ${a * h / 2}`)); }
+};
 // שאלות מנושא השיעור (לבינגו, מלחמת תרגילים ואמת או שקר): רק שאלות שמתאימות למשחק (ok)
 function gamePool(id, ok, tries = 400) { const T = TOPIC[id], out = [], seen = new Set(); if (!T) return out;
-  for (let i = 0; i < tries; i++) { const lv = 1 + i % 3, L = T.levels[lv]; if (!L || !L.length) continue; let q; try { q = mk(id, pick(L), lv); } catch (e) { continue; } if (seen.has(q.text) || !ok(q)) continue; seen.add(q.text); out.push(q); }
+  const X = GAME_EXTRA[id];
+  for (let i = 0; i < tries; i++) { const lv = 1 + i % 3, L = T.levels[lv]; if (!L || !L.length) continue; let q; try { q = X && i % 2 ? mk(id, () => X(lv), lv) : mk(id, pick(L), lv); } catch (e) { continue; } if (seen.has(q.text) || !ok(q)) continue; seen.add(q.text); out.push(q); }
   return out; }
 const gameNum = q => q.type === 'num' && typeof q.ans === 'number' && Number.isFinite(q.ans);
 const gamePreHTML = (ok, what) => GAME_PRE && TOPIC[GAME_PRE] ? `<p class="small center" style="margin:0 0 8px">📌 לפי נושא השיעור: <b>${TOPIC[GAME_PRE].name}</b>${ok ? '' : ` – בנושא הזה אין מספיק ${what}, ולכן המשחק בחשבון כללי`}</p>` : '';
@@ -14941,6 +14995,7 @@ function printBuilder() {
         <p class="muted small" id="drmsg"></p>
       </div>
       ${wpPrintCard()}
+      ${tzPrintCard()}
       ${GRADE <= 2 ? `<div class="card tform">
         <h2>🔟 חשבון בעל-פה עד 20 – לכיתה</h2>
         <p class="muted small"><b>אתגר דקה:</b> 40 תרגילים בדף – כמה תספיקו נכון בדקה? <b>דף תאומים:</b> שלושה חלקים – תאומים, חיסור תאומים וכמעט תאומים. (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
@@ -15055,6 +15110,7 @@ function printBuilder() {
   $('wprint').onclick = () => window.print();
   const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
   wpPrintBind(kfOut);
+  tzPrintBind(kfOut);
   if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: דף אתגר דקה') && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked)));
   $('drgo').onclick = () => {
     const ids = [...app.querySelectorAll('.drtopics input:checked')].map(x => x.value);
@@ -16332,6 +16388,170 @@ function wpPrintBind(out) {
     });
   };
   if (location.hash === '#wp' || urlPre) setTimeout(() => card.scrollIntoView({ block: 'start' }), 50);
+}
+/* ---------- 🧩 פאזל התאמה (טרסיה): משולש גדול מ-16 משולשים, על כל צלע פנימית – תרגיל מצד אחד ותשובה מהצד השני ---------- */
+// זוג = { q: HTML של התרגיל, a: HTML של התשובה, v: ערכים "טהורים" שמופיעים על החלקים (כדי שלא יהיו שתי תשובות זהות) }
+const TZ_FR = (n, d) => { const g = gcd(n, d); return { n: n / g, d: d / g }; };
+const tzF = (n, d) => { const r = TZ_FR(n, d); return { h: FX(r.n, r.d), v: rnd(r.n / r.d) }; };
+const TZ_KINDS = [
+  { id: 'addsub', g: 1, nm: 'חיבור וחיסור', gen: lv => {
+    const max = [[20, 20, 20], [20, 100, 100], [100, 1000, 1000], [1000, 10000, 10000], [1000, 10000, 100000], [1000, 10000, 100000]][Math.min(GRADE, 6) - 1][lv - 1];
+    const a = R(Math.ceil(max * 0.1), Math.floor(max * 0.6)), b = R(1, max - a);
+    return Math.random() < 0.5 ? { q: M(`${fmt(a)} + ${fmt(b)}`), a: M(fmt(a + b)), v: [a + b] } : { q: M(`${fmt(a + b)} − ${fmt(b)}`), a: M(fmt(a)), v: [a] };
+  } },
+  { id: 'mul', g: 2, nm: 'כפל', gen: lv => {
+    let a, b;
+    if (GRADE === 2) { a = pick([2, 5, 10]); b = R(1, 10); }
+    else if (lv === 1) { a = R(2, 10); b = R(2, 10); }
+    else if (lv === 2) { a = R(3, 12); b = R(6, 12); }
+    else { a = GRADE >= 4 ? R(11, 25) : R(6, 10); b = R(3, 9); }
+    return { q: M(`${a} × ${b}`), a: M(fmt(a * b)), v: [a * b] };
+  } },
+  { id: 'div', g: 3, nm: 'כפל וחילוק', gen: lv => {
+    // חצי כפל, חצי חילוק – כדי שיהיו 18 תשובות שונות
+    const d = lv === 1 ? R(2, 10) : R(3, 12), qn = lv === 3 && GRADE >= 4 ? R(11, 30) : R(2, 10);
+    if (Math.random() < 0.5) return { q: M(`${d} × ${qn}`), a: M(fmt(d * qn)), v: [d * qn] };
+    return { q: M(`${fmt(d * qn)} : ${d}`), a: M(fmt(qn)), v: [qn] };
+  } },
+  { id: 'ord', g: 4, nm: 'סדר פעולות', gen: lv => {
+    const a = R(2, lv === 1 ? 20 : 50), b = R(2, 9), c = R(2, 9), k = R(0, lv === 1 ? 1 : 3);
+    if (k === 0) return { q: M(`${a} + ${b} × ${c}`), a: M(fmt(a + b * c)), v: [a + b * c] };
+    if (k === 1) { const x = a + b * c + R(1, 20); return { q: M(`${x} − ${b} × ${c}`), a: M(fmt(x - b * c)), v: [x - b * c] }; }
+    if (k === 2) return { q: M(`(${a} + ${b}) × ${c}`), a: M(fmt((a + b) * c)), v: [(a + b) * c] };
+    const m = R(2, 9); return { q: M(`${a} + ${b * m} : ${b}`), a: M(fmt(a + m)), v: [a + m] };
+  } },
+  { id: 'feq', g: 4, nm: 'שברים שווים וצמצום', gen: lv => {
+    const d = pick(lv === 1 ? [2, 3, 4, 5, 6, 8, 10] : [3, 4, 5, 6, 7, 8, 9, 10, 12]); let n; do { n = R(1, d - 1); } while (gcd(n, d) > 1);
+    const k = lv === 1 ? R(2, 3) : lv === 2 ? R(2, 5) : R(3, 8);
+    return Math.random() < 0.55 ? { q: M(F(n * k, d * k)), a: M(F(n, d)), v: [rnd(n / d)] }
+      : { q: M(`${F(n, d)} = ${F('?', d * k)}`), a: M(fmt(n * k)), v: [n * k] };
+  } },
+  { id: 'fadd', g: 4, nm: 'חיבור וחיסור שברים', gen: lv => {
+    let d1, d2;
+    if (GRADE <= 4 || lv === 1) { d1 = d2 = pick([3, 4, 5, 6, 7, 8, 9, 10]); }
+    else { do { d1 = pick([2, 3, 4, 5, 6, 8, 10, 12]); d2 = pick([2, 3, 4, 5, 6, 8, 10, 12]); } while (d1 === d2 || (lv === 2 && Math.max(d1, d2) % Math.min(d1, d2))); }
+    const n1 = R(1, d1 - 1), n2 = R(1, d2 - 1), L = d1 * d2 / gcd(d1, d2), A = n1 * L / d1, B = n2 * L / d2;
+    const sub = Math.random() < 0.45 && A !== B, [x, y, X, Y] = sub && A < B ? [n2, d2, n1, d1] : [n1, d1, n2, d2];
+    const res = sub ? Math.abs(A - B) : A + B, r = tzF(res, L);
+    return { q: M(`${F(x, y)} ${sub ? '−' : '+'} ${F(X, Y)}`), a: r.h, v: [r.v] };
+  } },
+  { id: 'fdec', g: 5, nm: 'שבר ומספר עשרוני', gen: lv => {
+    const d = pick(lv === 1 ? [2, 4, 5, 10, 10] : lv === 2 ? [4, 5, 20, 25, 50, 100] : [8, 20, 25, 40, 50, 100]); let n; do { n = R(1, d - 1); } while (gcd(n, d) > 1);
+    const w = Math.random() < (lv === 1 ? 0.35 : 0.3) ? R(1, 3) : 0, v = rnd(w + n / d);
+    const fr = w ? M(`${w}${F(n, d)}`) : M(F(n, d));
+    return Math.random() < 0.5 ? { q: fr, a: M(fmt(v)), v: [v] } : { q: M(fmt(v)), a: fr, v: [v] };
+  } },
+  { id: 'dadd', g: 6, nm: 'חיבור וחיסור עשרוניים', gen: lv => {
+    const P = lv === 1 ? 10 : 100, a = R(lv === 1 ? 2 : 11, lv === 3 ? 2000 : 600) / P, b = R(1, lv === 1 ? 50 : 500) / P;
+    if ((lv === 1 && Number.isInteger(rnd(a + b))) || Number.isInteger(a) || Number.isInteger(b)) return { q: '', a: '', v: [] };
+    return Math.random() < 0.5 ? { q: M(`${fmt(a)} + ${fmt(b)}`), a: M(fmt(rnd(a + b))), v: [rnd(a + b)] } : { q: M(`${fmt(rnd(a + b))} − ${fmt(b)}`), a: M(fmt(a)), v: [a] };
+  } },
+  { id: 'dx10', g: 6, nm: 'עשרוני × ו-: 10, 100, 1000', gen: lv => {
+    const t = pick(lv === 1 ? [10] : [10, 100, 1000]), x = R(lv === 1 ? 11 : 101, lv === 3 ? 9999 : 999) / (lv === 1 ? 10 : 100), mul = Math.random() < 0.5;
+    const r = rnd(mul ? x * t : x / t);
+    return { q: M(`${fmt(x)} ${mul ? '×' : ':'} ${fmt(t)}`), a: M(fmt(r)), v: [r] };
+  } },
+  { id: 'pct', g: 6, nm: 'אחוזים מכמות', gen: lv => {
+    const p = pick(lv === 1 ? [10, 50, 25] : lv === 2 ? [10, 20, 25, 50, 75] : [5, 15, 30, 40, 60, 75, 120]), base = lv === 1 ? 20 * R(1, 10) : 20 * R(1, 25), r = rnd(base * p / 100);
+    return Number.isInteger(r) ? { q: `${M(p + '%')} מ-${M(fmt(base))}`, a: M(fmt(r)), v: [r] } : { q: '', a: '', v: [] };
+  } }
+];
+const tzKinds = () => TZ_KINDS.filter(k => k.g <= GRADE);
+// 18 זוגות שונים (בלי שתי תשובות עם אותו ערך)
+function tzPairs(kind, lv, n = 18) {
+  const ks = kind === 'mix' ? tzKinds().filter(k => k.id !== 'addsub' || GRADE <= 3) : [tzKinds().find(k => k.id === kind)];
+  const out = [], vals = new Set(), qs = new Set();
+  for (let t = 0; out.length < n && t < 4000; t++) {
+    const k = ks[t % ks.length], L = lv === 'mix' ? 1 + Math.floor(3 * out.length / n) : Number(lv), p = k.gen(L);
+    if (!p.q || !p.a || qs.has(p.q) || p.v.some(v => vals.has(v))) continue;
+    qs.add(p.q); p.v.forEach(v => vals.add(v)); out.push(p);
+  }
+  return out.length === n ? shuffle(out) : null;
+}
+// הגאומטריה: קודקודים V(r,c) במשולש בגובה 4. כל משולש קטן – 3 קודקודים בסדר של כיוון השעון (במסך)
+function tzGrid() {
+  const T = [];
+  for (let r = 0; r < 4; r++) {
+    for (let k = 0; k <= r; k++) T.push({ up: 1, v: [[r, k], [r + 1, k + 1], [r + 1, k]] });
+    for (let k = 0; k < r; k++) T.push({ up: 0, v: [[r, k], [r, k + 1], [r + 1, k + 1]] });
+  }
+  const ek = (a, b) => [a, b].map(x => x.join('.')).sort().join('|'), cnt = {};
+  T.forEach(t => { t.e = [0, 1, 2].map(i => ek(t.v[i], t.v[(i + 1) % 3])); t.e.forEach(e => { cnt[e] = (cnt[e] || 0) + 1; }); });
+  return { T, inner: Object.keys(cnt).filter(e => cnt[e] === 2) };
+}
+// בונה פאזל: לכל צלע פנימית זוג, צד אקראי לתרגיל; לכל חלק – אות ותוויות לפי סדר הצלעות
+function tzBuild(kind, lv) {
+  const pairs = tzPairs(kind, lv); if (!pairs) return null;
+  const { T, inner } = tzGrid(), lab = {};
+  inner.forEach((e, i) => { const p = pairs[i], owners = T.filter(t => t.e.includes(e)), sw = Math.random() < 0.5; lab[e] = new Map([[owners[sw ? 0 : 1], p.q], [owners[sw ? 1 : 0], p.a]]); });
+  const letters = 'אבגדהוזחטיכלמנסעפצקרשת';
+  const ids = shuffle(T.map((_, i) => i));
+  T.forEach((t, i) => { t.L = t.e.map(e => lab[e] ? lab[e].get(t) : ''); t.id = letters[ids[i]]; });
+  return { T, pairs };
+}
+// ציור משולש אחד (HTML מוחלט בתוך מלבן S × H במ"מ). pts = 3 קודקודים בכיוון השעון, labels לפי הצלעות
+function tzPiece(pts, labels, id, S, fs) {
+  const c = [(pts[0][0] + pts[1][0] + pts[2][0]) / 3, (pts[0][1] + pts[1][1] + pts[2][1]) / 3];
+  const lab = labels.map((L, i) => {
+    if (!L) return '';
+    const a = pts[i], b = pts[(i + 1) % 3], m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    let n = [c[0] - m[0], c[1] - m[1]]; const len = Math.hypot(n[0], n[1]); n = [n[0] / len, n[1] / len];
+    const off = S * 0.115, th = Math.atan2(n[0], -n[1]) * 180 / Math.PI;
+    return `<div class="tz-l" dir="ltr" style="left:${(m[0] + n[0] * off).toFixed(2)}mm;top:${(m[1] + n[1] * off).toFixed(2)}mm;max-width:${(S * 0.46).toFixed(1)}mm;font-size:${fs}pt;transform:translate(-50%,-50%) rotate(${th.toFixed(1)}deg)">${L}</div>`;
+  }).join('');
+  return `<svg class="tz-svg" style="position:absolute;left:0;top:0;overflow:visible" width="1" height="1"><polygon points="${pts.map(p => `${p[0]}mm,${p[1]}mm`).join(' ')}" /></svg>`.replace(/(\d+(?:\.\d+)?)mm,(\d+(?:\.\d+)?)mm/g, (z, x, y) => `${(x * 3.7795).toFixed(2)},${(y * 3.7795).toFixed(2)}`)
+    + lab + (id ? `<div class="tz-id" style="left:${c[0].toFixed(2)}mm;top:${c[1].toFixed(2)}mm">${id}</div>` : '');
+}
+// דף התלמיד: 16 חלקים בשורות של 5 (מעלה/מטה לסירוגין), כל חלק במקום ובסיבוב אקראי
+function tzStudentHTML(P, S) {
+  const H = S * Math.sqrt(3) / 2, order = shuffle(P.T.slice()), g = 0.94;
+  const shrink = pts => { const c = [(pts[0][0] + pts[1][0] + pts[2][0]) / 3, (pts[0][1] + pts[1][1] + pts[2][1]) / 3]; return pts.map(p => [c[0] + (p[0] - c[0]) * g, c[1] + (p[1] - c[1]) * g]); };
+  let h = '';
+  order.forEach((t, i) => {
+    const row = Math.floor(i / 5), col = i % 5, x0 = col * S / 2, y0 = row * (H + 3), up = col % 2 === 0;
+    const pts = shrink(up ? [[x0 + S / 2, y0], [x0 + S, y0 + H], [x0, y0 + H]] : [[x0, y0], [x0 + S, y0], [x0 + S / 2, y0 + H]]);
+    const k = R(0, 2), L = [0, 1, 2].map(j => t.L[(j + k) % 3]);
+    h += tzPiece(pts, L, t.id, S, 10.5);
+  });
+  const rows = Math.ceil(P.T.length / 5);
+  return `<div class="tz-board" style="width:${3 * S}mm;height:${rows * (H + 3)}mm">${h}</div>`;
+}
+// הפתרון: המשולש הגדול מורכב, עם האות של כל חלק
+function tzKeyHTML(P, S) {
+  const H = S * Math.sqrt(3) / 2, X = ([r, c]) => (c - r / 2) * S + 2 * S, Y = ([r]) => r * H;
+  const h = P.T.map(t => tzPiece(t.v.map(v => [X(v), Y(v)]), t.L, t.id, S, 6.2)).join('');
+  return `<div class="tz-board tz-key" style="width:${4 * S}mm;height:${4 * H}mm">${h}</div>`;
+}
+function tzPrintCard() {
+  const K = tzKinds();
+  return `<div class="card tform" id="tzcard">
+    <h2>🧩 פאזל התאמה – משולש</h2>
+    <p class="muted small">16 חלקים לגזירה. על כל צלע – תרגיל או תשובה. מצמידים כל תרגיל לתשובה שלו – ובסוף מתקבל משולש גדול. כל לחיצה – פאזל חדש. (הכותרת ודף התשובות – לפי הבחירה למעלה.)</p>
+    <label>נושא: <select id="tzk"><option value="mix">🎲 מעורב – מכל הנושאים של הכיתה</option>${K.map(k => `<option value="${k.id}">${k.nm}</option>`).join('')}</select></label>
+    <label>רמה: <select id="tzl"><option value="1">רמה 1 – בסיסית</option><option value="2" selected>רמה 2 – בינונית</option><option value="3">רמה 3 – מאתגרת</option><option value="mix">מדורגת</option></select></label>
+    <div class="actions"><button class="secondary" id="tzgo">🧩 יצירת פאזל</button></div>
+    <p class="muted small" id="tzmsg"></p>
+  </div>`;
+}
+function tzPrintBind(out) {
+  if (!$('tzgo')) return;
+  $('tzgo').onclick = () => {
+    const kind = $('tzk').value, lv = $('tzl').value;
+    wsGate(() => {
+      const P = tzBuild(kind, lv);
+      if (!P) { $('tzmsg').textContent = 'בנושא וברמה האלה אין מספיק תרגילים שונים לפאזל. נסו רמה אחרת או "מעורב".'; return; }
+      const nm = kind === 'mix' ? 'מעורב' : tzKinds().find(k => k.id === kind).nm, title = $('wt').value.trim() || `פאזל התאמה – ${nm}`;
+      let html = `<section class="ws-page tz-page"><div class="wshead"><h1>🧩 ${esc(title)}</h1>
+        <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+        <p class="tz-how">✂️ גוזרים את 16 החלקים. מצמידים כל תרגיל לתשובה שלו – צלע לצלע. צלעות ריקות נמצאות בחוץ. בסוף מתקבל <b>משולש גדול</b>!</p>
+        ${tzStudentHTML(P, 60)}</section>`;
+      if ($('wkey').checked) html += `<section class="ws-page wskey tz-page"><h2>🔑 פתרון – ${esc(title)}</h2><p class="small">האותיות הקטנות במרכז כל חלק עוזרות לבדוק מהר.</p>${tzKeyHTML(P, 44)}
+        <ol class="tz-pairs">${P.pairs.map(p => `<li><span dir="ltr" class="tz-pr">${p.q} = <b>${p.a}</b></span></li>`).join('')}</ol></section>`;
+      $('wsout').dataset.what = `פאזל התאמה: ${nm} · רמה ${lv}`;
+      out(html);
+      $('tzmsg').textContent = 'הפאזל מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".';
+    });
+  };
 }
 /* ---------- דפי תרגילים רציפים: תרגיל אחרי תרגיל, לפי תחום (כל הכיתות) ---------- */
 // כל מחולל מחזיר { e: הביטוי (בתוך M), a: התשובה } – או { h: HTML מלא של התרגיל, a }; rem = חילוק עם שארית
