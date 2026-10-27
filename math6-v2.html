@@ -1717,7 +1717,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot">© 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קפז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 קצ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8091,17 +8091,13 @@ function home() {
   const tabs = [
     { id: 'learn', label: 'ללמוד', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
     { id: 'practice', label: 'לתרגל', icon: 'pencil', wash: 'rgba(217,138,154,0.28)' },
-    { id: 'wp', label: 'שאלות מילוליות', icon: 'note', wash: 'rgba(120,180,160,0.30)' },
-    ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
-    ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
-    { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
-    ...(T ? [] : [{ id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' }, { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }]),
+    { id: 'tests', label: GRADE === 6 ? 'תרגול מבדק (אונליין)' : 'תרגול מבחן (אונליין)', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
+    ...(T ? [] : [{ id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }]),
     ...(T ? [
       { id: 'lp', label: 'בונים שיעור', icon: 'clock', wash: 'rgba(196,170,140,0.30)', go: 'lpTop', grp: 'למורה' },
       { id: 'class', label: 'בכיתה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)' },
       { id: 'succ', label: 'מבדקי הצלחה', icon: 'star', wash: 'rgba(242,201,76,0.32)', go: 'succTab' },
-      { id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' },
       { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }
     ] : [])
   ];
@@ -8175,6 +8171,9 @@ function home() {
           </div>
           <div class="practice-more">
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
+            <button id="wpGo2">${ic('note')} שאלות מילוליות<span class="desc">תרגול ממוקד בבעיות מילוליות – לפי פעולות וסוג מספרים</span></button>
+            ${GRADE >= 3 ? `<button id="kefelGo2">${ic('times')} אימון כפל<span class="desc">תרגול מהיר וממוקד של לוח הכפל</span></button>` : ''}
+            ${GRADE <= 2 ? `<button id="fcGo2">${ic('cards')} כרטיסי הברקה<span class="desc">תרגול מהיר בכרטיסיות הברקה</span></button>` : ''}
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
             ${store.solved ? `<div class="muted">${ic('star')} עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
           </div>
@@ -8189,10 +8188,12 @@ function home() {
         </section>` : ''}
         ${wpPanelHTML()}
         <section class="panel" data-panel="tests" ${homeTab === 'tests' ? '' : 'hidden'}>
-          <h2>${GRADE === 6 ? 'מבדקים' : 'מבחנים'}</h2>
+          <h2>תרגול ${GRADE === 6 ? 'מבדק' : 'מבחן'} <span class="muted">(אונליין – על המסך)</span></h2>
+          <p class="muted small" style="margin:-6px 0 12px">מבחנים ל<b>הדפסה</b> נמצאים בלשונית "הדפסה".</p>
           <div class="big-actions">
             <button id="testPick" class="secondary">${ic('clipboard')} ${GRADE === 6 ? 'מבדק' : 'מבחן'} – 20 שאלות מכל הנושאים<span class="desc">בוחרים: עם משוב תוך כדי, ציון בסוף, או עם שעון</span></button>
             ${MK_HAS() ? `<button id="mkGo">${ic('star')} אימון לקראת ה${GRADE === 6 ? 'מבדק' : 'מבחן'}<span class="desc">שאלות בסגנון ה${GRADE === 6 ? 'מבדק' : 'מבחן'} – הקנייה ותרגול לכל שאלה, ומבחן אימון להדפסה</span></button>` : ''}
+            <button id="exitGo2" class="secondary">${ic('note')} כרטיס יציאה<span class="desc">סיכום קצר בסוף שיעור</span></button>
           </div>
           ${teacherOn() ? `<div class="big-actions"><button id="testLink" class="secondary">🔗 קישור ל${GRADE === 6 ? 'מבדק' : 'מבחן'} לתלמידים<span class="desc">בוחרים סוג, מעתיקים קישור ומדביקים בקלאסרום</span></button></div>` : ''}
           ${(store.tests || []).length ? `<div class="card" style="margin-top:18px"><b>${GRADE === 6 ? 'המבדקים' : 'המבחנים'} האחרונים שלי:</b> ${store.tests.slice(-5).map(t => `${t.date} – ${t.score}/${t.total}`).join(' · ')}</div>` : ''}
@@ -8288,6 +8289,16 @@ function home() {
       if (pn) { const y = pn.getBoundingClientRect().top + window.scrollY - 10; window.scrollTo({ top: y, behavior: 'smooth' }); }
     }
   });
+  // מעבר לפאנל מקופל (שאלות מילוליות / אימון כפל) מתוך קלף ב"לתרגל", בלי לשונית נפרדת
+  const goPanel = id => {
+    const pn = app.querySelector(`[data-panel="${id}"]`); if (!pn) return;
+    app.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== id; });
+    app.querySelectorAll('[data-tab]').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-selected', 'false'); });
+    const y = pn.getBoundingClientRect().top + window.scrollY - 10; window.scrollTo({ top: y, behavior: 'smooth' });
+  };
+  if ($('wpGo2')) $('wpGo2').onclick = () => goPanel('wp');
+  if ($('kefelGo2')) $('kefelGo2').onclick = () => goPanel('kefel');
+  if ($('fcGo2')) $('fcGo2').onclick = () => fcHome();
   if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
   wpBind();
   $('raceGo').onclick = () => raceHome();
@@ -8356,7 +8367,8 @@ function home() {
   if ($('lpTop')) $('lpTop').onclick = () => lpHome();
   if ($('succTab')) $('succTab').onclick = succHome;
   if ($('fcTab')) $('fcTab').onclick = fcHome;
-  $('exitTab').onclick = exitHome;
+  if ($('exitTab')) $('exitTab').onclick = exitHome;
+  if ($('exitGo2')) $('exitGo2').onclick = exitHome;
   $('testPick').onclick = testPicker;
   if ($('testLink')) $('testLink').onclick = testLinkDialog;
   if ($('mkGo')) $('mkGo').onclick = mkHome;
