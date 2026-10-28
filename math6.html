@@ -1016,6 +1016,7 @@
   .dl-coin.g { background: #e8b84a; border: 2px solid #1f1e1c; }
   .dl-coin.s { background: #d9d6cf; border: 2px solid #1f1e1c; }
   .dl-coin.x { background: #f1ece2; border-style: solid; }
+  .eqx { direction: ltr; unicode-bidi: isolate; display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 0 0.3em; vertical-align: middle; }
   .fj-opts { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 8px 0; }
   .fj-opt { font-size: 1.15rem; padding: 10px 20px; min-width: 90px; }
   .fj-opt.fj-ok { background: #cdeccd; border-color: #2f8f55; }
@@ -1832,7 +1833,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רי</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ריא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -1988,6 +1989,8 @@ function fmt(x) {
 const M = s => `<span class="m">${s}</span>`;
 // שבר
 const F = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+// ביטוי שלם ושבר יחד (למשל "6 × 3/7") – עוטף ב-LTR כך שהשלם יעמוד משמאל לשבר ולא יתהפך בהקשר ימין-לשמאל
+const MX = s => `<span class="eqx">${s}</span>`;
 const BOX = '<span class="box">?</span>';
 // שלב פתור: התוצאה נכתבת בתוך התרגיל, מימין לסימן = (ולא בנפרד, משמאל לו)
 const stepAns = (p, a) => /=\s*<\/span>\s*$/.test(p) ? p.replace(/=\s*<\/span>\s*$/, `= <b>${fmt(a)}</b></span>`) : `${p} <b class="m">${fmt(a)}</b>`;
@@ -11371,13 +11374,11 @@ function fjLine(k, p, d, shown) {
   g += `<circle cx="${X(shown * p / d)}" cy="60" r="5.5" fill="#2f8f55" stroke="#1f1e1c" stroke-width="1.4"/>`;
   return `<svg class="fig" viewBox="0 0 ${X(end) + 30} 96" width="${X(end) + 30}" height="96" aria-hidden="true" style="max-width:480px">${g}</svg>`;
 }
+// fjX עוטף ביטוי מתמטי ב-LTR כך שהשלם יעמוד משמאל לשבר (אחרת מתהפך בהקשר ימין-לשמאל)
+const fjX = MX;
 // מספר מעורב "גולמי" (בלי צמצום) כדי שיתאים למכנה שעל ישר המספרים – כמו בחוברת (18/7 = 2 4/7)
-function fjMixed(n, d) {
-  if (n % d === 0) return M(n / d);
-  if (n < d) return F(n, d);
-  const w = Math.floor(n / d), rem = n % d;
-  return `${M(w)}${F(rem, d)}`;
-}
+const fjMix = (n, d) => n % d === 0 ? M(n / d) : n < d ? F(n, d) : `${M(Math.floor(n / d))}${F(n % d, d)}`;
+const fjMixed = (n, d) => fjX(fjMix(n, d));
 function fjPlan() {
   const mk = tier => {
     for (let t = 0; t < 300; t++) {
@@ -11408,7 +11409,7 @@ function fjStart() { fj = { qs: fjPlan(), i: 0, shown: 0, tries: 0, answered: fa
 function fjRun() {
   const r = fj.qs[fj.i], num = fj.shown * r.p;
   const run = $('fjRun'); if (run) run.innerHTML = fj.shown === 0 ? '<span class="muted">לחצו "קפיצה" כדי להתחיל לקפוץ</span>'
-    : `${fj.shown} ${fj.shown === 1 ? 'קפיצה' : 'קפיצות'} = ${M(`${fj.shown} ×`)} ${F(r.p, r.d)} = ${F(num, r.d)}${num >= r.d && num % r.d !== 0 ? ` = ${fjMixed(num, r.d)}` : num % r.d === 0 ? ` = ${M(num / r.d)}` : ''}`;
+    : `${fj.shown} ${fj.shown === 1 ? 'קפיצה' : 'קפיצות'}: ${fjX(`${M(`${fj.shown} ×`)} ${F(r.p, r.d)} = ${F(num, r.d)}${num >= r.d ? ` = ${fjMix(num, r.d)}` : ''}`)}`;
   if ($('fjJumpB')) $('fjJumpB').disabled = fj.shown >= r.k;
   if ($('fjAllB')) $('fjAllB').disabled = fj.shown >= r.k;
 }
@@ -11446,7 +11447,7 @@ function fjPick(i, opts) {
   fj.coins[fj.i] = chosen.ok ? (fj.tries === 1 ? 2 : 1) : 0;
   $('fjOpts').querySelectorAll('.fj-opt').forEach((b, ix) => { b.disabled = true; if (opts[ix].ok) b.classList.add('fj-ok'); else if (ix === i) b.classList.add('fj-bad'); });
   const last = fj.i === 7;
-  $('fjFb').innerHTML = `<div class="fb show ${chosen.ok ? 'ok' : 'info'}"><div class="head">${chosen.ok ? (fj.tries === 1 ? '⭐ מצוין! כוכב זהב!' : 'נכון! כוכב כסף.') : `התשובה: ${fjMixed(num, r.d)}`}</div>${M(`${r.k} ×`)} ${F(r.p, r.d)} = ${M(`${r.k} × ${r.p}`)} × ${F(1, r.d)} = ${F(num, r.d)} = ${fjMixed(num, r.d)}</div>
+  $('fjFb').innerHTML = `<div class="fb show ${chosen.ok ? 'ok' : 'info'}"><div class="head">${chosen.ok ? (fj.tries === 1 ? '⭐ מצוין! כוכב זהב!' : 'נכון! כוכב כסף.') : `התשובה: ${fjMixed(num, r.d)}`}</div>${fjX(`${M(`${r.k} ×`)} ${F(r.p, r.d)} = ${M(`${r.k} × ${r.p}`)} × ${F(1, r.d)} = ${F(num, r.d)} = ${fjMix(num, r.d)}`)}</div>
     <div class="actions" style="justify-content:center"><button id="fjNext">${last ? 'לסיכום ←' : 'לאתגר הבא ←'}</button></div>`;
   document.querySelector('.fj-top').innerHTML = dlCoins(fj.coins);
   $('fjNext').onclick = () => { if (last) return fjEnd(); fj.i++; fjDraw(); };
@@ -11459,7 +11460,7 @@ function fjDraw() {
     <div class="topbar"><span class="title">🐸 קפיצות שברים</span><span class="toollinks"><span class="muted">אתגר ${fj.i + 1} מתוך 8</span><button class="secondary" id="fjQuit">${ic('close')} יציאה</button></span></div>
     <div class="card fj-top">${dlCoins(fj.coins)}</div>
     <div class="card city-q">
-      <div class="qtext">כמה זה ${M(`${r.k} ×`)} ${F(r.p, r.d)}? <span class="muted">(כל קפיצה היא ${F(r.p, r.d)})</span></div>
+      <div class="qtext">כמה זה ${fjX(`${M(`${r.k} ×`)} ${F(r.p, r.d)}`)}? <span class="muted">(כל קפיצה היא ${fjX(F(r.p, r.d))})</span></div>
       <div id="fjFig" class="center">${fjLine(r.k, r.p, r.d, 0)}</div>
       <div id="fjRun" class="center" style="min-height:1.6em;margin:6px 0"></div>
       <div class="actions" style="justify-content:center"><button class="secondary" id="fjJumpB">➕ קפיצה</button><button class="secondary" id="fjAllB">הצג הכול</button></div>
@@ -14169,33 +14170,33 @@ const opMixed = (a, b) => { const g = gcd(a, b), A = a / g, B = b / g; if (B ===
 const OP_MULFRAC = [
   () => { // מה משותף? עוגות ופיצה
     const a = R(3, 6), b = R(3, 8), k = R(3, 7), n = pick([6, 8, 10, 12]);
-    return { title: 'מה משותף לשאלות?', q: `<ol class="op-list"><li>רעות אפתה <b>${a} עוגות</b>, וקישטה כל עוגה ב-<b>${b} לבבות</b> שוקולד. בכמה לבבות היא השתמשה?</li><li>בפיצרייה חילקו כל פיצה ל"משולשים" שגודלם ${F(1, n)} פיצה. <b>${k} חברים</b> הזמינו משולש אחד לכל אחד. איזה חלק מפיצה שלמה הם הזמינו?</li></ol><p><b>מה משותף לשתי השאלות?</b></p>`, a: `<ol class="op-list"><li>${M(`${a} × ${b} = ${a * b}`)} – כלומר ${M(Array(a).fill(b).join(' + '))}.</li><li>${M(`${k} ×`)} ${F(1, n)} = ${F(k, n)} – כלומר ${k} פעמים ${F(1, n)}.</li></ol><div class="rule">💡 בשתיהן <b>כפל = חיבור חוזר</b>: מחברים את אותה כמות כמה פעמים – גם כשהכמות היא שבר!</div>` };
+    return { title: 'מה משותף לשאלות?', q: `<ol class="op-list"><li>רעות אפתה <b>${a} עוגות</b>, וקישטה כל עוגה ב-<b>${b} לבבות</b> שוקולד. בכמה לבבות היא השתמשה?</li><li>בפיצרייה חילקו כל פיצה ל"משולשים" שגודלם ${F(1, n)} פיצה. <b>${k} חברים</b> הזמינו משולש אחד לכל אחד. איזה חלק מפיצה שלמה הם הזמינו?</li></ol><p><b>מה משותף לשתי השאלות?</b></p>`, a: `<ol class="op-list"><li>${M(`${a} × ${b} = ${a * b}`)} – כלומר ${M(Array(a).fill(b).join(' + '))}.</li><li>${MX(`${M(`${k} ×`)} ${F(1, n)} = ${F(k, n)}`)} – כלומר ${k} פעמים ${F(1, n)}.</li></ol><div class="rule">💡 בשתיהן <b>כפל = חיבור חוזר</b>: מחברים את אותה כמות כמה פעמים – גם כשהכמות היא שבר!</div>` };
   },
   () => { // טושים – האם ישלים חבילה?
     const q = pick([3, 4, 5, 6, 8]), p = R(1, q - 1), packs = pick([2, 3]);
     const tot = packs * p, ok = tot >= q;
-    return { title: 'האם תהיה חבילה שלמה?', q: `<p>לדור היו <b>${packs} חבילות</b> זהות של טושים. מכל חבילה נשארו לו <b>${F(p, q)}</b> מהטושים, והשאר אבדו.</p><p><b>האם דור יצליח להרכיב חבילה שלמה מהטושים שנשארו?</b> הסבירו.</p>${pieSVG(packs, q, 26)}`, a: `${M(`${packs} ×`)} ${F(p, q)} = ${Array(packs).fill(F(p, q)).join(' + ')} = ${F(tot, q)}${tot >= q ? ` = ${opMixed(tot, q)}` : ''}.<br>${ok ? (tot === q ? '<b>כן – בדיוק חבילה שלמה!</b>' : '<b>כן – ויותר מחבילה שלמה!</b>') : `<b>לא</b> – יש לו רק ${F(tot, q)} חבילה, פחות משלמה.`}` };
+    return { title: 'האם תהיה חבילה שלמה?', q: `<p>לדור היו <b>${packs} חבילות</b> זהות של טושים. מכל חבילה נשארו לו <b>${F(p, q)}</b> מהטושים, והשאר אבדו.</p><p><b>האם דור יצליח להרכיב חבילה שלמה מהטושים שנשארו?</b> הסבירו.</p>${pieSVG(packs, q, 26)}`, a: `${MX(`${M(`${packs} ×`)} ${F(p, q)} = ${Array(packs).fill(F(p, q)).join(' + ')} = ${F(tot, q)}${tot >= q ? ` = ${opMixed(tot, q)}` : ''}`)}.<br>${ok ? (tot === q ? '<b>כן – בדיוק חבילה שלמה!</b>' : '<b>כן – ויותר מחבילה שלמה!</b>') : `<b>לא</b> – יש לו רק ${F(tot, q)} חבילה, פחות משלמה.`}` };
   },
   () => { // קופת חיסכון
     const c = pick([[2, 'חצי שקל'], [10, '10 אגורות'], [5, '20 אגורות']]), cnt = c[0] * R(2, 6) + (Math.random() < 0.4 ? R(1, c[0] - 1) : 0);
-    return { title: 'קופת החיסכון', q: `<p>בקופת החיסכון של אור יש רק <b>${cnt} מטבעות</b> של ${c[1]} (${F(1, c[0])} שקל).</p><p><b>כמה שקלים יש לאור?</b> כתבו תרגיל כפל.</p>`, a: `${M(`${cnt} ×`)} ${F(1, c[0])} = ${F(cnt, c[0])} = ${opMixed(cnt, c[0])} שקלים.<br>כמו לחבר ${F(1, c[0])} לעצמו ${cnt} פעמים.` };
+    return { title: 'קופת החיסכון', q: `<p>בקופת החיסכון של אור יש רק <b>${cnt} מטבעות</b> של ${c[1]} (${F(1, c[0])} שקל).</p><p><b>כמה שקלים יש לאור?</b> כתבו תרגיל כפל.</p>`, a: `${MX(`${M(`${cnt} ×`)} ${F(1, c[0])} = ${F(cnt, c[0])} = ${opMixed(cnt, c[0])}`)} שקלים.<br>כמו לחבר ${F(1, c[0])} לעצמו ${cnt} פעמים.` };
   },
   () => { // מוט מדידה
     const d = pick([2, 4, 5, 10]), k = d * R(2, 4) + (Math.random() < 0.5 ? 0 : R(1, d - 1));
-    return { title: 'מודדים בעזרת מוט', q: `<p>לאורי יש מוט באורך <b>${F(1, d)} מטר</b>. הוא מדד את הקיר בחדר שלו, והמוט נכנס בדיוק <b>${k} פעמים</b>.</p><p><b>מה אורך הקיר?</b></p>`, a: `${M(`${k} ×`)} ${F(1, d)} = ${F(k, d)} = ${opMixed(k, d)} מטר.${d === 4 ? `<br>💡 כל 4 מוטות = מטר אחד.` : ''}` };
+    return { title: 'מודדים בעזרת מוט', q: `<p>לאורי יש מוט באורך <b>${F(1, d)} מטר</b>. הוא מדד את הקיר בחדר שלו, והמוט נכנס בדיוק <b>${k} פעמים</b>.</p><p><b>מה אורך הקיר?</b></p>`, a: `${MX(`${M(`${k} ×`)} ${F(1, d)} = ${F(k, d)} = ${opMixed(k, d)}`)} מטר.${d === 4 ? `<br>💡 כל 4 מוטות = מטר אחד.` : ''}` };
   },
   () => { // צפרדע על ישר המספרים
     const q = pick([3, 4, 5]), p = R(1, q - 1), n = R(3, 6);
-    return { title: 'הצפרדע הקופצת', q: `<p>צפרדעים קופצות למרחק גדול פי 20–60 מאורך גופן! צפרדע קטנה קופצת בכל קפיצה <b>${F(p, q)} מטר</b>.</p><p><b>איזה מרחק היא תעבור ב-${n} קפיצות?</b> נסו לצייר על ישר המספרים.</p>`, a: `${opJumps(n, p, q)}${M(`${n} ×`)} ${F(p, q)} = ${F(n * p, q)} = ${opMixed(n * p, q)} מטר.` };
+    return { title: 'הצפרדע הקופצת', q: `<p>צפרדעים קופצות למרחק גדול פי 20–60 מאורך גופן! צפרדע קטנה קופצת בכל קפיצה <b>${F(p, q)} מטר</b>.</p><p><b>איזה מרחק היא תעבור ב-${n} קפיצות?</b> נסו לצייר על ישר המספרים.</p>`, a: `${opJumps(n, p, q)}${MX(`${M(`${n} ×`)} ${F(p, q)} = ${F(n * p, q)} = ${opMixed(n * p, q)}`)} מטר.` };
   },
   () => { // תרגילים קשורים
     const q = pick([3, 4, 5, 6]), k = q > 3 ? pick([2, 3]) : 2, p = R(1, Math.max(1, Math.floor((q - 1) / k))), base = q * R(1, 3);
     const r1 = base * p / q;
-    return { title: 'היעזרו בתרגיל הפתור', q: `<p>לפניכם תרגיל פתור:</p><p class="center">${M(`${base} ×`)} ${F(p, q)} = ${M(r1)}</p><p>היעזרו בו (בלי לחשב מההתחלה!):</p><ol class="op-list"><li>${M(`${base * k} ×`)} ${F(p, q)} = ?</li><li>${M(`${base} ×`)} ${F(p * k < q ? p * k : p, q)} = ?</li></ol>`, a: `<ol class="op-list"><li>${M(base * k)} גדול פי ${k} מ-${M(base)} ← גם התוצאה גדולה פי ${k}: ${M(`${r1} × ${k} = ${r1 * k}`)}.</li><li>${p * k < q ? `המונה גדול פי ${k} ← התוצאה גדולה פי ${k}: ${M(r1 * k)}.` : `זה אותו תרגיל – ${M(r1)}.`}</li></ol>` };
+    return { title: 'היעזרו בתרגיל הפתור', q: `<p>לפניכם תרגיל פתור:</p><p class="center">${MX(`${M(`${base} ×`)} ${F(p, q)} = ${M(r1)}`)}</p><p>היעזרו בו (בלי לחשב מההתחלה!):</p><ol class="op-list"><li>${MX(`${M(`${base * k} ×`)} ${F(p, q)} = ?`)}</li><li>${MX(`${M(`${base} ×`)} ${F(p * k < q ? p * k : p, q)} = ?`)}</li></ol>`, a: `<ol class="op-list"><li>${M(base * k)} גדול פי ${k} מ-${M(base)} ← גם התוצאה גדולה פי ${k}: ${M(`${r1} × ${k} = ${r1 * k}`)}.</li><li>${p * k < q ? `המונה גדול פי ${k} ← התוצאה גדולה פי ${k}: ${M(r1 * k)}.` : `זה אותו תרגיל – ${M(r1)}.`}</li></ol>` };
   },
   () => { // שברי יסוד מול מונה גדול
     const q = pick([5, 6, 7, 8, 9]), n = R(2, 4), m = R(2, Math.min(4, q - 1));
-    return { title: 'מה הקשר בין התרגילים?', q: `<p class="center">${M(`${n} ×`)} ${F(1, q)} = ${F(n, q)}</p><p>שערו – בלי לחשב בדרך הארוכה:</p><ol class="op-list"><li>${M(`${n} ×`)} ${F(m, q)} = ?</li><li>${M(`${n * 2} ×`)} ${F(1, q)} = ?</li></ol><p><b>מה הקשר בין התרגילים?</b></p>`, a: `<ol class="op-list"><li>${F(m, q)} גדול פי ${m} מ-${F(1, q)} ← ${F(n * m, q)}${n * m >= q ? ` = ${opMixed(n * m, q)}` : ''}.</li><li>${M(n * 2)} גדול פי 2 מ-${M(n)} ← ${F(n * 2, q)}${n * 2 >= q ? ` = ${opMixed(n * 2, q)}` : ''}.</li></ol><div class="rule">💡 כופלים שלם בשבר: כופלים את השלם <b>במונה</b>, והמכנה נשאר.</div>` };
+    return { title: 'מה הקשר בין התרגילים?', q: `<p class="center">${MX(`${M(`${n} ×`)} ${F(1, q)} = ${F(n, q)}`)}</p><p>שערו – בלי לחשב בדרך הארוכה:</p><ol class="op-list"><li>${MX(`${M(`${n} ×`)} ${F(m, q)} = ?`)}</li><li>${MX(`${M(`${n * 2} ×`)} ${F(1, q)} = ?`)}</li></ol><p><b>מה הקשר בין התרגילים?</b></p>`, a: `<ol class="op-list"><li>${F(m, q)} גדול פי ${m} מ-${F(1, q)} ← ${F(n * m, q)}${n * m >= q ? ` = ${opMixed(n * m, q)}` : ''}.</li><li>${M(n * 2)} גדול פי 2 מ-${M(n)} ← ${F(n * 2, q)}${n * 2 >= q ? ` = ${opMixed(n * 2, q)}` : ''}.</li></ol><div class="rule">💡 כופלים שלם בשבר: כופלים את השלם <b>במונה</b>, והמכנה נשאר.</div>` };
   }
 ];
 
@@ -17871,7 +17872,18 @@ function lpSetKind(p, k) {
 // דרכי סיכום – כולן נשארות אצל המורה בכיתה (שום דבר לא נשלח)
 const LP_SUMS = [['board', '3 שאלות בדיקה על הלוח (קלה, בינונית, מאתגרת)'], ['talk', 'סבב שיחה: "היום למדתי... / היה לי קשה... "'], ['thumbs', 'הערכה עצמית: 👍 👌 👎 – כמה הבנתי?'], ['paper', 'מבדק הצלחה מודפס (מדפיסים מראש)']];
 const lpBookPref = () => { try { return localStorage.getItem('math-lp-book') || LP_BOOKS[0]; } catch (e) { return LP_BOOKS[0]; } };
-const LP_GAMES = [['jeo', "ג'פרדי בקבוצות – לפי נושא השיעור"], ['mil', 'מיליונר בקבוצות – לפי נושא השיעור'], ['cq', 'כיבוש שטחים – לפי נושא השיעור'], ['war', 'מלחמת תרגילים – לפי נושא השיעור'], ['bingo', 'בינגו – לפי נושא השיעור'], ['tf', 'אמת או שקר – לפי נושא השיעור'], ['wheel', 'גלגל המזל – נושא לבחירה']];
+const LP_GAMES = [['jeo', "ג'פרדי בקבוצות – לפי נושא השיעור"], ['mil', 'מיליונר בקבוצות – לפי נושא השיעור'], ['cq', 'כיבוש שטחים – לפי נושא השיעור'], ['war', 'מלחמת תרגילים – לפי נושא השיעור'], ['bingo', 'בינגו – לפי נושא השיעור'], ['tf', 'אמת או שקר – לפי נושא השיעור'], ['wheel', 'גלגל המזל – נושא לבחירה'],
+  ...(GRADE >= 5 ? [['fj', '🐸 קפיצות שברים – כפל שלם בשבר (כל תלמיד/ה במכשיר)'], ['dlab', '🧪 מעבדת העשרוניים (כל תלמיד/ה במכשיר)']] : [])];
+// משחקים אישיים (כל תלמיד/ה במכשיר) – לא "לפי נושא השיעור" אלא מסבירים נושא מסוים
+const LP_SOLO = ['fj', 'dlab'];
+// המלצת פתיח+משחקון אוטומטית לפי נושא השיעור
+const LP_SUGGEST = { frac: { op: 'mulfrac', game: 'fj' }, dec: { op: 'density', game: 'dlab' } };
+function lpSuggest(p) {
+  const sg = LP_SUGGEST[p.topic] || {};
+  p.opSrc = sg.op && OP_SPECIAL.some(x => x.id === sg.op) ? sg.op : null;
+  if (sg.game && LP_GAMES.some(g => g[0] === sg.game)) p.game = sg.game;
+  else if (LP_SOLO.includes(p.game)) p.game = 'jeo';
+}
 const lpLesson = t => (LESSON_ORDER.includes(t) && LESSONS[t]) ? t : null;
 const lpLoad = () => { try { return JSON.parse(localStorage.getItem(LP_KEY)) || []; } catch (e) { return []; } };
 const lpSaveAll = L => { try { localStorage.setItem(LP_KEY, JSON.stringify(L.slice(0, 30))); } catch (e) { /* לא חובה */ } };
@@ -17879,7 +17891,7 @@ let lp = null;
 function lpNew(topic) {
   const T = topic || (TOPICS[0] && TOPICS[0].id);
   const p = { kind: 'first', topic: T, dur: 45, on: { open: 1, game: 1, learn: lpLesson(T) ? 1 : 0, prac: 1, book: 0, sum: 1 }, min: {}, game: 'jeo', pracN: 8, pracLv: 'mix', note: '', book: lpBookPref(), pages: '', selfType: 'book', shN: 8, shLv: 'mix', sumType: 'board' };
-  lpSplit(p); return p;
+  lpSuggest(p); lpSplit(p); return p;
 }
 // חלוקת הזמן לפי משקל החלקים שנבחרו
 function lpSplit(p) {
@@ -17890,7 +17902,7 @@ function lpSplit(p) {
 const lpTotal = p => LP_STAGES.reduce((a, s) => a + (p.on[s.id] ? (+p.min[s.id] || 0) : 0), 0);
 const lpDesc = (p, id) => ({
   open: p.opSrc && OP_SPECIAL.some(x => x.id === p.opSrc) ? `⭐ ${opName(p.opSrc)} – לפי מארגן ההוראה · ${(p.opN || 4) === 1 ? 'שקף אחד' : (p.opN || 4) + ' שקפים'}` : `${(p.opKinds || OP_DEFAULT).length === 1 ? 'שקף אחד' : (p.opKinds || OP_DEFAULT).length + ' שקפים'}: ${opKindsSorted(p.opKinds || OP_DEFAULT).map(id => OP_KINDS.find(k => k.id === id).name.replace(/^\S+ /, '')).join(', ')}`,
-  game: p.game === 'wheel' ? `גלגל המזל – ${((wheelTopics().find(t => t.id === (p.whTop || wheelDefFor(p.topic))) || {}).nm || '')} · מסובבים על הלוח, וכולם פותרים` : LP_GAMES.some(g => g[0] === p.game) ? `${(LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1].replace(/ – .*/, '')} על "${TOPIC[p.topic] ? TOPIC[p.topic].name : ''}" – הנושא מסומן מראש במסך המשחק` : (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – לא לפי נושא השיעור',
+  game: p.game === 'wheel' ? `גלגל המזל – ${((wheelTopics().find(t => t.id === (p.whTop || wheelDefFor(p.topic))) || {}).nm || '')} · מסובבים על הלוח, וכולם פותרים` : LP_SOLO.includes(p.game) ? `${((LP_GAMES.find(g => g[0] === p.game) || [0, ''])[1]).replace(/ – .*/, '')} – משחקון אישי: כל תלמיד/ה במכשיר, מסביר ומתרגל את הנושא` : LP_GAMES.some(g => g[0] === p.game) ? `${(LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1].replace(/ – .*/, '')} על "${TOPIC[p.topic] ? TOPIC[p.topic].name : ''}" – הנושא מסומן מראש במסך המשחק` : (LP_GAMES.find(g => g[0] === p.game) || LP_GAMES[0])[1] + ' – לא לפי נושא השיעור',
   learn: lpKind(p) !== 'first' ? 'חזרה קצרה: מה למדנו בשיעור הקודם, ו-2 שאלות חימום' : lpLesson(p.topic) ? `כרטיסי הלמידה "${LESSONS[lpLesson(p.topic)].title || LESSONS[lpLesson(p.topic)].name || TOPIC[p.topic].name}" – מקרינים ומסבירים` : 'אין כרטיסי לימוד לנושא הזה',
   prac: `${p.pracN} תרגילים על הלוח, אחד-אחד, עם הצגת תשובה · ${{ mix: 'מהקל לקשה', 23: 'בינוניים ומאתגרים', 1: 'קלים', 2: 'בינוניים', 3: 'מאתגרים' }[p.pracLv]}`,
   book: p.selfType === 'sheet' ? `דף תרגול מודפס על "${TOPIC[p.topic] ? TOPIC[p.topic].name : ''}" – ${p.shN || 8} שאלות · ${LP_SHLV[p.shLv || 'mix']} · עם דף תשובות` : `בחוברת: ${p.book || LP_BOOKS[0]}${p.pages ? ` – ${p.pages}` : ' – עמודים: ______'}`,
@@ -17949,7 +17961,7 @@ function lpHome(keep) {
   };
   $('lpDur').oninput = () => { const v = Math.round(+$('lpDur').value); if (v >= 10 && v <= 180) { p.dur = v; lpSplit(p); live(); } };
   $('lpDur').onchange = () => { const v = Math.max(10, Math.min(180, Math.round(+$('lpDur').value || 45))); p.dur = v; lpSplit(p); redo(); };
-  app.querySelectorAll('[data-lpt]').forEach(b => b.onclick = () => { p.topic = b.dataset.lpt; if (lpKind(p) === 'first') p.on.learn = lpLesson(p.topic) ? 1 : 0; lpSplit(p); redo(); });
+  app.querySelectorAll('[data-lpt]').forEach(b => b.onclick = () => { p.topic = b.dataset.lpt; if (lpKind(p) === 'first') p.on.learn = lpLesson(p.topic) ? 1 : 0; lpSuggest(p); lpSplit(p); redo(); });
   app.querySelectorAll('[data-lpkind]').forEach(b => b.onclick = () => { lpSetKind(p, b.dataset.lpkind); redo(); });
   app.querySelectorAll('[data-lpon]').forEach(x => x.onchange = () => { p.on[x.dataset.lpon] = x.checked ? 1 : 0; lpSplit(p); redo(); });
   app.querySelectorAll('[data-lpmin]').forEach(x => { x.oninput = () => { if (x.value !== '') { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); live(); } }; x.onchange = () => { p.min[x.dataset.lpmin] = Math.max(0, Math.min(120, Math.round(+x.value || 0))); redo(); }; });
@@ -18092,7 +18104,7 @@ function lpStage(k) {
   const p = lp, s = R0.st[R0.k], T = TOPIC[p.topic];
   lpBarDraw();
   if (s.id === 'open') { const src = p.opSrc && OP_SPECIAL.some(x => x.id === p.opSrc) ? p.opSrc : p.topic; op = { topic: src, slides: opBuild(src, p.opKinds, p.opN || 4), k: 0, show: false, back: () => lpStage(R0.k + 1), backLabel: 'לחלק הבא ←' }; opDraw(); }
-  else if (s.id === 'game') (GAME_PRE = p.topic === 'seq' && TOPIC.seqI ? 'seqI' : p.topic, ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome(), wheel: () => wheelGame({ op: p.whTop || wheelDefFor(p.topic), go: 1 }) }[p.game] || jeoHome))();
+  else if (s.id === 'game') (GAME_PRE = p.topic === 'seq' && TOPIC.seqI ? 'seqI' : p.topic, ({ jeo: () => jeoHome(), mil: () => milTeamHome(), war: () => warHome('teams'), bingo: () => bingoHome(), cq: () => cqHome(), tf: () => tfHome(), wheel: () => wheelGame({ op: p.whTop || wheelDefFor(p.topic), go: 1 }), fj: () => fjHome(), dlab: () => dlHome() }[p.game] || jeoHome))();
   else if (s.id === 'learn' && lpKind(p) !== 'first') {
     const L = lpLesson(p.topic) && LESSONS[lpLesson(p.topic)], tips = (L && L.tips) || [];
     const recap = { title: 'חזרה – מה למדנו בשיעור הקודם?', q: `<h3 class="center">${T.name}</h3>${tips.length ? `<ul class="lp-tips">${tips.slice(0, 3).map(x => `<li>${x}</li>`).join('')}</ul>` : `<p class="center">${T.desc}</p>`}<p class="center">🗣️ מי זוכר/ת? מי יכול/ה לתת דוגמה?</p>`, a: '' };
