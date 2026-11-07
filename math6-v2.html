@@ -1309,6 +1309,33 @@
   .b10-ex { font-size: clamp(2rem,10vw,3rem); font-weight: 900; color: var(--accent); text-align: center; margin-bottom: 6px; }
   .b10-cap { font-size: 1.15rem; min-height: 3em; margin: 6px auto; max-width: 540px; }
   .b10-cap.done { font-weight: 800; color: #2f8f55; font-size: 1.3rem; }
+
+  /* מסגרת עשר (מבנה 5-5) */
+  .tf-q { font-size: 1.3rem; font-weight: 800; margin: 4px 0 12px; }
+  .tf-frame { display: inline-flex; align-items: center; gap: 4px; padding: 6px; border: 2.5px solid #2f63c9; border-radius: 12px; background: #fff; }
+  .tf-c { width: min(34px, 6.8vw); aspect-ratio: 1; border: 2px solid #9ec0e8; border-radius: 6px; background: #e8f1fb; position: relative; box-sizing: border-box; }
+  .tf-c.on::after, .tf-c.add::after { content: ''; position: absolute; inset: 12%; border-radius: 50%; background: #f39a1e; border: 2px solid #c96f00; }
+  .tf-c.add::after { background: #8d97a3; border-color: #4f5864; }
+  .tf-c.miss { border-color: #2f8f55; border-style: dashed; background: #e6f6ec; }
+  .tf-gap { width: 10px; }
+  .tf-frame.tap .tf-c[data-tf] { cursor: pointer; }
+  .tf-frame.tap .tf-c[data-tf]:hover { background: #d3e5f8; }
+  .tf-num { font-size: 2.4rem; font-weight: 900; color: var(--accent); margin-bottom: 6px; }
+  .tf-park { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .tf-gars { display: flex; flex-direction: column; gap: 6px; }
+  .tf-gar { width: 170px; height: 52px; display: flex; align-items: center; justify-content: center; border: 2.5px solid #5b4aa8; border-top-width: 8px; border-radius: 6px 6px 2px 2px; background: repeating-linear-gradient(90deg,#b4a7e6 0 7px,#9384d6 7px 10px); }
+  .tf-gar b { background: #fff; border: 1.5px solid #5b4aa8; border-radius: 6px; padding: 0 8px; font-size: 0.95rem; }
+  .tf-cars { min-height: 2.6rem; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; font-size: 2rem; line-height: 1.2; }
+  .tf-pad { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px auto 4px; max-width: 360px; }
+  .tf-pad button { font: inherit; font-size: 1.35rem; font-weight: 800; width: 54px; height: 50px; border: 2.5px solid #1f1e1c; border-radius: 12px; background: #fff; box-shadow: 2px 2px 0 #1f1e1c; cursor: pointer; color: #1f1e1c; }
+  .tf-pad button.ok { background: #2f8f55; color: #fff; }
+  .tf-pad button.bad { background: #f3c1b6; }
+  .tf-pad button:disabled { cursor: default; opacity: .5; }
+  .tf-pad button.ok:disabled { opacity: 1; }
+  .tf-fb { min-height: 2.4em; font-size: 1.15rem; margin: 10px auto 4px; max-width: 520px; }
+  .tf-fb.ok { color: #2f8f55; font-weight: 800; }
+  .tf-fb.bad { color: #b03a20; font-weight: 700; }
+  .tf-score { font-size: 3rem; font-weight: 900; color: var(--accent); }
   .b10-steps { display: flex; justify-content: center; gap: 7px; margin: 10px 0; }
   .b10-dot { width: 10px; height: 10px; border-radius: 50%; background: #d7cfbf; }
   .b10-dot.on { background: var(--accent); transform: scale(1.3); }
@@ -1833,7 +1860,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ריז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 ריח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8755,6 +8782,7 @@ function home() {
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
   if ($('champGo')) $('champGo').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
+  if ($('tfGo')) $('tfGo').onclick = tenFrame;
   if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
   if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
   if ($('erGo0')) $('erGo0').onclick = escapeRoom;
@@ -8782,6 +8810,8 @@ document.addEventListener('click', e => {
 let topicBack = null;
 const topicLessons = id => LESSON_ORDER.filter(l => lessonTopic(LESSONS[l]) === id);
 const TOOL_CARDS = [
+  { id: 'tfGo', cls: 'b10-card2', on: GRADE <= 2, topics: ['add20', 'num100'], go: () => tenFrame(), chip: '🔟 מסגרת עשר',
+    html: `<span class="b10c-ic">🔟</span><span class="b10c-t">מסגרת עשר – מבנה 5-5</span><span class="b10c-d">כמה נקודות? כמה מכוניות בחניון? ציירו נקודות לפי המספר. רואים חמישייה ולא סופרים אותה!</span>` },
   { id: 'b10labGo', on: GRADE <= 3, topics: ['place', 'num100'], go: () => b10Lab(), chip: '🧱 אבני בסיס עשר',
     html: `<span class="b10c-ic">🧱</span><span class="b10c-t">מחולל אבני בסיס עשר</span><span class="b10c-d">מקלידים מספר ורואים אותו באבנים – עשרות ואחדות. אפשר להוסיף ולהוריד ולראות חי.</span>` },
   { id: 'b10twoGo', cls: 'b10-card2', on: GRADE <= 3, topics: ['addsub', 'add20', 'add100'], go: () => b10Two(), chip: '🔁 מעבר עשרת',
@@ -13478,6 +13508,110 @@ function b10Two() {
     if ($('t2again')) $('t2again').onclick = setup;
   };
   setup();
+}
+// מסגרת עשר – תרגול המבנה העשרוני עד 10 בתבנית 5-5: כמה נקודות? כמה מכוניות בחניון? ציירו נקודות לפי המספר
+function tfFrame(n, o = {}) {
+  const fixed = o.fixed == null ? n : o.fixed;
+  let s = '';
+  for (let i = 0; i < 10; i++) {
+    const cls = i < fixed ? ' on' : i < n ? ' add' : (o.miss && i < o.miss ? ' miss' : '');
+    s += `<span class="tf-c${cls}"${o.tap && i >= fixed ? ` data-tf="${i}" role="button" tabindex="0" aria-label="משבצת ${i + 1}"` : ''}></span>`;
+    if (i === 4) s += '<span class="tf-gap"></span>';
+  }
+  return `<div class="tf-frame${o.tap ? ' tap' : ''}" dir="ltr" role="img" aria-label="מסגרת עשר">${s}</div>`;
+}
+const tfGarage = (g, cars) => `<div class="tf-park"><div class="tf-gars">${'<div class="tf-gar"><b>5 מכוניות</b></div>'.repeat(g)}</div><div class="tf-cars" dir="ltr">${'<span>🚗</span>'.repeat(cars)}</div></div>`;
+const tfSay = n => n === 10 ? `${M('5 + 5 = 10')} – מסגרת מלאה` : n > 5 ? `5 ועוד ${n - 5}: ${M(`5 + ${n - 5} = ${n}`)}` : n === 5 ? `5 – שורה מלאה של חמש` : `${n} – חסרות עוד ${5 - n} עד 5`;
+function tenFrame() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('המחשה: מסגרת עשר');
+  const LEN = 10, rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  let Q = [], qi = 0, ok = 0;
+  const mk = t => {
+    if (t === 'count') return { t, n: Math.random() < 0.75 ? rnd(5, 10) : rnd(1, 4) };
+    if (t === 'park') { const g = Math.random() < 0.15 ? 2 : 1, c = g === 2 ? 0 : rnd(0, 5); return { t, g, c, n: 5 * g + c }; }
+    return Math.random() < 0.75 ? { t, n: rnd(6, 10), fixed: 5 } : { t, n: rnd(1, 5), fixed: 0 };
+  };
+  const newRound = () => {
+    const types = Array.from({ length: LEN }, (_, i) => ['count', 'park', 'fill'][i % 3]);
+    for (let i = types.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [types[i], types[j]] = [types[j], types[i]]; }
+    Q = []; qi = 0; ok = 0;
+    types.forEach(t => { let q; do { q = mk(t); } while (Q.length && Q[Q.length - 1].n === q.n); Q.push(q); });
+    show();
+  };
+  const header = `<div class="topbar"><span class="title">🔟 מסגרת עשר – מבנה 5-5</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
+  const dots = () => `<div class="b10-steps">${Q.map((_, i) => `<span class="b10-dot${i === qi ? ' on' : ''}${i < qi ? ' past' : ''}"></span>`).join('')}</div>`;
+  const show = () => {
+    const q = Q[qi];
+    let tries = 0, cur = q.t === 'fill' ? q.fixed : 0, done = false;
+    const body = () => q.t === 'count' ? tfFrame(q.n) : q.t === 'park' ? tfGarage(q.g, q.c) : `<div class="tf-num">${q.n}</div>${tfFrame(cur, { fixed: q.fixed, tap: !done, miss: done && cur !== q.n ? q.n : 0 })}`;
+    const ask = q.t === 'count' ? 'כמה נקודות יש במסגרת?' : q.t === 'park' ? 'כמה מכוניות יש?' : (q.fixed ? 'ציירו עוד נקודות לפי המספר' : 'ציירו נקודות לפי המספר') + ' – לוחצים על המשבצות';
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="tf-q">${ask}</div>
+        <div id="tfBody">${body()}</div>
+        ${q.t === 'fill' ? `<div class="actions" style="justify-content:center"><button id="tfChk" class="race-go">✔ בדיקה</button></div>` : `<div class="tf-pad" dir="ltr">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(k => `<button type="button" data-a="${k}">${k}</button>`).join('')}</div>`}
+        <div class="tf-fb" id="tfFb" aria-live="polite"></div>
+        <div class="actions" style="justify-content:center" id="tfNav"></div>
+        ${dots()}
+        <p class="b10-hint muted">${q.t === 'park' ? 'בכל חניון יש בדיוק <b>5</b> מכוניות. סופרים מ-5 והלאה את המכוניות שבחוץ.' : 'במסגרת שתי חמישיות. רואים חמישייה מלאה? לא צריך לספור אותה – מתחילים מ-5!'}</p>
+      </div>`;
+    $('quit').onclick = home;
+    const fb = (cls, h) => { const e = $('tfFb'); e.className = 'tf-fb ' + cls; e.innerHTML = h; };
+    const finish = good => {
+      done = true;
+      if (good && tries === 1) ok++;
+      $('tfNav').innerHTML = qi < LEN - 1 ? '<button id="tfNext">הבא ←</button>' : '<button id="tfNext" class="race-go">סיום ←</button>';
+      $('tfNext').onclick = () => { qi++; qi < LEN ? show() : end(); };
+      $('tfNext').focus();
+    };
+    const wire = () => {
+      app.querySelectorAll('[data-tf]').forEach(c => {
+        const act = () => { const i = Number(c.dataset.tf); cur = i < cur ? i : i + 1; $('tfBody').innerHTML = body(); wire(); };
+        c.onclick = act; c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); } };
+      });
+    };
+    if (q.t === 'fill') {
+      wire();
+      $('tfChk').onclick = () => {
+        if (done) return;
+        tries++;
+        if (cur === q.n) { fb('ok', `נכון! ${tfSay(q.n)} ✓`); $('tfChk').remove(); finish(true); $('tfBody').innerHTML = body(); return; }
+        if (tries < 2) { fb('bad', `ציירתם ${cur} נקודות, וצריך ${q.n}. ${cur < q.n ? 'חסרות נקודות' : 'יש יותר מדי'} – נסו שוב.`); return; }
+        fb('bad', `צריך ${q.n} נקודות: ${tfSay(q.n)}.`); $('tfChk').remove(); finish(false);
+        $('tfBody').innerHTML = tfFrame(q.n, { fixed: q.fixed });
+      };
+    } else {
+      app.querySelectorAll('[data-a]').forEach(b => b.onclick = () => {
+        if (done) return;
+        tries++;
+        const a = Number(b.dataset.a);
+        if (a === q.n) {
+          b.classList.add('ok'); app.querySelectorAll('[data-a]').forEach(x => x.disabled = true);
+          fb('ok', `נכון! ${q.t === 'park' ? (q.g === 2 ? `שני חניונים: ${M('5 + 5 = 10')}` : q.c ? `5 בחניון ועוד ${q.c} בחוץ: ${M(`5 + ${q.c} = ${q.n}`)}` : 'רק החניון – 5 מכוניות') : tfSay(q.n)} ✓`);
+          finish(true);
+        } else if (tries < 2) {
+          b.classList.add('bad'); b.disabled = true;
+          fb('bad', q.t === 'park' ? 'לא בדיוק. זוכרים? בחניון יש 5 – ממשיכים לספור: 6, 7…' : 'לא בדיוק. מתחילים מהחמישייה המלאה וממשיכים לספור.');
+        } else {
+          b.classList.add('bad'); app.querySelectorAll('[data-a]').forEach(x => { x.disabled = true; if (Number(x.dataset.a) === q.n) x.classList.add('ok'); });
+          fb('bad', `התשובה: ${q.n}. ${q.t === 'park' ? (q.g === 2 ? `שני חניונים: ${M('5 + 5 = 10')}` : `5 בחניון ועוד ${q.c} בחוץ: ${M(`5 + ${q.c} = ${q.n}`)}`) : tfSay(q.n)}.`);
+          finish(false);
+        }
+      });
+    }
+  };
+  const end = () => {
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="tf-q">סיימתם סבב! ${ok >= 9 ? '🏆' : ok >= 7 ? '🌟' : '💪'}</div>
+        <div class="tf-score">${ok} / ${LEN}</div>
+        <p>${ok >= 9 ? 'מצוין! אתם רואים חמישיות במבט אחד.' : ok >= 7 ? 'יפה מאוד! עוד סבב ותהיו אלופים.' : 'כל הכבוד על ההתמדה – נסו עוד סבב.'}</p>
+        <div class="actions" style="justify-content:center"><button id="tfAgain" class="race-go">↻ סבב חדש</button><button class="secondary" id="tfHome">לדף הבית</button></div>
+      </div>`;
+    $('quit').onclick = home; $('tfHome').onclick = home; $('tfAgain').onclick = newRound;
+  };
+  newRound();
 }
 // מחולל אבני בסיס עשר – כלי חופשי להמחשה: מקלידים מספר או לוחצים +/- עשרת/אחד ורואים את האבנים חיות
 function b10Lab() {
