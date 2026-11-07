@@ -1340,6 +1340,21 @@
   .tf-fb.ok { color: #2f8f55; font-weight: 800; }
   .tf-fb.bad { color: #b03a20; font-weight: 700; }
   .tf-score { font-size: 3rem; font-weight: 900; color: var(--accent); }
+  /* מאזניים – מספר חסר */
+  .bal-fig { width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto; }
+  .bal-beam { transform-box: view-box; transform-origin: 200px 112px; transition: transform .7s cubic-bezier(.3,1.6,.5,1); }
+  .bal-in { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 10px 0 4px; flex-wrap: wrap; font-size: 1.3rem; }
+  .bal-in input { width: 90px; font: inherit; font-size: 1.4rem; font-weight: 800; text-align: center; padding: 6px; border: 2.5px solid #2f63c9; border-radius: 10px; }
+  .bal-help { display: flex; justify-content: center; align-items: flex-end; gap: 10px; flex-wrap: wrap; margin: 8px auto; padding: 8px; border: 2px dashed #9ec0e8; border-radius: 12px; max-width: 520px; }
+  .bal-help .bh-side { display: flex; align-items: flex-end; gap: 4px; }
+  .bal-help .fc-blocks { height: 64px; width: auto; }
+  .bal-help .bh-op { font-size: 1.5rem; font-weight: 800; }
+  .balp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .balp-box { position: relative; border: 2px solid #b9cdf0; border-radius: 12px; padding: 18px 4px 6px; text-align: center; break-inside: avoid; }
+  .balp-box .bal-fig { max-width: 230px; }
+  .balp-ex { border: 2px solid #2f63c9; border-radius: 12px; padding: 6px 10px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .balp-ex .bal-fig { max-width: 300px; }
+  .bal-fig, .balp-box .tfp-l { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   /* מסגרת עשר – דף להדפסה */
   .tf-frame, .tf-c, .tf-c::after, .tf-gar, .tf-gar b, .tf-car { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .tfp-sec { margin: 0 0 8px; break-inside: avoid; }
@@ -1885,7 +1900,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רכ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רכא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8656,6 +8671,11 @@ function home() {
             <span class="gc-nm">משחק לכל הכיתה</span>
             <span class="gc-ds">ג'פרדי, כיבוש שטחים, מיליונר, מלחמה ובינגו – בקבוצות.</span>
           </button>
+          ${GRADE <= 3 ? `<button class="game-card" id="balT">
+            <span class="gc-ic" style="--gw:rgba(77,116,201,0.45)">⚖️</span>
+            <span class="gc-nm">מאזניים – מספר חסר</span>
+            <span class="gc-ds">מקרינים ועונים יחד: ${M('14 + 6 = 10 + ☐')}. המאזניים נוטים עד שמוצאים את המספר הנכון.</span>
+          </button>` : ''}
           ${GRADE <= 2 ? `<button class="game-card" id="tframeT">
             <span class="gc-ic" style="--gw:rgba(243,154,30,0.55)">🔟</span>
             <span class="gc-nm">מסגרת עשר – מבנה 5-5</span>
@@ -8814,6 +8834,8 @@ function home() {
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('tframeGo')) $('tframeGo').onclick = tenFrame;
   if ($('tframeT')) $('tframeT').onclick = tenFrame;
+  if ($('balT')) $('balT').onclick = balTool;
+  if ($('balGo')) $('balGo').onclick = balTool;
   if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
   if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
   if ($('erGo0')) $('erGo0').onclick = escapeRoom;
@@ -8841,6 +8863,8 @@ document.addEventListener('click', e => {
 let topicBack = null;
 const topicLessons = id => LESSON_ORDER.filter(l => lessonTopic(LESSONS[l]) === id);
 const TOOL_CARDS = [
+  { id: 'balGo', cls: 'b10-card3', on: GRADE <= 3, topics: ['add20', 'add100', 'addsub'], go: () => balTool(), chip: '⚖️ מאזניים',
+    html: `<span class="b10c-ic">⚖️</span><span class="b10c-t">מאזניים – מספר חסר</span><span class="b10c-d">שני הצדדים שווים! מוצאים את המספר החסר, והמאזניים נוטים או מתאזנים.</span>` },
   { id: 'tframeGo', cls: 'b10-card2', on: GRADE <= 2, topics: ['add20', 'num100'], go: () => tenFrame(), chip: '🔟 מסגרת עשר',
     html: `<span class="b10c-ic">🔟</span><span class="b10c-t">מסגרת עשר – מבנה 5-5</span><span class="b10c-d">כמה נקודות? כמה מכוניות בחניון? ציירו נקודות לפי המספר. רואים חמישייה ולא סופרים אותה!</span>` },
   { id: 'b10labGo', on: GRADE <= 3, topics: ['place', 'num100'], go: () => b10Lab(), chip: '🧱 אבני בסיס עשר',
@@ -13540,6 +13564,119 @@ function b10Two() {
   };
   setup();
 }
+// מאזניים – מספר חסר: a + b = c + ☐. שני הצדדים שווים, כמו מאזניים. כיתות א'–ג'
+function balGen(g) {
+  const r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  let a, b, c, k = Math.random();
+  for (let tries = 0; tries < 50; tries++) {
+    if (g <= 1) {
+      if (k < 0.4) { a = r(6, 9); b = r(11 - a, 9); c = 10; }
+      else if (k < 0.7) { a = r(11, 17); b = r(1, 20 - a); c = 10; }
+      else { a = r(3, 12); b = r(2, Math.min(9, 19 - a)); c = a + [-2, -1, 1, 2][r(0, 3)]; }
+    } else if (g === 2) {
+      if (k < 0.45) { a = r(11, 89); b = r(2, 9); c = Math.floor(a / 10) * 10; }
+      else if (k < 0.75) { a = r(12, 85); b = r(3, 9); c = a + [-3, -2, -1, 1, 2, 3][r(0, 5)]; }
+      else { a = r(5, 9); b = r(11, 60); c = 10 * r(1, Math.floor((a + b) / 10)); }
+    } else {
+      if (k < 0.4) { a = r(15, 79); b = r(11, 49); c = Math.round(a / 10) * 10; }
+      else if (k < 0.75) { a = r(15, 79); b = r(11, 49); c = a + [-5, -3, -2, -1, 1, 2, 3, 5][r(0, 7)]; }
+      else { a = r(21, 89); b = r(11, 99 - a); c = Math.floor(b / 10) * 10; }
+    }
+    if (c >= 1 && a + b - c >= 1 && a + b <= (g <= 1 ? 20 : g === 2 ? 99 : 130)) break;
+  }
+  const x = a + b - c;
+  return { a, b, c, x, sum: a + b, boxFirst: Math.random() < 0.2, swap: Math.random() < 0.3 };
+}
+// מאזניים בציור SVG. tilt: מעלות (שלילי = הצד השמאלי למטה). L/R – הטקסט שעל כל כף
+function balFig(L, R, tilt = 0, o = {}) {
+  const pan = (x, t, hl) => `<g transform="translate(${x} 96)"><rect x="-4" y="12" width="8" height="10" fill="#2f4f9a"/>
+    <path d="M-58 0 H58 Q52 16 0 16 Q-52 16 -58 0 Z" fill="#bcd0f2" stroke="#2f4f9a" stroke-width="2"/>
+    <rect x="-56" y="-34" width="112" height="30" rx="8" fill="#fff" stroke="${hl ? '#2f8f55' : '#2f4f9a'}" stroke-width="${hl ? 3 : 2}"/>
+    <text x="0" y="-12" text-anchor="middle" font-size="19" font-weight="800" fill="#1f1e1c" style="direction:ltr;unicode-bidi:bidi-override" data-raw>${t}</text></g>`;
+  // הכפות נשארות מאוזנות: מזיזים אותן למעלה/למטה לפי ההטיה במקום לסובב אותן
+  const rad = tilt * Math.PI / 180, dy = Math.sin(rad) * 140;
+  return `<svg viewBox="0 38 400 146" class="bal-fig" role="img" aria-label="מאזניים" dir="ltr">
+    <path d="M200 112 L176 170 H224 Z" fill="#4d74c9" stroke="#2f4f9a" stroke-width="2"/><rect x="150" y="168" width="100" height="12" rx="6" fill="#2f4f9a"/>
+    <g class="bal-beam" style="transform: rotate(${tilt}deg)"><rect x="56" y="107" width="288" height="10" rx="5" fill="#4d74c9" stroke="#2f4f9a" stroke-width="1.5"/></g>
+    <g style="transition: transform .7s cubic-bezier(.3,1.6,.5,1); transform: translateY(${-dy}px)">${pan(60, L, o.hl)}</g>
+    <g style="transition: transform .7s cubic-bezier(.3,1.6,.5,1); transform: translateY(${dy}px)">${pan(340, R, o.hl)}</g>
+    <circle cx="200" cy="112" r="8" fill="#fff" stroke="#2f4f9a" stroke-width="3"/>
+  </svg>`;
+}
+// הטקסט שעל שתי הכפות: [שמאל, ימין] (ans = המספר במשבצת, או null)
+const balSides = (q, ans) => {
+  const box = ans == null ? '☐' : String(ans);
+  const known = `${q.a} + ${q.b}`, unk = q.boxFirst ? `${box} + ${q.c}` : `${q.c} + ${box}`;
+  return q.swap ? [unk, known] : [known, unk];
+};
+function balTool() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('המחשה: מאזניים – מספר חסר');
+  const G = Math.min(3, GRADE), LEN = 10;
+  let Q = [], qi = 0, ok = 0;
+  const header = `<div class="topbar"><span class="title">⚖️ מאזניים – מספר חסר</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
+  const newRound = () => { Q = []; qi = 0; ok = 0; while (Q.length < LEN) { const q = balGen(G); if (!Q.some(p => p.a === q.a && p.b === q.b && p.c === q.c)) Q.push(q); } show(); };
+  const show = () => {
+    const q = Q[qi];
+    let tries = 0, done = false;
+    const unkLeft = q.swap;
+    const fig = (ans, tilt, hl) => { const [L, R] = balSides(q, ans); return balFig(L, R, tilt, { hl }); };
+    const help = () => { const side = (n1, n2, unk) => `<div class="bh-side">${fcBlocks(n1)}<span class="bh-op">+</span>${unk ? '<span class="bh-op">?</span>' : fcBlocks(n2)}</div>`;
+      const kn = side(q.a, q.b), un = side(q.c, 0, 1); return `<div class="bal-help" dir="ltr">${unkLeft ? un : kn}<span class="bh-op">=</span>${unkLeft ? kn : un}</div>`; };
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="tf-q">איזה מספר חסר כדי שהמאזניים יהיו מאוזנים?</div>
+        <div id="balFig">${fig(null, 0)}</div>
+        <div class="bal-in"><label for="balAns">המספר החסר:</label><input id="balAns" inputmode="numeric" autocomplete="off" aria-label="המספר החסר"><button id="balChk" class="race-go">✔ בדיקה</button></div>
+        <div id="balHelpBox"></div>
+        <div class="tf-fb" id="tfFb" aria-live="polite"></div>
+        <div class="actions" style="justify-content:center" id="tfNav"><button type="button" class="ghost" id="balHelp">💡 רמז: אבני בסיס עשר</button></div>
+        <div class="b10-steps">${Q.map((_, i) => `<span class="b10-dot${i === qi ? ' on' : ''}${i < qi ? ' past' : ''}"></span>`).join('')}</div>
+        <p class="b10-hint muted">הסימן <b>=</b> אומר: <b>שני הצדדים שווים</b>, כמו מאזניים מאוזנים. מחשבים כמה יש בצד אחד, ומשלימים את הצד השני.</p>
+      </div>`;
+    $('quit').onclick = home;
+    $('balHelp').onclick = () => { $('balHelpBox').innerHTML = help(); $('balHelp').remove(); };
+    const fb = (cls, h) => { const e = $('tfFb'); e.className = 'tf-fb ' + cls; e.innerHTML = h; };
+    const finish = good => {
+      done = true; if (good && tries === 1) ok++;
+      $('balAns').disabled = true; $('balChk').remove();
+      $('tfNav').innerHTML = qi < LEN - 1 ? '<button id="tfNext">הבא ←</button>' : '<button id="tfNext" class="race-go">סיום ←</button>';
+      $('tfNext').onclick = () => { qi++; qi < LEN ? show() : end(); };
+      $('tfNext').focus();
+    };
+    const explain = `בצד אחד: ${M(`${q.a} + ${q.b} = ${q.sum}`)}. ${q.c} ועוד כמה זה ${q.sum}? ${M(`${q.c} + ${q.x} = ${q.sum}`)}`;
+    const check = () => {
+      if (done) return;
+      const v = parseInt(($('balAns').value || '').replace(/\D/g, ''), 10);
+      if (isNaN(v)) { $('balAns').focus(); return; }
+      tries++;
+      const other = q.c + v, diff = other - q.sum; // חיובי = צד המשבצת כבד יותר
+      const t = diff === 0 ? 0 : Math.max(-9, Math.min(9, (diff > 0 ? 1 : -1) * (4 + Math.min(5, Math.abs(diff)))));
+      const tilt = unkLeft ? -t : t; // סיבוב חיובי = הצד הימני יורד
+      $('balFig').innerHTML = fig(v, 0, diff === 0);
+      requestAnimationFrame(() => requestAnimationFrame(() => { $('balFig').innerHTML = fig(v, tilt, diff === 0); }));
+      if (diff === 0) { fb('ok', `נכון! ${M(`${q.a} + ${q.b} = ${q.sum}`)} וגם ${M(`${q.c} + ${q.x} = ${q.sum}`)} – המאזניים מאוזנים ✓`); finish(true); return; }
+      if (tries < 2) { fb('bad', `${diff > 0 ? 'הצד עם המשבצת <b>כבד מדי</b> – צריך מספר <b>קטן</b> יותר.' : 'הצד עם המשבצת <b>קל מדי</b> – צריך מספר <b>גדול</b> יותר.'} נסו שוב.`); $('balAns').select(); return; }
+      fb('bad', `המספר החסר: <b>${q.x}</b>. ${explain}`);
+      setTimeout(() => { if ($('balFig')) $('balFig').innerHTML = fig(q.x, 0, true); }, 1200);
+      finish(false);
+    };
+    $('balChk').onclick = check;
+    $('balAns').addEventListener('keydown', e => { if (e.key === 'Enter') check(); });
+    if (!window.matchMedia('(pointer: coarse)').matches) $('balAns').focus();
+  };
+  const end = () => {
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="tf-q">סיימתם סבב! ${ok >= 9 ? '🏆' : ok >= 7 ? '🌟' : '💪'}</div>
+        <div class="tf-score">${ok} / ${LEN}</div>
+        <p>${ok >= 9 ? 'מצוין! אתם יודעים ש-= אומר "שני הצדדים שווים".' : ok >= 7 ? 'יפה מאוד! עוד סבב ותהיו אלופים.' : 'כל הכבוד על ההתמדה – נסו עוד סבב, ואפשר להיעזר ברמז.'}</p>
+        <div class="actions" style="justify-content:center"><button id="tfAgain" class="race-go">↻ סבב חדש</button><button class="secondary" id="tfHome">לדף הבית</button></div>
+      </div>`;
+    $('quit').onclick = home; $('tfHome').onclick = home; $('tfAgain').onclick = newRound;
+  };
+  newRound();
+}
 // מסגרת עשר – תרגול המבנה העשרוני עד 10 בתבנית 5-5: כמה נקודות? כמה מכוניות בחניון? ציירו נקודות לפי המספר
 function tfFrame(n, o = {}) {
   const fixed = o.fixed == null ? n : o.fixed;
@@ -15565,6 +15702,11 @@ function printBuilder() {
         <p class="muted small">דף עבודה על המבנה העשרוני עד 10: כמה מכוניות בחניון (5 ועוד…), ציירו עוד נקודות לפי המספר, וכמה נקודות במסגרת. (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
         <div class="actions"><button class="secondary" id="tfpGo">🔟 דף מסגרת עשר</button></div>
       </div>` : ''}
+      ${GRADE <= 3 ? `<div class="card tform">
+        <h2>⚖️ מאזניים – מספר חסר</h2>
+        <p class="muted small">דוגמה פתורה ו-9 מאזניים: ${M('a + b = c + ☐')} – הסימן = אומר "שני הצדדים שווים". המספרים לפי הכיתה (${GRADE <= 1 ? 'עד 20' : 'עד 100'}). (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
+        <div class="actions"><button class="secondary" id="balpGo">⚖️ דף מאזניים</button></div>
+      </div>` : ''}
       ${GRADE >= 3 ? `<div class="card tform">
         <h2>⚡ לוח הכפל – לכיתה</h2>
         <p class="muted small"><b>אתגר דקה:</b> 48 תרגילי כפל בדף – כמה תספיקו נכון בדקה? (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.) <b>בינגו כפל:</b> כרטיס שונה לכל תלמיד, ורשימת קריאה למורה.</p>
@@ -15679,6 +15821,7 @@ function printBuilder() {
     wsGate(() => ($('wsout').dataset.what = 'דף תרגילים: ' + ids.map(i => DRILL[i].name).join(', ')) && kfOut(drillPrint(ids, Number($('drc').value), Number($('wv').value), $('wkey').checked)));
   };
   if ($('g2pc')) $('g2pc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף אתגר דקה') && kfOut(g2PrintChallenge($('g2k').value, Number($('wv').value), $('wkey').checked)));
+  if ($('balpGo')) $('balpGo').onclick = () => wsGate(() => ($('wsout').dataset.what = 'מאזניים – מספר חסר') && kfOut(balPrint(Number($('wv').value), $('wkey').checked)));
   if ($('tfpGo')) $('tfpGo').onclick = () => wsGate(() => ($('wsout').dataset.what = 'מסגרת עשר 5-5') && kfOut(tfPrint(Number($('wv').value), $('wkey').checked)));
   if ($('g2pt')) $('g2pt').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף תאומים') && kfOut(g2PrintTwins(Number($('wv').value), $('wkey').checked)));
   if ($('kfpb')) $('kfpb').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: כרטיסי בינגו') && kfOut(kfPrintBingo(Number($('kfpn').value))));
@@ -17254,6 +17397,25 @@ function g2PrintTwins(versions, key) {
       <div class="wstips"><b>📘 תזכורת</b><ul><li>תאומים: ${M('6 + 6 = 12')}</li><li>חיסור תאומים: ${M('12 - 6 = 6')} – כי ${M('6 + 6 = 12')}</li><li>כמעט תאומים: ${M('6 + 7')} ← ${M('6 + 6 = 12')}, ועוד 1 = 13</li></ul></div>
       ${page(false)}<div class="wsfoot">בהצלחה! 🌟</div></section>`);
     if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – תרגילי תאומים${vn(v)}</h2>${page(true)}</section>`);
+  }
+  return out.join('');
+}
+/* ---------- מאזניים – מספר חסר: דף עבודה להדפסה לכיתות א'–ג' ---------- */
+function balPrint(versions, key) {
+  const vn = v => versions > 1 ? ' – נוסח ' + 'אבג'[v] : '';
+  const G = Math.min(3, GRADE), ln = '<span class="wsline"></span>', out = [];
+  for (let v = 0; v < versions; v++) {
+    const qs = [];
+    while (qs.length < 10) { const q = balGen(G); if (!qs.some(p => p.a === q.a && p.b === q.b && p.c === q.c)) qs.push(q); }
+    const ex = qs.shift(); ex.swap = false; ex.boxFirst = false;
+    const box = (q, i, ans) => { const [L, R] = balSides(q, ans ? q.x : null); return `<div class="balp-box"><span class="tfp-l">${i + 1}</span>${balFig(L, R)}<div class="tfp-ans">המספר החסר: ${ans ? `<b>${q.x}</b>` : ln}</div></div>`; };
+    const page = ans => `<div class="balp-grid">${qs.map((q, i) => box(q, i, ans)).join('')}</div>`;
+    out.push(`<section class="ws-page"><div class="wshead"><h1>⚖️ מאזניים – מספר חסר${vn(v)}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      <div class="wstips"><b>📘 תזכורת</b><ul><li>הסימן = אומר: <b>שני הצדדים שווים</b> – כמו מאזניים מאוזנים.</li><li>מחשבים כמה יש בצד אחד, ומשלימים את הצד השני. אפשר לצייר אבני בסיס עשר.</li></ul></div>
+      <div class="balp-ex"><b>דוגמה:</b>${balFig(`${ex.a} + ${ex.b}`, `${ex.c} + ${ex.x}`, 0, { hl: 1 })}<div>${M(`${ex.a} + ${ex.b} = ${ex.sum}`)}<br>${M(`${ex.c} + ${ex.x} = ${ex.sum}`)}<br>המספר החסר: <b>${ex.x}</b></div></div>
+      ${page(false)}<div class="wsfoot">בהצלחה! 🌟</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – מאזניים${vn(v)}</h2>${page(true)}</section>`);
   }
   return out.join('');
 }
