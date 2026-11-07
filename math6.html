@@ -1340,6 +1340,25 @@
   .tf-fb.ok { color: #2f8f55; font-weight: 800; }
   .tf-fb.bad { color: #b03a20; font-weight: 700; }
   .tf-score { font-size: 3rem; font-weight: 900; color: var(--accent); }
+  /* מעובדה אחת – הרבה עובדות */
+  .df-center { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 18px; border: 3px solid #2f4f9a; border-radius: 16px; background: #f4f7ff; margin: 4px auto 12px; }
+  .df-fact { font-size: clamp(1.8rem, 8vw, 2.6rem); font-weight: 900; color: #1f2f5c; }
+  .df-arr { display: grid; gap: 3px; }
+  .df-arr i { width: 11px; height: 11px; border-radius: 50%; background: #2f4f9a; display: block; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .df-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; text-align: center; }
+  .df-item { border: 2px solid #b9cdf0; border-radius: 12px; padding: 6px 6px 8px; background: #fff; }
+  .df-item.ok { border-color: #2f8f55; background: #eefaf2; }
+  .df-item.bad { border-color: #d9482b; background: #fff1ee; }
+  .df-chip { display: inline-block; font-size: .8rem; font-weight: 800; padding: 1px 8px; border-radius: 10px; background: #dbe8ff; color: #23407e; margin-bottom: 4px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .df-chip.c2 { background: #fde9c8; color: #7a4a06; } .df-chip.c3 { background: #d9f2df; color: #1d6537; } .df-chip.c4 { background: #fbdbe8; color: #8a2350; }
+  .df-q { font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
+  .df-q input { width: 74px; font: inherit; font-size: 1.1rem; text-align: center; padding: 3px; border: 2px solid #2f63c9; border-radius: 8px; }
+  .df-ex { font-size: .85rem; margin-top: 4px; color: #6b2a1a; }
+  .df-item.ok .df-ex { color: #1d6537; }
+  .dfp-top { display: flex; justify-content: center; margin-bottom: 8px; }
+  .dfp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .dfp-grid .df-item { min-height: 62px; }
+  .dfp-own { min-height: 58px; border-style: dashed; }
   /* מאזניים – מספר חסר */
   .bal-fig { width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto; }
   .bal-beam { transform-box: view-box; transform-origin: 200px 112px; transition: transform .7s cubic-bezier(.3,1.6,.5,1); }
@@ -1900,7 +1919,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רכא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רכב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8671,6 +8690,11 @@ function home() {
             <span class="gc-nm">משחק לכל הכיתה</span>
             <span class="gc-ds">ג'פרדי, כיבוש שטחים, מיליונר, מלחמה ובינגו – בקבוצות.</span>
           </button>
+          ${GRADE >= 3 ? `<button class="game-card" id="dfT">
+            <span class="gc-ic" style="--gw:rgba(47,79,154,0.35)">🧩</span>
+            <span class="gc-nm">מעובדה אחת – הרבה עובדות</span>
+            <span class="gc-ds">עובדת כפל אחת במרכז, והכיתה מגלה ממנה עוד 8 עובדות: חילוף, הכפלה, חציה, חילוק, פי 10…</span>
+          </button>` : ''}
           ${GRADE <= 3 ? `<button class="game-card" id="balT">
             <span class="gc-ic" style="--gw:rgba(77,116,201,0.45)">⚖️</span>
             <span class="gc-nm">מאזניים – מספר חסר</span>
@@ -8835,6 +8859,8 @@ function home() {
   if ($('tframeGo')) $('tframeGo').onclick = tenFrame;
   if ($('tframeT')) $('tframeT').onclick = tenFrame;
   if ($('balT')) $('balT').onclick = balTool;
+  if ($('dfT')) $('dfT').onclick = dfTool;
+  if ($('dfGo')) $('dfGo').onclick = dfTool;
   if ($('balGo')) $('balGo').onclick = balTool;
   if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
   if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
@@ -8863,6 +8889,8 @@ document.addEventListener('click', e => {
 let topicBack = null;
 const topicLessons = id => LESSON_ORDER.filter(l => lessonTopic(LESSONS[l]) === id);
 const TOOL_CARDS = [
+  { id: 'dfGo', cls: 'b10-card2', on: GRADE >= 3, topics: ['muldiv', 'mul22', 'times'], go: () => dfTool(), chip: '🧩 עובדות נגזרות',
+    html: `<span class="b10c-ic">🧩</span><span class="b10c-t">מעובדה אחת – הרבה עובדות</span><span class="b10c-d">יודעים עובדת כפל אחת? מגלים ממנה עוד: הכפלה, חציה, חילוק, פי 10 ועוד.</span>` },
   { id: 'balGo', cls: 'b10-card3', on: GRADE <= 3, topics: ['add20', 'add100', 'addsub'], go: () => balTool(), chip: '⚖️ מאזניים',
     html: `<span class="b10c-ic">⚖️</span><span class="b10c-t">מאזניים – מספר חסר</span><span class="b10c-d">שני הצדדים שווים! מוצאים את המספר החסר, והמאזניים נוטים או מתאזנים.</span>` },
   { id: 'tframeGo', cls: 'b10-card2', on: GRADE <= 2, topics: ['add20', 'num100'], go: () => tenFrame(), chip: '🔟 מסגרת עשר',
@@ -13564,6 +13592,94 @@ function b10Two() {
   };
   setup();
 }
+// מעובדה אחת – הרבה עובדות: יודעים a × b = p, ומסיקים עובדות קשורות (חילוף, הכפלה, חציה, חילוק, פי 10/100, פירוק). כיתות ג'–ו'
+function dfFacts(g) {
+  const r = (x, y) => x + Math.floor(Math.random() * (y - x + 1));
+  let a, b;
+  do { a = r(3, 9); b = r(3, 9); } while (a === b || (a % 2 && b % 2 && g < 5));
+  const ev = a % 2 === 0 ? a : b, od = ev === a ? b : a, p = a * b, X = '×', D = '÷';
+  const f = (lbl, c, e, ans, how) => ({ lbl, c, e, ans, how });
+  const L = [
+    f('חילוף', 1, `${b} ${X} ${a}`, p, `אפשר להחליף את סדר הגורמים – המכפלה לא משתנה.`),
+    f('הכפלה', 2, `${2 * a} ${X} ${b}`, 2 * p, `${2 * a} זה פי 2 מ-${a}, אז המכפלה פי 2: ${p} ${X} 2 = ${2 * p}`),
+    f('הכפלה', 2, `${a} ${X} ${2 * b}`, 2 * p, `${2 * b} זה פי 2 מ-${b}, אז המכפלה פי 2: ${p} ${X} 2 = ${2 * p}`),
+    f('חילוק', 4, `${p} ${D} ${a}`, b, `כי ${a} ${X} ${b} = ${p}`),
+    f('חילוק', 4, `${p} ${D} ${b}`, a, `כי ${a} ${X} ${b} = ${p}`),
+    f('עוד קבוצה', 3, `${a + 1} ${X} ${b}`, p + b, `עוד קבוצה אחת של ${b}: ${p} + ${b} = ${p + b}`),
+    f('קבוצה פחות', 3, `${a - 1} ${X} ${b}`, p - b, `קבוצה אחת פחות: ${p} − ${b} = ${p - b}`),
+  ];
+  const hv = ev / 2, hp = hv * od;
+  L.push(ev === a ? f('חציה', 2, `${hv} ${X} ${b}`, hp, `${hv} זה חצי מ-${a}, אז המכפלה חצי: ${p} ${D} 2 = ${hp}`) : f('חציה', 2, `${a} ${X} ${hv}`, hp, `${hv} זה חצי מ-${b}, אז המכפלה חצי: ${p} ${D} 2 = ${hp}`));
+  L.push(ev === a ? f('הכפלה וחציה', 2, `${hv} ${X} ${2 * b}`, p, `חצי מ-${a} ופי 2 מ-${b} – המכפלה לא משתנה.`) : f('הכפלה וחציה', 2, `${2 * a} ${X} ${hv}`, p, `פי 2 מ-${a} וחצי מ-${b} – המכפלה לא משתנה.`));
+  L.push(f('פי 10', 1, `${10 * a} ${X} ${b}`, 10 * p, `${10 * a} זה פי 10 מ-${a}, אז המכפלה פי 10: ${10 * p}`));
+  L.push(f('פי 10', 1, `${a} ${X} ${10 * b}`, 10 * p, `${10 * b} זה פי 10 מ-${b}, אז המכפלה פי 10: ${10 * p}`));
+  if (g >= 4) {
+    L.push(f('פי 100', 1, `${100 * a} ${X} ${b}`, 100 * p, `פי 100 מ-${a}, אז המכפלה פי 100: ${fmt(100 * p)}`));
+    L.push(f('פי 10 ופי 10', 1, `${10 * a} ${X} ${10 * b}`, 100 * p, `פי 10 וגם פי 10 = פי 100: ${fmt(100 * p)}`));
+    L.push(f('חילוק', 4, `${10 * p} ${D} ${a}`, 10 * b, `${10 * p} זה פי 10 מ-${p}, אז גם התוצאה פי 10: ${10 * b}`));
+  }
+  if (g >= 5) {
+    L.push(f('חלקי 10', 3, `${fmt(a / 10)} ${X} ${b}`, p / 10, `${fmt(a / 10)} זה ${a} חלקי 10, אז המכפלה חלקי 10: ${fmt(p / 10)}`));
+    L.push(f('חציה', 2, `${fmt(od / 2)} ${X} ${ev}`, od * ev / 2, `${fmt(od / 2)} זה חצי מ-${od}: ${p} ${D} 2 = ${fmt(p / 2)}`));
+  }
+  if (g >= 6) L.push(f('חלקי 100', 3, `${fmt(a / 10)} ${X} ${fmt(b / 10)}`, p / 100, `כל גורם חלקי 10, אז המכפלה חלקי 100: ${fmt(p / 100)}`));
+  // 8 עובדות (12 בהדפסה): תמיד חילוף וחילוק, והשאר מעורב
+  return { a, b, p, all: L };
+}
+function dfPick(F, n) {
+  const must = [F.all[0], F.all[3]], rest = shuffle(F.all.filter(x => !must.includes(x)));
+  const seen = new Set(must.map(x => x.e)), out = must.slice();
+  rest.forEach(x => { if (out.length < n && !seen.has(x.e)) { seen.add(x.e); out.push(x); } });
+  return shuffle(out);
+}
+const dfArr = (a, b) => `<div class="df-arr" style="grid-template-columns: repeat(${b}, 11px)" aria-hidden="true">${'<i></i>'.repeat(a * b)}</div>`;
+const dfNum = v => parseFloat(String(v || '').replace(/[,\s]/g, '').replace(/[^\d.]/g, ''));
+function dfTool() {
+  stopRace && stopRace(); state = null; lessonView = null; navPush('view');
+  track('המחשה: מעובדה אחת – הרבה עובדות');
+  const G = Math.max(3, Math.min(6, GRADE));
+  const header = `<div class="topbar"><span class="title">🧩 מעובדה אחת – הרבה עובדות</span><button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button></div>`;
+  let tries = 0, total = 0, okAll = 0;
+  const round = () => {
+    const F = dfFacts(G), items = dfPick(F, 8);
+    let checked = 0;
+    app.innerHTML = `${header}
+      <div class="card b10lab">
+        <div class="tf-q">אם אנחנו יודעים ש…</div>
+        <div class="df-center"><div class="df-fact">${M(`${F.a} × ${F.b} = ${F.p}`)}</div>${dfArr(F.a, F.b)}<div class="muted small">${F.a} שורות, ${F.b} בכל שורה</div></div>
+        <div class="tf-q">…אנחנו יודעים גם:</div>
+        <div class="df-grid">${items.map((x, i) => `<div class="df-item" id="dfi${i}"><span class="df-chip c${x.c}">${x.lbl}</span><div class="df-q" dir="ltr">${M(x.e + ' =')}<input inputmode="decimal" autocomplete="off" aria-label="${x.e}" data-i="${i}"></div><div class="df-ex"></div></div>`).join('')}</div>
+        <div class="tf-fb" id="tfFb" aria-live="polite"></div>
+        <div class="actions" style="justify-content:center" id="dfNav"><button id="dfChk" class="race-go">✔ בדיקה</button></div>
+        <p class="b10-hint muted">לא צריך לחשב מההתחלה! מסתכלים על העובדה שבמרכז ושואלים: מה השתנה? פי 2? חצי? פי 10? קבוצה אחת יותר?</p>
+      </div>`;
+    $('quit').onclick = home;
+    const ins = [...app.querySelectorAll('.df-q input')];
+    ins.forEach((el, i) => el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); (ins[i + 1] || $('dfChk') || el).focus(); } }));
+    $('dfChk').onclick = () => {
+      checked++;
+      let good = 0;
+      items.forEach((x, i) => {
+        const box = $('dfi' + i), inp = box.querySelector('input'), v = dfNum(inp.value), ok = Math.abs(v - x.ans) < 1e-9;
+        if (ok) good++;
+        box.classList.toggle('ok', ok); box.classList.toggle('bad', !ok);
+        if (ok) { inp.disabled = true; box.querySelector('.df-ex').innerHTML = '✓ ' + x.how; }
+        else box.querySelector('.df-ex').innerHTML = checked >= 2 ? `התשובה: <b>${fmt(x.ans)}</b> – ${x.how}` : (inp.value ? 'לא בדיוק – מה השתנה לעומת העובדה במרכז?' : '');
+        if (!ok && checked >= 2) { inp.value = fmt(x.ans); inp.disabled = true; }
+      });
+      if (checked === 1) { tries++; okAll += good; total += items.length; }
+      const all = good === items.length;
+      $('tfFb').className = 'tf-fb ' + (all ? 'ok' : 'bad');
+      $('tfFb').innerHTML = all ? `כל הכבוד! מעובדה אחת גיליתם ${items.length} עובדות 🌟` : checked >= 2 ? `נכון ${good} מתוך ${items.length}. קראו את ההסברים.` : `נכון ${good} מתוך ${items.length}. תקנו את המסומנים באדום ולחצו שוב "בדיקה".`;
+      if (all || checked >= 2) {
+        $('dfNav').innerHTML = `<button id="dfNew" class="race-go">↻ עובדה חדשה</button>`;
+        $('dfNew').onclick = round;
+        if (tries) $('tfFb').innerHTML += `<div class="muted small">עד עכשיו בסבב הזה: ${okAll} מתוך ${total} נכונים בניסיון הראשון.</div>`;
+      }
+    };
+  };
+  round();
+}
 // מאזניים – מספר חסר: a + b = c + ☐. שני הצדדים שווים, כמו מאזניים. כיתות א'–ג'
 function balGen(g) {
   const r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -15708,6 +15824,11 @@ function printBuilder() {
         <div class="actions"><button class="secondary" id="balpGo">⚖️ דף מאזניים</button></div>
       </div>` : ''}
       ${GRADE >= 3 ? `<div class="card tform">
+        <h2>🧩 מעובדה אחת – הרבה עובדות</h2>
+        <p class="muted small">במרכז עובדת כפל אחת (עם מערך נקודות), ומסביב 12 עובדות שנגזרות ממנה: חילוף, הכפלה וחציה, חילוק, פי 10${GRADE >= 4 ? ' ופי 100' : ''}, עוד קבוצה / קבוצה פחות${GRADE >= 5 ? ', עשרוניים' : ''}. בסוף – 4 משבצות ל"עובדות שגיליתי בעצמי". (בכל הדפסה עובדה אחרת; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.)</p>
+        <div class="actions"><button class="secondary" id="dfpGo">🧩 דף עובדות נגזרות</button></div>
+      </div>` : ''}
+      ${GRADE >= 3 ? `<div class="card tform">
         <h2>⚡ לוח הכפל – לכיתה</h2>
         <p class="muted small"><b>אתגר דקה:</b> 48 תרגילי כפל בדף – כמה תספיקו נכון בדקה? (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.) <b>בינגו כפל:</b> כרטיס שונה לכל תלמיד, ורשימת קריאה למורה.</p>
         <label>מספר כרטיסי בינגו:
@@ -15821,6 +15942,7 @@ function printBuilder() {
     wsGate(() => ($('wsout').dataset.what = 'דף תרגילים: ' + ids.map(i => DRILL[i].name).join(', ')) && kfOut(drillPrint(ids, Number($('drc').value), Number($('wv').value), $('wkey').checked)));
   };
   if ($('g2pc')) $('g2pc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף אתגר דקה') && kfOut(g2PrintChallenge($('g2k').value, Number($('wv').value), $('wkey').checked)));
+  if ($('dfpGo')) $('dfpGo').onclick = () => wsGate(() => ($('wsout').dataset.what = 'מעובדה אחת – הרבה עובדות') && kfOut(dfPrint(Number($('wv').value), $('wkey').checked)));
   if ($('balpGo')) $('balpGo').onclick = () => wsGate(() => ($('wsout').dataset.what = 'מאזניים – מספר חסר') && kfOut(balPrint(Number($('wv').value), $('wkey').checked)));
   if ($('tfpGo')) $('tfpGo').onclick = () => wsGate(() => ($('wsout').dataset.what = 'מסגרת עשר 5-5') && kfOut(tfPrint(Number($('wv').value), $('wkey').checked)));
   if ($('g2pt')) $('g2pt').onclick = () => wsGate(() => ($('wsout').dataset.what = 'עד 20: דף תאומים') && kfOut(g2PrintTwins(Number($('wv').value), $('wkey').checked)));
@@ -17397,6 +17519,23 @@ function g2PrintTwins(versions, key) {
       <div class="wstips"><b>📘 תזכורת</b><ul><li>תאומים: ${M('6 + 6 = 12')}</li><li>חיסור תאומים: ${M('12 - 6 = 6')} – כי ${M('6 + 6 = 12')}</li><li>כמעט תאומים: ${M('6 + 7')} ← ${M('6 + 6 = 12')}, ועוד 1 = 13</li></ul></div>
       ${page(false)}<div class="wsfoot">בהצלחה! 🌟</div></section>`);
     if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – תרגילי תאומים${vn(v)}</h2>${page(true)}</section>`);
+  }
+  return out.join('');
+}
+/* ---------- מעובדה אחת – הרבה עובדות: דף עבודה להדפסה לכיתות ג'–ו' ---------- */
+function dfPrint(versions, key) {
+  const vn = v => versions > 1 ? ' – נוסח ' + 'אבג'[v] : '';
+  const G = Math.max(3, Math.min(6, GRADE)), ln = '<span class="wsline"></span>', out = [];
+  for (let v = 0; v < versions; v++) {
+    const F = dfFacts(G), items = dfPick(F, 12);
+    const page = ans => `<div class="dfp-top"><div class="df-center"><div class="df-fact">${M(`${F.a} × ${F.b} = ${F.p}`)}</div>${dfArr(F.a, F.b)}</div></div>
+      <div class="dfp-grid">${items.map(x => `<div class="df-item"><span class="df-chip c${x.c}">${x.lbl}</span><div class="df-q" dir="ltr">${M(x.e + ' =')} ${ans ? `<b>${M(fmt(x.ans))}</b>` : ln}</div></div>`).join('')}</div>
+      ${ans ? '' : `<h3 style="margin:10px 0 6px">✍️ עובדות שגיליתי בעצמי</h3><div class="dfp-grid">${'<div class="df-item dfp-own"></div>'.repeat(4)}</div>`}`;
+    out.push(`<section class="ws-page"><div class="wshead"><h1>🧩 אם יודעים ש-${M(`${F.a} × ${F.b} = ${F.p}`)}, יודעים גם…${vn(v)}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      <div class="wstips"><b>📘 תזכורת</b><ul><li>לא מחשבים מההתחלה – בודקים מה השתנה לעומת העובדה במרכז.</li><li>גורם פי 2 → המכפלה פי 2 · גורם חצי → המכפלה חצי · גורם פי 10 → המכפלה פי 10.</li><li>חילוק הוא הפעולה ההפוכה: ${M(`${F.p} ÷ ${F.a} = ${F.b}`)}.</li></ul></div>
+      ${page(false)}<div class="wsfoot">בהצלחה! 🌟</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – ${M(`${F.a} × ${F.b} = ${F.p}`)}${vn(v)}</h2>${page(true)}</section>`);
   }
   return out.join('');
 }
