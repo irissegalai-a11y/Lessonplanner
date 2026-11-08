@@ -1952,6 +1952,11 @@
   .pl-clue-b, .pl-clue-t { flex-direction: column; line-height: 1; }
   .pl-clue.pl-bad { color: var(--bad); background: var(--bad-bg); border-radius: 8px; }
   .pl-ex { text-align: center; }
+  .pz-wrap { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: center; margin: 8px 0; }
+  .pz-svg { width: 200px; max-width: 60vw; height: auto; }
+  .pz-kids { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 330px; }
+  .pz-kid { min-width: 82px; text-align: center; padding: 6px 8px; border-radius: 14px; background: color-mix(in srgb, var(--kc) 30%, #fff); border: 2.5px solid var(--kc); font-size: 0.95rem; }
+  .pz-face { display: block; font-size: 1.8rem; line-height: 1.2; }
   .pk-common { padding: 12px 16px; }
   .pk-common-h { font-weight: 700; margin-bottom: 8px; }
   .pk-common-row { display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: flex-end; }
@@ -1995,7 +2000,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -2100,6 +2105,7 @@ const ICONS = {
   cards: '<rect x="3.5" y="6" width="10" height="14" rx="1.5"/><path d="M10 4.5l8.5 1.6c.8.2 1.4 1 1.2 1.8l-2 10.8"/>',
   grid: '<rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M3.5 14.5h17M9.2 4.5v15M14.8 4.5v15"/>',
   check: '<path d="M4.5 12.5l5 5L19.5 7"/>',
+  divide: '<path d="M5 12h14"/><circle cx="12" cy="6.5" r="1.4"/><circle cx="12" cy="17.5" r="1.4"/>',
   flag: '<path d="M6 21V4"/><path d="M6 4h12l-3 4 3 4H6"/>',
   star: '<path d="M12 3.5l2.4 5.2 5.6.6-4.2 3.8 1.2 5.6L12 15.9l-5 2.8 1.2-5.6L4 9.3l5.6-.6z"/>',
   home: '<path d="M4 11.5l8-7 8 7"/><path d="M6.5 10v10h11V10"/>',
@@ -8608,11 +8614,11 @@ let navPopping = false;
    כל עוד TRACK.form ריק – לא נשלח כלום
    ========================================================= */
 const TRACK = { form: 'https://docs.google.com/forms/d/e/1FAIpQLScbU-3oB6Sx3hsec4cxoQQUWUfSnuvGH8X7DOKLR5hldhe6CA/formResponse', f: { device: 'entry.218291459', grade: 'entry.2065505054', name: 'entry.1804780443', action: 'entry.285567241', detail: 'entry.1501454704' } };
-const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', dlab: 'משחק: מעבדת העשרוניים', fj: 'משחק: קפיצות שברים', fd: 'משחק: קפיצות חילוק', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל' };
+const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', dlab: 'משחק: מעבדת העשרוניים', fj: 'משחק: קפיצות שברים', fd: 'משחק: קפיצות חילוק', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל', kfd: 'אימון חילוק' };
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
-const TRACK_TIMED = /^(מצוינות|משחק|כלי|המחשה|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|מבחן$|אימון למבחן|תרגול מרובעים|תרגול שרטוט|מבדק הצלחה$|כרטיסי הברקה$)/;
+const TRACK_TIMED = /^(מצוינות|משחק|כלי|המחשה|למידה|תרגול$|פתיח שיעור|מארגן ההוראה|כרטיס יציאה$|אימון כפל|אימון חילוק|מבחן$|אימון למבחן|תרגול מרובעים|תרגול שרטוט|מבדק הצלחה$|כרטיסי הברקה$)/;
 const ACT_IDLE = 60000, ACT_TAIL = 10000;
 let actCur = null, actPaused = null;
 function actTick() {
@@ -8675,7 +8681,7 @@ window.addEventListener('popstate', e => {
     document.querySelectorAll('.overlay').forEach(o => o.remove());
     const v = e.state && e.state.v;
     if (URLP.has('print') || URLP.has('teacher')) return;
-    if (v === 'kf') kfHome(); else home();
+    if (v === 'kf' || v === 'kfd') kfHome(v === 'kfd' ? 'div' : 'mul'); else home();
   } finally { navPopping = false; }
 });
 
@@ -8696,7 +8702,7 @@ function home() {
   const T = teacherOn();
   const tabs = [
     { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
-    ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
+    ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }, { id: 'hiluk', label: 'אימון חילוק', icon: 'divide', wash: 'rgba(122,79,181,0.22)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
     ...(GRADE >= 4 ? [{ id: 'excel', label: 'מצוינות', icon: 'star', wash: 'rgba(242,201,76,0.34)' }] : []),
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
@@ -8783,10 +8789,18 @@ function home() {
         ${GRADE >= 3 ? `<section class="panel" data-panel="kefel" ${homeTab === 'kefel' ? '' : 'hidden'}>
           <h2>אימון לוח הכפל</h2>
           <div class="card kf-banner banner">
-            <div>5 דקות ביום. ${kf.placed ? `בשליטה: <b>${kfMastered()}</b> מתוך 36 עובדות.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
+            <div>5 דקות ביום. ${kfPeek('mul').placed ? `בשליטה: <b>${kfPeek('mul').m}</b> מתוך 36 עובדות.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
             <button id="kfGoHome">לאימון ←</button>
           </div>
           <p class="muted">באימון: מפה אישית של לוח הכפל, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
+        </section>
+        <section class="panel" data-panel="hiluk" ${homeTab === 'hiluk' ? '' : 'hidden'}>
+          <h2>אימון חילוק</h2>
+          <div class="card kf-banner banner">
+            <div>5 דקות ביום. ${kfPeek('div').placed ? `בשליטה: <b>${kfPeek('div').m}</b> מתוך 36 משפחות חילוק.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
+            <button id="kdGoHome">לאימון ←</button>
+          </div>
+          <p class="muted">חילוק הוא "כפל הפוך": ${M('56 : 8 = ?')} שואלים – <b>8 כפול מה זה 56?</b> באימון: מפה אישית של עובדות החילוק, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
         </section>` : ''}
         ${wpPanelHTML()}
         ${GRADE >= 4 ? `<section class="panel" data-panel="excel" ${homeTab === 'excel' ? '' : 'hidden'}>
@@ -8979,7 +8993,8 @@ function home() {
       if (pn) { const y = pn.getBoundingClientRect().top + window.scrollY - 10; window.scrollTo({ top: y, behavior: 'smooth' }); }
     }
   });
-  if ($('kfGoHome')) $('kfGoHome').onclick = kfHome;
+  if ($('kfGoHome')) $('kfGoHome').onclick = () => kfHome('mul');
+  if ($('kdGoHome')) $('kdGoHome').onclick = () => kfHome('div');
   const wpShow = on => {
     homeTab = on ? 'wp' : 'practice';
     try { sessionStorage.setItem('math-tab', homeTab); } catch (e) {}
@@ -9194,7 +9209,8 @@ function contCard() {
   return Object.assign({ k: 'מה עושים היום?' }, todaySuggestion());
 }
 function todaySuggestion() {
-  if (GRADE >= 3 && kf.placed && kf.lastDay !== kfToday()) return { t: 'אימון כפל – 5 דקות', d: 'עובדות חדשות, וחזרה על מה שעוד קשה', btn: 'לאימון', go: kfHome };
+  const kfm = (() => { try { return JSON.parse(localStorage.getItem(KF_KEY)) || {}; } catch (e) { return {}; } })();
+  if (GRADE >= 3 && kfm.placed && kfm.lastDay !== kfToday()) return { t: 'אימון כפל – 5 דקות', d: 'עובדות חדשות, וחזרה על מה שעוד קשה', btn: 'לאימון', go: () => kfHome('mul') };
   const started = TOPICS.filter(t => store.topics[t.id]);
   const learned = LESSON_ORDER.some(id => learnedSet(id).size);
   if (!started.length && !learned) {
@@ -12022,6 +12038,21 @@ function dfWholes(w, d, n = 0) {
     g += `<text x="${(a + b) / 2}" y="${4 + H / 2 + 6}" text-anchor="middle" font-size="${cw < 16 ? 12 : 16}" font-weight="700" fill="#fff" stroke="#23264a" stroke-width="0.6">${k + 1}</text>`; }
   return `<svg class="fig" viewBox="0 0 ${W + 8} ${H + 32}" aria-hidden="true" style="max-width:440px">${g}</svg>`;
 }
+// 🍕 פיצה לחילוק שבר במספר שלם: d פרוסות בפיצה, n מהן על המגש, כל פרוסה חתוכה ל-m; owner[i] = לאיזה ילד הפרוסה הקטנה i
+const PZ_COL = ['#7fb3e6', '#f29fb5', '#9ad18b', '#f6c85f', '#c4a3e8'];
+const PZ_KID = ['🧒', '👧', '👦', '🧑', '👧'];
+function pzSVG(d, n, m, owner) {
+  const N = d * m, R = 80, C = 90, pt = (k, r) => { const a = (-90 + k * 360 / N) * Math.PI / 180; return `${(C + r * Math.cos(a)).toFixed(2)} ${(C + r * Math.sin(a)).toFixed(2)}`; };
+  let g = '';
+  for (let i = 0; i < N; i++) {
+    const has = i < n * m, o = owner[i];
+    g += `<path d="M${C} ${C} L${pt(i, R)} A${R} ${R} 0 0 1 ${pt(i + 1, R)}Z" fill="${!has ? '#fbfaf7' : o >= 0 ? PZ_COL[o] : '#f4c26b'}" stroke="${has ? '#8a5a1c' : '#c9c4b8'}" stroke-width="1" ${has ? '' : 'stroke-dasharray="3 3"'}/>`;
+    if (has && o < 0) { const a = (-90 + (i + 0.5) * 360 / N) * Math.PI / 180; g += `<circle cx="${(C + R * 0.6 * Math.cos(a)).toFixed(1)}" cy="${(C + R * 0.6 * Math.sin(a)).toFixed(1)}" r="${m > 2 ? 3 : 5}" fill="#c0392b"/>`; }
+  }
+  for (let j = 0; j < d; j++) g += `<line x1="${C}" y1="${C}" x2="${pt(j * m, R).split(' ')[0]}" y2="${pt(j * m, R).split(' ')[1]}" stroke="#8a5a1c" stroke-width="2.6"/>`;
+  g += `<circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="#c98a3a" stroke-width="5"/>`;
+  return `<svg viewBox="0 0 180 180" class="pz-svg" aria-hidden="true">${g}</svg>`;
+}
 if (GRADE === 6 && TOPIC.divfr) {
   Object.assign(LESSONS, {
     divfr: {
@@ -12029,6 +12060,59 @@ if (GRADE === 6 && TOPIC.divfr) {
       desc: 'שבר : שלם, שלם : שבר, ולמה מחלקים בשבר = כופלים בהופכי',
       practice: [() => genDivFrW('fw1'), () => genDivFrW('fw2'), () => genDivFrW('wu'), () => genDivFrW('wn'), () => genDivFrW('fw1'), () => genDivFrW('fw2'), () => genDivFrW('wu'), () => genDivFrW('wn')],
       cards: [
+        {
+          title: 'מחלקים פיצה 🍕 – שבר : שלם בציור',
+          html: `<p>חילוק במספר שלם הוא <b>חלוקה הוגנת</b>: יש לנו חלק מפיצה, ומחלקים אותו בין כמה ילדים – כל ילד מקבל <b>אותה כמות</b>. כמה מהפיצה השלמה מקבל כל ילד?</p>
+            <div class="lbtns" data-pzp></div>
+            <div class="pz-wrap"><div data-pz></div><div class="pz-kids" data-kids></div></div>
+            <div class="fbig" data-ex></div>
+            <div class="lbtns" data-ctl></div>
+            <div data-msg class="explain"></div>`,
+          setup(root) {
+            const PRE = [[6, 8, 3], [3, 4, 3], [4, 6, 2], [2, 3, 4], [3, 5, 2]];
+            let s;
+            const reset = (n, d, k) => { s = { n, d, k, m: 1, owner: [], dealt: 0 }; s.owner = new Array(d).fill(-1); draw(); };
+            const total = () => s.n * s.m, perKid = () => Math.floor(total() / s.k), canDeal = () => s.dealt < perKid() * s.k;
+            const deal = () => { if (!canDeal()) return; s.owner[s.dealt] = s.dealt % s.k; s.dealt++; };
+            root.querySelector('[data-pzp]').innerHTML = PRE.map(([n, d, k], i) => `<button class="secondary" data-pre="${i}">${MX(`${F(n, d)} ${M(`: ${k}`)}`)}</button>`).join('');
+            root.querySelectorAll('[data-pre]').forEach(b => b.onclick = () => { const [n, d, k] = PRE[+b.dataset.pre]; reset(n, d, k); });
+            const draw = () => {
+              const N = s.d * s.m, cnt = [...Array(s.k)].map((_, j) => s.owner.filter(o => o === j).length);
+              root.querySelectorAll('[data-pre]').forEach((b, i) => b.classList.toggle('secondary', !(PRE[i][0] === s.n && PRE[i][1] === s.d && PRE[i][2] === s.k)));
+              root.querySelector('[data-pz]').innerHTML = pzSVG(s.d, s.n, s.m, s.owner);
+              root.querySelector('[data-kids]').innerHTML = cnt.map((c, j) => `<div class="pz-kid" style="--kc:${PZ_COL[j]}"><span class="pz-face">${PZ_KID[j]}</span><b>${c}</b> ${c === 1 ? 'פרוסה' : 'פרוסות'}${c ? `<div>${MX(F(c, N))}</div>` : ''}</div>`).join('');
+              root.querySelector('[data-ex]').innerHTML = MX(`${F(s.n, s.d)} ${M(`: ${s.k}`)}`) + ` <span class="small">– ${s.n} ${s.n === 1 ? 'פרוסה' : 'פרוסות'} של ${F(1, s.d)} פיצה, ל-${s.k} ילדים</span>`;
+              const ctl = root.querySelector('[data-ctl]'), msg = root.querySelector('[data-msg]');
+              const left = total() - s.dealt;
+              if (canDeal()) {
+                ctl.innerHTML = '<button data-one>🍕 תנו פרוסה לילד הבא</button><button class="secondary" data-all>⏩ חלקו הכל</button>';
+                msg.innerHTML = s.dealt ? `חילקנו ${s.dealt} ${s.dealt === 1 ? 'פרוסה' : 'פרוסות'}, נשארו ${left}.` : `נותנים לכל ילד פרוסה בתורו – כמו שמחלקים קלפים.`;
+              } else if (left > 0) {
+                ctl.innerHTML = `<button data-cut>✂️ חתכו כל פרוסה ל-${s.k}</button>`;
+                msg.innerHTML = s.dealt ? `נשארו <b>${left}</b> ${left === 1 ? 'פרוסה' : 'פרוסות'} – לא מספיק כדי לתת לכל אחד מ-${s.k} הילדים עוד פרוסה. זה לא הוגן! 🤔<br>מה עושים? <b>חותכים כל פרוסה ל-${s.k} חתיכות קטנות</b> – ומחלקים מחדש.`
+                  : `יש רק <b>${s.n}</b> ${s.n === 1 ? 'פרוסה' : 'פרוסות'} ו-<b>${s.k}</b> ילדים – אי אפשר לתת לכל ילד פרוסה שלמה. 🤔<br>מה עושים? <b>חותכים כל פרוסה ל-${s.k} חתיכות קטנות</b>.`;
+              } else {
+                const q = perKid();
+                ctl.innerHTML = '<button class="secondary" data-again>🔁 שוב מההתחלה</button>';
+                msg.innerHTML = `🎉 כל ילד קיבל <b>${q}</b> ${q === 1 ? 'פרוסה' : 'פרוסות'}. בפיצה שלמה יש <b>${N}</b> פרוסות כאלה, ולכן כל ילד קיבל ${MX(F(q, N))} מהפיצה.<br>
+                  ${MX(`${F(s.n, s.d)} ${M(`: ${s.k} =`)} ${s.m > 1 ? `${F(s.n, `${s.d} × ${s.k}`)} = ` : ''}${F(q, N)}`)}
+                  <br>${s.m > 1 ? `💡 חתכנו כל פרוסה ל-${s.k} – לכן <b>המכנה גדל פי ${s.k}</b>, והמונה נשאר ${s.n}.` : `💡 ${s.n} פרוסות התחלקו ל-${s.k} – לכן <b>מחלקים את המונה</b>: ${M(`${s.n} : ${s.k} = ${q}`)}, והמכנה (גודל הפרוסה) נשאר ${s.d}.`}
+                  <br>⚠️ שימו לב: כל ילד קיבל <b>פחות</b> ממה שהיה על המגש – כשמחלקים במספר שלם, התוצאה קטנה.`;
+              }
+              const b1 = ctl.querySelector('[data-one]'), b2 = ctl.querySelector('[data-all]'), b3 = ctl.querySelector('[data-cut]'), b4 = ctl.querySelector('[data-again]');
+              if (b1) b1.onclick = () => { deal(); draw(); };
+              if (b2) b2.onclick = () => { while (canDeal()) deal(); draw(); };
+              if (b3) b3.onclick = () => { s.m = s.k; s.owner = new Array(s.d * s.m).fill(-1); s.dealt = 0; draw(); };
+              if (b4) b4.onclick = () => reset(s.n, s.d, s.k);
+            };
+            reset(6, 8, 3);
+          },
+          try: {
+            type: 'num', q: `על המגש ${F(3, 4)} פיצה (3 פרוסות של רבע). 3 ילדים מתחלקים בה שווה בשווה. כל ילד מקבל ${MX(F(1, BOX))} פיצה. מה המכנה?`, ans: 4,
+            hint: 'כמה פרוסות יש? כמה ילדים? כל ילד מקבל פרוסה אחת – ומה גודל כל פרוסה?', exp: `3 פרוסות ל-3 ילדים – פרוסה אחת לכל ילד, וכל פרוסה היא רבע: ${MX(`${F(3, 4)} ${M(': 3 =')} ${F(1, 4)}`)}`,
+            traps: [{ v: 12, m: 'לא צריך לחתוך כאן – 3 פרוסות מתחלקות יפה ל-3 ילדים.' }]
+          }
+        },
         {
           title: 'שבר : שלם – מחלקים לקבוצות',
           html: `<p>יש לנו ${M(F(6, 7))} מחפיסת שוקולד, ו-<b>3 ילדים</b> מתחלקים בה שווה בשווה: ${MX(`${F(6, 7)} ${M(': 3')}`)}</p>
@@ -16850,8 +16934,11 @@ function printBuilder() {
         <div class="actions"><button class="secondary" id="dfpGo">🧩 דף עובדות נגזרות</button></div>
       </div>` : ''}
       ${GRADE >= 3 ? `<div class="card tform">
-        <h2>⚡ לוח הכפל – לכיתה</h2>
+        <h2>⚡ לוח הכפל והחילוק – לכיתה</h2>
         <p class="muted small"><b>אתגר דקה:</b> 48 תרגילי כפל בדף – כמה תספיקו נכון בדקה? (בכל הדפסה מספרים אחרים; מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.) <b>בינגו כפל:</b> כרטיס שונה לכל תלמיד, ורשימת קריאה למורה.</p>
+        <label>תרגילים באתגר הדקה:
+          <select id="kfpop"><option value="mul">כפל</option><option value="div">חילוק</option><option value="mix">כפל וחילוק – מעורב</option></select>
+        </label>
         <label>מספר כרטיסי בינגו:
           <select id="kfpn">${[10, 20, 30, 36].map(n => `<option ${n === 30 ? 'selected' : ''}>${n}</option>`).join('')}</select>
         </label>
@@ -16961,7 +17048,7 @@ function printBuilder() {
   const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
   wpPrintBind(kfOut);
   tzPrintBind(kfOut);
-  if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'כפל: דף אתגר דקה') && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked)));
+  if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'אתגר דקה: ' + $('kfpop').selectedOptions[0].textContent) && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked, $('kfpop').value)));
   $('drgo').onclick = () => {
     const ids = [...app.querySelectorAll('.drtopics input:checked')].map(x => x.value);
     if (!ids.length) { $('drmsg').textContent = 'בחרו לפחות תחום אחד 🙂'; return; }
@@ -17233,7 +17320,24 @@ const KF_FIELDS = { name: 'entry.233330149', klass: 'entry.553468133', minutes: 
 const KF_CLASS_HASH = '97949116';
 let kf = (() => { try { return JSON.parse(localStorage.getItem(KF_KEY)) || {}; } catch (e) { return {}; } })();
 kf.facts = kf.facts || {};
-const kfSave = () => { try { localStorage.setItem(KF_KEY, JSON.stringify(kf)); } catch (e) { /* לא חובה */ } };
+// אותו מנוע לשני אימונים: כפל (kfOp = 'mul') וחילוק (kfOp = 'div') – כל אחד נשמר בנפרד
+let kfOp = 'mul';
+const KD_KEY = 'math-hiluk-v1';
+const kfStoreKey = op => (op || kfOp) === 'div' ? KD_KEY : KF_KEY;
+const kfSave = () => { try { localStorage.setItem(kfStoreKey(), JSON.stringify(kf)); } catch (e) { /* לא חובה */ } };
+function kfLoad(op) {
+  kfOp = op;
+  try { kf = JSON.parse(localStorage.getItem(kfStoreKey())) || {}; } catch (e) { kf = {}; }
+  kf.facts = kf.facts || {};
+  // מי שכבר התחבר לכיתה באימון הכפל – מחובר גם באימון החילוק
+  if (op === 'div' && !kf.report) { try { const m = JSON.parse(localStorage.getItem(KF_KEY)) || {}; if (m.report) Object.assign(kf, { name: m.name, klass: m.klass, report: true }); } catch (e) { /* לא חובה */ } }
+}
+function kfPeek(op) {
+  let d = {}; try { d = JSON.parse(localStorage.getItem(kfStoreKey(op))) || {}; } catch (e) { /* לא חובה */ }
+  const fc = d.facts || {};
+  return { placed: !!d.placed, m: KF_FACTS.filter(([a, b]) => (fc[kfId(a, b)] || {}).box >= 3).length };
+}
+const kfTip = (a, b) => kfOp === 'div' ? `${a * b} : ${a} = ${b} וגם ${a * b} : ${b} = ${a}, כי ${a} × ${b} = ${a * b}.<br>איך זוכרים את ${a} × ${b}? ${kfStrategy(a, b)}` : kfStrategy(a, b);
 const kfToday = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 864e5);
 const kfId = (a, b) => `${Math.min(a, b)}x${Math.max(a, b)}`;
 const kfFact = (a, b) => (kf.facts[kfId(a, b)] = kf.facts[kfId(a, b)] || { box: 0, due: 0, right: 0, wrong: 0 });
@@ -17287,13 +17391,15 @@ function kfStrategy(x, y) {
   return `מתחילים מ-× 5: ${b} × 5 = ${b * 5}, ועוד ${a - 5} פעמים ${b} = ${p}`;
 }
 
-function kfHome() {
-  navPush('kf');
+function kfHome(op) {
+  if (op === 'mul' || op === 'div') kfLoad(op); // (בלחיצה על כפתור מגיע אירוע – לא סוג אימון)
+  const D = kfOp === 'div';
+  navPush(D ? 'kfd' : 'kf');
   stopSimTimer(); state = null; lessonView = null; stopSpeak();
   const m = kfMastered(), placed = !!kf.placed;
   const streak = kf.lastDay >= kfToday() - 1 ? kf.streak || 0 : 0;
   app.innerHTML = `
-    <div class="topbar"><span class="title">אימון לוח הכפל</span><span></span><span><button class="ghost navhome" id="kfBack">${ic('home')} לדף הבית</button></span></div>
+    <div class="topbar"><span class="title">${D ? 'אימון חילוק' : 'אימון לוח הכפל'}</span><span></span><span><button class="ghost navhome" id="kfBack">${ic('home')} לדף הבית</button></span></div>
     <div class="card center">
       <div class="kf-stats">
         <div><b>${m}</b><span>מתוך 36 עובדות בשליטה</span></div>
@@ -17303,12 +17409,12 @@ function kfHome() {
       <div class="actions" style="justify-content:center">
         ${placed ? `<button id="kfDaily">⚡ אימון יומי (כ-5 דקות)</button>` : `<button id="kfPlace">🧭 בדיקת פתיחה (כ-3 דקות)</button>`}
         <button class="secondary" id="kfChal">🏆 אתגר דקה</button>
-        <button class="secondary" id="kfLearn">📚 טריקים ללוח הכפל</button>
+        <button class="secondary" id="kfLearn">📚 ${D ? 'כפל וחילוק – הסבר' : 'טריקים ללוח הכפל'}</button>
       </div>
       <p class="muted small">${placed ? 'בכל יום: כמה עובדות חדשות, וחזרה על מה שקשה לך. עובדה הופכת לירוקה כשעונים עליה נכון ומהר בשני ימים שונים.' : 'בבדיקת הפתיחה עוברים פעם אחת על כל 36 העובדות. ענו מהר ככל שאפשר – זה לא מבחן, זה כדי לדעת מאיפה להתחיל.'}</p>
     </div>
     <h2>🗺️ המפה שלי</h2>
-    <div class="card">${kfMapHTML()}
+    <div class="card">${D ? '<p class="small muted">כל משבצת היא "משפחה": למשל 7 × 8 = 56, ולכן 56 : 7 = 8 וגם 56 : 8 = 7. משבצת נצבעת כשעונים נכון ומהר על החילוק.</p>' : ''}${kfMapHTML()}
       <div class="kf-legend"><span class="kf-c3">שולט</span><span class="kf-c1">בתהליך</span><span class="kf-c0">עוד לא</span></div>
     </div>
     <div class="card kf-class">
@@ -17372,6 +17478,12 @@ function kfStart(mode) {
 
 function kfText(q) {
   const [x, y] = Math.random() < 0.5 ? [q.a, q.b] : [q.b, q.a], p = q.a * q.b;
+  if (kfOp === 'div') {
+    if (q.v === 'div') return { t: `${p} : ${BOX} = ${x}`, ans: y };
+    if (q.v === 'miss') return { t: `${BOX} : ${x} = ${y}`, ans: p };
+    if (q.v === 'tens') return { t: `${p * 10} : ${x} =`, ans: y * 10 };
+    return { t: `${p} : ${x} =`, ans: y };
+  }
   if (q.v === 'div') return { t: `${p} : ${x} =`, ans: y };
   if (q.v === 'miss') return { t: `${BOX} × ${x} = ${p}`, ans: y };
   if (q.v === 'tens') return { t: `${x * 10} × ${y} =`, ans: p * 10 };
@@ -17384,12 +17496,12 @@ function kfQ() {
   if (!q.shown) q.shown = kfText(q);
   const total = kz.mode === 'chal' ? '' : `${kz.i + 1} / ${kz.queue.length}`;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${kz.mode === 'place' ? '🧭 בדיקת פתיחה' : kz.mode === 'daily' ? '⚡ אימון יומי' : '🏆 אתגר דקה'}</span>
+    <div class="topbar"><span class="title">${kz.mode === 'place' ? '🧭 בדיקת פתיחה' : kz.mode === 'daily' ? '⚡ אימון יומי' : '🏆 אתגר דקה'}${kfOp === 'div' ? ' – חילוק' : ''}</span>
       <span>${kz.mode === 'chal' ? `<b id="kfClock">⏱️ ${Math.ceil((kz.end - Date.now()) / 1000)}</b> · נכון: <b>${kz.right}</b>` : total}</span>
       <span><button class="ghost navhome" id="kfQuit">→ חזרה לאימון</button></span></div>
     ${kz.mode === 'chal' ? '' : `<div class="progress"><div style="width:${kz.i / kz.queue.length * 100}%"></div></div>`}
     <div class="card center kf-q">
-      ${q.intro ? `<div class="kf-new">✨ עובדה חדשה<br><span class="small">${kfStrategy(q.a, q.b)}</span></div>` : ''}
+      ${q.intro ? `<div class="kf-new">✨ עובדה חדשה<br><span class="small">${kfTip(q.a, q.b)}</span></div>` : ''}
       <div class="kf-ex">${M(q.shown.t.replace(BOX, '<span class="box">?</span>'))}</div>
       <input id="kfAns" class="ans kf-in" inputmode="numeric" autocomplete="off" aria-label="תשובה">
       <div class="actions" style="justify-content:center"><button id="kfGo">✓</button></div>
@@ -17414,11 +17526,12 @@ function kfStopClock() { if (kz && kz.clock) { clearInterval(kz.clock); kz.clock
 function kfAnswer(raw) {
   if (!raw.trim()) return;
   const q = kz.queue[kz.i], ok = Number(raw.trim()) === q.shown.ans, ms = Date.now() - q.t0;
-  const fast = ms <= (q.v === 'mul' ? 5000 : 7000);
+  const extra = kfOp === 'div' ? 1500 : 0; // חילוק לוקח קצת יותר זמן
+  const fast = ms <= (q.v === 'mul' ? 5000 : 7000) + extra;
   const f = kfFact(q.a, q.b), today = kfToday();
-  if (ok) kz.right++; else { kz.wrong++; const t = `${Math.min(q.a, q.b)}×${Math.max(q.a, q.b)}`; if (!kz.mistakes.includes(t)) kz.mistakes.push(t); }
+  if (ok) kz.right++; else { kz.wrong++; const t = kfOp === 'div' ? `${q.a * q.b}:${Math.min(q.a, q.b)}` : `${Math.min(q.a, q.b)}×${Math.max(q.a, q.b)}`; if (!kz.mistakes.includes(t)) kz.mistakes.push(t); }
   if (kz.mode === 'place') {
-    if (ok && ms <= 4000) { f.box = 3; f.lastUp = today; f.due = today + KF_INTERVAL[3]; }
+    if (ok && ms <= 4000 + extra) { f.box = 3; f.lastUp = today; f.due = today + KF_INTERVAL[3]; }
     else if (ok) { f.box = 1; f.due = today; }
     else f.box = 0;
   } else if (kz.mode === 'daily') {
@@ -17449,7 +17562,7 @@ function kfAnswer(raw) {
   }
   fb.className = 'fb show bad';
   if (kz.mode === 'chal') { fb.innerHTML = `${M(full)}`; kz.i++; setTimeout(kfQ, 900); return; }
-  fb.innerHTML = `<div class="head">התשובה: ${M(full)}</div>💡 ${kfStrategy(q.a, q.b)}<div class="actions" style="justify-content:center"><button id="kfNext">הבנתי, ממשיכים ←</button></div>`;
+  fb.innerHTML = `<div class="head">התשובה: ${M(full)}</div>💡 ${kfTip(q.a, q.b)}<div class="actions" style="justify-content:center"><button id="kfNext">הבנתי, ממשיכים ←</button></div>`;
   $('kfAns').disabled = true; $('kfGo').classList.add('hidden');
   $('kfNext').focus();
   $('kfNext').onclick = () => { kz.i++; kfQ(); };
@@ -17472,8 +17585,8 @@ function kfDone() {
   const sent = kf.report;
   kfReport({
     minutes: Math.max(1, Math.round((Date.now() - kz.start) / 60000)),
-    mastered: `${m}/36`,
-    score: kz.mode === 'chal' ? `אתגר דקה: ${kz.right} נכון` : `${kz.mode === 'place' ? 'בדיקת פתיחה' : 'אימון יומי'}: ${kz.right}/${kz.right + kz.wrong}`,
+    mastered: `${m}/36${kfOp === 'div' ? ' (חילוק)' : ''}`,
+    score: (kfOp === 'div' ? 'חילוק – ' : '') + (kz.mode === 'chal' ? `אתגר דקה: ${kz.right} נכון` : `${kz.mode === 'place' ? 'בדיקת פתיחה' : 'אימון יומי'}: ${kz.right}/${kz.right + kz.wrong}`),
     mistakes: kz.mistakes.join(', ')
   });
   app.innerHTML = `
@@ -17494,14 +17607,18 @@ function kfDone() {
 }
 
 /* ---------- להדפסה בכיתה: אתגר דקה ובינגו כפל ---------- */
-function kfPrintChallenge(versions, key) {
+function kfPrintChallenge(versions, key, op) {
+  op = op || 'mul';
+  const isD = i => op === 'div' || (op === 'mix' && i % 2 === 1);
+  const ex = ([a, b], i, ans) => isD(i) ? `${a * b} : ${a} =${ans ? ' ' + b : ''}` : `${a} × ${b} =${ans ? ' ' + a * b : ''}`;
+  const nm = op === 'div' ? 'חילוק' : op === 'mix' ? 'כפל וחילוק' : 'לוח הכפל';
   const out = [];
   for (let v = 0; v < versions; v++) {
     const qs = Array.from({ length: 48 }, () => { const [a, b] = pick(KF_FACTS); return Math.random() < 0.5 ? [a, b] : [b, a]; });
-    out.push(`<section class="ws-page"><div class="wshead"><h1>⚡ אתגר דקה – לוח הכפל${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h1>
+    out.push(`<section class="ws-page"><div class="wshead"><h1>⚡ אתגר דקה – ${nm}${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h1>
       <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>תאריך: <span class="wsline"></span></span><span>נכון: <span class="wsline"></span></span></div></div>
-      <div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} =`)}<span class="wsline"></span></div>`).join('')}</div></section>`);
-    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – אתגר דקה${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h2><div class="kfp-grid">${qs.map(([a, b]) => `<div>${M(`${a} × ${b} = ${a * b}`)}</div>`).join('')}</div></section>`);
+      <div class="kfp-grid">${qs.map((q, i) => `<div>${M(ex(q, i))}<span class="wsline"></span></div>`).join('')}</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 תשובות – אתגר דקה${versions > 1 ? ' – נוסח ' + 'אבג'[v] : ''}</h2><div class="kfp-grid">${qs.map((q, i) => `<div>${M(ex(q, i, 1))}</div>`).join('')}</div></section>`);
   }
   return out.join('');
 }
@@ -20270,15 +20387,15 @@ function askName(done, tch) {
   const logVisit = () => { if (first && !URLP.has('print')) track('כניסה לאתר', GRADE_NAME[GRADE] || ''); };
   let noName = false;
   try { noName = !!sessionStorage.getItem('math-noname'); } catch (e) { /* לא חובה */ }
-  if (!roleOk() && !URLP.has('kefel')) { setTimeout(() => askRole(logVisit), 300); return; }
+  if (!roleOk() && !URLP.has('kefel') && !URLP.has('hiluk')) { setTimeout(() => askRole(logVisit), 300); return; }
   if (!first) return;
   const noFull = !store.name || store.name.trim().split(/\s+/).length < 2;
   if (staffOn() && !irisOk() && noFull) setTimeout(() => askName(logVisit, true), 300); // מורה עם קוד המורות – שם חובה, פעם אחת
-  else if (!teacherCred() && !noName && noFull && !URLP.has('kefel')) setTimeout(() => askName(logVisit), 300); else logVisit();
+  else if (!teacherCred() && !noName && noFull && !URLP.has('kefel') && !URLP.has('hiluk')) setTimeout(() => askName(logVisit), 300); else logVisit();
 })();
 if (teacherCred()) document.documentElement.classList.add('tch');
 if (URLP.has('lp') && lpDec(URLP.get('lp') || '')) { try { sessionStorage.setItem(LP_PEND, URLP.get('lp')); } catch (e) { const x = lpDec(URLP.get('lp')); if (x && teacherOn()) lp = x; } }
-if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome(); else if (URLP.has('dlab') && GRADE >= 5) dlHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('lp') && lpPending()) teacherGate(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
+if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome('mul'); else if (URLP.has('hiluk') && GRADE >= 3) kfHome('div'); else if (URLP.has('dlab') && GRADE >= 5) dlHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('lp') && lpPending()) teacherGate(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
 </html>
