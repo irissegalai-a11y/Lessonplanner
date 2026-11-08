@@ -168,7 +168,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <div class="btns"><button class="btn" id="bTry">✏️ נסו לצייר את הצורה שלי</button></div>
 </section>
 
-<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ג</footer>
+<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ד</footer>
 </main>
 
 <script>
@@ -274,6 +274,21 @@ function analyze(g) {
   const conn = connected(g);
   return { deg, odd, conn, possible: conn && g.edges.length > 0 && odd.length <= 2 };
 }
+function eulerPath(g) {
+  const a = analyze(g); if (!a.possible) return null;
+  const start = a.odd.length ? a.odd[0] : a.deg.findIndex(d => d > 0);
+  const used = new Set(), stack = [[start, -1]], out = [];
+  while (stack.length) {
+    const [u] = stack[stack.length - 1];
+    const ei = g.edges.findIndex((e, i) => !used.has(i) && (e[0] === u || e[1] === u));
+    if (ei < 0) out.push(stack.pop());
+    else { used.add(ei); const e = g.edges[ei]; stack.push([e[0] === u ? e[1] : e[0], ei]); }
+  }
+  out.reverse();
+  return { nodes: out.map(x => x[0]), edges: out.slice(1).map(x => x[1]) };
+}
+let solTimer = null;
+function stopSol() { if (solTimer) { clearInterval(solTimer); solTimer = null; } P.anim = false; }
 const nm = i => HE[i] || String(i + 1);
 const list = arr => arr.map(nm).map(x => `<b>${x}</b>`).join(', ');
 
@@ -357,6 +372,7 @@ const board = $('board');
 
 function maxStars() { return P.a.possible ? 3 : 2; }
 function loadLevel(i, custom, rand) {
+  stopSol(); P.sol = false;
   P.li = i; P.custom = custom || null; P.rand = rand || null;
   P.g = custom || rand || LEVELS[i];
   P.a = analyze(P.g);
@@ -408,7 +424,7 @@ function render() {
   let instr = '', act = '', fb = '', cnt = '';
   if (ph === 'predict') {
     instr = `<b>שלב 1 – חושבים מראש (בלי לצייר!)</b><br>האם אפשר לצייר את הצורה במשיכת קולמוס אחת?<br><small>💡 טיפ: הקישו על נקודה כדי לספור כמה קווים יוצאים ממנה.</small>`;
-    act = `<button class="btn yes" data-act="yes">✔ אפשר</button><button class="btn no" data-act="no">✘ אי אפשר</button>`;
+    act = `<button class="btn yes" data-act="yes">✔ אפשר</button><button class="btn no" data-act="no">✘ אי אפשר</button><button class="btn sec" data-act="solve">💡 פתרון</button>`;
     const z = [...P.shown];
     if (z.length) cnt = `ספרתם ${z.length} מתוך ${g.nodes.length} נקודות` + (z.length === g.nodes.length ? ` · אי־זוגיות: ${z.filter(i => a.deg[i] % 2).length}` : '');
   } else if (ph === 'start') {
@@ -416,7 +432,7 @@ function render() {
     act = `<button class="btn sec" data-act="back">↩ חזרה</button>`;
   } else if (ph === 'reveal') {
     const predOk = P.pred === a.possible;
-    let head = predOk ? `✅ <b>נכון!</b> ${a.possible ? 'אפשר לצייר את הצורה בקו אחד.' : 'אי אפשר לצייר את הצורה בקו אחד.'}`
+    let head = P.sol ? `💡 <b>הפתרון: אי אפשר לצייר את הצורה הזו בקו אחד.</b>` : predOk ? `✅ <b>נכון!</b> ${a.possible ? 'אפשר לצייר את הצורה בקו אחד.' : 'אי אפשר לצייר את הצורה בקו אחד.'}`
       : `❌ <b>לא בדיוק.</b> ${a.possible ? 'דווקא אפשר לצייר אותה בקו אחד!' : 'את הצורה הזו אי אפשר לצייר בקו אחד.'}`;
     let startTxt = '';
     if (a.possible && P.start != null) {
@@ -424,7 +440,7 @@ function render() {
         : `<br>⚠️ בנקודה <b>${nm(P.start)}</b> יש ${a.deg[P.start]} קווים (זוגי). כשיש 2 נקודות אי־זוגיות, ההתחלה חייבת להיות באחת מהן. נסו להתחיל ממנה – ותראו מה קורה...`;
     }
     instr = `<b>שלב 2 – בודקים:</b> ליד כל נקודה מופיע מספר הקווים שלה. <span class="odd">כתום = אי־זוגי</span>, <span class="even">ירוק = זוגי</span>.`;
-    fb = `<div class="msg ${predOk ? 'good' : 'bad'}">${head}${startTxt}<br><br>${explain()}</div>`;
+    fb = `<div class="msg ${P.sol ? '' : predOk ? 'good' : 'bad'}">${head}${startTxt}<br><br>${explain()}</div>`;
     if (!a.possible && !P.custom) {
       fb += `<div class="msg"><b>שאלת בונוס:</b> למה אי אפשר?<div class="why" id="why">
         ${[['many', 'כי יש יותר מדי קווים'], ['odd', 'כי יש יותר משתי נקודות שמספר הקווים שלהן אי־זוגי'], ['big', 'כי הצורה מסובכת מדי']].map(([k, t]) =>
@@ -438,10 +454,11 @@ function render() {
     const left = g.edges.length - P.order.length;
     const cur = P.path[P.path.length - 1];
     if (ph === 'won') {
-      instr = `<b>🎉 כל הכבוד! ציירתם את כל ${g.edges.length} הקווים בקו אחד!</b>`;
-      fb = `<div class="msg good">התחלתם בנקודה <b>${nm(P.path[0])}</b> וסיימתם בנקודה <b>${nm(cur)}</b>. ` +
-        (P.path[0] === cur ? 'חזרתם לנקודת ההתחלה – כמו שקורה תמיד כשכל הנקודות זוגיות.' : 'שימו לב: ההתחלה והסוף הן בדיוק שתי הנקודות האי־זוגיות!') + `</div>` + (P.custom ? '' : starsLine());
-      act = (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '') + `<button class="btn sec" data-act="reset">🔁 שוב</button>` + (P.custom ? '' : nextBtn());
+      instr = P.sol ? `<b>💡 זה פתרון אפשרי</b> – המספרים על הקווים מראים את הסדר.` : `<b>🎉 כל הכבוד! ציירתם את כל ${g.edges.length} הקווים בקו אחד!</b>`;
+      fb = `<div class="msg good">${P.sol ? 'התחלנו' : 'התחלתם'} בנקודה <b>${nm(P.path[0])}</b> ו${P.sol ? 'סיימנו' : 'סיימתם'} בנקודה <b>${nm(cur)}</b>. ` +
+        (P.path[0] === cur ? 'חזרנו לנקודת ההתחלה – כמו שקורה תמיד כשכל הנקודות זוגיות.' : 'שימו לב: ההתחלה והסוף הן בדיוק שתי הנקודות האי־זוגיות!') + `</div>` + (P.custom || P.sol ? '' : starsLine());
+      if (P.sol) { act = `<button class="btn" data-act="reset">✏️ עכשיו נסו בעצמכם</button>` + (P.custom ? '' : nextBtn()); }
+      else act = (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '') + `<button class="btn sec" data-act="reset">🔁 שוב</button>` + (P.custom ? '' : nextBtn());
     } else if (!P.path.length) {
       instr = P.quick ? `<b>חשבו מראש:</b> אפשר לצייר את הצורה בקו אחד? אם כן – הקישו על נקודת ההתחלה וציירו (הקשה או גרירה). אם לא – לחצו "אי אפשר".`
         : `<b>שלב 3 – מציירים:</b> הקישו על נקודת ההתחלה. אחר כך הקישו על הנקודות לפי הסדר (או גררו את האצבע).`;
@@ -462,6 +479,7 @@ function render() {
       cnt = `קווים: ${P.order.length} / ${g.edges.length}`;
       act = `<button class="btn sec" data-act="undo" ${P.order.length ? '' : 'disabled'}>↶ צעד אחורה</button><button class="btn sec" data-act="reset">🔁 התחלה מחדש</button>` +
         (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '') +
+        `<button class="btn sec" data-act="solve">💡 פתרון</button>` +
         (P.quick ? `<button class="btn sec" data-act="hint" ${P.hint ? 'disabled' : ''}>🔍 רמז: מספרי הקווים</button><button class="btn no" data-act="nope" ${P.declared ? 'disabled' : ''}>✘ אי אפשר!</button>` : '');
       if (P.quick && P.badDecl && !fb) fb = `<div class="msg bad">❌ <b>דווקא אפשר!</b> ${explain()}</div>`;
     }
@@ -491,11 +509,24 @@ $('tab-play').addEventListener('click', e => {
   else if (act === 'no') { P.pred = false; P.s1 = a.possible ? 0 : 1; P.phase = 'reveal'; finishStars(); }
   else if (act === 'back') { P.phase = 'predict'; P.start = null; }
   else if (act === 'draw') {
-    P.phase = 'draw'; P.order = [];
+    P.phase = 'draw'; P.order = []; P.sol = false;
     P.path = a.possible && P.start != null ? [P.start] : [];
   }
+  else if (P.anim && !['reset', 'next', 'rand'].includes(act)) return;
   else if (act === 'undo') { if (P.order.length) { P.order.pop(); P.path.pop(); } }
-  else if (act === 'reset') { P.phase = 'draw'; P.order = []; P.path = []; }
+  else if (act === 'reset') { stopSol(); P.sol = false; P.phase = 'draw'; P.order = []; P.path = []; }
+  else if (act === 'solve') {
+    stopSol(); P.sol = true; P.hint = true; P.declared = true;
+    const sol = eulerPath(P.g);
+    if (!sol) { P.pred = false; P.phase = 'reveal'; }
+    else {
+      P.phase = 'draw'; P.order = []; P.path = [sol.nodes[0]]; P.anim = true; let k = 0;
+      solTimer = setInterval(() => {
+        if (k >= sol.edges.length) { stopSol(); P.phase = 'won'; render(); return; }
+        P.order.push(sol.edges[k]); P.path.push(sol.nodes[k + 1]); k++; render();
+      }, 450);
+    }
+  }
   else if (act === 'hint') { P.hint = true; }
   else if (act === 'nope') {
     P.declared = true;
@@ -520,6 +551,7 @@ function tryMove(n) {
 }
 let dragging = false;
 board.addEventListener('pointerdown', e => {
+  if (P.anim || (P.sol && P.phase === 'draw')) return;
   const n = hitNode(P.g, svgPoint(board, e)); if (n < 0) return;
   const ph = P.phase;
   if (ph === 'predict') {
