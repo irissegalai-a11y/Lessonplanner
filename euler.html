@@ -168,7 +168,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <div class="btns"><button class="btn" id="bTry">✏️ נסו לצייר את הצורה שלי</button></div>
 </section>
 
-<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ב</footer>
+<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ג</footer>
 </main>
 
 <script>
@@ -360,7 +360,8 @@ function loadLevel(i, custom, rand) {
   P.li = i; P.custom = custom || null; P.rand = rand || null;
   P.g = custom || rand || LEVELS[i];
   P.a = analyze(P.g);
-  Object.assign(P, { phase: custom ? 'draw' : 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, popId: -1, tried: false, counted: 0 });
+  const quick = !custom && (!!rand || i >= 4);
+  Object.assign(P, { quick, hint: false, declared: false, badDecl: false, phase: custom || quick ? 'draw' : 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, popId: -1, tried: false, counted: 0 });
   render();
 }
 function chips() {
@@ -377,6 +378,7 @@ function stepsHtml() {
   const cur = map[ph];
   const names = ['① חושבים מראש', '② בודקים', '③ מציירים'];
   if (P.custom) return `<span class="step on">③ מציירים</span>`;
+  if (P.quick) return `<span class="step on">⚡ חושבים ומציירים</span>`;
   return names.map((n, k) => `<span class="step ${k === cur ? 'on' : k < cur ? 'done' : ''}">${n}</span>`).join('');
 }
 function explain() {
@@ -395,7 +397,7 @@ function render() {
   const g = P.g, a = P.a, ph = P.phase;
   $('lvTitle').textContent = P.custom ? 'הצורה שבניתם' : P.rand ? '🎲 צורה אקראית' : `שלב ${P.li + 1}: ${g.name}`;
   $('steps').innerHTML = stepsHtml();
-  const showAll = ph === 'reveal' || ph === 'draw' || ph === 'won';
+  const showAll = P.quick ? (P.hint || P.declared || ph === 'won' || ph === 'reveal') : (ph === 'reveal' || ph === 'draw' || ph === 'won');
   const used = new Set(P.order);
   draw(board, g, {
     shown: P.shown, showAll: showAll || !!P.custom, popId: P.popId,
@@ -441,7 +443,8 @@ function render() {
         (P.path[0] === cur ? 'חזרתם לנקודת ההתחלה – כמו שקורה תמיד כשכל הנקודות זוגיות.' : 'שימו לב: ההתחלה והסוף הן בדיוק שתי הנקודות האי־זוגיות!') + `</div>` + (P.custom ? '' : starsLine());
       act = (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '') + `<button class="btn sec" data-act="reset">🔁 שוב</button>` + (P.custom ? '' : nextBtn());
     } else if (!P.path.length) {
-      instr = `<b>שלב 3 – מציירים:</b> הקישו על נקודת ההתחלה. אחר כך הקישו על הנקודות לפי הסדר (או גררו את האצבע).`;
+      instr = P.quick ? `<b>חשבו מראש:</b> אפשר לצייר את הצורה בקו אחד? אם כן – הקישו על נקודת ההתחלה וציירו (הקשה או גרירה). אם לא – לחצו "אי אפשר".`
+        : `<b>שלב 3 – מציירים:</b> הקישו על נקודת ההתחלה. אחר כך הקישו על הנקודות לפי הסדר (או גררו את האצבע).`;
       if (P.custom) instr += `<br>${explain()}`;
     } else {
       const stuck = !g.edges.some((e, i) => !used.has(i) && (e[0] === cur || e[1] === cur));
@@ -458,7 +461,9 @@ function render() {
     if (ph === 'draw') {
       cnt = `קווים: ${P.order.length} / ${g.edges.length}`;
       act = `<button class="btn sec" data-act="undo" ${P.order.length ? '' : 'disabled'}>↶ צעד אחורה</button><button class="btn sec" data-act="reset">🔁 התחלה מחדש</button>` +
-        (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '');
+        (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '') +
+        (P.quick ? `<button class="btn sec" data-act="hint" ${P.hint ? 'disabled' : ''}>🔍 רמז: מספרי הקווים</button><button class="btn no" data-act="nope" ${P.declared ? 'disabled' : ''}>✘ אי אפשר!</button>` : '');
+      if (P.quick && P.badDecl && !fb) fb = `<div class="msg bad">❌ <b>דווקא אפשר!</b> ${explain()}</div>`;
     }
   }
   $('instr').innerHTML = instr;
@@ -491,6 +496,12 @@ $('tab-play').addEventListener('click', e => {
   }
   else if (act === 'undo') { if (P.order.length) { P.order.pop(); P.path.pop(); } }
   else if (act === 'reset') { P.phase = 'draw'; P.order = []; P.path = []; }
+  else if (act === 'hint') { P.hint = true; }
+  else if (act === 'nope') {
+    P.declared = true;
+    if (a.possible) { P.badDecl = true; P.hint = true; }
+    else { P.pred = false; P.s1 = 1; P.phase = 'reveal'; finishStars(); }
+  }
   else if (act === 'rand') { loadLevel(P.li, null, randShape()); return; }
   else if (act === 'next') { loadLevel(Math.min(P.li + 1, LEVELS.length - 1)); return; }
   else if (act === 'tobuild') { showTab('build'); return; }
@@ -504,7 +515,7 @@ function tryMove(n) {
   const ei = g.edges.findIndex((e, i) => !used.has(i) && ((e[0] === cur && e[1] === n) || (e[1] === cur && e[0] === n)));
   if (ei < 0) return false;
   P.order.push(ei); P.path.push(n);
-  if (P.order.length === g.edges.length) { P.phase = 'won'; if (P.a.possible) { P.s3 = 1; finishStars(); } }
+  if (P.order.length === g.edges.length) { P.phase = 'won'; if (P.a.possible) { P.s3 = 1; if (P.quick) { P.s1 = P.badDecl ? 0 : 1; P.s2 = P.hint ? 0 : 1; } finishStars(); } }
   return true;
 }
 let dragging = false;
