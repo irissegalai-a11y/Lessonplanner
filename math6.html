@@ -1952,6 +1952,14 @@
   .pl-clue-b, .pl-clue-t { flex-direction: column; line-height: 1; }
   .pl-clue.pl-bad { color: var(--bad); background: var(--bad-bg); border-radius: 8px; }
   .pl-ex { text-align: center; }
+  .dl-arr i.hl { background: #e0a33a; } .dl-arr i.gh { background: transparent; border: 1.5px dashed #9aa6d8; box-sizing: border-box; }
+  .dl-row, .dl-fam { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; margin: 10px 0; }
+  .dl-box { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 12px; border: 2px solid #9aa6d8; border-radius: 14px; background: #f4f7ff; }
+  .dl-f { font-weight: 800; font-size: 1.1rem; }
+  .dl-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 8px 0; }
+  .dl-chips span { background: #fff; border: 1.5px solid #9aa6d8; border-radius: 999px; padding: 3px 10px; font-weight: 700; }
+  .dl-col { flex-direction: column; }
+  .dl-arrow { font-size: 1.8rem; color: #2f4f9a; }
   .kfc-pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; }
   .kfc-pq { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0 10px; border-bottom: 1px solid #ddd; break-inside: avoid; }
   .kfc-pex { font-size: 1.15rem; }
@@ -2022,7 +2030,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -2176,11 +2184,12 @@ function fmt(x) {
 }
 
 // ביטוי מתמטי משמאל לימין בתוך טקסט עברי
-const M = s => `<span class="m">${s}</span>`;
+// dir="ltr" – בנוסף ל-CSS: כך הכיוון נשמר גם בדפדפנים/מצבי תצוגה שמתעלמים מ-direction ב-CSS
+const M = s => `<span class="m" dir="ltr">${s}</span>`;
 // שבר
 const F = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
 // ביטוי שלם ושבר יחד (למשל "6 × 3/7") – עוטף ב-LTR כך שהשלם יעמוד משמאל לשבר ולא יתהפך בהקשר ימין-לשמאל
-const MX = s => `<span class="eqx">${s}</span>`;
+const MX = s => `<span class="eqx" dir="ltr">${s}</span>`;
 const BOX = '<span class="box">?</span>';
 // שלב פתור: התוצאה נכתבת בתוך התרגיל, מימין לסימן = (ולא בנפרד, משמאל לו)
 const stepAns = (p, a) => /=\s*<\/span>\s*$/.test(p) ? p.replace(/=\s*<\/span>\s*$/, `= <b>${fmt(a)}</b></span>`) : `${p} <b class="m">${fmt(a)}</b>`;
@@ -14367,6 +14376,98 @@ function dfTool() {
   };
   round();
 }
+/* ---------- 🧩 נושא לימודי: מעובדה אחת – הרבה עובדות (כיתות ג'–ו') ---------- */
+// מערך נקודות עם הדגשה: hl = שורות מודגשות בסוף (צבע אחר), ghost = שורות "שהורדו" (שקופות)
+const dlArr = (a, b, o = {}) => {
+  const hl = o.hl || 0, gh = o.ghost || 0, rows = a + hl + gh;
+  let h = '';
+  for (let r = 0; r < rows; r++) for (let c = 0; c < b; c++) h += `<i class="${r >= a + hl ? 'gh' : r >= a ? 'hl' : ''}"></i>`;
+  return `<div class="df-arr dl-arr" style="grid-template-columns: repeat(${b}, 11px)" aria-hidden="true">${h}</div>`;
+};
+const dlBox = (fact, arr, cap) => `<div class="dl-box"><div class="dl-f">${M(fact)}</div>${arr}${cap ? `<div class="muted small">${cap}</div>` : ''}</div>`;
+function genDerived() {
+  const G = Math.max(3, Math.min(6, GRADE));
+  const F = dfFacts(G), x = pick(F.all.slice(1));
+  return { type: 'num', text: `יודעים ש-${M(`${F.a} × ${F.b} = ${F.p}`)}. השתמשו בעובדה הזאת: ${M(x.e.replace(/÷/g, ':') + ' =')}`,
+    ans: x.ans, hint: `מה השתנה לעומת ${M(`${F.a} × ${F.b}`)}? (${x.lbl})`, exp: x.how.replace(/÷/g, ':') };
+}
+if (GRADE >= 3) {
+  Object.assign(LESSONS, {
+    dfacts: {
+      id: 'dfacts', name: 'מעובדה אחת – הרבה עובדות', icon: '🧩', color: '#2f4f9a', topic: { 3: 'muldiv', 4: 'ops', 5: 'ops', 6: 'ops' },
+      desc: 'יודעים עובדת כפל אחת? מגלים ממנה עוד: חילוף, הכפלה וחציה, קבוצה יותר/פחות, חילוק, פי 10',
+      practice: Array.from({ length: 8 }, () => genDerived),
+      cards: [
+        {
+          title: 'עובדה אחת פותחת הרבה דלתות 🚪',
+          html: `<p>לא צריך לזכור כל תרגיל כפל לבד! מי שיודע <b>עובדה אחת</b> – יכול לגלות ממנה עוד הרבה עובדות, בלי לחשב מההתחלה.</p>
+            <div class="dl-row">${dlBox('6 × 4 = 24', dlArr(6, 4), '6 שורות, 4 בכל שורה')}</div>
+            <p>מהעובדה ${M('6 × 4 = 24')} אפשר לדעת מיד:</p>
+            <div class="dl-chips">${['4 × 6 = 24', '12 × 4 = 48', '3 × 4 = 12', '7 × 4 = 28', '5 × 4 = 20', '24 : 6 = 4', '60 × 4 = 240', '3 × 8 = 24'].map(t => `<span>${M(t)}</span>`).join('')}</div>
+            <div class="rule">💡 השאלה הקסומה: <b>"מה השתנה לעומת העובדה שאני יודע?"</b> – פי 2? חצי? עוד קבוצה? פי 10? בכרטיסיות הבאות נלמד כל דרך.</div>`
+        },
+        {
+          title: 'חילוף – מסובבים את המערך 🔄',
+          html: `<p>אם מסובבים את המערך, מספר הנקודות לא משתנה. ${M('6 × 4')} ו-${M('4 × 6')} הם אותו מספר!</p>
+            <div class="dl-row">${dlBox('6 × 4 = 24', dlArr(6, 4))}${dlBox('4 × 6 = 24', dlArr(4, 6))}</div>
+            <div class="rule">💡 <b>חילוף:</b> אפשר להחליף את סדר הגורמים – המכפלה לא משתנה. כך חוסכים חצי מלוח הכפל!</div>`,
+          try: { type: 'num', q: `יודעים ש-${M('7 × 3 = 21')}. כמה זה ${M('3 × 7')}?`, ans: 21, hint: 'מחליפים את הסדר – המכפלה לא משתנה.', exp: `${M('3 × 7 = 7 × 3 = 21')}` }
+        },
+        {
+          title: 'הכפלה וחציה – פי 2 וחצי ✌️',
+          html: `<p>אם אחד הגורמים גדל <b>פי 2</b> – גם המכפלה גדלה פי 2. אם הוא קטן <b>לחצי</b> – גם המכפלה חצי.</p>
+            <div class="dl-row">${dlBox('3 × 4 = 12', dlArr(3, 4), 'חצי')}${dlBox('6 × 4 = 24', dlArr(6, 4), 'העובדה שיודעים')}${dlBox('12 × 4 = 48', dlArr(6, 4, { hl: 6 }), 'פי 2')}</div>
+            <div class="rule">💡 ${M('12 × 4')}: ‏12 זה פי 2 מ-6, אז התוצאה פי 2 מ-24 – כלומר <b>48</b>.<br>💡 ${M('3 × 4')}: ‏3 זה חצי מ-6, אז התוצאה חצי מ-24 – כלומר <b>12</b>.</div>`,
+          try: { type: 'num', q: `יודעים ש-${M('8 × 3 = 24')}. כמה זה ${M('8 × 6')}?`, ans: 48, hint: '6 זה פי 2 מ-3. מה קורה למכפלה?', exp: `6 זה פי 2 מ-3, אז ${M('24 × 2 = 48')}.`, traps: [{ v: 27, m: 'הוספתם 3. אבל 6 זה <b>פי 2</b> מ-3 – אז המכפלה פי 2.' }] }
+        },
+        {
+          title: 'עוד קבוצה, קבוצה פחות ➕➖',
+          html: `<p>${M('7 × 4')} זה <b>7 קבוצות</b> של 4. אם יודעים ${M('6 × 4 = 24')} – צריך רק <b>עוד קבוצה אחת</b> של 4!</p>
+            <div class="dl-row">${dlBox('7 × 4 = 24 + 4 = 28', dlArr(6, 4, { hl: 1 }), 'עוד שורה אחת')}${dlBox('5 × 4 = 24 − 4 = 20', dlArr(5, 4, { ghost: 1 }), 'שורה אחת פחות')}</div>
+            <div class="rule">💡 <b>עוד קבוצה:</b> מוסיפים את גודל הקבוצה (לא 1!). <b>קבוצה פחות:</b> מורידים את גודל הקבוצה.</div>`,
+          try: { type: 'num', q: `יודעים ש-${M('5 × 8 = 40')}. כמה זה ${M('6 × 8')}?`, ans: 48, hint: 'עוד קבוצה אחת של 8.', exp: `${M('40 + 8 = 48')}`, traps: [{ v: 41, m: 'הוספתם 1. מוסיפים <b>קבוצה שלמה</b> – 8.' }] }
+        },
+        {
+          title: 'מכפל לחילוק – משפחת עובדות 👨‍👩‍👧',
+          html: `<p>כל עובדת כפל היא חלק מ<b>משפחה</b> של 4 עובדות: שתי עובדות כפל ושתי עובדות חילוק.</p>
+            <div class="dl-fam">${dlBox('6 × 4 = 24', dlArr(6, 4))}<div class="dl-chips dl-col">${['6 × 4 = 24', '4 × 6 = 24', '24 : 6 = 4', '24 : 4 = 6'].map(t => `<span>${M(t)}</span>`).join('')}</div></div>
+            <div class="rule">💡 ${M('24 : 6')} שואל: <b>6 כפול מה זה 24?</b> מחלקים 24 נקודות ל-6 שורות – בכל שורה 4.</div>`,
+          try: { type: 'num', q: `יודעים ש-${M('9 × 7 = 63')}. כמה זה ${M('63 : 9')}?`, ans: 7, hint: '9 כפול מה זה 63?', exp: `${M('63 : 9 = 7')}, כי ${M('9 × 7 = 63')}.` }
+        },
+        {
+          title: 'פי 10 ופי 100 🔟',
+          html: `<p>${M('60 × 4')} זה <b>60 קבוצות</b> של 4 – פי 10 מ-${M('6 × 4')}. אז גם התוצאה פי 10!</p>
+            <div class="dl-chips">${['6 × 4 = 24', '60 × 4 = 240', '6 × 40 = 240', ...(GRADE >= 4 ? ['600 × 4 = 2,400', '60 × 40 = 2,400'] : []), '240 : 6 = 40'].map(t => `<span>${M(t)}</span>`).join('')}</div>
+            <div class="rule">💡 גורם אחד פי 10 → המכפלה פי 10 (מוסיפים אפס).${GRADE >= 4 ? ' שני הגורמים פי 10 → המכפלה פי 100 (שני אפסים).' : ''}${GRADE >= 5 ? '<br>💡 ובכיוון ההפוך: ' + M('0.6 × 4 = 2.4') + ' – גורם חלקי 10, המכפלה חלקי 10.' : ''}</div>`,
+          try: { type: 'num', q: `יודעים ש-${M('7 × 8 = 56')}. כמה זה ${M('70 × 8')}?`, ans: 560, hint: '70 זה פי 10 מ-7.', exp: `${M('56 × 10 = 560')}`, traps: [{ v: 5600, m: 'רק גורם אחד גדל פי 10 – אז מוסיפים <b>אפס אחד</b>.' }] }
+        },
+        {
+          title: 'חצי מכאן, כפול משם – המכפלה לא משתנה ⚖️',
+          html: `<p>מה קורה אם גורם אחד קטן לחצי, והשני גדל פי 2? חותכים את המערך לשניים ומסדרים מחדש:</p>
+            <div class="dl-row">${dlBox('6 × 4 = 24', dlArr(6, 4))}<div class="dl-arrow">←</div>${dlBox('3 × 8 = 24', dlArr(3, 8))}</div>
+            <div class="rule">💡 חצי מ-6 ופי 2 מ-4: ${M('6 × 4 = 3 × 8 = 24')}. זה עוזר מאוד: ${M('5 × 16 = 10 × 8 = 80')}!</div>`,
+          try: { type: 'num', q: `${M('5 × 14')} = ${M('10 × ?')}. מה המספר החסר?`, ans: 7, hint: '5 גדל פי 2 והפך ל-10. מה צריך לקרות ל-14?', exp: `חצי מ-14 הוא 7: ${M('5 × 14 = 10 × 7 = 70')}` }
+        },
+        {
+          title: 'כללים לזכור 📌',
+          html: `<ul class="recap">
+              <li>🔄 <b>חילוף:</b> ${M('6 × 4 = 4 × 6')}</li>
+              <li>✌️ <b>הכפלה וחציה:</b> גורם פי 2 → המכפלה פי 2. גורם חצי → המכפלה חצי.</li>
+              <li>➕ <b>עוד קבוצה:</b> ${M('7 × 4 = 6 × 4 + 4')} · ➖ <b>קבוצה פחות:</b> ${M('5 × 4 = 6 × 4 − 4')}</li>
+              <li>👨‍👩‍👧 <b>משפחת עובדות:</b> ${M('24 : 6 = 4')} כי ${M('6 × 4 = 24')}</li>
+              <li>🔟 <b>פי 10:</b> ${M('60 × 4 = 240')}</li>
+              <li>⚖️ <b>חצי וכפול:</b> ${M('6 × 4 = 3 × 8')}</li>
+            </ul>
+            <div class="lbtns"><button data-dftool>🧩 לתרגול: מעובדה אחת – הרבה עובדות</button></div>
+            <p class="center"><b>כל הכבוד! עכשיו כל עובדה שאתם יודעים שווה הרבה עובדות 🎉</b></p>`,
+          setup(root) { root.querySelector('[data-dftool]').onclick = () => dfTool(); }
+        }
+      ]
+    }
+  });
+  const ti = LESSON_ORDER.indexOf('times'), di = LESSON_ORDER.indexOf('divis');
+  LESSON_ORDER.splice(ti >= 0 ? ti + 1 : di >= 0 ? di + 1 : 0, 0, 'dfacts');
+}
 // מאזניים – מספר חסר: a + b = c + ☐. שני הצדדים שווים, כמו מאזניים. כיתות א'–ג'
 function balGen(g) {
   const r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -16779,7 +16880,7 @@ function isWordQ(q) {
   if (WORD_GENS.test(src)) return true;
   const raw = String(q.text || q.q || '');
   if (!q.unit || /<svg/.test(raw)) return false;
-  const t = raw.replace(/<span class="m">[\s\S]*?<\/span>/g, ' ').replace(/<[^>]+>/g, ' ');
+  const t = raw.replace(/<span class="m"[^>]*>[\s\S]*?<\/span>/g, ' ').replace(/<[^>]+>/g, ' ');
   return (t.match(/[\u05d0-\u05ea]+/g) || []).length >= 12;
 }
 // זיהוי שאלה שאינה "מספרים שלמים" – עשרוני, שבר או אחוז
