@@ -20,7 +20,7 @@ header{background:linear-gradient(120deg,#6c4cf1,#a34cf1);color:#fff;padding:18p
 header h1{margin:0;font-size:clamp(22px,5vw,32px);font-weight:800}
 header p{margin:4px 0 0;opacity:.9}
 nav.tabs{display:flex;gap:8px;justify-content:center;margin:-38px auto 0;padding:0 16px;max-width:760px;flex-wrap:wrap}
-nav.tabs button{flex:1 1 0;min-width:96px;border:0;border-radius:14px 14px 0 0;padding:12px 8px;font:inherit;font-weight:700;background:rgba(255,255,255,.55);color:var(--ink);cursor:pointer}
+nav.tabs button{flex:1 1 0;min-width:72px;border:0;border-radius:14px 14px 0 0;padding:12px 6px;font-size:15px;font-family:inherit;font-weight:700;background:rgba(255,255,255,.55);color:var(--ink);cursor:pointer}
 nav.tabs button.on{background:var(--card)}
 main{max-width:760px;margin:0 auto;padding:0 16px 40px}
 .panel{background:var(--card);border-radius:0 0 18px 18px;padding:18px 16px;box-shadow:0 6px 24px rgba(60,40,140,.08)}
@@ -70,6 +70,33 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
 .toolrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:6px 0}
 .toolrow .btn{padding:8px 12px;font-size:15px}
 .btn.mode-on{outline:3px solid var(--odd)}
+/* ---- הדפסה ---- */
+.prctl{display:flex;flex-wrap:wrap;gap:10px 18px;margin:8px 0}
+.prctl input,.prctl select{font:inherit;padding:4px 6px;border:2px solid var(--pri2);border-radius:8px}
+.prctl input[type=number]{width:70px}
+.prctl input[type=checkbox]{width:18px;height:18px;vertical-align:middle}
+.prpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px 10px;font-size:15px;margin:8px 0;max-height:260px;overflow:auto;border:2px solid var(--pri2);border-radius:12px;padding:8px}
+.prpick label{cursor:pointer}
+.page{container-type:inline-size;width:100%;max-width:620px;aspect-ratio:186/268;background:#fff;border:1px solid #c9c4dc;margin:14px auto;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.pin{height:100%;padding:3cqw;display:flex;flex-direction:column}
+.ph{display:flex;justify-content:space-between;gap:2cqw;align-items:baseline;font-size:3.3cqw;border-bottom:.4cqw solid #333;padding-bottom:1cqw;margin-bottom:1.6cqw}
+.ph span{font-size:2.6cqw}
+.pinst{font-size:2.5cqw;margin-bottom:1.6cqw}
+.pgrid{flex:1;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-template-rows:repeat(var(--rows),minmax(0,1fr));gap:2cqw;min-height:0}
+.cell{border:.25cqw solid #aaa;border-radius:2cqw;padding:1.4cqw;display:flex;flex-direction:column;min-height:0;font-size:var(--fs)}
+.cell svg{flex:1;min-height:0;width:100%}
+.cn{font-weight:700}
+.cq{text-align:center}
+@page{size:A4;margin:12mm}
+@media print{
+  :root{--line:#666}
+  header,nav.tabs,footer,.noprint{display:none!important}
+  body{background:#fff}
+  main{padding:0;max-width:none}
+  .panel{box-shadow:none;padding:0;border-radius:0}
+  .page{border:0;box-shadow:none;margin:0;width:186mm;max-width:none;height:268mm;aspect-ratio:auto;break-after:page}
+  .page:last-child{break-after:auto}
+}
 </style>
 </head>
 <body>
@@ -81,6 +108,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <button data-tab="play" class="on">🎮 משחק</button>
   <button data-tab="learn">💡 למה זה עובד?</button>
   <button data-tab="build">🛠️ בונים צורה</button>
+  <button data-tab="print">🖨️ הדפסה</button>
 </nav>
 <main>
 
@@ -168,7 +196,31 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <div class="btns"><button class="btn" id="bTry">✏️ נסו לצייר את הצורה שלי</button></div>
 </section>
 
-<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ד</footer>
+<!-- ====== הדפסה ====== -->
+<section id="tab-print" class="panel hide">
+  <div class="noprint">
+    <h2>🖨️ דף עבודה להדפסה</h2>
+    <div class="prctl">
+      <label>כותרת: <input id="prTitle" value="משיכת קולמוס אחת"></label>
+      <label>צורות בעמוד: <select id="prPer"><option>1</option><option>2</option><option selected>4</option><option>6</option><option>9</option><option>12</option></select></label>
+      <label>צורות אקראיות: <input id="prRand" type="number" min="0" max="60" value="0"></label>
+      <label><input type="checkbox" id="prAns" checked> עמודי פתרונות למורה</label>
+    </div>
+    <div><b>אילו צורות להדפיס?</b></div>
+    <div class="toolrow">
+      <button class="btn sec" id="prAll">בחרו הכול</button>
+      <button class="btn sec" id="prNone">נקו בחירה</button>
+      <button class="btn sec" id="prNewRand">🎲 החליפו את הצורות האקראיות</button>
+    </div>
+    <div class="prpick" id="prPick"></div>
+    <div class="msg" id="prInfo"></div>
+    <div class="btns"><button class="btn" id="prGo">🖨️ הדפסה</button></div>
+    <h3>תצוגה מקדימה</h3>
+  </div>
+  <div id="prPages"></div>
+</section>
+
+<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ה</footer>
 </main>
 
 <script>
@@ -579,8 +631,9 @@ board.addEventListener('pointermove', e => {
 /* ---------- לשוניות ---------- */
 function showTab(t) {
   document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
-  ['play', 'learn', 'build'].forEach(x => $('tab-' + x).classList.toggle('hide', x !== t));
+  ['play', 'learn', 'build', 'print'].forEach(x => $('tab-' + x).classList.toggle('hide', x !== t));
   if (t === 'build') bRender();
+  if (t === 'print') prRender();
   try { localStorage.setItem('euler-tab', t); } catch (e) { }
 }
 document.querySelector('nav.tabs').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) showTab(b.dataset.tab); };
@@ -679,6 +732,61 @@ $('bTry').onclick = () => {
 };
 
 /* ---------- התחלה ---------- */
+/* ---------- הדפסה ---------- */
+const PR = { sel: new Set(LEVELS.map((_, i) => i)), rands: [] };
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+$('prPick').innerHTML = LEVELS.map((L, i) => `<label><input type="checkbox" data-pi="${i}" checked> ${i + 1}. ${L.name}</label>`).join('');
+function prList() {
+  const n = Math.max(0, Math.min(60, Math.floor(+$('prRand').value || 0)));
+  while (PR.rands.length < n) PR.rands.push(randShape());
+  const list = [...PR.sel].sort((a, b) => a - b).map(i => ({ g: LEVELS[i], label: LEVELS[i].name }));
+  PR.rands.slice(0, n).forEach(g => list.push({ g, label: 'צורה אקראית' }));
+  return list;
+}
+function prSvg(g, ans) {
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '-8 -8 116 116');
+  if (ans) { const sol = eulerPath(g); draw(svg, g, sol ? { showAll: true, used: new Set(sol.edges), order: sol.edges } : { showAll: true }); }
+  else draw(svg, g, {});
+  return svg.outerHTML;
+}
+function prRender() {
+  const per = +$('prPer').value, cols = per <= 2 ? 1 : per <= 6 ? 2 : 3, rows = Math.ceil(per / cols);
+  const fs = ({ 1: 3.4, 2: 3, 4: 2.6, 6: 2.4, 9: 2, 12: 1.9 })[per] + 'cqw';
+  const list = prList(), title = esc($('prTitle').value || ''), withAns = $('prAns').checked;
+  const pages = [];
+  const page = (ans) => {
+    for (let p = 0; p < list.length; p += per) {
+      const cells = list.slice(p, p + per).map((it, k) => {
+        const num = p + k + 1, a = analyze(it.g);
+        let q;
+        if (ans) {
+          const sol = eulerPath(it.g);
+          q = sol ? `✔ אפשר · מתחילים ב־${nm(sol.nodes[0])}` + (a.odd.length ? ` (אי־זוגיות: ${a.odd.map(nm).join(', ')})` : ' (כל הנקודות זוגיות)')
+            : `✘ אי אפשר · ${a.odd.length} נקודות אי־זוגיות`;
+        } else q = 'אפשר בקו אחד?&nbsp; ☐ כן &nbsp; ☐ לא' + (per <= 4 ? '<br>אם כן – מאיזו נקודה מתחילים? ______' : '');
+        return `<div class="cell"><div class="cn">${num}. ${esc(it.label)}</div>${prSvg(it.g, ans)}<div class="cq">${q}</div></div>`;
+      }).join('');
+      pages.push(`<div class="page"><div class="pin" style="--cols:${cols};--rows:${rows};--fs:${fs}">
+        <div class="ph"><b>${title}${ans ? ' – פתרונות' : ''}</b>${ans ? '' : '<span>שם: ______________ &nbsp; כיתה: ______</span>'}</div>
+        ${ans ? '<div class="pinst">המספרים על הקווים מראים סדר ציור אפשרי. ליד כל נקודה – מספר הקווים שלה (כתום = אי־זוגי).</div>'
+          : '<div class="pinst">האם אפשר לצייר את הצורה במשיכת קולמוס אחת – בלי להרים את העיפרון ובלי לעבור פעמיים על אותו קו? חשבו מראש: ספרו כמה קווים יוצאים מכל נקודה. אם אפשר – ציירו!</div>'}
+        <div class="pgrid">${cells}</div></div></div>`);
+    }
+  };
+  page(false); if (withAns) page(true);
+  $('prPages').innerHTML = pages.join('');
+  const np = Math.ceil(list.length / per);
+  $('prInfo').innerHTML = list.length ? `${list.length} צורות · ${np} עמודים${withAns ? ` + ${np} עמודי פתרונות` : ''}` : 'לא נבחרה אף צורה.';
+  $('prGo').disabled = !list.length;
+}
+$('prPick').addEventListener('change', e => { const c = e.target.closest('[data-pi]'); if (!c) return; c.checked ? PR.sel.add(+c.dataset.pi) : PR.sel.delete(+c.dataset.pi); prRender(); });
+$('prAll').onclick = () => { LEVELS.forEach((_, i) => PR.sel.add(i)); document.querySelectorAll('[data-pi]').forEach(c => c.checked = true); prRender(); };
+$('prNone').onclick = () => { PR.sel.clear(); document.querySelectorAll('[data-pi]').forEach(c => c.checked = false); prRender(); };
+$('prNewRand').onclick = () => { PR.rands = []; prRender(); };
+['prPer', 'prAns', 'prRand', 'prTitle'].forEach(id => $(id).addEventListener('input', prRender));
+$('prGo').onclick = () => window.print();
+
 loadLevel(0);
 </script>
 </body>
