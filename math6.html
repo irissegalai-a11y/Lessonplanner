@@ -1952,6 +1952,17 @@
   .pl-clue-b, .pl-clue-t { flex-direction: column; line-height: 1; }
   .pl-clue.pl-bad { color: var(--bad); background: var(--bad-bg); border-radius: 8px; }
   .pl-ex { text-align: center; }
+  .kfc-pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; }
+  .kfc-pq { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0 10px; border-bottom: 1px solid #ddd; break-inside: avoid; }
+  .kfc-pex { font-size: 1.15rem; }
+  .kfc-prow { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+  .kfc-pbox { position: relative; display: inline-block; width: 46px; height: 46px; border: 1.8px solid #000; border-radius: 6px; }
+  .kfc-pbox i { position: absolute; top: -9px; left: 4px; background: #fff; padding: 0 3px; font-size: 0.72rem; font-style: normal; font-weight: 700; }
+  .kfc-prow .wsline { min-width: 80px; }
+  .kfc-pspace { height: 56px; }
+  .kfc-pkey li { margin-bottom: 8px; }
+  .kfc-p-leg { line-height: 2; }
+  @media (max-width: 520px) { .kfc-pgrid { grid-template-columns: 1fr; } }
   .kfc-legend { display: grid; gap: 8px; margin: 10px 0; }
   .kfc-legend > div { display: flex; gap: 12px; align-items: center; padding: 8px 12px; border-radius: 12px; }
   .kfc-legend > div > b { font-size: 2rem; width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #fff; border: 2.5px solid currentColor; }
@@ -2011,7 +2022,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -17005,6 +17016,23 @@ function printBuilder() {
         </label>
         <div class="actions"><button class="secondary" id="kfpc">⚡ דף אתגר דקה</button><button class="secondary" id="kfpb">🎲 כרטיסי בינגו</button></div>
       </div>` : ''}
+      ${GRADE === 6 ? `<div class="card tform" id="kfccard">
+        <h2>🍗 חילוק שברים – שיטת KFC</h2>
+        <p class="muted small">דף תרגול בשיטת KFC: <b>K</b>eep – שומרים את הראשון, <b>F</b>lip – הופכים את השני, <b>C</b>hange – משנים את : ל-×. בראש הדף תזכורת לשיטה. מספר הנוסחים ודף התשובות (עם כל השלבים) – לפי ההגדרות למעלה.</p>
+        <label>סוג התרגילים:
+          <select id="kfcT">
+            <option value="mix">מעורב – מהקל אל הקשה</option>
+            <option value="wf">שלם : שבר</option>
+            <option value="fw">שבר : שלם</option>
+            <option value="ff">שבר : שבר</option>
+          </select>
+        </label>
+        <label>כמה תרגילים?
+          <input id="kfcN" class="tinput" type="number" min="1" value="12" inputmode="numeric" style="width:90px">
+        </label>
+        <label class="chk"><input type="checkbox" id="kfcS" checked> שורת עזר לכל תרגיל (משבצות K ו-F) – בלי סימון: רק תרגיל ומקום לפתרון</label>
+        <div class="actions"><button class="secondary" id="kfcGo">🍗 יצירת דף KFC</button></div>
+      </div>` : ''}
       ${GRADE >= 4 ? `<div class="card tform" id="palcard">
         <h2>🪞 תבניות פלינדרומיות (מצוינות)</h2>
         <div id="palPForm"></div>
@@ -17109,6 +17137,11 @@ function printBuilder() {
   const kfOut = html => { $('wsout').innerHTML = html; paginateSheets(); $('wprint').classList.remove('hidden'); $('wsout').scrollIntoView({ behavior: 'smooth' }); };
   wpPrintBind(kfOut);
   tzPrintBind(kfOut);
+  if ($('kfcGo')) $('kfcGo').onclick = () => wsGate(() => {
+    const n = Math.max(1, Math.floor(Number($('kfcN').value) || 1)); $('kfcN').value = n;
+    $('wsout').dataset.what = `KFC חילוק שברים: ${$('kfcT').selectedOptions[0].textContent} · ${n} תרגילים`;
+    kfOut(kfcPrint(Number($('wv').value), $('wkey').checked, $('kfcT').value, n, $('kfcS').checked));
+  });
   if ($('kfpc')) $('kfpc').onclick = () => wsGate(() => ($('wsout').dataset.what = 'אתגר דקה: ' + $('kfpop').selectedOptions[0].textContent) && kfOut(kfPrintChallenge(Number($('wv').value), $('wkey').checked, $('kfpop').value)));
   $('drgo').onclick = () => {
     const ids = [...app.querySelectorAll('.drtopics input:checked')].map(x => x.value);
@@ -17152,6 +17185,46 @@ const BOOK_COUNTS = [0, 4, 6, 8, 10, 12, 15, 20];
 var BOOK_HASH = 'e1050f14';
 // עד 2 דפי עבודה ביום בכל מכשיר; מעבר לזה צריך את הקוד
 const WS_PER_DAY = 2;
+// ---- 🍗 דף תרגול KFC לחילוק שברים ----
+function kfcPrint(versions, key, type, n, scaf) {
+  const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const fr = () => { const d = ri(2, 9); return [ri(1, d - 1), d]; };
+  const mk = t => {
+    if (t === 'wf') return [[ri(2, 9), 1], fr()];
+    if (t === 'fw') return [fr(), [ri(2, 6), 1]];
+    let a = fr(), b = fr(); while (a[0] * b[1] === a[1] * b[0]) b = fr(); return [a, b];
+  };
+  const show = ([p, q]) => q === 1 ? M(String(p)) : F(p, q);
+  const ansHTML = ([a, b]) => {
+    const num = a[0] * b[1], den = a[1] * b[0], g = gcd(num, den), n2 = num / g, d2 = den / g;
+    let h = `${show(a)} ${M('×')} ${F(b[1], b[0])} ${M('=')} ${F(num, den)}`;
+    if (g > 1) h += ` ${M('=')} ${d2 === 1 ? M(String(n2)) : F(n2, d2)}`;
+    if (d2 !== 1 && n2 > d2) h += ` ${M('=')} ${M(String(Math.floor(n2 / d2)))}${F(n2 % d2, d2)}`;
+    return MX(h);
+  };
+  const order = ['wf', 'fw', 'ff'];
+  const legend = `<div class="wstips kfc-p-leg"><b>🍗 שיטת KFC</b><br>
+    <b><bdi>K</bdi></b> (<bdi>Keep</bdi>) – שומרים את המספר הראשון.<br>
+    <b><bdi>F</bdi></b> (<bdi>Flip</bdi>) – הופכים את המספר השני: מונה ↔ מכנה. (מספר שלם = שבר עם מכנה 1: ${MX(`${M('4 =')} ${F(4, 1)}`)})<br>
+    <b><bdi>C</bdi></b> (<bdi>Change</bdi>) – משנים את : ל-×. ואז כופלים מונה × מונה ומכנה × מכנה, ומצמצמים.<br>
+    דוגמה: ${MX(`${M('3 :')} ${F(3, 4)} ${M('= 3 ×')} ${F(4, 3)} ${M('=')} ${F(12, 3)} ${M('= 4')}`)}</div>`;
+  const out = [];
+  for (let v = 0; v < versions; v++) {
+    const qs = Array.from({ length: n }, (_, i) => mk(type === 'mix' ? order[Math.min(2, Math.floor(i * 3 / n))] : type));
+    const vn = versions > 1 ? ' – נוסח ' + 'אבג'[v] : '';
+    const box = l => `<span class="kfc-pbox"><i>${l}</i></span>`;
+    out.push(`<section class="ws-page"><div class="wshead"><h1>🍗 חילוק שברים בשיטת KFC${vn}</h1>
+      <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      ${legend}
+      <div class="wsqs kfc-pgrid">${qs.map((q, i) => `<div class="kfc-pq"><b class="wsnum">${i + 1}</b><div>
+        <div class="kfc-pex">${MX(`${show(q[0])} ${M(':')} ${show(q[1])} ${M('=')}`)}</div>
+        ${scaf ? `<div class="kfc-prow" dir="ltr">${box('K')}<span class="kfc-pop">${M('×')}</span>${box('F')}<span class="kfc-pop">${M('=')}</span><span class="wsline"></span></div>` : '<div class="kfc-pspace"></div>'}
+      </div></div>`).join('')}</div>
+      <div class="wsfoot">בהצלחה! 🌟</div></section>`);
+    if (key) out.push(`<section class="ws-page wskey"><h2>🔑 דף תשובות – חילוק שברים בשיטת KFC${vn}</h2><ol class="kfc-pkey">${qs.map(q => `<li>${MX(`${show(q[0])} ${M(':')} ${show(q[1])} ${M('=')}`)} ${ansHTML(q)}</li>`).join('')}</ol></section>`);
+  }
+  return out.join('');
+}
 function wsGate(fn) {
   const today = new Date().toLocaleDateString('en-CA');
   let u = {};
