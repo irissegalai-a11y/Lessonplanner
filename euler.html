@@ -168,7 +168,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <div class="btns"><button class="btn" id="bTry">✏️ נסו לצייר את הצורה שלי</button></div>
 </section>
 
-<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 א</footer>
+<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ב</footer>
 </main>
 
 <script>
@@ -188,21 +188,66 @@ const pent = circ(5, 44);
 const hex = circ(6, 44, 50, 50, -90);
 const KB_NODES = [[50, 6], [50, 94], [28, 50], [84, 50]];
 const KB_EDGES = [[0, 2], [0, 2], [1, 2], [1, 2], [0, 3], [1, 3], [2, 3]];
+const star6 = [...circ(6, 46, 50, 50, -90), ...circ(6, 26.6, 50, 50, -60)];
+const S6E = []; for (let k = 0; k < 6; k++) { S6E.push([k, 6 + k], [k, 6 + (k + 5) % 6], [6 + k, 6 + (k + 1) % 6]); }
 const LEVELS = [
   { name: 'משולש', nodes: [[50, 12], [12, 86], [88, 86]], edges: [[0, 1], [1, 2], [2, 0]] },
+  { name: 'משולש עם קו באמצע', nodes: [[50, 8], [10, 88], [90, 88], [50, 88]], edges: [[0, 1], [1, 3], [3, 2], [2, 0], [0, 3]] },
   { name: 'ריבוע ואלכסון', nodes: [[15, 15], [85, 15], [85, 85], [15, 85]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2]] },
   { name: 'פפיון', nodes: [[10, 18], [10, 82], [50, 50], [90, 18], [90, 82]], edges: [[0, 1], [1, 2], [2, 0], [2, 3], [3, 4], [4, 2]] },
-  { name: 'מעטפה (הבית)', nodes: [[15, 92], [85, 92], [85, 42], [15, 42], [50, 6]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2], [1, 3], [3, 4], [4, 2]] },
+  { name: 'בית', nodes: [[18, 92], [82, 92], [82, 46], [18, 46], [50, 8]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [3, 4], [4, 2]] },
+  { name: 'משולש עם מרכז', nodes: [[50, 6], [8, 88], [92, 88], [50, 62]], edges: [[0, 1], [1, 2], [2, 0], [3, 0], [3, 1], [3, 2]] },
+  { name: 'מעטפה', nodes: [[15, 92], [85, 92], [85, 42], [15, 42], [50, 6]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2], [1, 3], [3, 4], [4, 2]] },
+  { name: 'שני ריבועים', nodes: [[8, 25], [50, 25], [92, 25], [8, 75], [50, 75], [92, 75]], edges: [[0, 1], [1, 2], [3, 4], [4, 5], [0, 3], [1, 4], [2, 5]] },
   { name: 'ריבוע עם שני אלכסונים', nodes: [[15, 15], [85, 15], [85, 85], [15, 85]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2], [1, 3]] },
   { name: 'כוכב', nodes: pent, edges: [[0, 2], [2, 4], [4, 1], [1, 3], [3, 0]] },
   { name: 'עיגול וקוטר', nodes: [[8, 50], [92, 50]], edges: [[0, 1], [0, 1], [0, 1]], bend: 40 },
+  { name: 'יהלום', nodes: [[50, 6], [8, 50], [92, 50], [50, 94]], edges: [[0, 1], [0, 2], [1, 3], [2, 3], [1, 2]] },
+  { name: 'שלושה ריבועים', nodes: [[4, 30], [36, 30], [68, 30], [100, 30], [4, 70], [36, 70], [68, 70], [100, 70]], edges: [[0, 1], [1, 2], [2, 3], [4, 5], [5, 6], [6, 7], [0, 4], [1, 5], [2, 6], [3, 7]] },
+  { name: 'משולש המשולשים', nodes: [[50, 6], [29, 47], [71, 47], [8, 88], [50, 88], [92, 88]], edges: [[0, 1], [0, 2], [1, 2], [1, 3], [1, 4], [2, 4], [2, 5], [3, 4], [4, 5]] },
   { name: 'דג', nodes: [[6, 50], [38, 20], [66, 50], [38, 80], [94, 22], [94, 78]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [1, 3], [2, 4], [4, 5], [5, 2]] },
+  { name: 'משקפיים', nodes: [[4, 50], [38, 50], [62, 50], [96, 50]], edges: [[0, 1], [0, 1], [1, 2], [2, 3], [2, 3]], bend: 15 },
+  { name: 'ריבוע בתוך ריבוע', nodes: [[10, 10], [90, 10], [90, 90], [10, 90], [50, 10], [90, 50], [50, 90], [10, 50]], edges: [[0, 4], [4, 1], [1, 5], [5, 2], [2, 6], [6, 3], [3, 7], [7, 0], [4, 5], [5, 6], [6, 7], [7, 4]] },
   { name: 'חלון', nodes: [[12, 12], [50, 12], [88, 12], [12, 50], [50, 50], [88, 50], [12, 88], [50, 88], [88, 88]], edges: [[0, 1], [1, 2], [3, 4], [4, 5], [6, 7], [7, 8], [0, 3], [3, 6], [1, 4], [4, 7], [2, 5], [5, 8]] },
+  { name: 'פרח', nodes: [[50, 50], [50, 4], [96, 50], [50, 96], [4, 50]], edges: [[0, 1], [0, 1], [0, 2], [0, 2], [0, 3], [0, 3], [0, 4], [0, 4]], bend: 10 },
   { name: 'מחומש וכוכב', nodes: pent, edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [0, 2], [2, 4], [4, 1], [1, 3], [3, 0]] },
+  { name: 'קובייה', nodes: [[8, 32], [62, 32], [62, 92], [8, 92], [38, 8], [92, 8], [92, 68], [38, 68]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]] },
   { name: 'גלגל', nodes: [...hex, [50, 50]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5]] },
+  { name: 'מגן דוד', nodes: star6, edges: S6E },
+  { name: 'בית עם חלון', nodes: [[10, 94], [50, 94], [90, 94], [10, 62], [50, 62], [90, 62], [10, 30], [50, 30], [90, 30], [50, 4]], edges: [[0, 1], [1, 2], [3, 4], [4, 5], [6, 7], [7, 8], [0, 3], [3, 6], [1, 4], [4, 7], [2, 5], [5, 8], [6, 9], [9, 8]] },
   { name: 'שבעת הגשרים של קניגסברג', nodes: KB_NODES, edges: KB_EDGES, bg: 'river', bend: 11 },
+  { name: 'קניגסברג בלי גשר אחד', nodes: KB_NODES, edges: KB_EDGES.slice(1), bg: 'river', bend: 11 },
   { name: 'קניגסברג + גשר שמיני', nodes: KB_NODES, edges: [...KB_EDGES, [1, 3]], bg: 'river', bend: 11 },
 ];
+
+/* ---------- צורה אקראית ---------- */
+function randShape() {
+  const want = Math.random() < .55;
+  for (let t = 0; t < 400; t++) {
+    const pts = []; for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) pts.push([12 + c * 38, 12 + r * 38]);
+    const cand = [];
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+      const i = r * 3 + c;
+      if (c < 2) cand.push([i, i + 1]);
+      if (r < 2) cand.push([i, i + 3]);
+      if (r < 2 && c < 2) cand.push(Math.random() < .5 ? [i, i + 4] : [i + 1, i + 3]);
+    }
+    cand.sort(() => Math.random() - .5);
+    const k = 6 + Math.floor(Math.random() * 6);
+    const edges = cand.slice(0, k);
+    if (Math.random() < .3) edges.push([...edges[0]]);
+    const g0 = { nodes: pts, edges };
+    if (!connected(g0)) continue;
+    const deg = degrees(g0), map = [], nodes = [];
+    pts.forEach((p, i) => { if (deg[i]) { map[i] = nodes.length; nodes.push(p); } });
+    if (nodes.length < 4) continue;
+    const g = { name: 'צורה אקראית', nodes, edges: edges.map(([a, b]) => [map[a], map[b]]) };
+    if (analyze(g).possible === want) return g;
+  }
+  return LEVELS[0];
+}
+let RAND_WON = 0;
+try { RAND_WON = +localStorage.getItem('euler-rand') || 0; } catch (e) { }
 
 /* ---------- גרף: חישובים ---------- */
 function degrees(g) {
@@ -307,24 +352,24 @@ function saveStar(i, n) {
 }
 
 /* ---------- מצב המשחק ---------- */
-const P = { li: 0, g: null, a: null, phase: 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, custom: null, popId: -1, tried: false };
+const P = { li: 0, g: null, a: null, phase: 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, custom: null, rand: null, popId: -1, tried: false };
 const board = $('board');
 
 function maxStars() { return P.a.possible ? 3 : 2; }
-function loadLevel(i, custom) {
-  P.li = i; P.custom = custom || null;
-  P.g = custom || LEVELS[i];
+function loadLevel(i, custom, rand) {
+  P.li = i; P.custom = custom || null; P.rand = rand || null;
+  P.g = custom || rand || LEVELS[i];
   P.a = analyze(P.g);
-  Object.assign(P, { phase: custom ? 'draw' : 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, popId: -1, tried: false });
+  Object.assign(P, { phase: custom ? 'draw' : 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, popId: -1, tried: false, counted: 0 });
   render();
 }
 function chips() {
   $('chips').innerHTML = LEVELS.map((L, i) => {
     const a = analyze(L), s = STARS[i] || 0, mx = a.possible ? 3 : 2;
-    return `<button class="chip ${i === P.li && !P.custom ? 'on' : ''}" data-l="${i}">${i + 1}<small>${s ? '★'.repeat(s) + '☆'.repeat(mx - s) : ''}</small></button>`;
-  }).join('') + (P.custom ? `<button class="chip on">שלי</button>` : '');
+    return `<button class="chip ${i === P.li && !P.custom && !P.rand ? 'on' : ''}" data-l="${i}">${i + 1}<small>${s ? '★'.repeat(s) + '☆'.repeat(mx - s) : ''}</small></button>`;
+  }).join('') + `<button class="chip ${P.rand ? 'on' : ''}" data-r="1">🎲 אקראי<small>${RAND_WON ? '✔ ' + RAND_WON : ''}</small></button>` + (P.custom ? `<button class="chip on">שלי</button>` : '');
 }
-$('chips').onclick = e => { const b = e.target.closest('[data-l]'); if (b) loadLevel(+b.dataset.l); };
+$('chips').onclick = e => { const b = e.target.closest('[data-l],[data-r]'); if (!b) return; if (b.dataset.r) loadLevel(P.li, null, randShape()); else loadLevel(+b.dataset.l); };
 
 function stepsHtml() {
   const ph = P.phase, order = ['predict', 'reveal', 'draw'];
@@ -348,7 +393,7 @@ function starsLine() {
 function render() {
   chips();
   const g = P.g, a = P.a, ph = P.phase;
-  $('lvTitle').textContent = P.custom ? 'הצורה שבניתם' : `שלב ${P.li + 1}: ${g.name}`;
+  $('lvTitle').textContent = P.custom ? 'הצורה שבניתם' : P.rand ? '🎲 צורה אקראית' : `שלב ${P.li + 1}: ${g.name}`;
   $('steps').innerHTML = stepsHtml();
   const showAll = ph === 'reveal' || ph === 'draw' || ph === 'won';
   const used = new Set(P.order);
@@ -421,9 +466,14 @@ function render() {
   $('feedback').innerHTML = fb;
   $('counter').textContent = cnt;
 }
-function nextBtn() { return P.li < LEVELS.length - 1 ? `<button class="btn" data-act="next">לשלב הבא ⬅</button>` : `<span class="msg good">🏆 סיימתם את כל השלבים!</span>`; }
+function nextBtn() {
+  if (P.rand) return `<button class="btn" data-act="rand">🎲 צורה חדשה</button>`;
+  return P.li < LEVELS.length - 1 ? `<button class="btn" data-act="next">לשלב הבא ⬅</button>` : `<span class="msg good">🏆 סיימתם את כל השלבים!</span><button class="btn" data-act="rand">🎲 עוד צורות אקראיות</button>`;
+}
 function nextBtnWrap() { return `<div class="btns">${nextBtn()}</div>`; }
-function finishStars() { if (!P.custom) saveStar(P.li, P.s1 + P.s2 + P.s3); }
+function finishStars() {
+  if (P.rand) { if (P.s1 + P.s2 + P.s3 === maxStars() && !P.counted) { P.counted = 1; RAND_WON++; try { localStorage.setItem('euler-rand', RAND_WON); } catch (e) { } } return; }
+  if (!P.custom) saveStar(P.li, P.s1 + P.s2 + P.s3); }
 
 $('tab-play').addEventListener('click', e => {
   const b = e.target.closest('[data-act],[data-why]'); if (!b) return;
@@ -441,6 +491,7 @@ $('tab-play').addEventListener('click', e => {
   }
   else if (act === 'undo') { if (P.order.length) { P.order.pop(); P.path.pop(); } }
   else if (act === 'reset') { P.phase = 'draw'; P.order = []; P.path = []; }
+  else if (act === 'rand') { loadLevel(P.li, null, randShape()); return; }
   else if (act === 'next') { loadLevel(Math.min(P.li + 1, LEVELS.length - 1)); return; }
   else if (act === 'tobuild') { showTab('build'); return; }
   render();
@@ -477,7 +528,7 @@ board.addEventListener('pointerdown', e => {
 });
 board.addEventListener('pointermove', e => {
   if (!dragging || P.phase !== 'draw' || !P.path.length) return;
-  const n = hitNode(P.g, svgPoint(board, e), 7);
+  const n = hitNode(P.g, svgPoint(board, e), 9);
   if (n >= 0 && tryMove(n)) render();
 });
 ['pointerup', 'pointercancel'].forEach(t => board.addEventListener(t, () => dragging = false));
