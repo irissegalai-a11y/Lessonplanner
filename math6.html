@@ -1952,6 +1952,24 @@
   .pl-clue-b, .pl-clue-t { flex-direction: column; line-height: 1; }
   .pl-clue.pl-bad { color: var(--bad); background: var(--bad-bg); border-radius: 8px; }
   .pl-ex { text-align: center; }
+  .pk-common { padding: 12px 16px; }
+  .pk-common-h { font-weight: 700; margin-bottom: 8px; }
+  .pk-common-row { display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: flex-end; }
+  .pk-common-row label { margin-bottom: 4px; }
+  .pk-q { margin: 18px 0 8px; font-size: 1.25rem; }
+  .pk-menu { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .pk-tile { display: flex; align-items: center; gap: 8px; text-align: right; padding: 10px 12px; background: #fff; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; font-size: 0.98rem; font-weight: 600; line-height: 1.3; box-shadow: none; }
+  .pk-tile .pk-ic { font-size: 1.4rem; flex-shrink: 0; }
+  .pk-tile.on { border-color: var(--accent); background: #e8ecff; box-shadow: 0 0 0 2px var(--accent) inset; }
+  .pk-card { scroll-margin-top: 10px; }
+  .pk-card[hidden] { display: none !important; }
+  .pk-card .pl-card { box-shadow: none; border: 0; padding: 0; background: none; margin: 0; }
+  .pk-card .pl-card > h3 { display: none; }
+  .pk-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; display: flex; gap: 10px; justify-content: center; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(255,255,255,0.96); border-top: 2px solid var(--line); box-shadow: 0 -4px 14px rgba(0,0,0,0.08); }
+  .pk-bar[hidden] { display: none; }
+  #wsout:not(:empty) { padding-bottom: 80px; }
+  @media print { .pk-bar { display: none !important; } #wsout { padding-bottom: 0 !important; } }
+  @media (max-width: 520px) { .pk-menu { grid-template-columns: 1fr 1fr; } .pk-tile { font-size: 0.88rem; padding: 8px; } }
   .pl-form { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-end; margin-bottom: 10px; }
   .pl-form label { display: flex; flex-direction: column; gap: 3px; font-weight: 600; }
   .pl-form .pl-chk { flex-direction: row; align-items: center; gap: 6px; }
@@ -1977,7 +1995,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8923,7 +8941,7 @@ function home() {
             <a class="btnlink printlink" href="${gq('print')}#book">${ic('booklet')} חוברות לפי נושאים<span class="desc">עם תוכן עניינים, דף תשובות וקוד חוברת</span></a>
             <a class="btnlink printlink" href="${gq('print')}#wp">${ic('note')} שאלות מילוליות<span class="desc">בוחרים פעולות וסוג מספרים, מהקל אל הקשה</span></a>
             ${GRADE >= 5 && teacherOn() ? `<button type="button" class="btnlink printlink" id="cmpSheetP">${ic('printer')} שטחים מורכבים – דף עבודה ופתקי יציאה<span class="desc">6 צורות על רשת משבצות, דף תשובות ו-4 פתקי יציאה בעמוד</span></button>` : ''}
-            ${GRADE >= 4 ? `<button type="button" class="btnlink printlink" id="palPrGoP">${ic('printer')} תבניות פלינדרומיות (מצוינות)<span class="desc">בוחרים סוג, רמת קושי וכמה תבניות, עם דף פתרונות</span></button>` : ''}
+            ${GRADE >= 4 ? `<a class="btnlink printlink" href="${gq('print')}#pal">${ic('printer')} תבניות פלינדרומיות (מצוינות)<span class="desc">בוחרים סוג, רמת קושי וכמה תבניות, עם דף פתרונות</span></a>` : ''}
           </div>
         </section>
       </div>
@@ -8981,7 +8999,6 @@ function home() {
   if ($('fdGo')) $('fdGo').onclick = () => fdHome();
   $('gbGo').onclick = gbHome;
   if ($('palGo')) $('palGo').onclick = () => palHome('learn');
-  if ($('palPrGoP')) $('palPrGoP').onclick = () => palHome('print');
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
   if ($('guideBtn')) $('guideBtn').onclick = guideHome;
   app.querySelectorAll('.semx').forEach(b => b.onclick = () => { const n = b.dataset.sem; try { localStorage.setItem('math-sem', n); } catch (e) { /* לא חובה */ } const u = new URL(location.href); u.searchParams.set('sem', n); location.href = u.toString(); });
@@ -15294,7 +15311,7 @@ function palGridHTML(P, ro, pr) {
 }
 
 // ---- דף להדפסה: בוחרים סוג, רמה וכמות – בלי הגבלה מראש ----
-function palPrint(el) {
+function palPrint(el, outEl) {
   const o = pal.pr || (pal.pr = { type: 'd', lv: '1', n: 6, key: true, title: 'תבניות פלינדרומיות' });
   el.innerHTML = `
     <div class="card pl-card noprint">
@@ -15329,7 +15346,7 @@ function palPrint(el) {
       <div class="pp-credit">${PAL_CREDIT}</div>
     </section>`;
     if (o.key) out += `<section class="ws-page pp-page wskey"><h2>🔑 פתרונות – ${esc(o.title)}</h2><div class="pp-grid pp-keys">${list.map((P, i) => box(P, i, 1)).join('')}</div></section>`;
-    $('ppOut').innerHTML = out;
+    (outEl || $('ppOut')).innerHTML = out;
     $('ppPrint').classList.remove('hidden');
     $('ppGo').textContent = '🔄 יצירה מחדש (תבניות חדשות)';
     $('ppMsg').textContent = `הדף מוכן – ${o.n} תבניות. גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".`;
@@ -16685,14 +16702,49 @@ function buildWordQs(topics, level, n, wholeOnly, strict) {
   return out;
 }
 
+// ---- דף ההדפסה: תפריט סוגי דפים למעלה – רואים רק את הכרטיס שנבחר, בלי לגלול ----
+function pkSetup() {
+  const wrap = app.querySelector('.noprint'), menu = $('pkMenu');
+  const cards = [...wrap.querySelectorAll(':scope > .card.tform:not(.pk-common)')];
+  cards.forEach((c, i) => { c.dataset.pk = c.id || 'pk' + i; c.classList.add('pk-card'); });
+  menu.innerHTML = cards.map(c => {
+    const t = (c.querySelector('h2') || {}).textContent || '';
+    const m = t.match(/^(\S+)\s+(.*)$/);
+    return `<button type="button" class="pk-tile" data-pkgo="${c.dataset.pk}"><span class="pk-ic">${m ? m[1] : '🖨️'}</span><span>${esc(m ? m[2] : t)}</span></button>`;
+  }).join('');
+  const bar = $('pkBar'), out = $('wsout');
+  const show = (id, scroll) => {
+    if (!cards.some(c => c.dataset.pk === id)) id = cards[0].dataset.pk;
+    cards.forEach(c => { c.hidden = c.dataset.pk !== id; });
+    menu.querySelectorAll('[data-pkgo]').forEach(b => b.classList.toggle('on', b.dataset.pkgo === id));
+    try { sessionStorage.setItem('math-pk', id); } catch (e) { /* לא חובה */ }
+    if (out.innerHTML) { out.innerHTML = ''; }
+    if (id === 'palcard' && !$('ppGo')) palPrint($('palPForm'), out);
+    if (scroll) { const c = cards.find(x => x.dataset.pk === id); window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - 10, behavior: 'smooth' }); }
+  };
+  menu.querySelectorAll('[data-pkgo]').forEach(b => b.onclick = () => show(b.dataset.pkgo, true));
+  let pre = null; try { pre = sessionStorage.getItem('math-pk'); } catch (e) { /* לא חובה */ }
+  const h = location.hash, hashId = h === '#book' ? 'bkcard' : h === '#wp' ? 'wpcard' : h === '#pal' ? 'palcard' : null;
+  show(hashId || pre || cards[0].dataset.pk, !!hashId);
+  // כשנוצר דף – קופצים לתצוגה המקדימה, וסרגל קבוע למטה עם "הדפסה" ו"חזרה להגדרות"
+  new MutationObserver(() => {
+    const has = !!out.innerHTML.trim();
+    bar.hidden = !has;
+    if (has) setTimeout(() => window.scrollTo({ top: out.getBoundingClientRect().top + window.scrollY - 10, behavior: 'smooth' }), 60);
+  }).observe(out, { childList: true });
+  $('pkPrint').onclick = () => window.print();
+  $('pkEdit').onclick = () => { const c = cards.find(x => !x.hidden); window.scrollTo({ top: Math.max(0, (c ? c.getBoundingClientRect().top + window.scrollY : 0) - 10), behavior: 'smooth' }); };
+}
 function printBuilder() {
   document.title = 'דפי עבודה – מתרגלים מתמטיקה';
   app.innerHTML = `
     <div class="noprint">
       <div class="tools"><a class="btnlink navhome" href="${location.pathname}${gq()}">${ic('home')} לדף הבית</a><span></span></div>
       <h1>דפי עבודה להדפסה</h1>
-      <div class="subtitle">בחרו נושאים ורמה – בכל לחיצה נוצר דף חדש עם מספרים אחרים</div>
-      <div class="card tform">
+      <div class="subtitle">בוחרים סוג דף, ממלאים הגדרות ולוחצים "יצירה" – בכל לחיצה דף חדש עם מספרים אחרים</div>
+      <div class="card tform pk-common">
+        <div class="pk-common-h">⚙️ הגדרות כלליות לכל סוגי הדפים</div>
+        <div class="pk-common-row">
         <label>כיתה:
           <select id="wg">
             <option value="6" ${GRADE === 6 ? 'selected' : ''}>כיתה ו'</option>
@@ -16701,6 +16753,17 @@ function printBuilder() {
             <option value="3" ${GRADE === 3 ? 'selected' : ''}>כיתה ג'</option><option value="2" ${GRADE === 2 ? 'selected' : ''}>כיתה ב'</option><option value="1" ${GRADE === 1 ? 'selected' : ''}>כיתה א'</option>
           </select>
         </label>
+        <label>מספר נוסחים:
+          <select id="wv"><option>1</option><option>2</option><option>3</option></select>
+        </label>
+        <label class="chk"><input type="checkbox" id="wkey" checked> דף תשובות למורה (בסוף)</label>
+        </div>
+      </div>
+      <h2 class="pk-q">איזה דף תרצו להדפיס?</h2>
+      <div class="pk-menu" id="pkMenu"></div>
+      <div class="card tform">
+        <h2>📄 דף תרגול לפי נושאים</h2>
+        <p class="muted small">שאלות מהנושאים שתבחרו – תרגילים, שאלות מילוליות או שילוב, עם משבצות חישוב. כאן אפשר גם להדפיס מבחן בסגנון מבדק.</p>
         <div class="lbl2">נושאים:</div>
         <div class="wstopics">${TOPICS.map((t, i) => `<label class="chk"><input type="checkbox" value="${t.id}" ${i === 0 ? 'checked' : ''}> ${t.icon} ${t.name}</label>`).join('')}</div>
         <label>רמה:
@@ -16722,9 +16785,6 @@ function printBuilder() {
             ${[1, 2, 3, 4, 5, 6, 8, 10].map(n => `<option value="${n}">${n} שאלות מילוליות (בסוף הדף, בנוסף לתרגילים)</option>`).join('')}
           </select>
         </label>
-        <label>מספר נוסחים (כל נוסח עם מספרים אחרים – למשל לשכנים בשולחן):
-          <select id="wv"><option>1</option><option>2</option><option>3</option></select>
-        </label>
         <label>כותרת הדף:
           <input id="wt" class="tinput" placeholder="דף תרגול במתמטיקה">
         </label>
@@ -16737,7 +16797,6 @@ function printBuilder() {
         <label class="chk"><input type="checkbox" id="wwhole"> 🔢 מספרים שלמים בלבד (בלי שברים, עשרוניים ואחוזים)</label>
         <label class="chk"><input type="checkbox" id="wgrid" checked> ▦ משבצות חישוב ליד כל שאלה (בלי משבצות – הדף צפוף יותר, בשני טורים)</label>
         <label class="chk"><input type="checkbox" id="wtips" checked> תיבת "תזכורת" עם הכללים בראש הדף</label>
-        <label class="chk"><input type="checkbox" id="wkey" checked> דף תשובות למורה (בסוף)</label>
         <label class="chk"><input type="checkbox" id="wexp"> לכלול דרך פתרון בדף התשובות</label>
         <div class="actions">
           <button id="wgo">✨ יצירת דף תרגול</button>
@@ -16750,7 +16809,7 @@ function printBuilder() {
         <p class="muted small" id="wmsg">טיפ: בחלון ההדפסה אפשר לבחור "שמירה כ-PDF" ולהעלות את הקובץ לקלאסרום.</p>
       </div>
       <div class="card tform">
-        <h2>📝 דף תרגילים רציף – תרגיל אחרי תרגיל</h2>
+        <h2>🔢 דף תרגילים בלבד – תרגיל אחרי תרגיל</h2>
         <p class="muted small">רק תרגילים, בלי שאלות מילוליות ובלי משבצות – הרבה תרגול בדף אחד. בוחרים תחום אחד או כמה (כל תחום בחלק נפרד). מספר הנוסחים ודף התשובות – לפי הבחירה למעלה.</p>
         <div class="wstopics drtopics">${DRILLS.filter(d => d.g.includes(GRADE)).map((d, i) => `<label class="chk"><input type="checkbox" value="${d.id}" ${i === 0 ? 'checked' : ''}> ${d.name}</label>`).join('')}</div>
         <label>תרגילים בכל תחום:
@@ -16798,6 +16857,10 @@ function printBuilder() {
         </label>
         <div class="actions"><button class="secondary" id="kfpc">⚡ דף אתגר דקה</button><button class="secondary" id="kfpb">🎲 כרטיסי בינגו</button></div>
       </div>` : ''}
+      ${GRADE >= 4 ? `<div class="card tform" id="palcard">
+        <h2>🪞 תבניות פלינדרומיות (מצוינות)</h2>
+        <div id="palPForm"></div>
+      </div>` : ''}
       <div class="card tform" id="bkcard">
         <h2>📚 חוברת לפי נושאים</h2>
         <div id="bklock"${bookOk() ? ' hidden' : ''}>
@@ -16824,7 +16887,9 @@ function printBuilder() {
       </div>
       <p class="center"><a class="btnlink navhome" href="${location.pathname}${gq()}">${ic('home')} לדף הבית</a></p>
     </div>
-    <div id="wsout"></div>`;
+    <div id="wsout"></div>
+    <div class="pk-bar noprint" id="pkBar" hidden><button type="button" id="pkPrint">🖨️ הדפסה / שמירה כ-PDF</button><button type="button" class="secondary" id="pkEdit">✏️ חזרה להגדרות</button></div>`;
+  pkSetup();
   $('wg').onchange = () => { location.search = '?print' + ($('wg').value !== '6' ? '&grade=' + $('wg').value : '') + (NEUTRAL ? '&neutral=1' : ''); };
   const letters = 'אבג';
   $('wgo').onclick = () => wsGate(() => {
@@ -16921,7 +16986,6 @@ function printBuilder() {
     if (d.grade !== GRADE) { location.search = `?print&grade=${d.grade}&book=${encodeURIComponent(code)}${NEUTRAL ? '&neutral=1' : ''}`; return; }
     renderBooklet(code);
   };
-  if (location.hash === '#book') setTimeout(() => $('bkcard').scrollIntoView({ block: 'start' }), 50);
   const bk = URLP.get('book');
   const bkUrl = () => { if (bk && bookDecode(bk.toUpperCase())) { $('bkcode').value = bk.toUpperCase(); renderBooklet(bk.toUpperCase()); } };
   const bkTry = () => {
@@ -18175,7 +18239,6 @@ function wpPrintBind(out) {
       $('wppmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה". כל לחיצה יוצרת דף חדש.';
     });
   };
-  if (location.hash === '#wp' || urlPre) setTimeout(() => card.scrollIntoView({ block: 'start' }), 50);
 }
 /* ---------- 🧩 פאזל התאמה (טרסיה): משולש גדול מ-16 משולשים, על כל צלע פנימית – תרגיל מצד אחד ותשובה מהצד השני ---------- */
 // זוג = { q: HTML של התרגיל, a: HTML של התשובה, v: ערכים "טהורים" שמופיעים על החלקים (כדי שלא יהיו שתי תשובות זהות) }
