@@ -8744,6 +8744,11 @@ function home() {
             <span class="gc-nm">גלגל המזל</span>
             <span class="gc-ds">בוחרים נושא וטווח מספרים${GRADE >= 6 ? ' – גם מספרים עשרוניים' : ''}, מסובבים את הגלגל ופותרים את התרגיל שיצא!</span>
           </button>
+          <button class="game-card" id="eulerGo">
+            <span class="gc-ic" style="--gw:rgba(108,76,241,0.5)">✏️</span>
+            <span class="gc-nm">משיכת קולמוס אחת</span>
+            <span class="gc-ds">אפשר לצייר את הצורה בקו אחד בלי להרים את העיפרון? חושבים מראש כמו המתמטיקאי אוילר – ומציירים!</span>
+          </button>
           <button class="game-card" id="tfGo0">
             <span class="gc-ic" style="--gw:rgba(127,168,214,0.6)">${ic('check')}</span>
             <span class="gc-nm">אמת או שקר?</span>
@@ -8986,6 +8991,7 @@ function home() {
   if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
   if ($('erGo0')) $('erGo0').onclick = escapeRoom;
   if ($('whGo0')) $('whGo0').onclick = wheelGame;
+  if ($('eulerGo')) $('eulerGo').onclick = () => { location.href = 'euler.html'; };
   if ($('cmpSheetP')) $('cmpSheetP').onclick = () => cmpSheetHome();
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
