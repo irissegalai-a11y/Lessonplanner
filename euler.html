@@ -222,7 +222,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <div id="prPages"></div>
 </section>
 
-<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ו</footer>
+<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ז</footer>
 </main>
 
 <script>
@@ -732,6 +732,13 @@ $('bTry').onclick = () => {
   const g = { name: 'שלי', nodes: B.g.nodes.map(p => [...p]), edges: B.g.edges.map(e => [...e]), bend: B.g.bend };
   showTab('play'); loadLevel(P.li, g);
 };
+
+/* ---------- חזרה לאתר התרגול – לאותה כיתה ---------- */
+(function () {
+  let back = new URLSearchParams(location.search).get('back');
+  try { if (back && /^[\w.-]+\.html(\?[\w=&%.-]*)?$/.test(back)) localStorage.setItem('euler-back', back); else back = localStorage.getItem('euler-back'); } catch (e) { }
+  if (back && /^[\w.-]+\.html(\?[\w=&%.-]*)?$/.test(back)) document.querySelector('header .back').href = back;
+})();
 
 /* ---------- התחלה ---------- */
 /* ---------- הדפסה ---------- */
