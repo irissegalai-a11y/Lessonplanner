@@ -203,18 +203,13 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <div class="noprint">
     <h2>🖨️ דף עבודה להדפסה</h2>
     <div class="prctl">
-      <label>כותרת: <input id="prTitle" value="משיכת קולמוס אחת"></label>
+      <label>רמת קושי: <select id="prDiff"><option value="easy">קל</option><option value="mid">בינוני</option><option value="hard">קשה</option><option value="mix" selected>מעורב (מהקל לקשה)</option></select></label>
+      <label>כמה צורות להדפיס: <input id="prCount" type="number" min="1" max="60" value="12"></label>
       <label>צורות בעמוד: <select id="prPer"><option>1</option><option>2</option><option selected>4</option><option>6</option><option>9</option><option>12</option></select></label>
-      <label>צורות אקראיות: <input id="prRand" type="number" min="0" max="60" value="0"></label>
+      <label>כותרת: <input id="prTitle" value="משיכת קולמוס אחת"></label>
       <label><input type="checkbox" id="prAns" checked> עמודי פתרונות למורה</label>
     </div>
-    <div><b>אילו צורות להדפיס?</b></div>
-    <div class="toolrow">
-      <button class="btn sec" id="prAll">בחרו הכול</button>
-      <button class="btn sec" id="prNone">נקו בחירה</button>
-      <button class="btn sec" id="prNewRand">🎲 החליפו את הצורות האקראיות</button>
-    </div>
-    <div class="prpick" id="prPick"></div>
+    <div class="toolrow"><button class="btn sec" id="prNewRand">🎲 צורות אחרות</button></div>
     <div class="msg" id="prInfo"></div>
     <div class="btns"><button class="btn" id="prGo">🖨️ הדפסה</button></div>
     <h3>תצוגה מקדימה</h3>
@@ -222,7 +217,7 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
   <div id="prPages"></div>
 </section>
 
-<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ז</footer>
+<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 ח</footer>
 </main>
 
 <script>
@@ -275,21 +270,22 @@ const LEVELS = [
 ];
 
 /* ---------- צורה אקראית ---------- */
-function randShape() {
+function randShape(o = {}) {
+  const N = o.n || 3, lo = o.min || 6, hi = o.max || 11, step = 76 / (N - 1);
   const want = Math.random() < .55;
-  for (let t = 0; t < 400; t++) {
-    const pts = []; for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) pts.push([12 + c * 38, 12 + r * 38]);
+  for (let t = 0; t < 600; t++) {
+    const pts = []; for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) pts.push([+(12 + c * step).toFixed(1), +(12 + r * step).toFixed(1)]);
     const cand = [];
-    for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
-      const i = r * 3 + c;
-      if (c < 2) cand.push([i, i + 1]);
-      if (r < 2) cand.push([i, i + 3]);
-      if (r < 2 && c < 2) cand.push(Math.random() < .5 ? [i, i + 4] : [i + 1, i + 3]);
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      const i = r * N + c;
+      if (c < N - 1) cand.push([i, i + 1]);
+      if (r < N - 1) cand.push([i, i + N]);
+      if (r < N - 1 && c < N - 1) cand.push(Math.random() < .5 ? [i, i + N + 1] : [i + 1, i + N]);
     }
     cand.sort(() => Math.random() - .5);
-    const k = 6 + Math.floor(Math.random() * 6);
+    const k = lo + Math.floor(Math.random() * (hi - lo + 1));
     const edges = cand.slice(0, k);
-    if (Math.random() < .3) edges.push([...edges[0]]);
+    if (Math.random() < .3 && k < hi) edges.push([...edges[0]]);
     const g0 = { nodes: pts, edges };
     if (!connected(g0)) continue;
     const deg = degrees(g0), map = [], nodes = [];
@@ -742,15 +738,27 @@ $('bTry').onclick = () => {
 
 /* ---------- התחלה ---------- */
 /* ---------- הדפסה ---------- */
-const PR = { sel: new Set(LEVELS.map((_, i) => i)), rands: [] };
 const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-$('prPick').innerHTML = LEVELS.map((L, i) => `<label><input type="checkbox" data-pi="${i}" checked> ${i + 1}. ${L.name}</label>`).join('');
+const DIFF = {
+  easy: { lv: L => L.edges.length <= 6, rnd: { n: 3, min: 4, max: 6 }, name: 'קל' },
+  mid: { lv: L => L.edges.length >= 7 && L.edges.length <= 10, rnd: { n: 3, min: 7, max: 10 }, name: 'בינוני' },
+  hard: { lv: L => L.edges.length >= 11, rnd: { n: 4, min: 11, max: 16 }, name: 'קשה' }
+};
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function prPick(d, n) {
+  const D = DIFF[d], fixed = shuffle(LEVELS.filter(D.lv)).slice(0, n).map(g => ({ g, label: g.name }));
+  while (fixed.length < n) fixed.push({ g: randShape(D.rnd), label: 'צורה' });
+  return shuffle(fixed);
+}
+const PR = { key: '', list: [] };
 function prList() {
-  const n = Math.max(0, Math.min(60, Math.floor(+$('prRand').value || 0)));
-  while (PR.rands.length < n) PR.rands.push(randShape());
-  const list = [...PR.sel].sort((a, b) => a - b).map(i => ({ g: LEVELS[i], label: LEVELS[i].name }));
-  PR.rands.slice(0, n).forEach(g => list.push({ g, label: 'צורה אקראית' }));
-  return list;
+  const d = $('prDiff').value, n = Math.max(1, Math.min(60, Math.floor(+$('prCount').value || 1))), key = d + n;
+  if (PR.key !== key) {
+    PR.key = key;
+    if (d === 'mix') { const a = Math.round(n / 3), b = Math.round(n / 3); PR.list = [...prPick('easy', a), ...prPick('mid', b), ...prPick('hard', n - a - b)]; }
+    else PR.list = prPick(d, n);
+  }
+  return PR.list;
 }
 function prSvg(g, ans) {
   const svg = document.createElementNS(NS, 'svg');
@@ -774,7 +782,7 @@ function prRender() {
           q = sol ? `✔ אפשר · מתחילים ב־${nm(sol.nodes[0])}` + (a.odd.length ? ` (אי־זוגיות: ${a.odd.map(nm).join(', ')})` : ' (כל הנקודות זוגיות)')
             : `✘ אי אפשר · ${a.odd.length} נקודות אי־זוגיות`;
         } else q = 'אפשר בקו אחד?&nbsp; ☐ כן &nbsp; ☐ לא' + (per <= 4 ? '<br>אם כן – מאיזו נקודה מתחילים? ______' : '');
-        return `<div class="cell"><div class="cn">${num}. ${esc(it.label)}</div>${prSvg(it.g, ans)}<div class="cq">${q}</div></div>`;
+        return `<div class="cell"><div class="cn">${num}.${it.label !== 'צורה' ? ' ' + esc(it.label) : ''}</div>${prSvg(it.g, ans)}<div class="cq">${q}</div></div>`;
       }).join('');
       pages.push(`<div class="page"><div class="pin" style="--cols:${cols};--rows:${rows};--fs:${fs}">
         <div class="ph"><b>${title}${ans ? ' – פתרונות' : ''}</b>${ans ? '' : '<span>שם: ______________ &nbsp; כיתה: ______</span>'}</div>
@@ -789,11 +797,8 @@ function prRender() {
   $('prInfo').innerHTML = list.length ? `${list.length} צורות · ${np} עמודים${withAns ? ` + ${np} עמודי פתרונות` : ''}` : 'לא נבחרה אף צורה.';
   $('prGo').disabled = !list.length;
 }
-$('prPick').addEventListener('change', e => { const c = e.target.closest('[data-pi]'); if (!c) return; c.checked ? PR.sel.add(+c.dataset.pi) : PR.sel.delete(+c.dataset.pi); prRender(); });
-$('prAll').onclick = () => { LEVELS.forEach((_, i) => PR.sel.add(i)); document.querySelectorAll('[data-pi]').forEach(c => c.checked = true); prRender(); };
-$('prNone').onclick = () => { PR.sel.clear(); document.querySelectorAll('[data-pi]').forEach(c => c.checked = false); prRender(); };
-$('prNewRand').onclick = () => { PR.rands = []; prRender(); };
-['prPer', 'prAns', 'prRand', 'prTitle'].forEach(id => $(id).addEventListener('input', prRender));
+$('prNewRand').onclick = () => { PR.key = ''; prRender(); };
+['prPer', 'prAns', 'prDiff', 'prCount', 'prTitle'].forEach(id => $(id).addEventListener('input', prRender));
 $('prGo').onclick = () => window.print();
 
 loadLevel(0);
