@@ -1952,6 +1952,24 @@
   .pl-clue-b, .pl-clue-t { flex-direction: column; line-height: 1; }
   .pl-clue.pl-bad { color: var(--bad); background: var(--bad-bg); border-radius: 8px; }
   .pl-ex { text-align: center; }
+  .pl-form { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-end; margin-bottom: 10px; }
+  .pl-form label { display: flex; flex-direction: column; gap: 3px; font-weight: 600; }
+  .pl-form .pl-chk { flex-direction: row; align-items: center; gap: 6px; }
+  .pp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px 18px; }
+  .pp-item { break-inside: avoid; text-align: center; border: 1px solid #ddd; border-radius: 10px; padding: 6px; }
+  .pp-h { text-align: right; }
+  .pp-st { color: #b8860b; } .pp-ty { font-size: 0.85rem; color: #555; }
+  .pp-tot { font-size: 0.95rem; }
+  .pp-page .pl-cell { color: #000; font-size: 16px; }
+  .pp-page .pl-cell.pl-given { background: #eee; }
+  .pp-page .pl-cell.pl-keyd { color: #2c7a5b; }
+  .pp-page .pl-clue { color: #000; font-size: 12px; }
+  .pp-page .pl-grid { margin: 2px auto; }
+  .pp-keys .pl-grid { --cs: 21px !important; }
+  .pp-keys .pl-cell { font-size: 12px; }
+  .pp-keys .pl-clue { font-size: 10px; }
+  .pp-credit { font-size: 8.5pt; color: #666; margin-top: 12px; border-top: 1px solid #ccc; padding-top: 4px; }
+  @media print { .pp-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 12px; } .pp-keys { grid-template-columns: repeat(4, minmax(0, 1fr)); } .pl-nav, .pl-credit, .topbar { display: none !important; } }
   .pl-acts { justify-content: center; flex-wrap: wrap; }
 </style>
 </head>
@@ -8662,7 +8680,7 @@ function home() {
     { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', grp: 'לומדים ומתרגלים' },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
-    { id: 'excel', label: 'מצוינות', icon: 'star', wash: 'rgba(242,201,76,0.34)' },
+    ...(GRADE >= 4 ? [{ id: 'excel', label: 'מצוינות', icon: 'star', wash: 'rgba(242,201,76,0.34)' }] : []),
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
     ...(T ? [] : [{ id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' }, { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }]),
@@ -8752,7 +8770,7 @@ function home() {
           <p class="muted">באימון: מפה אישית של לוח הכפל, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
         </section>` : ''}
         ${wpPanelHTML()}
-        <section class="panel" data-panel="excel" ${homeTab === 'excel' ? '' : 'hidden'}>
+        ${GRADE >= 4 ? `<section class="panel" data-panel="excel" ${homeTab === 'excel' ? '' : 'hidden'}>
           <h2>מצוינות</h2>
           <p class="muted">אתגרים למי שאוהב לחשוב: חידות, תבניות וגילויים מתמטיים.</p>
           <button class="game-card" id="palGo">
@@ -8760,8 +8778,13 @@ function home() {
             <span class="gc-nm">פלינדרום</span>
             <span class="gc-ds">מספרים שנקראים אותו דבר משני הכיוונים: הסבר, משחק זיהוי, "הופכים ומחברים", חידות ותבניות פלינדרומיות ב-5 רמות.</span>
           </button>
+          <button class="game-card" id="palPrGo">
+            <span class="gc-ic" style="--gw:rgba(157,178,122,0.6)">${ic('printer')}</span>
+            <span class="gc-nm">דף להדפסה – תבניות פלינדרומיות</span>
+            <span class="gc-ds">בוחרים סוג, רמת קושי וכמה תבניות – ומדפיסים, עם דף פתרונות.</span>
+          </button>
           <p class="pl-credit">${PAL_CREDIT}</p>
-        </section>
+        </section>` : ''}
         <section class="panel" data-panel="tests" ${homeTab === 'tests' ? '' : 'hidden'}>
           <h2>${GRADE === 6 ? 'מבדקים' : 'מבחנים'}</h2>
           <div class="big-actions">
@@ -8962,6 +8985,7 @@ function home() {
   if ($('fdGo')) $('fdGo').onclick = () => fdHome();
   $('gbGo').onclick = gbHome;
   if ($('palGo')) $('palGo').onclick = () => palHome('learn');
+  if ($('palPrGo')) $('palPrGo').onclick = () => palHome('print');
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
   if ($('guideBtn')) $('guideBtn').onclick = guideHome;
   app.querySelectorAll('.semx').forEach(b => b.onclick = () => { const n = b.dataset.sem; try { localStorage.setItem('math-sem', n); } catch (e) { /* לא חובה */ } const u = new URL(location.href); u.searchParams.set('sem', n); location.href = u.toString(); });
@@ -15084,7 +15108,7 @@ function palMake(type, lv) {
   return best;
 }
 const PAL_CREDIT = 'רעיון התבניות הפלינדרומיות – בהשראת דפי העבודה של <b>תכנית מצוינות <span data-raw>2000</span></b> (מתוך החוברת "לקבל את המשתנה"). תודה לצוות מצוינות <span data-raw>2000</span>! הפעילויות כאן נבנו מחדש לאתר, והתבניות נוצרות באקראי – אין כאן העתקה של הדפים.';
-const PAL_SECS = [['learn', 'מה זה פלינדרום?'], ['quiz', 'פלינדרום או לא?'], ['rev', 'הופכים ומחברים'], ['grid', 'תבניות פלינדרומיות'], ['riddle', 'חידות']];
+const PAL_SECS = [['learn', 'מה זה פלינדרום?'], ['quiz', 'פלינדרום או לא?'], ['rev', 'הופכים ומחברים'], ['grid', 'תבניות פלינדרומיות'], ['riddle', 'חידות'], ['print', '🖨️ דף להדפסה']];
 const PAL_TYPES = [['d', 'ספרות נתונות'], ['s', 'סכומים'], ['t', 'סכום כולל']];
 const PAL_COL = ['#f6c4b8', '#bfe0c9', '#c6d4f5', '#f6e2a6', '#e2c8ef', '#bfe6ea', '#f3cde0', '#d9e8b4', '#f4d3b0', '#cfd3dd'];
 const PAL_LET = 'אבגדהוזחטיכלמנסעפצקרשת';
@@ -15108,7 +15132,7 @@ function palDraw() {
     <p class="pl-credit">${PAL_CREDIT}</p>`;
   $('palBack').onclick = () => { homeTab = 'excel'; home(); };
   app.querySelectorAll('[data-psec]').forEach(b => b.onclick = () => { pal.sec = b.dataset.psec; palDraw(); window.scrollTo({ top: 0 }); });
-  ({ learn: palLearn, quiz: palQuiz, rev: palRevAdd, grid: palGrid, riddle: palRiddle })[pal.sec]($('plBody'));
+  ({ learn: palLearn, quiz: palQuiz, rev: palRevAdd, grid: palGrid, riddle: palRiddle, print: palPrint })[pal.sec]($('plBody'));
   track('מצוינות: פלינדרום', PAL_SECS.find(s => s[0] === pal.sec)[1]);
 }
 
@@ -15256,21 +15280,66 @@ function palRiddle(el) {
 
 // ---- תבניות פלינדרומיות ----
 // ציור התבנית: רשת עם שוליים של משבצת אחת מכל צד – שם יושבים רמזי הסכום
-function palGridHTML(P, ro) {
+function palGridHTML(P, ro, pr) {
   const { sh } = P, W = sh.W + 2, H = sh.H + 2;
-  const cs = Math.max(30, Math.min(46, Math.floor((Math.min(window.innerWidth || 400, 640) - 70) / W)));
+  const cs = pr ? 26 : Math.max(30, Math.min(46, Math.floor((Math.min(window.innerWidth || 400, 640) - 70) / W)));
   let h = '';
   for (let r = -1; r <= sh.H; r++) for (let c = -1; c <= sh.W; c++) {
     const i = sh.at[r + ',' + c], cl = P.clues.find(x => x.r === r && x.c === c);
     if (i !== undefined) {
       const g = P.given[i];
-      h += g !== undefined ? `<div class="pl-cell pl-given" data-ci="${i}">${g}</div>` : `<input class="pl-cell" data-ci="${i}" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="משבצת">`;
+      h += g !== undefined ? `<div class="pl-cell pl-given" data-ci="${i}">${g}</div>` : pr ? `<div class="pl-cell${pr === 'key' ? ' pl-keyd' : ''}">${pr === 'key' ? P.sol[sh.cls[i]] : ''}</div>` : `<input class="pl-cell" data-ci="${i}" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="משבצת">`;
     } else if (cl) {
       const a = { r: '←', l: '→', b: '↑', t: '↓' }[cl.side];
       h += `<div class="pl-clue pl-clue-${cl.side}" data-cl="${P.clues.indexOf(cl)}">${cl.side === 'r' || cl.side === 'b' ? `<i>${a}</i><span>${cl.con.t}</span>` : `<span>${cl.con.t}</span><i>${a}</i>`}</div>`;
     } else h += '<div></div>';
   }
   return `<div class="pl-grid${ro ? ' pl-ro' : ''}" dir="ltr" data-raw style="--cs:${cs}px;grid-template-columns:repeat(${W},var(--cs))">${h}</div>`;
+}
+
+// ---- דף להדפסה: בוחרים סוג, רמה וכמות – בלי הגבלה מראש ----
+function palPrint(el) {
+  const o = pal.pr || (pal.pr = { type: 'd', lv: '1', n: 6, key: true, title: 'תבניות פלינדרומיות' });
+  el.innerHTML = `
+    <div class="card pl-card noprint">
+      <h3>${ic('printer')} דף תבניות פלינדרומיות להדפסה</h3>
+      <div class="pl-form">
+        <label>כותרת <input id="ppT" class="tinput" value="${esc(o.title)}"></label>
+        <label>סוג <select id="ppTy" class="tinput">${PAL_TYPES.map(([id, t]) => `<option value="${id}"${o.type === id ? ' selected' : ''}>${t}</option>`).join('')}<option value="mix"${o.type === 'mix' ? ' selected' : ''}>מעורב – כל הסוגים</option></select></label>
+        <label>רמת קושי <select id="ppLv" class="tinput">${[1, 2, 3, 4, 5].map(l => `<option value="${l}"${o.lv === String(l) ? ' selected' : ''}>${'★'.repeat(l)} (רמה ${l})</option>`).join('')}<option value="up"${o.lv === 'up' ? ' selected' : ''}>מדורג – מקל לקשה</option></select></label>
+        <label>כמה תבניות? <input id="ppN" class="tinput" type="number" min="1" value="${o.n}" inputmode="numeric" style="width:90px"></label>
+        <label class="pl-chk"><input type="checkbox" id="ppKey"${o.key ? ' checked' : ''}> דף פתרונות</label>
+      </div>
+      <div class="actions"><button type="button" id="ppGo">יצירת הדף</button><button type="button" class="secondary hidden" id="ppPrint">${ic('printer')} הדפסה</button></div>
+      <div class="muted" id="ppMsg"></div>
+    </div>
+    <div id="ppOut"></div>`;
+  const read = () => { o.title = $('ppT').value.trim() || 'תבניות פלינדרומיות'; o.type = $('ppTy').value; o.lv = $('ppLv').value; o.n = Math.max(1, Math.floor(Number($('ppN').value) || 1)); o.key = $('ppKey').checked; $('ppN').value = o.n; };
+  $('ppGo').onclick = () => {
+    read();
+    const tys = ['d', 's', 't'], list = [];
+    for (let i = 0; i < o.n; i++) {
+      const ty = o.type === 'mix' ? tys[i % 3] : o.type;
+      const lv = o.lv === 'up' ? Math.min(5, 1 + Math.floor(i * 5 / o.n)) : Number(o.lv);
+      list.push(Object.assign(palMake(ty, lv), { ty, lv }));
+    }
+    const box = (P, i, key) => `<div class="pp-item"><div class="pp-h"><b>${i + 1}.</b> <span class="pp-st">${'★'.repeat(P.lv)}</span>${o.type === 'mix' && !key ? ` <span class="pp-ty">${PAL_TYPES.find(t => t[0] === P.ty)[1]}</span>` : ''}</div>${P.total !== null ? `<div class="pp-tot">סכום כל המספרים: <b>${P.total}</b></div>` : ''}${palGridHTML(P, true, key ? 'key' : 'blank')}</div>`;
+    const anyT = list.some(P => P.ty !== 'd');
+    let out = `<section class="ws-page pp-page">
+      <div class="wshead"><h1>${esc(o.title)}</h1>
+        <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      <div class="wstips">מלאו את המשבצות הריקות בספרות 1–9, כך שבכל שורה ובכל טור (שתי משבצות צמודות או יותר) יהיה <b>מספר פלינדרומי</b> – מספר שנקרא אותו דבר משני הכיוונים.${anyT ? ' המספרים ליד החצים הם סכום הספרות בשורה או בטור.' : ''}</div>
+      <div class="pp-grid">${list.map((P, i) => box(P, i)).join('')}</div>
+      <div class="pp-credit">${PAL_CREDIT}</div>
+    </section>`;
+    if (o.key) out += `<section class="ws-page pp-page wskey"><h2>🔑 פתרונות – ${esc(o.title)}</h2><div class="pp-grid pp-keys">${list.map((P, i) => box(P, i, 1)).join('')}</div></section>`;
+    $('ppOut').innerHTML = out;
+    $('ppPrint').classList.remove('hidden');
+    $('ppGo').textContent = '🔄 יצירה מחדש (תבניות חדשות)';
+    $('ppMsg').textContent = `הדף מוכן – ${o.n} תבניות. גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".`;
+    track('מצוינות: פלינדרום', `הדפסה: ${o.n} תבניות`);
+  };
+  $('ppPrint').onclick = () => window.print();
 }
 const PAL_TIP = {
   d: 'התחילו מספרה נתונה: בשורה או בטור, המשבצת שנמצאת <b>באותו מרחק מהקצה השני</b> מקבלת את אותה ספרה. כך הספרה "עוברת" משורה לטור, ומטור לשורה.',
