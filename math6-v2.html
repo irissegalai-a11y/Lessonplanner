@@ -1953,6 +1953,17 @@
   .pl-clue.pl-bad { color: var(--bad); background: var(--bad-bg); border-radius: 8px; }
   .pl-ex { text-align: center; }
   .dl-arr i.hl { background: #e0a33a; } .dl-arr i.gh { background: transparent; border: 1.5px dashed #9aa6d8; box-sizing: border-box; }
+  .dfg-hud { font-size: 1.05rem; }
+  .dfg-board .df-center { margin-bottom: 6px; }
+  .dfg-q { font-size: clamp(1.5rem, 7vw, 2.1rem); font-weight: 800; margin: 8px 0 12px; display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .dfg-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 420px; margin: 0 auto; }
+  .dfg-opt { font-size: 1.5rem; font-weight: 800; padding: 14px 8px; background: #fff; color: #1f2f5c; border: 2.5px solid #2f4f9a; border-radius: 14px; box-shadow: 2px 3px 0 #2f4f9a; }
+  .dfg-opt:hover, .dfg-opt:focus, .dfg-opt:active { background: #eef2ff; color: #1f2f5c; border-color: #2f4f9a; }
+  .dfg-opt.ok { background: var(--ok-bg); border-color: var(--ok); color: var(--ok); }
+  .dfg-opt.bad { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .dfg-fb { min-height: 2.6em; margin-top: 10px; font-weight: 700; }
+  .dfg-fb .ok { color: var(--ok); font-size: 1.3rem; } .dfg-fb .bad { color: var(--bad); }
+  .dfg-stars { font-size: 2.4rem; letter-spacing: 6px; }
   .dl-row, .dl-fam { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; margin: 10px 0; }
   .dl-box { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 12px; border: 2px solid #9aa6d8; border-radius: 14px; background: #f4f7ff; }
   .dl-f { font-weight: 800; font-size: 1.1rem; }
@@ -2030,7 +2041,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רלט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רמ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8645,7 +8656,7 @@ let navPopping = false;
    כל עוד TRACK.form ריק – לא נשלח כלום
    ========================================================= */
 const TRACK = { form: 'https://docs.google.com/forms/d/e/1FAIpQLScbU-3oB6Sx3hsec4cxoQQUWUfSnuvGH8X7DOKLR5hldhe6CA/formResponse', f: { device: 'entry.218291459', grade: 'entry.2065505054', name: 'entry.1804780443', action: 'entry.285567241', detail: 'entry.1501454704' } };
-const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', dlab: 'משחק: מעבדת העשרוניים', fj: 'משחק: קפיצות שברים', fd: 'משחק: קפיצות חילוק', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל', kfd: 'אימון חילוק' };
+const TRACK_SCREENS = { race: 'משחק: מרוץ נגד השעון', memory: 'משחק: זוגות', jeo: "משחק: ג'פרדי", mil: 'משחק: מי רוצה להיות מיליונר', mt: 'משחק: מיליונר קבוצות', bingo: 'משחק: בינגו', tf: 'משחק: אמת או שקר', cq: 'משחק: כיבוש שטחים', war: 'משחק: מלחמה', city: 'משחק: עיר השטחים', dlab: 'משחק: מעבדת העשרוניים', fj: 'משחק: קפיצות שברים', fd: 'משחק: קפיצות חילוק', gb: 'כלי: גיאובורד', exit: 'כרטיס יציאה', kf: 'אימון כפל', kfd: 'אימון חילוק', dfg: 'משחק: מרוץ העובדות' };
 let trackLast = '';
 // זמן תרגול פעיל: כל משחק, שיעור, תרגול או פתיח נמדד מרגע הפתיחה ועד שעוברים לפעילות אחרת, חוזרים לדף הבית או סוגרים את הדף.
 // נספר רק זמן שבו באמת עבדו: בין לחיצה/הקלדה אחת לבאה נספרת לכל היותר דקה, כך שהשארת המסך פתוח בלי לגעת לא נספרת.
@@ -8867,6 +8878,12 @@ function home() {
             <span class="gc-ds">כמה תרגילים תפתרו בדקה אחת? נסו לעבור את השיא שלכם.</span>
             ${Object.keys(raceData().best).length ? `<span class="gc-st">${ic('star')} השיא שלי: ${Math.max(...Object.values(raceData().best))}</span>` : ''}
           </button>
+          ${GRADE >= 3 ? `<button class="game-card" id="dfgGo">
+            <span class="gc-ic" style="--gw:rgba(47,79,154,0.45)">🧩</span>
+            <span class="gc-nm">מרוץ העובדות</span>
+            <span class="gc-ds">עובדת כפל אחת במרכז – וכמה עובדות תגלו ממנה בדקה? הכפלה, חציה, עוד קבוצה, חילוק, פי 10. רצף תשובות נכונות = בונוס!</span>
+            ${dfgBest() ? `<span class="gc-st">${ic('star')} השיא שלי: ${dfgBest()}</span>` : ''}
+          </button>` : ''}
           <button class="game-card" id="memGo">
             <span class="gc-ic" style="--gw:rgba(127,168,214,0.6)">${ic('cards')}</span>
             <span class="gc-nm">זוגות</span>
@@ -9038,6 +9055,7 @@ function home() {
   wpBind();
   $('raceGo').onclick = () => raceHome();
   $('memGo').onclick = () => memHome();
+  if ($('dfgGo')) $('dfgGo').onclick = () => dfgHome();
   $('milGo').onclick = () => milHome();
   $('cityGo').onclick = () => cityHome();
   if ($('dlGo')) $('dlGo').onclick = () => dlHome();
@@ -14467,6 +14485,99 @@ if (GRADE >= 3) {
   });
   const ti = LESSON_ORDER.indexOf('times'), di = LESSON_ORDER.indexOf('divis');
   LESSON_ORDER.splice(ti >= 0 ? ti + 1 : di >= 0 ? di + 1 : 0, 0, 'dfacts');
+}
+/* ---------- 🎮 משחק: מרוץ העובדות – עובדה אחת במרכז, דקה אחת, 4 תשובות לבחירה ---------- */
+const DFG_KEY = 'math-dfg-best-' + GRADE;
+const dfgBest = () => { try { return Number(localStorage.getItem(DFG_KEY)) || 0; } catch (e) { return 0; } };
+function dfgHome() {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('dfg');
+  const best = dfgBest();
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧩 מרוץ העובדות</span><button class="secondary" id="dfgBack">${ic('home')} לדף הבית</button></div>
+    <div class="card center dfg-intro">
+      <div class="df-center"><div class="df-fact">${M('6 × 4 = 24')}</div>${dlArr(6, 4)}</div>
+      <p>במרכז יש <b>עובדת כפל אחת</b>. מסביב יופיעו תרגילים שאפשר לפתור <b>בעזרתה</b> – בלי לחשב מההתחלה!</p>
+      <p class="muted">שואלים: מה השתנה? פי 2? חצי? עוד קבוצה? פי 10? חילוק?<br>יש לכם <b>דקה אחת</b>. כל 3 תשובות נכונות ברצף = 🔥 בונוס. כל 4 תרגילים – עובדה חדשה.</p>
+      ${best ? `<p>${ic('star')} השיא שלך: <b>${best}</b> נקודות</p>` : ''}
+      <div class="actions" style="justify-content:center"><button class="race-go" id="dfgStart">▶ מתחילים!</button></div>
+    </div>`;
+  $('dfgBack').onclick = home;
+  $('dfgStart').onclick = dfgPlay;
+}
+function dfgPlay() {
+  const G = Math.max(3, Math.min(6, GRADE)), END = Date.now() + 60000;
+  const g = { score: 0, right: 0, wrong: 0, streak: 0, n: 0, F: null, used: new Set(), miss: [] };
+  const newFact = () => { g.F = dfFacts(G); g.used = new Set(); };
+  const nextQ = () => {
+    if (!g.F || g.n % 4 === 0) newFact();
+    const pool = g.F.all.filter(x => !g.used.has(x.e) && x.e !== g.F.all[0].e);
+    const x = pick(pool.length ? pool : g.F.all); g.used.add(x.e);
+    const A = x.ans, a = g.F.a, b = g.F.b;
+    const cand = [g.F.p, A + 1, A - 1, A * 10, A / 10, A + a, A + b, A - b, A * 2, A / 2, A + 10].filter(v => v > 0 && Math.abs(v - A) > 1e-9 && (Number.isInteger(v) || G >= 5));
+    const uniq = [...new Set(cand.map(v => Math.round(v * 1000) / 1000))];
+    const opts = shuffle([A, ...shuffle(uniq).slice(0, 3)]);
+    g.q = { x, A, opts };
+    draw();
+  };
+  const left = () => Math.max(0, Math.ceil((END - Date.now()) / 1000));
+  const draw = (fb) => {
+    const { x, opts } = g.q;
+    app.innerHTML = `
+      <div class="topbar"><span class="title">🧩 מרוץ העובדות</span><span class="dfg-hud"><b id="dfgClock">⏱️ ${left()}</b> · נקודות: <b>${g.score}</b>${g.streak >= 3 ? ` · 🔥${g.streak}` : ''}</span><button class="ghost" id="dfgQuit">${ic('close')} יציאה</button></div>
+      <div class="card center dfg-board">
+        <div class="muted small">יודעים ש…</div>
+        <div class="df-center"><div class="df-fact">${M(`${g.F.a} × ${g.F.b} = ${g.F.p}`)}</div>${dlArr(g.F.a, g.F.b)}</div>
+        <div class="dfg-q"><span class="df-chip c${x.c}">${x.lbl}</span> ${M(x.e.replace(/÷/g, ':') + ' = ?')}</div>
+        <div class="dfg-opts">${opts.map((v, i) => `<button type="button" class="dfg-opt" data-o="${i}">${M(fmt(v))}</button>`).join('')}</div>
+        <div class="dfg-fb" id="dfgFb">${fb || ''}</div>
+      </div>`;
+    $('dfgQuit').onclick = () => { clearInterval(g.t); dfgHome(); };
+    app.querySelectorAll('[data-o]').forEach(bt => bt.onclick = () => answer(+bt.dataset.o, bt));
+  };
+  const answer = (i, bt) => {
+    if (g.lock) return;
+    const { x, A, opts } = g.q, ok = Math.abs(opts[i] - A) < 1e-9;
+    g.n++;
+    if (ok) {
+      g.right++; g.streak++; const pts = g.streak >= 3 ? 2 : 1; g.score += pts;
+      bt.classList.add('ok');
+      g.lock = true; setTimeout(() => { g.lock = false; if (left() > 0) nextQ(); }, 350);
+      $('dfgFb').innerHTML = `<span class="ok">✔ ${pts > 1 ? '+2 🔥' : '+1'}</span>`;
+    } else {
+      g.wrong++; g.streak = 0; if (g.miss.length < 5) g.miss.push(`${x.e.replace(/÷/g, ':')} = ${fmt(A)}`);
+      bt.classList.add('bad'); app.querySelectorAll('[data-o]').forEach((b2, j) => { if (Math.abs(opts[j] - A) < 1e-9) b2.classList.add('ok'); });
+      $('dfgFb').innerHTML = `<span class="bad">✘ ${x.how.replace(/÷/g, ':')}</span>`;
+      g.lock = true; setTimeout(() => { g.lock = false; if (left() > 0) nextQ(); }, 1800);
+    }
+  };
+  const done = () => {
+    clearInterval(g.t);
+    const best = dfgBest(), rec = g.score > best;
+    if (rec) { try { localStorage.setItem(DFG_KEY, String(g.score)); } catch (e) { /* לא חובה */ } }
+    track('משחק: מרוץ העובדות', `${g.score} נקודות (${g.right} נכון, ${g.wrong} טעויות)`);
+    const stars = g.right >= 15 ? 3 : g.right >= 8 ? 2 : g.right >= 3 ? 1 : 0;
+    app.innerHTML = `
+      <div class="topbar"><span class="title">🧩 מרוץ העובדות</span><button class="secondary" id="dfgBack">${ic('home')} לדף הבית</button></div>
+      <div class="card center">
+        <h2>⏱️ נגמרה הדקה!</h2>
+        <div class="dfg-stars">${'⭐'.repeat(stars)}${'☆'.repeat(3 - stars)}</div>
+        <div class="score-big">${g.score} נקודות</div>
+        <p>✅ ${g.right} נכון · ✘ ${g.wrong} לא נכון</p>
+        <p>${rec ? (best ? `🏆 <b>שיא חדש!</b> השיא הקודם היה ${best}.` : '🏆 זה השיא הראשון שלך!') : `השיא שלך: ${best}. ${g.score >= best - 2 ? 'כמעט! 💪' : 'נסו שוב – בכל פעם משתפרים.'}`}</p>
+        ${g.miss.length ? `<div class="muted small">כדאי לזכור: ${g.miss.map(t => M(t)).join(' · ')}</div>` : ''}
+        <div class="actions" style="justify-content:center"><button class="race-go" id="dfgAgain">🔁 עוד דקה</button><button class="secondary" id="dfgLearn">📚 הסבר: מעובדה אחת – הרבה עובדות</button></div>
+      </div>`;
+    $('dfgBack').onclick = home;
+    $('dfgAgain').onclick = dfgPlay;
+    $('dfgLearn').onclick = () => startLesson('dfacts');
+  };
+  nextQ();
+  g.t = setInterval(() => {
+    const c = $('dfgClock');
+    if (!c) { clearInterval(g.t); return; } // יצאו מהמשחק
+    c.textContent = '⏱️ ' + left();
+    if (left() <= 0) done();
+  }, 250);
 }
 // מאזניים – מספר חסר: a + b = c + ☐. שני הצדדים שווים, כמו מאזניים. כיתות א'–ג'
 function balGen(g) {
