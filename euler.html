@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>משיכת קולמוס אחת – הגשרים של אוילר</title>
+<link rel="icon" href="icon-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f1fb; --card:#fff; --ink:#24213a; --muted:#6b6785;
+  --pri:#6c4cf1; --pri2:#ece6ff; --line:#a9a4c2;
+  --odd:#f08a24; --oddbg:#fff1e3; --even:#1f9d6b; --evenbg:#e2f6ee;
+  --bad:#d6455d; --badbg:#fde8ec; --water:#cfe6fb; --land:#eef3e2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Rubik,Arial,sans-serif;font-size:17px;line-height:1.55}
+header{background:linear-gradient(120deg,#6c4cf1,#a34cf1);color:#fff;padding:18px 16px 54px;text-align:center}
+header h1{margin:0;font-size:clamp(22px,5vw,32px);font-weight:800}
+header p{margin:4px 0 0;opacity:.9}
+nav.tabs{display:flex;gap:8px;justify-content:center;margin:-38px auto 0;padding:0 16px;max-width:760px;flex-wrap:wrap}
+nav.tabs button{flex:1 1 0;min-width:96px;border:0;border-radius:14px 14px 0 0;padding:12px 8px;font:inherit;font-weight:700;background:rgba(255,255,255,.55);color:var(--ink);cursor:pointer}
+nav.tabs button.on{background:var(--card)}
+main{max-width:760px;margin:0 auto;padding:0 16px 40px}
+.panel{background:var(--card);border-radius:0 0 18px 18px;padding:18px 16px;box-shadow:0 6px 24px rgba(60,40,140,.08)}
+.hide{display:none!important}
+h2{margin:.2em 0 .4em;font-size:22px}
+h3{margin:1em 0 .3em;font-size:19px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chip{border:2px solid var(--pri2);background:#fff;border-radius:12px;padding:4px 9px;font:inherit;font-size:14px;cursor:pointer;min-width:44px;line-height:1.2}
+.chip small{display:block;font-size:11px;color:var(--odd);letter-spacing:-1px;min-height:13px}
+.chip.on{border-color:var(--pri);background:var(--pri2);font-weight:700}
+.steps{display:flex;gap:6px;margin:6px 0 10px;flex-wrap:wrap}
+.step{font-size:13px;padding:3px 10px;border-radius:20px;background:#f1eff7;color:var(--muted)}
+.step.on{background:var(--pri);color:#fff;font-weight:700}
+.step.done{background:var(--pri2);color:var(--pri)}
+.board{width:100%;max-width:470px;display:block;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.msg{border-radius:14px;padding:12px 14px;margin:10px 0;background:#f6f4fc}
+.msg.good{background:var(--evenbg)}
+.msg.bad{background:var(--badbg)}
+.msg.warn{background:var(--oddbg)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.btn{border:0;border-radius:12px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer;background:var(--pri);color:#fff}
+.btn.sec{background:var(--pri2);color:var(--pri)}
+.btn.yes{background:var(--even)}
+.btn.no{background:var(--bad)}
+.btn:disabled{opacity:.45;cursor:default}
+.odd{color:var(--odd);font-weight:700}
+.even{color:var(--even);font-weight:700}
+.stars{font-size:22px;text-align:center;letter-spacing:2px}
+.counter{text-align:center;color:var(--muted);font-size:15px;min-height:1.5em}
+.rule{width:100%;border-collapse:collapse;margin:8px 0;font-size:16px}
+.rule td,.rule th{border:1px solid #e3def3;padding:8px;text-align:right;vertical-align:top}
+.rule th{background:var(--pri2)}
+.card{border:2px solid var(--pri2);border-radius:16px;padding:12px 14px;margin:12px 0}
+.figrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center}
+.figrow svg{width:100%;max-width:300px}
+.arrow{font-size:28px;color:var(--pri)}
+.why{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.why button{text-align:right;background:#fff;border:2px solid var(--pri2);border-radius:12px;padding:9px 12px;font:inherit;cursor:pointer}
+.why button.right{border-color:var(--even);background:var(--evenbg)}
+.why button.wrong{border-color:var(--bad);background:var(--badbg)}
+.pop{animation:pop .5s}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{r:6.2}50%{r:7.6}}
+.cur{animation:pulse 1s infinite}
+.legend{font-size:14px;color:var(--muted);text-align:center}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:10px}
+.toolrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:6px 0}
+.toolrow .btn{padding:8px 12px;font-size:15px}
+.btn.mode-on{outline:3px solid var(--odd)}
+</style>
+</head>
+<body>
+<header>
+  <h1>✏️ משיכת קולמוס אחת</h1>
+  <p>הגשרים של אוילר – האם אפשר לצייר את הצורה בקו אחד? חושבים לפני שמציירים!</p>
+</header>
+<nav class="tabs">
+  <button data-tab="play" class="on">🎮 משחק</button>
+  <button data-tab="learn">💡 למה זה עובד?</button>
+  <button data-tab="build">🛠️ בונים צורה</button>
+</nav>
+<main>
+
+<!-- ====== משחק ====== -->
+<section id="tab-play" class="panel">
+  <div class="chips" id="chips"></div>
+  <h2 id="lvTitle"></h2>
+  <div class="steps" id="steps"></div>
+  <div id="instr" class="msg"></div>
+  <svg id="board" class="board" viewBox="-8 -8 116 116"></svg>
+  <div class="counter" id="counter"></div>
+  <div class="btns" id="actions"></div>
+  <div id="feedback"></div>
+  <div class="legend">החוקים: מציירים את כל הקווים · בלי להרים את העיפרון · בלי לעבור פעמיים על אותו קו (מותר לעבור שוב דרך נקודה)</div>
+</section>
+
+<!-- ====== הסבר ====== -->
+<section id="tab-learn" class="panel hide">
+  <h2>🌉 הסיפור: שבעת הגשרים</h2>
+  <p>לפני כמעט 300 שנה, בעיר <b>קניגסברג</b>, זרם נהר ובתוכו שני איים. שבעה גשרים חיברו בין חלקי העיר. תושבי העיר שאלו:
+  <b>האם אפשר לטייל בעיר ולעבור על כל גשר בדיוק פעם אחת?</b> אף אחד לא הצליח – אבל גם אף אחד לא ידע להסביר למה.</p>
+  <p>המתמטיקאי <b>לאונרד אוילר</b> פתר את החידה בשנת 1736 – בלי לטייל בכלל! הוא הבין שלא משנה כמה גדול האי או כמה ארוך הגשר. חשוב רק <b>מה מחובר למה</b>.
+  לכן הפך כל חלק יבשה ל<b>נקודה</b>, וכל גשר ל<b>קו</b>:</p>
+  <div class="figrow">
+    <svg id="mapFig" viewBox="-8 -8 116 116" aria-label="מפה של הנהר והגשרים"></svg>
+    <div class="arrow">⬅</div>
+    <svg id="graphFig" viewBox="-8 -8 116 116" aria-label="אותה מפה כנקודות וקווים"></svg>
+  </div>
+  <p>עכשיו השאלה היא בדיוק השאלה של המשחק שלנו: <b>האם אפשר לצייר את הצורה במשיכת קולמוס אחת?</b></p>
+
+  <h2>🔍 הרעיון הגדול: נכנסים ויוצאים</h2>
+  <div class="card">
+    <p>נניח שאנחנו מציירים, ו<b>עוברים דרך</b> נקודה כלשהי (לא מתחילים בה ולא מסיימים בה).
+    כל פעם שאנחנו מגיעים אליה – אנחנו <b>נכנסים</b> בקו אחד, ו<b>יוצאים</b> בקו אחר. כלומר כל ביקור "משתמש" ב<b>שני קווים</b>.</p>
+    <div class="figrow"><svg id="passFig" viewBox="0 0 200 110" style="max-width:360px"></svg></div>
+    <p>לכן בנקודה שעוברים דרכה, הקווים תמיד הולכים <b>בזוגות</b>: 2, 4, 6... מספר הקווים חייב להיות <span class="even">זוגי</span>.</p>
+    <p>ומה עם נקודה עם מספר <span class="odd">אי־זוגי</span> של קווים (1, 3, 5...)? אחרי שכל הזוגות "נכנס־יוצא" נגמרים, נשאר קו אחד בלי בן־זוג.
+    זה יכול לקרות רק אם <b>מתחילים</b> בנקודה הזו (יוצאים בלי להיכנס) או <b>מסיימים</b> בה (נכנסים ולא יוצאים).</p>
+    <p>ויש רק התחלה אחת וסוף אחד... ולכן <b>לכל היותר 2 נקודות אי־זוגיות</b>!</p>
+  </div>
+
+  <h2>📏 הכלל של אוילר</h2>
+  <table class="rule">
+    <tr><th>כמה נקודות אי־זוגיות יש?</th><th>אפשר בקו אחד?</th><th>איפה מתחילים?</th></tr>
+    <tr><td><b>0</b> (כל הנקודות זוגיות)</td><td class="even">כן ✔</td><td>בכל נקודה שרוצים – ומסיימים באותה נקודה!</td></tr>
+    <tr><td><b>2</b></td><td class="even">כן ✔</td><td>חייבים להתחיל באחת האי־זוגיות, ומסיימים בשנייה.</td></tr>
+    <tr><td><b>4, 6, 8...</b></td><td class="odd">לא ✘</td><td>אין דרך – גם לא לגאונים 😉</td></tr>
+  </table>
+  <p style="font-size:15px;color:var(--muted)">(בתנאי שהצורה היא חלק אחד מחובר. ואם תחפשו צורה עם בדיוק נקודה אי־זוגית אחת או שלוש – לא תמצאו! ראו בהמשך.)</p>
+
+  <h2>🧠 חושבים מראש – שלושה צעדים</h2>
+  <div class="card">
+    <ol>
+      <li><b>סופרים</b> כמה קווים יוצאים מכל נקודה.</li>
+      <li><b>מסמנים</b> את הנקודות שבהן המספר אי־זוגי.</li>
+      <li><b>מחליטים:</b> 0 או 2 נקודות אי־זוגיות → אפשר (ואם 2 – מתחילים באחת מהן). יותר מ־2 → אי אפשר.</li>
+    </ol>
+    <p><b>ובקניגסברג?</b> באי שבאמצע יש 5 גשרים, ובשלושת חלקי היבשה האחרים יש 3 גשרים בכל אחד. ארבע נקודות אי־זוגיות → <span class="odd">אי אפשר!</span>
+    (במשחק תוכלו לנסות בכל זאת, וגם לבדוק מה קורה כשבונים גשר שמיני.)</p>
+  </div>
+
+  <h2>⭐ בונוס לסקרנים: למה אין אף פעם 3 נקודות אי־זוגיות?</h2>
+  <div class="card">
+    <p>לכל קו יש <b>שני קצוות</b>. אם נחבר את מספרי הקווים של כל הנקודות, כל קו ייספר פעמיים – אז הסכום תמיד <b>זוגי</b>.</p>
+    <p>סכום של מספרים זוגיים הוא זוגי. כדי שהסכום הכולל יישאר זוגי, המספרים האי־זוגיים חייבים להגיע <b>בזוגות</b>: 0, 2, 4, 6... לכן אי אפשר שיהיו 1 או 3 נקודות אי־זוגיות.</p>
+    <p>נסו בלשונית "בונים צורה": בנו כל צורה שתרצו וספרו – תמיד יצא מספר זוגי של נקודות אי־זוגיות!</p>
+  </div>
+</section>
+
+<!-- ====== בונים ====== -->
+<section id="tab-build" class="panel hide">
+  <h2>🛠️ בונים צורה משלכם</h2>
+  <div class="msg" id="bInstr">הקישו על מקום ריק כדי להוסיף נקודה. הקישו על נקודה ואז על נקודה אחרת כדי לחבר ביניהן בקו (אפשר לחבר שוב – יופיע קו כפול, כמו שני גשרים).</div>
+  <div class="toolrow">
+    <button class="btn sec" id="bAdd">➕ הוספה</button>
+    <button class="btn sec" id="bDel">🧽 מחיקה</button>
+    <button class="btn sec" id="bClear">🗑️ דף חדש</button>
+  </div>
+  <div class="toolrow">
+    <button class="btn sec" id="bKb">אתגר: קניגסברג – הוסיפו גשר אחד</button>
+    <button class="btn sec" id="bSq">אתגר: ריבוע עם אלכסונים – קו אחד</button>
+  </div>
+  <svg id="bBoard" class="board" viewBox="-8 -8 116 116" style="border:2px dashed var(--pri2);border-radius:16px"></svg>
+  <div id="bVerdict"></div>
+  <div class="btns"><button class="btn" id="bTry">✏️ נסו לצייר את הצורה שלי</button></div>
+</section>
+
+<footer>מתמטיקה בכיתה · איריס סגל · גרסה 1.0 א</footer>
+</main>
+
+<script>
+"use strict";
+const HE = 'אבגדהוזחטיכלמנסעפצקרשת';
+const NS = 'http://www.w3.org/2000/svg';
+const $ = id => document.getElementById(id);
+
+/* ---------- שלבים ---------- */
+function circ(n, r, cx = 50, cy = 52, rot = -90) {
+  return Array.from({ length: n }, (_, i) => {
+    const a = (rot + i * 360 / n) * Math.PI / 180;
+    return [+(cx + r * Math.cos(a)).toFixed(1), +(cy + r * Math.sin(a)).toFixed(1)];
+  });
+}
+const pent = circ(5, 44);
+const hex = circ(6, 44, 50, 50, -90);
+const KB_NODES = [[50, 6], [50, 94], [28, 50], [84, 50]];
+const KB_EDGES = [[0, 2], [0, 2], [1, 2], [1, 2], [0, 3], [1, 3], [2, 3]];
+const LEVELS = [
+  { name: 'משולש', nodes: [[50, 12], [12, 86], [88, 86]], edges: [[0, 1], [1, 2], [2, 0]] },
+  { name: 'ריבוע ואלכסון', nodes: [[15, 15], [85, 15], [85, 85], [15, 85]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2]] },
+  { name: 'פפיון', nodes: [[10, 18], [10, 82], [50, 50], [90, 18], [90, 82]], edges: [[0, 1], [1, 2], [2, 0], [2, 3], [3, 4], [4, 2]] },
+  { name: 'מעטפה (הבית)', nodes: [[15, 92], [85, 92], [85, 42], [15, 42], [50, 6]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2], [1, 3], [3, 4], [4, 2]] },
+  { name: 'ריבוע עם שני אלכסונים', nodes: [[15, 15], [85, 15], [85, 85], [15, 85]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2], [1, 3]] },
+  { name: 'כוכב', nodes: pent, edges: [[0, 2], [2, 4], [4, 1], [1, 3], [3, 0]] },
+  { name: 'עיגול וקוטר', nodes: [[8, 50], [92, 50]], edges: [[0, 1], [0, 1], [0, 1]], bend: 40 },
+  { name: 'דג', nodes: [[6, 50], [38, 20], [66, 50], [38, 80], [94, 22], [94, 78]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [1, 3], [2, 4], [4, 5], [5, 2]] },
+  { name: 'חלון', nodes: [[12, 12], [50, 12], [88, 12], [12, 50], [50, 50], [88, 50], [12, 88], [50, 88], [88, 88]], edges: [[0, 1], [1, 2], [3, 4], [4, 5], [6, 7], [7, 8], [0, 3], [3, 6], [1, 4], [4, 7], [2, 5], [5, 8]] },
+  { name: 'מחומש וכוכב', nodes: pent, edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [0, 2], [2, 4], [4, 1], [1, 3], [3, 0]] },
+  { name: 'גלגל', nodes: [...hex, [50, 50]], edges: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5]] },
+  { name: 'שבעת הגשרים של קניגסברג', nodes: KB_NODES, edges: KB_EDGES, bg: 'river', bend: 11 },
+  { name: 'קניגסברג + גשר שמיני', nodes: KB_NODES, edges: [...KB_EDGES, [1, 3]], bg: 'river', bend: 11 },
+];
+
+/* ---------- גרף: חישובים ---------- */
+function degrees(g) {
+  const d = g.nodes.map(() => 0);
+  g.edges.forEach(([a, b]) => { d[a]++; d[b]++; });
+  return d;
+}
+function connected(g) {
+  const d = degrees(g), used = d.map((x, i) => x > 0 ? i : -1).filter(i => i >= 0);
+  if (!used.length) return true;
+  const seen = new Set([used[0]]), st = [used[0]];
+  while (st.length) {
+    const u = st.pop();
+    g.edges.forEach(([a, b]) => {
+      const v = a === u ? b : b === u ? a : -1;
+      if (v >= 0 && !seen.has(v)) { seen.add(v); st.push(v); }
+    });
+  }
+  return used.every(i => seen.has(i));
+}
+function analyze(g) {
+  const deg = degrees(g);
+  const odd = deg.map((x, i) => x % 2 ? i : -1).filter(i => i >= 0);
+  const conn = connected(g);
+  return { deg, odd, conn, possible: conn && g.edges.length > 0 && odd.length <= 2 };
+}
+const nm = i => HE[i] || String(i + 1);
+const list = arr => arr.map(nm).map(x => `<b>${x}</b>`).join(', ');
+
+/* ---------- ציור ---------- */
+function edgeGeom(g) {
+  const groups = {}, B = g.bend || 13;
+  g.edges.forEach(([a, b], i) => { const k = Math.min(a, b) + '-' + Math.max(a, b); (groups[k] = groups[k] || []).push(i); });
+  const geo = [];
+  Object.values(groups).forEach(ids => {
+    const m = ids.length;
+    const offs = m % 2 ? [0] : [];
+    for (let j = 1; offs.length < m; j++) { offs.push(m % 2 ? j : j - .5, m % 2 ? -j : -(j - .5)); }
+    ids.forEach((ei, k) => {
+      let [a, b] = g.edges[ei]; if (a > b) [a, b] = [b, a];
+      const [x1, y1] = g.nodes[a], [x2, y2] = g.nodes[b];
+      const len = Math.hypot(x2 - x1, y2 - y1) || 1, nx = -(y2 - y1) / len, ny = (x2 - x1) / len;
+      const o = offs[k] * B * (m % 2 ? 1 : 2), mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      geo[ei] = {
+        d: o ? `M${x1} ${y1} Q${mx + nx * o * 2} ${my + ny * o * 2} ${x2} ${y2}` : `M${x1} ${y1} L${x2} ${y2}`,
+        mid: [mx + nx * o, my + ny * o]
+      };
+    });
+  });
+  return geo;
+}
+function riverBg() {
+  return `<g fill="var(--water)">
+    <rect x="-8" y="24" width="116" height="14" rx="3"/>
+    <rect x="-8" y="62" width="116" height="14" rx="3"/>
+    <rect x="57" y="24" width="12" height="52"/></g>`;
+}
+function draw(svg, g, o = {}) {
+  const geo = edgeGeom(g), deg = degrees(g);
+  let h = g.bg === 'river' ? riverBg() : '';
+  g.edges.forEach((e, i) => {
+    const used = o.used && o.used.has(i);
+    h += `<path d="${geo[i].d}" data-e="${i}" fill="none" stroke="transparent" stroke-width="9"/>`;
+    h += `<path d="${geo[i].d}" fill="none" pointer-events="none" stroke="${used ? 'var(--pri)' : 'var(--line)'}" stroke-width="${used ? 3.4 : 2.4}" stroke-linecap="round" ${!used && o.dashFree ? 'stroke-dasharray="3 2.5"' : ''}/>`;
+  });
+  if (o.order) o.order.forEach((ei, k) => {
+    const [x, y] = geo[ei].mid;
+    h += `<g pointer-events="none"><rect x="${x - 2.6}" y="${y - 2.4}" width="5.2" height="4.8" rx=".8" fill="var(--pri)"/><text x="${x}" y="${y + 1.3}" font-size="3.6" text-anchor="middle" fill="#fff" font-weight="700">${k + 1}</text></g>`;
+  });
+  g.nodes.forEach(([x, y], i) => {
+    if (o.hideIsolated && !deg[i] && i !== o.sel) { /* still draw */ }
+    const isCur = o.cur === i, isStart = o.start === i, isSel = o.sel === i;
+    const showD = o.showAll || (o.shown && o.shown.has(i));
+    const fill = isCur ? 'var(--pri)' : isSel ? 'var(--odd)' : '#fff';
+    h += `<circle cx="${x}" cy="${y}" r="6.2" data-n="${i}" class="${isCur ? 'cur' : ''}" fill="${fill}" stroke="${showD ? (deg[i] % 2 ? 'var(--odd)' : 'var(--even)') : 'var(--ink)'}" stroke-width="${showD ? 2 : 1.2}"/>`;
+    if (isStart && !isCur) h += `<circle cx="${x}" cy="${y}" r="8.4" fill="none" stroke="var(--pri)" stroke-width=".9" stroke-dasharray="2 1.5" pointer-events="none"/>`;
+    h += `<text x="${x}" y="${y + 2}" font-size="5.6" text-anchor="middle" font-weight="700" pointer-events="none" fill="${isCur || isSel ? '#fff' : 'var(--ink)'}">${nm(i)}</text>`;
+    if (showD) {
+      const bx = x + (x > 85 ? -8 : 8), by = y + (y < 8 ? 8 : -7.5), oddv = deg[i] % 2;
+      h += `<g pointer-events="none" class="${o.popId === i ? 'pop' : ''}" style="transform-origin:${bx}px ${by}px"><circle cx="${bx}" cy="${by}" r="4.4" fill="${oddv ? 'var(--odd)' : 'var(--even)'}"/><text x="${bx}" y="${by + 1.7}" font-size="5" text-anchor="middle" fill="#fff" font-weight="800">${deg[i]}</text></g>`;
+    }
+  });
+  svg.innerHTML = h;
+}
+function svgPoint(svg, ev) {
+  const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY;
+  return p.matrixTransform(svg.getScreenCTM().inverse());
+}
+function hitNode(g, p, r = 10) {
+  let best = -1, bd = r;
+  g.nodes.forEach(([x, y], i) => { const d = Math.hypot(x - p.x, y - p.y); if (d < bd) { bd = d; best = i; } });
+  return best;
+}
+
+/* ---------- שמירת כוכבים ---------- */
+let STARS = {};
+try { STARS = JSON.parse(localStorage.getItem('euler-stars') || '{}') || {}; } catch (e) { STARS = {}; }
+function saveStar(i, n) {
+  if ((STARS[i] || 0) >= n) return;
+  STARS[i] = n;
+  try { localStorage.setItem('euler-stars', JSON.stringify(STARS)); } catch (e) { }
+}
+
+/* ---------- מצב המשחק ---------- */
+const P = { li: 0, g: null, a: null, phase: 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, custom: null, popId: -1, tried: false };
+const board = $('board');
+
+function maxStars() { return P.a.possible ? 3 : 2; }
+function loadLevel(i, custom) {
+  P.li = i; P.custom = custom || null;
+  P.g = custom || LEVELS[i];
+  P.a = analyze(P.g);
+  Object.assign(P, { phase: custom ? 'draw' : 'predict', shown: new Set(), pred: null, start: null, path: [], order: [], why: null, s1: 0, s2: 0, s3: 0, popId: -1, tried: false });
+  render();
+}
+function chips() {
+  $('chips').innerHTML = LEVELS.map((L, i) => {
+    const a = analyze(L), s = STARS[i] || 0, mx = a.possible ? 3 : 2;
+    return `<button class="chip ${i === P.li && !P.custom ? 'on' : ''}" data-l="${i}">${i + 1}<small>${s ? '★'.repeat(s) + '☆'.repeat(mx - s) : ''}</small></button>`;
+  }).join('') + (P.custom ? `<button class="chip on">שלי</button>` : '');
+}
+$('chips').onclick = e => { const b = e.target.closest('[data-l]'); if (b) loadLevel(+b.dataset.l); };
+
+function stepsHtml() {
+  const ph = P.phase, order = ['predict', 'reveal', 'draw'];
+  const map = { predict: 0, start: 0, reveal: 1, draw: 2, won: 2 };
+  const cur = map[ph];
+  const names = ['① חושבים מראש', '② בודקים', '③ מציירים'];
+  if (P.custom) return `<span class="step on">③ מציירים</span>`;
+  return names.map((n, k) => `<span class="step ${k === cur ? 'on' : k < cur ? 'done' : ''}">${n}</span>`).join('');
+}
+function explain() {
+  const a = P.a, n = a.odd.length;
+  if (!a.conn) return 'הצורה בנויה מכמה חלקים נפרדים – אי אפשר לעבור מחלק לחלק בלי להרים את העיפרון.';
+  if (n === 0) return `כל הנקודות <span class="even">זוגיות</span> (אין אף נקודה אי־זוגית) → <b>אפשר!</b> מתחילים בכל נקודה שרוצים, ומסיימים בדיוק באותה נקודה.`;
+  if (n === 2) return `יש בדיוק <b>2</b> נקודות <span class="odd">אי־זוגיות</span>: ${list(a.odd)} → <b>אפשר!</b> אבל חייבים להתחיל באחת מהן – ונסיים בשנייה.`;
+  return `יש <b>${n}</b> נקודות <span class="odd">אי־זוגיות</span>: ${list(a.odd)} → <b>אי אפשר.</b> כל נקודה שעוברים דרכה צריכה זוגות של קווים (נכנסים ויוצאים). רק ההתחלה והסוף יכולים להיות אי־זוגיים – כלומר לכל היותר 2 נקודות.`;
+}
+function starsLine() {
+  const got = P.s1 + P.s2 + P.s3, mx = maxStars();
+  return `<div class="stars">${'⭐'.repeat(got)}${'☆'.repeat(mx - got)}</div>`;
+}
+function render() {
+  chips();
+  const g = P.g, a = P.a, ph = P.phase;
+  $('lvTitle').textContent = P.custom ? 'הצורה שבניתם' : `שלב ${P.li + 1}: ${g.name}`;
+  $('steps').innerHTML = stepsHtml();
+  const showAll = ph === 'reveal' || ph === 'draw' || ph === 'won';
+  const used = new Set(P.order);
+  draw(board, g, {
+    shown: P.shown, showAll: showAll || !!P.custom, popId: P.popId,
+    used, order: P.order, cur: P.path.length ? P.path[P.path.length - 1] : -1,
+    start: ph === 'start' || ph === 'reveal' ? P.start : P.path[0], dashFree: ph === 'draw' && P.path.length > 0
+  });
+  P.popId = -1;
+  let instr = '', act = '', fb = '', cnt = '';
+  if (ph === 'predict') {
+    instr = `<b>שלב 1 – חושבים מראש (בלי לצייר!)</b><br>האם אפשר לצייר את הצורה במשיכת קולמוס אחת?<br><small>💡 טיפ: הקישו על נקודה כדי לספור כמה קווים יוצאים ממנה.</small>`;
+    act = `<button class="btn yes" data-act="yes">✔ אפשר</button><button class="btn no" data-act="no">✘ אי אפשר</button>`;
+    const z = [...P.shown];
+    if (z.length) cnt = `ספרתם ${z.length} מתוך ${g.nodes.length} נקודות` + (z.length === g.nodes.length ? ` · אי־זוגיות: ${z.filter(i => a.deg[i] % 2).length}` : '');
+  } else if (ph === 'start') {
+    instr = `<b>יפה, חשבתם שאפשר.</b><br>מאיזו נקודה כדאי להתחיל? <b>הקישו עליה.</b>`;
+    act = `<button class="btn sec" data-act="back">↩ חזרה</button>`;
+  } else if (ph === 'reveal') {
+    const predOk = P.pred === a.possible;
+    let head = predOk ? `✅ <b>נכון!</b> ${a.possible ? 'אפשר לצייר את הצורה בקו אחד.' : 'אי אפשר לצייר את הצורה בקו אחד.'}`
+      : `❌ <b>לא בדיוק.</b> ${a.possible ? 'דווקא אפשר לצייר אותה בקו אחד!' : 'את הצורה הזו אי אפשר לצייר בקו אחד.'}`;
+    let startTxt = '';
+    if (a.possible && P.start != null) {
+      startTxt = P.s2 ? `<br>✅ ההתחלה בנקודה <b>${nm(P.start)}</b> טובה!`
+        : `<br>⚠️ בנקודה <b>${nm(P.start)}</b> יש ${a.deg[P.start]} קווים (זוגי). כשיש 2 נקודות אי־זוגיות, ההתחלה חייבת להיות באחת מהן. נסו להתחיל ממנה – ותראו מה קורה...`;
+    }
+    instr = `<b>שלב 2 – בודקים:</b> ליד כל נקודה מופיע מספר הקווים שלה. <span class="odd">כתום = אי־זוגי</span>, <span class="even">ירוק = זוגי</span>.`;
+    fb = `<div class="msg ${predOk ? 'good' : 'bad'}">${head}${startTxt}<br><br>${explain()}</div>`;
+    if (!a.possible && !P.custom) {
+      fb += `<div class="msg"><b>שאלת בונוס:</b> למה אי אפשר?<div class="why" id="why">
+        ${[['many', 'כי יש יותר מדי קווים'], ['odd', 'כי יש יותר משתי נקודות שמספר הקווים שלהן אי־זוגי'], ['big', 'כי הצורה מסובכת מדי']].map(([k, t]) =>
+        `<button data-why="${k}" class="${P.why === k ? (k === 'odd' ? 'right' : 'wrong') : ''}" ${P.why ? 'disabled' : ''}>${t}</button>`).join('')}
+        </div>${P.why ? (P.why === 'odd' ? '<p>✅ בדיוק! זה הכלל של אוילר.</p>' : '<p>❌ לא זה. גם צורות עם הרבה קווים אפשר לצייר (נסו את "מחומש וכוכב"). מה שקובע הוא כמה נקודות אי־זוגיות יש.</p>') : ''}</div>`;
+    }
+    fb += starsLine();
+    act = a.possible ? `<button class="btn" data-act="draw">✏️ עכשיו ציירו!</button>`
+      : `<button class="btn sec" data-act="draw">😉 נסו בכל זאת</button>` + nextBtn();
+  } else if (ph === 'draw' || ph === 'won') {
+    const left = g.edges.length - P.order.length;
+    const cur = P.path[P.path.length - 1];
+    if (ph === 'won') {
+      instr = `<b>🎉 כל הכבוד! ציירתם את כל ${g.edges.length} הקווים בקו אחד!</b>`;
+      fb = `<div class="msg good">התחלתם בנקודה <b>${nm(P.path[0])}</b> וסיימתם בנקודה <b>${nm(cur)}</b>. ` +
+        (P.path[0] === cur ? 'חזרתם לנקודת ההתחלה – כמו שקורה תמיד כשכל הנקודות זוגיות.' : 'שימו לב: ההתחלה והסוף הן בדיוק שתי הנקודות האי־זוגיות!') + `</div>` + (P.custom ? '' : starsLine());
+      act = (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '') + `<button class="btn sec" data-act="reset">🔁 שוב</button>` + (P.custom ? '' : nextBtn());
+    } else if (!P.path.length) {
+      instr = `<b>שלב 3 – מציירים:</b> הקישו על נקודת ההתחלה. אחר כך הקישו על הנקודות לפי הסדר (או גררו את האצבע).`;
+      if (P.custom) instr += `<br>${explain()}`;
+    } else {
+      const stuck = !g.edges.some((e, i) => !used.has(i) && (e[0] === cur || e[1] === cur));
+      instr = `<b>שלב 3 – מציירים:</b> הקישו על נקודה שמחוברת לנקודה <b>${nm(cur)}</b> בקו שעוד לא ציירתם.`;
+      if (stuck && left) {
+        const oddTxt = a.possible && a.odd.length === 2 && !a.odd.includes(P.path[0])
+          ? `רמז: התחלתם בנקודה זוגית. נסו להתחיל ב־${list(a.odd)}.`
+          : a.possible ? 'רמז: אל תסגרו "מעגל" מוקדם מדי – השאירו לעצמכם דרך חזרה. נסו לחזור צעד או להתחיל מחדש.'
+            : 'וזה בדיוק מה שאוילר הסביר: עם יותר משתי נקודות אי־זוגיות תמיד נשארים קווים בחוץ.';
+        fb = `<div class="msg warn">😬 <b>נתקעתם בנקודה ${nm(cur)}</b> – נשארו עוד ${left} קווים שלא ציירתם.<br>${oddTxt}</div>`;
+        if (!a.possible && !P.custom) fb += nextBtnWrap();
+      }
+    }
+    if (ph === 'draw') {
+      cnt = `קווים: ${P.order.length} / ${g.edges.length}`;
+      act = `<button class="btn sec" data-act="undo" ${P.order.length ? '' : 'disabled'}>↶ צעד אחורה</button><button class="btn sec" data-act="reset">🔁 התחלה מחדש</button>` +
+        (P.custom ? `<button class="btn sec" data-act="tobuild">🛠️ חזרה לבנייה</button>` : '');
+    }
+  }
+  $('instr').innerHTML = instr;
+  $('actions').innerHTML = act;
+  $('feedback').innerHTML = fb;
+  $('counter').textContent = cnt;
+}
+function nextBtn() { return P.li < LEVELS.length - 1 ? `<button class="btn" data-act="next">לשלב הבא ⬅</button>` : `<span class="msg good">🏆 סיימתם את כל השלבים!</span>`; }
+function nextBtnWrap() { return `<div class="btns">${nextBtn()}</div>`; }
+function finishStars() { if (!P.custom) saveStar(P.li, P.s1 + P.s2 + P.s3); }
+
+$('tab-play').addEventListener('click', e => {
+  const b = e.target.closest('[data-act],[data-why]'); if (!b) return;
+  if (b.dataset.why) {
+    if (P.why) return;
+    P.why = b.dataset.why; if (P.why === 'odd') P.s2 = 1; finishStars(); render(); return;
+  }
+  const act = b.dataset.act, a = P.a;
+  if (act === 'yes') { P.pred = true; P.phase = 'start'; }
+  else if (act === 'no') { P.pred = false; P.s1 = a.possible ? 0 : 1; P.phase = 'reveal'; finishStars(); }
+  else if (act === 'back') { P.phase = 'predict'; P.start = null; }
+  else if (act === 'draw') {
+    P.phase = 'draw'; P.order = [];
+    P.path = a.possible && P.start != null ? [P.start] : [];
+  }
+  else if (act === 'undo') { if (P.order.length) { P.order.pop(); P.path.pop(); } }
+  else if (act === 'reset') { P.phase = 'draw'; P.order = []; P.path = []; }
+  else if (act === 'next') { loadLevel(Math.min(P.li + 1, LEVELS.length - 1)); return; }
+  else if (act === 'tobuild') { showTab('build'); return; }
+  render();
+});
+
+function tryMove(n) {
+  const g = P.g, cur = P.path[P.path.length - 1];
+  if (n === cur) return false;
+  const used = new Set(P.order);
+  const ei = g.edges.findIndex((e, i) => !used.has(i) && ((e[0] === cur && e[1] === n) || (e[1] === cur && e[0] === n)));
+  if (ei < 0) return false;
+  P.order.push(ei); P.path.push(n);
+  if (P.order.length === g.edges.length) { P.phase = 'won'; if (P.a.possible) { P.s3 = 1; finishStars(); } }
+  return true;
+}
+let dragging = false;
+board.addEventListener('pointerdown', e => {
+  const n = hitNode(P.g, svgPoint(board, e)); if (n < 0) return;
+  const ph = P.phase;
+  if (ph === 'predict') {
+    if (!P.shown.has(n)) { P.shown.add(n); P.popId = n; } render(); return;
+  }
+  if (ph === 'start') {
+    P.start = n; const a = P.a;
+    P.s1 = a.possible ? 1 : 0;
+    P.s2 = a.possible && (a.odd.length === 0 || a.odd.includes(n)) ? 1 : 0;
+    P.phase = 'reveal'; finishStars(); render(); return;
+  }
+  if (ph !== 'draw') return;
+  if (!P.path.length || (P.order.length === 0 && !P.g.edges.some(([x, y]) => (x === P.path[0] && y === n) || (y === P.path[0] && x === n)))) { P.path = [n]; render(); }
+  else if (tryMove(n)) render();
+  dragging = true;
+  try { board.setPointerCapture(e.pointerId); } catch (_) { }
+});
+board.addEventListener('pointermove', e => {
+  if (!dragging || P.phase !== 'draw' || !P.path.length) return;
+  const n = hitNode(P.g, svgPoint(board, e), 7);
+  if (n >= 0 && tryMove(n)) render();
+});
+['pointerup', 'pointercancel'].forEach(t => board.addEventListener(t, () => dragging = false));
+
+/* ---------- לשוניות ---------- */
+function showTab(t) {
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  ['play', 'learn', 'build'].forEach(x => $('tab-' + x).classList.toggle('hide', x !== t));
+  if (t === 'build') bRender();
+  try { localStorage.setItem('euler-tab', t); } catch (e) { }
+}
+document.querySelector('nav.tabs').onclick = e => { const b = e.target.closest('[data-tab]'); if (b) showTab(b.dataset.tab); };
+
+/* ---------- איורי ההסבר ---------- */
+(function lessonFigs() {
+  const lands = ['גדה צפונית', 'גדה דרומית', 'האי', 'האי המזרחי'];
+  let m = `<rect x="-8" y="-8" width="116" height="116" fill="var(--land)" rx="6"/>` + riverBg();
+  const br = [[22, 24, 'v'], [38, 24, 'v'], [22, 62, 'v'], [38, 62, 'v'], [84, 24, 'v'], [84, 62, 'v'], [57, 48, 'h']];
+  br.forEach(([x, y, d]) => {
+    m += d === 'v' ? `<rect x="${x - 2.5}" y="${y - 1}" width="5" height="16" fill="#a8743f" rx="1"/>`
+      : `<rect x="${x - 1}" y="${y}" width="14" height="5" fill="#a8743f" rx="1"/>`;
+  });
+  [[50, 10], [50, 92], [28, 50], [84, 50]].forEach(([x, y], i) =>
+    m += `<text x="${x}" y="${y + 2}" font-size="6" text-anchor="middle" fill="#4b5a2a" font-weight="700">${lands[i]}</text>`);
+  m += `<text x="-2" y="33" font-size="5" fill="#3d77b5">נהר</text>`;
+  $('mapFig').innerHTML = m;
+  draw($('graphFig'), { nodes: KB_NODES, edges: KB_EDGES, bend: 11 }, { showAll: true });
+  // נכנסים-יוצאים
+  const pf = $('passFig');
+  pf.innerHTML = `<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--pri)"/></marker></defs>
+   <line x1="15" y1="20" x2="94" y2="53" stroke="var(--pri)" stroke-width="3" marker-end="url(#ah)"/>
+   <line x1="100" y1="55" x2="185" y2="20" stroke="var(--pri)" stroke-width="3" marker-end="url(#ah)"/>
+   <line x1="185" y1="95" x2="106" y2="58" stroke="var(--odd)" stroke-width="3" marker-end="url(#ah)"/>
+   <line x1="100" y1="58" x2="15" y2="95" stroke="var(--odd)" stroke-width="3" marker-end="url(#ah)"/>
+   <circle cx="100" cy="55" r="8" fill="#fff" stroke="var(--ink)" stroke-width="2"/>
+   <text x="45" y="22" font-size="11" text-anchor="middle" fill="var(--pri)">נכנסים 1</text>
+   <text x="155" y="22" font-size="11" text-anchor="middle" fill="var(--pri)">יוצאים 1</text>
+   <text x="155" y="104" font-size="11" text-anchor="middle" fill="var(--odd)">נכנסים 2</text>
+   <text x="45" y="104" font-size="11" text-anchor="middle" fill="var(--odd)">יוצאים 2</text>`;
+})();
+
+/* ---------- בונים ---------- */
+const B = { g: { nodes: [], edges: [] }, sel: -1, mode: 'add' };
+const bBoard = $('bBoard');
+function bRender() {
+  const a = analyze(B.g), g = B.g;
+  draw(bBoard, g, { showAll: true, sel: B.sel });
+  $('bAdd').classList.toggle('mode-on', B.mode === 'add');
+  $('bDel').classList.toggle('mode-on', B.mode === 'del');
+  let v;
+  if (!g.edges.length) v = `<div class="msg">עדיין אין קווים. הוסיפו נקודות וחברו ביניהן.</div>`;
+  else {
+    const n = a.odd.length;
+    const sum = a.deg.reduce((x, y) => x + y, 0);
+    v = `<div class="msg ${a.possible ? 'good' : 'bad'}">${a.possible ? '✔ <b>אפשר</b> לצייר בקו אחד.' : '✘ <b>אי אפשר</b> לצייר בקו אחד.'}<br>`
+      + (a.conn ? `נקודות אי־זוגיות: <b>${n}</b>${n ? ' (' + list(a.odd) + ')' : ''}. ` + (a.possible ? (n ? 'מתחילים באחת מהן.' : 'מתחילים בכל נקודה.') : '') : 'הצורה בנויה מכמה חלקים נפרדים.')
+      + `<br><small>קווים: ${g.edges.length} · סכום כל המספרים: ${sum} = ${g.edges.length} × 2 (כל קו נספר פעמיים)</small></div>`;
+  }
+  $('bVerdict').innerHTML = v;
+  $('bTry').disabled = !g.edges.length;
+}
+bBoard.addEventListener('pointerdown', e => {
+  const p = svgPoint(bBoard, e), g = B.g;
+  const n = hitNode(g, p, 8);
+  if (B.mode === 'del') {
+    if (n >= 0) {
+      g.edges = g.edges.filter(([a, b]) => a !== n && b !== n).map(([a, b]) => [a > n ? a - 1 : a, b > n ? b - 1 : b]);
+      g.nodes.splice(n, 1);
+    } else {
+      const t = e.target.closest('[data-e]'); if (t) g.edges.splice(+t.dataset.e, 1);
+    }
+    B.sel = -1; bRender(); return;
+  }
+  if (n < 0) {
+    if (p.x < -4 || p.x > 104 || p.y < -4 || p.y > 104) return;
+    if (g.nodes.length >= HE.length) return;
+    g.nodes.push([Math.round(p.x), Math.round(p.y)]);
+    if (B.sel >= 0) { g.edges.push([B.sel, g.nodes.length - 1]); }
+    B.sel = g.nodes.length - 1;
+  } else if (B.sel < 0) B.sel = n;
+  else if (B.sel === n) B.sel = -1;
+  else {
+    const cnt = g.edges.filter(([a, b]) => (a === B.sel && b === n) || (a === n && b === B.sel)).length;
+    if (cnt < 4) g.edges.push([B.sel, n]);
+    B.sel = n;
+  }
+  bRender();
+});
+$('bAdd').onclick = () => { B.mode = 'add'; B.sel = -1; bRender(); };
+$('bDel').onclick = () => { B.mode = 'del'; B.sel = -1; bRender(); };
+$('bClear').onclick = () => { B.g = { nodes: [], edges: [] }; B.sel = -1; B.mode = 'add'; $('bInstr').innerHTML = 'הקישו על מקום ריק כדי להוסיף נקודה. הקישו על נקודה ואז על נקודה אחרת כדי לחבר ביניהן בקו (אפשר לחבר שוב – יופיע קו כפול, כמו שני גשרים).'; bRender(); };
+$('bKb').onclick = () => {
+  B.g = { nodes: KB_NODES.map(p => [...p]), edges: KB_EDGES.map(e => [...e]), bend: 11 }; B.sel = -1; B.mode = 'add';
+  $('bInstr').innerHTML = '<b>אתגר:</b> אלה שבעת הגשרים של קניגסברג. הוסיפו <b>גשר אחד בלבד</b> (הקישו על שתי נקודות) כך שיהיה אפשר לעבור על כל הגשרים בדיוק פעם אחת. איפה כדאי לבנות אותו? ולמה?';
+  bRender();
+};
+$('bSq').onclick = () => {
+  B.g = { nodes: [[15, 15], [85, 15], [85, 85], [15, 85]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2], [1, 3]] }; B.sel = -1; B.mode = 'add';
+  $('bInstr').innerHTML = '<b>אתגר:</b> את הריבוע עם שני האלכסונים אי אפשר לצייר בקו אחד. <b>מחקו קו אחד או הוסיפו קו אחד</b> כדי שיהיה אפשר. כמה פתרונות שונים מצאתם?';
+  bRender();
+};
+$('bTry').onclick = () => {
+  const g = { name: 'שלי', nodes: B.g.nodes.map(p => [...p]), edges: B.g.edges.map(e => [...e]), bend: B.g.bend };
+  showTab('play'); loadLevel(P.li, g);
+};
+
+/* ---------- התחלה ---------- */
+loadLevel(0);
+</script>
+</body>
+</html>
