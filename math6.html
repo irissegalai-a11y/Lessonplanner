@@ -1964,6 +1964,16 @@
   .f3-world { position: relative; transform-style: preserve-3d; transform: rotateX(55deg) rotateZ(-25deg); }
   .f3-face { position: absolute; box-sizing: border-box; border: 2px solid #23264a; transform-style: preserve-3d; display: flex; align-items: center; justify-content: center; font-weight: 800; }
   .f3-face > span { pointer-events: none; }
+  .f3-face.f3-bad { background: rgba(232, 90, 79, .92) !important; }
+  .sol-fig.sol-big { max-width: 320px; }
+  .sol-cap { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; max-width: 240px; }
+  .sol-cap figcaption { font-size: .95rem; font-weight: 700; text-align: center; }
+  .sol-cap.bad figcaption { color: #b8392b; } .sol-cap.good figcaption { color: #2c7a5b; }
+  .sol-c3b { background: #f6d77a; border-radius: 6px; padding: 1px 4px; } .sol-c4 { background: #f6c4b8; border-radius: 6px; padding: 1px 4px; }
+  .sol-gal-d summary { cursor: pointer; font-weight: 700; margin: 8px 0; }
+  .sol-gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; align-items: end; }
+  .sol-gal > div { display: flex; flex-direction: column; align-items: center; gap: 2px; font-weight: 700; }
+  .sol-gal .sol-fig { max-width: 110px; }
   .f3-range { display: flex; align-items: center; gap: 8px; justify-content: center; font-weight: 700; } .f3-range input { width: 220px; }
   .dfg-hud { font-size: 1.05rem; }
   .dfg-board .df-center { margin-bottom: 6px; }
@@ -2053,7 +2063,7 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רמו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רמז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6073,16 +6083,43 @@ if (GRADE >= 3) TOPICS.push({
   },
   tips: ['שואלים: מה השתנה לעומת העובדה שאני יודע? פי 2? חצי? עוד קבוצה? פי 10?', 'חילוף: 6 × 4 = 4 × 6. משפחת עובדות: 24 : 6 = 4 כי 6 × 4 = 24.', 'עוד קבוצה: 7 × 4 = 6 × 4 + 4. חצי מכאן וכפול משם: 6 × 4 = 3 × 8.']
 });
-// 🧊 גופים (כיתה ו') – נוסף בסוף כדי לא לשבש קודי חוברות
+// 🧊 גופים (כיתה ו') – נוסף בסוף כדי לא לשבש קודי חוברות. ארבעה נושאים נפרדים: הכרה · פריסות · שטח פנים · נפח
 if (GRADE === 6) TOPICS.push({
-  id: 'solids', name: 'גופים – פריסה, שטח פנים ונפח', icon: '🧊', color: '#3a7bd5',
-  desc: 'מנסרות ופירמידות: פאות, מקצועות וקדקודים · פריסות וקיפול · שטח פנים · נפח',
+  id: 'solids', name: 'גופים – הכרה ותכונות', icon: '🧊', color: '#3a7bd5',
+  desc: 'מנסרות, פירמידות, גליל, חרוט וכדור · פאות, מקצועות וקדקודים · בונים מצורות · חתכים',
   levels: {
-    1: [genSolidName, () => genSolidParts(1), genCubeNet, () => genSurf(1), () => genVol(1)],
-    2: [() => genSolidParts(2), genCubeNet, genCubeOpp, () => genSurf(2), () => genVol(2)],
-    3: [() => genSolidParts(3), genCubeOpp, () => genSurf(3), () => genVol(3), genTriPrism]
+    1: [genSolidName, () => genSolidParts(1), () => genSolidFaces(1), genSolidRound],
+    2: [() => genSolidParts(2), () => genSolidFaces(2), () => genSolidWho(2), genSolidRound, genSolidName],
+    3: [() => genSolidParts(3), () => genSolidWho(3), genSolidTF, genSolidEuler, genSolidCut]
   },
-  tips: ['פאה – משטח, מקצוע – קו, קדקוד – נקודה. סופרים גם את מה שמאחור (קווים מקווקווים).', 'מנסרה (n צלעות בבסיס): 2n קדקודים, 3n מקצועות, n + 2 פאות. פירמידה: n + 1 קדקודים, 2n מקצועות, n + 1 פאות.', 'שטח פנים = סכום שטחי כל הפאות (סמ"ר). תיבה: 2 × (אורך × רוחב + אורך × גובה + רוחב × גובה).', 'נפח = כמה קוביות יחידה (סמ"ק). תיבה: אורך × רוחב × גובה. מנסרה: שטח הבסיס × גובה.']
+  tips: ['פאה – משטח, מקצוע – קו, קדקוד – נקודה. סופרים גם את מה שמאחור (קווים מקווקווים).', 'מנסרה: 2 בסיסים זהים ומלבנים. פירמידה: בסיס אחד ומשולשים שנפגשים בקדקוד. השם – לפי צורת הבסיס.', 'מנסרה (n צלעות בבסיס): 2n קדקודים, 3n מקצועות, n + 2 פאות. פירמידה: n + 1 קדקודים, 2n מקצועות, n + 1 פאות.', 'גליל – 2 בסיסים עגולים · חרוט – בסיס עגול וקדקוד · כדור – בלי בסיסים ובלי קדקודים.']
+}, {
+  id: 'solidsN', name: 'גופים – פריסות', icon: '📦', color: '#2f6fb0',
+  desc: 'פריסות של מנסרות, פירמידות, קובייה, גליל וחרוט · פריסה נכונה או לא · פאות נגדיות',
+  levels: {
+    1: [() => genNetWhich(1), () => genNetCount(1), genCubeNet, genBoxNetAsk],
+    2: [() => genNetWhich(2), genNetOfSolid, () => genNetValid(2), genCubeOpp, () => genNetCount(2), genCubeNet],
+    3: [() => genNetValid(3), genNetOfSolid, genCubeMissing, genDice, genCubeOpp]
+  },
+  tips: ['מנסרה: רצועה של n מלבנים, ושני בסיסים – אחד מכל צד של הרצועה.', 'פירמידה: בסיס, ומשולש אחד על כל צלע שלו.', 'קובייה: אין 5 בשורה ואין ריבוע 2×2. בשורה של 3 – הראשונה והשלישית נגדיות.', 'גליל: מלבן ו-2 עיגולים. חרוט: "מניפה" ועיגול – לא משולש!']
+}, {
+  id: 'solidsS', name: 'גופים – שטח פנים', icon: '🎁', color: '#3a7bd5',
+  desc: 'קובייה, תיבה, פריסה, קופסה בלי מכסה, צביעת חדר, קוביות מודבקות, מנסרה משולשת',
+  levels: {
+    1: [() => genSurf(1), () => genSurfNet(1), () => genSurfGlue(1), () => genSurf(1)],
+    2: [() => genSurf(2), () => genSurfNet(2), () => genSurfWord(2), () => genSurfGlue(2)],
+    3: [() => genSurf(3), () => genSurfWord(3), genTriPrismS, genSurfScale, () => genSurfGlue(3)]
+  },
+  tips: ['שטח פנים = סכום שטחי כל הפאות (סמ"ר) = השטח של הפריסה.', 'תיבה: 2 × (אורך × רוחב + אורך × גובה + רוחב × גובה). קובייה: 6 × מקצוע × מקצוע.', 'קופסה בלי מכסה – מורידים פאה אחת. קוביות מודבקות – כל הדבקה מעלימה 2 ריבועים.', 'מנסרה: 2 בסיסים + היקף הבסיס × גובה.']
+}, {
+  id: 'solidsV', name: 'גופים – נפח', icon: '🧱', color: '#2f6fb0',
+  desc: 'קוביות יחידה, נפח תיבה ומנסרה, מידה חסרה, ליטרים ומ"ק, גובה המים, הגדלה',
+  levels: {
+    1: [() => genVol(1), () => genVol(2), () => genVolUnit(1), () => genVol(1)],
+    2: [() => genVol(2), () => genVolMissing(2), () => genVolUnit(2), genVolCompare],
+    3: [() => genVolMissing(3), genVolWater, genTriPrismV, genVolScale, genVolFit, () => genVolUnit(3)]
+  },
+  tips: ['נפח = כמה קוביות יחידה נכנסות (סמ"ק). תיבה: אורך × רוחב × גובה.', 'מנסרה: שטח הבסיס × גובה. גובה = נפח : שטח הבסיס.', '1 סמ"ק = 1 מ"ל · 1,000 סמ"ק = 1 ליטר · 1 מ"ק = 1,000 ליטר.', 'מקצוע פי 2 → נפח פי 8 (2 × 2 × 2).']
 });
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
 if (TOPIC.seq) {
@@ -9324,7 +9361,12 @@ const LEVEL_DESC6 = {
 const LEVEL_DESC = GRADE === 1 ? LEVEL_DESC1 : GRADE === 2 ? LEVEL_DESC2 : GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
 // נושא בלי תיאורי רמות (למשל סדרות בכיתה ג') – תיאור כללי, כדי שבחירת הרמה לא תיכשל
 TOPICS.forEach(t => { if (!LEVEL_DESC[t.id]) LEVEL_DESC[t.id] = ['תרגילים קלים להתחלה', 'תרגילים בינוניים', 'תרגילים מאתגרים']; });
-if (TOPIC.solids) LEVEL_DESC.solids = ['שמות הגופים, ספירת פאות/מקצועות/קדקודים, פריסות של קובייה, שטח פנים ונפח בסיסיים', 'מנסרות ופירמידות, פאות נגדיות, שטח פנים ונפח של תיבה', 'בלי ציור, קופסה בלי מכסה, מידה חסרה, ליטרים ומנסרה משולשת'];
+if (TOPIC.solids) {
+  LEVEL_DESC.solids = ['שמות הגופים, ספירת פאות/מקצועות/קדקודים בציור, ממה בנויות הפאות', 'כל המנסרות והפירמידות, זיהוי גוף לפי מספר הפאות, צורות לבנייה', 'בלי ציור, נכון/לא נכון, כלל אוילר וחתכים'];
+  LEVEL_DESC.solidsN = ['לאיזה גוף שייכת הפריסה, ספירת צורות, פריסות של קובייה', 'בוחרים פריסה לגוף, פריסה נכונה או לא, פאות נגדיות', 'פריסות "מטעות", משבצת חסרה, קוביית משחק'];
+  LEVEL_DESC.solidsS = ['קובייה, פריסה של קובייה, קוביות מודבקות בשורה', 'תיבה, פריסה של תיבה, נייר עטיפה', 'קופסה בלי מכסה, צביעת חדר, מנסרה משולשת, הגדלה'];
+  LEVEL_DESC.solidsV = ['ספירת קוביות יחידה, נפח תיבה, ליטר וסמ"ק', 'מידה חסרה, מ"ל וליטרים, השוואת נפחים', 'גובה המים, נפח מנסרה, הגדלה, כמה קוביות נכנסות, מ"ק'];
+}
 if (TOPIC.dfacts) LEVEL_DESC.dfacts = ['חילוף, חילוק, הכפלה ועוד/פחות קבוצה – ולוח הכפל', 'גם חציה, הכפלה וחציה ופי 10', 'כל סוגי העובדות' + (GRADE >= 4 ? ', כולל פי 100' : '') + (dfDec(GRADE) ? ' ועשרוניים' : '')];
 if (TOPIC.divfr) LEVEL_DESC.divfr = ['⁦שבר ‎:‎ שלם⁩ (המונה מתחלק) ו⁦שלם ‎:‎ שבר יסודי⁩', '⁦שבר ‎:‎ שלם⁩ (כופלים את המכנה) ובעיות', '⁦שלם ‎:‎ כל שבר⁩, ⁦מספר מעורב ‎:‎ שלם⁩ ובעיות'];
 if (TOPIC.mul22) LEVEL_DESC.mul22 = ['מודל השטח ותרגילים', 'תרגילים ובעיות מילוליות', 'בעיות, אומדן ותרגילים'];
@@ -14666,14 +14708,24 @@ function dfgPlay() {
   }, 250);
 }
 /* =========================================================
-   🧊 גופים (כיתה ו'): הכרה, פאות-מקצועות-קדקודים, פריסה וקיפול, שטח פנים, נפח
+   🧊 גופים (כיתה ו') – ארבעה נושאים נפרדים:
+   הכרת גופים · פריסות · שטח פנים · נפח
    ========================================================= */
 const SOL_INK = '#23264a';
 const SOL_KINDS = [['prism', 3, 'מנסרה משולשת'], ['prism', 4, 'תיבה (מנסרה מרובעת)'], ['prism', 5, 'מנסרה מחומשת'], ['prism', 6, 'מנסרה משושה'],
   ['pyramid', 3, 'פירמידה משולשת'], ['pyramid', 4, 'פירמידה מרובעת'], ['pyramid', 5, 'פירמידה מחומשת'], ['pyramid', 6, 'פירמידה משושה']];
 const SOL_ROUND = [['cyl', 0, 'גליל'], ['cone', 0, 'חרוט'], ['sphere', 0, 'כדור']];
 const SOL_W = { F: 'פאות', E: 'מקצועות', V: 'קדקודים' };
+const SOL_BASE = ['', '', '', 'משולש', 'מרובע', 'מחומש', 'משושה', '', 'מתומן'];
+const SOL_BASES = ['', '', '', 'משולשים', 'מרובעים', 'מחומשים', 'משושים', '', 'מתומנים'];
+const SOL_ADJ = ['', '', '', 'משולשת', 'מרובעת', 'מחומשת', 'משושה', '', 'מתומנת'];
+const solNm = (kind, n) => kind === 'prism' ? (n === 4 ? 'תיבה' : 'מנסרה ' + SOL_ADJ[n]) : 'פירמידה ' + SOL_ADJ[n];
 const solCount = (kind, n) => kind === 'prism' ? { F: n + 2, E: 3 * n, V: 2 * n } : { F: n + 1, E: 2 * n, V: n + 1 };
+// ממה בנויות הפאות
+const solFaces = (kind, n) => kind === 'cube' ? '6 ריבועים' : kind === 'prism' ? (n === 4 ? '6 מלבנים' : `2 ${SOL_BASES[n]} ו-${n} מלבנים`) : kind === 'pyramid' ? (n === 3 ? '4 משולשים' : `${SOL_BASE[n]} אחד ו-${n} משולשים`)
+  : kind === 'cyl' ? '2 עיגולים ומלבן' : kind === 'cone' ? 'עיגול וחלק של עיגול (כמו מניפה)' : 'מעטפת עגולה אחת';
+const SL = (q, lesson, card) => Object.assign(q, { learn: { lesson, card } });
+const ynQ = (base, yes) => Object.assign(base, { type: 'choice', choices: ['כן', 'לא'], ans: yes ? 0 : 1 });
 const solSVGwrap = (g, w, h, cls = '') => `<svg class="fig sol-fig ${cls}" viewBox="0 0 ${w} ${h}" aria-hidden="true" dir="ltr">${g}</svg>`;
 const solLine = (a, b, dash, o = {}) => `<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" stroke="${o.c || SOL_INK}" stroke-width="${o.w || 2.2}" stroke-linecap="round"${dash ? ' stroke-dasharray="5 4"' : ''}/>`;
 const solPoly = (P, fill) => `<polygon points="${P.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="${fill}" stroke="none"/>`;
@@ -14704,6 +14756,7 @@ function solidSVG(kind, n = 4, o = {}) {
     g += `<path d="M${cx - R} ${by} A${R} ${ry} 0 0 0 ${cx + R} ${by}" fill="none" stroke="${SOL_INK}" stroke-width="2.2"/><path d="M${cx - R} ${by} A${R} ${ry} 0 0 1 ${cx + R} ${by}" fill="none" stroke="${SOL_INK}" stroke-width="2" stroke-dasharray="5 4"/>`;
     g += kind === 'cyl' ? `<ellipse cx="${cx}" cy="${top}" rx="${R}" ry="${ry}" fill="none" stroke="${SOL_INK}" stroke-width="2.2"/>${solLine([cx - R, by], [cx - R, top])}${solLine([cx + R, by], [cx + R, top])}`
       : `${solLine([cx - R, by], [cx, by - h - 12])}${solLine([cx + R, by], [cx, by - h - 12])}`;
+    if (kind === 'cone' && hl === 'V') dots = [[[cx, by - h - 12], false]];
   } else if (kind === 'sphere') {
     const c = [cx, by - 52], r = 66;
     fill += `<circle cx="${c[0]}" cy="${c[1]}" r="${r}" fill="#eef2ff"/>`;
@@ -14741,14 +14794,17 @@ function isoBoxSVG(a, b, c) {
   for (let z = 0; z <= c; z++) g += L(P(a, 0, z), P(a, b, z)) + L(P(0, b, z), P(a, b, z));
   return solSVGwrap(g, ox + a * s * cs + 10, oy + (a + b) * s * sn + 10);
 }
-// פריסה של תיבה (צורת צלב): זוגות פאות נגדיות באותו צבע
+// פריסה של תיבה (צורת צלב): זוגות פאות נגדיות באותו צבע. ask = מספר הפאה שמסומנת "?"
+// סדר הפאות: 0 למעלה · 1 צד שמאל · 2 קדמית · 3 צד ימין · 4 אחורית · 5 למטה
 function boxNetSVG(a, b, c, o = {}) {
   const s = Math.min(26, 300 / (2 * a + 2 * b), 260 / (2 * b + c)), A = a * s, B = b * s, C = c * s, pad = 6;
-  const R = (x, y, w, h, col, t) => `<rect x="${pad + x}" y="${pad + y}" width="${w}" height="${h}" fill="${col}" stroke="${SOL_INK}" stroke-width="1.8"/>${t ? `<text x="${pad + x + w / 2}" y="${pad + y + h / 2 + 5}" text-anchor="middle" font-size="${Math.min(13, w / 3.2)}" font-weight="700" fill="${SOL_INK}">${t}</text>` : ''}`;
-  const t = (p, q) => o.lbl === false ? '' : `${p}×${q}`;
   const C1 = '#c6d4f5', C2 = '#f6e2a6', C3 = '#bfe0c9';
-  let g = R(B, 0, A, B, o.noTop ? '#fff' : C3, o.noTop ? '' : t(a, b)) + R(0, B, B, C, C2, t(b, c)) + R(B, B, A, C, C1, t(a, c)) + R(B + A, B, B, C, C2, t(b, c)) + R(2 * B + A, B, A, C, C1, t(a, c)) + R(B, B + C, A, B, C3, t(a, b));
-  if (o.noTop) g = g.replace('fill="#fff" stroke="' + SOL_INK + '"', 'fill="none" stroke="#bbb" stroke-dasharray="4 3"');
+  const FC = [[B, 0, A, B, C3, a, b], [0, B, B, C, C2, b, c], [B, B, A, C, C1, a, c], [B + A, B, B, C, C2, b, c], [2 * B + A, B, A, C, C1, a, c], [B, B + C, A, B, C3, a, b]];
+  const g = FC.map(([x, y, w, h, col, p, q], i) => {
+    if (i === 0 && o.noTop) return `<rect x="${pad + x}" y="${pad + y}" width="${w}" height="${h}" fill="none" stroke="#bbb" stroke-width="1.8" stroke-dasharray="4 3"/>`;
+    const ask = o.ask === i, t = ask ? '?' : o.lbl === false ? '' : `${p}×${q}`;
+    return `<rect x="${pad + x}" y="${pad + y}" width="${w}" height="${h}" fill="${ask ? '#fff3c4' : col}" stroke="${SOL_INK}" stroke-width="1.8"/>${t ? `<text x="${pad + x + w / 2}" y="${pad + y + h / 2 + 5}" text-anchor="middle" font-size="${ask ? 18 : Math.min(13, w / 3.2)}" font-weight="700" fill="${SOL_INK}">${t}</text>` : ''}`;
+  }).join('');
   return solSVGwrap(g, 2 * A + 2 * B + 2 * pad, 2 * B + C + 2 * pad);
 }
 // מנסרה משולשת ישרת-זווית: ניצבים a, b, צלע שלישית c, גובה המנסרה h
@@ -14763,11 +14819,133 @@ function triPrismSVG(a, b, c, h) {
   g += T(x0 + a * s / 2, y0 + 18, a) + T(x0 - 14, y0 - b * s / 2 + 5, b) + T(x0 + a * s / 2 + 2, y0 - b * s / 2 - 4, c) + T(x0 + a * s + dx / 2 + 14, y0 - dy / 2 + 8, h);
   return solSVGwrap(g, x0 + a * s + dx + 34, y0 + 26);
 }
-// ---- פריסות של קובייה: "מגלגלים" קובייה על הפריסה – אם כל 6 המשבצות קיבלו פאות שונות, הפריסה מתקפלת לקובייה ----
+
+/* ---------- מנוע פריסה וקיפול לכל פאון (תיבה, מנסרות, פירמידות) ----------
+   הגוף מוגדר בקדקודים ובפאות. "עץ" הפריסה אומר לכל פאה לאיזו פאה היא מחוברת.
+   t = 0 – פרוש על השולחן, t = 1 – מקופל. כל פאה מסתובבת סביב המקצוע המשותף עם הפאה שהיא תלויה עליה. */
+const V3s = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const V3d = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const V3x = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const V3u = a => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+const xfAp = (X, p) => [0, 1, 2].map(i => X.m[i][0] * p[0] + X.m[i][1] * p[1] + X.m[i][2] * p[2] + X.t[i]);
+const xfMul = (A, B) => ({ m: [0, 1, 2].map(i => [0, 1, 2].map(j => A.m[i][0] * B.m[0][j] + A.m[i][1] * B.m[1][j] + A.m[i][2] * B.m[2][j])), t: xfAp(A, B.t) });
+function xfRot(o, u, a) {
+  const c = Math.cos(a), s = Math.sin(a), C = 1 - c, [x, y, z] = u;
+  const m = [[c + x * x * C, x * y * C - z * s, x * z * C + y * s], [y * x * C + z * s, c + y * y * C, y * z * C - x * s], [z * x * C - y * s, z * y * C + x * s, c + z * z * C]];
+  const mo = [0, 1, 2].map(i => m[i][0] * o[0] + m[i][1] * o[1] + m[i][2] * o[2]);
+  return { m, t: [o[0] - mo[0], o[1] - mo[1], o[2] - mo[2]] };
+}
+// מצולע משוכלל (נגד כיוון השעון), צלע תחתונה אופקית
+const regPoly = (n, r) => [...Array(n)].map((_, i) => { const t = -Math.PI / 2 - Math.PI / n + i * 2 * Math.PI / n; return [r * Math.cos(t), r * Math.sin(t)]; });
+function polyPrism(base, h) {
+  const n = base.length, V = [...base.map(p => [p[0], p[1], 0]), ...base.map(p => [p[0], p[1], h])];
+  const F = [[...Array(n).keys()].reverse(), [...Array(n).keys()].map(i => i + n)], K = ['b', 'b'];
+  for (let i = 0; i < n; i++) { const j = (i + 1) % n; F.push([i, j, j + n, i + n]); K.push('l'); }
+  return { V, F, K, kind: 'prism', n };
+}
+function polyPyr(base, h) {
+  const n = base.length, cx = base.reduce((s, p) => s + p[0], 0) / n, cy = base.reduce((s, p) => s + p[1], 0) / n;
+  const V = [...base.map(p => [p[0], p[1], 0]), [cx, cy, h]], F = [[...Array(n).keys()].reverse()], K = ['b'];
+  for (let i = 0; i < n; i++) { F.push([i, (i + 1) % n, n]); K.push('t'); }
+  return { V, F, K, kind: 'pyramid', n };
+}
+// מנסרה/פירמידה משוכללת שאורך צלע הבסיס שלה 1
+const solPoly3 = (kind, n) => { const base = regPoly(n, 1 / (2 * Math.sin(Math.PI / n))); return kind === 'prism' ? polyPrism(base, n === 3 ? 1.5 : 1.3) : polyPyr(base, n === 3 ? 1.0 : 1.2); };
+// עצי פריסה. מנסרה: פאות 0,1 = בסיסים, 2..n+1 = מלבנים. רצועת מלבנים, בסיס אחד מתחת למלבן i והשני מעל מלבן j
+const prismTree = (n, i, j) => { const p = Array(n + 2).fill(0); p[2] = -1; for (let k = 3; k < n + 2; k++) p[k] = k - 1; p[0] = 2 + i; p[1] = 2 + j; return p; };
+// פירמידה: פאה 0 = בסיס, 1..n = משולשים. "כוכב" – משולש על כל צלע של הבסיס. "מניפה" – המשולשים זה ליד זה, והבסיס תלוי על משולש i
+const pyrStar = n => [-1, ...Array(n).fill(0)];
+const pyrFan = (n, i) => { const p = [1 + i, -1]; for (let k = 2; k <= n; k++) p.push(k - 1); return p; };
+function solFold(P, par, t) {
+  const { V, F } = P, nF = F.length;
+  const cen = f => { const s = [0, 0, 0]; F[f].forEach(i => { s[0] += V[i][0]; s[1] += V[i][1]; s[2] += V[i][2]; }); return s.map(x => x / F[f].length); };
+  const nrm = f => { const a = V[F[f][0]], b = V[F[f][1]], c = V[F[f][2]]; return V3u(V3x(V3s(b, a), V3s(c, a))); };
+  const r = par.indexOf(-1), nr = nrm(r), cr = cen(r), down = [0, 0, -1];
+  let ax = V3x(nr, down); const ang = Math.acos(Math.max(-1, Math.min(1, V3d(nr, down))));
+  ax = Math.hypot(...ax) < 1e-9 ? [1, 0, 0] : V3u(ax);
+  let X0 = xfRot(cr, ax, ang);
+  const e0 = V3s(xfAp(X0, V[F[r][1]]), xfAp(X0, V[F[r][0]]));
+  X0 = xfMul(xfRot(cr, [0, 0, 1], -Math.atan2(e0[1], e0[0])), X0);
+  const X = Array(nF); X[r] = X0;
+  const done = new Set([r]);
+  for (let guard = 0; done.size < nF && guard < 50; guard++) for (let c = 0; c < nF; c++) {
+    const p = par[c];
+    if (done.has(c) || p < 0 || !done.has(p)) continue;
+    const sh = F[c].filter(i => F[p].includes(i)), o = V[sh[0]], u = V3u(V3s(V[sh[1]], o));
+    const np = nrm(p), th = Math.acos(Math.max(-1, Math.min(1, V3d(np, nrm(c))))), cc = cen(c), w = V3x(np, u), sp = V3d(w, V3s(cen(p), o));
+    let best = th;
+    for (const sg of [1, -1]) { const d = V3s(xfAp(xfRot(o, u, sg * th), cc), o); if (Math.abs(V3d(np, d)) < 1e-4 && V3d(w, d) * sp < 0) best = sg * th; }
+    X[c] = xfMul(X[p], xfRot(o, u, best * (1 - t)));
+    done.add(c);
+  }
+  return F.map((f, i) => f.map(k => xfAp(X[i], V[k])));
+}
+const SOL_COL = { b: '#f6d77a', l: '#c6d4f5', t: '#f6c4b8' };
+// ציור רשימת מצולעים (בדו-ממד) כ-SVG. bb – נקודות לקביעת מסגרת קבועה (לאנימציה)
+function solPolysSVG(polys, o = {}) {
+  const all = o.bb || polys.flatMap(x => x.p), xs = all.map(p => p[0]), ys = all.map(p => p[1]);
+  const mx = Math.min(...xs), my = Math.min(...ys), w = Math.max(...xs) - mx || 1, h = Math.max(...ys) - my || 1, pad = 6;
+  const s = Math.min((o.W || 230) / w, (o.H || 190) / h), X = p => ((p[0] - mx) * s + pad).toFixed(1) + ',' + ((p[1] - my) * s + pad).toFixed(1);
+  const g = polys.slice().sort((a, b) => (a.d || 0) - (b.d || 0)).map(f => `<polygon points="${f.p.map(X).join(' ')}" fill="${f.fill || SOL_COL[f.k] || '#e8edff'}"${o.op ? ` fill-opacity="${o.op}"` : ''} stroke="${SOL_INK}" stroke-width="1.8" stroke-linejoin="round"/>`).join('');
+  const lb = (o.lbl || []).map(([p, t]) => { const [x, y] = X(p).split(','); return `<text x="${x}" y="${+y + 6}" text-anchor="middle" font-size="17" font-weight="800" fill="${SOL_INK}">${t}</text>`; }).join('');
+  return solSVGwrap(g + lb, Math.round(w * s + 2 * pad), Math.round(h * s + 2 * pad), o.cls || '');
+}
+const solFlat = (P, par) => solFold(P, par, 0).map((f, i) => ({ p: f.map(q => [q[0], -q[1]]), k: P.K[i] }));
+const solCen2 = p => [p.reduce((s, q) => s + q[0], 0) / p.length, p.reduce((s, q) => s + q[1], 0) / p.length];
+const solView = p => { const yw = -0.55, el = 0.62, cy = Math.cos(yw), sy = Math.sin(yw), x = p[0] * cy - p[1] * sy, y = p[0] * sy + p[1] * cy; return [x, -p[2] * Math.cos(el) - y * Math.sin(el), -y * Math.cos(el) + p[2] * Math.sin(el)]; };
+function solNetBB(P, par) { const pts = []; for (const t of [0, 0.2, 0.4, 0.6, 0.8, 1]) solFold(P, par, t).forEach(f => f.forEach(p => { const v = solView(p); pts.push([v[0], v[1]]); })); return pts; }
+function solNet3D(P, par, t, bb) {
+  return solPolysSVG(solFold(P, par, t).map((f, i) => { const q = f.map(solView); return { p: q.map(v => [v[0], v[1]]), k: P.K[i], d: q.reduce((s, v) => s + v[2], 0) / q.length }; }), { bb, W: 280, H: 220, op: 0.92, cls: 'sol-big' });
+}
+// פריסת מנסרה: v = 'ok' | 'same' (שני הבסיסים באותו צד) | 'less' / 'more' (מספר מלבנים לא נכון)
+function prismNetPolys(n, v = 'ok', i, j) {
+  const P = solPoly3('prism', n), L = k => 2 + k;
+  if (v === 'less' || v === 'more') { i = i ?? R(0, n - 2); j = j ?? R(0, n - 2); }
+  i = i ?? R(0, n - 1); j = j ?? R(0, n - 1);
+  const polys = solFlat(P, prismTree(n, i, j));
+  if (v === 'same') {
+    const ks = [...Array(n).keys()].filter(k => Math.abs(k - j) >= (n === 3 ? 1 : 2)), k = pick(ks), a = solCen2(polys[L(k)].p), b = solCen2(polys[L(j)].p);
+    polys[0] = { p: polys[1].p.map(q => [q[0] + a[0] - b[0], q[1] + a[1] - b[1]]), k: 'b' };
+  }
+  if (v === 'less') polys.splice(L(n - 1), 1);
+  if (v === 'more') { const a = solCen2(polys[L(n - 1)].p), b = solCen2(polys[L(n - 2)].p); polys.push({ p: polys[L(n - 1)].p.map(q => [q[0] + a[0] - b[0], q[1] + a[1] - b[1]]), k: 'l' }); }
+  return polys;
+}
+// פריסת פירמידה: v = 'ok' | 'fan' (מניפה) | 'less' (חסר משולש)
+function pyrNetPolys(n, v = 'ok') {
+  const P = solPoly3('pyramid', n);
+  const polys = solFlat(P, v === 'fan' ? pyrFan(n, 0) : pyrStar(n));
+  if (v === 'less') polys.splice(R(1, n), 1);
+  return polys;
+}
+// פריסות של גליל וחרוט. v: 'ok' | 'same' | 'one' | 'small' (גליל) · 'ok' | 'tri' | 'two' (חרוט)
+function cylNetSVG(v = 'ok') {
+  const r = 17, W = Math.round(2 * Math.PI * r), H = 64, x0 = 10, rr = v === 'small' ? r * 0.45 : r, y0 = 2 * r + 8;
+  const circ = (cx, cy) => `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rr.toFixed(1)}" fill="${SOL_COL.b}" stroke="${SOL_INK}" stroke-width="2"/>`;
+  let g = `<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="${SOL_COL.l}" stroke="${SOL_INK}" stroke-width="2"/>`;
+  if (v === 'same') g += circ(x0 + W * 0.25, y0 - rr) + circ(x0 + W * 0.75, y0 - rr);
+  else { g += circ(x0 + W * 0.3, y0 - rr); if (v !== 'one') g += circ(x0 + W * 0.7, y0 + H + rr); }
+  return solSVGwrap(g, W + 2 * x0, y0 + H + 2 * r + 8);
+}
+function coneNetSVG(v = 'ok') {
+  const l = 62, r = 21, ang = 2 * Math.PI * r / l, cx = 80, cy = 8, a1 = Math.PI / 2 - ang / 2, a2 = Math.PI / 2 + ang / 2;
+  const pt = a => [cx + l * Math.cos(a), cy + l * Math.sin(a)], p1 = pt(a1), p2 = pt(a2);
+  const circ = (x, y) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${SOL_COL.b}" stroke="${SOL_INK}" stroke-width="2"/>`;
+  let g;
+  if (v === 'tri') g = `<polygon points="${cx},${cy} ${cx - 30},${cy + l} ${cx + 30},${cy + l}" fill="${SOL_COL.t}" stroke="${SOL_INK}" stroke-width="2" stroke-linejoin="round"/>` + circ(cx, cy + l + r);
+  else {
+    g = `<path d="M${cx} ${cy} L${p1[0].toFixed(1)} ${p1[1].toFixed(1)} A${l} ${l} 0 0 1 ${p2[0].toFixed(1)} ${p2[1].toFixed(1)} Z" fill="${SOL_COL.t}" stroke="${SOL_INK}" stroke-width="2" stroke-linejoin="round"/>` + circ(cx, cy + l + r);
+    if (v === 'two') { const a = a2 - 0.12; g += circ(cx + (l + r) * Math.cos(a), cy + (l + r) * Math.sin(a)); }
+  }
+  return solSVGwrap(g, 160, cy + l + 2 * r + 8);
+}
+
+/* ---------- פריסות של קובייה ---------- */
+// "מגלגלים" קובייה על הפריסה – אם כל 6 המשבצות קיבלו פאות שונות, הפריסה מתקפלת לקובייה
 function cubeNet(cells) {
   const at = new Map(cells.map(([r, c], i) => [r + ',' + c, i])), lab = new Array(cells.length).fill(-1);
   const roll = { E: s => ({ D: s.E, E: s.U, U: s.W, W: s.D, N: s.N, S: s.S }), W: s => ({ D: s.W, W: s.U, U: s.E, E: s.D, N: s.N, S: s.S }), S: s => ({ D: s.S, S: s.U, U: s.N, N: s.D, E: s.E, W: s.W }), N: s => ({ D: s.N, N: s.U, U: s.S, S: s.D, E: s.E, W: s.W }) };
-  const st = [{ D: 0, U: 1, N: 2, S: 3, E: 4, W: 5 }], q = [0]; lab[0] = 0; const S = [st[0]];
+  const S = [{ D: 0, U: 1, N: 2, S: 3, E: 4, W: 5 }], q = [0]; lab[0] = 0;
   while (q.length) {
     const i = q.shift(), [r, c] = cells[i];
     for (const [d, dr, dc] of [['E', 0, 1], ['W', 0, -1], ['S', 1, 0], ['N', -1, 0]]) {
@@ -14779,102 +14957,39 @@ function cubeNet(cells) {
   return { ok: new Set(lab).size === 6 && cells.length === 6, lab };
 }
 const cubeOpp = l => l ^ 1; // 0↔1, 2↔3, 4↔5
+const solNorm = P => { const mr = Math.min(...P.map(p => p[0])), mc = Math.min(...P.map(p => p[1])); return P.map(([r, c]) => [r - mr, c - mc]).sort((x, y) => x[0] - y[0] || x[1] - y[1]); };
 function randHexo() {
   const S = new Set(['0,0']);
   while (S.size < 6) { const [r, c] = pick([...S]).split(',').map(Number), [dr, dc] = pick([[0, 1], [0, -1], [1, 0], [-1, 0]]); S.add((r + dr) + ',' + (c + dc)); }
-  const P = [...S].map(k => k.split(',').map(Number)), mr = Math.min(...P.map(p => p[0])), mc = Math.min(...P.map(p => p[1]));
-  return P.map(([r, c]) => [r - mr, c - mc]).sort((x, y) => x[0] - y[0] || x[1] - y[1]);
+  return solNorm([...S].map(k => k.split(',').map(Number)));
 }
+// כל 11 הפריסות של קובייה (מחושב פעם אחת: כל המשושונים, ומסננים את אלה שמתקפלים)
+let SOL_N11 = null;
+function cubeNets11() {
+  if (SOL_N11) return SOL_N11;
+  const key = P => JSON.stringify(solNorm(P)), canon = P => { const out = []; let Q = P; for (let k = 0; k < 4; k++) { Q = Q.map(([r, c]) => [c, -r]); out.push(key(Q), key(Q.map(([r, c]) => [r, -c]))); } return out.sort()[0]; };
+  let cur = new Set([key([[0, 0]])]);
+  for (let n = 1; n < 6; n++) { const nx = new Set(); for (const k of cur) { const P = JSON.parse(k); for (const [r, c] of P) for (const [dr, dc] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) { const q = [r + dr, c + dc]; if (!P.some(p => p[0] === q[0] && p[1] === q[1])) nx.add(key([...P, q])); } } cur = nx; }
+  const free = new Map(); for (const k of cur) { const c = canon(JSON.parse(k)); if (!free.has(c)) free.set(c, JSON.parse(k)); }
+  SOL_N11 = [...free.values()].filter(P => cubeNet(P).ok).map(P => { const rows = Math.max(...P.map(p => p[0])), cols = Math.max(...P.map(p => p[1])); return rows > cols ? solNorm(P.map(([r, c]) => [c, -r])) : P; });
+  return SOL_N11;
+}
+const randCubeNet = ok => { let c; for (let t = 0; t < 500; t++) { c = ok ? pick(cubeNets11()) : randHexo(); if (cubeNet(c).ok === ok) break; } if (!ok) return c; const fx = Math.random() < 0.5, fy = Math.random() < 0.5; return solNorm(c.map(([r, k]) => [fy ? -r : r, fx ? -k : k])); };
 function netSVG(cells, o = {}) {
-  const s = o.s || 34, W = (Math.max(...cells.map(c => c[1])) + 1) * s + 8, H = (Math.max(...cells.map(c => c[0])) + 1) * s + 8;
-  const g = cells.map(([r, c], i) => `<rect x="${4 + c * s}" y="${4 + r * s}" width="${s}" height="${s}" fill="${o.mark === i ? '#f6c85f' : '#e8edff'}" stroke="${SOL_INK}" stroke-width="2"/>${o.txt && o.txt[i] ? `<text x="${4 + c * s + s / 2}" y="${4 + r * s + s / 2 + 6}" text-anchor="middle" font-size="17" font-weight="800" fill="${SOL_INK}">${o.txt[i]}</text>` : ''}`).join('');
+  const s = o.s || 34, all = [...cells, ...(o.cand || [])], W = (Math.max(...all.map(c => c[1])) + 1) * s + 8, H = (Math.max(...all.map(c => c[0])) + 1) * s + 8;
+  const txt = (r, c, t) => `<text x="${4 + c * s + s / 2}" y="${4 + r * s + s / 2 + 6}" text-anchor="middle" font-size="17" font-weight="800" fill="${SOL_INK}">${t}</text>`;
+  let g = cells.map(([r, c], i) => `<rect x="${4 + c * s}" y="${4 + r * s}" width="${s}" height="${s}" fill="${o.mark === i ? '#f6c85f' : '#e8edff'}" stroke="${SOL_INK}" stroke-width="2"/>${o.txt && o.txt[i] ? txt(r, c, o.txt[i]) : ''}`).join('');
+  g += (o.cand || []).map(([r, c, t]) => `<rect x="${4 + c * s + 2}" y="${4 + r * s + 2}" width="${s - 4}" height="${s - 4}" fill="#fff" stroke="#e0703a" stroke-width="2" stroke-dasharray="4 3"/>${txt(r, c, t)}`).join('');
   return solSVGwrap(g, W, H);
 }
-// ---- מחוללי שאלות ----
-function genSolidName() {
-  const all = [...SOL_KINDS.filter(x => x[1] !== 4 || x[0] === 'pyramid'), ...SOL_ROUND, ['prism', 4, 'תיבה']], it = pick(all);
-  const wrong = shuffle(all.filter(x => x[2] !== it[2]).map(x => x[2])).slice(0, 3);
-  return choiceQ({ text: 'איך קוראים לגוף שבציור?', fig: solidSVG(it[0], it[1] || 4), hint: 'מנסרה – שני בסיסים זהים ומקבילים, ופאות צדדיות מלבניות. פירמידה – בסיס אחד, והפאות הצדדיות משולשים שנפגשים בקדקוד אחד.', exp: `זו ${it[2]}.` }, it[2], wrong);
-}
-function genSolidParts(lv) {
-  const pool = lv === 1 ? SOL_KINDS.filter(x => x[1] <= 4) : SOL_KINDS;
-  const [kind, n, name] = pick(pool), cnt = solCount(kind, n), w = pick(['F', 'E', 'V']);
-  if (lv === 3 && Math.random() < 0.6) {
-    const isP = kind === 'prism', base = ['', '', '', 'משולש', 'מרובע', 'מחומש', 'משושה'][n];
-    return { type: 'num', text: `בסיס של ${isP ? 'מנסרה' : 'פירמידה'} הוא ${base}. כמה ${SOL_W[w]} יש ל${isP ? 'מנסרה' : 'פירמידה'}? (בלי ציור!)`, ans: cnt[w],
-      hint: isP ? `במנסרה שני בסיסים של ${n} צלעות: קדקודים ${M(`2 × ${n}`)}, מקצועות ${M(`3 × ${n}`)}, פאות ${M(`${n} + 2`)}` : `בפירמידה בסיס אחד של ${n} צלעות ועוד קדקוד ראש: קדקודים ${M(`${n} + 1`)}, מקצועות ${M(`2 × ${n}`)}, פאות ${M(`${n} + 1`)}`,
-      exp: `${name}: ${cnt.F} פאות, ${cnt.E} מקצועות, ${cnt.V} קדקודים.` };
-  }
-  return { type: 'num', text: `כמה <b>${SOL_W[w]}</b> יש ל${name.replace(' (מנסרה מרובעת)', '')}?`, fig: solidSVG(kind, n, { hl: w }), ans: cnt[w],
-    hint: w === 'F' ? 'פאה = משטח שטוח. סופרים גם את הבסיסים, וגם את הפאות שמאחור (בקו מקווקו).' : w === 'E' ? 'מקצוע = קו שבו שתי פאות נפגשות. אל תשכחו את הקווים המקווקווים מאחור!' : 'קדקוד = נקודה שבה מקצועות נפגשים. אל תשכחו את הקדקודים שמאחור!',
-    exp: `${name}: ${cnt.F} פאות, ${cnt.E} מקצועות, ${cnt.V} קדקודים.` };
-}
-function genCubeNet() {
-  const want = Math.random() < 0.5;
-  let cells; for (let t = 0; t < 400; t++) { cells = randHexo(); if (cubeNet(cells).ok === want) break; }
-  const ok = cubeNet(cells).ok;
-  return choiceQ({ text: 'האם אפשר לקפל את הפריסה הזאת ל<b>קובייה</b>?', fig: netSVG(cells), hint: 'דמיינו שמשבצת אחת היא הרצפה, ומקפלים את השאר כלפי מעלה. האם שתי משבצות נופלות על אותה פאה? (למשל: 5 משבצות בשורה, או ריבוע 2×2 – לא יכולים להיות בפריסה של קובייה.)',
-    exp: ok ? 'כן – כל משבצת נופלת על פאה אחרת, ומתקבלת קובייה סגורה.' : 'לא – כשמקפלים, שתי משבצות נופלות על אותה פאה, ופאה אחרת נשארת פתוחה.' }, ok ? 'כן, מתקבלת קובייה' : 'לא', [ok ? 'לא' : 'כן, מתקבלת קובייה'], true);
-}
-function genCubeOpp() {
-  let cells; do cells = randHexo(); while (!cubeNet(cells).ok);
-  const { lab } = cubeNet(cells), m = R(0, 5), L = 'אבגדה', txt = [], others = [];
-  cells.forEach((_, i) => { if (i !== m) { txt[i] = L[others.length]; others.push(i); } else txt[i] = '★'; });
-  const j = lab.findIndex(l => l === cubeOpp(lab[m]));
-  return choiceQ({ text: 'מקפלים את הפריסה לקובייה. איזו פאה תהיה <b>מול</b> הפאה עם הכוכב ★?', fig: netSVG(cells, { txt, mark: m }),
-    hint: 'פאות נגדיות לא נוגעות זו בזו בפריסה. בשורה של 3 משבצות – הראשונה והשלישית נגדיות.', exp: `הפאה ${txt[j]} תהיה מול הכוכב.` }, txt[j], shuffle(others.filter(i => i !== j).map(i => txt[i])).slice(0, 3));
-}
-function genSurf(lv) {
-  if (lv === 1) {
-    const e = R(2, 9);
-    return { type: 'num', text: `אורך המקצוע של קובייה הוא ${M(e)} ס"מ. מה <b>שטח הפנים</b> של הקובייה?`, fig: solBoxSVG(e, e, e), ans: 6 * e * e, unit: 'סמ"ר',
-      steps: [{ p: `שטח פאה אחת: ${M(`${e} × ${e} =`)}`, a: e * e }, { p: `לקובייה 6 פאות זהות: ${M(`6 × ${e * e} =`)}`, a: 6 * e * e }],
-      hint: 'לקובייה 6 פאות, וכולן ריבועים זהים.', exp: `${M(`6 × ${e} × ${e} = ${6 * e * e}`)} סמ"ר`, traps: [{ v: e * e * e, m: 'זה הנפח. שטח פנים = סכום שטחי כל הפאות.' }, { v: e * e, m: 'זה שטח של פאה אחת. לקובייה 6 פאות.' }] };
-  }
-  let a, b, c; do { a = R(2, 9); b = R(2, 7); c = R(2, 8); } while (a === b || b === c || a === c);
-  const S = 2 * (a * b + a * c + b * c);
-  if (lv === 2) return { type: 'num', text: `מה <b>שטח הפנים</b> של התיבה? (המידות בס"מ)`, fig: solBoxSVG(a, b, c), ans: S, unit: 'סמ"ר',
-    steps: [{ p: `קדמית ואחורית: ${M(`2 × ${a} × ${c} =`)}`, a: 2 * a * c }, { p: `שתי הפאות בצדדים: ${M(`2 × ${b} × ${c} =`)}`, a: 2 * b * c }, { p: `למעלה ולמטה: ${M(`2 × ${a} × ${b} =`)}`, a: 2 * a * b }, { p: `ביחד: ${M(`${2 * a * c} + ${2 * b * c} + ${2 * a * b} =`)}`, a: S }],
-    hint: 'לתיבה 3 זוגות של פאות זהות. מחשבים שטח של כל זוג ומחברים.', exp: `${M(`2 × (${a} × ${b} + ${a} × ${c} + ${b} × ${c}) = ${S}`)} סמ"ר`, traps: [{ v: a * b * c, m: 'זה הנפח. שטח פנים = סכום שטחי כל 6 הפאות.' }, { v: S / 2, m: 'ספרתם רק 3 פאות. לכל פאה יש פאה זהה מולה.' }] };
-  const k = R(0, 2);
-  if (k === 0) { const open = S - a * b; return { type: 'num', text: `קופסה בצורת תיבה – <b>בלי מכסה</b>. כמה נייר צריך כדי לצפות אותה מבחוץ (כולל הרצפה)? (המידות בס"מ)`, fig: boxNetSVG(a, b, c, { noTop: true }), ans: open, unit: 'סמ"ר',
-    hint: 'מחשבים שטח פנים של תיבה שלמה – ומורידים את המכסה.', exp: `${M(`${S} − ${a} × ${b} = ${open}`)} סמ"ר`, traps: [{ v: S, m: 'לקופסה אין מכסה – מורידים פאה אחת.' }] }; }
-  if (k === 1) { const e = R(2, 10); return { type: 'num', text: `שטח הפנים של קובייה הוא ${M(6 * e * e)} סמ"ר. מה אורך המקצוע שלה?`, ans: e, unit: 'ס"מ',
-    steps: [{ p: `שטח פאה אחת: ${M(`${6 * e * e} : 6 =`)}`, a: e * e }, { p: `איזה מספר כפול עצמו נותן ${e * e}?`, a: e }], hint: 'מחלקים ל-6 פאות, ואז שואלים: איזה מספר כפול עצמו נותן את שטח הפאה?', exp: `${M(`${6 * e * e} : 6 = ${e * e}`)}, ו-${M(`${e} × ${e} = ${e * e}`)}` }; }
-  return { type: 'num', text: `זו פריסה של תיבה (המידות בס"מ). מה שטח הפנים של התיבה?`, fig: boxNetSVG(a, b, c), ans: S, unit: 'סמ"ר',
-    hint: 'שטח הפנים = סכום השטחים של כל 6 המלבנים בפריסה. פאות באותו צבע – זהות.', exp: `${M(`2 × (${a * b} + ${a * c} + ${b * c}) = ${S}`)} סמ"ר` };
-}
-function genVol(lv) {
-  if (lv === 1) { const a = R(2, 4), b = R(2, 3), c = R(2, 4);
-    return { type: 'num', text: 'מכמה <b>קוביות יחידה</b> בנויה התיבה? (אין חללים בתוכה)', fig: isoBoxSVG(a, b, c), ans: a * b * c,
-      steps: [{ p: `כמה קוביות בשכבה אחת (${M(`${a} × ${b}`)})?`, a: a * b }, { p: `כמה שכבות יש? ${M(`${a * b} × ${c} =`)}`, a: a * b * c }],
-      hint: 'סופרים כמה קוביות יש בשכבה העליונה, וכופלים במספר השכבות.', exp: `${M(`${a} × ${b} × ${c} = ${a * b * c}`)} קוביות`, traps: [{ v: 2 * (a * b + a * c + b * c), m: 'ספרתם את הריבועים על הפאות. סופרים קוביות – גם את אלה שבפנים.' }] }; }
-  let a, b, c; do { a = R(2, 10); b = R(2, 8); c = R(2, 9); } while (a === b && b === c);
-  if (lv === 2) return { type: 'num', text: 'מה <b>הנפח</b> של התיבה? (המידות בס"מ)', fig: solBoxSVG(a, b, c), ans: a * b * c, unit: 'סמ"ק',
-    hint: 'נפח תיבה = אורך × רוחב × גובה.', exp: `${M(`${a} × ${b} × ${c} = ${a * b * c}`)} סמ"ק`, traps: [{ v: 2 * (a * b + a * c + b * c), m: 'זה שטח הפנים. נפח = כמה קוביות נכנסות: אורך × רוחב × גובה.' }, { v: a + b + c, m: 'חיברתם. בנפח כופלים את שלוש המידות.' }] };
-  const k = R(0, 2);
-  if (k === 0) return { type: 'num', text: `נפח של תיבה הוא ${M(a * b * c)} סמ"ק. האורך ${M(a)} ס"מ והרוחב ${M(b)} ס"מ. מה הגובה?`, ans: c, unit: 'ס"מ',
-    steps: [{ p: `שטח הבסיס: ${M(`${a} × ${b} =`)}`, a: a * b }, { p: `הגובה: ${M(`${a * b * c} : ${a * b} =`)}`, a: c }], hint: 'נפח = שטח הבסיס × גובה. אז גובה = נפח : שטח הבסיס.', exp: `${M(`${a * b * c} : (${a} × ${b}) = ${c}`)} ס"מ` };
-  if (k === 1) { const e = pick([2, 3, 4, 5, 6, 10]); return { type: 'num', text: `נפח של קובייה הוא ${M(e ** 3)} סמ"ק. מה אורך המקצוע שלה?`, ans: e, unit: 'ס"מ', hint: 'איזה מספר כפול עצמו כפול עצמו נותן את הנפח?', exp: `${M(`${e} × ${e} × ${e} = ${e ** 3}`)}` }; }
-  const [x, y, z] = pick([[10, 10, 10], [10, 20, 30], [20, 20, 10], [10, 10, 30], [20, 30, 50], [10, 40, 50]]);
-  return { type: 'num', text: `אקווריום בצורת תיבה – ${M(`${x} × ${y} × ${z}`)} ס"מ. כמה <b>ליטרים</b> מים נכנסים בו? (ליטר = ${M('1,000')} סמ"ק)`, ans: x * y * z / 1000, unit: 'ליטר',
-    steps: [{ p: `הנפח בסמ"ק: ${M(`${x} × ${y} × ${z} =`)}`, a: x * y * z }, { p: `בליטרים: ${M(`${fmt(x * y * z)} : 1,000 =`)}`, a: x * y * z / 1000 }], hint: 'מחשבים נפח בסמ"ק, ומחלקים ב-1,000.', exp: `${M(`${fmt(x * y * z)} : 1,000 = ${fmt(x * y * z / 1000)}`)} ליטר` };
-}
-function genTriPrism() {
-  const [a, b, c] = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 6, 10], [4, 3, 5]]), h = R(2, 10), base = a * b / 2;
-  if (Math.random() < 0.5) return { type: 'num', text: 'מה <b>הנפח</b> של המנסרה המשולשת? (הבסיס משולש ישר-זווית, המידות בס"מ)', fig: triPrismSVG(a, b, c, h), ans: base * h, unit: 'סמ"ק',
-    steps: [{ p: `שטח הבסיס (המשולש): ${M(`${a} × ${b} : 2 =`)}`, a: base }, { p: `נפח = שטח הבסיס × גובה: ${M(`${base} × ${h} =`)}`, a: base * h }], hint: 'נפח של מנסרה = שטח הבסיס × גובה המנסרה.', exp: `${M(`${a} × ${b} : 2 × ${h} = ${base * h}`)} סמ"ק`, traps: [{ v: a * b * h, m: 'שכחתם לחלק ב-2: שטח משולש ישר-זווית = ניצב × ניצב : 2.' }] };
-  const S = 2 * base + (a + b + c) * h;
-  return { type: 'num', text: 'מה <b>שטח הפנים</b> של המנסרה המשולשת? (הבסיס משולש ישר-זווית, המידות בס"מ)', fig: triPrismSVG(a, b, c, h), ans: S, unit: 'סמ"ר',
-    steps: [{ p: `שני הבסיסים: ${M(`2 × ${a} × ${b} : 2 =`)}`, a: 2 * base }, { p: `3 המלבנים בצדדים: ${M(`(${a} + ${b} + ${c}) × ${h} =`)}`, a: (a + b + c) * h }, { p: `ביחד: ${M(`${2 * base} + ${(a + b + c) * h} =`)}`, a: S }],
-    hint: 'שני משולשים זהים + שלושה מלבנים. רוחב כל מלבן = צלע של המשולש, ואורכו = גובה המנסרה.', exp: `${M(`2 × ${base} + ${a + b + c} × ${h} = ${S}`)} סמ"ר` };
-}
-// ---- קיפול פריסה בתלת-ממד (CSS): כל פאה "תלויה" על הפאה שלידה, ומסתובבת סביב הקו המשותף ----
+// ---- קיפול פריסת קובייה בתלת-ממד (CSS): כל פאה "תלויה" על הפאה שלידה, ומסתובבת סביב הקו המשותף.
+// בפריסה שלא מתקפלת לקובייה – המשבצות שנופלות על אותה פאה נצבעות באדום בסוף הקיפול
 function fold3D(host, cells, S = 50, txt) {
   const at = new Map(cells.map(([r, c], i) => [r + ',' + c, i])), kids = cells.map(() => []), dir = {}, seen = new Set([0]), q = [0];
   while (q.length) { const i = q.shift(), [r, c] = cells[i]; for (const [dr, dc] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) { const j = at.get((r + dr) + ',' + (c + dc)); if (j !== undefined && !seen.has(j)) { seen.add(j); kids[i].push(j); dir[j] = [dr, dc]; q.push(j); } } }
   const COL = ['rgba(246,196,184,.9)', 'rgba(191,224,201,.9)', 'rgba(198,212,245,.9)', 'rgba(246,226,166,.9)', 'rgba(226,200,239,.9)', 'rgba(191,230,234,.9)'], mr = Math.min(...cells.map(c => c[0])), mc = Math.min(...cells.map(c => c[1]));
   const W = (Math.max(...cells.map(c => c[1])) - mc + 1) * S, H = (Math.max(...cells.map(c => c[0])) - mr + 1) * S;
+  const { lab } = cubeNet(cells), bad = lab.map(l => lab.filter(x => x === l).length > 1);
   const faces = [];
   const build = i => {
     const [dr, dc] = dir[i] || [0, 0], el = document.createElement('div');
@@ -14883,29 +14998,372 @@ function fold3D(host, cells, S = 50, txt) {
     el.style.cssText = `width:${S}px;height:${S}px;left:${pos[0]}px;top:${pos[1]}px;background:${COL[i % 6]};transform-origin:${dc === 1 ? '0 50%' : dc === -1 ? '100% 50%' : dr === 1 ? '50% 0' : dr === -1 ? '50% 100%' : '50% 50%'}`;
     el.dataset.d = dc === 1 ? 'E' : dc === -1 ? 'W' : dr === 1 ? 'S' : dr === -1 ? 'N' : '';
     el.innerHTML = `<span>${txt ? txt[i] : ''}</span>`;
-    faces.push(el);
+    faces[i] = el;
     kids[i].forEach(j => el.appendChild(build(j)));
     return el;
   };
   host.innerHTML = `<div class="f3-stage" style="height:${Math.max(W, H) + 40}px"><div class="f3-world" style="width:${W}px;height:${H}px"></div></div>`;
   host.querySelector('.f3-world').appendChild(build(0));
-  return deg => faces.forEach(el => { const d = el.dataset.d; el.style.transform = d === 'E' ? `rotateY(${-deg}deg)` : d === 'W' ? `rotateY(${deg}deg)` : d === 'S' ? `rotateX(${deg}deg)` : d === 'N' ? `rotateX(${-deg}deg)` : ''; });
+  return deg => faces.forEach((el, i) => { const d = el.dataset.d; el.style.transform = d === 'E' ? `rotateY(${-deg}deg)` : d === 'W' ? `rotateY(${deg}deg)` : d === 'S' ? `rotateX(${deg}deg)` : d === 'N' ? `rotateX(${-deg}deg)` : ''; el.classList.toggle('f3-bad', deg >= 86 && bad[i]); });
 }
 const SOL_NETS = [
   ['צלב', [[0, 1], [1, 0], [1, 1], [1, 2], [1, 3], [2, 1]]],
-  ['1-4-1 באלכסון', [[0, 0], [1, 0], [1, 1], [1, 2], [1, 3], [2, 3]]],
+  ['<span dir="ltr">1-4-1</span> אלכסון', [[0, 0], [1, 0], [1, 1], [1, 2], [1, 3], [2, 3]]],
   ['מדרגות', [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2], [3, 2]]],
-  ['3-3', [[0, 0], [0, 1], [0, 2], [1, 2], [1, 3], [1, 4]]],
-  ['5 בשורה', [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 1]]],
-  ['ריבוע 2×2', [[0, 0], [0, 1], [1, 0], [1, 1], [2, 1], [2, 2]]]
+  ['<span dir="ltr">3-3</span>', [[0, 0], [0, 1], [0, 2], [1, 2], [1, 3], [1, 4]]],
+  ['5 בשורה ❌', [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 1]]],
+  ['ריבוע 2×2 ❌', [[0, 0], [0, 1], [1, 0], [1, 1], [2, 1], [2, 2]]],
+  ['צורת U ❌', [[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 3]]]
 ];
 
+/* ---------- מאגר הגופים: שם, ציור, פריסה ---------- */
+const SOL_INFO = {
+  cube: ['קובייה', () => solBoxSVG(3, 3, 3, { lbl: false })], box: ['תיבה', () => solBoxSVG(5, 3, 2, { lbl: false })],
+  P3: ['מנסרה משולשת', () => solidSVG('prism', 3)], P5: ['מנסרה מחומשת', () => solidSVG('prism', 5)], P6: ['מנסרה משושה', () => solidSVG('prism', 6)],
+  Y3: ['פירמידה משולשת', () => solidSVG('pyramid', 3)], Y4: ['פירמידה מרובעת', () => solidSVG('pyramid', 4)], Y5: ['פירמידה מחומשת', () => solidSVG('pyramid', 5)], Y6: ['פירמידה משושה', () => solidSVG('pyramid', 6)],
+  cyl: ['גליל', () => solidSVG('cyl')], cone: ['חרוט', () => solidSVG('cone')], sphere: ['כדור', () => solidSVG('sphere')]
+};
+function solNetPic(id, v = 'ok') {
+  if (id === 'cube') return netSVG(randCubeNet(v === 'ok'));
+  if (id === 'box') { let a, b, c; do { a = R(3, 6); b = R(2, 4); c = R(1, 3); } while (a === b || b === c || a === c); return boxNetSVG(a, b, c, { lbl: false }); }
+  if (id === 'cyl') return cylNetSVG(v);
+  if (id === 'cone') return coneNetSVG(v);
+  const n = +id[1];
+  return solPolysSVG(id[0] === 'P' ? prismNetPolys(n, v) : pyrNetPolys(n, v === 'ok' && n <= 4 && Math.random() < 0.3 ? 'fan' : v));
+}
+// מסיחים "קרובים": אותו מספר צלעות בבסיס, או אותה משפחה
+function solNear(id) {
+  const n = +id[1], P = id[0] === 'P', Y = id[0] === 'Y';
+  const L = P ? ['Y' + n, 'P' + (n === 3 ? 5 : n === 5 ? 6 : 5), 'P' + (n === 6 ? 3 : n === 5 ? 3 : 6), 'Y' + (n === 6 ? 5 : n + 1)]
+    : Y ? ['P' + (n === 4 ? 6 : n), 'Y' + (n === 6 ? 5 : n + 1), 'Y' + (n === 3 ? 5 : n - 1), 'P' + (n === 3 ? 5 : 3)]
+    : id === 'cyl' ? ['cone', 'P6', 'sphere', 'box'] : id === 'cone' ? ['cyl', 'Y4', 'Y6', 'sphere'] : id === 'cube' ? ['box', 'Y4', 'P6', 'P3'] : ['cube', 'P6', 'Y4', 'P3'];
+  return [...new Set(L)].filter(x => x !== id);
+}
+const SOL_INVALID = {
+  same: 'שני הבסיסים נמצאים <b>באותו צד</b> של רצועת המלבנים. כשמגלגלים את הרצועה, צד אחד נסגר פעמיים והצד השני נשאר פתוח.',
+  cylSame: 'שני העיגולים <b>באותו צד</b> של המלבן. כשמגלגלים את המלבן לצינור, צריך עיגול אחד למעלה ועיגול אחד למטה.',
+  one: 'לגליל <b>שני בסיסים</b> עגולים, וכאן יש רק עיגול אחד.',
+  small: 'העיגולים <b>קטנים מדי</b>. אורך המלבן צריך להיות שווה להיקף העיגול – כך העיגול סוגר בדיוק את הצינור.',
+  tri: 'המעטפת של חרוט היא <b>חלק של עיגול (כמו מניפה)</b>, לא משולש. משולש לא יכול להתעגל סביב בסיס עגול.',
+  two: 'לחרוט רק <b>בסיס אחד</b>. כאן יש שני עיגולים.',
+  cube: 'כשמקפלים, <b>שתי משבצות נופלות על אותה פאה</b> – ופאה אחרת נשארת פתוחה.'
+};
+
+/* =================== מחוללי שאלות: הכרת גופים =================== */
+function genSolidName() {
+  const all = [...SOL_KINDS.filter(x => x[1] !== 4 || x[0] === 'pyramid'), ...SOL_ROUND, ['prism', 4, 'תיבה']], it = pick(all);
+  const wrong = shuffle(all.filter(x => x[2] !== it[2]).map(x => x[2])).slice(0, 3);
+  return SL(choiceQ({ text: 'איך קוראים לגוף שבציור?', fig: solidSVG(it[0], it[1] || 4), hint: 'מנסרה – שני בסיסים זהים ומקבילים, ופאות צדדיות מלבניות. פירמידה – בסיס אחד, והפאות הצדדיות משולשים שנפגשים בקדקוד אחד. השם בא מצורת הבסיס.', exp: `זו ${it[2]}.` }, it[2], wrong), 'solids', it[0] === 'cyl' || it[0] === 'cone' || it[0] === 'sphere' ? 3 : 1);
+}
+function genSolidParts(lv) {
+  const pool = lv === 1 ? SOL_KINDS.filter(x => x[1] <= 4) : SOL_KINDS;
+  const [kind, n, name] = pick(pool), cnt = solCount(kind, n), w = pick(['F', 'E', 'V']);
+  if (lv === 3 && Math.random() < 0.6) {
+    const isP = kind === 'prism', base = SOL_BASE[n];
+    return SL({ type: 'num', text: `בסיס של ${isP ? 'מנסרה' : 'פירמידה'} הוא ${base}. כמה ${SOL_W[w]} יש ל${isP ? 'מנסרה' : 'פירמידה'}? (בלי ציור!)`, ans: cnt[w],
+      hint: isP ? `במנסרה שני בסיסים של ${n} צלעות: קדקודים ${M(`2 × ${n}`)}, מקצועות ${M(`3 × ${n}`)}, פאות ${M(`${n} + 2`)}` : `בפירמידה בסיס אחד של ${n} צלעות ועוד קדקוד ראש: קדקודים ${M(`${n} + 1`)}, מקצועות ${M(`2 × ${n}`)}, פאות ${M(`${n} + 1`)}`,
+      exp: `${name}: ${cnt.F} פאות, ${cnt.E} מקצועות, ${cnt.V} קדקודים.` }, 'solids', 2);
+  }
+  return SL({ type: 'num', text: `כמה <b>${SOL_W[w]}</b> יש ל${name.replace(' (מנסרה מרובעת)', '')}?`, fig: solidSVG(kind, n, { hl: w }), ans: cnt[w],
+    hint: w === 'F' ? 'פאה = משטח שטוח. סופרים גם את הבסיסים, וגם את הפאות שמאחור (בקו מקווקו).' : w === 'E' ? 'מקצוע = קו שבו שתי פאות נפגשות. אל תשכחו את הקווים המקווקווים מאחור!' : 'קדקוד = נקודה שבה מקצועות נפגשים. אל תשכחו את הקדקודים שמאחור!',
+    exp: `${name}: ${cnt.F} פאות, ${cnt.E} מקצועות, ${cnt.V} קדקודים.`, traps: w === 'E' ? [{ v: cnt.E - (kind === 'prism' ? 3 : 2), m: 'שכחתם את המקצועות המקווקווים שמאחור.' }] : [] }, 'solids', lv === 1 ? 0 : 2);
+}
+// ממה בנויות הפאות / אילו צורות צריך כדי לבנות את הגוף
+function genSolidFaces(lv) {
+  const opts = lv === 1 ? [['prism', 3], ['prism', 4], ['cube', 4], ['pyramid', 4], ['pyramid', 3]] : [['prism', 3], ['prism', 5], ['prism', 6], ['pyramid', 4], ['pyramid', 5], ['pyramid', 6], ['cyl', 0], ['cone', 0]];
+  const [kind, n] = pick(opts), ok = solFaces(kind, n), name = kind === 'cube' ? 'קובייה' : kind === 'cyl' ? 'גליל' : kind === 'cone' ? 'חרוט' : solNm(kind, n);
+  let wr;
+  if (kind === 'prism' && n !== 4) wr = [solFaces('pyramid', n), `2 ${SOL_BASES[n]} ו-${n + 2} מלבנים`, `2 ${SOL_BASES[n]} ו-${n} משולשים`];
+  else if (kind === 'prism' || kind === 'cube') wr = kind === 'cube' ? ['4 ריבועים', '6 מלבנים שונים', 'ריבוע אחד ו-4 משולשים'] : ['6 ריבועים', '4 מלבנים', 'מלבן אחד ו-4 משולשים'];
+  else if (kind === 'pyramid') wr = n === 3 ? ['3 משולשים', '2 משולשים ו-3 מלבנים', 'משולש אחד ו-4 משולשים'] : [solFaces('prism', n), `${SOL_BASE[n]} אחד ו-${n + 1} משולשים`, `2 ${SOL_BASES[n]} ו-${n} משולשים`];
+  else if (kind === 'cyl') wr = ['עיגול אחד ומלבן', '2 עיגולים ו-2 מלבנים', 'עיגול ומשולש'];
+  else wr = ['עיגול ומשולש', '2 עיגולים ומלבן', 'עיגול אחד בלבד'];
+  const fig = kind === 'cube' ? solBoxSVG(3, 3, 3, { lbl: false }) : solidSVG(kind, n || 4);
+  return SL(choiceQ({ text: lv === 1 ? `ממה בנויות הפאות של ${name}?` : `רוצים לבנות <b>${name}</b> מקרטון. אילו צורות צריך לגזור?`, fig: lv === 1 ? fig : undefined,
+    hint: kind === 'prism' || kind === 'cube' ? 'במנסרה: 2 בסיסים זהים, ועוד מלבן אחד על כל צלע של הבסיס.' : kind === 'pyramid' ? 'בפירמידה: בסיס אחד, ועוד משולש אחד על כל צלע של הבסיס.' : kind === 'cyl' ? 'מה מקבלים כשפותחים פחית: מכסה, תחתית, והדופן.' : 'גביע גלידה פתוח – הוא לא משולש! הוא מתעגל.',
+    exp: `${name}: ${ok}.` }, ok, wr), 'solids', kind === 'cyl' || kind === 'cone' ? 3 : 4);
+}
+// מזהים את הגוף לפי מספר הפאות/המקצועות/הקדקודים
+function genSolidWho(lv) {
+  const [kind, n] = pick([['prism', 3], ['prism', 5], ['prism', 6], ['prism', 8], ['pyramid', 3], ['pyramid', 4], ['pyramid', 5], ['pyramid', 6], ['pyramid', 8]]), c = solCount(kind, n), nm = solNm(kind, n);
+  if (lv === 3 && Math.random() < 0.6) {
+    const w = pick(['E', 'V', 'F']), base = SOL_BASE[n];
+    const wr = shuffle([3, 4, 5, 6, 8].filter(k => k !== n).map(k => SOL_BASE[k])).slice(0, 3);
+    return SL(choiceQ({ text: `ל${kind === 'prism' ? 'מנסרה' : 'פירמידה'} יש ${c[w]} ${SOL_W[w]}. מה צורת הבסיס שלה?`,
+      hint: kind === 'prism' ? (w === 'E' ? 'במנסרה: מקצועות = 3 × צלעות הבסיס. כמה פעמים 3 נכנס?' : w === 'V' ? 'במנסרה: קדקודים = 2 × צלעות הבסיס.' : 'במנסרה: פאות = צלעות הבסיס + 2.') : (w === 'E' ? 'בפירמידה: מקצועות = 2 × צלעות הבסיס.' : 'בפירמידה: ' + SOL_W[w] + ' = צלעות הבסיס + 1.'),
+      exp: `לבסיס ${n} צלעות – ${base}.` }, base, wr), 'solids', 2);
+  }
+  const other = kind === 'prism' ? 'pyramid' : 'prism', ns = [3, 5, 6, 8].filter(k => k !== n), set = new Set([solNm(other, n)]);
+  while (set.size < 3) set.add(solNm(pick([kind, other]), pick(ns)));
+  const wr = [...set].filter(x => x !== nm).slice(0, 3);
+  return SL(choiceQ({ text: `לגוף יש ${c.F} פאות, ${c.E} מקצועות ו-${c.V} קדקודים. איזה גוף הוא?`, hint: 'בפירמידה מספר הפאות שווה למספר הקדקודים. במנסרה מספר הקדקודים כפול ממספר הצלעות של הבסיס.',
+    exp: `${nm}: ${kind === 'prism' ? `${M(`2 × ${n} = ${c.V}`)} קדקודים, ${M(`3 × ${n} = ${c.E}`)} מקצועות` : `${M(`${n} + 1 = ${c.V}`)} קדקודים, ${M(`2 × ${n} = ${c.E}`)} מקצועות`}.` }, nm, wr), 'solids', 2);
+}
+function genSolidEuler() {
+  const [nm, F, V, E] = pick([...[3, 5, 6, 8].map(n => [solNm('prism', n), n + 2, 2 * n, 3 * n]), ...[4, 5, 6, 8].map(n => [solNm('pyramid', n), n + 1, n + 1, 2 * n]), ['תיבה', 6, 8, 12], ['אוקטהדרון (גוף משוכלל של 8 משולשים)', 8, 6, 12]]);
+  const w = pick(['E', 'V', 'F']);
+  const given = w === 'E' ? `${F} פאות ו-${V} קדקודים` : w === 'V' ? `${F} פאות ו-${E} מקצועות` : `${V} קדקודים ו-${E} מקצועות`, ans = { E, V, F }[w];
+  return SL({ type: 'num', text: `לגוף (${nm}) יש ${given}. כמה <b>${SOL_W[w]}</b> יש לגוף? (רמז: הכלל של אוילר)`, ans,
+    hint: 'כלל אוילר: פאות + קדקודים − מקצועות = 2.', exp: `${M(`${F} + ${V} − ${E} = 2`)}` }, 'solids', 2);
+}
+function genSolidRound() {
+  const it = pick([['לאיזה גוף יש שני בסיסים עגולים ומעטפת מעוקלת?', 'גליל'], ['לאיזה גוף יש בסיס עגול אחד וקדקוד אחד?', 'חרוט'], ['לאיזה גוף אין בסיסים, אין מקצועות ואין קדקודים?', 'כדור'],
+    ['לאיזה גוף יש בסיס אחד שהוא מצולע, ופאות משולשות שנפגשות בקדקוד אחד?', 'פירמידה מרובעת'], ['פחית שתייה – לאיזה גוף היא דומה?', 'גליל'], ['גביע גלידה – לאיזה גוף הוא דומה?', 'חרוט'], ['כדורסל – לאיזה גוף הוא דומה?', 'כדור'],
+    ['קופסת נעליים – לאיזה גוף היא דומה?', 'תיבה'], ['קוביית סוכר – לאיזה גוף היא דומה?', 'קובייה'], ['אוהל שהחזית שלו משולש – לאיזה גוף הוא דומה?', 'מנסרה משולשת'], ['הפירמידות במצרים – לאיזה גוף הן דומות?', 'פירמידה מרובעת'], ['עיפרון מחודד – החלק המחודד דומה ל...', 'חרוט']]);
+  const wr = shuffle(['גליל', 'חרוט', 'כדור', 'מנסרה משולשת', 'פירמידה מרובעת', 'תיבה', 'קובייה'].filter(x => x !== it[1])).slice(0, 3);
+  return SL(choiceQ({ text: it[0], hint: 'גליל – 2 בסיסים עגולים. חרוט – בסיס עגול אחד וקדקוד. כדור – בלי בסיסים ובלי קדקודים.', exp: `${it[1]}.` }, it[1], wr), 'solids', 3);
+}
+function genSolidTF() {
+  const it = pick([['לכל פירמידה – מספר הפאות שווה למספר הקדקודים.', 1, 'בפירמידה: פאות = n + 1 וגם קדקודים = n + 1.'], ['לכל מנסרה – מספר הקדקודים זוגי.', 1, 'במנסרה: קדקודים = 2 × n – תמיד זוגי.'],
+    ['יש פירמידה שיש לה 9 מקצועות.', 0, 'בפירמידה: מקצועות = 2 × n – תמיד זוגי, ו-9 אי-זוגי.'], ['יש מנסרה שיש לה 12 מקצועות.', 1, 'מקצועות = 3 × n, ו-12 = 3 × 4. זו תיבה.'], ['יש מנסרה שיש לה 10 מקצועות.', 0, 'במנסרה מספר המקצועות מתחלק ב-3, ו-10 לא מתחלק ב-3.'],
+    ['יש פירמידה שיש לה 7 קדקודים.', 1, 'קדקודים = n + 1, ו-7 = 6 + 1. זו פירמידה משושה.'], ['יש מנסרה שיש לה 7 קדקודים.', 0, 'במנסרה מספר הקדקודים זוגי (2 × n).'], ['בכל פירמידה – כל הפאות הן משולשים.', 0, 'הבסיס יכול להיות ריבוע, מחומש ועוד. רק בפירמידה משולשת כל הפאות משולשים.'],
+    ['במנסרה ישרה – כל הפאות הצדדיות הן מלבנים.', 1, 'הבסיסים יכולים להיות כל מצולע, אבל הפאות הצדדיות של מנסרה ישרה – מלבנים.'], ['תיבה היא סוג של מנסרה.', 1, 'תיבה היא מנסרה שהבסיס שלה מלבן.'], ['קובייה היא סוג של תיבה.', 1, 'קובייה היא תיבה שכל הפאות שלה ריבועים.'],
+    ['למנסרה משולשת ולפירמידה מרובעת יש אותו מספר פאות.', 1, 'מנסרה משולשת: 3 + 2 = 5 פאות. פירמידה מרובעת: 4 + 1 = 5 פאות.'], ['לגליל יש מקצועות ישרים.', 0, 'לגליל אין מקצועות ישרים ואין קדקודים.'], ['לחרוט יש קדקוד אחד.', 1, 'הקדקוד – הנקודה החדה בראש החרוט.'],
+    ['לכדור יש פאה שטוחה אחת.', 0, 'לכדור אין שום חלק שטוח.'], ['לכל פירמידה יש מספר זוגי של מקצועות.', 1, 'מקצועות = 2 × n – תמיד זוגי.']]);
+  return SL(Object.assign({ text: `נכון או לא נכון? ${it[0]}`, type: 'choice', choices: ['נכון', 'לא נכון'], ans: it[1] ? 0 : 1, hint: 'מנסרה (n צלעות בבסיס): 2n קדקודים, 3n מקצועות, n + 2 פאות. פירמידה: n + 1 קדקודים, 2n מקצועות, n + 1 פאות.', exp: it[2] }), 'solids', 2);
+}
+function genSolidCut() {
+  const it = pick([['גליל', 'עיגול זהה לבסיס'], ['חרוט', 'עיגול קטן יותר מהבסיס'], ['כדור', 'עיגול'], ['פירמידה מרובעת', 'ריבוע קטן יותר מהבסיס'], ['פירמידה משולשת', 'משולש קטן יותר מהבסיס'], ['מנסרה משושה', 'משושה זהה לבסיס'], ['תיבה', 'מלבן זהה לבסיס'], ['מנסרה משולשת', 'משולש זהה לבסיס']]);
+  const pool = ['עיגול זהה לבסיס', 'עיגול קטן יותר מהבסיס', 'ריבוע קטן יותר מהבסיס', 'משולש קטן יותר מהבסיס', 'משושה זהה לבסיס', 'מלבן זהה לבסיס', 'משולש זהה לבסיס', 'מלבן', 'משולש', 'עיגול'];
+  const wr = shuffle(pool.filter(x => x !== it[1] && !(it[0] === 'כדור' && x.startsWith('עיגול')))).slice(0, 3);
+  return SL(choiceQ({ text: `חותכים <b>${it[0]}</b> ${it[0] === 'כדור' ? 'במישור (חיתוך ישר)' : 'במישור <b>מקביל לבסיס</b>'}. איזו צורה מתקבלת בחתך?`,
+    hint: 'במנסרה ובגליל החתך זהה לבסיס בכל גובה. בפירמידה ובחרוט – הגוף הולך ונעשה צר כלפי מעלה, ולכן החתך קטן יותר.', exp: `מתקבל ${it[1]}.` }, it[1], wr), 'solids', 5);
+}
+
+/* =================== מחוללי שאלות: פריסות =================== */
+function genCubeNet() {
+  const ok = Math.random() < 0.5, cells = randCubeNet(ok);
+  return SL(ynQ({ text: 'האם אפשר לקפל את הפריסה הזאת ל<b>קובייה</b>?', fig: netSVG(cells), hint: 'דמיינו שמשבצת אחת היא הרצפה, ומקפלים את השאר כלפי מעלה. האם שתי משבצות נופלות על אותה פאה? (למשל: 5 משבצות בשורה, או ריבוע 2×2 – לא יכולים להיות בפריסה של קובייה.)',
+    exp: ok ? 'כן – כל משבצת נופלת על פאה אחרת, ומתקבלת קובייה סגורה.' : 'לא – ' + SOL_INVALID.cube }, ok), 'solidsN', 3);
+}
+function genCubeOpp() {
+  const cells = randCubeNet(true), { lab } = cubeNet(cells), m = R(0, 5), L = 'אבגדה', txt = [], others = [];
+  cells.forEach((_, i) => { if (i !== m) { txt[i] = L[others.length]; others.push(i); } else txt[i] = '★'; });
+  const j = lab.findIndex(l => l === cubeOpp(lab[m]));
+  return SL(choiceQ({ text: 'מקפלים את הפריסה לקובייה. איזו פאה תהיה <b>מול</b> הפאה עם הכוכב ★?', fig: netSVG(cells, { txt, mark: m }),
+    hint: 'פאות נגדיות לא נוגעות זו בזו בפריסה. בשורה של 3 משבצות – הראשונה והשלישית נגדיות.', exp: `הפאה ${txt[j]} תהיה מול הכוכב.` }, txt[j], shuffle(others.filter(i => i !== j).map(i => txt[i])).slice(0, 3)), 'solidsN', 4);
+}
+// קוביית משחק: סכום פאות נגדיות 7 – איזה מספר חסר?
+function genDice() {
+  const cells = randCubeNet(true), { lab } = cubeNet(cells), pairs = shuffle([[1, 6], [2, 5], [3, 4]]).map(p => Math.random() < 0.5 ? p : [p[1], p[0]]);
+  const num = lab.map(l => pairs[l >> 1][l & 1]), m = R(0, 5), txt = num.map((x, i) => i === m ? '?' : String(x)), j = lab.findIndex(l => l === cubeOpp(lab[m]));
+  return SL({ type: 'num', text: 'זו פריסה של <b>קוביית משחק</b>: בקובייה כזאת סכום כל שתי פאות נגדיות הוא 7. איזה מספר צריך להיות במשבצת עם <b>?</b>', fig: netSVG(cells, { txt, mark: m }), ans: num[m],
+    hint: 'מוצאים איזו משבצת תהיה מול ה-? (היא לא נוגעת בה, ובשורה של 3 – מדלגים על אחת), ומשלימים ל-7.', exp: `מול ה-? נמצא ${num[j]}, ולכן ${M(`7 − ${num[j]} = ${num[m]}`)}.` }, 'solidsN', 4);
+}
+// חסרה משבצת אחת בפריסה – איפה להוסיף אותה?
+function genCubeMissing() {
+  for (let t = 0; t < 200; t++) {
+    const full = randCubeNet(true), k = R(0, 5), rest = full.filter((_, i) => i !== k);
+    const has = (r, c) => rest.some(p => p[0] === r && p[1] === c);
+    if (!cubeNet([...rest, full[k]].slice(0, 6)).ok) continue;
+    const cand = [];
+    rest.forEach(([r, c]) => [[0, 1], [0, -1], [1, 0], [-1, 0]].forEach(([dr, dc]) => { const q = [r + dr, c + dc]; if (!has(...q) && !cand.some(x => x[0] === q[0] && x[1] === q[1])) cand.push(q); }));
+    const good = cand.filter(q => cubeNet([...rest, q]).ok), badC = cand.filter(q => !cubeNet([...rest, q]).ok);
+    if (good.length < 1 || badC.length < 2) continue;
+    const pickC = shuffle([pick(good), ...shuffle(badC).slice(0, 3)]), L = 'אבגד';
+    const all = [...rest, ...pickC], mr = Math.min(...all.map(p => p[0])), mc = Math.min(...all.map(p => p[1]));
+    const sh = ([r, c]) => [r - mr, c - mc];
+    const ci = pickC.findIndex(q => cubeNet([...rest, q]).ok);
+    if (pickC.filter(q => cubeNet([...rest, q]).ok).length !== 1) continue;
+    return SL({ type: 'choice', choices: [...L.slice(0, pickC.length)], ans: ci, text: 'לפריסה של הקובייה חסרה משבצת אחת. באיזה מקום צריך להוסיף אותה כדי שתתקבל קובייה?', fig: netSVG(rest.map(sh), { cand: pickC.map((q, i) => [...sh(q), L[i]]) }),
+      hint: 'בודקים כל מקום: האם המשבצת החדשה תיפול על פאה שכבר תפוסה? (למשל 5 בשורה, או ריבוע 2×2 – לא טוב.)', exp: `במקום ${L[ci]} – רק שם המשבצת סוגרת את הפאה שחסרה.` }, 'solidsN', 3);
+  }
+  return genCubeOpp();
+}
+// לאיזה גוף שייכת הפריסה?
+function genNetWhich(lv) {
+  const id = pick(lv === 1 ? ['cube', 'box', 'P3', 'Y4', 'cyl', 'cone'] : ['P3', 'P5', 'P6', 'Y3', 'Y4', 'Y5', 'Y6', 'cyl', 'cone', 'box']), nm = SOL_INFO[id][0];
+  const wr = solNear(id).slice(0, 3).map(x => SOL_INFO[x][0]);
+  return SL(choiceQ({ text: 'לאיזה גוף שייכת הפריסה?', fig: solNetPic(id),
+    hint: 'סופרים: כמה בסיסים יש (1 – פירמידה או חרוט, 2 – מנסרה או גליל)? ומה צורת הבסיס? מלבנים בצדדים = מנסרה, משולשים בצדדים = פירמידה.', exp: `זו פריסה של ${nm}.` }, nm, wr), 'solidsN', id === 'cyl' || id === 'cone' ? 5 : id === 'cube' ? 3 : id[0] === 'Y' ? 2 : 1);
+}
+// מה הפריסה של הגוף שבציור? (התשובות – ציורים)
+function genNetOfSolid() {
+  const id = pick(['P3', 'P5', 'P6', 'Y3', 'Y4', 'Y5', 'Y6', 'cyl', 'cone']), n = +id[1];
+  let ok = solNetPic(id), wr;
+  if (id === 'cyl') wr = [coneNetSVG(), cylNetSVG('same'), cylNetSVG('one')];
+  else if (id === 'cone') wr = [coneNetSVG('tri'), cylNetSVG(), coneNetSVG('two')];
+  else if (id[0] === 'P') wr = [solNetPic('Y' + n), solNetPic(id, pick(['same', 'less', 'more'])), solNetPic('P' + (n === 3 ? 5 : n === 5 ? 6 : 5))];
+  else wr = [solNetPic('P' + (n === 4 ? 6 : n)), solNetPic(id, 'less'), solNetPic('Y' + (n === 6 ? 5 : n + 1))];
+  return SL(choiceQ({ text: `איזו מהן היא פריסה של ${SOL_INFO[id][0]}?`, fig: SOL_INFO[id][1](),
+    hint: 'בודקים שלושה דברים: כמה בסיסים? מה צורת הבסיס? וכמה פאות צדדיות – אחת לכל צלע של הבסיס.', exp: `בפריסה הנכונה: ${solFaces(id === 'cyl' ? 'cyl' : id === 'cone' ? 'cone' : id[0] === 'P' ? 'prism' : 'pyramid', n)}${id === 'cyl' ? ' – עיגול מכל צד של המלבן' : id[0] === 'P' ? ' – בסיס אחד מכל צד של רצועת המלבנים' : ''}.` }, ok, wr), 'solidsN', id === 'cyl' || id === 'cone' ? 5 : id[0] === 'P' ? 1 : 2);
+}
+// האם זו פריסה של הגוף?
+function genNetValid(lv) {
+  const id = pick(lv === 2 ? ['P3', 'P5', 'Y4', 'Y5', 'cyl', 'cone', 'cube'] : ['P3', 'P5', 'P6', 'Y3', 'Y4', 'Y5', 'Y6', 'cyl', 'cone', 'cube']), n = +id[1], yes = Math.random() < 0.45;
+  let v = 'ok', why = '';
+  if (!yes) {
+    if (id === 'cube') { v = 'bad'; why = SOL_INVALID.cube; }
+    else if (id === 'cyl') { v = pick(lv === 3 ? ['same', 'one', 'small'] : ['same', 'one']); why = SOL_INVALID[v === 'same' ? 'cylSame' : v]; }
+    else if (id === 'cone') { v = pick(['tri', 'two']); why = SOL_INVALID[v]; }
+    else if (id[0] === 'P') { v = pick(['same', 'less', 'more']); why = v === 'same' ? SOL_INVALID.same : `לבסיס יש ${n} צלעות, ולכן צריך <b>${n} מלבנים</b> – אחד לכל צלע. כאן יש ${v === 'less' ? n - 1 : n + 1}.`; }
+    else { v = 'less'; why = `לבסיס יש ${n} צלעות, ולכן צריך <b>${n} משולשים</b> – אחד על כל צלע. כאן יש ${n - 1}.`; }
+  }
+  const fig = id === 'cube' ? netSVG(randCubeNet(yes)) : solNetPic(id, v), nm = SOL_INFO[id][0];
+  const rule = id === 'cube' ? 'כל משבצת נופלת על פאה אחרת.' : id === 'cyl' ? 'מלבן ושני עיגולים – אחד מכל צד.' : id === 'cone' ? 'חלק של עיגול (מניפה) ועיגול אחד.' : id[0] === 'P' ? `2 ${SOL_BASES[n]} – אחד מכל צד – ו-${n} מלבנים.` : `${SOL_BASE[n]} ו-${n} משולשים שנפגשים בקדקוד אחד.`;
+  return SL(ynQ({ text: `האם זו פריסה של <b>${nm}</b>?`, fig, hint: 'סופרים בסיסים ופאות צדדיות, ובודקים איפה הבסיסים מחוברים. דמיינו שמקפלים: האם הגוף נסגר בלי חורים ובלי פאות כפולות?', exp: yes ? `כן – ${rule}` : `לא – ${why}` }, yes), 'solidsN', id === 'cyl' || id === 'cone' ? 5 : id === 'cube' ? 3 : id[0] === 'P' ? 1 : 2);
+}
+// כמה צורות יש בפריסה?
+function genNetCount(lv) {
+  const kind = pick(['prism', 'pyramid']), n = pick(lv === 1 ? [3, 4, 5] : [5, 6, 7, 8]), nm = solNm(kind, n), lat = kind === 'prism' ? 'מלבנים' : 'משולשים';
+  const w = pick(['lat', 'all']), ans = w === 'lat' ? n : (kind === 'prism' ? n + 2 : n + 1);
+  const fig = lv === 1 ? (n === 4 && kind === 'prism' ? solPolysSVG(prismNetPolys(4)) : solPolysSVG(kind === 'prism' ? prismNetPolys(n) : pyrNetPolys(n))) : undefined;
+  return SL({ type: 'num', text: w === 'lat' ? `כמה <b>${lat}</b> יש בפריסה של ${nm}?` : `מכמה צורות (פאות) <b>בסך הכול</b> בנויה הפריסה של ${nm}?`, fig, ans,
+    hint: kind === 'prism' ? 'מנסרה: מלבן אחד לכל צלע של הבסיס, ועוד 2 בסיסים.' : 'פירמידה: משולש אחד לכל צלע של הבסיס, ועוד בסיס אחד.',
+    exp: kind === 'prism' ? `${n} מלבנים ו-2 בסיסים: ${M(`${n} + 2 = ${n + 2}`)}` : `${n} משולשים ובסיס אחד: ${M(`${n} + 1 = ${n + 1}`)}`, traps: w === 'all' ? [{ v: n, m: `ספרתם רק את ה${lat}. אל תשכחו את ${kind === 'prism' ? '2 הבסיסים' : 'הבסיס'}.` }] : [] }, 'solidsN', kind === 'prism' ? 1 : 2);
+}
+// פריסת תיבה: איזה מלבן חסר?
+function genBoxNetAsk() {
+  let a, b, c; do { a = R(3, 8); b = R(2, 5); c = R(2, 6); } while (a === b || b === c || a === c);
+  const f = pick([1, 3, 4, 5]), pair = { 1: 3, 3: 1, 4: 2, 5: 0 }[f], dims = f === 1 || f === 3 ? [b, c] : f === 4 ? [a, c] : [a, b];
+  return SL({ type: 'num', text: 'זו פריסה של תיבה (המידות בס"מ). מה <b>השטח</b> של המלבן המסומן ב-?', fig: boxNetSVG(a, b, c, { ask: f }), ans: dims[0] * dims[1], unit: 'סמ"ר',
+    hint: 'בתיבה כל פאה זהה לפאה שמולה. בפריסה הן באותו צבע.', exp: `המלבן זהה לפאה שמולו: ${M(`${dims[0]} × ${dims[1]} = ${dims[0] * dims[1]}`)} סמ"ר` }, 'solidsN', 1);
+}
+
+/* =================== מחוללי שאלות: שטח פנים =================== */
+function genSurf(lv) {
+  if (lv === 1) {
+    const e = R(2, 9);
+    return SL({ type: 'num', text: `אורך המקצוע של קובייה הוא ${M(e)} ס"מ. מה <b>שטח הפנים</b> של הקובייה?`, fig: solBoxSVG(e, e, e), ans: 6 * e * e, unit: 'סמ"ר',
+      steps: [{ p: `שטח פאה אחת: ${M(`${e} × ${e} =`)}`, a: e * e }, { p: `לקובייה 6 פאות זהות: ${M(`6 × ${e * e} =`)}`, a: 6 * e * e }],
+      hint: 'לקובייה 6 פאות, וכולן ריבועים זהים.', exp: `${M(`6 × ${e} × ${e} = ${6 * e * e}`)} סמ"ר`, traps: [{ v: e * e * e, m: 'זה הנפח. שטח פנים = סכום שטחי כל הפאות.' }, { v: e * e, m: 'זה שטח של פאה אחת. לקובייה 6 פאות.' }] }, 'solidsS', 1);
+  }
+  let a, b, c; do { a = R(2, 9); b = R(2, 7); c = R(2, 8); } while (a === b || b === c || a === c);
+  const S = 2 * (a * b + a * c + b * c);
+  if (lv === 2) return SL({ type: 'num', text: `מה <b>שטח הפנים</b> של התיבה? (המידות בס"מ)`, fig: solBoxSVG(a, b, c), ans: S, unit: 'סמ"ר',
+    steps: [{ p: `קדמית ואחורית: ${M(`2 × ${a} × ${c} =`)}`, a: 2 * a * c }, { p: `שתי הפאות בצדדים: ${M(`2 × ${b} × ${c} =`)}`, a: 2 * b * c }, { p: `למעלה ולמטה: ${M(`2 × ${a} × ${b} =`)}`, a: 2 * a * b }, { p: `ביחד: ${M(`${2 * a * c} + ${2 * b * c} + ${2 * a * b} =`)}`, a: S }],
+    hint: 'לתיבה 3 זוגות של פאות זהות. מחשבים שטח של כל זוג ומחברים.', exp: `${M(`2 × (${a} × ${b} + ${a} × ${c} + ${b} × ${c}) = ${S}`)} סמ"ר`, traps: [{ v: a * b * c, m: 'זה הנפח. שטח פנים = סכום שטחי כל 6 הפאות.' }, { v: S / 2, m: 'ספרתם רק 3 פאות. לכל פאה יש פאה זהה מולה.' }] }, 'solidsS', 0);
+  if (Math.random() < 0.5) { const open = S - a * b; return SL({ type: 'num', text: `קופסה בצורת תיבה – <b>בלי מכסה</b>. כמה קרטון צריך כדי לבנות אותה? (המידות בס"מ)`, fig: boxNetSVG(a, b, c, { noTop: true }), ans: open, unit: 'סמ"ר',
+    steps: [{ p: `שטח הפנים של תיבה סגורה: ${M(`2 × (${a * b} + ${a * c} + ${b * c}) =`)}`, a: S }, { p: `בלי המכסה: ${M(`${S} − ${a * b} =`)}`, a: open }],
+    hint: 'מחשבים שטח פנים של תיבה שלמה – ומורידים את המכסה.', exp: `${M(`${S} − ${a} × ${b} = ${open}`)} סמ"ר`, traps: [{ v: S, m: 'לקופסה אין מכסה – מורידים פאה אחת.' }] }, 'solidsS', 1); }
+  const e = R(2, 10);
+  return SL({ type: 'num', text: `שטח הפנים של קובייה הוא ${M(6 * e * e)} סמ"ר. מה אורך המקצוע שלה?`, ans: e, unit: 'ס"מ',
+    steps: [{ p: `שטח פאה אחת: ${M(`${6 * e * e} : 6 =`)}`, a: e * e }, { p: `איזה מספר כפול עצמו נותן ${e * e}?`, a: e }], hint: 'מחלקים ל-6 פאות, ואז שואלים: איזה מספר כפול עצמו נותן את שטח הפאה?', exp: `${M(`${6 * e * e} : 6 = ${e * e}`)}, ו-${M(`${e} × ${e} = ${e * e}`)}` }, 'solidsS', 1);
+}
+function genSurfNet(lv) {
+  if (lv === 1) { const e = R(2, 8), cells = randCubeNet(true);
+    return SL({ type: 'num', text: `זו פריסה של קובייה. כל משבצת היא ריבוע של ${M(`${e} × ${e}`)} ס"מ. מה שטח הפנים של הקובייה?`, fig: netSVG(cells), ans: 6 * e * e, unit: 'סמ"ר',
+      steps: [{ p: `שטח משבצת אחת: ${M(`${e} × ${e} =`)}`, a: e * e }, { p: `6 משבצות: ${M(`6 × ${e * e} =`)}`, a: 6 * e * e }], hint: 'שטח הפנים = השטח של כל הפריסה.', exp: `${M(`6 × ${e * e} = ${6 * e * e}`)} סמ"ר` }, 'solidsS', 0); }
+  let a, b, c; do { a = R(2, 8); b = R(2, 5); c = R(2, 6); } while (a === b || b === c || a === c);
+  const S = 2 * (a * b + a * c + b * c);
+  return SL({ type: 'num', text: `זו פריסה של תיבה (המידות בס"מ). מה שטח הפנים של התיבה?`, fig: boxNetSVG(a, b, c), ans: S, unit: 'סמ"ר',
+    steps: [{ p: `ירוקים: ${M(`2 × ${a} × ${b} =`)}`, a: 2 * a * b }, { p: `כחולים: ${M(`2 × ${a} × ${c} =`)}`, a: 2 * a * c }, { p: `צהובים: ${M(`2 × ${b} × ${c} =`)}`, a: 2 * b * c }, { p: `ביחד:`, a: S }],
+    hint: 'שטח הפנים = סכום השטחים של כל 6 המלבנים בפריסה. פאות באותו צבע – זהות.', exp: `${M(`2 × (${a * b} + ${a * c} + ${b * c}) = ${S}`)} סמ"ר` }, 'solidsS', 0);
+}
+// קוביות מודבקות
+function genSurfGlue(lv) {
+  if (lv === 1) { const k = R(2, 6), S = 4 * k + 2;
+    return SL({ type: 'num', text: `הדביקו ${k} קוביות של ${M('1 × 1 × 1')} ס"מ בשורה. מה שטח הפנים של הגוף שהתקבל?`, fig: isoBoxSVG(k, 1, 1), ans: S, unit: 'סמ"ר',
+      steps: [{ p: `לפני ההדבקה: ${M(`6 × ${k} =`)}`, a: 6 * k }, { p: `בכל הדבקה נעלמים 2 ריבועים. יש ${k - 1} הדבקות: ${M(`${6 * k} − 2 × ${k - 1} =`)}`, a: S }],
+      hint: 'סופרים ריבועים: למעלה, למטה, מקדימה ומאחור – ועוד 2 בקצוות.', exp: `${M(`4 × ${k} + 2 = ${S}`)} סמ"ר`, traps: [{ v: 6 * k, m: 'הריבועים שהודבקו זה לזה נמצאים בפנים – לא רואים אותם, ולא סופרים אותם.' }] }, 'solidsS', 2); }
+  const a = R(2, 4), b = R(2, 3), c = lv === 3 ? 2 : 1, S = 2 * (a * b + a * c + b * c);
+  return SL({ type: 'num', text: `הגוף בנוי מקוביות של ${M('1 × 1 × 1')} ס"מ. מה שטח הפנים שלו?`, fig: isoBoxSVG(a, b, c), ans: S, unit: 'סמ"ר',
+    steps: [{ p: `למעלה ולמטה: ${M(`2 × ${a} × ${b} =`)}`, a: 2 * a * b }, { p: `שתי פאות: ${M(`2 × ${a} × ${c} =`)}`, a: 2 * a * c }, { p: `שתי פאות: ${M(`2 × ${b} × ${c} =`)}`, a: 2 * b * c }, { p: 'ביחד:', a: S }],
+    hint: 'זו תיבה! סופרים את הריבועים בכל אחת מ-6 הפאות.', exp: `${M(`2 × (${a * b} + ${a * c} + ${b * c}) = ${S}`)} סמ"ר`, traps: [{ v: a * b * c * 6, m: 'ספרתם 6 ריבועים לכל קובייה – אבל ריבועים שנוגעים זה בזה נמצאים בפנים.' }, { v: a * b * c, m: 'זה מספר הקוביות (הנפח).' }] }, 'solidsS', 2);
+}
+function genSurfWord(lv) {
+  if (lv === 2) { let a, b, c; do { a = R(10, 30); b = R(5, 20); c = R(4, 15); } while (a === b || b === c || a === c); const S = 2 * (a * b + a * c + b * c);
+    return SL({ type: 'num', text: `קופסת מתנה בצורת תיבה: אורך ${a} ס"מ, רוחב ${b} ס"מ, גובה ${c} ס"מ. כמה סמ"ר נייר עטיפה צריך לפחות כדי לכסות אותה?`, ans: S, unit: 'סמ"ר',
+      steps: [{ p: `${M(`2 × ${a} × ${b} =`)}`, a: 2 * a * b }, { p: `${M(`2 × ${a} × ${c} =`)}`, a: 2 * a * c }, { p: `${M(`2 × ${b} × ${c} =`)}`, a: 2 * b * c }, { p: 'ביחד:', a: S }],
+      hint: 'נייר עטיפה מכסה את כל הפאות – זה שטח הפנים.', exp: `${M(`2 × (${a * b} + ${a * c} + ${b * c}) = ${fmt(S)}`)} סמ"ר`, traps: [{ v: a * b * c, m: 'זה הנפח. נייר עטיפה = שטח הפנים.' }] }, 'solidsS', 1); }
+  const a = R(4, 7), b = R(3, 5), c = 3, door = 2, walls = 2 * (a + b) * c, ans = walls + a * b - door;
+  return SL({ type: 'num', text: `צובעים חדר: אורך ${a} מ', רוחב ${b} מ', גובה ${c} מ'. צובעים את 4 הקירות ואת התקרה – <b>לא</b> את הרצפה, ו<b>לא</b> את הדלת (${door} מ"ר). כמה מ"ר צובעים?`, ans, unit: 'מ"ר',
+    steps: [{ p: `4 הקירות: ${M(`2 × ${a} × ${c} + 2 × ${b} × ${c} =`)}`, a: walls }, { p: `ועוד התקרה: ${M(`${walls} + ${a} × ${b} =`)}`, a: walls + a * b }, { p: `פחות הדלת: ${M(`${walls + a * b} − ${door} =`)}`, a: ans }],
+    hint: 'שטח פנים של תיבה – בלי הרצפה, ובלי הדלת.', exp: `${M(`${walls} + ${a * b} − ${door} = ${ans}`)} מ"ר`, traps: [{ v: walls + 2 * a * b - door, m: 'את הרצפה לא צובעים.' }, { v: walls + a * b, m: 'שכחתם להוריד את הדלת.' }] }, 'solidsS', 1);
+}
+function genSurfScale() {
+  const k = pick([2, 3]), e = R(1, 4), S1 = 6 * e * e, S2 = 6 * k * k * e * e;
+  return SL({ type: 'num', text: `מקצוע של קובייה הוא ${e} ס"מ. מגדילים את המקצוע <b>פי ${k}</b>. פי כמה גדל שטח הפנים?`, ans: k * k,
+    steps: [{ p: `שטח הפנים לפני: ${M(`6 × ${e} × ${e} =`)}`, a: S1 }, { p: `אחרי (מקצוע ${k * e}): ${M(`6 × ${k * e} × ${k * e} =`)}`, a: S2 }, { p: `${M(`${S2} : ${S1} =`)}`, a: k * k }],
+    hint: 'כל ריבוע גדל גם באורך וגם ברוחב.', exp: `פי ${M(`${k} × ${k} = ${k * k}`)} – כל פאה גדלה פי ${k} באורך ופי ${k} ברוחב.`, traps: [{ v: k, m: `המקצוע גדל פי ${k}, אבל השטח גדל פי ${k} × ${k}.` }, { v: k ** 3, m: 'זה הגידול בנפח. שטח גדל פי ' + k + ' × ' + k + '.' }] }, 'solidsS', 4);
+}
+function genTriPrismS() {
+  const [a, b, c] = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 6, 10], [4, 3, 5]]), h = R(2, 10), base = a * b / 2, S = 2 * base + (a + b + c) * h;
+  return SL({ type: 'num', text: 'מה <b>שטח הפנים</b> של המנסרה המשולשת? (הבסיס משולש ישר-זווית, המידות בס"מ)', fig: triPrismSVG(a, b, c, h), ans: S, unit: 'סמ"ר',
+    steps: [{ p: `שני הבסיסים: ${M(`2 × ${a} × ${b} : 2 =`)}`, a: 2 * base }, { p: `3 המלבנים בצדדים: ${M(`(${a} + ${b} + ${c}) × ${h} =`)}`, a: (a + b + c) * h }, { p: `ביחד: ${M(`${2 * base} + ${(a + b + c) * h} =`)}`, a: S }],
+    hint: 'שני משולשים זהים + שלושה מלבנים. רוחב כל מלבן = צלע של המשולש, ואורכו = גובה המנסרה.', exp: `${M(`2 × ${base} + ${a + b + c} × ${h} = ${S}`)} סמ"ר`, traps: [{ v: (a + b + c) * h, m: 'שכחתם את שני הבסיסים המשולשים.' }] }, 'solidsS', 3);
+}
+
+/* =================== מחוללי שאלות: נפח =================== */
+function genVol(lv) {
+  if (lv === 1) { const a = R(2, 4), b = R(2, 3), c = R(2, 4);
+    return SL({ type: 'num', text: 'מכמה <b>קוביות יחידה</b> בנויה התיבה? (אין חללים בתוכה)', fig: isoBoxSVG(a, b, c), ans: a * b * c,
+      steps: [{ p: `כמה קוביות בשכבה אחת (${M(`${a} × ${b}`)})?`, a: a * b }, { p: `כמה שכבות יש? ${M(`${a * b} × ${c} =`)}`, a: a * b * c }],
+      hint: 'סופרים כמה קוביות יש בשכבה העליונה, וכופלים במספר השכבות.', exp: `${M(`${a} × ${b} × ${c} = ${a * b * c}`)} קוביות`, traps: [{ v: 2 * (a * b + a * c + b * c), m: 'ספרתם את הריבועים על הפאות. סופרים קוביות – גם את אלה שבפנים.' }] }, 'solidsV', 0); }
+  let a, b, c; do { a = R(2, 10); b = R(2, 8); c = R(2, 9); } while (a === b && b === c);
+  return SL({ type: 'num', text: 'מה <b>הנפח</b> של התיבה? (המידות בס"מ)', fig: solBoxSVG(a, b, c), ans: a * b * c, unit: 'סמ"ק',
+    hint: 'נפח תיבה = אורך × רוחב × גובה.', exp: `${M(`${a} × ${b} × ${c} = ${a * b * c}`)} סמ"ק`, traps: [{ v: 2 * (a * b + a * c + b * c), m: 'זה שטח הפנים. נפח = כמה קוביות נכנסות: אורך × רוחב × גובה.' }, { v: a + b + c, m: 'חיברתם. בנפח כופלים את שלוש המידות.' }] }, 'solidsV', 0);
+}
+function genVolMissing(lv) {
+  if (lv === 3 && Math.random() < 0.5) { const e = pick([2, 3, 4, 5, 6, 10]); return SL({ type: 'num', text: `נפח של קובייה הוא ${M(fmt(e ** 3))} סמ"ק. מה אורך המקצוע שלה?`, ans: e, unit: 'ס"מ', hint: 'איזה מספר כפול עצמו כפול עצמו נותן את הנפח?', exp: `${M(`${e} × ${e} × ${e} = ${e ** 3}`)}`, traps: [{ v: Math.round(e ** 3 / 3), m: 'לא מחלקים ב-3. מחפשים מספר שכפול עצמו פעמיים נותן את הנפח.' }] }, 'solidsV', 1); }
+  let a, b, c; do { a = R(2, 10); b = R(2, 8); c = R(2, 9); } while (a === b && b === c);
+  if (lv === 3) { const base = a * b; return SL({ type: 'num', text: `שטח הבסיס של תיבה הוא ${base} סמ"ר, והנפח שלה ${a * b * c} סמ"ק. מה הגובה?`, ans: c, unit: 'ס"מ', hint: 'נפח = שטח הבסיס × גובה.', exp: `${M(`${a * b * c} : ${base} = ${c}`)} ס"מ` }, 'solidsV', 1); }
+  return SL({ type: 'num', text: `נפח של תיבה הוא ${M(a * b * c)} סמ"ק. האורך ${M(a)} ס"מ והרוחב ${M(b)} ס"מ. מה הגובה?`, ans: c, unit: 'ס"מ',
+    steps: [{ p: `שטח הבסיס: ${M(`${a} × ${b} =`)}`, a: a * b }, { p: `הגובה: ${M(`${a * b * c} : ${a * b} =`)}`, a: c }], hint: 'נפח = שטח הבסיס × גובה. אז גובה = נפח : שטח הבסיס.', exp: `${M(`${a * b * c} : (${a} × ${b}) = ${c}`)} ס"מ`, traps: [{ v: a * b * c - a - b, m: 'לא מחסרים. הנפח הוא כפל, ולכן מחלקים.' }] }, 'solidsV', 1);
+}
+function genVolUnit(lv) {
+  if (lv === 1) {
+    if (Math.random() < 0.5) { const it = pick([['חדר כיתה', 'מ"ק'], ['בריכת שחייה', 'מ"ק'], ['קוביית סוכר', 'סמ"ק'], ['כפית תרופה', 'מ"ל'], ['דלי מים', 'ליטר'], ['בקבוק שתייה גדול', 'ליטר'], ['מחק', 'סמ"ק']]);
+      return SL(choiceQ({ text: `באיזו יחידה הכי מתאים למדוד את הנפח של <b>${it[0]}</b>?`, hint: 'סמ"ק ומ"ל – לדברים קטנים מאוד. ליטר – לבקבוקים ודליים. מ"ק – לחדרים ובריכות. סמ"ר היא יחידה של שטח!', exp: `${it[1]}.` }, it[1], shuffle(['סמ"ק', 'מ"ל', 'ליטר', 'מ"ק', 'סמ"ר'].filter(x => x !== it[1] && !(it[1] === 'סמ"ק' && x === 'מ"ל') && !(it[1] === 'מ"ל' && x === 'סמ"ק'))).slice(0, 3)), 'solidsV', 2); }
+    const L = R(2, 9); return SL(Math.random() < 0.5 ? { type: 'num', text: `${L} ליטר = כמה סמ"ק?`, ans: L * 1000, unit: 'סמ"ק', hint: 'ליטר אחד = 1,000 סמ"ק.', exp: `${M(`${L} × 1,000 = ${fmt(L * 1000)}`)}` }
+      : { type: 'num', text: `${M(fmt(L * 1000))} סמ"ק = כמה ליטר?`, ans: L, unit: 'ליטר', hint: 'ליטר אחד = 1,000 סמ"ק.', exp: `${M(`${fmt(L * 1000)} : 1,000 = ${L}`)}` }, 'solidsV', 2);
+  }
+  if (lv === 2) { const k = R(0, 2);
+    if (k === 0) { const v = pick([1.5, 2.5, 0.5, 0.25, 0.75, 1.25]); return SL({ type: 'num', text: `בבקבוק ${M(fmt(v))} ליטר. כמה מ"ל זה?`, ans: v * 1000, unit: 'מ"ל', hint: 'ליטר = 1,000 מ"ל.', exp: `${M(`${fmt(v)} × 1,000 = ${fmt(v * 1000)}`)} מ"ל` }, 'solidsV', 2); }
+    if (k === 1) { const cup = pick([200, 250]), L = cup === 250 ? R(1, 3) : pick([1, 2]), n = L * 1000 / cup; return SL({ type: 'num', text: `כמה כוסות של ${cup} מ"ל אפשר למלא מבקבוק של ${L} ליטר?`, ans: n, unit: 'כוסות', steps: [{ p: `${L} ליטר = כמה מ"ל?`, a: L * 1000 }, { p: `${M(`${fmt(L * 1000)} : ${cup} =`)}`, a: n }], hint: 'הופכים ליטרים למ"ל, ומחלקים בגודל הכוס.', exp: `${M(`${fmt(L * 1000)} : ${cup} = ${n}`)}` }, 'solidsV', 2); }
+    const [x, y, z] = pick([[10, 10, 10], [10, 20, 30], [20, 20, 10], [10, 10, 30], [20, 30, 50], [10, 40, 50]]);
+    return SL({ type: 'num', text: `אקווריום בצורת תיבה – ${M(`${x} × ${y} × ${z}`)} ס"מ. כמה <b>ליטרים</b> מים נכנסים בו? (ליטר = ${M('1,000')} סמ"ק)`, ans: x * y * z / 1000, unit: 'ליטר',
+      steps: [{ p: `הנפח בסמ"ק: ${M(`${x} × ${y} × ${z} =`)}`, a: x * y * z }, { p: `בליטרים: ${M(`${fmt(x * y * z)} : 1,000 =`)}`, a: x * y * z / 1000 }], hint: 'מחשבים נפח בסמ"ק, ומחלקים ב-1,000.', exp: `${M(`${fmt(x * y * z)} : 1,000 = ${fmt(x * y * z / 1000)}`)} ליטר` }, 'solidsV', 2);
+  }
+  if (Math.random() < 0.5) { const m = R(2, 9); return SL({ type: 'num', text: `${m} מ"ק = כמה ליטר?`, ans: m * 1000, unit: 'ליטר', hint: 'מטר מעוקב = קובייה של 10 × 10 × 10 דצימטרים = 1,000 ליטר.', exp: `${M(`${m} × 1,000 = ${fmt(m * 1000)}`)} ליטר` }, 'solidsV', 2); }
+  const a = pick([8, 10, 12, 15]), b = pick([4, 5, 6]), c = pick([1, 2]), V = a * b * c;
+  return SL({ type: 'num', text: `בריכה בצורת תיבה: אורך ${a} מ', רוחב ${b} מ', עומק ${c} מ'. כמה <b>ליטרים</b> מים נכנסים בה?`, ans: V * 1000, unit: 'ליטר',
+    steps: [{ p: `הנפח במ"ק: ${M(`${a} × ${b} × ${c} =`)}`, a: V }, { p: `כל מ"ק = 1,000 ליטר: ${M(`${V} × 1,000 =`)}`, a: V * 1000 }], hint: 'מחשבים נפח במ"ק, ואז: מ"ק אחד = 1,000 ליטר.', exp: `${M(`${V} × 1,000 = ${fmt(V * 1000)}`)} ליטר` }, 'solidsV', 2);
+}
+// גובה המים באקווריום
+function genVolWater() {
+  for (;;) { const a = pick([20, 25, 30, 40, 50, 60]), b = pick([20, 25, 30, 40]), h = R(4, 30), cc = a * b * h, L = cc / 1000;
+    if (L * 2 !== Math.round(L * 2) || h >= 40) continue;
+    return SL({ type: 'num', text: `לאקווריום בצורת תיבה בסיס של ${M(`${a} × ${b}`)} ס"מ. שופכים לתוכו ${M(fmt(L))} ליטר מים. לאיזה גובה יגיעו המים?`, ans: h, unit: 'ס"מ',
+      steps: [{ p: `${fmt(L)} ליטר = כמה סמ"ק?`, a: cc }, { p: `שטח הבסיס: ${M(`${a} × ${b} =`)}`, a: a * b }, { p: `הגובה: ${M(`${fmt(cc)} : ${fmt(a * b)} =`)}`, a: h }],
+      hint: 'נפח המים = שטח הבסיס × גובה המים. הופכים ליטרים לסמ"ק ומחלקים בשטח הבסיס.', exp: `${M(`${fmt(cc)} : ${fmt(a * b)} = ${h}`)} ס"מ` }, 'solidsV', 3); }
+}
+// כמה קוביות גדולות נכנסות בקופסה
+function genVolFit() {
+  const e = pick([2, 3]), x = R(1, 4) * e, y = R(1, 3) * e, z = R(1, 3) * e, n = (x / e) * (y / e) * (z / e);
+  return SL({ type: 'num', text: `כמה קוביות של ${M(`${e} × ${e} × ${e}`)} ס"מ נכנסות בדיוק לקופסה בצורת תיבה של ${M(`${x} × ${y} × ${z}`)} ס"מ?`, ans: n,
+    steps: [{ p: `לאורך: ${M(`${x} : ${e} =`)}`, a: x / e }, { p: `לרוחב: ${M(`${y} : ${e} =`)}`, a: y / e }, { p: `לגובה: ${M(`${z} : ${e} =`)}`, a: z / e }, { p: 'ביחד:', a: n }],
+    hint: 'כמה קוביות נכנסות בשורה לאורך? לרוחב? לגובה? ואז כופלים.', exp: `${M(`${x / e} × ${y / e} × ${z / e} = ${n}`)} קוביות`, traps: [{ v: x * y * z / e, m: `נפח קובייה כזאת הוא ${e ** 3} סמ"ק, לא ${e}.` }, { v: x * y * z, m: 'זה מספר הקוביות של 1 סמ"ק. הקוביות כאן גדולות יותר.' }] }, 'solidsV', 4);
+}
+function genVolScale() {
+  const it = pick([['כל שלושת המקצועות של התיבה גדלו פי 2', 8, '2 × 2 × 2'], ['רק האורך של התיבה גדל פי 2', 2, '2'], ['האורך והרוחב של התיבה גדלו פי 2 (הגובה לא השתנה)', 4, '2 × 2'], ['המקצוע של הקובייה גדל פי 3', 27, '3 × 3 × 3'], ['רק הגובה של התיבה גדל פי 3', 3, '3']]);
+  return SL({ type: 'num', text: `${it[0]}. פי כמה גדל <b>הנפח</b>?`, ans: it[1], hint: 'נפח = אורך × רוחב × גובה. כל מידה שגדלה – מכפילה את הנפח.', exp: `פי ${M(`${it[2]} = ${it[1]}`)}.`, traps: it[1] === 8 ? [{ v: 2, m: 'כל אחת משלוש המידות גדלה פי 2 – הנפח גדל פי 2 × 2 × 2.' }, { v: 6, m: 'כופלים, לא מחברים: 2 × 2 × 2.' }] : it[1] === 27 ? [{ v: 9, m: 'זה הגידול בשטח הפנים. בנפח – 3 × 3 × 3.' }] : [] }, 'solidsV', 4);
+}
+function genVolCompare() {
+  for (;;) {
+    const A = [R(2, 10), R(2, 6), R(2, 8)], B = [R(2, 10), R(2, 6), R(2, 8)], va = A[0] * A[1] * A[2], vb = B[0] * B[1] * B[2];
+    if (Math.abs(va - vb) > Math.max(va, vb) * 0.25 || A.join() === B.join()) continue;
+    const ans = va > vb ? 'תיבה א' : vb > va ? 'תיבה ב' : 'הנפחים שווים';
+    const CH = ['תיבה א', 'תיבה ב', 'הנפחים שווים'];
+    return SL({ type: 'choice', choices: CH, ans: CH.indexOf(ans), text: `לאיזו תיבה נפח גדול יותר? <br>תיבה א: ${M(A.join(' × '))} ס"מ · תיבה ב: ${M(B.join(' × '))} ס"מ`, hint: 'מחשבים את הנפח של כל תיבה: אורך × רוחב × גובה.', exp: `תיבה א: ${M(`${A.join(' × ')} = ${va}`)} · תיבה ב: ${M(`${B.join(' × ')} = ${vb}`)}` }, 'solidsV', 4);
+  }
+}
+function genTriPrismV() {
+  if (Math.random() < 0.4) { const B = R(6, 30), h = R(3, 12); return SL({ type: 'num', text: `שטח הבסיס של מנסרה הוא ${B} סמ"ר, והגובה שלה ${h} ס"מ. מה הנפח?`, ans: B * h, unit: 'סמ"ק', hint: 'נפח של כל מנסרה = שטח הבסיס × גובה.', exp: `${M(`${B} × ${h} = ${B * h}`)} סמ"ק` }, 'solidsV', 3); }
+  const [a, b, c] = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 6, 10], [4, 3, 5]]), h = R(2, 10), base = a * b / 2;
+  return SL({ type: 'num', text: 'מה <b>הנפח</b> של המנסרה המשולשת? (הבסיס משולש ישר-זווית, המידות בס"מ)', fig: triPrismSVG(a, b, c, h), ans: base * h, unit: 'סמ"ק',
+    steps: [{ p: `שטח הבסיס (המשולש): ${M(`${a} × ${b} : 2 =`)}`, a: base }, { p: `נפח = שטח הבסיס × גובה: ${M(`${base} × ${h} =`)}`, a: base * h }], hint: 'נפח של מנסרה = שטח הבסיס × גובה המנסרה.', exp: `${M(`${a} × ${b} : 2 × ${h} = ${base * h}`)} סמ"ק`, traps: [{ v: a * b * h, m: 'שכחתם לחלק ב-2: שטח משולש ישר-זווית = ניצב × ניצב : 2.' }, { v: a * b * c * h, m: 'לא כופלים את כל הצלעות. נפח = שטח הבסיס × גובה.' }] }, 'solidsV', 3);
+}
+
+/* =================== שיעורים (כרטיסיות) =================== */
+const solDims = (s, max, cls) => ['a', 'b', 'c'].map(k => `<span class="sol-dim">${{ a: 'אורך', b: 'רוחב', c: 'גובה' }[k]}: <button class="secondary" data-d="${k}" data-v="-1">−</button><b>${s[k]}</b><button class="secondary" data-d="${k}" data-v="1">+</button></span>`).join('');
+const solCap = (svgS, cap, ok) => `<figure class="sol-cap${ok === false ? ' bad' : ok ? ' good' : ''}">${svgS}<figcaption>${ok === false ? '❌ ' : ok ? '✅ ' : ''}${cap}</figcaption></figure>`;
 if (GRADE === 6 && TOPIC.solids) {
   Object.assign(LESSONS, {
     solids: {
-      id: 'solids', name: 'גופים', icon: '🧊', color: '#3a7bd5', topic: 'solids',
-      desc: 'פאות, מקצועות וקדקודים, מנסרות ופירמידות, פריסה וקיפול, שטח פנים ונפח',
-      practice: [genSolidName, () => genSolidParts(1), genCubeNet, () => genSurf(1), () => genSolidParts(2), genCubeOpp, () => genSurf(2), () => genVol(2)],
+      id: 'solids', name: 'גופים – הכרה ותכונות', icon: '🧊', color: '#3a7bd5', topic: 'solids',
+      desc: 'מנסרות, פירמידות, גליל, חרוט וכדור · פאות, מקצועות וקדקודים · בונים מצורות · חתכים',
+      practice: [genSolidName, () => genSolidParts(1), () => genSolidFaces(1), genSolidRound, () => genSolidParts(2), () => genSolidWho(2), () => genSolidFaces(2), genSolidTF],
       cards: [
         {
           title: 'גוף – פאות, מקצועות וקדקודים 🧊',
@@ -14914,19 +15372,17 @@ if (GRADE === 6 && TOPIC.solids) {
             <div class="sol-view" data-sv></div>
             <div class="lbtns" data-sh><button class="secondary" data-h="F">🟦 פאות</button><button class="secondary" data-h="E">📏 מקצועות</button><button class="secondary" data-h="V">🔴 קדקודים</button></div>
             <div data-sm class="explain"></div>
-            <ul class="recap"><li><b>פאה</b> – משטח שטוח של הגוף.</li><li><b>מקצוע</b> – קו שבו שתי פאות נפגשות.</li><li><b>קדקוד</b> – נקודה שבה מקצועות נפגשים.</li></ul>
+            <ul class="recap"><li><b>פאה</b> – משטח שטוח של הגוף (מצולע).</li><li><b>מקצוע</b> – קו שבו שתי פאות נפגשות.</li><li><b>קדקוד</b> – נקודה שבה מקצועות נפגשים.</li></ul>
             <div class="warn">⚠️ קווים מקווקווים = מקצועות שנמצאים <b>מאחור</b>. לא רואים אותם – אבל סופרים אותם!</div>`,
           setup(root) {
-            const L = [['prism', 4, 'תיבה'], ['prism', 3, 'מנסרה משולשת'], ['pyramid', 4, 'פירמידה מרובעת'], ['pyramid', 3, 'פירמידה משולשת'], ['prism', 6, 'מנסרה משושה'], ['cyl', 0, 'גליל'], ['cone', 0, 'חרוט'], ['sphere', 0, 'כדור']];
+            const L = [['prism', 4, 'תיבה'], ['prism', 3, 'מנסרה משולשת'], ['pyramid', 4, 'פירמידה מרובעת'], ['pyramid', 3, 'פירמידה משולשת'], ['prism', 6, 'מנסרה משושה'], ['pyramid', 5, 'פירמידה מחומשת']];
             let k = 0, h = '';
             const draw = () => {
-              const [kind, n, name] = L[k], flat = kind === 'prism' || kind === 'pyramid';
-              root.querySelector('[data-sv]').innerHTML = solidSVG(kind, n || 4, { hl: flat ? h : '' });
+              const [kind, n, name] = L[k], c = solCount(kind, n);
+              root.querySelector('[data-sv]').innerHTML = solidSVG(kind, n, { hl: h });
               root.querySelectorAll('[data-k]').forEach((b, i) => b.classList.toggle('secondary', i !== k));
-              root.querySelectorAll('[data-h]').forEach(b => { b.classList.toggle('secondary', b.dataset.h !== h); b.disabled = !flat; });
-              const c = flat ? solCount(kind, n) : null;
-              root.querySelector('[data-sm]').innerHTML = flat ? `<b>${name}</b>: ${h === 'F' ? `<b>${c.F}</b> פאות` : h === 'E' ? `<b>${c.E}</b> מקצועות` : h === 'V' ? `<b>${c.V}</b> קדקודים` : `${c.F} פאות · ${c.E} מקצועות · ${c.V} קדקודים`}`
-                : `<b>${name}</b> – גוף עגול: יש לו ${kind === 'sphere' ? 'מעטפת עגולה אחת, בלי פאות שטוחות ובלי מקצועות' : kind === 'cyl' ? 'שני בסיסים עגולים ומעטפת מעוקלת' : 'בסיס עגול אחד, מעטפת מעוקלת וקודקוד ראש'}.`;
+              root.querySelectorAll('[data-h]').forEach(b => b.classList.toggle('secondary', b.dataset.h !== h));
+              root.querySelector('[data-sm]').innerHTML = `<b>${name}</b>: ${h === 'F' ? `<b>${c.F}</b> פאות` : h === 'E' ? `<b>${c.E}</b> מקצועות` : h === 'V' ? `<b>${c.V}</b> קדקודים` : `${c.F} פאות · ${c.E} מקצועות · ${c.V} קדקודים`}`;
             };
             root.querySelector('[data-sk]').innerHTML = L.map((x, i) => `<button class="secondary" data-k="${i}">${x[2]}</button>`).join('');
             root.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { k = +b.dataset.k; draw(); });
@@ -14936,91 +15392,288 @@ if (GRADE === 6 && TOPIC.solids) {
           try: { type: 'num', q: `כמה <b>מקצועות</b> יש לתיבה?`, ans: 12, hint: '4 למעלה, 4 למטה, ו-4 עומדים.', exp: `${M('4 + 4 + 4 = 12')}`, traps: [{ v: 9, m: 'שכחתם את 3 המקצועות המקווקווים שמאחור.' }, { v: 6, m: 'זה מספר הפאות. מקצוע הוא קו.' }] }
         },
         {
-          title: 'מנסרות ופירמידות – סופרים בלי לספור 🔢',
-          html: `<div class="dl-row">${solidSVG('prism', 5)}${solidSVG('pyramid', 5)}</div>
-            <p><b>מנסרה</b> – שני בסיסים זהים ומקבילים, והפאות הצדדיות מלבנים. <b>פירמידה</b> – בסיס אחד, והפאות הצדדיות משולשים שנפגשים בקדקוד אחד (קדקוד הראש).</p>
+          title: 'מנסרה ישרה ופירמידה ישרה 🏛️',
+          html: `<div class="dl-row">${solCap(solidSVG('prism', 5), 'מנסרה מחומשת')}${solCap(solidSVG('pyramid', 5), 'פירמידה מחומשת')}</div>
+            <div class="rule">🏛️ <b>מנסרה (ישרה)</b>: שני <b>בסיסים</b> זהים ומקבילים – אחד למטה ואחד למעלה – והפאות הצדדיות הן <b>מלבנים</b>.</div>
+            <div class="rule">🔺 <b>פירמידה (ישרה)</b>: <b>בסיס אחד</b>, והפאות הצדדיות הן <b>משולשים</b> שנפגשים בנקודה אחת – <b>קדקוד הראש</b>.</div>
+            <div class="rule">🏷️ <b>השם בא מצורת הבסיס:</b> בסיס משולש – מנסרה משולשת / פירמידה משולשת. בסיס מחומש – מנסרה מחומשת / פירמידה מחומשת.</div>
+            <ul class="recap"><li>📦 <b>תיבה</b> = מנסרה שהבסיס שלה מלבן.</li><li>🎲 <b>קובייה</b> = תיבה שכל 6 הפאות שלה ריבועים.</li></ul>
+            <div class="warn">⚠️ גוף "שוכב" עדיין אותו גוף! מנסרה משולשת ששוכבת על מלבן (כמו אוהל) – הבסיסים שלה הם המשולשים שמלפנים ומאחור.</div>`,
+          try: { type: 'choice', q: 'לגוף יש בסיס אחד שהוא משושה, וכל שאר הפאות משולשים. מה שמו?', choices: ['פירמידה משושה', 'מנסרה משושה', 'פירמידה משולשת', 'מנסרה משולשת'], ans: 0, hint: 'בסיס אחד ומשולשים – פירמידה. השם לפי הבסיס.', exp: 'פירמידה משושה.' }
+        },
+        {
+          title: 'סופרים בלי לספור 🔢',
+          html: `<p>אפשר לדעת כמה פאות, מקצועות וקדקודים יש לגוף – רק לפי מספר הצלעות של הבסיס (<b>n</b>):</p>
             <table class="ftable sol-tab"><tr><td></td><td><b>פאות</b></td><td><b>מקצועות</b></td><td><b>קדקודים</b></td></tr>
-              ${[3, 4, 5, 6].map(n => { const a = solCount('prism', n); return `<tr><td>מנסרה, בסיס של ${n} צלעות</td><td>${a.F}</td><td>${a.E}</td><td>${a.V}</td></tr>`; }).join('')}
-              ${[3, 4, 5, 6].map(n => { const a = solCount('pyramid', n); return `<tr><td>פירמידה, בסיס של ${n} צלעות</td><td>${a.F}</td><td>${a.E}</td><td>${a.V}</td></tr>`; }).join('')}
+              ${[3, 4, 5, 6].map(n => { const a = solCount('prism', n); return `<tr><td>${solNm('prism', n)}</td><td>${a.F}</td><td>${a.E}</td><td>${a.V}</td></tr>`; }).join('')}
+              ${[3, 4, 5, 6].map(n => { const a = solCount('pyramid', n); return `<tr><td>${solNm('pyramid', n)}</td><td>${a.F}</td><td>${a.E}</td><td>${a.V}</td></tr>`; }).join('')}
             </table>
-            <div class="rule">💡 <b>מנסרה</b> שבבסיס שלה n צלעות: קדקודים ${M('2 × n')} · מקצועות ${M('3 × n')} · פאות ${M('n + 2')}<br>💡 <b>פירמידה</b> שבבסיס שלה n צלעות: קדקודים ${M('n + 1')} · מקצועות ${M('2 × n')} · פאות ${M('n + 1')}</div>
-            <div class="rule">✨ <b>הקסם של אוילר:</b> בכל גוף כזה – <b>פאות + קדקודים − מקצועות = 2</b>. בדקו בטבלה!</div>`,
+            <div class="rule">💡 <b>מנסרה</b>: קדקודים ${M('2 × n')} (n למטה ו-n למעלה) · מקצועות ${M('3 × n')} (n למטה, n למעלה, n עומדים) · פאות ${M('n + 2')} (n מלבנים ו-2 בסיסים)</div>
+            <div class="rule">💡 <b>פירמידה</b>: קדקודים ${M('n + 1')} (n בבסיס ועוד הראש) · מקצועות ${M('2 × n')} (n בבסיס ו-n עולים לראש) · פאות ${M('n + 1')} (n משולשים ובסיס)</div>
+            <div class="rule">✨ <b>הכלל של אוילר:</b> בכל גוף כזה – <b>פאות + קדקודים − מקצועות = 2</b>. בדקו בטבלה!</div>
+            <div class="warn">🕵️ אפשר לעבוד גם הפוך: מנסרה עם 18 מקצועות? ${M('18 : 3 = 6')} – הבסיס משושה. פירמידה עם 9 מקצועות? אין כזאת – אצלה המקצועות תמיד זוגיים!</div>`,
           try: { type: 'num', q: 'בבסיס של מנסרה יש 8 צלעות (מתומן). כמה מקצועות יש למנסרה?', ans: 24, hint: 'מנסרה: מקצועות = 3 × מספר הצלעות בבסיס.', exp: `${M('3 × 8 = 24')}`, traps: [{ v: 16, m: 'זה מספר הקדקודים (2 × 8). מקצועות = 3 × 8.' }] }
         },
         {
-          title: 'פריסה וקיפול – פותחים את הקופסה 📦',
-          html: `<p><b>פריסה</b> של גוף = מה שמקבלים כשגוזרים אותו לאורך המקצועות ופורשים על השולחן. בחרו פריסה, וקפלו אותה עם המחוון:</p>
+          title: 'גופים עגולים – גליל, חרוט וכדור ⚪',
+          html: `<div class="dl-row">${solCap(solidSVG('cyl'), 'גליל')}${solCap(solidSVG('cone'), 'חרוט')}${solCap(solidSVG('sphere'), 'כדור')}</div>
+            <table class="ftable sol-tab"><tr><td></td><td><b>בסיסים</b></td><td><b>קדקודים</b></td><td><b>מעטפת</b></td></tr>
+              <tr><td>גליל 🥫</td><td>2 עיגולים</td><td>0</td><td>מעוקלת</td></tr><tr><td>חרוט 🍦</td><td>עיגול 1</td><td>1</td><td>מעוקלת</td></tr><tr><td>כדור ⚽</td><td>0</td><td>0</td><td>מעוקלת</td></tr></table>
+            <div class="rule">💡 לגופים העגולים <b>אין מקצועות ישרים</b>. המשטח המעוקל נקרא <b>מעטפת</b>.</div>
+            <div class="rule">🔁 <b>גליל דומה למנסרה</b> – שני בסיסים זהים ומקבילים. <b>חרוט דומה לפירמידה</b> – בסיס אחד וקדקוד ראש.</div>`,
+          try: { type: 'choice', q: 'לאיזה גוף יש בסיס עגול אחד וקדקוד אחד?', choices: ['חרוט', 'גליל', 'כדור', 'פירמידה'], ans: 0, hint: 'חשבו על גביע גלידה.', exp: 'חרוט.' }
+        },
+        {
+          title: 'בונים גופים מצורות ✂️',
+          html: `<p>אם נפרק גוף לפאות שלו – אילו צורות נקבל? זה עוזר לבנות גוף מקרטון:</p>
+            <table class="ftable sol-tab"><tr><td><b>גוף</b></td><td><b>צריך לגזור</b></td></tr>
+              ${[['prism', 3], ['prism', 4], ['prism', 6], ['pyramid', 3], ['pyramid', 4], ['pyramid', 5]].map(([k, n]) => `<tr><td>${solNm(k, n)}</td><td>${solFaces(k, n)}</td></tr>`).join('')}
+              <tr><td>קובייה</td><td>6 ריבועים</td></tr><tr><td>גליל</td><td>2 עיגולים ומלבן</td></tr><tr><td>חרוט</td><td>עיגול וחלק של עיגול (מניפה)</td></tr></table>
+            <div class="rule">💡 <b>מנסרה</b>: 2 בסיסים + <b>מלבן אחד לכל צלע</b> של הבסיס. <b>פירמידה</b>: בסיס אחד + <b>משולש אחד לכל צלע</b> של הבסיס.</div>
+            <div class="warn">⚠️ במנסרה כל מלבן צריך להתאים בדיוק לצלע של הבסיס שהוא נוגע בה. בפירמידה – לכל משולש צלע אחת ששווה לצלע של הבסיס.</div>`,
+          try: { type: 'choice', q: 'יש לנו 2 מחומשים זהים ו-5 מלבנים מתאימים. איזה גוף אפשר לבנות?', choices: ['מנסרה מחומשת', 'פירמידה מחומשת', 'מנסרה משושה', 'תיבה'], ans: 0, hint: '2 בסיסים ומלבנים – מנסרה.', exp: 'מנסרה מחומשת: 2 בסיסים מחומשים ו-5 מלבנים.' }
+        },
+        {
+          title: 'חתכים וגופים משוכללים (העשרה) 🔪',
+          html: `<p>מה רואים כשחותכים גוף בחיתוך ישר, <b>מקביל לבסיס</b>?</p>
+            <ul class="recap"><li>🏛️ <b>מנסרה / גליל</b> – החתך <b>זהה לבסיס</b> (בכל גובה!).</li><li>🔺 <b>פירמידה / חרוט</b> – החתך באותה צורה של הבסיס, אבל <b>קטן יותר</b> (הגוף נעשה צר כלפי מעלה).</li><li>⚽ <b>כדור</b> – כל חתך ישר הוא <b>עיגול</b>.</li></ul>
+            <div class="rule">💎 <b>גוף משוכלל</b>: כל הפאות מצולעים משוכללים זהים, ובכל קדקוד נפגש אותו מספר פאות. יש <b>בדיוק 5</b> כאלה: 3 בנויים ממשולשים שווי-צלעות, אחד מריבועים (הקובייה) ואחד ממחומשים.</div>`,
+          try: { type: 'choice', q: 'חותכים פירמידה מרובעת במקביל לבסיס. מה מתקבל?', choices: ['ריבוע קטן יותר מהבסיס', 'ריבוע זהה לבסיס', 'משולש', 'עיגול'], ans: 0, hint: 'הפירמידה נעשית צרה כלפי מעלה.', exp: 'ריבוע קטן יותר מהבסיס.' }
+        },
+        {
+          title: 'כללים לזכור 📌',
+          html: `<ul class="recap">
+              <li>🧊 <b>פאה</b> – משטח · <b>מקצוע</b> – קו · <b>קדקוד</b> – נקודה.</li>
+              <li>🏛️ <b>מנסרה</b>: 2 בסיסים זהים + מלבנים. 🔺 <b>פירמידה</b>: בסיס + משולשים לקדקוד אחד. השם – לפי הבסיס.</li>
+              <li>🔢 מנסרה: ${M('2n')} קדקודים, ${M('3n')} מקצועות, ${M('n + 2')} פאות · פירמידה: ${M('n + 1')}, ${M('2n')}, ${M('n + 1')}.</li>
+              <li>✨ פאות + קדקודים − מקצועות = 2.</li>
+              <li>⚪ גליל – 2 עיגולים · חרוט – עיגול וקדקוד · כדור – בלי בסיסים ובלי קדקודים.</li>
+            </ul>`
+        }
+      ]
+    },
+    solidsN: {
+      id: 'solidsN', name: 'גופים – פריסות', icon: '📦', color: '#2f6fb0', topic: 'solidsN',
+      desc: 'מקפלים ופותחים: פריסות של מנסרות, פירמידות, קובייה, גליל וחרוט · פריסה נכונה או לא',
+      practice: [() => genNetWhich(1), () => genNetCount(1), genCubeNet, genNetOfSolid, () => genNetValid(2), genCubeOpp, () => genNetWhich(2), genDice],
+      cards: [
+        {
+          title: 'מה זו פריסה? מקפלים ופותחים 📦',
+          html: `<p><b>פריסה</b> של גוף = מה שמקבלים כשגוזרים אותו לאורך חלק מהמקצועות ופורשים אותו על השולחן. בחרו גוף, וקפלו את הפריסה עם המחוון:</p>
+            <div class="lbtns" data-gk></div>
+            <div class="lbtns" data-gv></div>
+            <div class="sol-view" data-g3></div>
+            <label class="f3-range">פרוש <input type="range" dir="ltr" min="0" max="100" value="0" data-gr> מקופל</label>
+            <div class="lbtns"><button data-ga>▶ קפלו!</button></div>
+            <div data-gm class="explain"></div>
+            <div class="rule">💡 <b>לאותו גוף יש כמה פריסות שונות</b> – תלוי איפה גוזרים. נסו "פריסה א" ו"פריסה ב".</div>`,
+          setup(root) {
+            const box = () => polyPrism([[0, 0], [1.6, 0], [1.6, 1], [0, 1]], 0.8);
+            const L = [['תיבה', box, [prismTree(4, 0, 0), prismTree(4, 1, 3)]], ['מנסרה משולשת', () => solPoly3('prism', 3), [prismTree(3, 0, 0), prismTree(3, 0, 2)]], ['מנסרה מחומשת', () => solPoly3('prism', 5), [prismTree(5, 2, 2), prismTree(5, 1, 3)]],
+              ['מנסרה משושה', () => solPoly3('prism', 6), [prismTree(6, 2, 2), prismTree(6, 1, 4)]], ['פירמידה משולשת', () => solPoly3('pyramid', 3), [pyrStar(3), pyrFan(3, 1)]], ['פירמידה מרובעת', () => solPoly3('pyramid', 4), [pyrStar(4), pyrFan(4, 0)]], ['פירמידה מחומשת', () => solPoly3('pyramid', 5), [pyrStar(5), pyrFan(5, 0)]]];
+            let k = 0, v = 0, P, par, bb, timer = null;
+            const fr = root.querySelector('[data-gr]');
+            const show = () => {
+              root.querySelector('[data-g3]').innerHTML = solNet3D(P, par, +fr.value / 100, bb);
+              const isP = P.kind === 'prism', n = P.n;
+              root.querySelector('[data-gm]').innerHTML = `<b>${L[k][0]}</b>: ${isP ? `<span class="sol-c3b">2 בסיסים</span> (${k === 0 ? 'מלבנים' : SOL_BASES[n]}) ו-<span class="sol-c1">${n} מלבנים</span>` : `<span class="sol-c3b">בסיס</span> (${SOL_BASE[n]}) ו-<span class="sol-c4">${n} משולשים</span>`} – ביחד ${isP ? n + 2 : n + 1} פאות.${+fr.value >= 100 ? ' ✅ הגוף נסגר!' : ''}`;
+            };
+            const draw = () => {
+              clearInterval(timer);
+              P = L[k][1](); par = L[k][2][v]; bb = solNetBB(P, par); fr.value = 0;
+              root.querySelectorAll('[data-k]').forEach((b, i) => b.classList.toggle('secondary', i !== k));
+              root.querySelectorAll('[data-v]').forEach((b, i) => b.classList.toggle('secondary', i !== v));
+              show();
+            };
+            root.querySelector('[data-gk]').innerHTML = L.map((x, i) => `<button class="secondary" data-k="${i}">${x[0]}</button>`).join('');
+            root.querySelector('[data-gv]').innerHTML = `<button class="secondary" data-v="0">פריסה א</button><button class="secondary" data-v="1">פריסה ב</button>`;
+            root.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { k = +b.dataset.k; v = 0; draw(); });
+            root.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { v = +b.dataset.v; draw(); });
+            fr.oninput = show;
+            root.querySelector('[data-ga]').onclick = () => { clearInterval(timer); fr.value = 0; timer = setInterval(() => { fr.value = Math.min(100, +fr.value + 2); show(); if (+fr.value >= 100 || !root.isConnected) clearInterval(timer); }, 40); };
+            draw();
+          },
+          try: { type: 'num', q: 'מכמה צורות בנויה הפריסה של מנסרה משושה?', ans: 8, hint: '6 מלבנים ועוד 2 בסיסים.', exp: `${M('6 + 2 = 8')}`, traps: [{ v: 6, m: 'אל תשכחו את 2 הבסיסים.' }] }
+        },
+        {
+          title: 'פריסות של מנסרה – רצועה ושני בסיסים 🏛️',
+          html: `<p>בפריסה של מנסרה רואים <b>רצועה של מלבנים</b> – מלבן אחד לכל צלע של הבסיס – ושני בסיסים: <b>אחד מכל צד</b> של הרצועה.</p>
+            <div class="dl-row">${solCap(solPolysSVG(prismNetPolys(5, 'ok', 1, 3)), 'פריסה נכונה', true)}${solCap(solPolysSVG(prismNetPolys(5, 'same', 1, 1)), 'שני הבסיסים באותו צד', false)}${solCap(solPolysSVG(prismNetPolys(5, 'less', 1, 2)), 'רק 4 מלבנים לבסיס מחומש', false)}</div>
+            <div class="rule">✅ <b>בודקים פריסה של מנסרה:</b><br>1️⃣ שני בסיסים זהים?<br>2️⃣ מספר המלבנים = מספר הצלעות של הבסיס?<br>3️⃣ בסיס אחד <b>מעל</b> הרצועה ואחד <b>מתחת</b> לה? (לא משנה מעל איזה מלבן)</div>`,
+          try: { type: 'choice', q: 'בפריסה יש 2 משושים ו-5 מלבנים. האם זו פריסה של מנסרה משושה?', choices: ['לא', 'כן'], ans: 0, hint: 'כמה צלעות יש למשושה?', exp: 'לא – למשושה 6 צלעות, ולכן צריך 6 מלבנים.' }
+        },
+        {
+          title: 'פריסות של פירמידה – כוכב ומניפה 🔺',
+          html: `<p>בפריסה של פירמידה יש בסיס, ו<b>משולש אחד לכל צלע</b> של הבסיס. כשמקפלים – כל הקדקודים החדים נפגשים בנקודה אחת: קדקוד הראש.</p>
+            <div class="dl-row">${solCap(solPolysSVG(pyrNetPolys(4, 'ok')), '"כוכב" – משולש על כל צלע', true)}${solCap(solPolysSVG(pyrNetPolys(4, 'fan')), '"מניפה" – גם נכון!', true)}${solCap(solPolysSVG(solFlat(solPoly3('pyramid', 5), pyrStar(5)).filter((_, i) => i !== 3)), 'מחומש עם 4 משולשים', false)}</div>
+            <div class="rule">✅ <b>בודקים פריסה של פירמידה:</b><br>1️⃣ בסיס אחד בלבד?<br>2️⃣ מספר המשולשים = מספר הצלעות של הבסיס?<br>3️⃣ המשולשים זהים (בפירמידה ישרה עם בסיס משוכלל)?</div>
+            <div class="warn">⚠️ בפירמידה משולשת <b>כל 4 הפאות משולשים</b> – כל אחד מהם יכול לשמש בסיס.</div>`,
+          try: { type: 'num', q: 'כמה משולשים יש בפריסה של פירמידה משושה?', ans: 6, hint: 'משולש אחד לכל צלע של הבסיס.', exp: '6 משולשים (ועוד בסיס משושה).', traps: [{ v: 7, m: 'הבסיס הוא משושה, לא משולש. משולשים – רק 6.' }] }
+        },
+        {
+          title: 'פריסות של קובייה – 11 אפשרויות 🎲',
+          html: `<p>בחרו פריסה, וקפלו אותה עם המחוון. שימו לב מה קורה בפריסות שמסומנות ❌:</p>
             <div class="lbtns" data-fn></div>
             <div data-f3 class="f3-host"></div>
             <label class="f3-range">פרוש <input type="range" dir="ltr" min="0" max="90" value="0" data-fr> מקופל</label>
             <div class="lbtns"><button data-fa>▶ קפלו!</button></div>
             <div data-fm class="explain"></div>
-            <div class="rule">💡 יש בדיוק <b>11 פריסות שונות</b> של קובייה. ב-5 משבצות בשורה, או בריבוע 2×2 – אי אפשר לקבל קובייה.</div>`,
+            <div class="rule">💡 יש בדיוק <b>11 פריסות שונות</b> של קובייה. אף פעם אין בהן <b>5 משבצות בשורה</b>, ואף פעם אין <b>ריבוע 2×2</b>.</div>
+            <details class="sol-gal-d"><summary>📋 הראו לי את כל 11 הפריסות</summary><div class="sol-gal" data-gal></div></details>`,
           setup(root) {
             let k = 0, setDeg = null, timer = null;
-            const fr = root.querySelector('[data-fr]'), msg = root.querySelector('[data-fm]');
+            const fr = root.querySelector('[data-fr]'), msg = root.querySelector('[data-fm]'), T = 'אבגדהו';
             const show = () => {
               const deg = +fr.value; setDeg && setDeg(deg);
-              const ok = cubeNet(SOL_NETS[k][1]).ok;
-              msg.innerHTML = deg < 90 ? 'הזיזו את המחוון כדי לקפל…' : ok ? '✅ <b>נסגרה קובייה!</b> כל משבצת הפכה לפאה אחרת.' : '❌ <b>לא נסגרה קובייה:</b> שתי פאות נפגשות באותו מקום, ונשאר חור.';
+              const { ok, lab } = cubeNet(SOL_NETS[k][1]);
+              const dup = lab.map((l, i) => lab.filter(x => x === l).length > 1 ? T[i] : '').filter(Boolean);
+              msg.innerHTML = deg < 90 ? 'הזיזו את המחוון כדי לקפל…' : ok ? '✅ <b>נסגרה קובייה!</b> כל משבצת הפכה לפאה אחרת.' : `❌ <b>לא נסגרה קובייה:</b> המשבצות ${dup.join(' ו-')} (באדום) נופלות <b>על אותה פאה</b> – אחת על השנייה – ולכן בצד אחר של הקובייה נשאר <b>חור</b>.`;
             };
             const draw = () => {
               clearInterval(timer);
               root.querySelectorAll('[data-n]').forEach((b, i) => b.classList.toggle('secondary', i !== k));
-              setDeg = fold3D(root.querySelector('[data-f3]'), SOL_NETS[k][1], Math.min(58, Math.floor((Math.min(window.innerWidth, 640) - 80) / 5))); fr.value = 0; show();
+              setDeg = fold3D(root.querySelector('[data-f3]'), SOL_NETS[k][1], Math.min(54, Math.floor((Math.min(window.innerWidth, 640) - 80) / 5)), T); fr.value = 0; show();
             };
             root.querySelector('[data-fn]').innerHTML = SOL_NETS.map((x, i) => `<button class="secondary" data-n="${i}">${x[0]}</button>`).join('');
             root.querySelectorAll('[data-n]').forEach(b => b.onclick = () => { k = +b.dataset.n; draw(); });
             fr.oninput = show;
             root.querySelector('[data-fa]').onclick = () => { clearInterval(timer); fr.value = 0; timer = setInterval(() => { fr.value = Math.min(90, +fr.value + 3); show(); if (+fr.value >= 90 || !root.isConnected) clearInterval(timer); }, 40); };
+            root.querySelector('[data-gal]').innerHTML = cubeNets11().map((c, i) => `<div>${netSVG(c, { s: 18 })}<span>${i + 1}</span></div>`).join('');
             draw();
           },
           try: { type: 'choice', q: 'אפשר לקפל לקובייה פריסה של 6 משבצות, ש<b>5 מהן בשורה אחת</b>?', choices: ['לא', 'כן'], ans: 0, hint: 'כשמקפלים 5 משבצות בשורה – החמישית חוזרת על הראשונה.', exp: 'לא. מסביב לקובייה יש רק 4 פאות בשורה – החמישית נופלת על הראשונה.' }
         },
         {
-          title: 'פאות נגדיות – מי מול מי? 🎲',
+          title: 'פאות נגדיות וקוביית משחק 🎲',
           html: `<p>בקובייה כל פאה נמצאת <b>מול</b> פאה אחת (הן לא נוגעות זו בזו). בפריסה אפשר לגלות מי מול מי – בלי לקפל:</p>
-            <div class="dl-row">${netSVG([[0, 1], [1, 0], [1, 1], [1, 2], [1, 3], [2, 1]], { txt: ['א', 'ב', 'ג', 'ד', 'ה', 'ו'] })}</div>
-            <div class="rule">💡 <b>בשורה של 3 משבצות</b> – הראשונה והשלישית נגדיות (כאן: ב מול ד, ג מול ה).<br>💡 משבצות שנוגעות זו בזו בפריסה – <b>אף פעם לא</b> נגדיות.<br>💡 כאן: א מול ו.</div>
-            <div class="rule">🎲 בקובייה רגילה סכום שתי פאות נגדיות הוא תמיד 7: 1 מול 6, 2 מול 5, 3 מול 4.</div>`,
-          try: { type: 'choice', q: `בפריסה שלמעלה – איזו פאה מול <b>ג</b>?`, choices: ['ה', 'ב', 'א', 'ו'], ans: 0, hint: 'ג נמצאת בשורה ב-ג-ד-ה. מדלגים על אחת.', exp: 'בשורה ג-ד-ה: ג וה נגדיות.' }
+            <div class="dl-row">${netSVG([[0, 1], [1, 0], [1, 1], [1, 2], [1, 3], [2, 1]], { txt: ['א', 'ב', 'ג', 'ד', 'ה', 'ו'] })}${netSVG([[0, 0], [0, 1], [0, 2], [1, 2], [1, 3], [1, 4]], { txt: ['1', '2', '6', '4', '5', '3'] })}</div>
+            <div class="rule">💡 <b>בשורה של 3 משבצות</b> – הראשונה והשלישית נגדיות (בפריסה עם האותיות: ב מול ד, ג מול ה).<br>💡 משבצות שנוגעות זו בזו בפריסה – <b>אף פעם לא</b> נגדיות.<br>💡 בפריסה עם האותיות: א מול ו.</div>
+            <div class="rule">🎲 בקוביית משחק סכום שתי פאות נגדיות הוא תמיד <b>7</b>: 1 מול 6, 2 מול 5, 3 מול 4. בפריסה עם המספרים: 1 מול 6 (בשורה, מדלגים על 2), 4 מול 3 (בשורה, מדלגים על 5), ולכן 2 מול 5.</div>`,
+          try: { type: 'choice', q: `בפריסה עם האותיות – איזו פאה מול <b>ג</b>?`, choices: ['ה', 'ב', 'א', 'ו'], ans: 0, hint: 'ג נמצאת בשורה ב-ג-ד-ה. מדלגים על אחת.', exp: 'בשורה ג-ד-ה: ג וה נגדיות.' }
         },
+        {
+          title: 'פריסות של גליל וחרוט 🥫🍦',
+          html: `<div class="dl-row">${solCap(cylNetSVG(), 'גליל: מלבן ו-2 עיגולים', true)}${solCap(coneNetSVG(), 'חרוט: "מניפה" ועיגול', true)}${solCap(coneNetSVG('tri'), 'משולש ועיגול – לא חרוט!', false)}</div>
+            <div class="rule">🥫 <b>גליל</b>: המעטפת נפתחת ל<b>מלבן</b>. אורך המלבן שווה ל<b>היקף העיגול</b> – כי הוא מתגלגל מסביב לו בדיוק. עיגול אחד מעל המלבן ואחד מתחתיו.</div>
+            <div class="rule">🍦 <b>חרוט</b>: המעטפת נפתחת ל<b>חלק של עיגול</b> – כמו מניפה. הקשת שלה מתעגלת סביב הבסיס.</div>
+            <div class="warn">⚠️ טעות נפוצה: לצייר משולש במקום מניפה. משולש יש לו צלע ישרה – והיא לא יכולה להתעגל סביב עיגול.</div>`,
+          try: { type: 'choice', q: 'בפריסה יש מלבן ועיגול אחד. האם זו פריסה של גליל?', choices: ['לא', 'כן'], ans: 0, hint: 'כמה בסיסים יש לגליל?', exp: 'לא – לגליל 2 בסיסים, ולכן צריך 2 עיגולים.' }
+        },
+        {
+          title: 'כללים לזכור 📌',
+          html: `<ul class="recap">
+              <li>📦 <b>פריסה</b> = הגוף גזור לאורך מקצועות ופרוש על השולחן. לגוף אחד – הרבה פריסות.</li>
+              <li>🏛️ מנסרה: רצועה של n מלבנים + 2 בסיסים, <b>אחד מכל צד</b>.</li>
+              <li>🔺 פירמידה: בסיס + n משולשים ("כוכב" או "מניפה").</li>
+              <li>🎲 לקובייה 11 פריסות. 5 בשורה או ריבוע 2×2 – לא קובייה. בשורה של 3: הראשונה והשלישית נגדיות.</li>
+              <li>🥫 גליל: מלבן + 2 עיגולים · 🍦 חרוט: מניפה + עיגול (לא משולש!).</li>
+            </ul>`
+        }
+      ]
+    },
+    solidsS: {
+      id: 'solidsS', name: 'גופים – שטח פנים', icon: '🎁', color: '#3a7bd5', topic: 'solidsS',
+      desc: 'כמה נייר צריך? שטח פנים של קובייה, תיבה, קופסה בלי מכסה, קוביות מודבקות ומנסרה משולשת',
+      practice: [() => genSurf(1), () => genSurfNet(1), () => genSurfGlue(1), () => genSurf(2), () => genSurfNet(2), () => genSurfWord(2), () => genSurf(3), genTriPrismS],
+      cards: [
         {
           title: 'שטח פנים – כמה נייר עטיפה? 🎁',
           html: `<p><b>שטח הפנים</b> של גוף = סכום השטחים של <b>כל הפאות</b> שלו. הכי קל לראות את זה בפריסה! שנו את המידות:</p>
             <div class="lbtns" data-sc></div>
             <div class="dl-row" data-sv2></div>
             <div data-sr class="explain"></div>
-            <div class="rule">💡 לתיבה <b>3 זוגות</b> של פאות זהות (באותו צבע). מחשבים שטח של כל זוג ומחברים: <b>2 × (אורך × רוחב + אורך × גובה + רוחב × גובה)</b><br>💡 קובייה: 6 ריבועים זהים – <b>6 × צלע × צלע</b>.</div>
-            <div class="warn">⚠️ שטח פנים נמדד ביחידות <b>שטח</b> – סמ"ר.</div>`,
+            <div class="rule">💡 לתיבה <b>3 זוגות</b> של פאות זהות (באותו צבע). מחשבים שטח של כל זוג ומחברים: <b>2 × (אורך × רוחב + אורך × גובה + רוחב × גובה)</b></div>
+            <div class="warn">⚠️ שטח פנים נמדד ביחידות <b>שטח</b> – סמ"ר (או מ"ר).</div>`,
           setup(root) {
             const s = { a: 4, b: 2, c: 3 };
             const draw = () => {
               const { a, b, c } = s, S = 2 * (a * b + a * c + b * c);
               root.querySelector('[data-sv2]').innerHTML = solBoxSVG(a, b, c) + boxNetSVG(a, b, c);
               root.querySelector('[data-sr]').innerHTML = `<div class="sol-rows"><div><span class="sol-c1">קדמית ואחורית</span> ${M(`2 × ${a} × ${c} = ${2 * a * c}`)}</div><div><span class="sol-c2">שני הצדדים</span> ${M(`2 × ${b} × ${c} = ${2 * b * c}`)}</div><div><span class="sol-c3">למעלה ולמטה</span> ${M(`2 × ${a} × ${b} = ${2 * a * b}`)}</div></div>שטח הפנים: ${M(`${2 * a * c} + ${2 * b * c} + ${2 * a * b} = ${S}`)} סמ"ר`;
-              root.querySelector('[data-sc]').innerHTML = ['a', 'b', 'c'].map(k => `<span class="sol-dim">${{ a: 'אורך', b: 'רוחב', c: 'גובה' }[k]}: <button class="secondary" data-d="${k}" data-v="-1">−</button><b>${s[k]}</b><button class="secondary" data-d="${k}" data-v="1">+</button></span>`).join('');
+              root.querySelector('[data-sc]').innerHTML = solDims(s);
               root.querySelectorAll('[data-d]').forEach(bt => bt.onclick = () => { const k = bt.dataset.d; s[k] = Math.max(1, Math.min(8, s[k] + Number(bt.dataset.v))); draw(); });
             };
             draw();
           },
+          try: { type: 'num', q: `מה שטח הפנים של תיבה שמידותיה ${M('5 × 3 × 2')} ס"מ?`, ans: 62, hint: `${M('2 × (5 × 3 + 5 × 2 + 3 × 2)')}`, exp: `${M('2 × (15 + 10 + 6) = 62')} סמ"ר`, traps: [{ v: 30, m: 'זה הנפח. שטח פנים = סכום שטחי 6 הפאות.' }, { v: 31, m: 'ספרתם 3 פאות בלבד. לכל פאה יש תאומה מולה.' }] }
+        },
+        {
+          title: 'קובייה, וקופסה בלי מכסה 📭',
+          html: `<div class="rule">🎲 <b>קובייה</b>: 6 ריבועים זהים. שטח הפנים = <b>6 × מקצוע × מקצוע</b>. למשל מקצוע 5 ס"מ: ${M('6 × 5 × 5 = 150')} סמ"ר.</div>
+            <div class="dl-row">${boxNetSVG(6, 4, 3, { noTop: true })}</div>
+            <div class="rule">📭 <b>קופסה בלי מכסה</b>: יש לה רק 5 פאות. מחשבים שטח פנים של תיבה סגורה ו<b>מורידים את המכסה</b>.<br>תיבה סגורה: ${M('2 × (24 + 18 + 12) = 108')}<br>בלי המכסה: ${M('108 − 24 = 84')} סמ"ר</div>
+            <div class="rule">🎨 <b>צביעת חדר</b>: צובעים קירות ותקרה – לא את הרצפה, ולא דלתות וחלונות. תמיד שואלים: <b>אילו פאות באמת מכסים?</b></div>
+            <div class="rule">🔄 <b>הפוך:</b> שטח הפנים של קובייה 96 סמ"ר? ${M('96 : 6 = 16')} לפאה, ו-${M('4 × 4 = 16')} – המקצוע 4 ס"מ.</div>`,
           try: { type: 'num', q: `מה שטח הפנים של קובייה שאורך המקצוע שלה ${M(5)} ס"מ?`, ans: 150, hint: 'שטח פאה אחת × 6.', exp: `${M('6 × 5 × 5 = 150')} סמ"ר`, traps: [{ v: 125, m: 'זה הנפח (5 × 5 × 5). שטח הפנים = 6 פאות.' }] }
         },
+        {
+          title: 'קוביות מודבקות 🧩',
+          html: `<p>מדביקים קוביות של ${M('1 × 1 × 1')} ס"מ בשורה. כמה ריבועים רואים מבחוץ?</p>
+            <div class="lbtns" data-gc></div>
+            <div class="dl-row" data-gv2></div>
+            <div data-gr2 class="explain"></div>
+            <div class="rule">💡 בכל הדבקה <b>2 ריבועים נעלמים</b> – הם נמצאים בפנים, צמודים זה לזה. שורה של n קוביות: ${M('4 × n + 2')} – 4 ריבועים בכל קובייה (למעלה, למטה, מקדימה, מאחור) ועוד 2 בקצוות.</div>`,
+          setup(root) {
+            let n = 3;
+            const draw = () => {
+              root.querySelector('[data-gc]').innerHTML = `<span class="sol-dim">קוביות: <button class="secondary" data-d="-1">−</button><b>${n}</b><button class="secondary" data-d="1">+</button></span>`;
+              root.querySelector('[data-gv2]').innerHTML = isoBoxSVG(n, 1, 1);
+              root.querySelector('[data-gr2]').innerHTML = `לפני ההדבקה: ${M(`6 × ${n} = ${6 * n}`)} ריבועים · הדבקות: ${n - 1}, נעלמים ${M(`2 × ${n - 1} = ${2 * (n - 1)}`)}<br>שטח הפנים: ${M(`${6 * n} − ${2 * (n - 1)} = ${4 * n + 2}`)} סמ"ר`;
+              root.querySelectorAll('[data-d]').forEach(b => b.onclick = () => { n = Math.max(1, Math.min(7, n + Number(b.dataset.d))); draw(); });
+            };
+            draw();
+          },
+          try: { type: 'num', q: 'הדביקו 5 קוביות של 1 סמ"ק בשורה. מה שטח הפנים?', ans: 22, hint: '4 × 5 + 2', exp: `${M('4 × 5 + 2 = 22')} סמ"ר`, traps: [{ v: 30, m: 'הריבועים שהודבקו לא נראים מבחוץ – מורידים אותם.' }] }
+        },
+        {
+          title: 'שטח הפנים של מנסרה משולשת 🔺',
+          html: `<div class="dl-row">${triPrismSVG(3, 4, 5, 6)}${solPolysSVG(solFlat(polyPrism([[0, 0], [3, 0], [0, 4]], 6), prismTree(3, 0, 1)))}</div>
+            <p>הבסיס – משולש ישר-זווית עם ניצבים 3 ו-4 (והיתר 5). גובה המנסרה – 6 ס"מ.</p>
+            <div class="rule">💡 <b>שטח פנים</b> = 2 בסיסים + המלבנים בצדדים.<br>כל המלבנים ביחד = מלבן אחד גדול: <b>היקף הבסיס × גובה המנסרה</b>.</div>
+            <div class="sol-rows explain"><div>שני הבסיסים: ${M('2 × (3 × 4 : 2) = 12')}</div><div>המלבנים: ${M('(3 + 4 + 5) × 6 = 72')}</div><div>שטח הפנים: ${M('12 + 72 = 84')} סמ"ר</div></div>
+            <div class="warn">⚠️ שטח משולש ישר-זווית = ניצב × ניצב : 2. לא לשכוח לחלק ב-2!</div>`,
+          try: { type: 'num', q: 'בסיס של מנסרה הוא משולש עם צלעות 5, 5 ו-6 ס"מ ושטח 12 סמ"ר. גובה המנסרה 10 ס"מ. מה שטח הפנים?', ans: 184, hint: 'שני בסיסים + היקף × גובה.', exp: `${M('2 × 12 + (5 + 5 + 6) × 10 = 24 + 160 = 184')} סמ"ר`, traps: [{ v: 160, m: 'שכחתם את שני הבסיסים.' }] }
+        },
+        {
+          title: 'מה קורה כשמגדילים? 🔍',
+          html: `<p>מגדילים את המקצוע של קובייה. מה קורה לשטח הפנים?</p>
+            <table class="ftable sol-tab"><tr><td><b>מקצוע</b></td><td><b>שטח פנים</b></td><td><b>פי כמה?</b></td></tr><tr><td>1</td><td>${M('6 × 1 × 1 = 6')}</td><td>–</td></tr><tr><td>2</td><td>${M('6 × 2 × 2 = 24')}</td><td>פי 4</td></tr><tr><td>3</td><td>${M('6 × 3 × 3 = 54')}</td><td>פי 9</td></tr></table>
+            <div class="rule">💡 המקצוע גדל <b>פי 2</b> → כל פאה גדלה פי 2 באורך <b>וגם</b> פי 2 ברוחב → שטח הפנים גדל <b>פי 4</b>.</div>`,
+          try: { type: 'num', q: 'מגדילים מקצוע של קובייה פי 2. פי כמה גדל שטח הפנים?', ans: 4, hint: 'פי 2 באורך ופי 2 ברוחב.', exp: `${M('2 × 2 = 4')}`, traps: [{ v: 2, m: 'כל פאה גדלה בשני כיוונים: 2 × 2.' }, { v: 8, m: 'זה הנפח. שטח – 2 × 2.' }] }
+        },
+        {
+          title: 'כללים לזכור 📌',
+          html: `<ul class="recap">
+              <li>🎁 <b>שטח פנים</b> = סכום שטחי כל הפאות = השטח של הפריסה (סמ"ר).</li>
+              <li>📦 תיבה: ${M('2 × (ab + ac + bc)')} · 🎲 קובייה: ${M('6 × a × a')}</li>
+              <li>📭 בלי מכסה / בלי רצפה – מורידים את הפאות שלא מכסים.</li>
+              <li>🧩 קוביות מודבקות – כל הדבקה מעלימה 2 ריבועים.</li>
+              <li>🔺 מנסרה: 2 בסיסים + היקף הבסיס × גובה.</li>
+              <li>🔍 מקצוע פי 2 → שטח פי 4.</li>
+            </ul>`
+        }
+      ]
+    },
+    solidsV: {
+      id: 'solidsV', name: 'גופים – נפח', icon: '🧱', color: '#2f6fb0', topic: 'solidsV',
+      desc: 'כמה קוביות נכנסות? נפח תיבה ומנסרה, מידה חסרה, ליטרים ומ"ק, גובה המים, הגדלה',
+      practice: [() => genVol(1), () => genVol(2), () => genVolUnit(1), () => genVolMissing(2), () => genVolUnit(2), genVolWater, genTriPrismV, genVolScale],
+      cards: [
         {
           title: 'נפח – כמה קוביות נכנסות? 🧱',
           html: `<p><b>נפח</b> = כמה מקום הגוף תופס. מודדים אותו ב<b>קוביות יחידה</b> – קובייה של ${M('1 × 1 × 1')} ס"מ היא <b>סמ"ק</b> אחד.</p>
             <div class="lbtns" data-vc></div>
             <div class="dl-row" data-vv></div>
             <div data-vr class="explain"></div>
-            <div class="rule">💡 <b>נפח תיבה = אורך × רוחב × גובה</b> (שטח הבסיס × הגובה: כמה קוביות בשכבה × כמה שכבות).<br>💡 נפח קובייה = <b>צלע × צלע × צלע</b>.</div>
-            <div class="rule">🥤 ${M('1,000')} סמ"ק = ליטר אחד. ${M('1')} סמ"ק = מיליליטר אחד.</div>`,
+            <div class="rule">💡 <b>נפח תיבה = אורך × רוחב × גובה</b> = שטח הבסיס × הגובה (כמה קוביות בשכבה × כמה שכבות).<br>💡 נפח קובייה = <b>מקצוע × מקצוע × מקצוע</b>.</div>
+            <div class="warn">⚠️ נפח נמדד ביחידות <b>נפח</b> – סמ"ק או מ"ק. לא סמ"ר!</div>`,
           setup(root) {
             const s = { a: 3, b: 2, c: 2 };
             const draw = () => {
               const { a, b, c } = s;
               root.querySelector('[data-vv]').innerHTML = isoBoxSVG(a, b, c);
               root.querySelector('[data-vr]').innerHTML = `בשכבה אחת: ${M(`${a} × ${b} = ${a * b}`)} קוביות · שכבות: ${M(c)}<br>נפח: ${M(`${a} × ${b} × ${c} = ${a * b * c}`)} סמ"ק`;
-              root.querySelector('[data-vc]').innerHTML = ['a', 'b', 'c'].map(k => `<span class="sol-dim">${{ a: 'אורך', b: 'רוחב', c: 'גובה' }[k]}: <button class="secondary" data-d="${k}" data-v="-1">−</button><b>${s[k]}</b><button class="secondary" data-d="${k}" data-v="1">+</button></span>`).join('');
+              root.querySelector('[data-vc]').innerHTML = solDims(s);
               root.querySelectorAll('[data-d]').forEach(bt => bt.onclick = () => { const k = bt.dataset.d; s[k] = Math.max(1, Math.min(6, s[k] + Number(bt.dataset.v))); draw(); });
             };
             draw();
@@ -15028,30 +15681,73 @@ if (GRADE === 6 && TOPIC.solids) {
           try: { type: 'num', q: `מה הנפח של תיבה שמידותיה ${M('5 × 4 × 3')} ס"מ?`, ans: 60, hint: 'אורך × רוחב × גובה.', exp: `${M('5 × 4 × 3 = 60')} סמ"ק`, traps: [{ v: 94, m: 'זה שטח הפנים. נפח = אורך × רוחב × גובה.' }, { v: 12, m: 'חיברתם. כופלים את שלוש המידות.' }] }
         },
         {
-          title: 'מנסרה משולשת – שטח פנים ונפח 🔺',
+          title: 'מידה חסרה – עובדים הפוך 🔄',
+          html: `<div class="rule">🔄 <b>נפח = שטח הבסיס × גובה</b>, ולכן: <b>גובה = נפח : שטח הבסיס</b>.<br>תיבה בנפח 120 סמ"ק, בסיס ${M('6 × 4')}: שטח הבסיס ${M('24')}, הגובה ${M('120 : 24 = 5')} ס"מ.</div>
+            <div class="rule">🎲 <b>קובייה</b>: מחפשים מספר שכפול עצמו כפול עצמו נותן את הנפח. נפח 64? ${M('4 × 4 × 4 = 64')} – המקצוע 4.</div>
+            <div class="rule">📦 <b>כמה קוביות גדולות נכנסות?</b> קופסה ${M('6 × 4 × 4')}, קוביות של ${M('2 × 2 × 2')}: לאורך 3, לרוחב 2, לגובה 2 → ${M('3 × 2 × 2 = 12')} קוביות.</div>
+            <div class="warn">⚠️ <b>תיבות שונות – אותו נפח!</b> ${M('1 × 1 × 12')}, ${M('2 × 2 × 3')} ו-${M('2 × 3 × 2')} – לכולן נפח 12 סמ"ק.</div>`,
+          try: { type: 'num', q: 'נפח של תיבה 96 סמ"ק. האורך 8 ס"מ והרוחב 4 ס"מ. מה הגובה?', ans: 3, hint: 'שטח הבסיס 8 × 4, ואז מחלקים.', exp: `${M('96 : 32 = 3')} ס"מ` }
+        },
+        {
+          title: 'יחידות נפח וליטרים 🥤',
+          html: `<table class="ftable sol-tab"><tr><td><b>יחידה</b></td><td><b>מה זה?</b></td><td><b>שווה ל...</b></td></tr>
+              <tr><td>סמ"ק</td><td>קובייה ${M('1 × 1 × 1')} ס"מ</td><td>${M('1')} מ"ל</td></tr>
+              <tr><td>ליטר (דמ"ק)</td><td>קובייה ${M('10 × 10 × 10')} ס"מ</td><td>${M('1,000')} סמ"ק = ${M('1,000')} מ"ל</td></tr>
+              <tr><td>מ"ק</td><td>קובייה ${M('1 × 1 × 1')} מ'</td><td>${M('1,000')} ליטר</td></tr></table>
+            <div class="rule">💡 סמ"ק → ליטר: <b>מחלקים ב-1,000</b>. ליטר → סמ"ק (או מ"ל): <b>כופלים ב-1,000</b>.</div>
+            <div class="rule">🧪 איזו יחידה? כפית תרופה – מ"ל · בקבוק – ליטר · חדר או בריכה – מ"ק.</div>`,
+          try: { type: 'num', q: 'אקווריום בגודל 40 × 20 × 25 ס"מ. כמה ליטרים נכנסים בו?', ans: 20, hint: 'נפח בסמ"ק, ואז : 1,000.', exp: `${M('40 × 20 × 25 = 20,000')} סמ"ק = ${M('20')} ליטר`, traps: [{ v: 20000, m: 'זה בסמ"ק. ליטר = 1,000 סמ"ק.' }] }
+        },
+        {
+          title: 'כמה גבוה יגיעו המים? 🐠',
+          html: `<div class="dl-row">${solBoxSVG(50, 30, 40, { u: '' })}</div>
+            <p>לאקווריום בסיס של ${M('50 × 30')} ס"מ. שופכים לתוכו <b>30 ליטר</b>. לאיזה גובה יגיעו המים?</p>
+            <div class="rule">1️⃣ ליטרים → סמ"ק: ${M('30 × 1,000 = 30,000')} סמ"ק<br>2️⃣ שטח הבסיס: ${M('50 × 30 = 1,500')} סמ"ר<br>3️⃣ גובה המים = נפח : שטח הבסיס: ${M('30,000 : 1,500 = 20')} ס"מ</div>
+            <div class="warn">⚠️ גובה האקווריום (40) לא משנה את החישוב – רק בודקים שהמים לא גולשים!</div>`,
+          try: { type: 'num', q: 'בסיס אקווריום 40 × 25 ס"מ. שופכים 10 ליטר. מה גובה המים בס"מ?', ans: 10, hint: '10,000 : (40 × 25)', exp: `${M('10,000 : 1,000 = 10')} ס"מ` }
+        },
+        {
+          title: 'נפח של מנסרה 🔺',
           html: `<div class="dl-row">${triPrismSVG(3, 4, 5, 6)}</div>
-            <p>הבסיס – משולש ישר-זווית עם ניצבים 3 ו-4 (והיתר 5). גובה המנסרה – 6 ס"מ.</p>
-            <div class="rule">💡 <b>נפח מנסרה = שטח הבסיס × גובה המנסרה</b><br>שטח הבסיס: ${M('3 × 4 : 2 = 6')} · נפח: ${M('6 × 6 = 36')} סמ"ק</div>
-            <div class="rule">💡 <b>שטח פנים</b> = 2 בסיסים + המלבנים בצדדים. כל המלבנים ביחד = <b>היקף הבסיס × גובה המנסרה</b><br>${M('2 × 6 + (3 + 4 + 5) × 6 = 12 + 72 = 84')} סמ"ר</div>`,
+            <div class="rule">💡 <b>נפח של כל מנסרה = שטח הבסיס × גובה המנסרה</b> (כמו בתיבה: שכבה × מספר שכבות).</div>
+            <p>הבסיס – משולש ישר-זווית עם ניצבים 3 ו-4. גובה המנסרה – 6 ס"מ.<br>שטח הבסיס: ${M('3 × 4 : 2 = 6')} · נפח: ${M('6 × 6 = 36')} סמ"ק</p>
+            <div class="rule">🧀 מנסרה משולשת כזאת היא <b>חצי תיבה</b>: תיבה ${M('3 × 4 × 6 = 72')} חתוכה באלכסון – ${M('72 : 2 = 36')}.</div>`,
           try: { type: 'num', q: `מנסרה: הבסיס משולש ישר-זווית עם ניצבים 6 ו-8 ס"מ, וגובה המנסרה 10 ס"מ. מה הנפח?`, ans: 240, hint: 'שטח הבסיס (6 × 8 : 2) × גובה.', exp: `${M('6 × 8 : 2 × 10 = 240')} סמ"ק`, traps: [{ v: 480, m: 'שכחתם לחלק ב-2: שטח משולש ישר-זווית = ניצב × ניצב : 2.' }] }
+        },
+        {
+          title: 'מגדילים – נפח מול שטח פנים 🔍',
+          html: `<p>בחרו פי כמה להגדיל את המקצוע של קובייה:</p>
+            <div class="lbtns" data-kk></div>
+            <div class="dl-row" data-kv></div>
+            <div data-kr class="explain"></div>
+            <div class="rule">💡 מקצוע <b>פי 2</b> → שטח פנים <b>פי 4</b> (${M('2 × 2')}) → נפח <b>פי 8</b> (${M('2 × 2 × 2')}).<br>💡 רק מידה <b>אחת</b> של תיבה גדלה פי 2 → הנפח גדל פי 2.</div>`,
+          setup(root) {
+            let k = 2;
+            const draw = () => {
+              root.querySelector('[data-kk]').innerHTML = [1, 2, 3].map(x => `<button class="${x === k ? '' : 'secondary'}" data-x="${x}">מקצוע ${x}</button>`).join('');
+              root.querySelector('[data-kv]').innerHTML = isoBoxSVG(k, k, k);
+              root.querySelector('[data-kr]').innerHTML = `שטח פנים: ${M(`6 × ${k} × ${k} = ${6 * k * k}`)} סמ"ר (פי ${k * k} מקובייה של 1)<br>נפח: ${M(`${k} × ${k} × ${k} = ${k ** 3}`)} סמ"ק (פי ${k ** 3} מקובייה של 1)`;
+              root.querySelectorAll('[data-x]').forEach(b => b.onclick = () => { k = +b.dataset.x; draw(); });
+            };
+            draw();
+          },
+          try: { type: 'num', q: 'כל המידות של תיבה גדלו פי 2. פי כמה גדל הנפח?', ans: 8, hint: '2 × 2 × 2', exp: `${M('2 × 2 × 2 = 8')}`, traps: [{ v: 2, m: 'כל אחת משלוש המידות גדלה – כופלים: 2 × 2 × 2.' }, { v: 4, m: 'זה הגידול בשטח הפנים.' }] }
         },
         {
           title: 'כללים לזכור 📌',
           html: `<ul class="recap">
-              <li>🧊 <b>פאה</b> – משטח · <b>מקצוע</b> – קו · <b>קדקוד</b> – נקודה.</li>
-              <li>🔢 מנסרה (n צלעות בבסיס): ${M('2n')} קדקודים, ${M('3n')} מקצועות, ${M('n + 2')} פאות. פירמידה: ${M('n + 1')} קדקודים, ${M('2n')} מקצועות, ${M('n + 1')} פאות.</li>
-              <li>📦 <b>פריסה</b> = הגוף פרוש על השולחן. לקובייה 11 פריסות. 5 בשורה או ריבוע 2×2 – לא קובייה.</li>
-              <li>🎲 פאות נגדיות – לא נוגעות זו בזו. בשורה של 3: הראשונה והשלישית.</li>
-              <li>🎁 <b>שטח פנים</b> = סכום שטחי הפאות (סמ"ר). תיבה: ${M('2 × (ab + ac + bc)')} · קובייה: ${M('6 × a × a')}</li>
-              <li>🧱 <b>נפח</b> = כמה קוביות יחידה (סמ"ק). תיבה: ${M('a × b × c')} · מנסרה: שטח הבסיס × גובה.</li>
-            </ul>
-            <p class="center"><b>כל הכבוד! עכשיו אתם מומחים לגופים 🎉</b></p>`
+              <li>🧱 <b>נפח</b> = כמה קוביות יחידה נכנסות (סמ"ק, מ"ק).</li>
+              <li>📦 תיבה: ${M('a × b × c')} · 🎲 קובייה: ${M('a × a × a')} · 🔺 מנסרה: שטח הבסיס × גובה.</li>
+              <li>🔄 גובה = נפח : שטח הבסיס.</li>
+              <li>🥤 ${M('1')} סמ"ק = ${M('1')} מ"ל · ${M('1,000')} סמ"ק = ליטר · מ"ק = ${M('1,000')} ליטר.</li>
+              <li>🔍 מקצוע פי 2 → נפח פי 8.</li>
+            </ul>`
         }
       ]
     }
   });
   const gi = LESSON_ORDER.indexOf('geo');
-  LESSON_ORDER.splice(gi >= 0 ? gi + 1 : LESSON_ORDER.length, 0, 'solids');
+  LESSON_ORDER.splice(gi >= 0 ? gi + 1 : LESSON_ORDER.length, 0, 'solids', 'solidsN', 'solidsS', 'solidsV');
 }
 
 // מאזניים – מספר חסר: a + b = c + ☐. שני הצדדים שווים, כמו מאזניים. כיתות א'–ג'
