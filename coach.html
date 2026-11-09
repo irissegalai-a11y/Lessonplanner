@@ -186,12 +186,13 @@
       </div>
     </aside>
   </div>
-  <footer>המאמן האישי · מאת איריס סגל · <span class="ver">גרסה 1.1</span></footer>
+  <footer>המאמן האישי · מאת איריס סגל · <span class="ver">גרסה 1.2</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
 <script src="coach/engine.js"></script>
 <script src="coach/courses/equiv.js"></script>
+<script src="coach/courses/equiv-units.js"></script>
 <script>
 (function () {
   const C = window.COACH, V = C.V, E = C.E, K = C.courses.equiv;
@@ -268,7 +269,7 @@
       body += `<div class="opts${figs ? ' figopts' : ''}">${item.opts.map((o, i) => `<button class="opt" data-i="${i}">${o.t ? R(o.t) : ''}${o.fig && !o.t ? fig(o.fig) : ''}</button>`).join('')}</div>`;
     }
     if (item.type === 'nums') body += `<div class="row">${item.labels.map((l, i) => `<label class="chk">${esc(l)}: <input class="nin" data-k="${i}" inputmode="numeric" maxlength="3"></label>`).join('')}</div>`;
-    body += `<div class="fbarea" aria-live="polite"></div><div class="row acts"><button class="go">${learn ? 'בדיקה' : 'המשך'}</button>${learn && item.hints ? '<button class="sec hintb">רמז</button>' : ''}${learn && item.showFig ? '<button class="sec showfig">הראו לי בציור</button>' : ''}${!learn && item.type !== 'nums' ? '<button class="ghost skip">עוד לא למדתי</button>' : ''}</div><div class="sure" hidden></div>`;
+    body += `<div class="fbarea" aria-live="polite"></div><div class="row acts"><button class="go">${learn ? 'בדיקה' : 'המשך'}</button>${learn && item.hints ? '<button class="sec hintb">רמז</button>' : ''}${learn && item.showFig ? '<button class="sec showfig">הראו לי בציור</button>' : ''}${!learn && item.id !== 'NB' ? '<button class="ghost skip">עוד לא למדתי</button>' : ''}</div><div class="sure" hidden></div>`;
     box.innerHTML = body;
 
     // אינטראקציה
@@ -306,12 +307,19 @@
     }
     function judge(a) {
       const t = item.type;
-      if (t === 'num' || t === 'shade' || t === 'line') return { ok: a.v === item.ans, tag: (learn ? (item.trapTags || {})[a.v] : (item.traps || {})[a.v]) || '', msg: learn ? (item.traps || {})[a.v] : '' };
+      // מסיח ידוע: באבחון הערך הוא סוג טעות; בלמידה – הודעת משוב (וסוג הטעות ב-trapTags)
+      const trapOf = k => {
+        const tv = (item.traps || {})[k];
+        if (tv == null) return { tag: '', msg: '' };
+        if (!learn || K.TAGS[tv]) return { tag: K.TAGS[tv] ? tv : '', msg: '' };
+        return { tag: (item.trapTags || {})[k] || '', msg: tv };
+      };
+      if (t === 'num' || t === 'shade' || t === 'line') return Object.assign({ ok: a.v === item.ans }, trapOf(a.v));
       if (t === 'frac') {
         const ok = a.n === item.ans[0] && a.d === item.ans[1];
-        let tag = (item.traps || {})[a.key] || '';
-        if (!ok && !tag && a.n * item.ans[1] === a.d * item.ans[0]) tag = 'partialReduce';
-        return { ok, tag };
+        let { tag, msg } = trapOf(a.key);
+        if (!ok && !tag && !msg && a.n * item.ans[1] === a.d * item.ans[0]) { tag = 'partialReduce'; msg = 'זה אותו שבר – אבל אפשר לצמצם עוד. יש מספר שמחלק גם את המונה וגם את המכנה?'; }
+        return { ok, tag, msg: learn ? msg : '' };
       }
       if (t === 'open') { const ok = item.check(a.n, a.d); return { ok, tag: ok ? '' : ((item.bad && item.bad(a.n, a.d)) ? 'additive' : ''), msg: ok ? '' : (item.bad && item.bad(a.n, a.d)) || '' }; }
       if (t === 'choice') { const o = item.opts[a.i]; return { ok: a.i === item.ans, tag: o.tag || '', msg: o.msg || '', fig: o.fig && o.t ? o.fig : null }; }
@@ -502,14 +510,14 @@
       const icon = dn ? '✓' : act ? '▸' : '';
       const meta = dn ? 'הושלמה' : `כ-${u.min} דקות${p.optional ? ' · רשות' : ''}`;
       let btn = '';
-      if (!dn && ready(p.id) && (act || T || p.optional)) btn = `<button class="${act ? '' : 'sec '}small" data-open="${p.id}" data-ver="${p.ver || 'teach'}">כניסה</button>`;
+      if (ready(p.id) && (T || (!dn && (act || p.optional)))) btn = `<button class="${act ? '' : 'sec '}small" data-open="${p.id}" data-ver="${p.ver || 'teach'}">כניסה</button>`;
       else if (!dn && !ready(p.id)) btn = '<span class="tag">בקרוב</span>';
       const tv = T ? (p.ver ? `<span class="tag">${{ teach: 'הקניה', reinforce: 'חיזוק', deep: 'העמקה' }[p.ver]}</span>` : '<span class="tag">לא במסלול</span>') : '';
-      const tsel = T && ready(p.id) ? ` <button class="ghost small nosay" data-open="${p.id}" data-ver="${p.ver === 'teach' ? 'reinforce' : 'teach'}">(${p.ver === 'teach' ? 'חיזוק' : 'הקניה'})</button>` : '';
+      const tsel = T && ready(p.id) ? ` <button class="ghost small nosay" data-open="${p.id}" data-ver="${p.ver === 'reinforce' ? 'teach' : 'reinforce'}">(${p.ver === 'reinforce' ? 'הקניה' : 'חיזוק'})</button>` : '';
       return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}"><span class="ic">${icon}</span><span class="t"><b>${u.title}</b>${tv}<br><span class="meta">${meta}</span></span>${btn}${tsel}</li>`;
     }).join('');
     const knows = [1, 2, 3, 4, 5, 6, 7, 8].filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
-    const badges = E.BADGES.filter(b => st.badges[b]).map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('');
+    const badges = (st.done.u8 ? '<span class="badge">🏆 מומחה/ית בשברים שקולים</span>' : '') + E.BADGES.filter(b => st.badges[b]).map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('');
     const pct = core.length ? Math.round(100 * doneN / core.length) : 100;
     main.innerHTML = `${tview(T ? `מיומנויות: ${E.skillLine(st.skills)} · ${E.encode(st, K)}` : '')}
       <div class="card"><h1>${K.title}</h1><p class="muted">${K.sub}</p>
@@ -634,7 +642,7 @@
       $('nb').remove();
       $('nb2').innerHTML = `<div class="fb info"><b>השוו לציור הזה:</b>${fig(sc.model)}${sc.selfcheck.map((t, i) => `<label class="chk"><input type="checkbox" data-c="${i}"> ${t}</label>`).join('')}</div><h3 style="margin-top:14px">שאלת אימות</h3><div id="ib"></div>`;
       let tries = 0;
-      const ask = () => askItem($('ib'), { id: 'NB', type: 'nums', q: sc.verify.q, labels: sc.verify.labels, ans: sc.verify.ans }, 'diag', rec => {
+      const ask = () => askItem($('ib'), sc.verify.type === 'open' ? { id: 'NB', type: 'open', q: sc.verify.q, check: sc.verify.check } : { id: 'NB', type: 'nums', q: sc.verify.q, labels: sc.verify.labels, ans: sc.verify.ans }, 'diag', rec => {
         tries++;
         log('notebook', { ok: rec.correct, tries });
         if (rec.correct) { $('ib').insertAdjacentHTML('beforeend', '<div class="fb ok">✓ מצוין! העבודה במחברת מתאימה.</div><div class="row"><button id="nx">ממשיכים</button></div>'); $('nx').onclick = next; }
@@ -654,12 +662,13 @@
     const j = u.results.length;
     if (j >= items.length) {
       const passes = u.results.filter(r => r.pass).length;
-      const mastered = passes >= 2 && u.results[items.length - 1].pass;
+      const mastered = U.passNeed ? passes >= U.passNeed : (passes >= 2 && u.results[items.length - 1].pass);
       log('check', { set: setName, passes, mastered });
       if (u.results.some(r => !r.pass && r.correct) || u.results.some(r => r.attempts > 1)) { if (mastered) u.ev.persist = true; }
       if (mastered) { u.mastered = true; u.masteredSet = setName; save(); return next(); }
       u.setI++; u.results = [];
       save();
+      if (U.deep) return deepRetry(sc);
       if (!sc.sets[u.setI]) return referral(true);
       return ladder(sc);
     }
@@ -673,6 +682,17 @@
       save();
       check(sc);
     });
+  }
+  // אתגר המומחים: בלי סולם עזרה ובלי הפניה – הוא רשות
+  function deepRetry(sc) {
+    if (sc.sets[st.unit.setI]) {
+      frame(4, '<h3>אלה שאלות קשות במיוחד</h3><p>וזה בסדר. ננסה סט אחר של משימות אתגר.</p><div class="row"><button id="nx">לסט הבא</button></div>');
+      $('nx').onclick = () => check(sc);
+    } else {
+      log('deepMiss');
+      frame(4, '<h3>עוד לא הפעם</h3><p>אתגר המומחים קשה בכוונה. אפשר לחזור אליו בפעם אחרת – וכל מה שכבר למדתם נשאר.</p><div class="row"><button id="cr">למסלול שלי</button></div>');
+      $('cr').onclick = course;
+    }
   }
   // סולם העזרה אחרי בדיקה שלא עברה: הסבר בדרך אחרת → משימה פשוטה → סט מקביל
   function ladder(sc) {
@@ -739,20 +759,22 @@
     const u = st.unit, U = K.units[u.id];
     if (!u.mastered) return check({ sets: (u.ver === 'reinforce' ? ['B', 'C'] : ['A', 'B']) });
     const ev = u.ev;
+    const did = U.did || 'הרחבתם שברים';
     let line;
-    if (ev.additive && ev.fixed) line = 'בהתחלה הוספתם מספר למונה ולמכנה. עכשיו אתם כופלים, ויודעים להסביר למה.';
-    else if (ev.drawing) line = 'בהתחלה נעזרתם בציור. בסוף הרחבתם שברים גם בחישוב.';
-    else if (ev.claim) line = 'הרחבתם שברים בעצמכם, וזיהיתם טעות של תלמיד אחר והסברתם אותה.';
-    else line = 'הרחבתם שברים בעצמכם, ובשאלה האחרונה פתרתם בלי רמז.';
+    if (U.deep) line = 'הגעתם לרמת מומחיות: ניתחתם טעויות, בדקתם טענות ויצרתם שברים בעצמכם.';
+    else if (ev.additive && ev.fixed) line = u.id === 'u4' ? 'בהתחלה הוספתם מספר למונה ולמכנה. עכשיו אתם כופלים, ויודעים להסביר למה.' : `בהתחלה טעיתם, ומיד תיקנתם בעצמכם. בסוף ${did} לבד.`;
+    else if (ev.drawing) line = `בהתחלה נעזרתם בציור. בסוף ${did} גם בלי ציור.`;
+    else if (ev.claim) line = `${did} בעצמכם, וזיהיתם טעות של תלמיד אחר והסברתם אותה.`;
+    else line = `${did} בעצמכם, ובשאלה האחרונה פתרתם בלי רמז.`;
     const newB = [];
     const give = b => { if (!st.badges[b]) newB.push(b); st.badges[b] = true; };
     give('master');
     if (ev.claim) give('explain');
     if (ev.fixed) give('fix');
     if (ev.persist || u.setI > 0) give('persist');
-    if (!st.done[u.id]) { st.done[u.id] = true; st.skills[U.skill] = 'mastered'; }
+    if (!st.done[u.id]) { st.done[u.id] = true; [].concat(U.skill).forEach(k => { st.skills[k] = 'mastered'; }); }
     save();
-    tr('יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
+    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
     frame(5, `<h3>מה למדתי? 🎉</h3><p style="font-size:1.15rem">${line}</p><div class="rulebox">${U.learned}</div>
       ${newB.length ? `<h3 style="margin-top:14px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
       <div class="row"><button id="cr">חזרה למסלול שלי</button></div>`);
@@ -836,7 +858,7 @@
   else if (st.phase === 'unit' && st.unit) screen();
   else course();
   bump();
-  window.__coach = { get st() { return st; } };
+  window.__coach = { get st() { return st; }, get cur() { return cur && cur.item; } };
 })();
 </script>
 </body>
