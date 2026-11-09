@@ -8,61 +8,62 @@
 <meta name="description" content="קורס אישי עם מאמן: שברים שקולים (שווים)">
 <link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<meta name="theme-color" content="#fbf8f1">
+<meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@400;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   :root {
-    --bg: #fbf8f1; --card: #fffdf8; --ink: #1f1e1c; --muted: #5f5a50; --line: #cfc6b4;
-    --hot: #d9482b; --hot-dark: #b93a20; --ok: #2c7a5b; --ok-bg: #e4eedb; --bad: #9a4b14; --bad-bg: #f7e6c8;
-    --info-bg: #e3ecf6; --rule-bg: #efe9f6; --pink: #e07aa5;
-    --hand: 'Playpen Sans Hebrew', 'Assistant', cursive;
+    --bg: #f4f6fb; --card: #ffffff; --ink: #1d2433; --muted: #5d6578; --line: #e2e6ef;
+    --brand: #3b5bdb; --brand-dark: #2f4ac0; --brand-soft: #e9eeff;
+    --ok: #2b8a3e; --ok-bg: #e6f5ea; --bad: #b4511a; --bad-bg: #fdf0e6; --hint-bg: #fff6d9;
+    --info-bg: #eef2fb; --rule-bg: #f2efff; --shadow: 0 1px 2px rgba(29, 36, 51, 0.06), 0 4px 16px rgba(29, 36, 51, 0.06);
   }
-  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Assistant', 'Segoe UI', 'Arial Hebrew', sans-serif; direction: rtl; text-align: right; font-size: 18px; line-height: 1.5; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Assistant', 'Segoe UI', 'Arial Hebrew', sans-serif; direction: rtl; text-align: right; font-size: 18px; line-height: 1.55; }
   body.big { font-size: 21px; }
-  h1, h2, h3 { font-family: var(--hand); margin: 0 0 10px; line-height: 1.3; }
-  h1 { font-size: 1.6rem; } h2 { font-size: 1.3rem; } h3 { font-size: 1.1rem; }
+  h1, h2, h3 { margin: 0 0 10px; line-height: 1.25; font-weight: 800; }
+  h1 { font-size: 1.75rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.12rem; }
   p { margin: 0 0 10px; }
-  .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 16px; border-bottom: 2px solid var(--ink); background: var(--card); position: sticky; top: 0; z-index: 20; }
-  .top .brand { font-family: var(--hand); font-weight: 700; font-size: 1.05rem; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 20px; border-bottom: 1px solid var(--line); background: #fff; position: sticky; top: 0; z-index: 20; }
+  .top .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; }
+  .top .brand .crs { color: var(--muted); font-weight: 600; font-size: 0.92rem; }
   .top .acts { display: flex; gap: 8px; flex-wrap: wrap; }
-  .wrap { max-width: 1060px; margin: 0 auto; padding: 18px 16px 120px; }
-  .layout { display: grid; grid-template-columns: 1fr; gap: 18px; }
-  @media (min-width: 900px) { .layout.withcoach { grid-template-columns: 1fr 270px; } }
-  .card { background: var(--card); border: 2px solid var(--ink); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+  .avatar { width: 38px; height: 38px; flex: 0 0 38px; border-radius: 50%; background: var(--brand); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; }
+  .avatar.sm { width: 30px; height: 30px; flex-basis: 30px; font-size: 0.9rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 22px 18px 120px; }
+  .layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 920px) { .layout.withcoach { grid-template-columns: 1fr 280px; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
   .muted { color: var(--muted); }
   .small { font-size: 0.88rem; }
-  button, .btn { font: inherit; font-family: var(--hand); font-weight: 600; font-size: 1rem; padding: 10px 18px; min-height: 44px; border: 2px solid var(--ink); border-radius: 12px; background: var(--hot); color: #fff; cursor: pointer; box-shadow: 2px 3px 0 var(--ink); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-  button:hover { background: var(--hot-dark); }
-  button:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+  button, .btn { font: inherit; font-weight: 700; font-size: 1rem; padding: 10px 20px; min-height: 46px; border: 1px solid transparent; border-radius: 12px; background: var(--brand); color: #fff; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
+  button:hover { background: var(--brand-dark); }
   button:disabled { opacity: 0.45; cursor: default; }
-  button.sec, .btn.sec { background: var(--card); color: var(--ink); box-shadow: none; }
-  button.sec:hover { background: #fff; }
-  button.ghost { background: transparent; color: var(--ink); border-color: transparent; box-shadow: none; font-weight: 600; }
-  button.ghost:hover { background: rgba(31, 30, 28, 0.06); }
-  button.small { min-height: 36px; padding: 6px 12px; font-size: 0.9rem; }
-  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
-  input.tx { font: inherit; font-size: 1.1rem; padding: 10px 12px; border: 2px solid var(--ink); border-radius: 10px; background: #fff; width: 100%; max-width: 380px; }
-  input.tx:focus, input.slot:focus, input.nin:focus { outline: 3px solid rgba(217, 72, 43, 0.35); }
-  label.lb { display: block; font-weight: 700; margin: 12px 0 6px; }
+  button.sec, .btn.sec { background: #fff; color: var(--ink); border-color: var(--line); }
+  button.sec:hover, .btn.sec:hover { background: var(--info-bg); }
+  button.ghost { background: transparent; color: var(--ink); border-color: transparent; }
+  button.ghost:hover { background: var(--info-bg); }
+  button.small, .btn.small { min-height: 36px; padding: 6px 12px; font-size: 0.9rem; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+  input.tx { font: inherit; font-size: 1.1rem; padding: 11px 14px; border: 1.5px solid #c9cfdd; border-radius: 12px; background: #fff; width: 100%; max-width: 400px; }
+  input.tx:focus, input.slot:focus, input.nin:focus { outline: 3px solid rgba(59, 91, 219, 0.25); border-color: var(--brand); }
+  label.lb { display: block; font-weight: 700; margin: 14px 0 6px; }
 
   /* מתמטיקה */
   .mx { display: inline-flex; align-items: center; gap: 0.25em; direction: ltr; unicode-bidi: isolate; vertical-align: middle; margin: 0 0.15em; }
   .fr { display: inline-flex; flex-direction: column; text-align: center; line-height: 1.15; }
   .fr > span:first-child { border-bottom: 2px solid currentColor; padding: 0 0.2em 1px; }
   .fr > span:last-child { padding-top: 1px; }
-  .bigmx { font-size: 1.7rem; text-align: center; margin: 12px 0; }
+  .bigmx { font-size: 1.8rem; text-align: center; margin: 14px 0; }
   .bigmx .mx { gap: 0.4em; }
-  .qbox { display: inline-block; min-width: 1.2em; border: 2px dashed var(--ink); border-radius: 6px; padding: 0 0.15em; }
-  input.slot, input.nin { width: 2.6em; font: inherit; font-size: 1em; text-align: center; padding: 2px; border: 2px solid var(--ink); border-radius: 8px; background: #fff; direction: ltr; }
+  .qbox { display: inline-block; min-width: 1.2em; border: 2px dashed var(--muted); border-radius: 6px; padding: 0 0.15em; }
+  input.slot, input.nin { width: 2.6em; font: inherit; font-size: 1em; text-align: center; padding: 2px; border: 2px solid var(--brand); border-radius: 8px; background: #fff; direction: ltr; }
   .fracin { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; vertical-align: middle; }
   .fracin .bar { width: 3em; height: 0; border-top: 3px solid var(--ink); }
 
   /* ציורים */
-  .figs { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 12px 0; }
-  .figs.inline { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-end; }
+  .figs { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 14px 0; }
   svg.fig { max-width: 100%; height: auto; display: block; margin: 8px auto; }
   figure.figl { margin: 0; text-align: center; }
   figure.figl figcaption { font-size: 1.15rem; }
@@ -70,102 +71,127 @@
   .clickline svg .hit { cursor: pointer; }
 
   /* אפשרויות בחירה */
-  .opts { display: grid; gap: 10px; margin-top: 12px; }
+  .opts { display: grid; gap: 10px; margin-top: 14px; }
   .opts.figopts { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  .opt { text-align: right; justify-content: flex-start; background: var(--card); color: var(--ink); box-shadow: none; font-family: 'Assistant', sans-serif; font-weight: 400; font-size: 1.05rem; padding: 12px 14px; min-height: 52px; }
-  .opt:hover { background: #fff; }
-  .opt.sel { background: var(--info-bg); outline: 3px solid var(--ink); }
+  .opt { text-align: right; justify-content: flex-start; background: #fff; color: var(--ink); border: 1.5px solid #cfd5e3; font-weight: 600; font-size: 1.05rem; padding: 12px 16px; min-height: 54px; }
+  .opt:hover { background: var(--info-bg); }
+  .opt.sel { background: var(--brand-soft); border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand) inset; }
   .opt.right { background: var(--ok-bg); border-color: var(--ok); }
   .opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
   .opt svg.fig { margin: 0 auto; }
   .figopts .opt { justify-content: center; }
 
   /* משוב */
-  .fb { border: 2px solid var(--ink); border-radius: 12px; padding: 12px 14px; margin-top: 12px; }
-  .fb.ok { background: var(--ok-bg); }
-  .fb.bad { background: var(--bad-bg); }
-  .fb.hint { background: #fff3cf; }
-  .fb.info { background: var(--info-bg); }
-  .rulebox { background: var(--rule-bg); border: 2px dashed var(--ink); border-radius: 12px; padding: 14px 16px; }
-  .warnbox { background: var(--bad-bg); border: 2px dashed var(--ink); border-radius: 12px; padding: 14px 16px; }
+  .fb { border-radius: 14px; padding: 12px 16px; margin-top: 14px; border-inline-start: 5px solid var(--muted); }
+  .fb.ok { background: var(--ok-bg); border-color: var(--ok); }
+  .fb.bad { background: var(--bad-bg); border-color: var(--bad); }
+  .fb.hint { background: var(--hint-bg); border-color: #d9a400; }
+  .fb.info { background: var(--info-bg); border-color: var(--brand); }
+  .rulebox { background: var(--rule-bg); border-radius: 14px; padding: 16px 18px; border-inline-start: 5px solid #7048e8; }
+  .warnbox { background: var(--bad-bg); border-radius: 14px; padding: 16px 18px; border-inline-start: 5px solid var(--bad); }
   ol.steps { margin: 8px 0; padding-inline-start: 1.4em; }
   ol.steps li { margin-bottom: 6px; }
 
-  /* שלבי יחידה */
-  .pills { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 16px; }
-  .pill { border: 1.5px solid var(--ink); border-radius: 999px; padding: 3px 12px; font-size: 0.85rem; background: var(--card); color: var(--muted); }
-  .pill.on { background: var(--ink); color: var(--bg); font-weight: 700; }
-  .pill.done { background: var(--ok-bg); color: var(--ink); }
+  /* שיעור */
+  .crumb { color: var(--muted); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+  .lhead { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .pills { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 14px 0 20px; }
+  .pill { font-size: 0.8rem; color: var(--muted); text-align: center; padding-top: 8px; border-top: 4px solid var(--line); font-weight: 600; }
+  .pill.on { color: var(--brand); border-color: var(--brand); }
+  .pill.done { color: var(--ok); border-color: var(--ok); }
+  .coachline { display: flex; gap: 12px; align-items: flex-start; background: var(--brand-soft); border-radius: 16px; padding: 14px 16px; margin-bottom: 16px; }
+  .coachline .say { flex: 1; }
+  .coachline .who { font-size: 0.8rem; color: var(--brand); font-weight: 800; }
 
   /* מסך הקורס */
-  .prog { height: 14px; border: 2px solid var(--ink); border-radius: 999px; overflow: hidden; background: #fff; margin: 10px 0 6px; }
+  .hero { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  .ring { --p: 0; width: 104px; height: 104px; border-radius: 50%; background: conic-gradient(var(--ok) calc(var(--p) * 1%), var(--line) 0); display: flex; align-items: center; justify-content: center; }
+  .ring > span { width: 80px; height: 80px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem; line-height: 1.1; }
+  .ring small { font-size: 0.7rem; color: var(--muted); font-weight: 600; }
+  .prog { height: 10px; border-radius: 999px; overflow: hidden; background: var(--line); margin: 10px 0 6px; }
   .prog > div { height: 100%; background: var(--ok); }
+  .mods { display: grid; gap: 14px; }
+  .mod { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: #fff; }
+  .mod > h3 { margin: 0; padding: 12px 18px; background: #f8f9fd; border-bottom: 1px solid var(--line); font-size: 1rem; display: flex; justify-content: space-between; }
+  .mod > h3 .muted { font-weight: 600; font-size: 0.85rem; }
   .ulist { list-style: none; margin: 0; padding: 0; }
-  .ulist li { display: flex; align-items: center; gap: 12px; padding: 12px 10px; border-bottom: 1px solid var(--line); border-radius: 10px; }
+  .ulist li { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
   .ulist li:last-child { border-bottom: none; }
-  .ulist li.active { background: var(--info-bg); outline: 2px solid var(--ink); }
-  .ulist .ic { width: 30px; height: 30px; flex: 0 0 30px; border-radius: 50%; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; font-weight: 700; }
-  .ulist li.done .ic { border-color: var(--ok); background: var(--ok-bg); color: var(--ok); }
-  .ulist li.active .ic { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+  .ulist li.active { background: var(--brand-soft); }
+  .ulist .ic { width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: var(--muted); background: #fff; }
+  .ulist li.done .ic { border-color: var(--ok); background: var(--ok); color: #fff; }
+  .ulist li.active .ic { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .ulist li.skip .ic { border-color: var(--ok); color: var(--ok); }
   .ulist .t { flex: 1; }
-  .ulist li.done .t b { text-decoration: line-through; color: var(--muted); font-weight: 600; }
+  .ulist li.done .t b { text-decoration: line-through; color: var(--muted); }
   .ulist .meta { font-size: 0.85rem; color: var(--muted); }
-  .tag { display: inline-block; font-size: 0.78rem; border: 1px solid var(--ink); border-radius: 6px; padding: 0 6px; margin-inline-start: 6px; background: #fff; color: var(--ink); }
+  .chip { display: inline-block; font-size: 0.78rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; margin-inline-start: 6px; background: var(--info-bg); color: var(--muted); }
+  .chip.ok { background: var(--ok-bg); color: var(--ok); }
+  .chip.now { background: var(--brand); color: #fff; }
+  .tag { display: inline-block; font-size: 0.78rem; border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; margin-inline-start: 6px; background: #fff; color: var(--muted); }
+  .side { display: grid; gap: 18px; align-content: start; }
+  @media (min-width: 920px) { .cgrid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; } }
   .badges { display: flex; gap: 8px; flex-wrap: wrap; }
-  .badge { border: 2px solid var(--ink); border-radius: 12px; padding: 4px 10px; background: #fff3cf; font-size: 0.9rem; }
-  .knows li { margin-bottom: 4px; }
+  .badge { border-radius: 999px; padding: 5px 12px; background: var(--hint-bg); font-size: 0.9rem; font-weight: 700; }
+  .knows { margin: 0; padding-inline-start: 1.2em; }
+  .knows li { margin-bottom: 6px; }
+  .cert { border: 3px double var(--brand); border-radius: 18px; padding: 30px 24px; text-align: center; background: #fff; }
+  .cert h1 { color: var(--brand); font-size: 2rem; }
+  .cert .nm { font-size: 1.6rem; font-weight: 800; margin: 10px 0; }
 
   /* המאמן */
-  .coach { background: var(--card); border: 2px solid var(--ink); border-radius: 16px; padding: 14px; align-self: start; position: sticky; top: 74px; }
-  .coach h3 { margin-bottom: 8px; }
-  .bubble { background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; font-size: 0.97rem; }
+  .coach { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 16px; align-self: start; position: sticky; top: 76px; box-shadow: var(--shadow); }
+  .coach .chead { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: 800; }
+  .bubble { background: var(--brand-soft); border-radius: 4px 14px 14px 14px; padding: 10px 12px; margin-bottom: 12px; font-size: 0.97rem; }
   .coach .hb { display: flex; flex-direction: column; gap: 8px; }
   .coach .hb button { justify-content: center; }
-  .coach .hb button.teacher { background: #fff3cf; color: var(--ink); }
+  .coach .hb button.teacher { background: var(--hint-bg); color: var(--ink); border-color: #ecd9a0; }
   .coach .sub { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .coachtoggle { display: none; }
   @media (max-width: 600px) {
     .top { padding: 8px 10px; }
-    .top .brand { font-size: 0.95rem; }
-    .top .brand .long { display: none; }
+    .top .brand .crs, .top .acts .long2 { display: none; }
     .top .acts { flex-wrap: nowrap; gap: 6px; }
     .top .acts .small { padding: 4px 8px; font-size: 0.82rem; min-height: 34px; white-space: nowrap; }
     .wrap { padding: 12px 10px 110px; }
-    .card { padding: 14px; }
+    .card { padding: 16px; }
+    .hero { grid-template-columns: 1fr; }
+    .pill { font-size: 0.68rem; }
   }
-  @media (max-width: 899px) {
-    .coach { position: fixed; bottom: 0; left: 0; right: 0; top: auto; border-radius: 16px 16px 0 0; border-bottom: none; z-index: 30; max-height: 70vh; overflow: auto; transform: translateY(calc(100% - 56px)); transition: transform 0.2s; padding-top: 0; }
+  @media (max-width: 919px) {
+    .coach { position: fixed; bottom: 0; left: 0; right: 0; top: auto; border-radius: 18px 18px 0 0; z-index: 30; max-height: 70vh; overflow: auto; transform: translateY(calc(100% - 58px)); transition: transform 0.2s; padding-top: 0; }
     .coach.open { transform: none; }
-    .coachtoggle { display: flex; width: 100%; background: var(--card); color: var(--ink); box-shadow: none; border: none; border-bottom: 1.5px solid var(--line); border-radius: 0; margin-bottom: 10px; min-height: 54px; }
-    .coach h3 { display: none; }
-    .coachtoggle:hover, .coachtoggle:active { background: var(--card); transform: none; }
+    .coachtoggle { display: flex; width: 100%; background: #fff; color: var(--ink); border: none; border-bottom: 1px solid var(--line); border-radius: 0; margin-bottom: 10px; min-height: 56px; }
+    .coachtoggle:hover { background: #fff; }
+    .coach .chead { display: none; }
   }
 
   /* חלונות */
-  .overlay { position: fixed; inset: 0; background: rgba(31, 30, 28, 0.55); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
-  .modal { background: var(--bg); border: 2px solid var(--ink); border-radius: 16px; padding: 20px; max-width: 620px; width: 100%; max-height: 90vh; overflow: auto; }
-  .tcard { background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 14px; font-size: 1.05rem; }
-  .tcard dt { font-weight: 700; margin-top: 8px; }
+  .overlay { position: fixed; inset: 0; background: rgba(29, 36, 51, 0.5); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .modal { background: var(--card); border-radius: 18px; padding: 22px; max-width: 640px; width: 100%; max-height: 90vh; overflow: auto; box-shadow: var(--shadow); }
+  .tcard { background: var(--info-bg); border-radius: 14px; padding: 14px; font-size: 1.05rem; }
+  .tcard dt { font-weight: 800; margin-top: 8px; }
   .tcard dd { margin: 0; }
-  .code { font-family: 'Courier New', monospace; font-size: 2.2rem; font-weight: 700; letter-spacing: 4px; direction: ltr; text-align: center; background: #fff; border: 2px dashed var(--ink); border-radius: 12px; padding: 12px; margin: 12px 0; }
+  .code { font-family: 'Courier New', monospace; font-size: 2.2rem; font-weight: 700; letter-spacing: 4px; direction: ltr; text-align: center; background: var(--brand-soft); border: 2px dashed var(--brand); border-radius: 14px; padding: 12px; margin: 12px 0; }
   table.mt { border-collapse: collapse; margin: 0 auto; direction: ltr; }
   table.mt td { border: 1px solid var(--line); width: 2.3em; height: 2em; text-align: center; font-size: 0.95rem; }
-  table.mt td.h { background: #f1ece0; font-weight: 700; }
+  table.mt td.h { background: var(--info-bg); font-weight: 800; }
   table.cut { border-collapse: collapse; margin: 10px 0; }
-  table.cut td, table.cut th { border: 1.5px solid var(--line); padding: 4px 12px; text-align: center; }
+  table.cut td, table.cut th { border: 1px solid var(--line); padding: 4px 12px; text-align: center; }
   .chk { display: flex; gap: 8px; align-items: center; margin: 6px 0; }
-  .chk input { width: 22px; height: 22px; }
-  .tview { background: #fff3cf; border: 2px dashed var(--ink); border-radius: 12px; padding: 8px 12px; margin-bottom: 14px; font-size: 0.92rem; }
+  .chk input { width: 22px; height: 22px; accent-color: var(--brand); }
+  .tview { background: var(--hint-bg); border-radius: 12px; padding: 8px 12px; margin-bottom: 14px; font-size: 0.9rem; }
   .sure { margin-top: 14px; }
   footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 30px; }
   [hidden] { display: none !important; }
+  @media print { .top, footer, .noprint { display: none !important; } body { background: #fff; } .wrap { padding: 0; } .card { box-shadow: none; border: none; } }
 </style>
 </head>
 <body>
 <header class="top">
-  <span class="brand">המאמן האישי<span class="long"> שלי במתמטיקה</span></span>
+  <span class="brand"><span class="avatar sm" aria-hidden="true">מ</span><span>המאמן האישי</span><span class="crs" id="crsName"></span></span>
   <span class="acts">
-    <button class="sec small" id="bigBtn" title="הגדלת הכתב">א+ כתב</button>
+    <button class="sec small" id="bigBtn" title="הגדלת הכתב">א+</button>
     <a class="btn sec small" href="math6.html">לאתר<span class="long2"> התרגול</span></a>
     <button class="small" id="endBtn" hidden>סיימתי להיום</button>
   </span>
@@ -174,19 +200,19 @@
   <div class="layout" id="layout">
     <main id="main"></main>
     <aside class="coach" id="coach" hidden>
-      <button class="coachtoggle" id="coachToggle" aria-expanded="false">🙋 עזרה מהמאמן</button>
-      <h3>המאמן</h3>
+      <button class="coachtoggle" id="coachToggle" aria-expanded="false"><span class="avatar sm">מ</span>&nbsp; המאמן שלך – עזרה</button>
+      <div class="chead"><span class="avatar">מ</span><span>המאמן שלך</span></div>
       <div class="bubble" id="bubble">אני כאן אם צריך עזרה.</div>
       <div class="hb">
         <button class="sec" data-h="lost">לא הבנתי</button>
         <button class="sec" data-h="alt">תסביר בדרך אחרת</button>
         <button class="sec" data-h="hint">תן לי רמז</button>
-        <button class="sec" data-h="read">הקרא לי</button>
+        <button class="sec" data-h="read">🔊 הקרא לי</button>
         <button class="teacher" data-h="teacher">אני צריך את המורה</button>
       </div>
     </aside>
   </div>
-  <footer>המאמן האישי · מאת איריס סגל · <span class="ver">גרסה 1.2</span></footer>
+  <footer>המאמן האישי · מאת איריס סגל · <span class="ver">גרסה 1.3</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -412,17 +438,22 @@
   // ---------- כניסה ----------
   function entry(msg) {
     layout(false);
-    main.innerHTML = `<div class="card">
-      ${tview()}
-      <h1>שברים שקולים (שווים)</h1>
-      <p>${K.sub}.</p>
-      <label class="lb" for="nm">השם המלא שלי (שם פרטי ושם משפחה):</label>
-      <input class="tx" id="nm" autocomplete="off" placeholder="לדוגמה: נועה כהן">
-      <label class="lb" for="cd">קוד המשך מהמחברת <span class="muted small">(רק אם כבר התחלתם בפעם קודמת)</span></label>
+    main.innerHTML = `${tview()}<div class="cgrid"><div class="card">
+      <div class="crumb">קורס אישי עם מאמן · כיתה ו'</div>
+      <h1>${K.title}</h1>
+      <p class="muted" style="font-size:1.1rem">${K.sub}.</p>
+      <h3 style="margin-top:18px">בקורס הזה תלמדו</h3>
+      <ul class="knows">${K.LEARN.map(x => `<li>${x}</li>`).join('')}</ul>
+      <p class="muted small">${K.MODULES.length} פרקים · ${K.UNITS.length} שיעורים קצרים · כל שיעור כ-10 דקות · המסלול נבנה אישית אחרי מבדק קצר</p>
+    </div>
+    <div class="card"><div class="coachline" style="margin-bottom:6px"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>שלום! אני אלווה אותך בקורס. בואו נכיר:</div></div>
+      <label class="lb" for="nm">השם המלא שלי</label>
+      <input class="tx" id="nm" autocomplete="off" placeholder="שם פרטי ושם משפחה">
+      <label class="lb" for="cd">קוד המשך מהמחברת <span class="muted small">(אם כבר התחלתם)</span></label>
       <input class="tx" id="cd" autocomplete="off" dir="ltr" placeholder="XXXX-XXXX" style="max-width:220px;text-align:center">
       <div id="emsg">${msg ? `<div class="fb bad">${msg}</div>` : ''}</div>
-      <div class="row"><button id="go">מתחילים</button></div>
-    </div>`;
+      <div class="row"><button id="go">כניסה לקורס</button></div>
+    </div></div>`;
     const go = () => {
       const name = $('nm').value.trim().replace(/\s+/g, ' ');
       const parts = name.split(' ').filter(p => p.length >= 2);
@@ -452,10 +483,9 @@
   // ---------- אבחון ----------
   function diagIntro() {
     layout(false);
-    main.innerHTML = `<div class="card"><h2>שלום ${esc(st.name.split(' ')[0])}!</h2>
-      <p>לפני שמתחילים, כמה שאלות קצרות. <b>זה לא מבחן ואין ציון.</b> התשובות עוזרות לנו לבנות לכם מסלול שמתאים בדיוק למה שאתם כבר יודעים.</p>
-      <p>אם אתם לא יודעים, זה בסדר ללחוץ "עוד לא למדתי".</p>
-      <div class="row"><button id="go">מתחילים</button></div></div>`;
+    main.innerHTML = `<div class="card">${coachSay(`שלום ${esc(first())}! לפני שמתחילים, אני רוצה להכיר מה כבר ידוע לך. אשאל כמה שאלות קצרות – <b>זה לא מבחן ואין ציון</b>. לפי התשובות אבנה לך מסלול אישי בקורס.`)}
+      <p>אם אתם לא יודעים – זה בסדר ללחוץ "עוד לא למדתי". זה בדיוק מה שעוזר לי לבנות מסלול נכון.</p>
+      <div class="row"><button id="go">מתחילים את המבדק</button></div></div>`;
     $('go').onclick = () => { st.diag = E.diagStart(K); st.phase = 'diag'; save(); diagQ(); };
   }
   function diagQ() {
@@ -486,18 +516,24 @@
     tr('אבחון', `${K.title} · ${E.skillLine(st.skills)}${tagList.length ? ' · טעויות: ' + tagList.join('; ') : ''}`);
     layout(false);
     const knows = [8, 7, 6, 5, 4, 3, 2, 1].filter(s => st.skills[s] === 'mastered').slice(0, 2).map(s => K.SKILL_SAY[s]);
-    const units = st.path.filter(p => !p.optional).length;
-    main.innerHTML = `<div class="card"><h2>תודה!</h2>
-      <p>בנינו לכם מסלול של <b>${units} ${units === 1 ? 'יחידה' : 'יחידות'}</b>.</p>
-      ${knows.length ? `<p>כבר עכשיו אתם יודעים ${knows.join(', ו')}.</p>` : '<p>נתחיל מהבסיס, צעד אחר צעד.</p>'}
+    const units = st.path.filter(p => !p.optional && !st.done[p.id]).length;
+    const skipped = K.UNITS.filter(u => !u.deep && !st.path.some(p => p.id === u.id)).length;
+    const first1 = st.path.find(p => ready(p.id));
+    main.innerHTML = `<div class="card">${coachSay(`סיימנו, ${esc(first())}! תודה. לפי התשובות שלך בניתי לך <b>מסלול אישי של ${units} ${units === 1 ? 'שיעור' : 'שיעורים'}</b>${skipped ? `, ו-${skipped} שיעורים דילגנו – כבר הראית שאת/ה יודע/ת אותם` : ''}.`)}
+      ${knows.length ? `<p>כבר עכשיו את/ה יודע/ת ${knows.join(', ו')}. 👏</p>` : '<p>נתחיל מהבסיס, צעד אחר צעד. אני כאן כל הדרך.</p>'}
+      ${first1 ? `<p>השיעור הראשון שלך: <b>${unitDef(first1.id).title}</b>.</p>` : ''}
       ${T ? `<div class="tview">מצב מיומנויות: ${E.skillLine(st.skills)}<br>טעויות שזוהו: ${tagList.join('; ') || 'אין'}</div>` : ''}
-      <div class="row"><button id="go">למסלול שלי</button></div></div>`;
+      <div class="row"><button id="go">לתוכנית הקורס שלי</button></div></div>`;
     $('go').onclick = course;
   }
 
   // ---------- מסך הקורס ----------
   const unitDef = id => K.UNITS.find(u => u.id === id);
   const ready = id => !!K.units[id];
+  const first = () => (st && st.name ? st.name.split(' ')[0] : '');
+  const coachSay = html => `<div class="coachline"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>${R(html)}</div></div>`;
+  const lessonNo = id => K.UNITS.findIndex(u => u.id === id) + 1;
+  const courseDone = () => { const core = (st.path || []).filter(p => !p.optional); return core.length > 0 && core.every(p => st.done[p.id]); };
   function course() {
     st.phase = 'course'; st.unit = null; save();
     layout(false);
@@ -505,31 +541,61 @@
     const core = path.filter(p => !p.optional);
     const doneN = core.filter(p => st.done[p.id]).length;
     const next = path.find(p => !st.done[p.id] && ready(p.id));
-    const rows = (T ? K.UNITS.map(u => path.find(p => p.id === u.id) || { id: u.id, ver: null }) : path).map(p => {
-      const u = unitDef(p.id), dn = !!st.done[p.id], act = next && next.id === p.id;
-      const icon = dn ? '✓' : act ? '▸' : '';
-      const meta = dn ? 'הושלמה' : `כ-${u.min} דקות${p.optional ? ' · רשות' : ''}`;
-      let btn = '';
-      if (ready(p.id) && (T || (!dn && (act || p.optional)))) btn = `<button class="${act ? '' : 'sec '}small" data-open="${p.id}" data-ver="${p.ver || 'teach'}">כניסה</button>`;
-      else if (!dn && !ready(p.id)) btn = '<span class="tag">בקרוב</span>';
-      const tv = T ? (p.ver ? `<span class="tag">${{ teach: 'הקניה', reinforce: 'חיזוק', deep: 'העמקה' }[p.ver]}</span>` : '<span class="tag">לא במסלול</span>') : '';
-      const tsel = T && ready(p.id) ? ` <button class="ghost small nosay" data-open="${p.id}" data-ver="${p.ver === 'reinforce' ? 'teach' : 'reinforce'}">(${p.ver === 'reinforce' ? 'הקניה' : 'חיזוק'})</button>` : '';
-      return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}"><span class="ic">${icon}</span><span class="t"><b>${u.title}</b>${tv}<br><span class="meta">${meta}</span></span>${btn}${tsel}</li>`;
+    const pct = core.length ? Math.round(100 * doneN / core.length) : 100;
+    const skipped = K.UNITS.filter(u => !u.deep && !path.some(p => p.id === u.id)).length;
+    const row = u => {
+      const p = path.find(x => x.id === u.id), dn = !!st.done[u.id], act = next && next.id === u.id;
+      const inPath = !!p, skip = !inPath && !u.deep;
+      let chip = '', btn = '';
+      if (dn) chip = '<span class="chip ok">הושלם</span>';
+      else if (act) chip = '<span class="chip now">השיעור הבא</span>';
+      else if (inPath && p.optional) chip = '<span class="chip">רשות · אתגר</span>';
+      else if (inPath) chip = '<span class="chip">במסלול שלך</span>';
+      else if (skip) chip = '<span class="chip ok">כבר יודע/ת</span>';
+      else chip = '<span class="chip">נפתח אחרי השליטה</span>';
+      if (act) btn = `<button class="small" data-open="${u.id}" data-ver="${p.ver}">להתחיל</button>`;
+      else if (inPath && !dn) btn = `<button class="sec small" data-open="${u.id}" data-ver="${p.ver}">כניסה</button>`;
+      else if (skip && !T) btn = `<button class="ghost small" data-open="${u.id}" data-ver="reinforce">לעבור בכל זאת</button>`;
+      if (T) btn = `<button class="sec small nosay" data-open="${u.id}" data-ver="teach">הקניה</button><button class="ghost small nosay" data-open="${u.id}" data-ver="reinforce">חיזוק</button>`;
+      const tv = T && p ? `<span class="tag">${{ teach: 'הקניה', reinforce: 'חיזוק', deep: 'העמקה' }[p.ver]}</span>` : '';
+      return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}${skip ? ' skip' : ''}"><span class="ic">${dn || skip ? '✓' : lessonNo(u.id)}</span><span class="t"><b>שיעור ${lessonNo(u.id)}: ${u.title}</b>${tv}<br><span class="meta">כ-${u.min} דקות</span> ${chip}</span>${btn}</li>`;
+    };
+    const mods = K.MODULES.map((m, i) => {
+      const us = m.u.map(unitDef);
+      const dn = us.filter(u => st.done[u.id] || (!u.deep && !path.some(p => p.id === u.id))).length;
+      return `<div class="mod"><h3><span>פרק ${i + 1}: ${m.t}</span><span class="muted">${dn}/${us.length}</span></h3><ul class="ulist">${us.map(row).join('')}</ul></div>`;
     }).join('');
     const knows = [1, 2, 3, 4, 5, 6, 7, 8].filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
     const badges = (st.done.u8 ? '<span class="badge">🏆 מומחה/ית בשברים שקולים</span>' : '') + E.BADGES.filter(b => st.badges[b]).map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('');
-    const pct = core.length ? Math.round(100 * doneN / core.length) : 100;
+    const done = courseDone();
+    let hello;
+    if (done) hello = `כל הכבוד, ${esc(first())}! סיימת את הקורס. 🎓 ${st.done.u8 ? 'ואפילו הגעת לרמת מומחיות!' : 'אם בא לך אתגר – אתגר המומחים מחכה בפרק 4.'}`;
+    else if (doneN) hello = `יפה, ${esc(first())}! כבר השלמת ${doneN} ${doneN === 1 ? 'שיעור' : 'שיעורים'} מתוך ${core.length}. ממשיכים?`;
+    else hello = `שלום ${esc(first())}! זו תוכנית הקורס שלך. ${skipped ? `${skipped} שיעורים כבר מסומנים – הראית באבחון שאת/ה יודע/ת אותם. ` : ''}מתחילים מהשיעור המסומן.`;
     main.innerHTML = `${tview(T ? `מיומנויות: ${E.skillLine(st.skills)} · ${E.encode(st, K)}` : '')}
-      <div class="card"><h1>${K.title}</h1><p class="muted">${K.sub}</p>
-        <div class="prog" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><div style="width:${pct}%"></div></div>
-        <p><b>${doneN} מתוך ${core.length}</b> יחידות במסלול שלך</p>
-        <div class="row">${next ? `<button id="cont">${doneN || (st.unitStarted || {})[next.id] ? 'המשך מהיחידה האחרונה' : 'מתחילים'}</button>` : ''}</div>
-        ${!next ? `<div class="fb ok">${core.length && doneN === core.length ? 'כל הכבוד! סיימתם את המסלול.' : 'כל הכבוד! סיימתם את כל מה שמוכן כרגע במסלול שלכם. יחידות נוספות ייפתחו בקרוב.'}</div>` : ''}
-      </div>
-      <div class="card"><h2>היחידות שלי</h2><ul class="ulist">${rows || '<li>אין יחידות במסלול.</li>'}</ul></div>
-      ${knows || badges ? `<div class="card">${knows ? `<h3>מה אני כבר יודע/ת</h3><ul class="knows">${knows}</ul>` : ''}${badges ? `<h3>ההישגים שלי</h3><div class="badges">${badges}</div>` : ''}</div>` : ''}`;
+      <div class="card"><div class="hero"><div>
+        <div class="crumb">הקורס שלי</div><h1>${K.title}</h1>
+        ${coachSay(hello)}
+        <div class="row" style="margin-top:4px">${next ? `<button id="cont">${doneN || (st.unitStarted || {})[next.id] ? 'להמשיך' : 'להתחיל'}: שיעור ${lessonNo(next.id)} – ${unitDef(next.id).title}</button>` : ''}${done ? '<button id="cert">🎓 תעודת הסיום שלי</button>' : ''}</div>
+      </div><div class="ring" style="--p:${pct}" role="img" aria-label="התקדמות ${pct}%"><span>${doneN}/${core.length}<small>שיעורים</small></span></div></div></div>
+      <div class="cgrid"><div class="card"><h2>תוכנית הקורס</h2><div class="mods">${mods}</div></div>
+      <div class="side">${knows ? `<div class="card"><h3>מה אני כבר יודע/ת</h3><ul class="knows">${knows}</ul></div>` : ''}${badges ? `<div class="card"><h3>ההישגים שלי</h3><div class="badges">${badges}</div></div>` : ''}</div></div>`;
     if (next) $('cont').onclick = () => openUnit(next.id, next.ver);
+    if (done) $('cert').onclick = certificate;
     main.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openUnit(b.dataset.open, b.dataset.ver));
+  }
+  function certificate() {
+    layout(false);
+    const d = new Date().toLocaleDateString('he-IL');
+    const knows = [1, 2, 3, 4, 5, 6, 7, 8].filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
+    main.innerHTML = `<div class="card"><div class="cert"><span class="avatar" style="width:56px;height:56px;font-size:1.5rem">מ</span>
+      <h1 style="margin-top:12px">תעודת סיום</h1><p>מוענקת ל</p><div class="nm">${esc(st.name)}</div>
+      <p>על השלמת הקורס <b>${K.title}</b></p>${st.done.u8 ? '<p><b>🏆 ברמת מומחיות</b></p>' : ''}
+      <div style="text-align:right;max-width:460px;margin:16px auto"><b>מה למדתי:</b><ul class="knows">${knows}</ul></div>
+      <p class="muted">${d} · המאמן האישי במתמטיקה</p></div>
+      <div class="row noprint"><button id="pr">🖨️ הדפסה</button><button class="sec" id="cr">לתוכנית הקורס</button></div></div>`;
+    $('pr').onclick = () => window.print();
+    $('cr').onclick = course;
   }
 
   // ---------- יחידה ----------
@@ -549,11 +615,26 @@
     layout(true);
     const u = unitDef(st.unit.id);
     const s = Math.max(0, stepIdx - 1);
-    main.innerHTML = `${tview(`${{ teach: 'גרסת הקניה', reinforce: 'גרסת חיזוק' }[st.unit.ver]} · מסך ${st.unit.i + 1}`)}<div class="card" id="ucard"><div class="row" style="justify-content:space-between;margin-top:0"><h2 style="margin:0">${u.title}</h2><button class="ghost small nosay" id="back">→ למסלול</button></div>
-      <div class="pills">${PILLS.map((p, i) => `<span class="pill${i === s ? ' on' : i < s ? ' done' : ''}">${i + 1}. ${p}</span>`).join('')}</div><div id="ubody">${inner}</div></div>`;
+    const mi = K.MODULES.findIndex(m => m.u.includes(st.unit.id));
+    main.innerHTML = `${tview(`${{ teach: 'גרסת הקניה', reinforce: 'גרסת חיזוק' }[st.unit.ver]} · מסך ${st.unit.i + 1}`)}<div class="card" id="ucard"><div class="lhead"><div><div class="crumb">פרק ${mi + 1}: ${K.MODULES[mi].t} · שיעור ${lessonNo(st.unit.id)} מתוך ${K.UNITS.length}</div><h2 style="margin:0">${u.title}</h2></div><button class="ghost small nosay" id="back">→ לתוכנית הקורס</button></div>
+      <div class="pills nosay">${PILLS.map((p, i) => `<span class="pill${i === s ? ' on' : i < s ? ' done' : ''}">${p}</span>`).join('')}</div><div id="ubody">${inner}</div></div>`;
     $('back').onclick = course;
     say('אני כאן אם צריך עזרה.');
     return $('ubody');
+  }
+  // משפט הפתיחה האישי לשיעור – לפי מה שנמצא באבחון ולפי הגרסה
+  function coachIntro() {
+    const u = st.unit, U = K.units[u.id], why = (K.WHY || {})[u.id] || {};
+    const tags = Object.assign({}, (st.diagSummary || {}).tags || {}, st.tag && st.tag !== 'none' ? { [st.tag]: 1 } : {});
+    const hit = Object.keys(why).find(t => tags[t]);
+    const doneN = (st.path || []).filter(p => !p.optional && st.done[p.id]).length;
+    const pre = doneN ? `כבר השלמת ${doneN} ${doneN === 1 ? 'שיעור' : 'שיעורים'} – כל הכבוד! ` : '';
+    if (U.deep) return pre + 'הגעת לאתגר המומחים, כי הראית שליטה בכל השאר. כאן חושבים לעומק – קחו את הזמן.';
+    if (hit) return pre + why[hit];
+    const sk = K.SKILLS[[].concat(U.skill)[0]];
+    if (u.ver === 'reinforce') return pre + `באבחון חלק מהתשובות בנושא "${sk}" הצליחו וחלק לא. היום נחזק את זה עד שזה יושב טוב.`;
+    if ((st.skills || {})[[].concat(U.skill)[0]] === 'notyet') return pre + `הנושא "${sk}" עוד לא יושב טוב, אז נלמד אותו מההתחלה – צעד אחר צעד. אני כאן אם צריך.`;
+    return pre + 'בואו נתחיל. אני כאן אם צריך עזרה.';
   }
   function screen() {
     const list = screens();
@@ -565,7 +646,7 @@
       const b = frame(1, '<h3>שאלת חימום</h3><div id="ib"></div>');
       askItem($('ib'), sc.item, 'learn', rec => { log('warm', { ok: rec.pass }); if (!rec.pass) st.unit.ev.warmMiss = true; next(); });
     } else if (sc.kind === 'goal') {
-      const b = frame(1, `<h3>מה נלמד היום?</h3><p style="font-size:1.15rem">${R(sc.html)}</p><div class="row"><button id="nx">בואו נתחיל</button></div>`);
+      const b = frame(1, `${coachSay(coachIntro())}<h3>מה נלמד היום?</h3><p style="font-size:1.15rem">${R(sc.html)}</p><div class="row"><button id="nx">בואו נתחיל</button></div>`);
       $('nx').onclick = next;
     } else if (sc.kind === 'cutlab') cutlab();
     else if (sc.kind === 'info') {
@@ -775,10 +856,15 @@
     if (!st.done[u.id]) { st.done[u.id] = true; [].concat(U.skill).forEach(k => { st.skills[k] = 'mastered'; }); }
     save();
     tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
-    frame(5, `<h3>מה למדתי? 🎉</h3><p style="font-size:1.15rem">${line}</p><div class="rulebox">${U.learned}</div>
-      ${newB.length ? `<h3 style="margin-top:14px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
-      <div class="row"><button id="cr">חזרה למסלול שלי</button></div>`);
+    const nxt = (st.path || []).find(p => !st.done[p.id] && ready(p.id) && !p.optional);
+    const fin = courseDone();
+    if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills)}`); }
+    frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${U.learned}</div>
+      ${newB.length ? `<h3 style="margin-top:16px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
+      <div class="row">${fin ? '<button id="cert">🎓 סיימת את הקורס – לתעודה</button>' : nxt ? `<button id="nl">לשיעור הבא: ${unitDef(nxt.id).title}</button>` : ''}<button class="sec" id="cr">לתוכנית הקורס</button></div>`);
     $('cr').onclick = course;
+    if ($('nl')) $('nl').onclick = () => openUnit(nxt.id, nxt.ver);
+    if ($('cert')) $('cert').onclick = certificate;
   }
 
   // ---------- סיום מפגש ----------
@@ -851,6 +937,7 @@
   }
   ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, bump, true));
 
+  $('crsName').textContent = '· ' + K.title;
   /* ---------- התחלה ---------- */
   if (!st || st.phase === 'end') { st = null; entry(); }
   else if (st.phase === 'diagIntro') diagIntro();
