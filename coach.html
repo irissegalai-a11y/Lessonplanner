@@ -186,7 +186,7 @@
       </div>
     </aside>
   </div>
-  <footer>המאמן האישי · מאת איריס סגל · <span class="ver">גרסה 1.0</span></footer>
+  <footer>המאמן האישי · מאת איריס סגל · <span class="ver">גרסה 1.1</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -208,6 +208,8 @@
   const save = () => { if (st) E.store.save(st); };
   const log = (type, data) => { if (!st) return; st.log = st.log || []; st.log.push(Object.assign({ type, t: Date.now() }, data || {})); if (st.log.length > 200) st.log.shift(); save(); };
   const say = html => { $('bubble').innerHTML = R(html); };
+  // כל דיווח לאתר הבקרה כולל את קוד ההמשך העדכני – כדי שהמורה תוכל לתת אותו לילד ששכח
+  const tr = (action, detail) => { if (st) E.track(st.name, action, `קוד ${E.encode(st, K)} · ${detail}`); };
 
   /* ---------- הקראה ---------- */
   let heVoice = null;
@@ -420,11 +422,15 @@
       const code = $('cd').value.trim();
       if (code) {
         const d = E.decode(code, K);
-        if (!d) { $('emsg').innerHTML = '<div class="fb bad">הקוד לא תקין. בדקו שהעתקתם נכון מהמחברת, או מחקו אותו והתחילו בלי קוד.</div>'; return; }
+        if (!d) {
+          $('emsg').innerHTML = '<div class="fb bad">הקוד לא תקין. בדקו שהעתקתם נכון מהמחברת – או התחילו בלי קוד.<div class="row"><button class="sec" id="nocode">להתחיל בלי קוד</button></div></div>';
+          $('nocode').onclick = () => { $('cd').value = ''; go(); };
+          return;
+        }
         st = { name, phase: 'course', skills: d.skills, done: d.done, badges: d.badges, tag: d.tag, log: [], fromCode: true };
         st.path = E.buildPath(K, st.skills, st.done);
         save();
-        E.track(name, 'כניסה עם קוד', `${K.title} · ${E.skillLine(st.skills)}`);
+        tr('כניסה עם קוד', `${K.title} · ${E.skillLine(st.skills)}`);
         return course();
       }
       st = { name, phase: 'diagIntro', skills: {}, done: {}, badges: {}, tag: 'none', log: [] };
@@ -469,7 +475,7 @@
     delete st.diag;
     save();
     const tagList = Object.keys(ds.tags).filter(t => t !== 'skip').map(t => K.TAGS[t]).filter(Boolean);
-    E.track(st.name, 'אבחון', `${K.title} · ${E.skillLine(st.skills)}${tagList.length ? ' · טעויות: ' + tagList.join('; ') : ''}`);
+    tr('אבחון', `${K.title} · ${E.skillLine(st.skills)}${tagList.length ? ' · טעויות: ' + tagList.join('; ') : ''}`);
     layout(false);
     const knows = [8, 7, 6, 5, 4, 3, 2, 1].filter(s => st.skills[s] === 'mastered').slice(0, 2).map(s => K.SKILL_SAY[s]);
     const units = st.path.filter(p => !p.optional).length;
@@ -702,7 +708,7 @@
         <dt>עזרה שכבר קיבל/ה</dt><dd>${hintsN} רמזים${altN ? `, הסבר בדרך אחרת` : ''}${u && u.setI > 0 ? ', משימה פשוטה יותר וסט שאלות נוסף' : ''}</dd>
       </dl></div>`;
     const detail = `${U ? U.title : K.title} · ${stuck ? stuck.replace(/<[^>]+>/g, ' ').replace(/[⟦⟧]/g, '').replace(/\s+/g, ' ').trim() : ''}${ans ? ' · ' + ans : ''}`;
-    E.track(st.name, auto ? 'הפניה למורה' : 'עזרת מורה', detail);
+    tr(auto ? 'הפניה למורה' : 'עזרת מורה', detail);
     log('teacher', { auto: !!auto });
     const m = modal(`<h2>🙋 קוראים למורה</h2>${html}<div class="row"><button id="mwt">משימת חזרה בזמן שמחכים</button></div>`);
     m.el.querySelector('#mwt').onclick = () => { m.close(); waiting(0); };
@@ -746,7 +752,7 @@
     if (ev.persist || u.setI > 0) give('persist');
     if (!st.done[u.id]) { st.done[u.id] = true; st.skills[U.skill] = 'mastered'; }
     save();
-    E.track(st.name, 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
+    tr('יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
     frame(5, `<h3>מה למדתי? 🎉</h3><p style="font-size:1.15rem">${line}</p><div class="rulebox">${U.learned}</div>
       ${newB.length ? `<h3 style="margin-top:14px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
       <div class="row"><button id="cr">חזרה למסלול שלי</button></div>`);
@@ -761,7 +767,7 @@
     }
     const code = E.encode(st, K);
     const doneN = (st.path || []).filter(p => !p.optional && st.done[p.id]).length, all = (st.path || []).filter(p => !p.optional).length;
-    E.track(st.name, 'סיכום מפגש', `${K.title} · ${E.skillLine(st.skills)} · יחידות ${doneN}/${all} · קוד ${code}`);
+    tr('סיכום מפגש', `${K.title} · ${E.skillLine(st.skills)} · יחידות ${doneN}/${all}`);
     const name = st.name;
     st.phase = 'end'; save();
     layout(false);
