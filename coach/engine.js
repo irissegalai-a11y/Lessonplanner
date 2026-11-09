@@ -4,7 +4,7 @@
    ========================================================= */
 (function () {
   const C = window.COACH = window.COACH || {};
-  const VER = '1.0';
+  const VER = '1.1';
   C.VER = VER;
 
   /* ---------- מבדק אבחון ----------
