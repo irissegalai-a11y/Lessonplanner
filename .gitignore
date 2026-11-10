@@ -1,0 +1,11 @@
+# קבצי סודות וסביבה – לעולם לא להעלות
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# קבצים זמניים
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
