@@ -280,7 +280,7 @@
   ];
 
   C.courses.equiv = {
-    id: 'equiv', title: 'שברים שקולים (שווים)', sub: 'תלמדו לזהות ולכתוב שברים שקולים – בציור ובחישוב',
+    id: 'equiv', title: 'שברים שקולים (שווים)', grades: [5, 6], sub: 'תלמדו לזהות ולכתוב שברים שקולים – בציור ובחישוב',
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS,
     units: { u4: { teach: U4_TEACH, reinforce: U4_REINF, sets: U4, contrast: CONTRAST, alt: ALT, simpler: SIMPLER, waiting: WAITING, skill: 5,
       learned: 'אני יודע/ת להרחיב שבר ולהסביר למה הוא נשאר אותו שבר.' } },
@@ -289,6 +289,15 @@
     DIAG: { top: [7, 5, 6], apply: 8, mid: [4], base: [1, 2, 3], infer: { 5: [7], 6: [7] }, deps: { 6: [5] } },
     MAIN_TAGS: ['none', 'additive', 'denomOnly'], APPLY_UNIT: 'u7',
     // תוכנית הקורס: פרקים ושיעורים
+    SITE: {
+      u1: { learn: 'frac', card: 'מה זה שבר', gens: ['genFracBar3'], topic: 'frac' },
+      u2: { learn: 'frac', card: 'מה זה שבר', gens: ['genFracBar3'], topic: 'frac' },
+      u3: { learn: 'frac', card: 'הרחבה וצמצום', gens: ['genEquivYN', 'genExpand'], topic: 'frac' },
+      u4: { learn: 'frac', card: 'הרחבה וצמצום', gens: ['genExpand'], topic: 'frac' },
+      u5: { learn: 'frac', card: 'הרחבה וצמצום', gens: ['genReduce', 'genExpand'], topic: 'frac' },
+      u6: { learn: 'frac', card: 'הרחבה וצמצום', gens: ['genEquivYN', 'genExpand', 'genReduce'], topic: 'frac' },
+      u7: { learn: 'frac', card: 'הרחבה וצמצום', gens: ['genExpand', 'genEquivYN', 'genCompareFrac'], topic: 'frac' }
+    },
     MODULES: [{ t: 'מה זה שבר', u: ['u1', 'u2'] }, { t: 'שברים שקולים', u: ['u3', 'u4'] }, { t: 'צמצום והשוואה', u: ['u5', 'u6'] }, { t: 'יישום ואתגר', u: ['u7', 'u8'] }],
     LEARN: ['לזהות שבר כחלק משלם ולצייר אותו', 'לזהות שברים שקולים (שווים) – בציור ובחישוב', 'להרחיב ולצמצם שברים, ולהסביר למה השבר לא משתנה', 'להשתמש בשברים שקולים בבעיות מהחיים'],
     // משפט הפתיחה האישי של המאמן לכל שיעור, לפי הטעות שנמצאה באבחון
