@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="only light">
-<title>קורסים ללמידה עצמאית – איריס סגל</title>
-<meta name="description" content="קורסים ללמידה עצמאית במתמטיקה, עם מאמן אישי">
+<title>קורסים ללמידה עצמית – איריס סגל</title>
+<meta name="description" content="קורסים ללמידה עצמית במתמטיקה, עם מאמן אישי">
 <link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="theme-color" content="#ffffff">
@@ -201,7 +201,7 @@
 </head>
 <body>
 <header class="top">
-  <span class="brand" id="brand" style="cursor:pointer" title="לכל הקורסים"><span class="avatar sm" aria-hidden="true">מ</span><span>קורסים ללמידה עצמאית</span><span class="crs" id="crsName"></span></span>
+  <span class="brand" id="brand" style="cursor:pointer" title="לכל הקורסים"><span class="avatar sm" aria-hidden="true">מ</span><span>קורסים ללמידה עצמית</span><span class="crs" id="crsName"></span></span>
   <span class="acts">
     <button class="sec small" id="bigBtn" title="הגדלת הכתב">א+</button>
     <a class="btn sec small" href="math6.html">לאתר<span class="long2"> התרגול</span></a>
@@ -224,7 +224,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמאית · מאת איריס סגל · <span class="ver">גרסה 3.2</span></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 3.3</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -469,7 +469,7 @@
   function entry(msg) {
     layout(false);
     main.innerHTML = `${tview()}<div class="cgrid"><div class="card">
-      <div class="crumb"><a href="#" id="toCat">קורסים ללמידה עצמאית</a> · קורס אישי עם מאמן</div>
+      <div class="crumb"><a href="#" id="toCat">קורסים ללמידה עצמית</a> · קורס אישי עם מאמן</div>
       <h1>${K.title}</h1>
       <p class="muted" style="font-size:1.1rem">${K.sub}.</p>
       <h3 style="margin-top:18px">בקורס הזה תלמדו</h3>
@@ -1069,7 +1069,7 @@
     };
     // קורסים פעילים קודם, ואחריהם "בקרוב"
     const sortA = a => a.slice().sort((x, y) => (y.c ? 1 : 0) - (x.c ? 1 : 0));
-    main.innerHTML = `${tview()}<div class="card"><div class="crumb">${MYG ? `כיתה ${GN[MYG]}` : 'כל הכיתות'}</div><h1>קורסים ללמידה עצמאית</h1>
+    main.innerHTML = `${tview()}<div class="card"><div class="crumb">${MYG ? `כיתה ${GN[MYG]}` : 'כל הכיתות'}</div><h1>קורסים ללמידה עצמית</h1>
       <div class="coachline"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>שלום! כאן לומדים לבד, בקצב שלך, עם עזרה ממני. בחרו את הקורס שהמורה אמר/ה לכם ללמוד.</div></div>
       <p class="small muted">כבר התחלתם קורס? היכנסו אליו והקלידו את קוד ההמשך מהמחברת.</p></div>
       <div class="cats">${sortA(mine).map(card).join('') || '<div class="card">עוד אין קורסים לכיתה הזו.</div>'}</div>
