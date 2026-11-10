@@ -8,10 +8,11 @@
 <meta name="description" content="קורסים ללמידה עצמית במתמטיקה, עם מאמן אישי">
 <link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#fbf8f1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@400;600;700&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script>try { if (localStorage.getItem('math-calm') === '1') document.documentElement.classList.add('calm'); } catch (e) {}</script>
 <style>
   * { box-sizing: border-box; }
   :root {
@@ -202,11 +203,144 @@
   .site { width: 100%; min-height: 460px; border: 1px solid #dfe3ee; border-radius: 14px; background: #fff; display: block; margin: 10px 0; }
   .modal .site { min-height: 60vh; }
   .ccard.soon { opacity: 0.6; border-top-color: var(--line); }
+
+  /* =========================================================
+     עיצוב "דיו וצבעי מים" – כמו באתר התרגול (רק במסך)
+     ========================================================= */
+  @media screen {
+    :root {
+      --bg: #fbf8f1; --card: #fffdf8; --ink: #1f1e1c; --muted: #5f5a50; --line: #cfc6b4;
+      --brand: #d9482b; --brand-dark: #b93a20; --brand-soft: rgba(127, 168, 214, 0.22);
+      --ok: #2c7a5b; --ok-bg: rgba(157, 178, 122, 0.30); --bad: #9a4b14; --bad-bg: rgba(226, 179, 87, 0.28); --hint-bg: rgba(239, 201, 106, 0.30);
+      --info-bg: rgba(127, 168, 214, 0.20); --rule-bg: rgba(164, 140, 201, 0.18); --shadow: none;
+      --sk1: 255px 16px 225px 16px / 16px 225px 16px 255px; --sk2: 16px 225px 16px 255px / 255px 16px 225px 16px;
+      --hand: 'Playpen Sans Hebrew', 'Assistant', cursive;
+    }
+    html, body {
+      background-color: var(--bg);
+      background-image: linear-gradient(#ece6d9 1px, transparent 1px), linear-gradient(90deg, #ece6d9 1px, transparent 1px);
+      background-size: 26px 26px;
+    }
+    body::before { content: ''; position: fixed; top: 0; bottom: 0; right: max(10px, calc(50% - 590px)); width: 2px; background: #e3a6a6; pointer-events: none; z-index: 0; }
+    .wrap, .top { position: relative; z-index: 1; }
+    h1, h2, h3, .top .brand, .crumb, .coachline .who, .coach .chead, .ring > span, .cert .nm, .badge, .chip, .pill { font-family: var(--hand); }
+    h1, h2 { font-weight: 700; }
+    h1 { padding-bottom: 12px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='14' viewBox='0 0 300 14'%3E%3Cpath d='M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8' fill='none' stroke='%231f1e1c' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right bottom / min(260px, 80%) 12px; }
+    .cert h1 { background-position: center bottom; }
+
+    /* סרגל עליון */
+    .top { background: rgba(251, 248, 241, 0.94); border-bottom: 2px solid var(--ink); }
+    .avatar { background: var(--ink); color: var(--bg); font-family: var(--hand); position: relative; isolation: isolate; }
+    .avatar::before { content: ''; position: absolute; inset: -5px; background: rgba(224, 122, 165, 0.45); border-radius: 48% 52% 45% 55% / 55% 45% 52% 48%; filter: url(#wcwash); z-index: -1; }
+    .avatar.sm::before { inset: -4px; }
+
+    /* כרטיסים */
+    .card { background: var(--card); border: 2px solid var(--ink); border-radius: var(--sk1); box-shadow: none; }
+    .modal { background-color: var(--bg); background-image: linear-gradient(#ece6d9 1px, transparent 1px), linear-gradient(90deg, #ece6d9 1px, transparent 1px); background-size: 26px 26px; border: 2px solid var(--ink); border-radius: var(--sk1); }
+    .overlay { background: rgba(31, 30, 28, 0.55); }
+
+    /* כפתורים */
+    button, .btn { font-family: var(--hand); font-weight: 600; background: var(--brand); color: #fff; border: 2px solid var(--ink); border-radius: var(--sk2); box-shadow: 3px 4px 0 var(--ink); transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease; }
+    button:hover, .btn:hover { background: var(--brand-dark); transform: translate(-1px, -1px); box-shadow: 4px 5px 0 var(--ink); }
+    button:active, .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+    button:disabled { transform: none; box-shadow: none; }
+    button.sec, .btn.sec { background: var(--card); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--sk1); box-shadow: none; }
+    button.sec:hover, .btn.sec:hover { background: #fff; box-shadow: 2px 3px 0 var(--ink); }
+    button.ghost { background: transparent; border: none; box-shadow: none; }
+    button.ghost:hover { background: rgba(31, 30, 28, 0.06); transform: none; box-shadow: none; }
+    .top .acts button, .top .acts .btn { box-shadow: none; }
+    .top .acts button:hover, .top .acts .btn:hover { box-shadow: 2px 3px 0 var(--ink); }
+
+    input.tx, input.slot, input.nin { background: var(--card); border: 2px solid var(--ink); border-radius: 12px 4px 12px 4px; color: var(--ink); }
+    input.tx:focus, input.slot:focus, input.nin:focus { outline: 3px solid rgba(217, 72, 43, 0.35); border-color: var(--ink); }
+    .qbox { border-color: var(--ink); }
+
+    /* אפשרויות בחירה */
+    .opt { background: var(--card); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--sk1); box-shadow: none; font-family: 'Assistant', sans-serif; font-weight: 600; }
+    .opt:hover { background: #fff; box-shadow: 2px 3px 0 var(--ink); }
+    .opt.sel { background: rgba(127, 168, 214, 0.30); border-color: var(--ink); box-shadow: 2px 3px 0 var(--ink); }
+    .opt.right { background: var(--ok-bg); border-color: var(--ok); }
+    .opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
+
+    /* משוב והסברים */
+    .fb { border: 2px solid var(--ink); border-radius: var(--sk1); }
+    .fb.ok { background: var(--ok-bg); border-color: var(--ink); }
+    .fb.bad { background: var(--bad-bg); border-color: var(--ink); }
+    .fb.hint { background: var(--hint-bg); border-color: var(--ink); }
+    .fb.info { background: var(--info-bg); border-color: var(--ink); }
+    .rulebox { border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    .warnbox { border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    .tcard, .tview { border: 1.5px dashed var(--ink); border-radius: var(--sk2); }
+    .code { background: var(--card); border: 2px dashed var(--ink); border-radius: var(--sk2); color: var(--ink); }
+
+    /* המאמן */
+    .coachline { background: transparent; position: relative; isolation: isolate; border-radius: 0; }
+    .coachline::before { content: ''; position: absolute; inset: 0; background: rgba(127, 168, 214, 0.28); border-radius: 44% 56% 52% 48% / 38% 46% 54% 62%; filter: url(#wcwash); z-index: -1; }
+    .coachline .who { color: var(--ink); font-weight: 700; }
+    .coach { background: var(--card); border: 2px solid var(--ink); border-radius: var(--sk1); box-shadow: none; }
+    .bubble { background: rgba(127, 168, 214, 0.22); border: 1.5px dashed var(--ink); border-radius: 4px 14px 14px 14px; }
+    .coach .hb button.teacher { background: rgba(239, 201, 106, 0.55); color: var(--ink); border-color: var(--ink); }
+    .coachtoggle, .coachtoggle:hover { background: var(--card); border: none; border-bottom: 2px solid var(--ink); box-shadow: none; transform: none; font-family: var(--hand); }
+
+    /* שיעור */
+    .pill { border-top-color: var(--line); }
+    .pill.on { color: var(--ink); border-color: var(--brand); }
+    .pill.done { color: var(--ok); border-color: var(--ok); }
+    .crumb { color: var(--muted); }
+
+    /* מסך הקורס */
+    .ring > span { background: var(--card); }
+    .prog { background: transparent; border: 1.5px solid var(--ink); border-radius: var(--sk1); height: 12px; }
+    .mod { background: var(--card); border: 2px solid var(--ink); border-radius: var(--sk1); }
+    .mod > h3 { background: rgba(239, 201, 106, 0.28); border-bottom: 1.5px dashed var(--ink); font-family: var(--hand); }
+    .ulist li { border-bottom: 1.5px dashed #c9c1b1; }
+    .ulist li.active { background: rgba(127, 168, 214, 0.22); }
+    .ulist .ic { border: 2px solid var(--ink); color: var(--ink); background: var(--card); font-family: var(--hand); }
+    .ulist li.done .ic { border-color: var(--ink); background: var(--ok); color: #fff; }
+    .ulist li.active .ic { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+    .ulist li.skip .ic { border-color: var(--ok); color: var(--ok); }
+    .chip { background: var(--card); border: 1.5px solid var(--ink); color: var(--ink); }
+    .chip.ok { background: var(--ok-bg); color: var(--ink); }
+    .chip.now { background: var(--ink); color: var(--bg); }
+    .tag { border-color: var(--ink); background: var(--card); }
+    .badge { background: rgba(239, 201, 106, 0.55); border: 1.5px solid var(--ink); }
+    .cert { border: 3px double var(--ink); border-radius: var(--sk1); background: var(--card); }
+    .cert h1 { color: var(--ink); }
+    .site { border: 2px solid var(--ink); border-radius: var(--sk2); }
+    .titem { border: 1.5px dashed var(--ink); border-radius: var(--sk2); background: var(--card); }
+    table.mt td, table.cut td, table.cut th, table.pvt td { border-color: var(--ink); }
+    table.mt td.h { background: rgba(239, 201, 106, 0.35); }
+
+    /* קטלוג הקורסים – כרטיס לכל קורס בצבע משלו, כמו כרטיסי המשחקים */
+    .cats .ccard { --cw: rgba(127, 168, 214, 0.38); border: 2px solid var(--ink); border-top: 2px solid var(--ink); box-shadow: 3px 4px 0 var(--ink); }
+    .cats .ccard:nth-child(6n+2) { --cw: rgba(224, 122, 165, 0.34); }
+    .cats .ccard:nth-child(6n+3) { --cw: rgba(239, 201, 106, 0.50); }
+    .cats .ccard:nth-child(6n+4) { --cw: rgba(157, 178, 122, 0.45); }
+    .cats .ccard:nth-child(6n+5) { --cw: rgba(164, 140, 201, 0.38); }
+    .cats .ccard:nth-child(6n+6) { --cw: rgba(127, 190, 170, 0.42); }
+    .ccard h2 { display: inline-block; position: relative; isolation: isolate; padding: 2px 10px; margin-inline-start: -6px; }
+    .ccard h2::before { content: ''; position: absolute; inset: -2px -4px; background: var(--cw); border-radius: 48% 52% 44% 56% / 58% 42% 60% 40%; filter: url(#wcwash); z-index: -1; }
+    .ccard.soon { opacity: 1; box-shadow: none; border-style: dashed; background: rgba(255, 253, 248, 0.6); }
+    .ccard.soon h2::before { background: rgba(31, 30, 28, 0.07); }
+    .ccard.soon h2, .ccard.soon p { color: var(--muted); }
+
+    footer { font-family: var(--hand); }
+
+    @media (max-width: 640px) { body::before { display: none; } }
+    @media (max-width: 919px) { .coach { border-radius: 22px 22px 0 0; border-bottom: none; } }
+
+    /* תצוגה נגישה (כמו באתר) – בלי רקע משבצות ובלי כתמי צבע */
+    html.calm, html.calm body { background-image: none; }
+    html.calm body::before, html.calm .avatar::before, html.calm .coachline::before, html.calm .ccard h2::before { display: none; }
+    html.calm h1 { background: none; padding-bottom: 0; }
+    html.calm .coachline { background: var(--card); border: 1.5px dashed var(--ink); border-radius: 14px; }
+  }
   [hidden] { display: none !important; }
   @media print { .top, footer, .noprint { display: none !important; } body { background: #fff; } .wrap { padding: 0; } .card { box-shadow: none; border: none; } }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <header class="top">
   <span class="brand" id="brand" style="cursor:pointer" title="לכל הקורסים"><span class="avatar sm" aria-hidden="true">מ</span><span>קורסים ללמידה עצמית</span><span class="crs" id="crsName"></span></span>
   <span class="acts">
@@ -231,7 +365,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 3.8</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 3.9</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
