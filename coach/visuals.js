@@ -123,7 +123,33 @@
     const line = (r, op) => `<tr><td class="op">${op || ''}</td>${r.padStart(w, ' ').split('').map(ch => `<td${ch === '.' ? ' class="pt"' : ''}>${ch === ' ' ? '' : ch}</td>`).join('')}</tr>`;
     return `<table class="vert" dir="ltr">${f.rows.map((r, i) => line(r, i === f.rows.length - 1 ? f.op : '')).join('')}${f.res != null ? `<tr class="res"><td></td>${f.res.padStart(w, ' ').split('').map(ch => `<td${ch === '.' ? ' class="pt"' : ''}>${ch === ' ' ? '' : ch}</td>`).join('')}</tr>` : ''}</table>`;
   }
-  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert };
+  // מערך: r שורות × c עמודות של עיגולים. split = קו אחרי שורה (פירוק), hl = כמה שורות ראשונות בצבע אחר
+  function arr(f) {
+    const r = f.r, c = f.c, g = f.g || (c > 8 || r > 8 ? 22 : 30), rad = g * 0.36, gap = f.split ? 14 : 0;
+    const W = c * g + 8, H = r * g + 8 + gap; let out = '';
+    for (let i = 0; i < r; i++) for (let j = 0; j < c; j++) {
+      const y = 4 + i * g + g / 2 + (f.split && i >= f.split ? gap : 0);
+      out += `<circle cx="${4 + j * g + g / 2}" cy="${y}" r="${rad}" fill="${f.hl && i < f.hl ? FILL2 : FILL}" stroke="${INK}" stroke-width="1"/>`;
+    }
+    if (f.split) out += `<line x1="0" x2="${W}" y1="${4 + f.split * g + gap / 2}" y2="${4 + f.split * g + gap / 2}" stroke="${INK}" stroke-width="2" stroke-dasharray="6 4"/>`;
+    return `<svg class="fig arr" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${r} שורות של ${c}">${out}</svg>`;
+  }
+  // קבוצות שוות: g קבוצות (עיגולים גדולים), בכל אחת n עיגולים קטנים
+  function groups(f) {
+    const g = f.g, n = f.n, per = Math.ceil(Math.sqrt(n)), cell = 16, box = per * cell + 18, W = g * (box + 10) + 6, H = box + 10;
+    let out = '';
+    for (let k = 0; k < g; k++) {
+      const x0 = 6 + k * (box + 10), cx = x0 + box / 2, cy = 5 + box / 2;
+      out += `<circle cx="${cx}" cy="${cy}" r="${box / 2}" fill="#fff" stroke="${INK}" stroke-width="2"/>`;
+      const rows = Math.ceil(n / per);
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / per), col = i % per, inRow = Math.min(per, n - row * per);
+        out += `<circle cx="${cx + (col - (inRow - 1) / 2) * cell}" cy="${cy + (row - (rows - 1) / 2) * cell}" r="5.5" fill="${FILL}" stroke="${INK}" stroke-width="0.8"/>`;
+      }
+    }
+    return `<svg class="fig groups" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${g} קבוצות של ${n}">${out}</svg>`;
+  }
+  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups };
   function fig(f) {
     if (!f) return '';
     if (Array.isArray(f)) return `<div class="figs">${f.map(fig).join('')}</div>`;
