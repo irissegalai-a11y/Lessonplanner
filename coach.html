@@ -224,7 +224,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמאית · מאת איריס סגל · <span class="ver">גרסה 3.1</span></footer>
+  <footer>קורסים ללמידה עצמאית · מאת איריס סגל · <span class="ver">גרסה 3.2</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -645,13 +645,14 @@
     const U = K.units[st.unit.id], list = st.unit.ver === 'reinforce' ? U.reinforce : U.teach;
     if (!siteOf(st.unit.id).gens || U.deep) return list;
     const i = list.findIndex(x => x.kind === 'check');
-    return list.slice(0, i).concat([{ step: 3, kind: 'more' }], list.slice(i));
+    return list.slice(0, i).concat([{ step: 3, kind: 'more' }, { step: 3, kind: 'sheet' }], list.slice(i));
   };
   // ההקנייה והתרגול מהאתר הראשי (math6.html?embed=1) – בתוך מסך הקורס
   const siteOf = id => (K.SITE || {})[id] || {};
   const siteGrade = () => (K.grades || [6]).includes(MYG) ? MYG : Math.max(...(K.grades || [6]));
   function siteUrl(o) {
     const q = new URLSearchParams({ embed: '1', grade: String(siteGrade()) });
+    if (o.sheet) q.set('sheet', '1'), q.set('min', String(o.min || 10));
     if (o.learn) { q.set('learn', o.learn); if (o.card) q.set('lt', o.card); } else { q.set('gens', o.gens.join(',')); q.set('count', String(o.count || 8)); if (o.topic) q.set('topic', o.topic); q.set('label', o.label || 'תרגול נוסף'); }
     return 'math6.html?' + q.toString();
   }
@@ -666,6 +667,23 @@
       if (on) on(e.data);
     };
     window.addEventListener('message', lis);
+  }
+  // תרגול במחברת עם טיימר של 10 דקות, ואז בדיקה עצמית מול התשובות (המאמן לא בודק את המחברת – הילד בודק את עצמו)
+  function sheet() {
+    const u = st.unit, o = siteOf(u.id);
+    frame(3, `<h3>תרגול במחברת ✏️</h3><p>עכשיו עובדים במחברת: מעתיקים כל תרגיל ופותרים. יש 10 דקות – השעון מראה כמה זמן נשאר. בסוף תראו את התשובות ותבדקו את עצמכם.</p><div id="sf"></div>`);
+    siteFrame($('sf'), { sheet: true, gens: o.gens, topic: o.topic, count: o.nb || 6, min: o.min || 10 }, d => {
+      if (d.ev === 'skip') return next();
+      if (d.ev !== 'nbdone') return;
+      u.sheet = `${d.ok}/${d.n}${d.skip ? ` (לא הספיק ${d.skip})` : ''}`;
+      if (d.skip) u.ev.nbTodo = d.skip;
+      log('sheet', { ok: d.ok, bad: d.bad, skip: d.skip, sec: d.sec });
+      save();
+      const msg = d.skip ? `השלמתם ${d.n - d.skip} תרגילים. את ${d.skip === 1 ? 'התרגיל שלא הספקתם' : `${d.skip} התרגילים שלא הספקתם`} – השלימו בבית או בשיעור הבא (סימנתם "להשלים").`
+        : d.bad ? `סיימתם הכול! ${d.bad === 1 ? 'בתרגיל אחד טעיתם' : `ב-${d.bad} תרגילים טעיתם`} ותיקנתם – זה בדיוק מה שעושים לומדים טובים.` : 'סיימתם הכול ובדקתם את עצמכם – מצוין!';
+      $('sf').innerHTML = `${coachSay(msg)}<div class="row"><button id="nx">לבדיקה</button></div>`;
+      $('nx').onclick = next;
+    });
   }
   function lessonModal() {
     const o = siteOf((st.unit && st.unit.id) || '');
@@ -752,6 +770,7 @@
     } else if (sc.kind === 'practice') practice(sc, 0);
     else if (sc.kind === 'notebook') notebook(sc);
     else if (sc.kind === 'more') more();
+    else if (sc.kind === 'sheet') sheet();
     else if (sc.kind === 'check') check(sc);
     else if (sc.kind === 'summary') summary();
   }
@@ -904,6 +923,7 @@
         <dt>נושא</dt><dd>${K.title}${U ? ' · ' + U.title : ''}</dd>
         <dt>כבר הצליח/ה</dt><dd>${doneU.length ? 'יחידות: ' + doneU.join(', ') + '. ' : ''}${known.length ? 'מיומנויות: ' + known.join(', ') : 'עוד אין מיומנויות שהוכחו'}</dd>
         ${stuck ? `<dt>במה נתקע/ה</dt><dd>${R(stuck.replace(/<div class="bigmx">/g, ' ').replace(/<\/div>/g, ''))} ${ans ? '<br>' + esc(ans) : ''}</dd>` : ''}
+        ${u && u.sheet ? `<dt>תרגול במחברת</dt><dd>בדיקה עצמית: ${u.sheet} נכונים</dd>` : ''}
         <dt>עזרה שכבר קיבל/ה</dt><dd>${hintsN} רמזים${altN ? `, הסבר בדרך אחרת` : ''}${u && u.setI > 0 ? ', משימה פשוטה יותר וסט שאלות נוסף' : ''}</dd>
       </dl></div>`;
     const detail = `${U ? U.title : K.title} · ${stuck ? stuck.replace(/<[^>]+>/g, ' ').replace(/[⟦⟧]/g, '').replace(/\s+/g, ' ').trim() : ''}${ans ? ' · ' + ans : ''}`;
@@ -953,11 +973,11 @@
     if (ev.persist || u.setI > 0) give('persist');
     if (!st.done[u.id]) { st.done[u.id] = true; [].concat(U.skill).forEach(k => { st.skills[k] = 'mastered'; }); }
     save();
-    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet}${u.more ? ' · תרגול נוסף ' + u.more.join(', ') : ''} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
+    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet}${u.more ? ' · תרגול נוסף ' + u.more.join(', ') : ''}${u.sheet ? ' · מחברת ' + u.sheet : ''} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
     const nxt = (st.path || []).find(p => !st.done[p.id] && ready(p.id) && !p.optional);
     const fin = courseDone();
     if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills, K)}`); }
-    frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${U.learned}</div>
+    frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${U.learned}</div>${ev.nbTodo ? `<div class="fb info">📌 במחברת ${ev.nbTodo === 1 ? 'נשאר תרגיל אחד' : `נשארו ${ev.nbTodo} תרגילים`} עם הסימן "להשלים". השלימו אותם בבית או בשיעור הבא.</div>` : ''}
       ${newB.length ? `<h3 style="margin-top:16px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
       <div class="row">${fin ? '<button id="cert">🎓 סיימת את הקורס – לתעודה</button>' : nxt ? `<button id="nl">לשיעור הבא: ${unitDef(nxt.id).title}</button>` : ''}<button class="sec" id="cr">לתוכנית הקורס</button></div>`);
     $('cr').onclick = course;

@@ -4,7 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="only light">
-<style>:root { color-scheme: only light; }html.embed footer.credit, html.embed .crumbs, html.embed .pwm { display: none !important; }
+<style>:root { color-scheme: only light; }.nbsheet .nbtimer { font-size: 2.4rem; font-weight: 800; text-align: center; letter-spacing: 2px; margin: 8px auto; padding: 4px 18px; border-radius: 14px; background: #eef2ff; width: max-content; direction: ltr; }
+.nbsheet .nbtimer.low { background: #fde8e8; color: #b42318; }
+.nbsheet ol.nbq { font-size: 1.25rem; line-height: 2.2; padding-inline-start: 28px; }
+.nbsheet ol.nbq > li { margin-bottom: 10px; }
+.nbsheet .nbans { color: #1e6b3a; }
+.nbsheet .fb { display: block; }
+.nbsheet .nbch { font-size: 1.1rem; color: #444; }
+.nbsheet button.on { outline: 3px solid #3b5bdb; font-weight: 700; }
+html.embed footer.credit, html.embed .crumbs, html.embed .pwm { display: none !important; }
 html.embed body { padding-top: 0; }
 </style>
 <title>מתרגלים מתמטיקה – איריס סגל</title>
@@ -2065,7 +2073,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רמי</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רנא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8355,8 +8363,69 @@ function masteryMeter(m) {
    ========================================================= */
 const URLP = new URLSearchParams(location.search);
 // תרגול מוטמע: ?embed=1&gens=genA,genB&count=8&topic=dec – שאלות מהמחוללים שנבחרו, לסירוגין
+const embedFns = () => (URLP.get('gens') || '').split(',').filter(n => /^gen[A-Za-z0-9]+$/.test(n) && typeof window[n] === 'function').map(n => window[n]);
+// תרגול במחברת: ?embed=1&sheet=1&gens=...&count=6&min=10 – מעתיקים ופותרים במחברת, טיימר, ואז בדיקה עצמית מול התשובות.
+// כשהזמן נגמר: עוד דקה אחת לסיים את התרגיל שבאמצע, ואז התשובות. תרגיל שלא הספיקו – "לא הספקתי" (להשלים אחר כך).
+function embedSheet() {
+  const fs = shuffle(embedFns());
+  const cnt = Math.min(10, Math.max(3, Number(URLP.get('count')) || 6)), mins = Math.min(20, Math.max(3, Number(URLP.get('min')) || 10));
+  const qs = [];
+  for (let g = 0; qs.length < cnt && g < 300; g++) {
+    const q = fs[g % fs.length]();
+    const ok = q.type === 'num' || (q.type === 'frac' && q.ans && q.ans.d) || (q.type === 'choice' && q.choices && q.choices.length <= 4);
+    if (ok && !q.fig && !/<svg/.test(q.text) && !qs.some(x => x.text + x.choices === q.text + q.choices)) qs.push(q);
+  }
+  if (!fs.length || qs.length < 3) return embedPost('skip');
+  const qHtml = q => q.text + (q.type === 'choice' ? `<div class="nbch">${q.choices.map(c => `<span>${c}</span>`).join(' · ')}</div>` : '');
+  const ansOf = q => q.type === 'choice' ? q.choices[q.ans] : q.type === 'frac' ? M(F(q.ans.n, q.ans.d)) : M(fmt(q.ans)) + (q.unit ? ' ' + q.unit : '');
+  const t0 = Date.now();
+  let end = t0 + mins * 60000, grace = false, timer = null;
+  const mmss = ms => { const x = Math.max(0, Math.ceil(ms / 1000)); return `${Math.floor(x / 60)}:${String(x % 60).padStart(2, '0')}`; };
+  app.innerHTML = `<div class="card nbsheet">
+    <h2 style="margin-top:0">✏️ תרגול במחברת</h2>
+    <p>העתיקו למחברת כל תרגיל <b>עם המספר שלו</b>, ופתרו. כתבו את כל הדרך, לא רק את התשובה.</p>
+    <div class="nbtimer" id="nbT" role="timer" aria-live="off">${mmss(end - Date.now())}</div>
+    <div id="nbMsg"></div>
+    <ol class="nbq">${qs.map(q => `<li>${qHtml(q)}</li>`).join('')}</ol>
+    <div class="row"><button id="nbDone">סיימתי – לבדיקה</button></div></div>`;
+  const tick = () => {
+    const left = end - Date.now();
+    const el = document.getElementById('nbT'); if (!el) return clearInterval(timer);
+    el.textContent = mmss(left);
+    el.classList.toggle('low', left < 60000);
+    if (left > 0) return;
+    if (!grace) {
+      grace = true; end = Date.now() + 60000;
+      document.getElementById('nbMsg').innerHTML = '<div class="fb info">⏰ הזמן נגמר! סיימו רק את התרגיל שאתם באמצע – יש לכם עוד דקה אחת.</div>';
+    } else check();
+  };
+  timer = setInterval(tick, 500);
+  document.getElementById('nbDone').onclick = check;
+  function check() {
+    clearInterval(timer);
+    const used = Math.round((Date.now() - t0) / 1000), marks = qs.map(() => null);
+    const btn = (i, k, t) => `<button class="secondary small" data-i="${i}" data-k="${k}">${t}</button>`;
+    app.innerHTML = `<div class="card nbsheet">
+      <h2 style="margin-top:0">✔️ בודקים את עצמנו</h2>
+      <p>השוו כל תשובה במחברת לתשובה כאן, וסמנו בכנות. טעות זה בסדר – ככה לומדים. ${grace ? 'תרגיל שלא הספקתם – סמנו "לא הספקתי".' : ''}</p>
+      <ol class="nbq">${qs.map((q, i) => `<li><div>${qHtml(q)}</div><div class="nbans">התשובה: <b>${ansOf(q)}</b></div>
+        <div class="row" id="nbr${i}">${btn(i, 'ok', '✓ צדקתי')}${btn(i, 'bad', '✗ טעיתי')}${btn(i, 'skip', 'לא הספקתי')}</div><div id="nbx${i}"></div></li>`).join('')}</ol>
+      <div id="nbEnd"></div></div>`;
+    app.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
+      const i = +b.dataset.i, k = b.dataset.k;
+      marks[i] = k;
+      document.getElementById('nbr' + i).querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      document.getElementById('nbx' + i).innerHTML = k === 'bad' ? `<div class="fb info">${qs[i].exp || ''}<br>✏️ תקנו במחברת בצבע אחר, ליד הפתרון הראשון.</div>` : k === 'skip' ? '<div class="fb info">כתבו ליד התרגיל במחברת: "להשלים".</div>' : '';
+      if (marks.every(Boolean)) {
+        const c = k2 => marks.filter(m => m === k2).length;
+        document.getElementById('nbEnd').innerHTML = `<div class="row"><button id="nbGo">ממשיכים</button></div>`;
+        document.getElementById('nbGo').onclick = () => embedPost('nbdone', { n: qs.length, ok: c('ok'), bad: c('bad'), skip: c('skip'), sec: used, over: grace });
+      }
+    });
+  }
+}
 function embedGens() {
-  const fs = (URLP.get('gens') || '').split(',').filter(n => /^gen[A-Za-z0-9]+$/.test(n) && typeof window[n] === 'function').map(n => window[n]);
+  const fs = embedFns();
   if (!fs.length) return home();
   const cnt = Math.min(20, Math.max(3, Number(URLP.get('count')) || 8)), t0 = URLP.get('topic'), t = TOPIC[t0] ? t0 : TOPICS[0].id;
   const order = []; while (order.length < cnt) order.push(...shuffle(fs.slice()));
@@ -21982,7 +22051,7 @@ function askName(done, tch) {
 })();
 if (teacherCred()) document.documentElement.classList.add('tch');
 if (URLP.has('lp') && lpDec(URLP.get('lp') || '')) { try { sessionStorage.setItem(LP_PEND, URLP.get('lp')); } catch (e) { const x = lpDec(URLP.get('lp')); if (x && teacherOn()) lp = x; } }
-if (EMBED && URLP.get('gens')) embedGens(); else if (EMBED && PRESET) startPreset(); else if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome('mul'); else if (URLP.has('hiluk') && GRADE >= 3) kfHome('div'); else if (URLP.has('dlab') && GRADE >= 5) dlHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('lp') && lpPending()) teacherGate(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
+if (EMBED && URLP.get('sheet') && URLP.get('gens')) embedSheet(); else if (EMBED && URLP.get('gens')) embedGens(); else if (EMBED && PRESET) startPreset(); else if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome('mul'); else if (URLP.has('hiluk') && GRADE >= 3) kfHome('div'); else if (URLP.has('dlab') && GRADE >= 5) dlHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('lp') && lpPending()) teacherGate(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
 </html>
