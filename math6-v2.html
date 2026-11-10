@@ -1929,6 +1929,10 @@ html.embed body { padding-top: 0; }
   .pl-pill { background: #fffdf8; color: #1f1e1c; border: 2px solid #1f1e1c; border-radius: 999px; padding: 6px 12px; font-size: 0.95rem; box-shadow: none; }
   .pl-pill.on, #plLet.on { background: #f2c94c; color: #1f1e1c; }
   .pl-card { margin-bottom: 14px; }
+  .cub-fig { margin: 10px auto; }
+  .cub-layers { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; text-align: center; }
+  .cub-layers .cub-fig { margin: 4px auto; }
+  .cub-sol { display: grid; gap: 8px; margin-top: 10px; }
   .pl-card h2, .pl-card h3 { margin-top: 0; }
   .pl-words { display: flex; flex-wrap: wrap; gap: 14px 30px; margin: 8px 0 14px; }
   .pl-word { display: inline-flex; gap: 3px; padding: 5px 7px; border: 1.5px dashed #c9c4b8; border-radius: 12px; background: #fff; }
@@ -2073,7 +2077,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רנד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רנו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -2120,12 +2124,14 @@ html.embed body { padding-top: 0; }
           <li>אילו דפים הדפסתם או שמרתם</li>
           <li>בסיום תרגול, מבחן, כרטיס יציאה ובאימון למבחן – כמה תשובות נכונות</li>
           <li>באימון הכפל – רק מי שהקליד את קוד הכיתה – גם ההתקדמות באימון</li>
+          <li>בקורסים ללמידה עצמית – השם המלא (נדרש בכל כניסה ולא נשמר במחשב), תוצאות האבחון וההתקדמות ביחידות</li>
         </ul>
         <p><b>מה לא נשמר:</b> מייל, טלפון, כתובת, תמונות, וגם לא התשובות עצמן ולא תוצאות המשחקים.</p>
         <p><b>למה:</b> כדי שהמורה תוכל לעקוב אחרי התרגול ולהתאים את ההוראה.</p>
         <p><b>מי רואה:</b> רק המורה איריס סגל. המידע נשמר בחשבון שלה ולא מועבר לאף אחד.</p>
         <p><b>במכשיר עצמו:</b> הדפדפן שומר את ההתקדמות שלכם כדי שתוכלו להמשיך מאיפה שעצרתם. זה נשאר אצלכם ולא נשלח.</p>
         <p><b>מחיקה ושאלות:</b> אפשר לבקש למחוק מידע שנשמר – דרך כפתור "יצירת קשר" בתחתית האתר.</p>
+        <p><a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות ותנאי השימוש המלאים</a></p>
       </div>
       <div class="ct-acts"><button type="button" class="ct-main" id="pvClose">הבנתי</button></div></div>`;
     document.body.appendChild(ov);
@@ -8486,10 +8492,11 @@ function embedGens() {
   if (!fs.length) return home();
   const cnt = Math.min(20, Math.max(3, Number(URLP.get('count')) || 8)), t = embedTopic(fs);
   const order = []; while (order.length < cnt) order.push(...shuffle(fs.slice()));
-  startPractice(t, { list: order.slice(0, cnt).map(f => Object.assign(f(), { topic: t })), label: URLP.get('label') || 'תרגול נוסף', hideLevel: true });
+  startPractice(t, { list: order.slice(0, cnt).map(f => Object.assign(f(), { topic: t })), label: URLP.get('label') ? esc(URLP.get('label').slice(0, 60)) : 'תרגול נוסף', hideLevel: true });
 }
 // מוטמע בתוך קורס ללמידה עצמית (coach.html): בלי מסכי פתיחה, בלי תפריטים ובלי דיווח – הקורס מדווח בעצמו
-const EMBED = URLP.get('embed') === '1' && window.parent !== window;
+// מצב מוטמע רק בתוך דף מאותו אתר (המאמן) – אתר זר שמטמיע את הדף לא יקבל מצב EMBED
+const EMBED = URLP.get('embed') === '1' && window.parent !== window && (() => { try { return window.parent.location.origin === location.origin; } catch (e) { return false; } })();
 if (EMBED) document.documentElement.classList.add('embed');
 function embedPost(ev, d) { if (EMBED) { try { parent.postMessage(Object.assign({ src: 'math-embed', ev }, d || {}), location.origin); } catch (e) { /* לא חובה */ } } }
 // כרטיס יציאה מקישור של מורה אחרת (?exit=o): התוצאה רק על המסך – לא נשלח כלום
@@ -8988,7 +8995,7 @@ window.addEventListener('popstate', e => {
     document.querySelectorAll('.overlay').forEach(o => o.remove());
     const v = e.state && e.state.v;
     if (URLP.has('print') || URLP.has('teacher')) return;
-    if (v === 'kf' || v === 'kfd') kfHome(v === 'kfd' ? 'div' : 'mul'); else home();
+    if (v === 'kf' || v === 'kfd') kfHome(v === 'kfd' ? 'div' : 'mul'); else if (v === 'cub') cubHome(); else home();
   } finally { navPopping = false; }
 });
 
@@ -9124,6 +9131,11 @@ function home() {
             <span class="gc-ic" style="--gw:rgba(108,76,241,0.5)">✏️</span>
             <span class="gc-nm">משיכת קולמוס אחת</span>
             <span class="gc-ds">אפשר לצייר את הצורה בקו אחד בלי להרים את העיפרון? חושבים מראש כמו המתמטיקאי אוילר – ומציירים!</span>
+          </button>
+          <button class="game-card" id="cubGo">
+            <span class="gc-ic" style="--gw:rgba(231,184,90,0.6)">🧊</span>
+            <span class="gc-nm">כמה קוביות?</span>
+            <span class="gc-ds">סופרים קוביות במבנה משורטט – גם את אלה שמוסתרות מאחור ומתחת. ואתגר: כמה קוביות חסרות כדי להשלים לתיבה?</span>
           </button>
           <p class="pl-credit">${PAL_CREDIT}</p>
         </section>` : ''}
@@ -9330,6 +9342,7 @@ function home() {
   if ($('fdGo')) $('fdGo').onclick = () => fdHome();
   $('gbGo').onclick = gbHome;
   if ($('palGo')) $('palGo').onclick = () => palHome('learn');
+  if ($('cubGo')) $('cubGo').onclick = () => cubHome('learn');
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
   if ($('guideBtn')) $('guideBtn').onclick = guideHome;
   app.querySelectorAll('.semx').forEach(b => b.onclick = () => { const n = b.dataset.sem; try { localStorage.setItem('math-sem', n); } catch (e) { /* לא חובה */ } const u = new URL(location.href); u.searchParams.set('sem', n); location.href = u.toString(); });
@@ -16739,6 +16752,166 @@ function gbTasks() {
   if (g >= 6) { const a = pick([6, 9, 12]); t.push({ q: `שרטטו <b>טרפז</b> ששטחו <b>${a} משבצות</b>.`, ok: p => { const c = gbCorners(p); if (c.length !== 4 || gbIsPar(p)) return false; const v = i => [c[(i + 1) % 4][0] - c[i][0], c[(i + 1) % 4][1] - c[i][1]]; const par = (x, y) => x[0] * y[1] - x[1] * y[0] === 0; return (par(v(0), v(2)) || par(v(1), v(3))) && gbArea(p) === a; } }); }
   return t;
 }
+// ===== מצוינות: כמה קוביות יש בשרטוט? =====
+// מבנה = מפת גבהים H[x][y] (x – ימינה-קדימה, y – שמאלה-קדימה). כל קובייה עומדת על הרצפה או על קובייה אחרת.
+// הגבהים לא עולים כשמתקרבים אלינו – כך כל ראש עמודה נראה, והשאלה חד-משמעית.
+const CUB_SECS = [['learn', 'איך סופרים?'], ['quiz', 'כמה קוביות?'], ['fill', 'משלימים לתיבה']];
+let cub = { sec: 'learn', lv: 1 };
+const cubR = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
+const cubSum = H => H.flat().reduce((s, v) => s + v, 0);
+const cubMax = H => Math.max(...H.flat());
+// קוביות שיש להן לפחות פאה אחת גלויה (למעלה / ימין / שמאל-קדימה)
+const cubVis = H => { let n = 0; H.forEach((col, x) => col.forEach((h, y) => { for (let z = 0; z < h; z++) if (z === h - 1 || (H[x + 1] ? H[x + 1][y] : 0) <= z || (col[y + 1] || 0) <= z) n++; })); return n; };
+const cubLayers = H => [...Array(cubMax(H))].map((_, k) => H.flat().filter(v => v > k).length);
+function cubGen(lv) {
+  for (let t = 0; t < 200; t++) {
+    const a = lv === 1 ? cubR(2, 4) : lv === 2 ? cubR(2, 3) : 3, b = lv === 1 ? 1 : lv === 2 ? 2 : cubR(2, 3), top = lv === 1 ? 3 : lv === 2 ? 3 : 4, lo = lv === 3 ? 0 : 1;
+    const H = [...Array(a)].map(() => Array(b).fill(0));
+    for (let x = 0; x < a; x++) for (let y = 0; y < b; y++) {
+      const mx = lv === 1 ? top : Math.min(x ? H[x - 1][y] : top, y ? H[x][y - 1] : top);
+      H[x][y] = cubR(Math.min(lo, mx), mx);
+    }
+    if (lv === 3 && (H[0][0] < 3 || !H[a - 1][0] || !H[0][b - 1])) continue;
+    const n = cubSum(H), hid = n - cubVis(H);
+    if (lv === 1 && n >= 4 && n <= 9) return H;
+    if (lv === 2 && hid >= 1 && n >= 6 && n <= 14) return H;
+    if (lv === 3 && hid >= 2 && n >= 10 && n <= 24) return H;
+  }
+  return lv === 1 ? [[2], [3], [1]] : lv === 2 ? [[3, 2], [2, 1]] : [[4, 3, 1], [3, 2, 1], [2, 1, 0]];
+}
+// ציור איזומטרי. o.nums – מספר על ראש כל עמודה; o.s – גודל קובייה
+function cubSVG(H, o = {}) {
+  const a = H.length, b = H[0].length, m = Math.max(1, cubMax(H)), cs = Math.cos(Math.PI / 6), sn = 0.5;
+  const s = o.s || Math.min(34, 250 / ((a + b) * cs), 200 / (m + (a + b) * sn));
+  const ox = b * s * cs + 12, oy = m * s + 12;
+  const P = (x, y, z) => [ox + (x - y) * s * cs, oy + (x + y) * s * sn - z * s];
+  const poly = (pts, fill) => `<polygon points="${pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ')}" fill="${fill}" stroke="${SOL_INK}" stroke-width="1.6" stroke-linejoin="round"/>`;
+  const cubes = [];
+  H.forEach((col, x) => col.forEach((h, y) => { for (let z = 0; z < h; z++) cubes.push([x, y, z]); }));
+  cubes.sort((p, q) => (p[0] + p[1] + p[2]) - (q[0] + q[1] + q[2]));
+  let g = cubes.map(([x, y, z]) =>
+    poly([P(x, y, z + 1), P(x + 1, y, z + 1), P(x + 1, y + 1, z + 1), P(x, y + 1, z + 1)], '#f6e2a6') +
+    poly([P(x + 1, y, z), P(x + 1, y + 1, z), P(x + 1, y + 1, z + 1), P(x + 1, y, z + 1)], '#e7b85a') +
+    poly([P(x, y + 1, z), P(x + 1, y + 1, z), P(x + 1, y + 1, z + 1), P(x, y + 1, z + 1)], '#f0c96f')).join('');
+  if (o.nums) H.forEach((col, x) => col.forEach((h, y) => {
+    if (!h) return;
+    const [cx, cy] = P(x + 0.5, y + 0.5, h), r = Math.max(8, s * 0.3);
+    g += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="#fff" stroke="#c0392b" stroke-width="1.6"/><text x="${cx.toFixed(1)}" y="${(cy + r * 0.42).toFixed(1)}" text-anchor="middle" font-size="${(r * 1.2).toFixed(1)}" font-weight="700" fill="#c0392b">${h}</text>`;
+  }));
+  return `<svg class="fig cub-fig" viewBox="0 0 ${(ox + a * s * cs + 12).toFixed(0)} ${(oy + (a + b) * s * sn + 12).toFixed(0)}" style="max-width:${o.w || 300}px" aria-hidden="true" dir="ltr">${g}</svg>`;
+}
+// הסבר הפתרון: מספרים על העמודות + ספירה לפי שכבות
+function cubExplain(H) {
+  const L = cubLayers(H), n = cubSum(H), cols = H.flat().filter(v => v);
+  return `<div class="cub-sol">${cubSVG(H, { nums: true, w: 260 })}
+    <div><b>לפי עמודות:</b> המספר על כל עמודה = כמה קוביות יש בה (כולל הנסתרות שמתחתיה).<br>${M(cols.join(' + ') + ' = ' + n)}</div>
+    <div><b>לפי שכבות:</b> ${L.map((c, i) => `שכבה ${i + 1}: ${c}`).join(' · ')}<br>${M(L.join(' + ') + ' = ' + n)}</div></div>`;
+}
+
+function cubHome(sec) {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('cub');
+  if (sec) cub.sec = sec;
+  cubDraw();
+}
+function cubDraw() {
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('star')} מצוינות · כמה קוביות?</span><button class="secondary" id="cubBack">${ic('home')} חזרה</button></div>
+    <div class="pl-nav">${CUB_SECS.map(([id, t]) => `<button type="button" class="pl-pill${cub.sec === id ? ' on' : ''}" data-csec="${id}">${t}</button>`).join('')}</div>
+    <div id="cubBody"></div>`;
+  $('cubBack').onclick = () => { homeTab = 'excel'; home(); };
+  app.querySelectorAll('[data-csec]').forEach(b => b.onclick = () => { cub.sec = b.dataset.csec; cubDraw(); window.scrollTo({ top: 0 }); });
+  ({ learn: cubLearn, quiz: el => cubQuiz(el, false), fill: el => cubQuiz(el, true) })[cub.sec]($('cubBody'));
+  track('מצוינות: קוביות', CUB_SECS.find(s => s[0] === cub.sec)[1]);
+}
+
+function cubLearn(el) {
+  const EX = [[3, 2, 1], [2, 1, 1], [1, 1, 0]];
+  let view = 'pic';
+  const draw = () => {
+    const L = cubLayers(EX);
+    $('cubEx').innerHTML = view === 'pic' ? cubSVG(EX) : view === 'nums' ? cubSVG(EX, { nums: true })
+      : `<div class="cub-layers">${L.map((c, k) => `<div>${cubSVG(EX.map(col => col.map(v => v > k ? 1 : 0)), { w: 150, s: 22 })}<div class="muted">שכבה ${k + 1}: <b>${c}</b></div></div>`).join('')}</div>`;
+    $('cubExT').innerHTML = view === 'pic' ? 'כמה קוביות יש כאן? נסו לספור לפני שלוחצים.' : view === 'nums' ? `סופרים עמודה-עמודה: ${M(EX.flat().filter(v => v).join(' + ') + ' = ' + cubSum(EX))}` : `סופרים שכבה-שכבה, מלמטה למעלה: ${M(L.join(' + ') + ' = ' + cubSum(EX))}`;
+    el.querySelectorAll('[data-cv]').forEach(b => b.classList.toggle('on', b.dataset.cv === view));
+  };
+  el.innerHTML = `
+    <div class="card pl-card">
+      <h2>כמה קוביות יש בשרטוט?</h2>
+      <p>בשרטוט של מבנה מקוביות <b>לא רואים את כל הקוביות</b>: חלק מהן מוסתרות מאחור ומתחת לקוביות אחרות.</p>
+      <div class="rule">🧱 <b>הכלל:</b> כל קובייה עומדת <b>על הרצפה או על קובייה אחרת</b> – אין קוביות שמרחפות באוויר. לכן מתחת לכל קובייה שרואים למעלה, יש עמודה שלמה עד הרצפה.</div>
+      <div class="pl-nav"><button type="button" class="pl-pill" data-cv="pic">השרטוט</button><button type="button" class="pl-pill" data-cv="nums">ספירה לפי עמודות</button><button type="button" class="pl-pill" data-cv="layers">ספירה לפי שכבות</button></div>
+      <div id="cubEx"></div>
+      <p id="cubExT"></p>
+    </div>
+    <div class="card pl-card">
+      <h3>שתי דרכים לספור</h3>
+      <p><b>1. לפי עמודות:</b> מסתכלים על כל ריבוע עליון ושואלים "כמה קוביות יש בעמודה הזאת עד הרצפה?". כותבים את המספר – ומחברים את כל המספרים.</p>
+      <p><b>2. לפי שכבות:</b> סופרים כמה קוביות יש בשכבה התחתונה, כמה בשכבה שמעליה, וכן הלאה – ומחברים.</p>
+      <div class="warn">⚠️ הטעות הנפוצה: לספור רק את הקוביות שרואים. אל תשכחו את הקוביות <b>הנסתרות</b> שמתחת ומאחור!</div>
+      <div class="actions"><button type="button" id="cubGoQ">לתרגול ←</button></div>
+    </div>`;
+  el.querySelectorAll('[data-cv]').forEach(b => b.onclick = () => { view = b.dataset.cv; draw(); });
+  $('cubGoQ').onclick = () => { cub.sec = 'quiz'; cubDraw(); window.scrollTo({ top: 0 }); };
+  draw();
+}
+
+// fill=false: כמה קוביות יש? · fill=true: כמה קוביות חסרות כדי להשלים לתיבה?
+function cubQuiz(el, fill) {
+  let n = 0, good = 0, H, tries;
+  const lvs = fill ? [[2, 'רמה 1'], [3, 'רמה 2']] : [[1, 'רמה 1 – הכל גלוי'], [2, 'רמה 2 – יש נסתרות'], [3, 'רמה 3 – מבנים גדולים']];
+  if (fill && cub.lv < 2) cub.lv = 2;
+  const name = () => (fill ? 'משלימים לתיבה' : 'כמה קוביות') + ' ' + lvs.find(l => l[0] === cub.lv)[1];
+  const ask = () => {
+    H = cubGen(cub.lv); tries = 0;
+    const a = H.length, b = H[0].length, m = cubMax(H);
+    el.innerHTML = `<div class="card pl-card pl-quiz">
+      <div class="pl-nav">${lvs.map(([v, t]) => `<button type="button" class="pl-pill${cub.lv === v ? ' on' : ''}" data-clv="${v}">${t}</button>`).join('')}</div>
+      <div class="muted">שאלה ${n + 1} מתוך 10 · נכונות: ${good}</div>
+      ${cubSVG(H)}
+      <p>${fill ? `רוצים להשלים את המבנה ל<b>תיבה מלאה</b> של ${M(`${a} × ${b} × ${m}`)} קוביות. <b>כמה קוביות חסרות?</b>` : '<b>כמה קוביות יש במבנה?</b>'}</p>
+      <div class="actions"><input id="cubIn" class="ans" type="text" inputmode="numeric" autocomplete="off" aria-label="תשובה" style="width:7em"><button type="button" id="cubOk">בדיקה</button></div>
+      <div id="cubFb"></div></div>`;
+    el.querySelectorAll('[data-clv]').forEach(bt => bt.onclick = () => { cub.lv = +bt.dataset.clv; n = 0; good = 0; ask(); });
+    const inp = $('cubIn');
+    inp.onkeydown = e => { if (e.key === 'Enter') $('cubOk').click(); };
+    $('cubOk').onclick = check;
+    inp.focus({ preventScroll: true });
+  };
+  const check = () => {
+    const v = Number($('cubIn').value.trim()), tot = cubSum(H), box = H.length * H[0].length * cubMax(H), want = fill ? box - tot : tot;
+    if (!$('cubIn').value.trim() || !Number.isFinite(v)) return;
+    const ok = v === want;
+    if (!ok && tries === 0) {
+      tries = 1;
+      const vis = cubVis(H);
+      const tip = !fill && v === vis && vis !== tot ? 'ספרת רק את הקוביות שרואים. מתחת לכל קובייה עליונה יש עמודה עד הרצפה – יש גם קוביות נסתרות!'
+        : fill && v === box ? 'זה מספר הקוביות בתיבה המלאה. כמה מהן כבר יש במבנה? מורידים אותן.'
+        : fill ? `טיפ: בתיבה המלאה יש ${M(`${H.length} × ${H[0].length} × ${cubMax(H)}`)} קוביות. כמה יש כבר במבנה?`
+        : 'טיפ: עברו עמודה-עמודה – כמה קוביות יש בכל עמודה עד הרצפה?';
+      $('cubFb').innerHTML = `<div class="fb show bad">עוד לא. ${tip} נסו שוב.</div>`;
+      $('cubIn').select();
+      return;
+    }
+    if (ok) good++;
+    n++;
+    $('cubIn').disabled = true; $('cubOk').disabled = true;
+    $('cubFb').innerHTML = `<div class="fb show ${ok ? 'ok' : 'bad'}">${ok ? 'נכון! 🎉' : `התשובה: <b>${want}</b>`}</div>
+      ${cubExplain(H)}
+      ${fill ? `<div class="explain">בתיבה המלאה: ${M(`${H.length} × ${H[0].length} × ${cubMax(H)} = ${box}`)} · במבנה: ${tot} · חסרות: ${M(`${box} − ${tot} = ${box - tot}`)}</div>` : ''}
+      <div class="actions"><button type="button" id="cubNx">${n < 10 ? 'הבא ←' : 'לסיכום'}</button></div>`;
+    $('cubNx').onclick = () => n < 10 ? ask() : done();
+    $('cubNx').focus();
+  };
+  const done = () => {
+    track('מצוינות: קוביות', `${name()}: ${good}/10`);
+    el.innerHTML = `<div class="card pl-card pl-quiz"><h2>${good >= 9 ? 'מצוין! 🌟' : good >= 7 ? 'יפה מאוד!' : 'כל הכבוד על התרגול!'}</h2><p>ענית נכון על <b>${good}</b> מתוך 10.</p>
+      <div class="actions"><button type="button" id="cubAg">עוד סבב</button>${!fill && cub.lv < 3 && good >= 8 ? '<button type="button" class="secondary" id="cubUp">לרמה הבאה ←</button>' : ''}</div></div>`;
+    $('cubAg').onclick = () => { n = 0; good = 0; ask(); };
+    if ($('cubUp')) $('cubUp').onclick = () => { cub.lv++; n = 0; good = 0; ask(); };
+  };
+  ask();
+}
+
 // ===== מצוינות: פלינדרום – מחולל תבניות פלינדרומיות =====
 // תבנית = צורה של משבצות. כל שורה וכל טור (רצף משבצות צמודות, 2 ומעלה) חייבים להיקרא אותו דבר משני הכיוונים.
 const palR = n => Math.floor(Math.random() * n);
@@ -21541,7 +21714,9 @@ const lpKey = x => { const y = JSON.parse(JSON.stringify(x)); delete y.saved; re
 function lpKeep(x) { const L = lpLoad().filter(y => lpKey(y) !== lpKey(x)); L.unshift(Object.assign(JSON.parse(JSON.stringify(x)), { saved: new Date().toLocaleDateString('he-IL') })); lpSaveAll(L); }
 let lpFromLink = false;
 const lpEnc = p => { const o = JSON.parse(JSON.stringify(p)); delete o.saved; const b = btoa(unescape(encodeURIComponent(JSON.stringify(o)))); return b.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
-const lpDec = c => { try { const b = c.replace(/-/g, '+').replace(/_/g, '/'); const o = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4))))); return o && TOPIC[o.topic] && o.on && o.dur ? o : null; } catch (e) { return null; } };
+const lpDec = c => { try { const b = c.replace(/-/g, '+').replace(/_/g, '/'); const o = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4))))); return o && TOPIC[o.topic] && o.on && o.dur && lpSafe(o) ? o : null; } catch (e) { return null; } };
+// קישור מערך מגיע מבחוץ: דוחים ערכים שיש בהם תווי HTML (הגנה מהזרקת קוד)
+function lpSafe(v, d = 0) { if (d > 4) return false; if (typeof v === 'string') return v.length <= 200 && !/[<>"'`&]/.test(v); if (typeof v === 'number' || typeof v === 'boolean' || v === null) return true; if (typeof v === 'object') return Object.keys(v).every(k => /^[\w-]{1,30}$/.test(k) && lpSafe(v[k], d + 1)); return false; }
 function lpLinkDialog(p) {
   const link = location.origin + location.pathname + '?' + (GRADE !== 6 ? 'grade=' + GRADE + '&' : '') + 'lp=' + lpEnc(p);
   const name = `${TOPIC[p.topic].name} · ${p.dur} דק'`;
