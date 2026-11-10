@@ -102,7 +102,8 @@
     const c = f.c || 17, n = f.n || 0; let out = '';
     for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
       const i = col * 10 + row;
-      out += `<rect x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${i < n ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
+      const on = f.rc ? (col < f.rc[0] && row < f.rc[1]) : i < n;
+      out += `<rect x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
     }
     out += `<rect x="2" y="2" width="${10 * c}" height="${10 * c}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
     return `<svg class="fig hund" viewBox="0 0 ${10 * c + 4} ${10 * c + 4}" width="${10 * c + 4}" height="${10 * c + 4}" role="img" aria-label="ריבוע של 100 משבצות">${out}</svg>`;

@@ -192,6 +192,8 @@
   table.vert tr.res td { border-top: 2.5px solid var(--ink); }
   .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
   .ccard { margin: 0; border-top: 6px solid var(--brand); }
+  .site { width: 100%; min-height: 460px; border: 1px solid #dfe3ee; border-radius: 14px; background: #fff; display: block; margin: 10px 0; }
+  .modal .site { min-height: 60vh; }
   .ccard.soon { opacity: 0.6; border-top-color: var(--line); }
   [hidden] { display: none !important; }
   @media print { .top, footer, .noprint { display: none !important; } body { background: #fff; } .wrap { padding: 0; } .card { box-shadow: none; border: none; } }
@@ -222,7 +224,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמאית · מאת איריס סגל · <span class="ver">גרסה 2.0</span></footer>
+  <footer>קורסים ללמידה עצמאית · מאת איריס סגל · <span class="ver">גרסה 3.1</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -236,15 +238,24 @@
   const C = window.COACH, V = C.V, E = C.E;
   let K = null; // הקורס הפעיל
   // קורסים מתוכננים שעוד לא נבנו – מוצגים בקטלוג כ"בקרוב"
-  const PLANNED = { dec: { title: 'מספרים עשרוניים', sub: 'עשיריות ומאיות, השוואה, חיבור, חיסור וכפל' }, pct: { title: 'אחוזים', sub: 'מה זה אחוז, אחוז מכמות, אחוזים בחיים' },
-    fracop: { title: 'כפל וחילוק שברים', sub: 'כפל וחילוק של שברים ומספרים מעורבים' }, area: { title: 'שטח והיקף', sub: 'שטח והיקף של מצולעים וצורות מורכבות' } };
+  // קורסים מתוכננים שעוד לא נבנו – מוצגים בקטלוג כ"בקרוב". grades = [מכיתה, עד כיתה]
+  const PLANNED = {
+    mult: { title: 'לוח הכפל', sub: 'מבינים את הכפל ושולטים בלוח הכפל', grades: [2, 6] },
+    frac: { title: 'שברים פשוטים', sub: 'מה זה שבר, השוואת שברים, שבר מכמות', grades: [5, 6] },
+    pct: { title: 'אחוזים', sub: 'מה זה אחוז, אחוז מכמות, אחוזים בחיים', grades: [6, 6] },
+    fracop: { title: 'כפל וחילוק שברים', sub: 'כפל וחילוק של שברים ומספרים מעורבים', grades: [6, 6] },
+    area: { title: 'שטח והיקף', sub: 'שטח והיקף של מצולעים וצורות מורכבות', grades: [4, 6] }
+  };
+  const GN = ['', "א'", "ב'", "ג'", "ד'", "ה'", "ו'"];
+  const gradeText = g => !g ? '' : g[0] === g[1] ? `כיתה ${GN[g[0]]}` : `כיתות ${GN[g[0]]}–${GN[g[1]]}`;
+  const MYG = +(E.URLP.get('grade') || 0);
   function setCourse(id) { K = C.courses[id] || null; const n = document.getElementById('crsName'); if (n) n.textContent = K ? '· ' + K.title : ''; }
   const { R, fig } = V;
   const $ = id => document.getElementById(id);
   const esc = s => String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const main = $('main'), coachEl = $('coach');
   const T = E.teacher();
-  const PILLS = ['מה נלמד', 'בואו נבין', 'עכשיו במחברת', 'בודקים הבנה', 'מה למדתי'];
+  const PILLS = ['מה נלמד', 'בואו נבין', 'מחברת ותרגול', 'בודקים הבנה', 'מה למדתי'];
   const BADGE_NAME = { persist: '💪 התמדה', fix: '🔧 תיקון טעות', explain: '💬 הסבר מתמטי', master: '⭐ שליטה' };
 
   let st = E.store.load() || null;
@@ -469,7 +480,7 @@
       <label class="lb" for="nm">השם המלא שלי</label>
       <input class="tx" id="nm" autocomplete="off" placeholder="שם פרטי ושם משפחה">
       <label class="lb" for="cd">קוד המשך מהמחברת <span class="muted small">(אם כבר התחלתם)</span></label>
-      <input class="tx" id="cd" autocomplete="off" dir="ltr" placeholder="XXXX-XXXX" style="max-width:220px;text-align:center">
+      <input class="tx" id="cd" autocomplete="off" dir="ltr" placeholder="XXXXX-XXXXX" style="max-width:240px;text-align:center">
       <div id="emsg">${msg ? `<div class="fb bad">${msg}</div>` : ''}</div>
       <div class="row"><button id="go">כניסה לקורס</button></div>
     </div></div>`;
@@ -526,7 +537,7 @@
   }
   function diagDone() {
     const ds = st.diag;
-    for (let s = 1; s <= 8; s++) st.skills[s] = ds.status[s] || 'unknown';
+    Object.keys(K.SKILLS).map(Number).filter(s => s <= 10).forEach(s => { st.skills[s] = ds.status[s] || 'unknown'; });
     st.tag = E.mainTag(K, ds.tags);
     st.path = E.buildPath(K, st.skills);
     st.phase = 'course';
@@ -536,7 +547,7 @@
     const tagList = Object.keys(ds.tags).filter(t => t !== 'skip').map(t => K.TAGS[t]).filter(Boolean);
     tr('אבחון', `${K.title} · ${E.skillLine(st.skills, K)}${tagList.length ? ' · טעויות: ' + tagList.join('; ') : ''}`);
     layout(false);
-    const knows = [8, 7, 6, 5, 4, 3, 2, 1].filter(s => st.skills[s] === 'mastered').slice(0, 2).map(s => K.SKILL_SAY[s]);
+    const knows = Object.keys(K.SKILL_SAY).map(Number).reverse().filter(s => st.skills[s] === 'mastered').slice(0, 2).map(s => K.SKILL_SAY[s]);
     const units = st.path.filter(p => !p.optional && !st.done[p.id]).length;
     const skipped = K.UNITS.filter(u => !u.deep && !st.path.some(p => p.id === u.id)).length;
     const first1 = st.path.find(p => ready(p.id));
@@ -586,7 +597,7 @@
       const dn = us.filter(u => st.done[u.id] || (!u.deep && !path.some(p => p.id === u.id))).length;
       return `<div class="mod"><h3><span>פרק ${i + 1}: ${m.t}</span><span class="muted">${dn}/${us.length}</span></h3><ul class="ulist">${us.map(row).join('')}</ul></div>`;
     }).join('');
-    const knows = [1, 2, 3, 4, 5, 6, 7, 8].filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
+    const knows = Object.keys(K.SKILL_SAY).map(Number).filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
     const badges = (st.done.u8 ? '<span class="badge">🏆 מומחה/ית בשברים שקולים</span>' : '') + E.BADGES.filter(b => st.badges[b]).map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('');
     const done = courseDone();
     let hello;
@@ -608,7 +619,7 @@
   function certificate() {
     layout(false);
     const d = new Date().toLocaleDateString('he-IL');
-    const knows = [1, 2, 3, 4, 5, 6, 7, 8].filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
+    const knows = Object.keys(K.SKILL_SAY).map(Number).filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
     main.innerHTML = `<div class="card"><div class="cert"><span class="avatar" style="width:56px;height:56px;font-size:1.5rem">מ</span>
       <h1 style="margin-top:12px">תעודת סיום</h1><p>מוענקת ל</p><div class="nm">${esc(st.name)}</div>
       <p>על השלמת הקורס <b>${K.title}</b></p>${st.done.u8 ? '<p><b>🏆 ברמת מומחיות</b></p>' : ''}
@@ -630,7 +641,63 @@
     save();
     screen();
   }
-  const screens = () => { const U = K.units[st.unit.id]; return st.unit.ver === 'reinforce' ? U.reinforce : U.teach; };
+  const screens = () => {
+    const U = K.units[st.unit.id], list = st.unit.ver === 'reinforce' ? U.reinforce : U.teach;
+    if (!siteOf(st.unit.id).gens || U.deep) return list;
+    const i = list.findIndex(x => x.kind === 'check');
+    return list.slice(0, i).concat([{ step: 3, kind: 'more' }], list.slice(i));
+  };
+  // ההקנייה והתרגול מהאתר הראשי (math6.html?embed=1) – בתוך מסך הקורס
+  const siteOf = id => (K.SITE || {})[id] || {};
+  const siteGrade = () => (K.grades || [6]).includes(MYG) ? MYG : Math.max(...(K.grades || [6]));
+  function siteUrl(o) {
+    const q = new URLSearchParams({ embed: '1', grade: String(siteGrade()) });
+    if (o.learn) { q.set('learn', o.learn); if (o.card) q.set('lt', o.card); } else { q.set('gens', o.gens.join(',')); q.set('count', String(o.count || 8)); if (o.topic) q.set('topic', o.topic); q.set('label', o.label || 'תרגול נוסף'); }
+    return 'math6.html?' + q.toString();
+  }
+  function siteFrame(box, o, on) {
+    box.innerHTML = `<iframe class="site" title="${o.learn ? 'שיעור מהאתר' : 'תרגול'}" src="${siteUrl(o)}"></iframe>`;
+    const fr = box.querySelector('iframe');
+    const fit = () => { try { const d = fr.contentDocument; if (d && d.body) fr.style.height = Math.max(460, d.documentElement.scrollHeight + 10) + 'px'; } catch (e) { /* לא חובה */ } };
+    const t = setInterval(() => { if (!document.body.contains(fr)) return clearInterval(t); fit(); }, 600);
+    const lis = e => {
+      if (e.origin !== location.origin || !e.data || e.data.src !== 'math-embed' || e.source !== fr.contentWindow) return;
+      if (!document.body.contains(fr)) return window.removeEventListener('message', lis);
+      if (on) on(e.data);
+    };
+    window.addEventListener('message', lis);
+  }
+  function lessonModal() {
+    const o = siteOf((st.unit && st.unit.id) || '');
+    if (!o.learn) return false;
+    log('siteLesson');
+    const m = modal('<h2>📖 השיעור המלא</h2><p class="muted">אפשר לדפדף בין הכרטיסיות. כשמסיימים – סוגרים את החלון.</p><div id="sl"></div>');
+    siteFrame(m.el.querySelector('#sl'), o, d => { if (d.ev === 'home') m.close(); });
+    return true;
+  }
+  // תרגול נוסף עד שזה יושב: 8 שאלות, עם הדרכה צעד-אחר-צעד בטעות. עוברים ב-6 מתוך 8; אחרי 2 סבבים ממשיכים בכל מקרה.
+  function more() {
+    const u = st.unit, o = siteOf(u.id);
+    u.moreN = (u.moreN || 0) + 1;
+    const b = frame(3, `<h3>תרגול נוסף <span class="muted small">(סבב ${u.moreN})</span></h3><p>8 תרגילים. אם טועים – מקבלים עזרה צעד אחר צעד. ${o.learn ? 'צריך תזכורת? יש כפתור לשיעור המלא.' : ''}</p>${o.learn ? '<div class="row"><button class="sec small" id="lsn">📖 לשיעור המלא</button></div>' : ''}<div id="sf"></div>`);
+    if ($('lsn')) $('lsn').onclick = lessonModal;
+    siteFrame($('sf'), { gens: o.gens, topic: o.topic, count: o.count, label: 'תרגול נוסף: ' + unitDef(u.id).title }, d => {
+      if (d.ev === 'home') return more();
+      if (d.ev !== 'done') return;
+      const ok = d.correct >= Math.ceil(d.n * 0.75);
+      u.more = (u.more || []).concat([`${d.correct}/${d.n}`]);
+      log('more', { r: u.moreN, correct: d.correct, n: d.n });
+      save();
+      $('sf').insertAdjacentHTML('beforebegin', ok
+        ? `<div class="fb ok">✓ ${d.correct} מתוך ${d.n}! זה כבר יושב טוב. ממשיכים לבדיקה.</div><div class="row"><button id="nx">לבדיקה</button></div>`
+        : u.moreN < 2 ? `<div class="fb info">${d.correct} מתוך ${d.n}. עוד לא יושב מספיק – ${o.learn ? 'נסתכל רגע בשיעור המלא, ואז ' : ''}נעשה עוד סבב.</div><div class="row">${o.learn ? '<button id="ls2">📖 לשיעור המלא</button>' : ''}<button ${o.learn ? 'class="sec" ' : ''}id="ag">לסבב נוסף</button></div>`
+        : `<div class="fb info">${d.correct} מתוך ${d.n}. נמשיך לבדיקה – ואם צריך, נמצא יחד דרך אחרת.</div><div class="row"><button id="nx">לבדיקה</button></div>`);
+      $('sf').innerHTML = '';
+      if ($('nx')) $('nx').onclick = next;
+      if ($('ag')) $('ag').onclick = more;
+      if ($('ls2')) $('ls2').onclick = () => { lessonModal(); $('ls2').remove(); if ($('ag')) $('ag').className = ''; };
+    });
+  }
   function next() { st.unit.i++; save(); screen(); }
   function frame(stepIdx, inner) {
     layout(true);
@@ -671,8 +738,9 @@
       $('nx').onclick = next;
     } else if (sc.kind === 'cutlab') cutlab();
     else if (sc.kind === 'info') {
-      frame(sc.step, `<h3>${sc.title}</h3>${R(sc.html)}${sc.anim ? '<div id="anim"></div>' : ''}${fig(sc.fig)}<div class="row"><button id="nx">הבנתי, ממשיכים</button></div>`);
+      frame(sc.step, `<h3>${sc.title}</h3>${R(sc.html)}${sc.anim ? '<div id="anim"></div>' : ''}${fig(sc.fig)}<div class="row"><button id="nx">הבנתי, ממשיכים</button>${siteOf(st.unit.id).learn ? '<button class="sec" id="lsn">📖 רוצים עוד הסבר? לשיעור המלא</button>' : ''}</div>`);
       if (sc.anim) halfAnim($('anim'));
+      if ($('lsn')) $('lsn').onclick = lessonModal;
       $('nx').onclick = next;
     } else if (sc.kind === 'contrast') {
       const c = U.contrast[st.tag] || U.contrast.none;
@@ -683,6 +751,7 @@
       };
     } else if (sc.kind === 'practice') practice(sc, 0);
     else if (sc.kind === 'notebook') notebook(sc);
+    else if (sc.kind === 'more') more();
     else if (sc.kind === 'check') check(sc);
     else if (sc.kind === 'summary') summary();
   }
@@ -801,12 +870,20 @@
     const U = K.units[st.unit.id];
     log('ladder');
     frame(4, `<h3>בואו ננסה בדרך אחרת</h3><p>עוד לא הגעתם לשליטה, וזה בסדר. ננסה להבין את זה בדרך נוספת.</p><h3>${U.alt.title}</h3>${R(U.alt.html)}${fig(U.alt.fig)}<div class="row"><button id="nx">הבנתי</button></div>`);
-    $('nx').onclick = () => {
+    const sl = siteOf(st.unit.id);
+    const simpler = () => {
       frame(4, '<h3>משימה קצרה</h3><div id="ib"></div>');
       askItem($('ib'), U.simpler, 'learn', () => {
         frame(4, '<h3>ועכשיו – בדיקה נוספת</h3><p>שלוש שאלות חדשות. קחו את הזמן.</p><div class="row"><button id="nx">מתחילים</button></div>');
         $('nx').onclick = () => check(sc);
       });
+    };
+    $('nx').onclick = () => {
+      if (!sl.learn) return simpler();
+      log('siteLesson');
+      frame(4, '<h3>השיעור המלא</h3><p>נעבור יחד על ההסבר המלא. דפדפו בין הכרטיסיות, ואז נמשיך.</p><div id="sf"></div><div class="row"><button id="nx">סיימתי, ממשיכים</button></div>');
+      siteFrame($('sf'), sl, d => { if (d.ev === 'home') simpler(); });
+      $('nx').onclick = simpler;
     };
   }
 
@@ -814,7 +891,7 @@
   function teacherCard(auto) {
     const u = st.unit, U = u ? unitDef(u.id) : null;
     const doneU = K.UNITS.filter(x => st.done[x.id]).map(x => x.title);
-    const known = [1, 2, 3, 4, 5, 6, 7, 8].filter(s => st.skills[s] === 'mastered').map(s => K.SKILLS[s]);
+    const known = Object.keys(K.SKILL_SAY).map(Number).filter(s => st.skills[s] === 'mastered').map(s => K.SKILLS[s]);
     const lw = u && u.lastWrong;
     const curQ = cur && cur.item ? cur.item.q : null;
     const helps = (st.log || []).filter(l => u && l.t >= (st.log.find(x => x.type === 'unitStart' && x.unit === u.id) || { t: 0 }).t);
@@ -876,7 +953,7 @@
     if (ev.persist || u.setI > 0) give('persist');
     if (!st.done[u.id]) { st.done[u.id] = true; [].concat(U.skill).forEach(k => { st.skills[k] = 'mastered'; }); }
     save();
-    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
+    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet}${u.more ? ' · תרגול נוסף ' + u.more.join(', ') : ''} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
     const nxt = (st.path || []).find(p => !st.done[p.id] && ready(p.id) && !p.optional);
     const fin = courseDone();
     if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills, K)}`); }
@@ -931,7 +1008,7 @@
     log('lost', { k });
     if (k === 'words') modal(`<h2>מילון קטן</h2>${K.GLOSSARY.map(([w, t, f]) => `<p><b>${w}:</b> ${t}</p>${f ? fig(f) : ''}`).join('')}`);
     else if (k === 'what') say(it && it.rephrase ? it.rephrase : 'קראו שוב את השאלה לאט: מה מבקשים למצוא? אפשר גם ללחוץ "הקרא לי".');
-    else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]]; modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
+    else if (k === 'idea' && lessonModal()) { /* השיעור המלא */ } else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]]; modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
     else if (k === 'start') say(it && it.start ? it.start : 'מתחילים מהמספר שידוע בשני השברים: פי כמה הוא גדל?');
     else if (k === 'calc') {
       let t = '<table class="mt">';
@@ -959,20 +1036,26 @@
   ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, bump, true));
 
   // ---------- קטלוג הקורסים ----------
-  function catalog() {
+  function catalog(all) {
     st = null; setCourse(null); layout(false);
-    const cards = C.COURSE_IDS.map(id => {
-      const c = C.courses[id], pl = PLANNED[id];
-      if (!c && !pl) return '';
+    const fits = g => !MYG || !g || (MYG >= g[0] && MYG <= g[1]);
+    const list = C.COURSE_IDS.map(id => ({ id, c: C.courses[id], pl: PLANNED[id] })).filter(x => x.c || x.pl)
+      .map(x => Object.assign(x, { g: x.c ? x.c.grades : x.pl.grades }));
+    const mine = list.filter(x => fits(x.g)), other = list.filter(x => !fits(x.g));
+    const card = ({ id, c, pl, g }) => {
       const t = c ? c.title : pl.title, sub = c ? c.sub : pl.sub;
       const meta = c ? `${c.MODULES.length} פרקים · ${c.UNITS.length} שיעורים` : 'בהכנה';
-      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? 'קורס' : 'בקרוב'}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button></div>` : ''}</div>`;
-    }).join('');
-    main.innerHTML = `${tview()}<div class="card"><div class="crumb">כיתה ו'</div><h1>קורסים ללמידה עצמאית</h1>
+      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? 'קורס' : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button></div>` : ''}</div>`;
+    };
+    // קורסים פעילים קודם, ואחריהם "בקרוב"
+    const sortA = a => a.slice().sort((x, y) => (y.c ? 1 : 0) - (x.c ? 1 : 0));
+    main.innerHTML = `${tview()}<div class="card"><div class="crumb">${MYG ? `כיתה ${GN[MYG]}` : 'כל הכיתות'}</div><h1>קורסים ללמידה עצמאית</h1>
       <div class="coachline"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>שלום! כאן לומדים לבד, בקצב שלך, עם עזרה ממני. בחרו את הקורס שהמורה אמר/ה לכם ללמוד.</div></div>
       <p class="small muted">כבר התחלתם קורס? היכנסו אליו והקלידו את קוד ההמשך מהמחברת.</p></div>
-      <div class="cats">${cards}</div>`;
+      <div class="cats">${sortA(mine).map(card).join('') || '<div class="card">עוד אין קורסים לכיתה הזו.</div>'}</div>
+      ${other.length ? (all ? `<h2 style="margin:26px 4px 12px">קורסים לכיתות אחרות</h2><div class="cats">${sortA(other).map(card).join('')}</div>` : '<div class="row"><button class="sec" id="allc">להציג גם קורסים לכיתות אחרות</button></div>') : ''}`;
     main.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { setCourse(b.dataset.c); entry(); });
+    if ($('allc')) $('allc').onclick = () => catalog(true);
   }
   $('brand').onclick = () => { if (!st || st.phase === 'course' || st.phase === 'end' || window.confirm('לחזור לרשימת הקורסים?')) { if (st && st.phase !== 'end') { E.store.clear(); } catalog(); } };
 
@@ -986,7 +1069,7 @@
   else if (st.phase === 'unit' && st.unit) screen();
   else course();
   bump();
-  window.__coach = { get st() { return st; }, get cur() { return cur && cur.item; } };
+  window.__coach = { get st() { return st; }, get cur() { return cur && cur.item; }, screens: () => screens() };
 })();
 </script>
 </body>
