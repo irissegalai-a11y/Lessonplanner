@@ -1936,6 +1936,31 @@ html.embed body { padding-top: 0; }
   .pp-page .cub-fig { margin: 4px auto; max-height: 4.4cm; }
   .cp-q { font-size: 0.95rem; margin-top: 2px; }
   .cp-ans { text-align: right; margin-top: 6px; }
+  /* ---- מצוינות: ריבועי קסם / תבניות גדילה ---- */
+  .mg-grid { display: grid; grid-template-columns: repeat(3, 58px); grid-auto-rows: 58px; gap: 0; justify-content: center; margin: 10px auto; }
+  .mg-c { box-sizing: border-box; width: 100%; height: 100%; border: 2px solid #1f1e1c; margin: -1px 0 0 -1px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; text-align: center; background: #fff; border-radius: 0; padding: 0; font-family: inherit; color: #1f1e1c; }
+  .mg-g { background: #f6efe0; }
+  .mg-k { color: #2c7a5b; }
+  input.mg-c:focus { outline: 3px solid #f2c94c; outline-offset: -3px; }
+  input.mg-c.mg-bad { background: #fde2e0; }
+  input.mg-c.mg-hl { background: #fff3c4; }
+  .mg-sums { margin-top: 6px; font-size: 0.95rem; }
+  .mg-s { display: inline-block; background: #fff; border: 1px solid #d8d2c4; border-radius: 8px; padding: 1px 8px; margin: 2px 4px; }
+  .mg-pr { grid-template-columns: repeat(3, 1.1cm); grid-auto-rows: 1.1cm; margin: 4px auto; }
+  .mg-pr .mg-c { font-size: 15pt; border-width: 1.5px; }
+  .mg-pS { font-size: 0.95rem; }
+  .grw-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 8px 22px; margin: 8px 0; }
+  .grw-st { text-align: center; }
+  .grw-fig { display: block; max-width: 100%; height: auto; margin: 0 auto 4px; }
+  .grw-one .grw-fig { margin: 10px auto 4px; }
+  .grw-tb { border-collapse: collapse; margin: 8px auto; font-size: 1rem; }
+  .grw-tb th, .grw-tb td { border: 1.5px solid #1f1e1c; padding: 3px 9px; text-align: center; min-width: 2.2em; }
+  .grw-tb th { background: #f6efe0; }
+  .grw-exp > div { margin-top: 6px; }
+  .grw-pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px 18px; }
+  .grw-pq { break-inside: avoid; border: 1px solid #ddd; border-radius: 10px; padding: 6px 8px; }
+  .grw-blank td { height: 1.3em; min-width: 2.4em; }
+  @media print { .grw-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 10px; } .grw-pq .grw-row { margin: 2px 0; } .grw-tb { font-size: 10pt; } }
   .pl-card h2, .pl-card h3 { margin-top: 0; }
   .pl-words { display: flex; flex-wrap: wrap; gap: 14px 30px; margin: 8px 0 14px; }
   .pl-word { display: inline-flex; gap: 3px; padding: 5px 7px; border: 1.5px dashed #c9c4b8; border-radius: 12px; background: #fff; }
@@ -2081,7 +2106,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רס</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -8999,7 +9024,7 @@ window.addEventListener('popstate', e => {
     document.querySelectorAll('.overlay').forEach(o => o.remove());
     const v = e.state && e.state.v;
     if (URLP.has('print') || URLP.has('teacher')) return;
-    if (v === 'kf' || v === 'kfd') kfHome(v === 'kfd' ? 'div' : 'mul'); else if (v === 'cub') cubHome(); else home();
+    if (v === 'kf' || v === 'kfd') kfHome(v === 'kfd' ? 'div' : 'mul'); else if (v === 'cub') cubHome(); else if (v === 'mag') magHome(); else if (v === 'grw') grwHome(); else home();
   } finally { navPopping = false; }
 });
 
@@ -9140,6 +9165,16 @@ function home() {
             <span class="gc-ic" style="--gw:rgba(231,184,90,0.6)">🧊</span>
             <span class="gc-nm">כמה קוביות?</span>
             <span class="gc-ds">סופרים קוביות במבנה משורטט – גם את אלה שמוסתרות מאחור ומתחת. ואתגר: כמה קוביות חסרות כדי להשלים לתיבה?</span>
+          </button>
+          <button class="game-card" id="magGo">
+            <span class="gc-ic" style="--gw:rgba(108,76,241,0.35)">🔢</span>
+            <span class="gc-nm">ריבועי קסם</span>
+            <span class="gc-ds">משלימים מספרים כך שכל שורה, כל טור וכל אלכסון יגיעו לאותו סכום. מה הסוד של המספר שבמרכז?</span>
+          </button>
+          <button class="game-card" id="grwGo">
+            <span class="gc-ic" style="--gw:rgba(46,125,50,0.35)">📈</span>
+            <span class="gc-nm">תבניות גדילה</span>
+            <span class="gc-ds">ציורים מגפרורים, משבצות ונקודות שגדלים משלב לשלב. מגלים את הכלל – ויודעים מה יהיה בשלב 10, ואפילו בשלב 100!</span>
           </button>
           <p class="pl-credit">${PAL_CREDIT}</p>
         </section>` : ''}
@@ -9288,6 +9323,8 @@ function home() {
             ${GRADE >= 5 && teacherOn() ? `<button type="button" class="btnlink printlink" id="cmpSheetP">${ic('printer')} שטחים מורכבים – דף עבודה ופתקי יציאה<span class="desc">6 צורות על רשת משבצות, דף תשובות ו-4 פתקי יציאה בעמוד</span></button>` : ''}
             ${GRADE >= 4 ? `<a class="btnlink printlink" href="${gq('print')}#pal">${ic('printer')} תבניות פלינדרומיות (מצוינות)<span class="desc">בוחרים סוג, רמת קושי וכמה תבניות, עם דף פתרונות</span></a>` : ''}
             ${GRADE >= 4 ? `<a class="btnlink printlink" href="${gq('print')}#cub">${ic('printer')} כמה קוביות? (מצוינות)<span class="desc">מבנים מקוביות לספירה, גם השלמה לתיבה, עם דף פתרונות</span></a>` : ''}
+            ${GRADE >= 4 ? `<a class="btnlink printlink" href="${gq('print')}#mag">${ic('printer')} ריבועי קסם (מצוינות)<span class="desc">ריבועים להשלמה ב-3 רמות, עם דף פתרונות</span></a>` : ''}
+            ${GRADE >= 4 ? `<a class="btnlink printlink" href="${gq('print')}#grw">${ic('printer')} תבניות גדילה (מצוינות)<span class="desc">שלבים 1–3 מצוירים, שאלות על שלב רחוק, טבלת עזר ודף פתרונות</span></a>` : ''}
           </div>
         </section>
       </div>
@@ -9348,6 +9385,8 @@ function home() {
   $('gbGo').onclick = gbHome;
   if ($('palGo')) $('palGo').onclick = () => palHome('learn');
   if ($('cubGo')) $('cubGo').onclick = () => cubHome('learn');
+  if ($('magGo')) $('magGo').onclick = () => magHome('learn');
+  if ($('grwGo')) $('grwGo').onclick = () => grwHome('learn');
   if ($('pvwOn')) $('pvwOn').onclick = () => setPreview(true);
   if ($('guideBtn')) $('guideBtn').onclick = guideHome;
   app.querySelectorAll('.semx').forEach(b => b.onclick = () => { const n = b.dataset.sem; try { localStorage.setItem('math-sem', n); } catch (e) { /* לא חובה */ } const u = new URL(location.href); u.searchParams.set('sem', n); location.href = u.toString(); });
@@ -16757,6 +16796,417 @@ function gbTasks() {
   if (g >= 6) { const a = pick([6, 9, 12]); t.push({ q: `שרטטו <b>טרפז</b> ששטחו <b>${a} משבצות</b>.`, ok: p => { const c = gbCorners(p); if (c.length !== 4 || gbIsPar(p)) return false; const v = i => [c[(i + 1) % 4][0] - c[i][0], c[(i + 1) % 4][1] - c[i][1]]; const par = (x, y) => x[0] * y[1] - x[1] * y[0] === 0; return (par(v(0), v(2)) || par(v(1), v(3))) && gbArea(p) === a; } }); }
   return t;
 }
+// ===== מצוינות: ריבועי קסם =====
+// ריבוע קסם 3×3 כללי: מרכז c, ומסביב c±a, c±b, c±(a+b), c±(a−b). סכום הקסם = 3 × c.
+const MAG_SECS = [['learn', 'מה זה ריבוע קסם?'], ['play', 'משלימים ריבועי קסם'], ['print', '🖨️ הדפסה']];
+const MAG_LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+const MAG_LV = [[1, 'רמה 1 – 3 חסרים'], [2, 'רמה 2 – 5 חסרים'], [3, 'רמה 3 – בלי סכום הקסם']];
+let mag = { sec: 'learn', lv: 1 };
+const magRnd = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
+function magMake(c, a, b) { return [c - b, c + a + b, c - a, c - a + b, c, c + a - b, c + a, c - a - b, c + b]; }
+// סיבוב / שיקוף אקראי – אותו ריבוע, במראה אחר
+function magSym(q) {
+  const rot = m => [m[6], m[3], m[0], m[7], m[4], m[1], m[8], m[5], m[2]], flip = m => [m[2], m[1], m[0], m[5], m[4], m[3], m[8], m[7], m[6]];
+  for (let k = magRnd(0, 3); k > 0; k--) q = rot(q);
+  return Math.random() < 0.5 ? flip(q) : q;
+}
+// אפשר לפתור בדרך "שורה שחסר בה מספר אחד"? (אם הסכום מוסתר – מגלים אותו משורה מלאה או מהמרכז)
+function magSolvable(sol, giv, showS) {
+  const v = sol.map((x, i) => giv[i] ? x : null);
+  let S = showS ? 3 * sol[4] : null;
+  for (let guard = 0; guard < 20; guard++) {
+    if (S === null) { if (v[4] !== null) S = 3 * v[4]; else { const full = MAG_LINES.find(L => L.every(i => v[i] !== null)); if (full) S = full.reduce((s, i) => s + v[i], 0); } }
+    if (v.every(x => x !== null)) return true;
+    if (S === null) return false;
+    const L = MAG_LINES.find(L => L.filter(i => v[i] === null).length === 1);
+    if (!L) return false;
+    const i = L.find(j => v[j] === null); v[i] = S - L.reduce((s, j) => s + (v[j] || 0), 0);
+  }
+  return false;
+}
+function magGen(lv) {
+  const R = { 1: [5, 9, 4], 2: [8, 20, 7], 3: [10, 30, 9] }[lv], nb = { 1: 3, 2: 5, 3: 6 }[lv], showS = lv < 3;
+  for (let t = 0; t < 500; t++) {
+    const c = magRnd(R[0], R[1]), a = magRnd(1, R[2]), b = magRnd(1, R[2]);
+    if (a === b || a === 2 * b || b === 2 * a || c <= a + b) continue;
+    const sol = magSym(magMake(c, a, b));
+    const blanks = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8]).slice(0, nb), giv = sol.map((_, i) => !blanks.includes(i));
+    if (magSolvable(sol, giv, showS)) return { sol, giv, S: 3 * sol[4], showS };
+  }
+  return { sol: [2, 7, 6, 9, 5, 1, 4, 3, 8], giv: [1, 0, 1, 1, 1, 0, 1, 0, 1].map(Boolean), S: 15, showS: true };
+}
+// ציור: inp – תיבות קלט לחסרים; key – ממלא את הפתרון (בצבע)
+function magGridHTML(P, o = {}) {
+  return `<div class="mg-grid${o.pr ? ' mg-pr' : ''}" dir="ltr" data-raw>${P.sol.map((x, i) => P.giv[i] ? `<div class="mg-c mg-g">${x}</div>`
+    : o.key ? `<div class="mg-c mg-k">${x}</div>` : o.inp ? `<input class="mg-c" data-mi="${i}" inputmode="numeric" autocomplete="off" maxlength="3" aria-label="משבצת">` : '<div class="mg-c"></div>').join('')}</div>`;
+}
+const magSumsHTML = q => `<div class="mg-sums">${[['שורות', [0, 1, 2]], ['טורים', [3, 4, 5]], ['אלכסונים', [6, 7]]].map(([t, ix]) => `<div><b>${t}:</b> ${ix.map(k => `<span class="mg-s">${M(MAG_LINES[k].map(i => q[i]).join(' + ') + ' = ' + MAG_LINES[k].reduce((s, i) => s + q[i], 0))}</span>`).join('')}</div>`).join('')}</div>`;
+
+function magHome(sec) {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('mag');
+  if (sec) mag.sec = sec;
+  magDraw();
+}
+function magDraw() {
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('star')} מצוינות · ריבועי קסם</span><button class="secondary" id="magBack">${ic('home')} חזרה</button></div>
+    <div class="pl-nav">${MAG_SECS.map(([id, t]) => `<button type="button" class="pl-pill${mag.sec === id ? ' on' : ''}" data-msec="${id}">${t}</button>`).join('')}</div>
+    <div id="magBody"></div>`;
+  $('magBack').onclick = () => { homeTab = 'excel'; home(); };
+  app.querySelectorAll('[data-msec]').forEach(b => b.onclick = () => { mag.sec = b.dataset.msec; magDraw(); window.scrollTo({ top: 0 }); });
+  ({ learn: magLearn, play: magPlay, print: el => magPrint(el) })[mag.sec]($('magBody'));
+  track('מצוינות: ריבועי קסם', MAG_SECS.find(s => s[0] === mag.sec)[1]);
+}
+function magLearn(el) {
+  let q = [4, 9, 2, 3, 5, 7, 8, 1, 6];
+  const draw = () => {
+    $('mgEx').innerHTML = magGridHTML({ sol: q, giv: q.map(() => true) });
+    $('mgExS').innerHTML = `סכום הקסם: <b>${q[0] + q[1] + q[2]}</b> · המרכז: <b>${q[4]}</b> · ${M(`3 × ${q[4]} = ${3 * q[4]}`)}${magSumsHTML(q)}`;
+  };
+  el.innerHTML = `
+    <div class="card pl-card">
+      <h2>מה זה ריבוע קסם?</h2>
+      <p>ריבוע קסם הוא טבלה של מספרים שבה <b>הסכום של כל שורה, כל טור ושני האלכסונים – שווה</b>. הסכום הזה נקרא <b>סכום הקסם</b>.</p>
+      <p class="muted">לפי אגדה סינית עתיקה, ריבוע הקסם הראשון (״לו שו״) הופיע על שריון של צב שיצא מהנהר – בדיוק הריבוע שלמטה.</p>
+      <div id="mgEx"></div>
+      <div id="mgExS" class="explain"></div>
+      <p><b>נסו לשנות את הריבוע</b> – האם הוא נשאר ריבוע קסם?</p>
+      <div class="actions"><button type="button" class="secondary" data-mt="add">+1 לכל מספר</button><button type="button" class="secondary" data-mt="mul">×2 לכל מספר</button><button type="button" class="secondary" data-mt="rot">↻ סיבוב</button><button type="button" class="ghost" data-mt="reset">🔁 חזרה להתחלה</button></div>
+    </div>
+    <div class="card pl-card">
+      <h3>סודות של ריבוע קסם 3×3</h3>
+      <div class="rule">⭐ <b>סכום הקסם = 3 × המספר שבמרכז.</b> מכירים את המרכז? מכירים את סכום הקסם!</div>
+      <div class="rule">🔍 <b>איך משלימים?</b> מחפשים שורה, טור או אלכסון שחסר בו <b>רק מספר אחד</b>: ${M('סכום הקסם − שני המספרים שיש')}. ממלאים – ומחפשים שוב.</div>
+      <div class="rule">➕ מוסיפים לכל המספרים אותו מספר, או כופלים את כולם באותו מספר – <b>עדיין ריבוע קסם</b>. גם סיבוב והיפוך במראה.</div>
+      <div class="warn">⚠️ בודקים את <b>כל 8 הקווים</b>: 3 שורות, 3 טורים ו-2 אלכסונים.</div>
+      <div class="actions"><button type="button" id="mgGoP">למשחק ←</button></div>
+    </div>`;
+  el.querySelectorAll('[data-mt]').forEach(b => b.onclick = () => {
+    const t = b.dataset.mt;
+    if (t === 'add') q = q.map(x => x + 1); else if (t === 'mul') q = q.map(x => x * 2); else if (t === 'rot') q = [q[6], q[3], q[0], q[7], q[4], q[1], q[8], q[5], q[2]]; else q = [4, 9, 2, 3, 5, 7, 8, 1, 6];
+    draw();
+  });
+  $('mgGoP').onclick = () => { mag.sec = 'play'; magDraw(); window.scrollTo({ top: 0 }); };
+  draw();
+}
+function magPlay(el) {
+  const N = 5;
+  let n = 0, good = 0, P, wrong = false, shown = false;
+  const ask = () => {
+    P = magGen(mag.lv); wrong = false; shown = false;
+    el.innerHTML = `<div class="card pl-card pl-quiz">
+      <div class="pl-nav">${MAG_LV.map(([v, t]) => `<button type="button" class="pl-pill${mag.lv === v ? ' on' : ''}" data-mlv="${v}">${t}</button>`).join('')}</div>
+      <div class="muted">ריבוע ${n + 1} מתוך ${N} · נפתרו: ${good}</div>
+      <p>${P.showS ? `סכום הקסם: <b>${P.S}</b>. ` : 'סכום הקסם לא כתוב – <b>גלו אותו בעצמכם!</b> '}השלימו את המספרים החסרים.</p>
+      ${magGridHTML(P, { inp: true })}
+      <div class="actions"><button type="button" id="mgOk">בדיקה</button><button type="button" class="secondary" id="mgHint">רמז</button></div>
+      ${teacherOn() ? '<div class="actions noprint"><button type="button" class="secondary" id="mgTSol">👁️ הצגת הפתרון (מורה)</button><button type="button" class="secondary" id="mgTSkip">דילוג לשאלה הבאה ← (מורה)</button></div>' : ''}
+      <div id="mgFb"></div></div>`;
+    el.querySelectorAll('[data-mlv]').forEach(b => b.onclick = () => { mag.lv = +b.dataset.mlv; n = 0; good = 0; ask(); });
+    el.querySelectorAll('input.mg-c').forEach(inp => {
+      inp.oninput = () => { inp.value = inp.value.replace(/\D/g, '').slice(0, 3); inp.classList.remove('mg-bad', 'mg-hl'); };
+      inp.onkeydown = e => { if (e.key === 'Enter') check(); };
+    });
+    $('mgOk').onclick = check;
+    $('mgHint').onclick = hint;
+    if ($('mgTSol')) $('mgTSol').onclick = () => reveal(null);
+    if ($('mgTSkip')) $('mgTSkip').onclick = () => { n++; n < N ? ask() : done(); };
+  };
+  const cur = () => P.sol.map((x, i) => { if (P.giv[i]) return x; const v = el.querySelector(`[data-mi="${i}"]`).value; return v === '' ? null : Number(v); });
+  const hint = () => {
+    el.querySelectorAll('.mg-hl').forEach(e => e.classList.remove('mg-hl'));
+    const v = cur(), S = P.S, sKnown = P.showS || MAG_LINES.some(L => L.every(i => P.giv[i])) || P.giv[4];
+    const L = MAG_LINES.find(L => L.filter(i => v[i] === null).length === 1);
+    let t;
+    if (!P.showS && !P.giv[4] && !MAG_LINES.some(L => L.every(i => v[i] !== null))) t = 'קודם מגלים את סכום הקסם: יש שורה, טור או אלכסון מלאים? או שכתוב המספר שבמרכז? (סכום הקסם = 3 × המרכז)';
+    else if (L) { L.forEach(i => { const e = el.querySelector(`[data-mi="${i}"]`); if (e) e.classList.add('mg-hl'); }); t = `בקו המסומן חסר רק מספר אחד. סכום הקסם${sKnown && P.showS ? ` הוא ${S}` : ''} – כמה חסר כדי להגיע אליו?`; }
+    else t = 'כל המשבצות מלאות – לחצו "בדיקה".';
+    $('mgFb').innerHTML = `<div class="fb show hint">💡 ${t}</div>`;
+  };
+  const check = () => {
+    const v = cur();
+    if (v.some(x => x === null)) { $('mgFb').innerHTML = '<div class="fb show hint">יש עוד משבצות ריקות.</div>'; return; }
+    const bad = v.map((x, i) => x !== P.sol[i]);
+    if (bad.some(Boolean)) {
+      wrong = true;
+      bad.forEach((b, i) => { const e = el.querySelector(`[data-mi="${i}"]`); if (e && b) e.classList.add('mg-bad'); });
+      const badL = MAG_LINES.filter(L => L.reduce((s, i) => s + v[i], 0) !== P.S).length;
+      $('mgFb').innerHTML = `<div class="fb show bad">עוד לא – ${badL} ${badL === 1 ? 'קו' : 'קווים'} לא ${badL === 1 ? 'מגיע' : 'מגיעים'} לסכום הקסם. המשבצות האדומות שגויות. נסו שוב!</div>`;
+      return;
+    }
+    reveal(!wrong);
+  };
+  // ok=null – המורה ביקשה לראות את הפתרון (לא נספר)
+  const reveal = ok => {
+    if (shown) return; shown = true;
+    if (ok) good++;
+    n++;
+    if (ok !== null) track('מצוינות: ריבועי קסם', `ריבוע רמה ${mag.lv} – נפתר`);
+    el.querySelectorAll('input.mg-c').forEach(inp => { inp.value = P.sol[+inp.dataset.mi]; inp.disabled = true; inp.classList.remove('mg-bad', 'mg-hl'); inp.classList.add('mg-k'); });
+    ['mgOk', 'mgHint', 'mgTSol', 'mgTSkip'].forEach(id => { if ($(id)) $(id).disabled = true; });
+    $('mgFb').innerHTML = `${ok === null ? '' : `<div class="fb show ok">${ok ? 'מצוין! פתרתם בפעם הראשונה 🎉' : 'יפה – תיקנתם והגעתם! ✓'}</div>`}
+      <div class="explain">סכום הקסם: ${M(`3 × ${P.sol[4]} = ${P.S}`)}${magSumsHTML(P.sol)}</div>
+      <div class="actions"><button type="button" id="mgNx">${n < N ? 'הריבוע הבא ←' : 'לסיכום'}</button></div>`;
+    $('mgNx').onclick = () => n < N ? ask() : done();
+    $('mgNx').focus();
+  };
+  const done = () => {
+    track('מצוינות: ריבועי קסם', `רמה ${mag.lv}: ${good}/${N} בניסיון ראשון`);
+    el.innerHTML = `<div class="card pl-card pl-quiz"><h2>${good === N ? 'מושלם! 🌟' : good >= N - 1 ? 'יפה מאוד!' : 'כל הכבוד על ההתמדה!'}</h2><p>פתרתם בניסיון הראשון <b>${good}</b> מתוך ${N} ריבועים.</p>
+      <div class="actions"><button type="button" id="mgAg">עוד סבב</button>${mag.lv < 3 && good >= N - 1 ? '<button type="button" class="secondary" id="mgUp">לרמה הבאה ←</button>' : ''}</div></div>`;
+    $('mgAg').onclick = () => { n = 0; good = 0; ask(); };
+    if ($('mgUp')) $('mgUp').onclick = () => { mag.lv++; n = 0; good = 0; ask(); };
+  };
+  ask();
+}
+function magPrint(el, outEl) {
+  const o = mag.pr || (mag.pr = { lv: 'up', n: 9, key: true, title: 'ריבועי קסם' });
+  el.innerHTML = `
+    <div class="card pl-card noprint">
+      <h3>${ic('printer')} דף ריבועי קסם להדפסה</h3>
+      <div class="pl-form">
+        <label>כותרת <input id="mpT" class="tinput" value="${esc(o.title)}"></label>
+        <label>רמת קושי <select id="mpL" class="tinput">${MAG_LV.map(([v, t]) => `<option value="${v}"${o.lv === String(v) ? ' selected' : ''}>${t}</option>`).join('')}<option value="up"${o.lv === 'up' ? ' selected' : ''}>מדורג – מקל לקשה</option></select></label>
+        <label>כמה ריבועים? <input id="mpN" class="tinput" type="number" min="1" max="30" value="${o.n}" inputmode="numeric" style="width:90px"></label>
+        <label class="pl-chk"><input type="checkbox" id="mpKey"${o.key ? ' checked' : ''}> דף פתרונות</label>
+      </div>
+      <div class="actions"><button type="button" id="mpGo">יצירת הדף</button><button type="button" class="secondary hidden" id="mpPrint">${ic('printer')} הדפסה</button></div>
+      <div class="muted" id="mpMsg"></div>
+    </div>
+    <div id="mpOut"></div>`;
+  const read = () => { o.title = $('mpT').value.trim() || 'ריבועי קסם'; o.lv = $('mpL').value; o.n = Math.max(1, Math.min(30, Math.floor(Number($('mpN').value) || 1))); o.key = $('mpKey').checked; $('mpN').value = o.n; };
+  $('mpGo').onclick = () => {
+    read();
+    const list = [...Array(o.n)].map((_, i) => { const lv = o.lv === 'up' ? 1 + Math.floor(i * 3 / o.n) : Number(o.lv); return Object.assign(magGen(lv), { lv }); });
+    const it = (P, i, key) => `<div class="pp-item"><div class="pp-h"><b>${i + 1}.</b> <span class="pp-st">${'★'.repeat(P.lv)}</span></div>
+      <div class="mg-pS">${P.showS || key ? `סכום הקסם: <b>${P.S}</b>` : 'סכום הקסם: <span class="wsline"></span>'}</div>${magGridHTML(P, { pr: true, key })}</div>`;
+    let out = `<section class="ws-page pp-page">
+      <div class="wshead"><h1>${esc(o.title)}</h1>
+        <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      <div class="wstips">השלימו את המספרים החסרים, כך שהסכום של <b>כל שורה, כל טור ושני האלכסונים</b> יהיה שווה – סכום הקסם. טיפ: סכום הקסם = 3 × המספר שבמרכז. חפשו קו שחסר בו רק מספר אחד!</div>
+      <div class="pp-grid">${list.map((P, i) => it(P, i)).join('')}</div>
+    </section>`;
+    if (o.key) out += `<section class="ws-page pp-page wskey"><h2>🔑 פתרונות – ${esc(o.title)}</h2><div class="pp-grid pp-keys">${list.map((P, i) => it(P, i, 1)).join('')}</div></section>`;
+    (outEl || $('mpOut')).innerHTML = out;
+    $('mpPrint').classList.remove('hidden');
+    $('mpGo').textContent = '🔄 יצירה מחדש (ריבועים חדשים)';
+    $('mpMsg').textContent = `הדף מוכן – ${o.n} ריבועים. גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".`;
+    track('מצוינות: ריבועי קסם', `הדפסה: ${o.n} ריבועים`);
+  };
+  $('mpPrint').onclick = () => window.print();
+}
+
+// ===== מצוינות: תבניות גדילה – מה יהיה בשלב ה-10? =====
+const GRW_SECS = [['learn', 'איך מגלים את הכלל?'], ['play', 'מה יהיה בשלב...?'], ['print', '🖨️ הדפסה']];
+const GRW_LV = [[1, 'רמה 1 – השלב הבא'], [2, 'רמה 2 – שלב רחוק'], [3, 'רמה 3 – שלב 100 ואתגרים']];
+let grw = { sec: 'learn', lv: 1 };
+// כל תבנית: אילו חלקים יש בשלב n (גפרורים / משבצות / נקודות), כמה יש, ואיך מסבירים את הכלל
+const GRW = [
+  { id: 'sq', nm: 'שורת ריבועים מגפרורים', u: 'גפרורים', k: 'st', lin: [3, 1], nest: 1,
+    el: n => { const s = []; for (let i = 0; i < n; i++) s.push([i, 0, i + 1, 0], [i, 1, i + 1, 1]); for (let i = 0; i <= n; i++) s.push([i, 0, i, 1]); return s; } },
+  { id: 'tri', nm: 'שורת משולשים מגפרורים', u: 'גפרורים', k: 'st', lin: [2, 1], nest: 1,
+    el: n => { const h = 0.87, B = k => [k, h], T = k => [k + 0.5, 0], E = new Map(), add = (p, q) => { const a = [...p, ...q], key = [p, q].map(String).sort().join('|'); E.set(key, a); };
+      for (let i = 0; i < n; i++) { const k = i >> 1; if (i % 2 === 0) { add(B(k), B(k + 1)); add(B(k), T(k)); add(T(k), B(k + 1)); } else { add(T(k), T(k + 1)); add(B(k + 1), T(k + 1)); add(T(k), B(k + 1)); } }
+      return [...E.values()]; } },
+  { id: 'dsq', nm: 'שתי שורות של ריבועים מגפרורים', u: 'גפרורים', k: 'st', lin: [5, 2], nest: 1,
+    el: n => { const s = []; for (let r = 0; r <= 2; r++) for (let i = 0; i < n; i++) s.push([i, r, i + 1, r]); for (let i = 0; i <= n; i++) for (let r = 0; r < 2; r++) s.push([i, r, i, r + 1]); return s; } },
+  { id: 'plus', nm: 'פלוס ממשבצות', u: 'משבצות', k: 'tl', lin: [4, 1], nest: 1,
+    el: n => { const t = [[0, 0]]; for (let k = 1; k <= n; k++) t.push([k, 0], [-k, 0], [0, k], [0, -k]); return t; } },
+  { id: 'L', nm: 'האות L ממשבצות', u: 'משבצות', k: 'tl', lin: [2, 1], nest: 1,
+    el: n => { const t = []; for (let y = 0; y <= n; y++) t.push([0, -y]); for (let x = 1; x <= n; x++) t.push([x, 0]); return t; } },
+  { id: 'frame', nm: 'מסגרת ממשבצות', u: 'משבצות', k: 'tl', lin: [4, 4], nest: 0,
+    el: n => { const m = n + 2, t = []; for (let x = 0; x < m; x++) for (let y = 0; y < m; y++) if (!x || !y || x === m - 1 || y === m - 1) t.push([x, y]); return t; } },
+  { id: 'stair', nm: 'מדרגות ממשבצות', u: 'משבצות', k: 'tl', q: n => n * (n + 1) / 2, nest: 1,
+    el: n => { const t = []; for (let c = 0; c < n; c++) for (let k = 0; k <= c; k++) t.push([c, -k]); return t; },
+    rule: N => `בשלב ${N} יש עמודות של 1, 2, 3 ... עד ${N} משבצות: ${M(N <= 6 ? [...Array(N)].map((_, i) => i + 1).join(' + ') + ' = ' + N * (N + 1) / 2 : `1 + 2 + ... + ${N} = ${N} × ${N + 1} : 2 = ${N * (N + 1) / 2}`)}` },
+  { id: 'sqd', nm: 'ריבוע של נקודות', u: 'נקודות', k: 'dt', q: n => n * n, nest: 1,
+    el: n => { const d = []; for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) d.push([i, j]); return d; },
+    rule: N => `בשלב ${N} יש ריבוע של ${N} שורות ו-${N} נקודות בכל שורה: ${M(`${N} × ${N} = ${N * N}`)}` },
+  { id: 'rectd', nm: 'מלבן של נקודות', u: 'נקודות', k: 'dt', q: n => n * (n + 1), nest: 1,
+    el: n => { const d = []; for (let i = 0; i <= n; i++) for (let j = 0; j < n; j++) d.push([i, j]); return d; },
+    rule: N => `בשלב ${N} יש ${N} שורות, ובכל שורה ${N + 1} נקודות: ${M(`${N} × ${N + 1} = ${N * (N + 1)}`)}` }
+];
+const grwF = (G, n) => G.lin ? G.lin[0] * n + G.lin[1] : G.q(n);
+const grwRule = (G, N) => G.lin ? `בשלב 1 יש ${grwF(G, 1)} ${G.u}, ובכל שלב <b>מוסיפים ${G.lin[0]}</b>. אפשר לחשוב שבשלב "0" יש ${G.lin[1]}, ואז בשלב ${N}: ${M(`${G.lin[0]} × ${N} + ${G.lin[1]} = ${grwF(G, N)}`)}` : G.rule(N);
+// ציור שלב. u – גודל יחידה (אותו גודל לכל השלבים, כדי לראות את הגדילה); hl – מדגישים מה נוסף
+function grwSVG(G, n, o = {}) {
+  const u = o.u || (G.k === 'st' ? 24 : 15), E = G.el(n), prev = o.hl && G.nest && n > 1 ? new Set(G.el(n - 1).map(String)) : null;
+  const isNew = e => prev && !prev.has(String(e));
+  const pts = G.k === 'st' ? E.flatMap(s => [[s[0], s[1]], [s[2], s[3]]]) : E.flatMap(([x, y]) => [[x, y], [x + 1, y + 1]]);
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), x0 = Math.min(...xs), y0 = Math.min(...ys), pad = 6;
+  const W = (Math.max(...xs) - x0) * u + 2 * pad, H = (Math.max(...ys) - y0) * u + 2 * pad, X = x => pad + (x - x0) * u, Y = y => pad + (y - y0) * u;
+  let g = '';
+  if (G.k === 'st') g = E.map(s => { const c = isNew(s) ? '#1a5fb4' : '#b5651d'; return `<line x1="${X(s[0]).toFixed(1)}" y1="${Y(s[1]).toFixed(1)}" x2="${X(s[2]).toFixed(1)}" y2="${Y(s[3]).toFixed(1)}" stroke="${c}" stroke-width="3.4" stroke-linecap="round"/><circle cx="${X(s[2]).toFixed(1)}" cy="${Y(s[3]).toFixed(1)}" r="2.8" fill="#d33a2c"/>`; }).join('');
+  else if (G.k === 'tl') g = E.map(t => `<rect x="${X(t[0]).toFixed(1)}" y="${Y(t[1]).toFixed(1)}" width="${u}" height="${u}" fill="${isNew(t) ? '#9fd3a8' : '#f6e2a6'}" stroke="${SOL_INK}" stroke-width="1.4"/>`).join('');
+  else g = E.map(d => `<circle cx="${(X(d[0]) + u / 2).toFixed(1)}" cy="${(Y(d[1]) + u / 2).toFixed(1)}" r="${(u * 0.32).toFixed(1)}" fill="${isNew(d) ? '#e07b39' : '#34449f'}"/>`).join('');
+  return `<svg class="grw-fig" viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" style="width:${W.toFixed(0)}px" aria-hidden="true" dir="ltr">${g}</svg>`;
+}
+const grwStages = (G, upto, o = {}) => `<div class="grw-row">${[...Array(upto)].map((_, i) => `<div class="grw-st">${grwSVG(G, i + 1, o)}<div class="muted">שלב ${i + 1}</div></div>`).join('')}</div>`;
+const grwTable = (G, ns) => `<table class="grw-tb" dir="rtl"><tr><th>שלב</th>${ns.map(n => `<td>${n === '…' ? '…' : n}</td>`).join('')}</tr><tr><th>${G.u}</th>${ns.map(n => `<td>${n === '…' ? '…' : grwF(G, n)}</td>`).join('')}</tr></table>`;
+// שאלה: { G, N, inv } – inv: "באיזה שלב יש X?"
+function grwGen(lv) {
+  const linG = GRW.filter(G => G.lin), qG = GRW.filter(G => !G.lin);
+  if (lv === 1) return { G: pick(GRW), N: pick([4, 4, 5]) };
+  if (lv === 2) return { G: pick(linG), N: pick([6, 8, 10, 10, 12, 15, 20]) };
+  const r = Math.random();
+  if (r < 0.4) return { G: pick(linG), N: pick([50, 100, 100]) };
+  if (r < 0.7) return { G: pick(linG), N: magRnd(7, 30), inv: true };
+  return { G: pick(qG), N: magRnd(6, 10) };
+}
+const grwQ = Q => Q.inv ? `באיזה שלב יהיו <b>${grwF(Q.G, Q.N)} ${Q.G.u}</b>?` : `כמה ${Q.G.u} יהיו <b>בשלב ${Q.N}</b>?`;
+const grwAns = Q => Q.inv ? Q.N : grwF(Q.G, Q.N);
+function grwExplain(Q) {
+  const { G, N } = Q, ns = N <= 6 ? [...Array(N)].map((_, i) => i + 1) : [1, 2, 3, 4, '…', N];
+  return `${grwTable(G, ns)}<div>${grwRule(G, N)}</div>${Q.inv ? `<div>הפוך: מורידים ${G.lin[1]} ומחלקים ב-${G.lin[0]}: ${M(`(${grwF(G, N)} − ${G.lin[1]}) : ${G.lin[0]} = ${N}`)}</div>` : ''}`;
+}
+
+function grwHome(sec) {
+  stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('grw');
+  if (sec) grw.sec = sec;
+  grwDraw();
+}
+function grwDraw() {
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('star')} מצוינות · תבניות גדילה</span><button class="secondary" id="grwBack">${ic('home')} חזרה</button></div>
+    <div class="pl-nav">${GRW_SECS.map(([id, t]) => `<button type="button" class="pl-pill${grw.sec === id ? ' on' : ''}" data-gsec="${id}">${t}</button>`).join('')}</div>
+    <div id="grwBody"></div>`;
+  $('grwBack').onclick = () => { homeTab = 'excel'; home(); };
+  app.querySelectorAll('[data-gsec]').forEach(b => b.onclick = () => { grw.sec = b.dataset.gsec; grwDraw(); window.scrollTo({ top: 0 }); });
+  ({ learn: grwLearn, play: grwPlay, print: el => grwPrint(el) })[grw.sec]($('grwBody'));
+  track('מצוינות: תבניות גדילה', GRW_SECS.find(s => s[0] === grw.sec)[1]);
+}
+function grwLearn(el) {
+  const EXS = ['sq', 'plus', 'stair'];
+  let gi = 0, n = 1;
+  const draw = () => {
+    const G = GRW.find(g => g.id === EXS[gi]);
+    el.querySelectorAll('[data-gex]').forEach((b, i) => b.classList.toggle('on', i === gi));
+    const ns = [...Array(n)].map((_, i) => i + 1);
+    $('grEx').innerHTML = `<div class="grw-st">${grwSVG(G, n, { hl: true })}<div class="muted">שלב ${n}${n > 1 ? ' – <span style="color:#1a5fb4">מה שנוסף מסומן בצבע</span>' : ''}</div></div>`;
+    $('grN').textContent = n;
+    $('grTb').innerHTML = grwTable(G, ns) + (n > 1 ? `<div class="muted">בכל שלב נוספו: ${ns.slice(1).map(k => grwF(G, k) - grwF(G, k - 1)).join(', ')}</div>` : '');
+    $('grRule').innerHTML = n >= 3 ? `💡 ${grwRule(G, 10).replace('ואז בשלב 10:', 'ולכן בשלב 10:')}` : 'הוסיפו עוד שלבים – ונסו לגלות את הכלל.';
+  };
+  el.innerHTML = `
+    <div class="card pl-card">
+      <h2>תבניות גדילה</h2>
+      <p>תבנית גדילה היא ציור שגדל משלב לשלב לפי <b>כלל קבוע</b>. אם מגלים את הכלל – אפשר לדעת מה יהיה בשלב 10, או אפילו בשלב 100, <b>בלי לצייר</b>!</p>
+      <div class="pl-nav">${EXS.map((id, i) => `<button type="button" class="pl-pill" data-gex="${i}">${GRW.find(g => g.id === id).nm}</button>`).join('')}</div>
+      <div id="grEx" class="grw-one"></div>
+      <div class="actions"><span class="sol-dim">שלב: <button class="secondary" data-gn="-1">−</button><b id="grN"></b><button class="secondary" data-gn="1">+</button></span></div>
+      <div id="grTb"></div>
+      <div id="grRule" class="explain"></div>
+    </div>
+    <div class="card pl-card">
+      <h3>איך מגלים את הכלל?</h3>
+      <p><b>1.</b> בונים <b>טבלה</b>: שלב 1, שלב 2, שלב 3 – וכמה יש בכל אחד.</p>
+      <p><b>2.</b> בודקים <b>כמה מוסיפים</b> בכל שלב. אם מוסיפים תמיד אותו מספר – הכלל הוא: ${M('כמה מוסיפים × מספר השלב + מה שהיה בשלב 0')}.</p>
+      <p><b>3.</b> בודקים את הכלל על השלבים שבציור – ורק אז מחשבים את השלב הרחוק.</p>
+      <div class="warn">⚠️ <b>טעות נפוצה:</b> "בשלב 5 יש 16 גפרורים, אז בשלב 10 יש פי 2 – 32". לא נכון! בשורת ריבועים בשלב 10 יש ${M('3 × 10 + 1 = 31')}. הגפרור הראשון לא מוכפל.</div>
+      <div class="actions"><button type="button" id="grGoP">לתרגול ←</button></div>
+    </div>`;
+  el.querySelectorAll('[data-gex]').forEach(b => b.onclick = () => { gi = +b.dataset.gex; n = 1; draw(); });
+  el.querySelectorAll('[data-gn]').forEach(b => b.onclick = () => { n = Math.max(1, Math.min(7, n + Number(b.dataset.gn))); draw(); });
+  $('grGoP').onclick = () => { grw.sec = 'play'; grwDraw(); window.scrollTo({ top: 0 }); };
+  draw();
+}
+function grwPlay(el) {
+  let n = 0, good = 0, Q, tries;
+  const ask = () => {
+    Q = grwGen(grw.lv); tries = 0;
+    el.innerHTML = `<div class="card pl-card pl-quiz">
+      <div class="pl-nav">${GRW_LV.map(([v, t]) => `<button type="button" class="pl-pill${grw.lv === v ? ' on' : ''}" data-glv="${v}">${t}</button>`).join('')}</div>
+      <div class="muted">שאלה ${n + 1} מתוך 10 · נכונות: ${good}</div>
+      <p><b>${Q.G.nm}</b></p>
+      ${grwStages(Q.G, 3)}
+      <p>${grwQ(Q)}</p>
+      <div class="actions"><input id="grIn" class="ans" type="text" inputmode="numeric" autocomplete="off" aria-label="תשובה" style="width:7em"><button type="button" id="grOk">בדיקה</button></div>
+      ${teacherOn() ? '<div class="actions noprint"><button type="button" class="secondary" id="grTSol">👁️ הצגת הפתרון (מורה)</button><button type="button" class="secondary" id="grTSkip">דילוג לשאלה הבאה ← (מורה)</button></div>' : ''}
+      <div id="grFb"></div></div>`;
+    el.querySelectorAll('[data-glv]').forEach(b => b.onclick = () => { grw.lv = +b.dataset.glv; n = 0; good = 0; ask(); });
+    $('grIn').onkeydown = e => { if (e.key === 'Enter') check(); };
+    $('grOk').onclick = check;
+    if ($('grTSol')) $('grTSol').onclick = () => reveal(null);
+    if ($('grTSkip')) $('grTSkip').onclick = () => { n++; n < 10 ? ask() : done(); };
+    $('grIn').focus({ preventScroll: true });
+  };
+  const check = () => {
+    const s = $('grIn').value.trim(), v = Number(s), want = grwAns(Q);
+    if (!s || !Number.isFinite(v)) return;
+    const ok = v === want;
+    if (!ok && tries === 0) {
+      tries = 1;
+      const G = Q.G;
+      const tip = G.lin && !Q.inv && Q.N > 5 && v === grwF(G, 1) * Q.N ? `כפלתם את שלב 1 ב-${Q.N}? זה לא עובד – בשלב 1 יש "תוספת" שלא חוזרת. בדקו: כמה <b>מוסיפים</b> בכל שלב?`
+        : Q.inv ? `טיפ: כמה מוסיפים בכל שלב? כמה היה בשלב "0"? אז כמה פעמים הוסיפו עד ${grwF(G, Q.N)}?`
+        : Q.N <= 5 ? 'טיפ: ציירו את השלב הבא, או בדקו כמה נוסף בין שלב לשלב.'
+        : G.lin ? 'טיפ: בנו טבלה ובדקו כמה מוסיפים בכל שלב.' : 'טיפ: איך בנוי כל שלב? כמה שורות או עמודות יש בו, ומה גודל כל אחת?';
+      $('grFb').innerHTML = `<div class="fb show bad">עוד לא. ${tip} נסו שוב.</div>`;
+      $('grIn').select();
+      return;
+    }
+    reveal(ok);
+  };
+  const reveal = ok => {
+    if (ok) good++;
+    n++;
+    ['grIn', 'grOk', 'grTSol', 'grTSkip'].forEach(id => { if ($(id)) $(id).disabled = true; });
+    $('grFb').innerHTML = `<div class="fb show ${ok ? 'ok' : ok === null ? 'hint' : 'bad'}">${ok ? 'נכון! 🎉' : `התשובה: <b>${grwAns(Q)}</b>`}</div>
+      <div class="explain grw-exp">${grwExplain(Q)}</div>
+      <div class="actions"><button type="button" id="grNx">${n < 10 ? 'הבא ←' : 'לסיכום'}</button></div>`;
+    $('grNx').onclick = () => n < 10 ? ask() : done();
+    $('grNx').focus();
+  };
+  const done = () => {
+    track('מצוינות: תבניות גדילה', `${GRW_LV.find(l => l[0] === grw.lv)[1]}: ${good}/10`);
+    el.innerHTML = `<div class="card pl-card pl-quiz"><h2>${good >= 9 ? 'מצוין! 🌟' : good >= 7 ? 'יפה מאוד!' : 'כל הכבוד על התרגול!'}</h2><p>ענית נכון על <b>${good}</b> מתוך 10.</p>
+      <div class="actions"><button type="button" id="grAg">עוד סבב</button>${grw.lv < 3 && good >= 8 ? '<button type="button" class="secondary" id="grUp">לרמה הבאה ←</button>' : ''}</div></div>`;
+    $('grAg').onclick = () => { n = 0; good = 0; ask(); };
+    if ($('grUp')) $('grUp').onclick = () => { grw.lv++; n = 0; good = 0; ask(); };
+  };
+  ask();
+}
+function grwPrint(el, outEl) {
+  const o = grw.pr || (grw.pr = { lv: 'up', n: 6, key: true, table: true, title: 'תבניות גדילה' });
+  el.innerHTML = `
+    <div class="card pl-card noprint">
+      <h3>${ic('printer')} דף תבניות גדילה להדפסה</h3>
+      <div class="pl-form">
+        <label>כותרת <input id="gpT" class="tinput" value="${esc(o.title)}"></label>
+        <label>רמת קושי <select id="gpL" class="tinput">${GRW_LV.map(([v, t]) => `<option value="${v}"${o.lv === String(v) ? ' selected' : ''}>${t}</option>`).join('')}<option value="up"${o.lv === 'up' ? ' selected' : ''}>מדורג – מקל לקשה</option></select></label>
+        <label>כמה שאלות? <input id="gpN" class="tinput" type="number" min="1" max="20" value="${o.n}" inputmode="numeric" style="width:90px"></label>
+        <label class="pl-chk"><input type="checkbox" id="gpTb"${o.table ? ' checked' : ''}> טבלת עזר ריקה</label>
+        <label class="pl-chk"><input type="checkbox" id="gpKey"${o.key ? ' checked' : ''}> דף פתרונות</label>
+      </div>
+      <div class="actions"><button type="button" id="gpGo">יצירת הדף</button><button type="button" class="secondary hidden" id="gpPrint">${ic('printer')} הדפסה</button></div>
+      <div class="muted" id="gpMsg"></div>
+    </div>
+    <div id="gpOut"></div>`;
+  const read = () => { o.title = $('gpT').value.trim() || 'תבניות גדילה'; o.lv = $('gpL').value; o.n = Math.max(1, Math.min(20, Math.floor(Number($('gpN').value) || 1))); o.key = $('gpKey').checked; o.table = $('gpTb').checked; $('gpN').value = o.n; };
+  $('gpGo').onclick = () => {
+    read();
+    const used = new Set();
+    const list = [...Array(o.n)].map((_, i) => { const lv = o.lv === 'up' ? 1 + Math.floor(i * 3 / o.n) : Number(o.lv); let Q, k = 0; do { Q = grwGen(lv); } while (used.has(Q.G.id) && ++k < 20); used.add(Q.G.id); if (used.size >= GRW.length) used.clear(); return Object.assign(Q, { lv }); });
+    const tb = `<table class="grw-tb grw-blank" dir="rtl"><tr><th>שלב</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><th>כמה?</th><td></td><td></td><td></td><td></td><td></td></tr></table>`;
+    const q = (Q, i) => `<div class="grw-pq"><div class="pp-h"><b>${i + 1}.</b> <span class="pp-st">${'★'.repeat(Q.lv)}</span> ${Q.G.nm}</div>${grwStages(Q.G, 3, { u: Q.G.k === 'st' ? 18 : 11 })}
+      ${o.table ? tb : ''}<div class="cp-q">${grwQ(Q)}</div><div class="cp-ans">תשובה: <span class="wsline"></span></div></div>`;
+    const k = (Q, i) => `<div class="grw-pq"><div class="pp-h"><b>${i + 1}.</b> ${Q.G.nm} – תשובה: <b>${grwAns(Q)}</b></div><div class="grw-exp">${grwExplain(Q)}</div></div>`;
+    let out = `<section class="ws-page pp-page">
+      <div class="wshead"><h1>${esc(o.title)}</h1>
+        <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      <div class="wstips">בכל תבנית מצוירים שלבים 1, 2, 3. גלו את <b>הכלל</b>: בנו טבלה ובדקו <b>כמה מוסיפים</b> בכל שלב. זהירות – בשלב 10 לא תמיד יש פי 2 ממה שיש בשלב 5!</div>
+      <div class="grw-pgrid">${list.map(q).join('')}</div>
+    </section>`;
+    if (o.key) out += `<section class="ws-page pp-page wskey"><h2>🔑 פתרונות – ${esc(o.title)}</h2><div class="grw-pgrid">${list.map(k).join('')}</div></section>`;
+    (outEl || $('gpOut')).innerHTML = out;
+    $('gpPrint').classList.remove('hidden');
+    $('gpGo').textContent = '🔄 יצירה מחדש (שאלות חדשות)';
+    $('gpMsg').textContent = `הדף מוכן – ${o.n} שאלות. גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".`;
+    track('מצוינות: תבניות גדילה', `הדפסה: ${o.n} שאלות`);
+  };
+  $('gpPrint').onclick = () => window.print();
+}
+
 // ===== מצוינות: כמה קוביות יש בשרטוט? =====
 // מבנה = מפת גבהים H[x][y] (x – ימינה-קדימה, y – שמאלה-קדימה). כל קובייה עומדת על הרצפה או על קובייה אחרת.
 // הגבהים לא עולים כשמתקרבים אלינו – כך כל ראש עמודה נראה, והשאלה חד-משמעית.
@@ -18703,11 +19153,13 @@ function pkSetup() {
     if (out.innerHTML) { out.innerHTML = ''; }
     if (id === 'palcard' && !$('ppGo')) palPrint($('palPForm'), out);
     if (id === 'cubcard' && !$('cpGo')) cubPrint($('cubPForm'), out);
+    if (id === 'magcard' && !$('mpGo')) magPrint($('magPForm'), out);
+    if (id === 'grwcard' && !$('gpGo')) grwPrint($('grwPForm'), out);
     if (scroll) { const c = cards.find(x => x.dataset.pk === id); window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - 10, behavior: 'smooth' }); }
   };
   menu.querySelectorAll('[data-pkgo]').forEach(b => b.onclick = () => show(b.dataset.pkgo, true));
   let pre = null; try { pre = sessionStorage.getItem('math-pk'); } catch (e) { /* לא חובה */ }
-  const h = location.hash, hashId = h === '#book' ? 'bkcard' : h === '#wp' ? 'wpcard' : h === '#pal' ? 'palcard' : h === '#cub' ? 'cubcard' : null;
+  const h = location.hash, hashId = h === '#book' ? 'bkcard' : h === '#wp' ? 'wpcard' : h === '#pal' ? 'palcard' : h === '#cub' ? 'cubcard' : h === '#mag' ? 'magcard' : h === '#grw' ? 'grwcard' : null;
   show(hashId || pre || cards[0].dataset.pk, !!hashId);
   // כשנוצר דף – קופצים לתצוגה המקדימה, וסרגל קבוע למטה עם "הדפסה" ו"חזרה להגדרות"
   new MutationObserver(() => {
@@ -18867,6 +19319,14 @@ function printBuilder() {
       ${GRADE >= 4 ? `<div class="card tform" id="cubcard">
         <h2>🧊 כמה קוביות? (מצוינות)</h2>
         <div id="cubPForm"></div>
+      </div>` : ''}
+      ${GRADE >= 4 ? `<div class="card tform" id="magcard">
+        <h2>🔢 ריבועי קסם (מצוינות)</h2>
+        <div id="magPForm"></div>
+      </div>` : ''}
+      ${GRADE >= 4 ? `<div class="card tform" id="grwcard">
+        <h2>📈 תבניות גדילה (מצוינות)</h2>
+        <div id="grwPForm"></div>
       </div>` : ''}
       <div class="card tform" id="bkcard">
         <h2>📚 חוברת לפי נושאים</h2>
