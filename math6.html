@@ -9009,7 +9009,7 @@ function home() {
   // תפריט הצד – בשלוש קטגוריות: לומדים ומתרגלים · משחקים ומבחנים · למורה
   const T = teacherOn();
   const tabs = [
-    ...(GRADE >= 2 ? [{ id: 'coach', label: 'למידה עצמית', icon: 'bulb', wash: 'rgba(224,122,165,0.28)', go: 'coachTab', grp: 'לומדים ומתרגלים' }] : []),
+    ...(GRADE >= 2 ? [{ id: 'coach', label: 'קורסים', icon: 'bulb', wash: 'rgba(224,122,165,0.28)', go: 'coachTab', grp: 'לומדים ומתרגלים' }] : []),
     { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', ...(GRADE >= 2 ? {} : { grp: 'לומדים ומתרגלים' }) },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }, { id: 'hiluk', label: 'אימון חילוק', icon: 'divide', wash: 'rgba(122,79,181,0.22)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
