@@ -18,7 +18,7 @@
     if (MANY[Dn]) return `${n} ${MANY[Dn]}`;
     return `${n} חלקי ${d}`;
   }
-  const OPS = { '=': 'שווה', '≠': 'לא שווה', '×': 'כפול', '+': 'ועוד', '−': 'פחות', '-': 'פחות', ':': 'חלקי' };
+  const OPS = { '=': 'שווה', '≠': 'לא שווה', '×': 'כפול', '+': 'ועוד', '−': 'פחות', '-': 'פחות', ':': 'חלקי', '>': 'גדול מ', '<': 'קטן מ', '%': 'אחוז' };
 
   // ---------- ביטוי מתמטי: "3/4 = ?/12" ----------
   // opts.input = true → כל "?" הופך לתיבת הקלדה
@@ -29,10 +29,10 @@
       const m = t.match(/^(\d+|\?)\/(\d+|\?)$/);
       if (m) {
         say.push(fracSay(m[1], m[2]));
-        const cell = v => v === '?' ? (opts.input ? `<input class="slot" inputmode="numeric" autocomplete="off" maxlength="3" aria-label="המספר החסר">` : '<span class="qbox">?</span>') : v;
+        const cell = v => v === '?' ? (opts.input ? `<input class="slot" inputmode="decimal" autocomplete="off" maxlength="7" aria-label="המספר החסר">` : '<span class="qbox">?</span>') : v;
         return `<span class="fr"><span>${cell(m[1])}</span><span>${cell(m[2])}</span></span>`;
       }
-      if (t === '?') { say.push('כמה'); return opts.input ? `<input class="slot" inputmode="numeric" autocomplete="off" maxlength="3" aria-label="המספר החסר">` : '<span class="qbox">?</span>'; }
+      if (t === '?') { say.push('כמה'); return opts.input ? `<input class="slot" inputmode="decimal" autocomplete="off" maxlength="7" aria-label="המספר החסר">` : '<span class="qbox">?</span>'; }
       say.push(OPS[t] || t);
       return `<span class="op">${t}</span>`;
     }).join('');
@@ -91,13 +91,38 @@
       const x = x0 + k * w / d, big = k === 0 || k === d;
       if (f.click) out += `<rect class="hit" data-k="${k}" x="${x - 14}" y="${y - 26}" width="28" height="52" fill="transparent"/>`;
       out += `<line x1="${x}" x2="${x}" y1="${y - (big ? 14 : 10)}" y2="${y + (big ? 14 : 10)}" stroke="${INK}" stroke-width="${big ? 2.4 : 1.6}" pointer-events="none"/>`;
-      if (big) out += `<text x="${x}" y="${y + 34}" text-anchor="middle" font-size="18" fill="${INK}" pointer-events="none">${k === 0 ? 0 : 1}</text>`;
+      if (big) out += `<text x="${x}" y="${y + 34}" text-anchor="middle" font-size="18" fill="${INK}" pointer-events="none">${k === 0 ? (f.from != null ? f.from : 0) : (f.to != null ? f.to : 1)}</text>`;
     }
     if (f.mark != null) { const x = x0 + f.mark * w / d; out += `<circle cx="${x}" cy="${y}" r="7" fill="${FILL}" stroke="${INK}" stroke-width="2"/>`; }
     if (f.sel != null) { const x = x0 + f.sel * w / d; out += `<circle class="sel" cx="${x}" cy="${y}" r="8" fill="${FILL}" stroke="${INK}" stroke-width="2" pointer-events="none"/>`; }
     return `<svg class="fig line" viewBox="0 0 ${w + 48} 84" width="${w + 48}" height="84" role="img" aria-label="ישר מספרים">${out}</svg>`;
   }
-  const KINDS = { bar, pie, grid, cup, line };
+  // ריבוע של 100 משבצות; הצביעה לפי עמודות (כל עמודה = עשירית)
+  function hund(f) {
+    const c = f.c || 17, n = f.n || 0; let out = '';
+    for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
+      const i = col * 10 + row;
+      out += `<rect x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${i < n ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
+    }
+    out += `<rect x="2" y="2" width="${10 * c}" height="${10 * c}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    return `<svg class="fig hund" viewBox="0 0 ${10 * c + 4} ${10 * c + 4}" width="${10 * c + 4}" height="${10 * c + 4}" role="img" aria-label="ריבוע של 100 משבצות">${out}</svg>`;
+  }
+  // לוח ערך המקום: { k:'pv', n:'3.45' }
+  function pv(f) {
+    const [a, b = ''] = String(f.n).split('.');
+    const ints = a.split(''), decs = b.split('');
+    const names = { i: ['אחדות', 'עשרות', 'מאות'], d: ['עשיריות', 'מאיות', 'אלפיות'] };
+    const head = [...ints.map((_, i) => names.i[ints.length - 1 - i] || ''), '', ...decs.map((_, i) => names.d[i] || '')];
+    const cells = [...ints, '.', ...decs];
+    return `<table class="pvt" dir="ltr"><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr><tr>${cells.map(c => `<td${c === '.' ? ' class="pt"' : ''}>${c}</td>`).join('')}</tr></table>`;
+  }
+  // תרגיל במאונך: { k:'vert', rows:['3.50','1.25'], op:'+', res:'4.75' } – הנקודות מיושרות
+  function vert(f) {
+    const w = Math.max(...f.rows.concat(f.res || '').map(r => r.length));
+    const line = (r, op) => `<tr><td class="op">${op || ''}</td>${r.padStart(w, ' ').split('').map(ch => `<td${ch === '.' ? ' class="pt"' : ''}>${ch === ' ' ? '' : ch}</td>`).join('')}</tr>`;
+    return `<table class="vert" dir="ltr">${f.rows.map((r, i) => line(r, i === f.rows.length - 1 ? f.op : '')).join('')}${f.res != null ? `<tr class="res"><td></td>${f.res.padStart(w, ' ').split('').map(ch => `<td${ch === '.' ? ' class="pt"' : ''}>${ch === ' ' ? '' : ch}</td>`).join('')}</tr>` : ''}</table>`;
+  }
+  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert };
   function fig(f) {
     if (!f) return '';
     if (Array.isArray(f)) return `<div class="figs">${f.map(fig).join('')}</div>`;

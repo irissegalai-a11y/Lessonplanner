@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="only light">
-<title>המאמן האישי שלי במתמטיקה – איריס סגל</title>
-<meta name="description" content="קורס אישי עם מאמן: שברים שקולים (שווים)">
+<title>קורסים ללמידה עצמאית – איריס סגל</title>
+<meta name="description" content="קורסים ללמידה עצמאית במתמטיקה, עם מאמן אישי">
 <link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="theme-color" content="#ffffff">
@@ -183,13 +183,23 @@
   .tview { background: var(--hint-bg); border-radius: 12px; padding: 8px 12px; margin-bottom: 14px; font-size: 0.9rem; }
   .sure { margin-top: 14px; }
   footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 30px; }
+  table.pvt, table.vert { border-collapse: collapse; margin: 12px auto; font-size: 1.4rem; direction: ltr; }
+  table.pvt th { font-size: 0.75rem; color: var(--muted); padding: 2px 8px; font-weight: 700; }
+  table.pvt td { border: 1.5px solid var(--line); min-width: 2.2em; height: 1.9em; text-align: center; font-weight: 700; }
+  table.pvt td.pt, table.vert td.pt { border: none; min-width: 0.6em; color: #e8590c; }
+  table.vert td { width: 1em; text-align: center; padding: 0 2px; font-variant-numeric: tabular-nums; }
+  table.vert td.op { color: var(--muted); padding-inline-end: 8px; }
+  table.vert tr.res td { border-top: 2.5px solid var(--ink); }
+  .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+  .ccard { margin: 0; border-top: 6px solid var(--brand); }
+  .ccard.soon { opacity: 0.6; border-top-color: var(--line); }
   [hidden] { display: none !important; }
   @media print { .top, footer, .noprint { display: none !important; } body { background: #fff; } .wrap { padding: 0; } .card { box-shadow: none; border: none; } }
 </style>
 </head>
 <body>
 <header class="top">
-  <span class="brand"><span class="avatar sm" aria-hidden="true">מ</span><span>המאמן האישי</span><span class="crs" id="crsName"></span></span>
+  <span class="brand" id="brand" style="cursor:pointer" title="לכל הקורסים"><span class="avatar sm" aria-hidden="true">מ</span><span>קורסים ללמידה עצמאית</span><span class="crs" id="crsName"></span></span>
   <span class="acts">
     <button class="sec small" id="bigBtn" title="הגדלת הכתב">א+</button>
     <a class="btn sec small" href="math6.html">לאתר<span class="long2"> התרגול</span></a>
@@ -212,16 +222,23 @@
       </div>
     </aside>
   </div>
-  <footer>המאמן האישי · מאת איריס סגל · <span class="ver">גרסה 1.3</span></footer>
+  <footer>קורסים ללמידה עצמאית · מאת איריס סגל · <span class="ver">גרסה 2.0</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
 <script src="coach/engine.js"></script>
+<script src="coach/kit.js"></script>
 <script src="coach/courses/equiv.js"></script>
 <script src="coach/courses/equiv-units.js"></script>
+<script src="coach/courses/dec.js"></script>
 <script>
 (function () {
-  const C = window.COACH, V = C.V, E = C.E, K = C.courses.equiv;
+  const C = window.COACH, V = C.V, E = C.E;
+  let K = null; // הקורס הפעיל
+  // קורסים מתוכננים שעוד לא נבנו – מוצגים בקטלוג כ"בקרוב"
+  const PLANNED = { dec: { title: 'מספרים עשרוניים', sub: 'עשיריות ומאיות, השוואה, חיבור, חיסור וכפל' }, pct: { title: 'אחוזים', sub: 'מה זה אחוז, אחוז מכמות, אחוזים בחיים' },
+    fracop: { title: 'כפל וחילוק שברים', sub: 'כפל וחילוק של שברים ומספרים מעורבים' }, area: { title: 'שטח והיקף', sub: 'שטח והיקף של מצולעים וצורות מורכבות' } };
+  function setCourse(id) { K = C.courses[id] || null; const n = document.getElementById('crsName'); if (n) n.textContent = K ? '· ' + K.title : ''; }
   const { R, fig } = V;
   const $ = id => document.getElementById(id);
   const esc = s => String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -294,7 +311,7 @@
       const figs = item.opts.some(o => o.fig && !o.t);
       body += `<div class="opts${figs ? ' figopts' : ''}">${item.opts.map((o, i) => `<button class="opt" data-i="${i}">${o.t ? R(o.t) : ''}${o.fig && !o.t ? fig(o.fig) : ''}</button>`).join('')}</div>`;
     }
-    if (item.type === 'nums') body += `<div class="row">${item.labels.map((l, i) => `<label class="chk">${esc(l)}: <input class="nin" data-k="${i}" inputmode="numeric" maxlength="3"></label>`).join('')}</div>`;
+    if (item.type === 'nums') body += `<div class="row">${item.labels.map((l, i) => `<label class="chk">${esc(l)}: <input class="nin" data-k="${i}" inputmode="decimal" maxlength="7"></label>`).join('')}</div>`;
     body += `<div class="fbarea" aria-live="polite"></div><div class="row acts"><button class="go">${learn ? 'בדיקה' : 'המשך'}</button>${learn && item.hints ? '<button class="sec hintb">רמז</button>' : ''}${learn && item.showFig ? '<button class="sec showfig">הראו לי בציור</button>' : ''}${!learn && item.id !== 'NB' ? '<button class="ghost skip">עוד לא למדתי</button>' : ''}</div><div class="sure" hidden></div>`;
     box.innerHTML = body;
 
@@ -320,9 +337,9 @@
     const firstIn = box.querySelector('input'); if (firstIn && window.innerWidth > 700) setTimeout(() => firstIn.focus(), 50);
 
     function read() {
-      const num = v => (v === '' || v == null || isNaN(+v)) ? null : +v;
+      const num = v => { v = String(v == null ? '' : v).replace(',', '.').trim(); return (v === '' || isNaN(+v)) ? null : +v; };
       switch (item.type) {
-        case 'num': { const v = num(box.querySelector('input.slot').value.trim()); return v == null ? null : { v, key: String(v) }; }
+        case 'num': { const v = num(box.querySelector('input.slot').value); return v == null ? null : { v, key: String(+v.toFixed(6)) }; }
         case 'frac': case 'open': { const n = num(box.querySelector('[data-p="n"]').value.trim()), d = num(box.querySelector('[data-p="d"]').value.trim()); return (n == null || d == null || d === 0) ? null : { n, d, key: `${n}/${d}` }; }
         case 'choice': return box.dataset.sel == null ? null : { i: +box.dataset.sel, key: String(box.dataset.sel) };
         case 'multi': return sel.size ? { s: [...sel].sort(), key: [...sel].sort().join(',') } : null;
@@ -340,7 +357,9 @@
         if (!learn || K.TAGS[tv]) return { tag: K.TAGS[tv] ? tv : '', msg: '' };
         return { tag: (item.trapTags || {})[k] || '', msg: tv };
       };
-      if (t === 'num' || t === 'shade' || t === 'line') return Object.assign({ ok: a.v === item.ans }, trapOf(a.v));
+      if (t === 'num' && item.check) return Object.assign({ ok: !!item.check(a.v) }, trapOf(a.key));
+      if (t === 'num') return Object.assign({ ok: Math.abs(a.v - item.ans) < 1e-9 }, trapOf(a.key));
+      if (t === 'shade' || t === 'line') return Object.assign({ ok: a.v === item.ans }, trapOf(a.v));
       if (t === 'frac') {
         const ok = a.n === item.ans[0] && a.d === item.ans[1];
         let { tag, msg } = trapOf(a.key);
@@ -439,7 +458,7 @@
   function entry(msg) {
     layout(false);
     main.innerHTML = `${tview()}<div class="cgrid"><div class="card">
-      <div class="crumb">קורס אישי עם מאמן · כיתה ו'</div>
+      <div class="crumb"><a href="#" id="toCat">קורסים ללמידה עצמאית</a> · קורס אישי עם מאמן</div>
       <h1>${K.title}</h1>
       <p class="muted" style="font-size:1.1rem">${K.sub}.</p>
       <h3 style="margin-top:18px">בקורס הזה תלמדו</h3>
@@ -454,25 +473,27 @@
       <div id="emsg">${msg ? `<div class="fb bad">${msg}</div>` : ''}</div>
       <div class="row"><button id="go">כניסה לקורס</button></div>
     </div></div>`;
+    $('toCat').onclick = e => { e.preventDefault(); catalog(); };
     const go = () => {
       const name = $('nm').value.trim().replace(/\s+/g, ' ');
       const parts = name.split(' ').filter(p => p.length >= 2);
       if (parts.length < 2) { $('emsg').innerHTML = '<div class="fb bad">כתבו שם פרטי <b>ושם משפחה</b>.</div>'; $('nm').focus(); return; }
       const code = $('cd').value.trim();
       if (code) {
-        const d = E.decode(code, K);
+        const d = E.decode(code);
         if (!d) {
           $('emsg').innerHTML = '<div class="fb bad">הקוד לא תקין. בדקו שהעתקתם נכון מהמחברת – או התחילו בלי קוד.<div class="row"><button class="sec" id="nocode">להתחיל בלי קוד</button></div></div>';
           $('nocode').onclick = () => { $('cd').value = ''; go(); };
           return;
         }
-        st = { name, phase: 'course', skills: d.skills, done: d.done, badges: d.badges, tag: d.tag, log: [], fromCode: true };
+        setCourse(d.courseId);
+        st = { name, course: K.id, phase: 'course', skills: d.skills, done: d.done, badges: d.badges, tag: d.tag, log: [], fromCode: true };
         st.path = E.buildPath(K, st.skills, st.done);
         save();
-        tr('כניסה עם קוד', `${K.title} · ${E.skillLine(st.skills)}`);
+        tr('כניסה עם קוד', `${K.title} · ${E.skillLine(st.skills, K)}`);
         return course();
       }
-      st = { name, phase: 'diagIntro', skills: {}, done: {}, badges: {}, tag: 'none', log: [] };
+      st = { name, course: K.id, phase: 'diagIntro', skills: {}, done: {}, badges: {}, tag: 'none', log: [] };
       save();
       diagIntro();
     };
@@ -506,14 +527,14 @@
   function diagDone() {
     const ds = st.diag;
     for (let s = 1; s <= 8; s++) st.skills[s] = ds.status[s] || 'unknown';
-    st.tag = E.mainTag(ds.tags);
+    st.tag = E.mainTag(K, ds.tags);
     st.path = E.buildPath(K, st.skills);
     st.phase = 'course';
     st.diagSummary = { n: ds.asked.length, tags: ds.tags };
     delete st.diag;
     save();
     const tagList = Object.keys(ds.tags).filter(t => t !== 'skip').map(t => K.TAGS[t]).filter(Boolean);
-    tr('אבחון', `${K.title} · ${E.skillLine(st.skills)}${tagList.length ? ' · טעויות: ' + tagList.join('; ') : ''}`);
+    tr('אבחון', `${K.title} · ${E.skillLine(st.skills, K)}${tagList.length ? ' · טעויות: ' + tagList.join('; ') : ''}`);
     layout(false);
     const knows = [8, 7, 6, 5, 4, 3, 2, 1].filter(s => st.skills[s] === 'mastered').slice(0, 2).map(s => K.SKILL_SAY[s]);
     const units = st.path.filter(p => !p.optional && !st.done[p.id]).length;
@@ -522,7 +543,7 @@
     main.innerHTML = `<div class="card">${coachSay(`סיימנו, ${esc(first())}! תודה. לפי התשובות שלך בניתי לך <b>מסלול אישי של ${units} ${units === 1 ? 'שיעור' : 'שיעורים'}</b>${skipped ? `, ו-${skipped} שיעורים דילגנו – כבר הראית שאת/ה יודע/ת אותם` : ''}.`)}
       ${knows.length ? `<p>כבר עכשיו את/ה יודע/ת ${knows.join(', ו')}. 👏</p>` : '<p>נתחיל מהבסיס, צעד אחר צעד. אני כאן כל הדרך.</p>'}
       ${first1 ? `<p>השיעור הראשון שלך: <b>${unitDef(first1.id).title}</b>.</p>` : ''}
-      ${T ? `<div class="tview">מצב מיומנויות: ${E.skillLine(st.skills)}<br>טעויות שזוהו: ${tagList.join('; ') || 'אין'}</div>` : ''}
+      ${T ? `<div class="tview">מצב מיומנויות: ${E.skillLine(st.skills, K)}<br>טעויות שזוהו: ${tagList.join('; ') || 'אין'}</div>` : ''}
       <div class="row"><button id="go">לתוכנית הקורס שלי</button></div></div>`;
     $('go').onclick = course;
   }
@@ -572,7 +593,7 @@
     if (done) hello = `כל הכבוד, ${esc(first())}! סיימת את הקורס. 🎓 ${st.done.u8 ? 'ואפילו הגעת לרמת מומחיות!' : 'אם בא לך אתגר – אתגר המומחים מחכה בפרק 4.'}`;
     else if (doneN) hello = `יפה, ${esc(first())}! כבר השלמת ${doneN} ${doneN === 1 ? 'שיעור' : 'שיעורים'} מתוך ${core.length}. ממשיכים?`;
     else hello = `שלום ${esc(first())}! זו תוכנית הקורס שלך. ${skipped ? `${skipped} שיעורים כבר מסומנים – הראית באבחון שאת/ה יודע/ת אותם. ` : ''}מתחילים מהשיעור המסומן.`;
-    main.innerHTML = `${tview(T ? `מיומנויות: ${E.skillLine(st.skills)} · ${E.encode(st, K)}` : '')}
+    main.innerHTML = `${tview(T ? `מיומנויות: ${E.skillLine(st.skills, K)} · ${E.encode(st, K)}` : '')}
       <div class="card"><div class="hero"><div>
         <div class="crumb">הקורס שלי</div><h1>${K.title}</h1>
         ${coachSay(hello)}
@@ -823,8 +844,8 @@
     teacherCard(true);
   }
   function waiting(j) {
-    const U = K.units[st.unit ? st.unit.id : 'u4'];
-    const items = U.waiting;
+    const U = K.units[st.unit ? st.unit.id : Object.keys(K.units)[0]];
+    const items = U.waiting && U.waiting.length ? U.waiting : [U.simpler];
     if (j >= items.length) {
       frame(4, '<h3>סיימתם את משימת החזרה 👏</h3><p>כשהמורה מגיע/ה, הראו לה את כרטיס העזרה.</p><div class="row"><button id="tc">הצגת כרטיס העזרה</button><button class="sec" id="cr">למסלול שלי</button></div>');
       $('tc').onclick = () => teacherCard(true);
@@ -843,7 +864,7 @@
     const did = U.did || 'הרחבתם שברים';
     let line;
     if (U.deep) line = 'הגעתם לרמת מומחיות: ניתחתם טעויות, בדקתם טענות ויצרתם שברים בעצמכם.';
-    else if (ev.additive && ev.fixed) line = u.id === 'u4' ? 'בהתחלה הוספתם מספר למונה ולמכנה. עכשיו אתם כופלים, ויודעים להסביר למה.' : `בהתחלה טעיתם, ומיד תיקנתם בעצמכם. בסוף ${did} לבד.`;
+    else if (ev.additive && ev.fixed) line = (K.id === 'equiv' && u.id === 'u4') ? 'בהתחלה הוספתם מספר למונה ולמכנה. עכשיו אתם כופלים, ויודעים להסביר למה.' : `בהתחלה טעיתם, ומיד תיקנתם בעצמכם. בסוף ${did} לבד.`;
     else if (ev.drawing) line = `בהתחלה נעזרתם בציור. בסוף ${did} גם בלי ציור.`;
     else if (ev.claim) line = `${did} בעצמכם, וזיהיתם טעות של תלמיד אחר והסברתם אותה.`;
     else line = `${did} בעצמכם, ובשאלה האחרונה פתרתם בלי רמז.`;
@@ -858,7 +879,7 @@
     tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
     const nxt = (st.path || []).find(p => !st.done[p.id] && ready(p.id) && !p.optional);
     const fin = courseDone();
-    if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills)}`); }
+    if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills, K)}`); }
     frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${U.learned}</div>
       ${newB.length ? `<h3 style="margin-top:16px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
       <div class="row">${fin ? '<button id="cert">🎓 סיימת את הקורס – לתעודה</button>' : nxt ? `<button id="nl">לשיעור הבא: ${unitDef(nxt.id).title}</button>` : ''}<button class="sec" id="cr">לתוכנית הקורס</button></div>`);
@@ -875,7 +896,7 @@
     }
     const code = E.encode(st, K);
     const doneN = (st.path || []).filter(p => !p.optional && st.done[p.id]).length, all = (st.path || []).filter(p => !p.optional).length;
-    tr('סיכום מפגש', `${K.title} · ${E.skillLine(st.skills)} · יחידות ${doneN}/${all}`);
+    tr('סיכום מפגש', `${K.title} · ${E.skillLine(st.skills, K)} · יחידות ${doneN}/${all}`);
     const name = st.name;
     st.phase = 'end'; save();
     layout(false);
@@ -883,7 +904,7 @@
       <p>העתיקו את הקוד הזה למחברת, ליד התאריך של היום:</p><div class="code">${code}</div>
       <p>בפעם הבאה תקלידו אותו במסך הכניסה, ותמשיכו בדיוק מאותו מקום.</p>
       <div class="row"><button id="fin">העתקתי – סיום</button></div></div>`;
-    $('fin').onclick = () => { E.store.clear(); st = null; entry(); };
+    $('fin').onclick = () => { E.store.clear(); st = null; catalog(); };
   }
   function confirmEnd() { return st.phase !== 'diag' || window.confirm('המבדק עוד לא הסתיים. לסיים בכל זאת?'); }
 
@@ -896,7 +917,7 @@
       $('bubble').insertAdjacentHTML('beforeend', `<div class="sub">${[['words', 'המילים'], ['what', 'מה צריך לעשות'], ['idea', 'מה זה בכלל'], ['start', 'איך מתחילים'], ['calc', 'החישוב']].map(([k, t]) => `<button class="sec small" data-l="${k}">${t}</button>`).join('')}</div>`);
       $('bubble').querySelectorAll('[data-l]').forEach(x => x.onclick = () => lost(x.dataset.l));
     } else if (h === 'alt') {
-      const U = K.units[(st.unit && st.unit.id) || 'u4'];
+      const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]];
       log('alt');
       modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`);
     } else if (h === 'hint') {
@@ -910,7 +931,7 @@
     log('lost', { k });
     if (k === 'words') modal(`<h2>מילון קטן</h2>${K.GLOSSARY.map(([w, t, f]) => `<p><b>${w}:</b> ${t}</p>${f ? fig(f) : ''}`).join('')}`);
     else if (k === 'what') say(it && it.rephrase ? it.rephrase : 'קראו שוב את השאלה לאט: מה מבקשים למצוא? אפשר גם ללחוץ "הקרא לי".');
-    else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || 'u4']; modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
+    else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]]; modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
     else if (k === 'start') say(it && it.start ? it.start : 'מתחילים מהמספר שידוע בשני השברים: פי כמה הוא גדל?');
     else if (k === 'calc') {
       let t = '<table class="mt">';
@@ -937,9 +958,29 @@
   }
   ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, bump, true));
 
-  $('crsName').textContent = '· ' + K.title;
+  // ---------- קטלוג הקורסים ----------
+  function catalog() {
+    st = null; setCourse(null); layout(false);
+    const cards = C.COURSE_IDS.map(id => {
+      const c = C.courses[id], pl = PLANNED[id];
+      if (!c && !pl) return '';
+      const t = c ? c.title : pl.title, sub = c ? c.sub : pl.sub;
+      const meta = c ? `${c.MODULES.length} פרקים · ${c.UNITS.length} שיעורים` : 'בהכנה';
+      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? 'קורס' : 'בקרוב'}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button></div>` : ''}</div>`;
+    }).join('');
+    main.innerHTML = `${tview()}<div class="card"><div class="crumb">כיתה ו'</div><h1>קורסים ללמידה עצמאית</h1>
+      <div class="coachline"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>שלום! כאן לומדים לבד, בקצב שלך, עם עזרה ממני. בחרו את הקורס שהמורה אמר/ה לכם ללמוד.</div></div>
+      <p class="small muted">כבר התחלתם קורס? היכנסו אליו והקלידו את קוד ההמשך מהמחברת.</p></div>
+      <div class="cats">${cards}</div>`;
+    main.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { setCourse(b.dataset.c); entry(); });
+  }
+  $('brand').onclick = () => { if (!st || st.phase === 'course' || st.phase === 'end' || window.confirm('לחזור לרשימת הקורסים?')) { if (st && st.phase !== 'end') { E.store.clear(); } catalog(); } };
+
   /* ---------- התחלה ---------- */
-  if (!st || st.phase === 'end') { st = null; entry(); }
+  if (st && st.phase !== 'end') setCourse(st.course || 'equiv');
+  const want = E.URLP.get('course');
+  if ((!st || st.phase === 'end') && want && C.courses[want]) { st = null; setCourse(want); entry(); }
+  else if (!st || st.phase === 'end' || !K) { st = null; catalog(); }
   else if (st.phase === 'diagIntro') diagIntro();
   else if (st.phase === 'diag') diagQ();
   else if (st.phase === 'unit' && st.unit) screen();

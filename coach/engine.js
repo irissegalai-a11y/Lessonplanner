@@ -1,52 +1,55 @@
 /* =========================================================
    מנוע: מבדק אבחון מסתגל, בניית מסלול, קוד המשך, שמירה ודיווח
-   לא יודע כלום על שברים – מקבל את הקורס כנתונים.
+   לא יודע כלום על הנושא – מקבל כל קורס כנתונים (course.DIAG, UNITS, MAIN_TAGS…).
    ========================================================= */
 (function () {
   const C = window.COACH = window.COACH || {};
-  const VER = '1.3';
+  const VER = '2.0';
   C.VER = VER;
+  // סדר קבוע! המיקום ברשימה נכנס לקוד ההמשך. קורס חדש מוסיפים רק בסוף.
+  C.COURSE_IDS = ['equiv', 'dec', 'pct', 'fracop', 'area'];
 
   /* ---------- מבדק אבחון ----------
      מיומנות "נשלטת" אחרי 2 תשובות נכונות, "עדיין לא" אחרי 2 שגויות או "עוד לא למדתי",
      "לא ברור" אם אחרי 3 שאלות אין הכרעה. תשובה נכונה עם "ניחשתי" לא נספרת.
-     שאלה נכונה אחת מספיקה כשמיומנות גבוהה יותר (7) כבר נשלטת. */
+     course.DIAG = { top, apply, mid, base, infer, deps }:
+     top – מיומנויות העוגן (נבדקות ראשונות, לפי הסדר); apply – יישום (רק אם כל העוגן נשלט);
+     mid – שלב ב'; base – יסודות. infer[s] – תשובה נכונה אחת מספיקה אם אחת מאלה כבר נשלטת.
+     deps[s] – אם אחת מאלה "עדיין לא", גם s "עדיין לא" בלי לשאול. */
   function diagStart(course) {
     return { ev: {}, status: {}, asked: [], tags: {}, course: course.id };
   }
   const evOf = (ds, s) => (ds.ev[s] = ds.ev[s] || { c: 0, w: 0, n: 0 });
-  const decided = (ds, s) => !!ds.status[s];
-  function settle(ds) {
-    [5, 6].forEach(s => {
+  function nextSkill(ds, course) {
+    const D = course.DIAG, st = s => ds.status[s];
+    const settle = () => Object.entries(D.infer || {}).forEach(([s, by]) => {
       const e = ds.ev[s];
-      if (!decided(ds, s) && e && e.n === 1 && e.c === 1 && ds.status[7] === 'mastered') ds.status[s] = 'mastered';
+      if (!st(s) && e && e.n === 1 && e.c === 1 && by.some(b => st(b) === 'mastered')) ds.status[s] = 'mastered';
     });
-  }
-  function nextSkill(ds) {
-    settle(ds);
-    const n = s => evOf(ds, s).n;
-    if (!decided(ds, 5) && n(5) === 0) return 5;
-    if (!decided(ds, 7) && n(7) === 0) return 7;
-    if (!decided(ds, 7)) return 7;
-    settle(ds);
-    if (!decided(ds, 5)) return 5;
-    if (ds.status[5] === 'notyet' && !decided(ds, 6)) ds.status[6] = 'notyet';
-    if (!decided(ds, 6)) return 6;
-    settle(ds);
-    const top = [5, 6, 7].every(s => ds.status[s] === 'mastered');
-    if (top) {
-      if (!decided(ds, 8)) return 8;
-      [1, 2, 3, 4].forEach(s => { ds.status[s] = 'mastered'; ds.inferred = true; });
+    const depFail = s => (D.deps && D.deps[s] || []).some(b => st(b) === 'notyet');
+    const walk = list => {
+      for (const s of list) {
+        settle();
+        if (!st(s) && depFail(s)) ds.status[s] = 'notyet';
+        if (!st(s)) return s;
+      }
+      return null;
+    };
+    let s = walk(D.top);
+    if (s != null) return s;
+    if (D.top.every(x => st(x) === 'mastered')) {
+      if (D.apply && !st(D.apply)) return D.apply;
+      D.mid.concat(D.base).forEach(x => { if (!st(x)) ds.status[x] = 'mastered'; });
       return null;
     }
-    if (!decided(ds, 4)) return 4;
-    if (ds.status[4] === 'mastered') { [1, 2, 3].forEach(s => { ds.status[s] = 'mastered'; }); return null; }
-    for (const s of [1, 2, 3]) if (!decided(ds, s)) return s;
-    return null;
+    s = walk(D.mid);
+    if (s != null) return s;
+    if (D.mid.length && D.mid.every(x => st(x) === 'mastered')) { D.base.forEach(x => { if (!st(x)) ds.status[x] = 'mastered'; }); return null; }
+    return walk(D.base);
   }
   const MAX_Q = 12; // תקרה: מבדק קצר גם כשהתשובות לא חד-משמעיות
   function diagNext(ds, course) {
-    let s = nextSkill(ds);
+    let s = nextSkill(ds, course);
     if (s != null && ds.asked.length >= MAX_Q) {
       Object.keys(ds.ev).forEach(k => { if (!ds.status[k] && ds.ev[k].n > 0) ds.status[k] = 'unclear'; });
       s = null;
@@ -68,11 +71,9 @@
     else if (e.w >= 2) ds.status[s] = 'notyet';
     else if (e.n >= 3) ds.status[s] = 'unclear';
   }
-  // הטעות העיקרית בהרחבה – קובעת את תוכן יחידת החיזוק
-  function mainTag(tags) {
-    if ((tags.additive || 0) > 0) return 'additive';
-    if ((tags.denomOnly || 0) > 0) return 'denomOnly';
-    return 'none';
+  // הטעות העיקרית – קובעת את תוכן החיזוק ואת משפט הפתיחה של המאמן
+  function mainTag(course, tags) {
+    return (course.MAIN_TAGS || ['none']).slice(1).find(t => (tags[t] || 0) > 0) || 'none';
   }
 
   /* ---------- מסלול ---------- */
@@ -82,54 +83,70 @@
     course.UNITS.forEach(u => {
       if (done && done[u.id]) { path.push({ id: u.id, ver: 'teach' }); return; }
       if (u.deep) {
-        if ([5, 6, 7].every(s => skills[s] === 'mastered')) path.push({ id: u.id, ver: 'deep', optional: true });
+        if (course.DIAG.top.every(s => skills[s] === 'mastered')) path.push({ id: u.id, ver: 'deep', optional: true });
         return;
       }
       const worst = u.skills.map(s => skills[s] || 'unknown').sort((a, b) => RANK[a] - RANK[b])[0];
       if (worst === 'mastered') return;
-      path.push({ id: u.id, ver: worst === 'notyet' ? 'teach' : worst === 'unclear' ? 'reinforce' : (u.id === 'u7' ? 'teach' : 'reinforce') });
+      path.push({ id: u.id, ver: worst === 'notyet' ? 'teach' : worst === 'unclear' ? 'reinforce' : (u.id === course.APPLY_UNIT ? 'teach' : 'reinforce') });
     });
     return path;
   }
 
-  /* ---------- קוד המשך: 8 תווים, בלי שם ובלי פרטים אישיים ---------- */
+  /* ---------- קוד המשך: 9 תווים (קורס + מצב), בלי שם ובלי פרטים אישיים ----------
+     קוד ישן של 8 תווים = קורס שברים שקולים (גרסה 1) – עדיין נקרא. */
   const AB = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
   const ST = ['unknown', 'notyet', 'unclear', 'mastered'];
-  const TG = ['none', 'additive', 'denomOnly'];
   const BADGES = ['persist', 'fix', 'explain', 'master'];
   function chk(p) { let h = 7; while (p > 0) { h = (h * 31 + p % 32) % 128; p = Math.floor(p / 32); } return h; }
-  function encode(st, course) {
-    let p = 1; // גרסת הקוד
+  const tagsOf = course => (course.MAIN_TAGS || ['none']).concat(['none', 'none', 'none']).slice(0, 4);
+  function packBody(p, st, course, nUnits) {
     for (let s = 1; s <= 8; s++) p = p * 4 + Math.max(0, ST.indexOf(st.skills[s] || 'unknown'));
-    course.UNITS.forEach(u => { p = p * 2 + (st.done[u.id] ? 1 : 0); });
+    for (let i = 0; i < nUnits; i++) { const u = course.UNITS[i]; p = p * 2 + (u && st.done[u.id] ? 1 : 0); }
     BADGES.forEach(b => { p = p * 2 + (st.badges[b] ? 1 : 0); });
-    p = p * 4 + Math.max(0, TG.indexOf(st.tag || 'none'));
+    return p * 4 + Math.max(0, tagsOf(course).indexOf(st.tag || 'none'));
+  }
+  function unpackBody(p, course, nUnits) {
+    const st = { skills: {}, done: {}, badges: {} };
+    st.tag = tagsOf(course)[p % 4] || 'none'; p = Math.floor(p / 4);
+    [...BADGES].reverse().forEach(b => { if (p % 2) st.badges[b] = true; p = Math.floor(p / 2); });
+    for (let i = nUnits - 1; i >= 0; i--) { const u = course.UNITS[i]; if (p % 2 && u) st.done[u.id] = true; p = Math.floor(p / 2); }
+    for (let k = 8; k >= 1; k--) { st.skills[k] = ST[p % 4]; p = Math.floor(p / 4); }
+    return { st, rest: p };
+  }
+  function encode(st, course) {
+    let p = 2 * 16 + C.COURSE_IDS.indexOf(course.id);
+    p = packBody(p, st, course, 8);
     let v = p * 128 + chk(p), out = '';
-    for (let i = 0; i < 8; i++) { out = AB[v % 32] + out; v = Math.floor(v / 32); }
+    for (let i = 0; i < 9; i++) { out = AB[v % 32] + out; v = Math.floor(v / 32); }
     return out.slice(0, 4) + '-' + out.slice(4);
   }
-  function decode(code, course) {
+  // מחזיר { courseId, ...מצב } או null
+  function decode(code) {
     const s = String(code || '').toUpperCase().replace(/[\s-]/g, '').replace(/O/g, '0').replace(/[IL]/g, '1').replace(/U/g, 'V');
-    if (!/^[0-9A-Z]{8}$/.test(s)) return null;
+    if (!/^[0-9A-Z]{8,9}$/.test(s)) return null;
     let v = 0;
     for (const ch of s) { const d = AB.indexOf(ch); if (d < 0) return null; v = v * 32 + d; }
-    const c = v % 128; let p = Math.floor(v / 128);
+    const c = v % 128; const p = Math.floor(v / 128);
     if (chk(p) !== c) return null;
-    const st = { skills: {}, done: {}, badges: {} };
-    st.tag = TG[p % 4] || 'none'; p = Math.floor(p / 4);
-    [...BADGES].reverse().forEach(b => { if (p % 2) st.badges[b] = true; p = Math.floor(p / 2); });
-    [...course.UNITS].reverse().forEach(u => { if (p % 2) st.done[u.id] = true; p = Math.floor(p / 2); });
-    for (let k = 8; k >= 1; k--) { st.skills[k] = ST[p % 4]; p = Math.floor(p / 4); }
-    if (p !== 1) return null;
-    return st;
+    if (s.length === 8) { // גרסה 1: שברים שקולים
+      const course = C.courses.equiv; if (!course) return null;
+      const r = unpackBody(p, course, course.UNITS.length);
+      return r.rest === 1 ? Object.assign(r.st, { courseId: 'equiv' }) : null;
+    }
+    // גרסה 2: ננסה לפי הקורס שבקוד
+    const head = q => q; // לנוחות קריאה
+    const tryCourse = id => { const course = C.courses[id]; if (!course) return null; const r = unpackBody(p, course, 8); return r.rest === head(2 * 16 + C.COURSE_IDS.indexOf(id)) ? Object.assign(r.st, { courseId: id }) : null; };
+    for (const id of C.COURSE_IDS) { const r = tryCourse(id); if (r) return r; }
+    return null;
   }
 
   /* ---------- שמירה לזמן המפגש בלבד (לא בין מחשבים) ---------- */
-  const KEY = 'coach:equiv';
+  const KEY = 'coach:state';
   const store = {
     load() { try { return JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (e) { return null; } },
     save(st) { try { sessionStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { /* לא חובה */ } },
-    clear() { try { sessionStorage.removeItem(KEY); } catch (e) { /* לא חובה */ } }
+    clear() { try { sessionStorage.removeItem(KEY); sessionStorage.removeItem('coach:equiv'); } catch (e) { /* לא חובה */ } }
   };
 
   /* ---------- תפקידים (אותם מפתחות כמו באתר התרגול) ---------- */
@@ -145,12 +162,12 @@
   function track(name, action, detail) {
     if (!TRACK.form || URLP.has('teacher') || URLP.has('notrack') || irisOk() || staffOn()) return;
     try {
-      const body = new URLSearchParams({ [TRACK.f.device]: 'מאמן v' + VER, [TRACK.f.grade]: '6', [TRACK.f.name]: name || '', [TRACK.f.action]: 'מאמן: ' + action, [TRACK.f.detail]: String(detail).slice(0, 200) });
+      const body = new URLSearchParams({ [TRACK.f.device]: 'קורסים v' + VER, [TRACK.f.grade]: '6', [TRACK.f.name]: name || '', [TRACK.f.action]: 'קורס: ' + action, [TRACK.f.detail]: String(detail).slice(0, 200) });
       fetch(TRACK.form, { method: 'POST', mode: 'no-cors', body, keepalive: true }).catch(() => {});
     } catch (e) { /* לא חובה */ }
   }
   const MARK = { mastered: '✓', notyet: '✗', unclear: '?', unknown: '–' };
-  const skillLine = skills => [1, 2, 3, 4, 5, 6, 7, 8].map(s => s + MARK[skills[s] || 'unknown']).join(' ');
+  const skillLine = (skills, course) => Object.keys(course.SKILLS).map(Number).filter(s => s <= 8).map(s => s + MARK[skills[s] || 'unknown']).join(' ');
 
   C.E = { diagStart, diagNext, diagAnswer, mainTag, buildPath, encode, decode, store, teacher, track, skillLine, URLP, BADGES };
 })();
