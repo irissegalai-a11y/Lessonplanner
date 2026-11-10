@@ -231,7 +231,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 3.4</span></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 3.5</span></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -240,6 +240,7 @@
 <script src="coach/courses/equiv.js"></script>
 <script src="coach/courses/equiv-units.js"></script>
 <script src="coach/courses/dec.js"></script>
+<script src="coach/courses/mult.js"></script>
 <script>
 (function () {
   const C = window.COACH, V = C.V, E = C.E;
@@ -247,7 +248,6 @@
   // קורסים מתוכננים שעוד לא נבנו – מוצגים בקטלוג כ"בקרוב"
   // קורסים מתוכננים שעוד לא נבנו – מוצגים בקטלוג כ"בקרוב". grades = [מכיתה, עד כיתה]
   const PLANNED = {
-    mult: { title: 'לוח הכפל', sub: 'מבינים את הכפל ושולטים בלוח הכפל', grades: [2, 6] },
     frac: { title: 'שברים פשוטים', sub: 'מה זה שבר, השוואת שברים, שבר מכמות', grades: [5, 6] },
     pct: { title: 'אחוזים', sub: 'מה זה אחוז, אחוז מכמות, אחוזים בחיים', grades: [6, 6] },
     fracop: { title: 'כפל וחילוק שברים', sub: 'כפל וחילוק של שברים ומספרים מעורבים', grades: [6, 6] },
@@ -667,7 +667,7 @@
   };
   // ההקנייה והתרגול מהאתר הראשי (math6.html?embed=1) – בתוך מסך הקורס
   const siteOf = id => (K.SITE || {})[id] || {};
-  const siteGrade = () => (K.grades || [6]).includes(MYG) ? MYG : Math.max(...(K.grades || [6]));
+  const siteGrade = () => { const g = K.grades || [6, 6]; return MYG >= g[0] && MYG <= g[1] ? MYG : g[1]; };
   function siteUrl(o) {
     const q = new URLSearchParams({ embed: '1', grade: String(siteGrade()) });
     if (o.sheet) q.set('sheet', '1'), q.set('min', String(o.min || 10));
