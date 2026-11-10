@@ -1,0 +1,161 @@
+/* =========================================================
+   המחשות: ביטויים מתמטיים (שבר מאונך) וציורים ב-SVG
+   פס שבר, עיגול, ריבוע, כוס מדידה, ישר מספרים
+   ========================================================= */
+(function () {
+  const C = window.COACH = window.COACH || {};
+  const INK = '#1f1e1c', FILL = '#e07aa5', FILL2 = '#f6d4e2';
+
+  // ---------- הקראה של מתמטיקה ----------
+  const ONE = { 2: 'חצי', 3: 'שליש', 4: 'רבע', 5: 'חמישית', 6: 'שישית', 7: 'שביעית', 8: 'שמינית', 9: 'תשיעית', 10: 'עשירית' };
+  const MANY = { 2: 'חצאים', 3: 'שלישים', 4: 'רבעים', 5: 'חמישיות', 6: 'שישיות', 7: 'שביעיות', 8: 'שמיניות', 9: 'תשיעיות', 10: 'עשיריות' };
+  function fracSay(n, d) {
+    if (n === '?' && d === '?') return 'כמה חלקי כמה';
+    if (n === '?') return `כמה חלקי ${d}`;
+    if (d === '?') return `${n} חלקי כמה`;
+    const N = +n, Dn = +d;
+    if (N === 1 && ONE[Dn]) return ONE[Dn];
+    if (MANY[Dn]) return `${n} ${MANY[Dn]}`;
+    return `${n} חלקי ${d}`;
+  }
+  const OPS = { '=': 'שווה', '≠': 'לא שווה', '×': 'כפול', '+': 'ועוד', '−': 'פחות', '-': 'פחות', ':': 'חלקי', '>': 'גדול מ', '<': 'קטן מ', '%': 'אחוז' };
+
+  // ---------- ביטוי מתמטי: "3/4 = ?/12" ----------
+  // opts.input = true → כל "?" הופך לתיבת הקלדה
+  function M(expr, opts = {}) {
+    const toks = String(expr).trim().split(/\s+/);
+    const say = [];
+    const html = toks.map(t => {
+      const m = t.match(/^(\d+|\?)\/(\d+|\?)$/);
+      if (m) {
+        say.push(fracSay(m[1], m[2]));
+        const cell = v => v === '?' ? (opts.input ? `<input class="slot" inputmode="decimal" autocomplete="off" maxlength="7" aria-label="המספר החסר">` : '<span class="qbox">?</span>') : v;
+        return `<span class="fr"><span>${cell(m[1])}</span><span>${cell(m[2])}</span></span>`;
+      }
+      if (t === '?') { say.push('כמה'); return opts.input ? `<input class="slot" inputmode="decimal" autocomplete="off" maxlength="7" aria-label="המספר החסר">` : '<span class="qbox">?</span>'; }
+      say.push(OPS[t] || t);
+      return `<span class="op">${t}</span>`;
+    }).join('');
+    return `<span class="mx" dir="ltr" data-say="${say.join(' ')}">${html}</span>`;
+  }
+  // טקסט עם ⟦…⟧ בתוכו
+  const R = (s, opts) => String(s || '').replace(/⟦([^⟧]*)⟧/g, (_, e) => M(e, opts));
+
+  // ---------- ציורים ----------
+  function bar(f) {
+    const w = f.w || 300, h = f.h || 46, n = f.n || 0;
+    const widths = f.widths || Array.from({ length: f.d }, () => 1 / f.d);
+    const g = f.g || 1;
+    let x = 2, out = '';
+    widths.forEach((p, i) => {
+      const pw = p * w;
+      out += `<rect data-i="${i}" x="${x}" y="2" width="${pw}" height="${h}" fill="${i < n ? FILL : '#fff'}" stroke="${INK}" stroke-width="1.2"/>`;
+      x += pw;
+    });
+    if (g > 1) for (let i = 0; i <= widths.length; i += g) { const xx = 2 + i * (w / widths.length); out += `<line x1="${xx}" x2="${xx}" y1="2" y2="${h + 2}" stroke="${INK}" stroke-width="3"/>`; }
+    out += `<rect x="2" y="2" width="${w}" height="${h}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    return `<svg class="fig bar" viewBox="0 0 ${w + 4} ${h + 4}" width="${w + 4}" height="${h + 4}" role="img" aria-label="פס שבר">${out}</svg>`;
+  }
+  function pie(f) {
+    const r = f.r || 40, d = f.d, n = f.n || 0, g = f.g || 1, c = r + 3;
+    let out = '';
+    for (let i = 0; i < d; i++) {
+      const a0 = -Math.PI / 2 + i * 2 * Math.PI / d, a1 = a0 + 2 * Math.PI / d;
+      const p = (a) => `${(c + r * Math.cos(a)).toFixed(2)} ${(c + r * Math.sin(a)).toFixed(2)}`;
+      out += `<path d="M${c} ${c} L${p(a0)} A${r} ${r} 0 ${d === 1 ? 1 : 0} 1 ${p(a1)} Z" fill="${i < n ? FILL : '#fff'}" stroke="${INK}" stroke-width="1.2"/>`;
+    }
+    if (g > 1) for (let i = 0; i < d; i += g) { const a = -Math.PI / 2 + i * 2 * Math.PI / d; out += `<line x1="${c}" y1="${c}" x2="${(c + r * Math.cos(a)).toFixed(2)}" y2="${(c + r * Math.sin(a)).toFixed(2)}" stroke="${INK}" stroke-width="3"/>`; }
+    out += `<circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    return `<svg class="fig pie" viewBox="0 0 ${2 * c} ${2 * c}" width="${2 * c}" height="${2 * c}" role="img" aria-label="עיגול מחולק">${out}</svg>`;
+  }
+  function grid(f) {
+    const s = 44; let out = '';
+    [[0, 0], [1, 0], [0, 1], [1, 1]].forEach(([i, j], k) => { out += `<rect x="${2 + i * s}" y="${2 + j * s}" width="${s}" height="${s}" fill="${k < f.n ? FILL : '#fff'}" stroke="${INK}" stroke-width="1.2"/>`; });
+    out += `<rect x="2" y="2" width="${2 * s}" height="${2 * s}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    return `<svg class="fig grid" viewBox="0 0 ${2 * s + 4} ${2 * s + 4}" width="${2 * s + 4}" height="${2 * s + 4}" role="img" aria-label="ריבוע מחולק">${out}</svg>`;
+  }
+  function cup(f) {
+    const w = 90, h = 170, d = f.d, n = f.n; let out = '';
+    const step = h / d;
+    out += `<rect x="20" y="${10 + h - n * step}" width="${w}" height="${n * step}" fill="${FILL2}"/>`;
+    for (let i = 1; i < d; i++) out += `<line x1="20" x2="40" y1="${10 + h - i * step}" y2="${10 + h - i * step}" stroke="${INK}" stroke-width="1.5"/>`;
+    out += `<path d="M20 10 V${10 + h} H${20 + w} V10" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    out += `<line x1="14" x2="${26 + w}" y1="${10 + h - n * step}" y2="${10 + h - n * step}" stroke="${FILL}" stroke-width="3"/>`;
+    return `<svg class="fig cup" viewBox="0 0 ${w + 40} ${h + 20}" width="${w + 40}" height="${h + 20}" role="img" aria-label="כוס מדידה">${out}</svg>`;
+  }
+  // ישר מספרים 0…1 (0 משמאל, 1 מימין – כמו בספרי המתמטיקה)
+  function line(f) {
+    const w = f.w || 340, x0 = 24, x1 = x0 + w, y = 40, d = f.d;
+    let out = `<line x1="${x0 - 10}" x2="${x1 + 10}" y1="${y}" y2="${y}" stroke="${INK}" stroke-width="2.4"/>`;
+    for (let k = 0; k <= d; k++) {
+      const x = x0 + k * w / d, big = k === 0 || k === d;
+      if (f.click) out += `<rect class="hit" data-k="${k}" x="${x - 14}" y="${y - 26}" width="28" height="52" fill="transparent"/>`;
+      out += `<line x1="${x}" x2="${x}" y1="${y - (big ? 14 : 10)}" y2="${y + (big ? 14 : 10)}" stroke="${INK}" stroke-width="${big ? 2.4 : 1.6}" pointer-events="none"/>`;
+      if (big) out += `<text x="${x}" y="${y + 34}" text-anchor="middle" font-size="18" fill="${INK}" pointer-events="none">${k === 0 ? (f.from != null ? f.from : 0) : (f.to != null ? f.to : 1)}</text>`;
+    }
+    if (f.mark != null) { const x = x0 + f.mark * w / d; out += `<circle cx="${x}" cy="${y}" r="7" fill="${FILL}" stroke="${INK}" stroke-width="2"/>`; }
+    if (f.sel != null) { const x = x0 + f.sel * w / d; out += `<circle class="sel" cx="${x}" cy="${y}" r="8" fill="${FILL}" stroke="${INK}" stroke-width="2" pointer-events="none"/>`; }
+    return `<svg class="fig line" viewBox="0 0 ${w + 48} 84" width="${w + 48}" height="84" role="img" aria-label="ישר מספרים">${out}</svg>`;
+  }
+  // ריבוע של 100 משבצות; הצביעה לפי עמודות (כל עמודה = עשירית)
+  function hund(f) {
+    const c = f.c || 17, n = f.n || 0; let out = '';
+    for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
+      const i = col * 10 + row;
+      const on = f.rc ? (col < f.rc[0] && row < f.rc[1]) : i < n;
+      out += `<rect x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
+    }
+    out += `<rect x="2" y="2" width="${10 * c}" height="${10 * c}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    return `<svg class="fig hund" viewBox="0 0 ${10 * c + 4} ${10 * c + 4}" width="${10 * c + 4}" height="${10 * c + 4}" role="img" aria-label="ריבוע של 100 משבצות">${out}</svg>`;
+  }
+  // לוח ערך המקום: { k:'pv', n:'3.45' }
+  function pv(f) {
+    const [a, b = ''] = String(f.n).split('.');
+    const ints = a.split(''), decs = b.split('');
+    const names = { i: ['אחדות', 'עשרות', 'מאות'], d: ['עשיריות', 'מאיות', 'אלפיות'] };
+    const head = [...ints.map((_, i) => names.i[ints.length - 1 - i] || ''), '', ...decs.map((_, i) => names.d[i] || '')];
+    const cells = [...ints, '.', ...decs];
+    return `<table class="pvt" dir="ltr"><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr><tr>${cells.map(c => `<td${c === '.' ? ' class="pt"' : ''}>${c}</td>`).join('')}</tr></table>`;
+  }
+  // תרגיל במאונך: { k:'vert', rows:['3.50','1.25'], op:'+', res:'4.75' } – הנקודות מיושרות
+  function vert(f) {
+    const w = Math.max(...f.rows.concat(f.res || '').map(r => r.length));
+    const line = (r, op) => `<tr><td class="op">${op || ''}</td>${r.padStart(w, ' ').split('').map(ch => `<td${ch === '.' ? ' class="pt"' : ''}>${ch === ' ' ? '' : ch}</td>`).join('')}</tr>`;
+    return `<table class="vert" dir="ltr">${f.rows.map((r, i) => line(r, i === f.rows.length - 1 ? f.op : '')).join('')}${f.res != null ? `<tr class="res"><td></td>${f.res.padStart(w, ' ').split('').map(ch => `<td${ch === '.' ? ' class="pt"' : ''}>${ch === ' ' ? '' : ch}</td>`).join('')}</tr>` : ''}</table>`;
+  }
+  // מערך: r שורות × c עמודות של עיגולים. split = קו אחרי שורה (פירוק), hl = כמה שורות ראשונות בצבע אחר
+  function arr(f) {
+    const r = f.r, c = f.c, g = f.g || (c > 8 || r > 8 ? 22 : 30), rad = g * 0.36, gap = f.split ? 14 : 0;
+    const W = c * g + 8, H = r * g + 8 + gap; let out = '';
+    for (let i = 0; i < r; i++) for (let j = 0; j < c; j++) {
+      const y = 4 + i * g + g / 2 + (f.split && i >= f.split ? gap : 0);
+      out += `<circle cx="${4 + j * g + g / 2}" cy="${y}" r="${rad}" fill="${f.hl && i < f.hl ? FILL2 : FILL}" stroke="${INK}" stroke-width="1"/>`;
+    }
+    if (f.split) out += `<line x1="0" x2="${W}" y1="${4 + f.split * g + gap / 2}" y2="${4 + f.split * g + gap / 2}" stroke="${INK}" stroke-width="2" stroke-dasharray="6 4"/>`;
+    return `<svg class="fig arr" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${r} שורות של ${c}">${out}</svg>`;
+  }
+  // קבוצות שוות: g קבוצות (עיגולים גדולים), בכל אחת n עיגולים קטנים
+  function groups(f) {
+    const g = f.g, n = f.n, per = Math.ceil(Math.sqrt(n)), cell = 16, box = per * cell + 18, W = g * (box + 10) + 6, H = box + 10;
+    let out = '';
+    for (let k = 0; k < g; k++) {
+      const x0 = 6 + k * (box + 10), cx = x0 + box / 2, cy = 5 + box / 2;
+      out += `<circle cx="${cx}" cy="${cy}" r="${box / 2}" fill="#fff" stroke="${INK}" stroke-width="2"/>`;
+      const rows = Math.ceil(n / per);
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / per), col = i % per, inRow = Math.min(per, n - row * per);
+        out += `<circle cx="${cx + (col - (inRow - 1) / 2) * cell}" cy="${cy + (row - (rows - 1) / 2) * cell}" r="5.5" fill="${FILL}" stroke="${INK}" stroke-width="0.8"/>`;
+      }
+    }
+    return `<svg class="fig groups" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${g} קבוצות של ${n}">${out}</svg>`;
+  }
+  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups };
+  function fig(f) {
+    if (!f) return '';
+    if (Array.isArray(f)) return `<div class="figs">${f.map(fig).join('')}</div>`;
+    const svg = (KINDS[f.k] || bar)(f);
+    return f.label ? `<figure class="figl">${svg}<figcaption>${R(f.label)}</figcaption></figure>` : svg;
+  }
+
+  C.V = { M, R, fig, bar, pie, line, fracSay, FILL };
+})();

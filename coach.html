@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="only light">
+<title>קורסים ללמידה עצמית – איריס סגל</title>
+<meta name="description" content="קורסים ללמידה עצמית במתמטיקה, עם מאמן אישי">
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #f4f6fb; --card: #ffffff; --ink: #1d2433; --muted: #5d6578; --line: #e2e6ef;
+    --brand: #3b5bdb; --brand-dark: #2f4ac0; --brand-soft: #e9eeff;
+    --ok: #2b8a3e; --ok-bg: #e6f5ea; --bad: #b4511a; --bad-bg: #fdf0e6; --hint-bg: #fff6d9;
+    --info-bg: #eef2fb; --rule-bg: #f2efff; --shadow: 0 1px 2px rgba(29, 36, 51, 0.06), 0 4px 16px rgba(29, 36, 51, 0.06);
+  }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Assistant', 'Segoe UI', 'Arial Hebrew', sans-serif; direction: rtl; text-align: right; font-size: 18px; line-height: 1.55; }
+  body.big { font-size: 21px; }
+  h1, h2, h3 { margin: 0 0 10px; line-height: 1.25; font-weight: 800; }
+  h1 { font-size: 1.75rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.12rem; }
+  p { margin: 0 0 10px; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 20px; border-bottom: 1px solid var(--line); background: #fff; position: sticky; top: 0; z-index: 20; }
+  .top .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; }
+  .top .brand .crs { color: var(--muted); font-weight: 600; font-size: 0.92rem; }
+  .top .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .avatar { width: 38px; height: 38px; flex: 0 0 38px; border-radius: 50%; background: var(--brand); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem; }
+  .avatar.sm { width: 30px; height: 30px; flex-basis: 30px; font-size: 0.9rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 22px 18px 120px; }
+  .layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 920px) { .layout.withcoach { grid-template-columns: 1fr 280px; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  .muted { color: var(--muted); }
+  .small { font-size: 0.88rem; }
+  button, .btn { font: inherit; font-weight: 700; font-size: 1rem; padding: 10px 20px; min-height: 46px; border: 1px solid transparent; border-radius: 12px; background: var(--brand); color: #fff; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
+  button:hover { background: var(--brand-dark); }
+  button:disabled { opacity: 0.45; cursor: default; }
+  button.sec, .btn.sec { background: #fff; color: var(--ink); border-color: var(--line); }
+  button.sec:hover, .btn.sec:hover { background: var(--info-bg); }
+  button.ghost { background: transparent; color: var(--ink); border-color: transparent; }
+  button.ghost:hover { background: var(--info-bg); }
+  button.small, .btn.small { min-height: 36px; padding: 6px 12px; font-size: 0.9rem; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+  input.tx { font: inherit; font-size: 1.1rem; padding: 11px 14px; border: 1.5px solid #c9cfdd; border-radius: 12px; background: #fff; width: 100%; max-width: 400px; }
+  input.tx:focus, input.slot:focus, input.nin:focus { outline: 3px solid rgba(59, 91, 219, 0.25); border-color: var(--brand); }
+  label.lb { display: block; font-weight: 700; margin: 14px 0 6px; }
+
+  /* מתמטיקה */
+  .mx { display: inline-flex; align-items: center; gap: 0.25em; direction: ltr; unicode-bidi: isolate; vertical-align: middle; margin: 0 0.15em; }
+  .fr { display: inline-flex; flex-direction: column; text-align: center; line-height: 1.15; }
+  .fr > span:first-child { border-bottom: 2px solid currentColor; padding: 0 0.2em 1px; }
+  .fr > span:last-child { padding-top: 1px; }
+  .bigmx { font-size: 1.8rem; text-align: center; margin: 14px 0; }
+  .bigmx .mx { gap: 0.4em; }
+  .qbox { display: inline-block; min-width: 1.2em; border: 2px dashed var(--muted); border-radius: 6px; padding: 0 0.15em; }
+  input.slot, input.nin { width: 2.6em; font: inherit; font-size: 1em; text-align: center; padding: 2px; border: 2px solid var(--brand); border-radius: 8px; background: #fff; direction: ltr; }
+  .fracin { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; vertical-align: middle; }
+  .fracin .bar { width: 3em; height: 0; border-top: 3px solid var(--ink); }
+
+  /* ציורים */
+  .figs { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 14px 0; }
+  svg.fig { max-width: 100%; height: auto; display: block; margin: 8px auto; }
+  figure.figl { margin: 0; text-align: center; }
+  figure.figl figcaption { font-size: 1.15rem; }
+  .shade svg rect[data-i] { cursor: pointer; }
+  .clickline svg .hit { cursor: pointer; }
+
+  /* אפשרויות בחירה */
+  .opts { display: grid; gap: 10px; margin-top: 14px; }
+  .opts.figopts { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .opt { text-align: right; justify-content: flex-start; background: #fff; color: var(--ink); border: 1.5px solid #cfd5e3; font-weight: 600; font-size: 1.05rem; padding: 12px 16px; min-height: 54px; }
+  .opt:hover { background: var(--info-bg); }
+  .opt.sel { background: var(--brand-soft); border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand) inset; }
+  .opt.right { background: var(--ok-bg); border-color: var(--ok); }
+  .opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
+  .opt svg.fig { margin: 0 auto; }
+  .figopts .opt { justify-content: center; }
+
+  /* משוב */
+  .fb { border-radius: 14px; padding: 12px 16px; margin-top: 14px; border-inline-start: 5px solid var(--muted); }
+  .fb.ok { background: var(--ok-bg); border-color: var(--ok); }
+  .fb.bad { background: var(--bad-bg); border-color: var(--bad); }
+  .fb.hint { background: var(--hint-bg); border-color: #d9a400; }
+  .fb.info { background: var(--info-bg); border-color: var(--brand); }
+  .rulebox { background: var(--rule-bg); border-radius: 14px; padding: 16px 18px; border-inline-start: 5px solid #7048e8; }
+  .warnbox { background: var(--bad-bg); border-radius: 14px; padding: 16px 18px; border-inline-start: 5px solid var(--bad); }
+  ol.steps { margin: 8px 0; padding-inline-start: 1.4em; }
+  ol.steps li { margin-bottom: 6px; }
+
+  /* שיעור */
+  .crumb { color: var(--muted); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+  .lhead { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .pills { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 14px 0 20px; }
+  .pill { font-size: 0.8rem; color: var(--muted); text-align: center; padding-top: 8px; border-top: 4px solid var(--line); font-weight: 600; }
+  .pill.on { color: var(--brand); border-color: var(--brand); }
+  .pill.done { color: var(--ok); border-color: var(--ok); }
+  .coachline { display: flex; gap: 12px; align-items: flex-start; background: var(--brand-soft); border-radius: 16px; padding: 14px 16px; margin-bottom: 16px; }
+  .coachline .say { flex: 1; }
+  .coachline .who { font-size: 0.8rem; color: var(--brand); font-weight: 800; }
+
+  /* מסך הקורס */
+  .hero { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
+  .ring { --p: 0; width: 104px; height: 104px; border-radius: 50%; background: conic-gradient(var(--ok) calc(var(--p) * 1%), var(--line) 0); display: flex; align-items: center; justify-content: center; }
+  .ring > span { width: 80px; height: 80px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem; line-height: 1.1; }
+  .ring small { font-size: 0.7rem; color: var(--muted); font-weight: 600; }
+  .prog { height: 10px; border-radius: 999px; overflow: hidden; background: var(--line); margin: 10px 0 6px; }
+  .prog > div { height: 100%; background: var(--ok); }
+  .mods { display: grid; gap: 14px; }
+  .mod { border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: #fff; }
+  .mod > h3 { margin: 0; padding: 12px 18px; background: #f8f9fd; border-bottom: 1px solid var(--line); font-size: 1rem; display: flex; justify-content: space-between; }
+  .mod > h3 .muted { font-weight: 600; font-size: 0.85rem; }
+  .ulist { list-style: none; margin: 0; padding: 0; }
+  .ulist li { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .ulist li:last-child { border-bottom: none; }
+  .ulist li.active { background: var(--brand-soft); }
+  .ulist .ic { width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: var(--muted); background: #fff; }
+  .ulist li.done .ic { border-color: var(--ok); background: var(--ok); color: #fff; }
+  .ulist li.active .ic { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .ulist li.skip .ic { border-color: var(--ok); color: var(--ok); }
+  .ulist .t { flex: 1; }
+  .ulist li.done .t b { text-decoration: line-through; color: var(--muted); }
+  .ulist .meta { font-size: 0.85rem; color: var(--muted); }
+  .chip { display: inline-block; font-size: 0.78rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; margin-inline-start: 6px; background: var(--info-bg); color: var(--muted); }
+  .chip.ok { background: var(--ok-bg); color: var(--ok); }
+  .chip.now { background: var(--brand); color: #fff; }
+  .tag { display: inline-block; font-size: 0.78rem; border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; margin-inline-start: 6px; background: #fff; color: var(--muted); }
+  .side { display: grid; gap: 18px; align-content: start; }
+  @media (min-width: 920px) { .cgrid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; } }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge { border-radius: 999px; padding: 5px 12px; background: var(--hint-bg); font-size: 0.9rem; font-weight: 700; }
+  .knows { margin: 0; padding-inline-start: 1.2em; }
+  .knows li { margin-bottom: 6px; }
+  .cert { border: 3px double var(--brand); border-radius: 18px; padding: 30px 24px; text-align: center; background: #fff; }
+  .cert h1 { color: var(--brand); font-size: 2rem; }
+  .cert .nm { font-size: 1.6rem; font-weight: 800; margin: 10px 0; }
+
+  /* המאמן */
+  .coach { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 16px; align-self: start; position: sticky; top: 76px; box-shadow: var(--shadow); }
+  .coach .chead { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: 800; }
+  .bubble { background: var(--brand-soft); border-radius: 4px 14px 14px 14px; padding: 10px 12px; margin-bottom: 12px; font-size: 0.97rem; }
+  .coach .hb { display: flex; flex-direction: column; gap: 8px; }
+  .coach .hb button { justify-content: center; }
+  .coach .hb button.teacher { background: var(--hint-bg); color: var(--ink); border-color: #ecd9a0; }
+  .coach .sub { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .coachtoggle { display: none; }
+  @media (max-width: 600px) {
+    .top { padding: 8px 10px; }
+    .top .brand .crs, .top .acts .long2 { display: none; }
+    .top .acts { flex-wrap: nowrap; gap: 6px; }
+    .top .acts .small { padding: 4px 8px; font-size: 0.82rem; min-height: 34px; white-space: nowrap; }
+    .wrap { padding: 12px 10px 110px; }
+    .card { padding: 16px; }
+    .hero { grid-template-columns: 1fr; }
+    .pill { font-size: 0.68rem; }
+  }
+  @media (max-width: 919px) {
+    .coach { position: fixed; bottom: 0; left: 0; right: 0; top: auto; border-radius: 18px 18px 0 0; z-index: 30; max-height: 70vh; overflow: auto; transform: translateY(calc(100% - 58px)); transition: transform 0.2s; padding-top: 0; }
+    .coach.open { transform: none; }
+    .coachtoggle { display: flex; width: 100%; background: #fff; color: var(--ink); border: none; border-bottom: 1px solid var(--line); border-radius: 0; margin-bottom: 10px; min-height: 56px; }
+    .coachtoggle:hover { background: #fff; }
+    .coach .chead { display: none; }
+  }
+
+  /* חלונות */
+  .overlay { position: fixed; inset: 0; background: rgba(29, 36, 51, 0.5); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .modal { background: var(--card); border-radius: 18px; padding: 22px; max-width: 640px; width: 100%; max-height: 90vh; overflow: auto; box-shadow: var(--shadow); }
+  .tcard { background: var(--info-bg); border-radius: 14px; padding: 14px; font-size: 1.05rem; }
+  .tcard dt { font-weight: 800; margin-top: 8px; }
+  .tcard dd { margin: 0; }
+  .code { font-family: 'Courier New', monospace; font-size: 2.2rem; font-weight: 700; letter-spacing: 4px; direction: ltr; text-align: center; background: var(--brand-soft); border: 2px dashed var(--brand); border-radius: 14px; padding: 12px; margin: 12px 0; }
+  table.mt { border-collapse: collapse; margin: 0 auto; direction: ltr; }
+  table.mt td { border: 1px solid var(--line); width: 2.3em; height: 2em; text-align: center; font-size: 0.95rem; }
+  table.mt td.h { background: var(--info-bg); font-weight: 800; }
+  table.cut { border-collapse: collapse; margin: 10px 0; }
+  table.cut td, table.cut th { border: 1px solid var(--line); padding: 4px 12px; text-align: center; }
+  .chk { display: flex; gap: 8px; align-items: center; margin: 6px 0; }
+  .chk input { width: 22px; height: 22px; accent-color: var(--brand); }
+  .tview { background: var(--hint-bg); border-radius: 12px; padding: 8px 12px; margin-bottom: 14px; font-size: 0.9rem; }
+  .sure { margin-top: 14px; }
+  footer { text-align: center; color: var(--muted); font-size: 0.8rem; margin-top: 30px; }
+  table.pvt, table.vert { border-collapse: collapse; margin: 12px auto; font-size: 1.4rem; direction: ltr; }
+  table.pvt th { font-size: 0.75rem; color: var(--muted); padding: 2px 8px; font-weight: 700; }
+  table.pvt td { border: 1.5px solid var(--line); min-width: 2.2em; height: 1.9em; text-align: center; font-weight: 700; }
+  table.pvt td.pt, table.vert td.pt { border: none; min-width: 0.6em; color: #e8590c; }
+  table.vert td { width: 1em; text-align: center; padding: 0 2px; font-variant-numeric: tabular-nums; }
+  table.vert td.op { color: var(--muted); padding-inline-end: 8px; }
+  table.vert tr.res td { border-top: 2.5px solid var(--ink); }
+  .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+  .ccard { margin: 0; border-top: 6px solid var(--brand); }
+  .tnav { display: inline-flex; gap: 6px; flex-wrap: wrap; margin-inline-start: 6px; }
+  .tnav button[disabled] { opacity: .4; }
+  .titem { border: 1px solid #e3e6ef; border-radius: 12px; padding: 10px 12px; margin: 8px 0; }
+  .titem .tans { color: #1e6b3a; font-weight: 700; margin-top: 6px; }
+  .titem .tmsg { color: #5b6275; font-size: .92rem; }
+  .titem ul.topts { margin: 6px 0; padding-inline-start: 20px; }
+  .titem ul.topts li.ok { color: #1e6b3a; font-weight: 700; }
+  .site { width: 100%; min-height: 460px; border: 1px solid #dfe3ee; border-radius: 14px; background: #fff; display: block; margin: 10px 0; }
+  .modal .site { min-height: 60vh; }
+  .ccard.soon { opacity: 0.6; border-top-color: var(--line); }
+  [hidden] { display: none !important; }
+  @media print { .top, footer, .noprint { display: none !important; } body { background: #fff; } .wrap { padding: 0; } .card { box-shadow: none; border: none; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand" id="brand" style="cursor:pointer" title="לכל הקורסים"><span class="avatar sm" aria-hidden="true">מ</span><span>קורסים ללמידה עצמית</span><span class="crs" id="crsName"></span></span>
+  <span class="acts">
+    <button class="sec small" id="bigBtn" title="הגדלת הכתב">א+</button>
+    <a class="btn sec small" href="math6.html">לאתר<span class="long2"> התרגול</span></a>
+    <button class="small" id="endBtn" hidden>סיימתי להיום</button>
+  </span>
+</header>
+<div class="wrap">
+  <div class="layout" id="layout">
+    <main id="main"></main>
+    <aside class="coach" id="coach" hidden>
+      <button class="coachtoggle" id="coachToggle" aria-expanded="false"><span class="avatar sm">מ</span>&nbsp; המאמן שלך – עזרה</button>
+      <div class="chead"><span class="avatar">מ</span><span>המאמן שלך</span></div>
+      <div class="bubble" id="bubble">אני כאן אם צריך עזרה.</div>
+      <div class="hb">
+        <button class="sec" data-h="lost">לא הבנתי</button>
+        <button class="sec" data-h="alt">תסביר בדרך אחרת</button>
+        <button class="sec" data-h="hint">תן לי רמז</button>
+        <button class="sec" data-h="read">🔊 הקרא לי</button>
+        <button class="teacher" data-h="teacher">אני צריך את המורה</button>
+      </div>
+    </aside>
+  </div>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 3.5</span></footer>
+</div>
+
+<script src="coach/visuals.js"></script>
+<script src="coach/engine.js"></script>
+<script src="coach/kit.js"></script>
+<script src="coach/courses/equiv.js"></script>
+<script src="coach/courses/equiv-units.js"></script>
+<script src="coach/courses/dec.js"></script>
+<script src="coach/courses/mult.js"></script>
+<script>
+(function () {
+  const C = window.COACH, V = C.V, E = C.E;
+  let K = null; // הקורס הפעיל
+  // קורסים מתוכננים שעוד לא נבנו – מוצגים בקטלוג כ"בקרוב"
+  // קורסים מתוכננים שעוד לא נבנו – מוצגים בקטלוג כ"בקרוב". grades = [מכיתה, עד כיתה]
+  const PLANNED = {
+    frac: { title: 'שברים פשוטים', sub: 'מה זה שבר, השוואת שברים, שבר מכמות', grades: [5, 6] },
+    pct: { title: 'אחוזים', sub: 'מה זה אחוז, אחוז מכמות, אחוזים בחיים', grades: [6, 6] },
+    fracop: { title: 'כפל וחילוק שברים', sub: 'כפל וחילוק של שברים ומספרים מעורבים', grades: [6, 6] },
+    area: { title: 'שטח והיקף', sub: 'שטח והיקף של מצולעים וצורות מורכבות', grades: [4, 6] }
+  };
+  const GN = ['', "א'", "ב'", "ג'", "ד'", "ה'", "ו'"];
+  const gradeText = g => !g ? '' : g[0] === g[1] ? `כיתה ${GN[g[0]]}` : `כיתות ${GN[g[0]]}–${GN[g[1]]}`;
+  const MYG = +(E.URLP.get('grade') || 0);
+  function setCourse(id) { K = C.courses[id] || null; const n = document.getElementById('crsName'); if (n) n.textContent = K ? '· ' + K.title : ''; }
+  const { R, fig } = V;
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const main = $('main'), coachEl = $('coach');
+  const T = E.teacher();
+  const PILLS = ['מה נלמד', 'בואו נבין', 'מחברת ותרגול', 'בודקים הבנה', 'מה למדתי'];
+  const BADGE_NAME = { persist: '💪 התמדה', fix: '🔧 תיקון טעות', explain: '💬 הסבר מתמטי', master: '⭐ שליטה' };
+
+  let st = E.store.load() || null;
+  let cur = null; // השאלה הפתוחה כרגע (לכפתורי המאמן)
+  const save = () => { if (st) E.store.save(st); };
+  const log = (type, data) => { if (!st) return; st.log = st.log || []; st.log.push(Object.assign({ type, t: Date.now() }, data || {})); if (st.log.length > 200) st.log.shift(); save(); };
+  const say = html => { $('bubble').innerHTML = R(html); };
+  // כל דיווח לאתר הבקרה כולל את קוד ההמשך העדכני – כדי שהמורה תוכל לתת אותו לילד ששכח
+  const tr = (action, detail) => { if (st) E.track(st.name, action, `קוד ${E.encode(st, K)} · ${detail}`); };
+
+  /* ---------- הקראה ---------- */
+  let heVoice = null;
+  const canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  const loadVoices = () => { if (!canSpeak) return; const vs = speechSynthesis.getVoices() || []; heVoice = vs.find(v => /^(he|iw)([-_]|$)/i.test(v.lang)) || vs.find(v => /hebrew|עברית|carmit|asaf/i.test(v.name)) || null; };
+  if (canSpeak) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+  function textOf(el) {
+    const c = el.cloneNode(true);
+    c.querySelectorAll('.mx').forEach(m => m.replaceWith(document.createTextNode(' ' + m.dataset.say + ' ')));
+    c.querySelectorAll('button, input, svg, .nosay, .pills, .tview').forEach(x => x.remove());
+    return c.textContent.replace(/\s+/g, ' ').trim();
+  }
+  function speak(el) {
+    loadVoices();
+    if (!canSpeak || !heVoice) {
+      document.body.classList.add('big');
+      say('ההקראה לא זמינה במחשב הזה. הגדלתי את הכתב. אפשר גם לבקש מחבר/ה להקריא.');
+      log('noVoice');
+      return;
+    }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(textOf(el));
+    u.voice = heVoice; u.lang = heVoice.lang; u.rate = 0.9;
+    speechSynthesis.speak(u);
+  }
+
+  /* ---------- חלונות ---------- */
+  function modal(html, onClose) {
+    const o = document.createElement('div');
+    o.className = 'overlay';
+    o.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}<div class="row"><button class="sec" data-close>סגירה</button></div></div>`;
+    document.body.appendChild(o);
+    const close = () => { o.remove(); if (onClose) onClose(); };
+    o.querySelectorAll('[data-close]').forEach(b => b.onclick = close);
+    o.addEventListener('click', e => { if (e.target === o) close(); });
+    return { el: o, close };
+  }
+
+  /* =========================================================
+     רכיב שאלה – משמש באבחון (בלי משוב) ובלמידה (משוב, רמזים, תיקון)
+     ========================================================= */
+  function askItem(box, item, mode, done) {
+    const learn = mode === 'learn';
+    let sel = item.type === 'multi' ? new Set() : null, shaded = new Set(), lineK = null;
+    let attempts = 0, hinted = false, hintI = 0, answers = [], firstTag = '', fixed = false, finished = false;
+    const fbBox = () => box.querySelector('.fbarea');
+    const fbs = (cls, html) => { fbBox().innerHTML = `<div class="fb ${cls}">${R(html)}</div>`; };
+
+    let body = `<div class="q">${R(item.q, { input: item.type === 'num' })}</div>`;
+    if (item.fig && item.type !== 'shade' && item.type !== 'line') body += fig(item.fig);
+    if (item.type === 'frac' || item.type === 'open') body += `<div class="bigmx"><span class="fracin" dir="ltr"><input class="nin" data-p="n" inputmode="numeric" maxlength="3" aria-label="מונה"><span class="bar"></span><input class="nin" data-p="d" inputmode="numeric" maxlength="3" aria-label="מכנה"></span></div>`;
+    if (item.type === 'shade') body += `<div class="shade">${V.bar({ n: 0, d: item.d, w: 320 })}</div><p class="muted small">צבועים: <b class="cnt">0</b></p>`;
+    if (item.type === 'line') body += `<div class="clickline">${V.line({ d: item.d, click: true })}</div>`;
+    if (item.type === 'choice' || item.type === 'multi') {
+      const figs = item.opts.some(o => o.fig && !o.t);
+      body += `<div class="opts${figs ? ' figopts' : ''}">${item.opts.map((o, i) => `<button class="opt" data-i="${i}">${o.t ? R(o.t) : ''}${o.fig && !o.t ? fig(o.fig) : ''}</button>`).join('')}</div>`;
+    }
+    if (item.type === 'nums') body += `<div class="row">${item.labels.map((l, i) => `<label class="chk">${esc(l)}: <input class="nin" data-k="${i}" inputmode="decimal" maxlength="7"></label>`).join('')}</div>`;
+    body += `<div class="fbarea" aria-live="polite"></div><div class="row acts"><button class="go">${learn ? 'בדיקה' : 'המשך'}</button>${learn && item.hints ? '<button class="sec hintb">רמז</button>' : ''}${learn && item.showFig ? '<button class="sec showfig">הראו לי בציור</button>' : ''}${!learn && item.id !== 'NB' ? '<button class="ghost skip">עוד לא למדתי</button>' : ''}</div><div class="sure" hidden></div>`;
+    box.innerHTML = body;
+
+    // אינטראקציה
+    box.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      if (finished) return;
+      const i = +b.dataset.i;
+      if (sel) { sel.has(i) ? sel.delete(i) : sel.add(i); b.classList.toggle('sel'); }
+      else { box.querySelectorAll('.opt').forEach(x => x.classList.remove('sel', 'wrong')); b.classList.add('sel'); box.dataset.sel = i; }
+    });
+    if (item.type === 'shade') {
+      const redraw = () => {
+        box.querySelectorAll('.shade rect[data-i]').forEach(r => r.setAttribute('fill', shaded.has(+r.dataset.i) ? V.FILL : '#fff'));
+        box.querySelector('.cnt').textContent = shaded.size;
+      };
+      box.querySelectorAll('.shade rect[data-i]').forEach(r => r.onclick = () => { if (finished) return; const i = +r.dataset.i; shaded.has(i) ? shaded.delete(i) : shaded.add(i); redraw(); });
+    }
+    if (item.type === 'line') {
+      const bind = () => box.querySelectorAll('.clickline .hit').forEach(h => h.onclick = () => { if (finished) return; lineK = +h.dataset.k; box.querySelector('.clickline').innerHTML = V.line({ d: item.d, click: true, sel: lineK }); bind(); });
+      bind();
+    }
+    box.querySelectorAll('input').forEach(inp => inp.addEventListener('keydown', e => { if (e.key === 'Enter') box.querySelector('.go').click(); }));
+    const firstIn = box.querySelector('input'); if (firstIn && window.innerWidth > 700) setTimeout(() => firstIn.focus(), 50);
+
+    function read() {
+      const num = v => { v = String(v == null ? '' : v).replace(',', '.').trim(); return (v === '' || isNaN(+v)) ? null : +v; };
+      switch (item.type) {
+        case 'num': { const v = num(box.querySelector('input.slot').value); return v == null ? null : { v, key: String(+v.toFixed(6)) }; }
+        case 'frac': case 'open': { const n = num(box.querySelector('[data-p="n"]').value.trim()), d = num(box.querySelector('[data-p="d"]').value.trim()); return (n == null || d == null || d === 0) ? null : { n, d, key: `${n}/${d}` }; }
+        case 'choice': return box.dataset.sel == null ? null : { i: +box.dataset.sel, key: String(box.dataset.sel) };
+        case 'multi': return sel.size ? { s: [...sel].sort(), key: [...sel].sort().join(',') } : null;
+        case 'shade': return { v: shaded.size, key: String(shaded.size) };
+        case 'line': return lineK == null ? null : { v: lineK, key: String(lineK) };
+        case 'nums': { const vs = [...box.querySelectorAll('input.nin')].map(x => num(x.value.trim())); return vs.some(v => v == null) ? null : { vs, key: vs.join(',') }; }
+      }
+    }
+    function judge(a) {
+      const t = item.type;
+      // מסיח ידוע: באבחון הערך הוא סוג טעות; בלמידה – הודעת משוב (וסוג הטעות ב-trapTags)
+      const trapOf = k => {
+        const tv = (item.traps || {})[k];
+        if (tv == null) return { tag: '', msg: '' };
+        if (!learn || K.TAGS[tv]) return { tag: K.TAGS[tv] ? tv : '', msg: '' };
+        return { tag: (item.trapTags || {})[k] || '', msg: tv };
+      };
+      if (t === 'num' && item.check) return Object.assign({ ok: !!item.check(a.v) }, trapOf(a.key));
+      if (t === 'num') return Object.assign({ ok: Math.abs(a.v - item.ans) < 1e-9 }, trapOf(a.key));
+      if (t === 'shade' || t === 'line') return Object.assign({ ok: a.v === item.ans }, trapOf(a.v));
+      if (t === 'frac') {
+        const ok = a.n === item.ans[0] && a.d === item.ans[1];
+        let { tag, msg } = trapOf(a.key);
+        if (!ok && !tag && !msg && a.n * item.ans[1] === a.d * item.ans[0]) { tag = 'partialReduce'; msg = 'זה אותו שבר – אבל אפשר לצמצם עוד. יש מספר שמחלק גם את המונה וגם את המכנה?'; }
+        return { ok, tag, msg: learn ? msg : '' };
+      }
+      if (t === 'open') { const ok = item.check(a.n, a.d); return { ok, tag: ok ? '' : ((item.bad && item.bad(a.n, a.d)) ? 'additive' : ''), msg: ok ? '' : (item.bad && item.bad(a.n, a.d)) || '' }; }
+      if (t === 'choice') { const o = item.opts[a.i]; return { ok: a.i === item.ans, tag: o.tag || '', msg: o.msg || '', fig: o.fig && o.t ? o.fig : null }; }
+      if (t === 'multi') { const ok = a.key === [...item.ans].sort().join(','); const wrongOpt = a.s.map(i => item.opts[i]).find(o => o.tag); return { ok, tag: ok ? '' : (wrongOpt ? wrongOpt.tag : ''), msg: '' }; }
+      if (t === 'nums') return { ok: a.vs.every((v, i) => v === item.ans[i]), tag: '' };
+    }
+    function hint() {
+      if (!item.hints || finished) return false;
+      hinted = true;
+      const h = item.hints[Math.min(hintI, item.hints.length - 1)];
+      hintI++;
+      fbs('hint', '💡 ' + h);
+      log('hint', { item: item.id });
+      return true;
+    }
+    function finish(rec) {
+      finished = true;
+      cur = null;
+      box.querySelectorAll('input').forEach(i => i.disabled = true);
+      done(rec);
+    }
+
+    if (learn) cur = { item, hint };
+    const hb = box.querySelector('.hintb'); if (hb) hb.onclick = hint;
+    const sf = box.querySelector('.showfig');
+    if (sf) sf.onclick = () => { sf.remove(); box.querySelector('.q').insertAdjacentHTML('afterend', fig(item.showFig)); log('drawing', { item: item.id }); if (st.unit) st.unit.ev.drawing = true; };
+    const sk = box.querySelector('.skip');
+    if (sk) sk.onclick = () => finish({ skip: true, correct: false, tag: 'skip' });
+
+    box.querySelector('.go').onclick = () => {
+      if (finished) return;
+      const a = read();
+      if (!a) { fbs('info', item.type === 'choice' ? 'בחרו תשובה.' : item.type === 'line' ? 'לחצו על מקום על ישר המספרים.' : 'השלימו את התשובה.'); return; }
+      const j = judge(a);
+      if (!learn) {
+        const out = { correct: j.ok, tag: j.tag };
+        if (item.sure && (item.type === 'choice' || item.type === 'multi')) {
+          box.querySelector('.acts').hidden = true;
+          box.querySelectorAll('.opt').forEach(x => x.disabled = true);
+          const s = box.querySelector('.sure');
+          s.hidden = false;
+          s.innerHTML = '<p><b>כמה אתם בטוחים בתשובה?</b></p><div class="row"><button class="sec" data-s="sure">בטוח/ה</button><button class="sec" data-s="unsure">לא כל כך בטוח/ה</button><button class="sec" data-s="guess">ניחשתי</button></div>';
+          s.querySelectorAll('button').forEach(b => b.onclick = () => { out.sure = b.dataset.s; finish(out); });
+        } else finish(out);
+        return;
+      }
+      attempts++;
+      answers.push(a.key);
+      if (j.ok) {
+        if (attempts === 2 && !hinted && firstTag) fixed = true;
+        if (item.type === 'choice') box.querySelector(`.opt[data-i="${a.i}"]`).classList.add('right');
+        fbs('ok', `✓ ${['נכון!', 'בדיוק!', 'יפה מאוד!'][attempts % 3]} ${item.exp ? item.exp : ''}`);
+        box.querySelector('.acts').innerHTML = '<button class="go2">המשך</button>';
+        box.querySelector('.go2').onclick = () => finish({ correct: true, pass: !hinted && attempts <= 2, hinted, attempts, answers, firstTag, fixed });
+        box.querySelector('.go2').focus();
+        return;
+      }
+      if (!firstTag && j.tag) firstTag = j.tag;
+      if (item.type === 'choice') box.querySelector(`.opt[data-i="${a.i}"]`).classList.add('wrong');
+      log('wrong', { item: item.id, a: a.key, tag: j.tag });
+      if (attempts === 1) {
+        fbs('bad', (j.msg || 'עוד לא. קראו שוב את השאלה ונסו שוב.') + (j.fig ? fig(j.fig) : ''));
+      } else if (attempts === 2) {
+        hinted = true; hintI = Math.max(hintI, 1); log('hint', { item: item.id, auto: true });
+        fbs('hint', '💡 ' + ((item.hints && item.hints[0]) || 'נסו שוב, לאט.') + (j.msg ? '<br>' + j.msg : ''));
+      } else if (attempts === 3) {
+        hinted = true;
+        if (item.similar) fbs('info', `<b>הנה דוגמה דומה, פתורה:</b><div class="bigmx">${R('⟦' + item.similar.q.replace(/[⟦⟧]/g, '') + '⟧')}</div><ol class="steps">${item.similar.steps.map(s => `<li>${R(s)}</li>`).join('')}</ol>${fig(item.similar.fig)}<p>עכשיו נסו שוב את השאלה שלכם.</p>`);
+        else fbs('hint', '💡 ' + ((item.hints && item.hints[item.hints.length - 1]) || 'נסו עוד פעם אחת.'));
+      } else {
+        fbs('info', `נעבור הלאה, ונחזור לזה. ${item.exp ? '<br>' + item.exp : ''}`);
+        box.querySelector('.acts').innerHTML = '<button class="go2">המשך</button>';
+        box.querySelector('.go2').onclick = () => finish({ correct: false, pass: false, hinted, attempts, answers, firstTag });
+      }
+    };
+  }
+
+  /* =========================================================
+     מסכים
+     ========================================================= */
+  function layout(withCoach) {
+    $('layout').classList.toggle('withcoach', !!withCoach);
+    coachEl.hidden = !withCoach;
+    coachEl.classList.remove('open');
+    $('endBtn').hidden = !st || !st.name || st.phase === 'end';
+    window.scrollTo(0, 0);
+  }
+  const tview = html => T ? `<div class="tview nosay">👩‍🏫 תצוגת מורה – לא נשלח מידע לאתר הבקרה. ${html || ''}</div>` : '';
+
+  // ---------- כניסה ----------
+  function entry(msg) {
+    layout(false);
+    main.innerHTML = `${tview()}<div class="cgrid"><div class="card">
+      <div class="crumb"><a href="#" id="toCat">קורסים ללמידה עצמית</a> · קורס אישי עם מאמן</div>
+      <h1>${K.title}</h1>
+      <p class="muted" style="font-size:1.1rem">${K.sub}.</p>
+      <h3 style="margin-top:18px">בקורס הזה תלמדו</h3>
+      <ul class="knows">${K.LEARN.map(x => `<li>${x}</li>`).join('')}</ul>
+      <p class="muted small">${K.MODULES.length} פרקים · ${K.UNITS.length} שיעורים קצרים · כל שיעור כ-10 דקות · המסלול נבנה אישית אחרי מבדק קצר</p>
+    </div>
+    <div class="card"><div class="coachline" style="margin-bottom:6px"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>שלום! אני אלווה אותך בקורס. בואו נכיר:</div></div>
+      <label class="lb" for="nm">השם המלא שלי</label>
+      <input class="tx" id="nm" autocomplete="off" placeholder="שם פרטי ושם משפחה">
+      <label class="lb" for="cd">קוד המשך מהמחברת <span class="muted small">(אם כבר התחלתם)</span></label>
+      <input class="tx" id="cd" autocomplete="off" dir="ltr" placeholder="XXXXX-XXXXX" style="max-width:240px;text-align:center">
+      <div id="emsg">${msg ? `<div class="fb bad">${msg}</div>` : ''}</div>
+      <div class="row"><button id="go">כניסה לקורס</button></div>
+    </div></div>`;
+    $('toCat').onclick = e => { e.preventDefault(); catalog(); };
+    const go = () => {
+      const name = $('nm').value.trim().replace(/\s+/g, ' ');
+      const parts = name.split(' ').filter(p => p.length >= 2);
+      if (parts.length < 2) { $('emsg').innerHTML = '<div class="fb bad">כתבו שם פרטי <b>ושם משפחה</b>.</div>'; $('nm').focus(); return; }
+      const code = $('cd').value.trim();
+      if (code) {
+        const d = E.decode(code);
+        if (!d) {
+          $('emsg').innerHTML = '<div class="fb bad">הקוד לא תקין. בדקו שהעתקתם נכון מהמחברת – או התחילו בלי קוד.<div class="row"><button class="sec" id="nocode">להתחיל בלי קוד</button></div></div>';
+          $('nocode').onclick = () => { $('cd').value = ''; go(); };
+          return;
+        }
+        setCourse(d.courseId);
+        st = { name, course: K.id, phase: 'course', skills: d.skills, done: d.done, badges: d.badges, tag: d.tag, log: [], fromCode: true };
+        st.path = E.buildPath(K, st.skills, st.done);
+        save();
+        tr('כניסה עם קוד', `${K.title} · ${E.skillLine(st.skills, K)}`);
+        return course();
+      }
+      st = { name, course: K.id, phase: 'diagIntro', skills: {}, done: {}, badges: {}, tag: 'none', log: [] };
+      save();
+      diagIntro();
+    };
+    $('go').onclick = go;
+    ['nm', 'cd'].forEach(id => $(id).addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
+  }
+
+  // ---------- אבחון ----------
+  function diagIntro() {
+    layout(false);
+    main.innerHTML = `<div class="card">${coachSay(`שלום ${esc(first())}! לפני שמתחילים, אני רוצה להכיר מה כבר ידוע לך. אשאל כמה שאלות קצרות – <b>זה לא מבחן ואין ציון</b>. לפי התשובות אבנה לך מסלול אישי בקורס.`)}
+      <p>אם אתם לא יודעים – זה בסדר ללחוץ "עוד לא למדתי". זה בדיוק מה שעוזר לי לבנות מסלול נכון.</p>
+      <div class="row"><button id="go">מתחילים את המבדק</button>${T ? '<button class="ghost nosay" id="tSkip">👩‍🏫 לדלג על האבחון – לתוכנית הקורס</button><button class="ghost nosay" id="tDiag">📋 שאלות האבחון</button>' : ''}</div></div>`;
+    $('go').onclick = () => { st.diag = E.diagStart(K); st.phase = 'diag'; save(); diagQ(); };
+    if (T) { $('tSkip').onclick = tSkipDiag; $('tDiag').onclick = diagTasks; }
+  }
+  function diagQ() {
+    layout(false);
+    const item = E.diagNext(st.diag, K);
+    if (!item) return diagDone();
+    const n = st.diag.asked.length + 1;
+    main.innerHTML = `<div class="card">${tview(`שאלה ${esc(item.id)} · מיומנות ${item.skill} · תשובה: ${R(ansText(item))} <span class="tnav"><button class="ghost small" id="tSkip">⏭ לדלג לתוכנית הקורס</button></span>`)}<div class="row" style="justify-content:space-between;margin-top:0"><span class="muted">שאלה ${n}</span><button class="ghost small" id="rd">🔊 הקרא לי</button></div><div id="qbox"></div></div>`;
+    $('rd').onclick = () => speak($('qbox'));
+    if (T) $('tSkip').onclick = tSkipDiag;
+    askItem($('qbox'), item, 'diag', res => {
+      E.diagAnswer(st.diag, item, res);
+      save();
+      const b = document.createElement('div'); b.className = 'fb info'; b.textContent = 'תודה, ממשיכים.';
+      $('qbox').appendChild(b);
+      setTimeout(diagQ, 450);
+    });
+  }
+  // מורה: בלי אבחון – כל השיעורים במסלול (גרסת הקניה), לא נשלח כלום
+  function tSkipDiag() {
+    if (!T) return;
+    Object.keys(K.SKILLS).map(Number).filter(s => s <= 10).forEach(s => { st.skills[s] = 'notyet'; });
+    st.tag = 'none'; st.path = E.buildPath(K, st.skills); st.diagSummary = { n: 0, tags: {} };
+    delete st.diag; save(); course();
+  }
+  function diagDone() {
+    const ds = st.diag;
+    Object.keys(K.SKILLS).map(Number).filter(s => s <= 10).forEach(s => { st.skills[s] = ds.status[s] || 'unknown'; });
+    st.tag = E.mainTag(K, ds.tags);
+    st.path = E.buildPath(K, st.skills);
+    st.phase = 'course';
+    st.diagSummary = { n: ds.asked.length, tags: ds.tags };
+    delete st.diag;
+    save();
+    const tagList = Object.keys(ds.tags).filter(t => t !== 'skip').map(t => K.TAGS[t]).filter(Boolean);
+    tr('אבחון', `${K.title} · ${E.skillLine(st.skills, K)}${tagList.length ? ' · טעויות: ' + tagList.join('; ') : ''}`);
+    layout(false);
+    const knows = Object.keys(K.SKILL_SAY).map(Number).reverse().filter(s => st.skills[s] === 'mastered').slice(0, 2).map(s => K.SKILL_SAY[s]);
+    const units = st.path.filter(p => !p.optional && !st.done[p.id]).length;
+    const skipped = K.UNITS.filter(u => !u.deep && !st.path.some(p => p.id === u.id)).length;
+    const first1 = st.path.find(p => ready(p.id));
+    main.innerHTML = `<div class="card">${coachSay(`סיימנו, ${esc(first())}! תודה. לפי התשובות שלך בניתי לך <b>מסלול אישי של ${units} ${units === 1 ? 'שיעור' : 'שיעורים'}</b>${skipped ? `, ו-${skipped} שיעורים דילגנו – כבר הראית שאת/ה יודע/ת אותם` : ''}.`)}
+      ${knows.length ? `<p>כבר עכשיו את/ה יודע/ת ${knows.join(', ו')}. 👏</p>` : '<p>נתחיל מהבסיס, צעד אחר צעד. אני כאן כל הדרך.</p>'}
+      ${first1 ? `<p>השיעור הראשון שלך: <b>${unitDef(first1.id).title}</b>.</p>` : ''}
+      ${T ? `<div class="tview">מצב מיומנויות: ${E.skillLine(st.skills, K)}<br>טעויות שזוהו: ${tagList.join('; ') || 'אין'}</div>` : ''}
+      <div class="row"><button id="go">לתוכנית הקורס שלי</button></div></div>`;
+    $('go').onclick = course;
+  }
+
+  // ---------- מסך הקורס ----------
+  const unitDef = id => K.UNITS.find(u => u.id === id);
+  const ready = id => !!K.units[id];
+  const first = () => (st && st.name ? st.name.split(' ')[0] : '');
+  const coachSay = html => `<div class="coachline"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>${R(html)}</div></div>`;
+  const lessonNo = id => K.UNITS.findIndex(u => u.id === id) + 1;
+  const courseDone = () => { const core = (st.path || []).filter(p => !p.optional); return core.length > 0 && core.every(p => st.done[p.id]); };
+  function course() {
+    st.phase = 'course'; st.unit = null; save();
+    layout(false);
+    const path = st.path || [];
+    const core = path.filter(p => !p.optional);
+    const doneN = core.filter(p => st.done[p.id]).length;
+    const next = path.find(p => !st.done[p.id] && ready(p.id));
+    const pct = core.length ? Math.round(100 * doneN / core.length) : 100;
+    const skipped = K.UNITS.filter(u => !u.deep && !path.some(p => p.id === u.id)).length;
+    const row = u => {
+      const p = path.find(x => x.id === u.id), dn = !!st.done[u.id], act = next && next.id === u.id;
+      const inPath = !!p, skip = !inPath && !u.deep;
+      let chip = '', btn = '';
+      if (dn) chip = '<span class="chip ok">הושלם</span>';
+      else if (act) chip = '<span class="chip now">השיעור הבא</span>';
+      else if (inPath && p.optional) chip = '<span class="chip">רשות · אתגר</span>';
+      else if (inPath) chip = '<span class="chip">במסלול שלך</span>';
+      else if (skip) chip = '<span class="chip ok">כבר יודע/ת</span>';
+      else chip = '<span class="chip">נפתח אחרי השליטה</span>';
+      if (act) btn = `<button class="small" data-open="${u.id}" data-ver="${p.ver}">להתחיל</button>`;
+      else if (inPath && !dn) btn = `<button class="sec small" data-open="${u.id}" data-ver="${p.ver}">כניסה</button>`;
+      else if (skip && !T) btn = `<button class="ghost small" data-open="${u.id}" data-ver="reinforce">לעבור בכל זאת</button>`;
+      if (T) btn = `<button class="sec small nosay" data-open="${u.id}" data-ver="teach">הקניה</button>${u.deep ? '' : `<button class="ghost small nosay" data-open="${u.id}" data-ver="reinforce">חיזוק</button>`}<button class="ghost small nosay" data-tasks="${u.id}">📋 משימות</button>`;
+      const tv = T && p ? `<span class="tag">${{ teach: 'הקניה', reinforce: 'חיזוק', deep: 'העמקה' }[p.ver]}</span>` : '';
+      return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}${skip ? ' skip' : ''}"><span class="ic">${dn || skip ? '✓' : lessonNo(u.id)}</span><span class="t"><b>שיעור ${lessonNo(u.id)}: ${u.title}</b>${tv}<br><span class="meta">כ-${u.min} דקות</span> ${chip}</span>${btn}</li>`;
+    };
+    const mods = K.MODULES.map((m, i) => {
+      const us = m.u.map(unitDef);
+      const dn = us.filter(u => st.done[u.id] || (!u.deep && !path.some(p => p.id === u.id))).length;
+      return `<div class="mod"><h3><span>פרק ${i + 1}: ${m.t}</span><span class="muted">${dn}/${us.length}</span></h3><ul class="ulist">${us.map(row).join('')}</ul></div>`;
+    }).join('');
+    const knows = Object.keys(K.SKILL_SAY).map(Number).filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
+    const badges = (st.done.u8 ? '<span class="badge">🏆 מומחה/ית בשברים שקולים</span>' : '') + E.BADGES.filter(b => st.badges[b]).map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('');
+    const done = courseDone();
+    let hello;
+    if (done) hello = `כל הכבוד, ${esc(first())}! סיימת את הקורס. 🎓 ${st.done.u8 ? 'ואפילו הגעת לרמת מומחיות!' : 'אם בא לך אתגר – אתגר המומחים מחכה בפרק 4.'}`;
+    else if (doneN) hello = `יפה, ${esc(first())}! כבר השלמת ${doneN} ${doneN === 1 ? 'שיעור' : 'שיעורים'} מתוך ${core.length}. ממשיכים?`;
+    else hello = `שלום ${esc(first())}! זו תוכנית הקורס שלך. ${skipped ? `${skipped} שיעורים כבר מסומנים – הראית באבחון שאת/ה יודע/ת אותם. ` : ''}מתחילים מהשיעור המסומן.`;
+    main.innerHTML = `${tview(T ? `מיומנויות: ${E.skillLine(st.skills, K)} · ${E.encode(st, K)} <button class="ghost small" id="tDiag">📋 שאלות האבחון</button>` : '')}
+      <div class="card"><div class="hero"><div>
+        <div class="crumb">הקורס שלי</div><h1>${K.title}</h1>
+        ${coachSay(hello)}
+        <div class="row" style="margin-top:4px">${next ? `<button id="cont">${doneN || (st.unitStarted || {})[next.id] ? 'להמשיך' : 'להתחיל'}: שיעור ${lessonNo(next.id)} – ${unitDef(next.id).title}</button>` : ''}${done ? '<button id="cert">🎓 תעודת הסיום שלי</button>' : ''}</div>
+      </div><div class="ring" style="--p:${pct}" role="img" aria-label="התקדמות ${pct}%"><span>${doneN}/${core.length}<small>שיעורים</small></span></div></div></div>
+      <div class="cgrid"><div class="card"><h2>תוכנית הקורס</h2><div class="mods">${mods}</div></div>
+      <div class="side">${knows ? `<div class="card"><h3>מה אני כבר יודע/ת</h3><ul class="knows">${knows}</ul></div>` : ''}${badges ? `<div class="card"><h3>ההישגים שלי</h3><div class="badges">${badges}</div></div>` : ''}</div></div>`;
+    if (next) $('cont').onclick = () => openUnit(next.id, next.ver);
+    if (done) $('cert').onclick = certificate;
+    main.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openUnit(b.dataset.open, b.dataset.ver));
+    main.querySelectorAll('[data-tasks]').forEach(b => b.onclick = () => tasks(b.dataset.tasks));
+    if ($('tDiag')) $('tDiag').onclick = diagTasks;
+  }
+  function certificate() {
+    layout(false);
+    const d = new Date().toLocaleDateString('he-IL');
+    const knows = Object.keys(K.SKILL_SAY).map(Number).filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
+    main.innerHTML = `<div class="card"><div class="cert"><span class="avatar" style="width:56px;height:56px;font-size:1.5rem">מ</span>
+      <h1 style="margin-top:12px">תעודת סיום</h1><p>מוענקת ל</p><div class="nm">${esc(st.name)}</div>
+      <p>על השלמת הקורס <b>${K.title}</b></p>${st.done.u8 ? '<p><b>🏆 ברמת מומחיות</b></p>' : ''}
+      <div style="text-align:right;max-width:460px;margin:16px auto"><b>מה למדתי:</b><ul class="knows">${knows}</ul></div>
+      <p class="muted">${d} · המאמן האישי במתמטיקה</p></div>
+      <div class="row noprint"><button id="pr">🖨️ הדפסה</button><button class="sec" id="cr">לתוכנית הקורס</button></div></div>`;
+    $('pr').onclick = () => window.print();
+    $('cr').onclick = course;
+  }
+
+  // ---------- יחידה ----------
+  function openUnit(id, ver) {
+    const U = K.units[id];
+    if (!U) return;
+    st.unitStarted = st.unitStarted || {}; st.unitStarted[id] = true;
+    st.unit = { id, ver: ver === 'reinforce' ? 'reinforce' : 'teach', i: 0, ev: {}, setI: 0, results: [] };
+    st.phase = 'unit';
+    log('unitStart', { unit: id, ver: st.unit.ver });
+    save();
+    screen();
+  }
+  const screens = () => {
+    const U = K.units[st.unit.id], list = st.unit.ver === 'reinforce' ? U.reinforce : U.teach;
+    if (!siteOf(st.unit.id).gens || U.deep) return list;
+    const i = list.findIndex(x => x.kind === 'check');
+    return list.slice(0, i).concat([{ step: 3, kind: 'more' }, { step: 3, kind: 'sheet' }], list.slice(i));
+  };
+  // ההקנייה והתרגול מהאתר הראשי (math6.html?embed=1) – בתוך מסך הקורס
+  const siteOf = id => (K.SITE || {})[id] || {};
+  const siteGrade = () => { const g = K.grades || [6, 6]; return MYG >= g[0] && MYG <= g[1] ? MYG : g[1]; };
+  function siteUrl(o) {
+    const q = new URLSearchParams({ embed: '1', grade: String(siteGrade()) });
+    if (o.sheet) q.set('sheet', '1'), q.set('min', String(o.min || 10));
+    if (o.learn) { q.set('learn', o.learn); if (o.card) q.set('lt', o.card); } else { q.set('gens', o.gens.join(',')); q.set('count', String(o.count || 8)); if (o.topic) q.set('topic', o.topic); q.set('label', o.label || 'תרגול נוסף'); }
+    return 'math6.html?' + q.toString();
+  }
+  function siteFrame(box, o, on) {
+    box.innerHTML = `<iframe class="site" title="${o.learn ? 'שיעור מהאתר' : 'תרגול'}" src="${siteUrl(o)}"></iframe>`;
+    const fr = box.querySelector('iframe');
+    const fit = () => { try { const d = fr.contentDocument; if (d && d.body) fr.style.height = Math.max(460, d.documentElement.scrollHeight + 10) + 'px'; } catch (e) { /* לא חובה */ } };
+    const t = setInterval(() => { if (!document.body.contains(fr)) return clearInterval(t); fit(); }, 600);
+    const lis = e => {
+      if (e.origin !== location.origin || !e.data || e.data.src !== 'math-embed' || e.source !== fr.contentWindow) return;
+      if (!document.body.contains(fr)) return window.removeEventListener('message', lis);
+      if (on) on(e.data);
+    };
+    window.addEventListener('message', lis);
+  }
+  // תרגול במחברת עם טיימר של 10 דקות, ואז בדיקה עצמית מול התשובות (המאמן לא בודק את המחברת – הילד בודק את עצמו)
+  function sheet() {
+    const u = st.unit, o = siteOf(u.id);
+    frame(3, `<h3>תרגול במחברת ✏️</h3><p>עכשיו עובדים במחברת: מעתיקים כל תרגיל ופותרים. יש 10 דקות – השעון מראה כמה זמן נשאר. בסוף תראו את התשובות ותבדקו את עצמכם.</p><div id="sf"></div>`);
+    siteFrame($('sf'), { sheet: true, gens: o.gens, topic: o.topic, count: o.nb || 6, min: o.min || 10 }, d => {
+      if (d.ev === 'skip') return next();
+      if (d.ev !== 'nbdone') return;
+      u.sheet = `${d.ok}/${d.n}${d.skip ? ` (לא הספיק ${d.skip})` : ''}`;
+      if (d.skip) u.ev.nbTodo = d.skip;
+      log('sheet', { ok: d.ok, bad: d.bad, skip: d.skip, sec: d.sec });
+      save();
+      const msg = d.skip ? `השלמתם ${d.n - d.skip} תרגילים. את ${d.skip === 1 ? 'התרגיל שלא הספקתם' : `${d.skip} התרגילים שלא הספקתם`} – השלימו בבית או בשיעור הבא (סימנתם "להשלים").`
+        : d.bad ? `סיימתם הכול! ${d.bad === 1 ? 'בתרגיל אחד טעיתם' : `ב-${d.bad} תרגילים טעיתם`} ותיקנתם – זה בדיוק מה שעושים לומדים טובים.` : 'סיימתם הכול ובדקתם את עצמכם – מצוין!';
+      $('sf').innerHTML = `${coachSay(msg)}<div class="row"><button id="nx">לבדיקה</button></div>`;
+      $('nx').onclick = next;
+    });
+  }
+  // ---------- תצוגת מורה: מעבר בין מסכים בלי לפתור, וכל המשימות של שיעור ----------
+  function tJump(d) {
+    if (!T) return;
+    const u = st.unit, list = screens(), i = u.i + d;
+    if (i < 0) return;
+    if (i >= list.length) return course();
+    u.results = []; u.setI = 0;
+    if (list[i].kind === 'summary' && !u.mastered) { u.mastered = true; u.masteredSet = u.masteredSet || (u.ver === 'reinforce' ? 'B' : 'A'); u.tPreview = true; }
+    u.i = i; save(); screen();
+  }
+  const optT = o => typeof o === 'string' ? o : (o.t || '');
+  function ansText(it) {
+    const o = it.opts || [];
+    switch (it.type) {
+      case 'num': return it.ans != null ? `⟦${it.ans}⟧` : 'כל תשובה שעונה על התנאי';
+      case 'frac': return `⟦${it.ans[0]}/${it.ans[1]}⟧`;
+      case 'choice': return optT(o[it.ans]) || (o[it.ans] && o[it.ans].fig ? 'הציור המסומן ✓' : '');
+      case 'multi': return it.ans.map(i => optT(o[i])).join(' · ');
+      case 'shade': return `לצבוע ${it.ans} חלקים`;
+      case 'line': return `נקודה ${it.ans} (מתוך ${it.d} קפיצות)`;
+      case 'nums': return (it.labels || []).map((l, i) => `${l}: ${it.ans[i]}`).join(' · ');
+      case 'open': { for (let d = 2; d < 60; d++) for (let n = 1; n < 60; n++) if (it.check(n, d)) return `כל שבר שעונה על התנאי, למשל ⟦${n}/${d}⟧`; return 'לפי התנאי'; }
+    }
+    return '';
+  }
+  function taskHtml(it, k) {
+    if (!it) return '';
+    const o = it.opts || [];
+    const opts = (it.type === 'choice' || it.type === 'multi') ? `<ul class="topts">${o.map((x, i) => { const ok = it.type === 'multi' ? it.ans.includes(i) : it.ans === i; return `<li class="${ok ? 'ok' : ''}">${ok ? '✓ ' : ''}${R(optT(x))}${x.fig && !x.t ? fig(x.fig) : ''}${!ok && x.msg ? `<span class="tmsg"> – משוב: ${R(x.msg)}</span>` : ''}</li>`; }).join('')}</ul>` : '';
+    const traps = it.traps && it.type !== 'choice' ? Object.keys(it.traps).map(v => `<div class="tmsg">אם עונים ${esc(v)}: ${R(String(it.traps[v]))}</div>`).join('') : '';
+    return `<div class="titem"><div class="tq"><b>${k}</b> ${R(it.q)}</div>${it.fig && it.type !== 'shade' ? fig(it.fig) : ''}${opts}
+      <div class="tans">✔ תשובה: ${R(ansText(it))}</div>${traps}${it.hints && it.hints.length ? `<div class="tmsg">💡 רמז: ${R(it.hints[0])}</div>` : ''}</div>`;
+  }
+  function tasks(id) {
+    const U = K.units[id], u = unitDef(id), sl = siteOf(id);
+    if (!U) return;
+    const sec = (t, items, pre) => items && items.length ? `<h3>${t}</h3>${items.map((it, i) => taskHtml(it, (pre || '') + (i + 1) + '.')).join('')}` : '';
+    const scr = U.teach.filter(x => x.kind === 'practice').flatMap(x => x.items || []);
+    const nb = U.teach.find(x => x.kind === 'notebook');
+    const html = `<h2>📋 ${u.title} – כל המשימות</h2><p class="muted">התשובות הנכונות מסומנות ב-✓. גרסת הקניה: בדיקה א' ואם לא עבר – ב'. גרסת חיזוק: ב' ואם לא עבר – ג'.</p>
+      ${sec('תרגול מונחה', scr)}
+      ${nb ? `<h3>מחברת – משימת ציור</h3><div class="titem">${R(nb.html)}${nb.verify ? `<div class="tans">✔ שאלת אימות: ${R(nb.verify.q)} – ${nb.verify.ans ? nb.verify.ans.join(', ') : 'לפי התנאי'}</div>` : ''}</div>` : ''}
+      ${sl.gens && !U.deep ? `<h3>תרגול נוסף ותרגול במחברת (מהאתר)</h3><p class="muted">שאלות משתנות בכל פעם, ממחוללי האתר: ${sl.gens.map(g => `<code>${g}</code>`).join(', ')}. תרגול נוסף – 8 שאלות (6 כדי להמשיך); מחברת – ${sl.nb || 6} תרגילים, ${sl.min || 10} דקות.</p>` : ''}
+      ${['A', 'B', 'C'].map((k, i) => sec(`${U.deep ? 'משימות אתגר' : 'בדיקת הבנה'} – סט ${'אבג'[i]}`, U.sets[k], 'אבג'[i] + '')).join('')}
+      ${U.alt ? `<h3>הסבר בדרך אחרת (סולם העזרה)</h3><div class="titem"><b>${U.alt.title}</b>${R(U.alt.html)}${fig(U.alt.fig)}</div>` : ''}
+      ${U.simpler ? `<h3>משימה פשוטה (סולם העזרה)</h3>${taskHtml(U.simpler, '•')}` : ''}`;
+    modal(html);
+  }
+  function diagTasks() {
+    const html = `<h2>📋 שאלות האבחון</h2><p class="muted">המבדק מסתגל: כל ילד מקבל רק חלק מהשאלות (עד ${(K.DIAG && K.DIAG.maxQ) || 12}).</p>` +
+      Object.keys(K.DIAG_ORDER).map(sk => `<h3>${K.SKILLS[sk]}</h3>${K.DIAG_ORDER[sk].map(id => taskHtml(K.D[id], id)).join('')}`).join('');
+    modal(html);
+  }
+  function lessonModal() {
+    const o = siteOf((st.unit && st.unit.id) || '');
+    if (!o.learn) return false;
+    log('siteLesson');
+    const m = modal('<h2>📖 השיעור המלא</h2><p class="muted">אפשר לדפדף בין הכרטיסיות. כשמסיימים – סוגרים את החלון.</p><div id="sl"></div>');
+    siteFrame(m.el.querySelector('#sl'), o, d => { if (d.ev === 'home') m.close(); });
+    return true;
+  }
+  // תרגול נוסף עד שזה יושב: 8 שאלות, עם הדרכה צעד-אחר-צעד בטעות. עוברים ב-6 מתוך 8; אחרי 2 סבבים ממשיכים בכל מקרה.
+  function more() {
+    const u = st.unit, o = siteOf(u.id);
+    u.moreN = (u.moreN || 0) + 1;
+    const b = frame(3, `<h3>תרגול נוסף <span class="muted small">(סבב ${u.moreN})</span></h3><p>8 תרגילים. אם טועים – מקבלים עזרה צעד אחר צעד. ${o.learn ? 'צריך תזכורת? יש כפתור לשיעור המלא.' : ''}</p>${o.learn ? '<div class="row"><button class="sec small" id="lsn">📖 לשיעור המלא</button></div>' : ''}<div id="sf"></div>`);
+    if ($('lsn')) $('lsn').onclick = lessonModal;
+    siteFrame($('sf'), { gens: o.gens, topic: o.topic, count: o.count, label: 'תרגול נוסף: ' + unitDef(u.id).title }, d => {
+      if (d.ev === 'home') return more();
+      if (d.ev !== 'done') return;
+      const ok = d.correct >= Math.ceil(d.n * 0.75);
+      u.more = (u.more || []).concat([`${d.correct}/${d.n}`]);
+      log('more', { r: u.moreN, correct: d.correct, n: d.n });
+      save();
+      $('sf').insertAdjacentHTML('beforebegin', ok
+        ? `<div class="fb ok">✓ ${d.correct} מתוך ${d.n}! זה כבר יושב טוב. ממשיכים לבדיקה.</div><div class="row"><button id="nx">לבדיקה</button></div>`
+        : u.moreN < 2 ? `<div class="fb info">${d.correct} מתוך ${d.n}. עוד לא יושב מספיק – ${o.learn ? 'נסתכל רגע בשיעור המלא, ואז ' : ''}נעשה עוד סבב.</div><div class="row">${o.learn ? '<button id="ls2">📖 לשיעור המלא</button>' : ''}<button ${o.learn ? 'class="sec" ' : ''}id="ag">לסבב נוסף</button></div>`
+        : `<div class="fb info">${d.correct} מתוך ${d.n}. נמשיך לבדיקה – ואם צריך, נמצא יחד דרך אחרת.</div><div class="row"><button id="nx">לבדיקה</button></div>`);
+      $('sf').innerHTML = '';
+      if ($('nx')) $('nx').onclick = next;
+      if ($('ag')) $('ag').onclick = more;
+      if ($('ls2')) $('ls2').onclick = () => { lessonModal(); $('ls2').remove(); if ($('ag')) $('ag').className = ''; };
+    });
+  }
+  function next() { st.unit.i++; save(); screen(); }
+  function frame(stepIdx, inner) {
+    layout(true);
+    const u = unitDef(st.unit.id);
+    const s = Math.max(0, stepIdx - 1);
+    const mi = K.MODULES.findIndex(m => m.u.includes(st.unit.id));
+    const nScr = screens().length;
+    main.innerHTML = `${tview(`${{ teach: 'גרסת הקניה', reinforce: 'גרסת חיזוק' }[st.unit.ver]} · מסך ${st.unit.i + 1} מתוך ${nScr} <span class="tnav"><button class="ghost small" id="tPrev"${st.unit.i ? '' : ' disabled'}>→ מסך קודם</button><button class="ghost small" id="tNext">מסך הבא ←</button><button class="ghost small" id="tAll">📋 כל המשימות</button></span>`)}<div class="card" id="ucard"><div class="lhead"><div><div class="crumb">פרק ${mi + 1}: ${K.MODULES[mi].t} · שיעור ${lessonNo(st.unit.id)} מתוך ${K.UNITS.length}</div><h2 style="margin:0">${u.title}</h2></div><button class="ghost small nosay" id="back">→ לתוכנית הקורס</button></div>
+      <div class="pills nosay">${PILLS.map((p, i) => `<span class="pill${i === s ? ' on' : i < s ? ' done' : ''}">${p}</span>`).join('')}</div><div id="ubody">${inner}</div></div>`;
+    $('back').onclick = course;
+    if (T) {
+      $('tPrev').onclick = () => tJump(-1);
+      $('tNext').onclick = () => tJump(1);
+      $('tAll').onclick = () => tasks(st.unit.id);
+    }
+    say('אני כאן אם צריך עזרה.');
+    return $('ubody');
+  }
+  // משפט הפתיחה האישי לשיעור – לפי מה שנמצא באבחון ולפי הגרסה
+  function coachIntro() {
+    const u = st.unit, U = K.units[u.id], why = (K.WHY || {})[u.id] || {};
+    const tags = Object.assign({}, (st.diagSummary || {}).tags || {}, st.tag && st.tag !== 'none' ? { [st.tag]: 1 } : {});
+    const hit = Object.keys(why).find(t => tags[t]);
+    const doneN = (st.path || []).filter(p => !p.optional && st.done[p.id]).length;
+    const pre = doneN ? `כבר השלמת ${doneN} ${doneN === 1 ? 'שיעור' : 'שיעורים'} – כל הכבוד! ` : '';
+    if (U.deep) return pre + 'הגעת לאתגר המומחים, כי הראית שליטה בכל השאר. כאן חושבים לעומק – קחו את הזמן.';
+    if (hit) return pre + why[hit];
+    const sk = K.SKILLS[[].concat(U.skill)[0]];
+    if (u.ver === 'reinforce') return pre + `באבחון חלק מהתשובות בנושא "${sk}" הצליחו וחלק לא. היום נחזק את זה עד שזה יושב טוב.`;
+    if ((st.skills || {})[[].concat(U.skill)[0]] === 'notyet') return pre + `הנושא "${sk}" עוד לא יושב טוב, אז נלמד אותו מההתחלה – צעד אחר צעד. אני כאן אם צריך.`;
+    return pre + 'בואו נתחיל. אני כאן אם צריך עזרה.';
+  }
+  function screen() {
+    const list = screens();
+    const sc = list[st.unit.i];
+    if (!sc) return course();
+    cur = null;
+    const U = K.units[st.unit.id];
+    if (sc.kind === 'warm') {
+      const b = frame(1, '<h3>שאלת חימום</h3><div id="ib"></div>');
+      askItem($('ib'), sc.item, 'learn', rec => { log('warm', { ok: rec.pass }); if (!rec.pass) st.unit.ev.warmMiss = true; next(); });
+    } else if (sc.kind === 'goal') {
+      const b = frame(1, `${coachSay(coachIntro())}<h3>מה נלמד היום?</h3><p style="font-size:1.15rem">${R(sc.html)}</p><div class="row"><button id="nx">בואו נתחיל</button></div>`);
+      $('nx').onclick = next;
+    } else if (sc.kind === 'cutlab') cutlab();
+    else if (sc.kind === 'info') {
+      frame(sc.step, `<h3>${sc.title}</h3>${R(sc.html)}${sc.anim ? '<div id="anim"></div>' : ''}${fig(sc.fig)}<div class="row"><button id="nx">הבנתי, ממשיכים</button>${siteOf(st.unit.id).learn ? '<button class="sec" id="lsn">📖 רוצים עוד הסבר? לשיעור המלא</button>' : ''}</div>`);
+      if (sc.anim) halfAnim($('anim'));
+      if ($('lsn')) $('lsn').onclick = lessonModal;
+      $('nx').onclick = next;
+    } else if (sc.kind === 'contrast') {
+      const c = U.contrast[st.tag] || U.contrast.none;
+      frame(2, `<h3>${c.title}</h3>${R(c.html)}${fig(c.fig)}<div id="aft"></div><div class="row"><button id="nx">${c.after ? 'מה התשובה?' : 'הבנתי, ממשיכים'}</button></div>`);
+      $('nx').onclick = () => {
+        if (c.after && !$('aft').innerHTML) { $('aft').innerHTML = R(c.after) + fig(c.fig2); $('nx').textContent = 'הבנתי, ממשיכים'; return; }
+        next();
+      };
+    } else if (sc.kind === 'practice') practice(sc, 0);
+    else if (sc.kind === 'notebook') notebook(sc);
+    else if (sc.kind === 'more') more();
+    else if (sc.kind === 'sheet') sheet();
+    else if (sc.kind === 'check') check(sc);
+    else if (sc.kind === 'summary') summary();
+  }
+  function halfAnim(el) {
+    const seq = [[1, 2, 1], [2, 4, 2], [4, 8, 4]];
+    let i = 0;
+    const show = () => { if (!document.body.contains(el)) return; const [n, d, g] = seq[i]; el.innerHTML = `<div class="bigmx">${R('⟦' + n + '/' + d + '⟧')}</div>` + fig({ k: 'bar', n, d, g, w: 320 }); i = (i + 1) % seq.length; setTimeout(show, 1600); };
+    show();
+  }
+
+  // מעבדת החיתוך – הקניית ההרחבה
+  function cutlab() {
+    const b = frame(2, `<h3>בואו נבין</h3><p>בפס הזה 4 חלקים שווים, ו-3 מהם צבועים: ${R('⟦3/4⟧')}.</p><div id="barv"></div><div id="labq"></div><table class="cut" id="tbl" hidden><tr><th>חתכנו כל חלק ל…</th><th>השבר</th></tr><tr><td>(בלי חיתוך)</td><td>${R('⟦3/4⟧')}</td></tr></table>`);
+    const show = k => { $('barv').innerHTML = `<div class="bigmx">${R(`⟦${3 * k}/${4 * k}⟧`)}</div>` + fig({ k: 'bar', n: 3 * k, d: 4 * k, g: k, w: 340 }); };
+    const addRow = (lbl, k) => { $('tbl').hidden = false; $('tbl').insertAdjacentHTML('beforeend', `<tr><td>${lbl}</td><td>${R(`⟦${3 * k}/${4 * k}⟧`)}</td></tr>`); };
+    show(1);
+    const q = $('labq');
+    q.innerHTML = '<div class="row"><button id="c2">✂️ חתכו כל חלק לשניים</button></div>';
+    $('c2').onclick = () => {
+      show(2); addRow('2', 2);
+      q.innerHTML = '<div id="ib"></div>';
+      askItem($('ib'), { id: 'L1', type: 'choice', q: 'מה קרה לחלק הצבוע של הפס?', ans: 2,
+        opts: [{ t: 'גדל', msg: 'נכון שיש עכשיו יותר חלקים צבועים: 6 במקום 3. אבל כל חלק קטן יותר. הסתכלו על הפס: האם הצבע הגיע רחוק יותר?' },
+          { t: 'קטן', msg: 'כל חלק באמת קטן יותר, אבל יש יותר חלקים צבועים. הסתכלו על כל השטח הצבוע יחד.' }, { t: 'נשאר אותו דבר' }],
+        hints: ['השוו את המקום שבו הצבע נגמר – לפני ואחרי החיתוך.'], exp: 'הצבע מגיע בדיוק לאותו מקום. ⟦3/4 = 6/8⟧.' }, 'learn', () => step3());
+    };
+    function step3() {
+      q.innerHTML = '<p>עכשיו נחתוך את הפס המקורי, כל חלק <b>לשלושה</b>.</p><div class="row"><button id="c3">✂️ חתכו כל חלק לשלושה</button></div>';
+      $('c3').onclick = () => {
+        $('barv').innerHTML = fig({ k: 'bar', n: 9, d: 12, g: 3, w: 340 });
+        q.innerHTML = '<p>ספרו בציור וכתבו את השבר:</p><div id="ib"></div>';
+        askItem($('ib'), { id: 'L2', type: 'open', q: 'כמה חלקים צבועים (למעלה), ומכמה חלקים בסך הכול (למטה)?', check: (n, d) => n === 9 && d === 12,
+          bad: (n, d) => (n === 12 && d === 9) ? 'החלפתם בין המונה למכנה: למעלה – הצבועים, למטה – כל החלקים.' : '',
+          hints: ['כל רבע נחתך ל-3. כמה חלקים יש עכשיו בכל הפס? כמה מהם צבועים?'], exp: '⟦3/4 = 9/12⟧.' }, 'learn', () => {
+          show(3); addRow('3', 3);
+          q.innerHTML = '<div class="row"><button id="c4">✂️ ועכשיו כל חלק לארבעה</button></div>';
+          $('c4').onclick = () => {
+            show(4); addRow('4', 4);
+            q.innerHTML = '<div id="ib"></div>';
+            askItem($('ib'), { id: 'L3', type: 'choice', q: 'הסתכלו בטבלה. מה קרה למונה ולמכנה כשחתכנו כל חלק לשלושה?', ans: 0,
+              opts: [{ t: 'שניהם גדלו פי 3' }, { t: 'לשניהם הוסיפו 3', msg: 'בדקו: ⟦3 + 3⟧ זה 6, אבל המונה נהיה 9. מה עושים ל-3 כדי לקבל 9?' }, { t: 'רק המכנה גדל פי 3', msg: 'גם המונה השתנה: מ-3 ל-9. פי כמה?' }],
+              hints: ['השוו את ⟦3/4⟧ ל-⟦9/12⟧: מה עשינו ל-3 כדי לקבל 9, ומה ל-4 כדי לקבל 12?'], exp: 'מ-3 ל-9 ומ-4 ל-12: שניהם גדלו פי 3.' }, 'learn', rec => { st.unit.ev.labOk = rec.pass; next(); });
+          };
+        });
+      };
+    }
+  }
+
+  function practice(sc, j) {
+    const item = sc.items[j];
+    if (!item) return next();
+    frame(sc.step, `<h3>${sc.title} <span class="muted small">(${j + 1} מתוך ${sc.items.length})</span></h3>${fig(item.figTop)}<div id="ib"></div>`);
+    askItem($('ib'), item, 'learn', rec => { if (rec.fixed) st.unit.ev.fixed = true; if (rec.firstTag === 'additive') st.unit.ev.additive = true; save(); practice(sc, j + 1); });
+  }
+
+  function notebook(sc) {
+    frame(3, `<h3>עכשיו במחברת ✏️</h3>${R(sc.html)}<div class="row"><button id="nb">סיימתי במחברת</button></div><div id="nb2"></div>`);
+    $('nb').onclick = () => {
+      $('nb').remove();
+      $('nb2').innerHTML = `<div class="fb info"><b>השוו לציור הזה:</b>${fig(sc.model)}${sc.selfcheck.map((t, i) => `<label class="chk"><input type="checkbox" data-c="${i}"> ${t}</label>`).join('')}</div><h3 style="margin-top:14px">שאלת אימות</h3><div id="ib"></div>`;
+      let tries = 0;
+      const ask = () => askItem($('ib'), sc.verify.type === 'open' ? { id: 'NB', type: 'open', q: sc.verify.q, check: sc.verify.check } : { id: 'NB', type: 'nums', q: sc.verify.q, labels: sc.verify.labels, ans: sc.verify.ans }, 'diag', rec => {
+        tries++;
+        log('notebook', { ok: rec.correct, tries });
+        if (rec.correct) { $('ib').insertAdjacentHTML('beforeend', '<div class="fb ok">✓ מצוין! העבודה במחברת מתאימה.</div><div class="row"><button id="nx">ממשיכים</button></div>'); $('nx').onclick = next; }
+        else if (tries === 1) { $('ib').insertAdjacentHTML('beforeend', `<div class="fb bad">בואו נבדוק את הציור יחד: הסתכלו על הציור לדוגמה, ותקנו במחברת אם צריך.</div><div class="row"><button id="again">ניסיון נוסף</button></div>`); $('again').onclick = ask; }
+        else { st.unit.ev.nbMiss = true; $('ib').insertAdjacentHTML('beforeend', '<div class="fb info">נמשיך הלאה. כדאי להראות את המחברת למורה בהזדמנות.</div><div class="row"><button id="nx">ממשיכים</button></div>'); $('nx').onclick = next; }
+      });
+      ask();
+    };
+  }
+
+  // בדיקת שליטה: 3 שאלות. שליטה = לפחות 2 עברו (ראשונה או שנייה אחרי משוב, בלי רמז) והאחרונה עברה.
+  function check(sc) {
+    const U = K.units[st.unit.id], u = st.unit;
+    const setName = sc.sets[u.setI];
+    if (!setName) return referral(true);
+    const items = U.sets[setName];
+    const j = u.results.length;
+    if (j >= items.length) {
+      const passes = u.results.filter(r => r.pass).length;
+      const mastered = U.passNeed ? passes >= U.passNeed : (passes >= 2 && u.results[items.length - 1].pass);
+      log('check', { set: setName, passes, mastered });
+      if (u.results.some(r => !r.pass && r.correct) || u.results.some(r => r.attempts > 1)) { if (mastered) u.ev.persist = true; }
+      if (mastered) { u.mastered = true; u.masteredSet = setName; save(); return next(); }
+      u.setI++; u.results = [];
+      save();
+      if (U.deep) return deepRetry(sc);
+      if (!sc.sets[u.setI]) return referral(true);
+      return ladder(sc);
+    }
+    frame(4, `<h3>בודקים הבנה <span class="muted small">(${j + 1} מתוך ${items.length})</span></h3><div id="ib"></div>`);
+    askItem($('ib'), items[j], 'learn', rec => {
+      u.results.push(rec);
+      if (rec.fixed) u.ev.fixed = true;
+      if (rec.firstTag === 'additive') u.ev.additive = true;
+      if (items[j].claim && rec.pass) u.ev.claim = true;
+      u.lastWrong = rec.pass ? u.lastWrong : { q: items[j].q, answers: rec.answers };
+      save();
+      check(sc);
+    });
+  }
+  // אתגר המומחים: בלי סולם עזרה ובלי הפניה – הוא רשות
+  function deepRetry(sc) {
+    if (sc.sets[st.unit.setI]) {
+      frame(4, '<h3>אלה שאלות קשות במיוחד</h3><p>וזה בסדר. ננסה סט אחר של משימות אתגר.</p><div class="row"><button id="nx">לסט הבא</button></div>');
+      $('nx').onclick = () => check(sc);
+    } else {
+      log('deepMiss');
+      frame(4, '<h3>עוד לא הפעם</h3><p>אתגר המומחים קשה בכוונה. אפשר לחזור אליו בפעם אחרת – וכל מה שכבר למדתם נשאר.</p><div class="row"><button id="cr">למסלול שלי</button></div>');
+      $('cr').onclick = course;
+    }
+  }
+  // סולם העזרה אחרי בדיקה שלא עברה: הסבר בדרך אחרת → משימה פשוטה → סט מקביל
+  function ladder(sc) {
+    const U = K.units[st.unit.id];
+    log('ladder');
+    frame(4, `<h3>בואו ננסה בדרך אחרת</h3><p>עוד לא הגעתם לשליטה, וזה בסדר. ננסה להבין את זה בדרך נוספת.</p><h3>${U.alt.title}</h3>${R(U.alt.html)}${fig(U.alt.fig)}<div class="row"><button id="nx">הבנתי</button></div>`);
+    const sl = siteOf(st.unit.id);
+    const simpler = () => {
+      frame(4, '<h3>משימה קצרה</h3><div id="ib"></div>');
+      askItem($('ib'), U.simpler, 'learn', () => {
+        frame(4, '<h3>ועכשיו – בדיקה נוספת</h3><p>שלוש שאלות חדשות. קחו את הזמן.</p><div class="row"><button id="nx">מתחילים</button></div>');
+        $('nx').onclick = () => check(sc);
+      });
+    };
+    $('nx').onclick = () => {
+      if (!sl.learn) return simpler();
+      log('siteLesson');
+      frame(4, '<h3>השיעור המלא</h3><p>נעבור יחד על ההסבר המלא. דפדפו בין הכרטיסיות, ואז נמשיך.</p><div id="sf"></div><div class="row"><button id="nx">סיימתי, ממשיכים</button></div>');
+      siteFrame($('sf'), sl, d => { if (d.ev === 'home') simpler(); });
+      $('nx').onclick = simpler;
+    };
+  }
+
+  // ---------- המורה ----------
+  function teacherCard(auto) {
+    const u = st.unit, U = u ? unitDef(u.id) : null;
+    const doneU = K.UNITS.filter(x => st.done[x.id]).map(x => x.title);
+    const known = Object.keys(K.SKILL_SAY).map(Number).filter(s => st.skills[s] === 'mastered').map(s => K.SKILLS[s]);
+    const lw = u && u.lastWrong;
+    const curQ = cur && cur.item ? cur.item.q : null;
+    const helps = (st.log || []).filter(l => u && l.t >= (st.log.find(x => x.type === 'unitStart' && x.unit === u.id) || { t: 0 }).t);
+    const hintsN = helps.filter(l => l.type === 'hint').length, altN = helps.filter(l => l.type === 'alt').length;
+    const stuck = curQ || (lw && lw.q);
+    const ans = lw && lw.answers && lw.answers.length ? `תשובות שנתן/ה: ${lw.answers.join(', ')}` : '';
+    const html = `${auto ? '<p><b>ניסינו כמה דרכים להבין את הנושא. עכשיו כדאי להיעזר במורה כדי להתקדם.</b></p>' : '<p>הכרטיס הזה מחכה למורה. בינתיים אפשר לעשות משימת חזרה.</p>'}
+      <div class="tcard"><dl>
+        <dt>שם</dt><dd>${esc(st.name)}</dd>
+        <dt>נושא</dt><dd>${K.title}${U ? ' · ' + U.title : ''}</dd>
+        <dt>כבר הצליח/ה</dt><dd>${doneU.length ? 'יחידות: ' + doneU.join(', ') + '. ' : ''}${known.length ? 'מיומנויות: ' + known.join(', ') : 'עוד אין מיומנויות שהוכחו'}</dd>
+        ${stuck ? `<dt>במה נתקע/ה</dt><dd>${R(stuck.replace(/<div class="bigmx">/g, ' ').replace(/<\/div>/g, ''))} ${ans ? '<br>' + esc(ans) : ''}</dd>` : ''}
+        ${u && u.sheet ? `<dt>תרגול במחברת</dt><dd>בדיקה עצמית: ${u.sheet} נכונים</dd>` : ''}
+        <dt>עזרה שכבר קיבל/ה</dt><dd>${hintsN} רמזים${altN ? `, הסבר בדרך אחרת` : ''}${u && u.setI > 0 ? ', משימה פשוטה יותר וסט שאלות נוסף' : ''}</dd>
+      </dl></div>`;
+    const detail = `${U ? U.title : K.title} · ${stuck ? stuck.replace(/<[^>]+>/g, ' ').replace(/[⟦⟧]/g, '').replace(/\s+/g, ' ').trim() : ''}${ans ? ' · ' + ans : ''}`;
+    tr(auto ? 'הפניה למורה' : 'עזרת מורה', detail);
+    log('teacher', { auto: !!auto });
+    const m = modal(`<h2>🙋 קוראים למורה</h2>${html}<div class="row"><button id="mwt">משימת חזרה בזמן שמחכים</button></div>`);
+    m.el.querySelector('#mwt').onclick = () => { m.close(); waiting(0); };
+  }
+  function referral() {
+    if (st.unit) st.unit.referred = true;
+    save();
+    frame(4, '<h3>הגיע הזמן לעזרה מהמורה</h3><p>ניסינו כמה דרכים, ועוד לא הגענו לשליטה. זה קורה, ובשביל זה יש מורה. 🙂</p><div class="row"><button id="tc">הצגת כרטיס העזרה</button><button class="sec" id="wt">משימת חזרה בזמן שמחכים</button></div>');
+    $('tc').onclick = () => teacherCard(true);
+    $('wt').onclick = () => waiting(0);
+    teacherCard(true);
+  }
+  function waiting(j) {
+    const U = K.units[st.unit ? st.unit.id : Object.keys(K.units)[0]];
+    const items = U.waiting && U.waiting.length ? U.waiting : [U.simpler];
+    if (j >= items.length) {
+      frame(4, '<h3>סיימתם את משימת החזרה 👏</h3><p>כשהמורה מגיע/ה, הראו לה את כרטיס העזרה.</p><div class="row"><button id="tc">הצגת כרטיס העזרה</button><button class="sec" id="cr">למסלול שלי</button></div>');
+      $('tc').onclick = () => teacherCard(true);
+      $('cr').onclick = course;
+      return;
+    }
+    frame(4, `<h3>משימת חזרה <span class="muted small">(${j + 1} מתוך ${items.length})</span></h3><div id="ib"></div>`);
+    askItem($('ib'), items[j], 'learn', () => waiting(j + 1));
+  }
+
+  // ---------- סיכום יחידה ----------
+  function summary() {
+    const u = st.unit, U = K.units[u.id];
+    if (!u.mastered) return check({ sets: (u.ver === 'reinforce' ? ['B', 'C'] : ['A', 'B']) });
+    const ev = u.ev;
+    const did = U.did || 'הרחבתם שברים';
+    let line;
+    if (U.deep) line = 'הגעתם לרמת מומחיות: ניתחתם טעויות, בדקתם טענות ויצרתם שברים בעצמכם.';
+    else if (ev.additive && ev.fixed) line = (K.id === 'equiv' && u.id === 'u4') ? 'בהתחלה הוספתם מספר למונה ולמכנה. עכשיו אתם כופלים, ויודעים להסביר למה.' : `בהתחלה טעיתם, ומיד תיקנתם בעצמכם. בסוף ${did} לבד.`;
+    else if (ev.drawing) line = `בהתחלה נעזרתם בציור. בסוף ${did} גם בלי ציור.`;
+    else if (ev.claim) line = `${did} בעצמכם, וזיהיתם טעות של תלמיד אחר והסברתם אותה.`;
+    else line = `${did} בעצמכם, ובשאלה האחרונה פתרתם בלי רמז.`;
+    const newB = [];
+    const give = b => { if (!st.badges[b]) newB.push(b); st.badges[b] = true; };
+    give('master');
+    if (ev.claim) give('explain');
+    if (ev.fixed) give('fix');
+    if (ev.persist || u.setI > 0) give('persist');
+    if (!st.done[u.id] && !u.tPreview) { st.done[u.id] = true; [].concat(U.skill).forEach(k => { st.skills[k] = 'mastered'; }); }
+    save();
+    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet}${u.more ? ' · תרגול נוסף ' + u.more.join(', ') : ''}${u.sheet ? ' · מחברת ' + u.sheet : ''} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
+    const nxt = (st.path || []).find(p => !st.done[p.id] && ready(p.id) && !p.optional);
+    const fin = courseDone();
+    if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills, K)}`); }
+    frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${U.learned}</div>${ev.nbTodo ? `<div class="fb info">📌 במחברת ${ev.nbTodo === 1 ? 'נשאר תרגיל אחד' : `נשארו ${ev.nbTodo} תרגילים`} עם הסימן "להשלים". השלימו אותם בבית או בשיעור הבא.</div>` : ''}
+      ${newB.length ? `<h3 style="margin-top:16px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
+      <div class="row">${fin ? '<button id="cert">🎓 סיימת את הקורס – לתעודה</button>' : nxt ? `<button id="nl">לשיעור הבא: ${unitDef(nxt.id).title}</button>` : ''}<button class="sec" id="cr">לתוכנית הקורס</button></div>`);
+    $('cr').onclick = course;
+    if ($('nl')) $('nl').onclick = () => openUnit(nxt.id, nxt.ver);
+    if ($('cert')) $('cert').onclick = certificate;
+  }
+
+  // ---------- סיום מפגש ----------
+  function endSession() {
+    if (!st || !st.name) return;
+    if (st.phase === 'diag' || st.phase === 'diagIntro') {
+      if (!confirmEnd()) return;
+    }
+    const code = E.encode(st, K);
+    const doneN = (st.path || []).filter(p => !p.optional && st.done[p.id]).length, all = (st.path || []).filter(p => !p.optional).length;
+    tr('סיכום מפגש', `${K.title} · ${E.skillLine(st.skills, K)} · יחידות ${doneN}/${all}`);
+    const name = st.name;
+    st.phase = 'end'; save();
+    layout(false);
+    main.innerHTML = `<div class="card"><h2>כל הכבוד, ${esc(name.split(' ')[0])}!</h2>
+      <p>העתיקו את הקוד הזה למחברת, ליד התאריך של היום:</p><div class="code">${code}</div>
+      <p>בפעם הבאה תקלידו אותו במסך הכניסה, ותמשיכו בדיוק מאותו מקום.</p>
+      <div class="row"><button id="fin">העתקתי – סיום</button></div></div>`;
+    $('fin').onclick = () => { E.store.clear(); st = null; catalog(); };
+  }
+  function confirmEnd() { return st.phase !== 'diag' || window.confirm('המבדק עוד לא הסתיים. לסיים בכל זאת?'); }
+
+  /* ---------- כפתורי המאמן ---------- */
+  coachEl.querySelectorAll('[data-h]').forEach(b => b.onclick = () => {
+    const h = b.dataset.h;
+    log('help', { h });
+    if (h === 'lost') {
+      say('מה לא ברור?');
+      $('bubble').insertAdjacentHTML('beforeend', `<div class="sub">${[['words', 'המילים'], ['what', 'מה צריך לעשות'], ['idea', 'מה זה בכלל'], ['start', 'איך מתחילים'], ['calc', 'החישוב']].map(([k, t]) => `<button class="sec small" data-l="${k}">${t}</button>`).join('')}</div>`);
+      $('bubble').querySelectorAll('[data-l]').forEach(x => x.onclick = () => lost(x.dataset.l));
+    } else if (h === 'alt') {
+      const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]];
+      log('alt');
+      modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`);
+    } else if (h === 'hint') {
+      if (!(cur && cur.hint && cur.hint())) say('כרגע אין שאלה פתוחה. אם משהו לא ברור, לחצו "לא הבנתי".');
+      else say('הוספתי רמז ליד השאלה. 💡');
+    } else if (h === 'read') speak($('ucard') || main);
+    else if (h === 'teacher') teacherCard(false);
+  });
+  function lost(k) {
+    const it = cur && cur.item;
+    log('lost', { k });
+    if (k === 'words') modal(`<h2>מילון קטן</h2>${K.GLOSSARY.map(([w, t, f]) => `<p><b>${w}:</b> ${t}</p>${f ? fig(f) : ''}`).join('')}`);
+    else if (k === 'what') say(it && it.rephrase ? it.rephrase : 'קראו שוב את השאלה לאט: מה מבקשים למצוא? אפשר גם ללחוץ "הקרא לי".');
+    else if (k === 'idea' && lessonModal()) { /* השיעור המלא */ } else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]]; modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
+    else if (k === 'start') say(it && it.start ? it.start : 'מתחילים מהמספר שידוע בשני השברים: פי כמה הוא גדל?');
+    else if (k === 'calc') {
+      let t = '<table class="mt">';
+      for (let r = 0; r <= 10; r++) { t += '<tr>'; for (let c = 0; c <= 10; c++) t += r === 0 && c === 0 ? '<td class="h">×</td>' : r === 0 ? `<td class="h">${c}</td>` : c === 0 ? `<td class="h">${r}</td>` : `<td>${r * c}</td>`; t += '</tr>'; }
+      modal(`<h2>לוח הכפל</h2>${t}</table>`);
+      log('mulTable');
+    }
+  }
+  $('coachToggle').onclick = () => { const o = coachEl.classList.toggle('open'); $('coachToggle').setAttribute('aria-expanded', o); };
+
+  $('endBtn').onclick = endSession;
+  $('bigBtn').onclick = () => document.body.classList.toggle('big');
+
+  /* ---------- חוסר פעילות (מחשב משותף) ---------- */
+  let idleT = null;
+  const IDLE = 20 * 60 * 1000;
+  const bump = () => { clearTimeout(idleT); if (st && st.name && st.phase !== 'end') idleT = setTimeout(idleAsk, IDLE); };
+  function idleAsk() {
+    if (document.querySelector('.overlay.idle')) return;
+    const m = modal(`<h2>ממשיכים?</h2><p>לא היתה פעילות כבר זמן מה. ${esc(st.name.split(' ')[0])}, את/ה עדיין כאן?</p><div class="row"><button id="iy">אני ממשיך/ה</button><button class="sec" id="in">סיימתי להיום</button></div>`, bump);
+    m.el.classList.add('idle');
+    m.el.querySelector('#iy').onclick = () => m.close();
+    m.el.querySelector('#in').onclick = () => { m.close(); endSession(); };
+  }
+  ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, bump, true));
+
+  // ---------- קטלוג הקורסים ----------
+  function catalog(all) {
+    st = null; setCourse(null); layout(false);
+    const fits = g => !MYG || !g || (MYG >= g[0] && MYG <= g[1]);
+    const list = C.COURSE_IDS.map(id => ({ id, c: C.courses[id], pl: PLANNED[id] })).filter(x => x.c || x.pl)
+      .map(x => Object.assign(x, { g: x.c ? x.c.grades : x.pl.grades }));
+    const mine = list.filter(x => fits(x.g)), other = list.filter(x => !fits(x.g));
+    const card = ({ id, c, pl, g }) => {
+      const t = c ? c.title : pl.title, sub = c ? c.sub : pl.sub;
+      const meta = c ? `${c.MODULES.length} פרקים · ${c.UNITS.length} שיעורים` : 'בהכנה';
+      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? 'קורס' : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button></div>` : ''}</div>`;
+    };
+    // קורסים פעילים קודם, ואחריהם "בקרוב"
+    const sortA = a => a.slice().sort((x, y) => (y.c ? 1 : 0) - (x.c ? 1 : 0));
+    main.innerHTML = `${tview()}<div class="card"><div class="crumb">${MYG ? `כיתה ${GN[MYG]}` : 'כל הכיתות'}</div><h1>קורסים ללמידה עצמית</h1>
+      <div class="coachline"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>שלום! כאן לומדים לבד, בקצב שלך, עם עזרה ממני. בחרו את הקורס שהמורה אמר/ה לכם ללמוד.</div></div>
+      <p class="small muted">כבר התחלתם קורס? היכנסו אליו והקלידו את קוד ההמשך מהמחברת.</p></div>
+      <div class="cats">${sortA(mine).map(card).join('') || '<div class="card">עוד אין קורסים לכיתה הזו.</div>'}</div>
+      ${other.length ? (all ? `<h2 style="margin:26px 4px 12px">קורסים לכיתות אחרות</h2><div class="cats">${sortA(other).map(card).join('')}</div>` : '<div class="row"><button class="sec" id="allc">להציג גם קורסים לכיתות אחרות</button></div>') : ''}`;
+    main.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { setCourse(b.dataset.c); entry(); });
+    if ($('allc')) $('allc').onclick = () => catalog(true);
+  }
+  $('brand').onclick = () => { if (!st || st.phase === 'course' || st.phase === 'end' || window.confirm('לחזור לרשימת הקורסים?')) { if (st && st.phase !== 'end') { E.store.clear(); } catalog(); } };
+
+  /* ---------- התחלה ---------- */
+  if (st && st.phase !== 'end') setCourse(st.course || 'equiv');
+  const want = E.URLP.get('course');
+  if ((!st || st.phase === 'end') && want && C.courses[want]) { st = null; setCourse(want); entry(); }
+  else if (!st || st.phase === 'end' || !K) { st = null; catalog(); }
+  else if (st.phase === 'diagIntro') diagIntro();
+  else if (st.phase === 'diag') diagQ();
+  else if (st.phase === 'unit' && st.unit) screen();
+  else course();
+  bump();
+  window.__coach = { get st() { return st; }, get cur() { return cur && cur.item; }, screens: () => screens() };
+})();
+</script>
+</body>
+</html>
