@@ -27,7 +27,7 @@
   - `coach/visuals.js` – ביטויים מתמטיים (`⟦3/4 = ?/12⟧` → שבר מאונך) וציורי SVG.
   - `coach/courses/equiv.js` – **תוכן בלבד** של הקורס "שברים שקולים (שווים)". קורס חדש = קובץ חדש באותו מבנה.
 - הכניסה: לשונית "למידה עצמית" בכיתות ב'–ו' (`go: 'coachTab'` ב-`math6-v2.html`, עם `?grade=`).
-- קורסים בנויים: `equiv` (שברים שקולים), `dec` (עשרוניים), `mult` (לוח הכפל, כיתות ב'–ו', `coach/courses/mult.js`). `grades: [מ, עד]`.
+- קורסים בנויים: `equiv` (שברים שקולים), `dec` (עשרוניים), `mult` (לוח הכפל, כיתות ב'–ו', `coach/courses/mult.js`; כולל u10 "מעובדה אחת – הרבה עובדות", מיומנות 9, לפני האתגר). `grades: [מ, עד]`.
 - ב-`SITE`: `topic` יכול להיות רשימה (`'muldiv,ops'` – הראשון שקיים בכיתה), `card` יכול להיות חלופות (`'א|ב'` – הראשונה שקיימת בכיתה).
 - ציורים בקורסים: `C.f.arr(r, c, {split, hl})` (מערך), `C.f.groups(g, n)` (קבוצות שוות), וגם bar/pie/hund/line/pv/vert.
 - **לא נוגעים ב-`math6-v2.html` כדי לשנות את המאמן** (חוץ ממצב `EMBED` ומחוללים חדשים שהקורס צריך). שינוי במאמן = עדכון `גרסה` בפוטר של `coach.html` ו-`VER` ב-`engine.js`.
@@ -54,7 +54,7 @@
 
 ## בדיקות (Playwright)
 
-- כרום: `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` · `NODE_PATH=$(npm root -g)`.
+- כרום: `/opt/pw-browsers/chromium-*/chrome-linux*/chrome (הגרסה משתנה – לבדוק עם ls)` · `NODE_PATH=$(npm root -g)`.
 - סקריפטים בתיקיית ה-scratchpad של הסשן.
 - לעקוף מסכי פתיחה: `addInitScript` עם `localStorage['math-role']='s'` ו-`sessionStorage['math-noname']='1'`.
 - `state` הוא משתנה מודול (`let`), **לא** `window.state` — ב-`page.evaluate` משתמשים ב-`state` חשוף.
