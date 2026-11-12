@@ -395,7 +395,7 @@
     A: [X.x1, X.x3, X.x2, X.x5], B: [X.x6, X.x7, X.x4, X.x8] });
 
   C.courses.dec = {
-    id: 'dec', title: 'מספרים עשרוניים', grades: [5, 6], sub: 'עשיריות ומאיות, השוואה, ארבע פעולות החשבון ובעיות',
+    id: 'dec', title: 'מספרים עשרוניים', grades: [5, 6], newExam: true, sub: 'עשיריות ומאיות, השוואה, ארבע פעולות החשבון ובעיות',
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS, units,
     DIAG: { top: [5, 9, 7, 10, 6], apply: 8, mid: [3, 4], base: [1, 2], infer: { 7: [9], 6: [9, 10] }, deps: {}, maxQ: 14 },
     MAIN_TAGS: ['none', 'longerBigger', 'alignRight'], APPLY_UNIT: 'u6',

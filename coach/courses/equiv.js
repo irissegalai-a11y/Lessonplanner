@@ -280,7 +280,7 @@
   ];
 
   C.courses.equiv = {
-    id: 'equiv', title: 'שברים שקולים (שווים)', grades: [5, 6], sub: 'תלמדו לזהות ולכתוב שברים שקולים – בציור ובחישוב',
+    id: 'equiv', title: 'שברים שקולים (שווים)', grades: [5, 6], newExam: true, sub: 'תלמדו לזהות ולכתוב שברים שקולים – בציור ובחישוב',
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS,
     units: { u4: { teach: U4_TEACH, reinforce: U4_REINF, sets: U4, contrast: CONTRAST, alt: ALT, simpler: SIMPLER, waiting: WAITING, skill: 5,
       learned: 'אני יודע/ת להרחיב שבר ולהסביר למה הוא נשאר אותו שבר.' } },

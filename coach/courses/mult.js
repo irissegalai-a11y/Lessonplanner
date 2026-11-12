@@ -436,7 +436,7 @@
     A: [X.x1, X.x3, X.x2, X.x5], B: [X.x6, X.x4, X.x7, X.x8] });
 
   C.courses.mult = {
-    id: 'mult', title: 'לוח הכפל', grades: [2, 6], sub: 'מבינים מה זה כפל, שולטים בלוח הכפל, מחלקים ופותרים בעיות',
+    id: 'mult', title: 'לוח הכפל', grades: [2, 6], newExam: true, sub: 'מבינים מה זה כפל, שולטים בלוח הכפל, מחלקים ופותרים בעיות',
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS, units,
     DIAG: { top: PRIME ? [5, 6, 8, 9, 10] : [5, 6, 8, 9], apply: 7, mid: [3, 4], base: [1, 2], infer: { 4: [5], 3: [4, 5] }, deps: {}, maxQ: PRIME ? 14 : 12 },
     MAIN_TAGS: ['none', 'addInstead', 'skipSlip'], APPLY_UNIT: 'u7',
