@@ -503,7 +503,7 @@
     A: [X.x1, X.x3, X.x2, X.x5], B: [X.x6, X.x4, X.x7, X.x8] });
 
   C.courses.fracop = {
-    id: 'fracop', title: 'כפל וחילוק שברים', grades: [5, 6], sub: 'כפל וחילוק של שברים ומספרים מעורבים, וצמצום לפני הכפל',
+    id: 'fracop', title: 'כפל וחילוק שברים', grades: [5, 6], newExam: true, sub: 'כפל וחילוק של שברים ומספרים מעורבים, וצמצום לפני הכפל',
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS, units,
     DIAG: { top: [4, 5, 6, 9], apply: 10, mid: [2, 3, 7, 8], base: [1], infer: { 2: [4], 3: [4], 7: [9], 8: [9], 1: [6] }, deps: {}, maxQ: 14 },
     MAIN_TAGS: ['none', 'mulDenom', 'cancelSame', 'flipFirst'], APPLY_UNIT: 'u11',
