@@ -1,10 +1,13 @@
 /* =========================================================
-   קורס: כפל וחילוק שברים – תוכן בלבד (כיתה ו')
+   קורס: כפל וחילוק שברים – תוכן בלבד (כיתות ה'–ו')
    סימון בביטויים: 2_1/2 = מספר מעורב · 4×8/5×8 = שבר עם גורמים
    ~8 = גורם מחוק (מונה-מכנה באותו שבר) · ^4 = מחוק באלכסון · ~32>4 = מחוק, ומעליו מה שנשאר
    ========================================================= */
 (function () {
   const C = window.COACH, { bar, pie, line, area, tree, arr } = C.f;
+  // כרטיסיות "חילוק שבר ומספר שלם" קיימות באתר רק בכיתה ו' (ובלי כיתה – תצוגת מורה)
+  const MYG = +(new URLSearchParams(location.search).get('grade') || 0);
+  const DIVL = (o, gens) => Object.assign(!MYG || MYG >= 6 ? o : {}, { gens, topic: 'divfr,frac' });
   const SKILLS = {
     1: 'מספר מעורב, שבר מדומה וצמצום', 2: 'כפל שבר ומספר שלם', 3: 'שבר מכמות', 4: 'כפל שבר בשבר', 5: 'צמצום לפני הכפל (פירוק לגורמים)',
     6: 'כפל מספרים מעורבים', 7: 'חילוק שבר במספר שלם', 8: 'חילוק מספר שלם בשבר', 9: 'חילוק שבר בשבר ומספרים מעורבים (KFC)', 10: 'גדל או קטן? ובעיות מילוליות'
@@ -491,7 +494,7 @@
     A: [X.x1, X.x3, X.x2, X.x5], B: [X.x6, X.x4, X.x7, X.x8] });
 
   C.courses.fracop = {
-    id: 'fracop', title: 'כפל וחילוק שברים', grades: [6, 6], sub: 'כפל וחילוק של שברים ומספרים מעורבים, וצמצום לפני הכפל',
+    id: 'fracop', title: 'כפל וחילוק שברים', grades: [5, 6], sub: 'כפל וחילוק של שברים ומספרים מעורבים, וצמצום לפני הכפל',
     // טיוטה: רק מורים רואים את הקורס, עד שאיריס מאשרת את הנוסח
     draft: true,
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS, units,
@@ -505,9 +508,9 @@
       u5: { gens: ['genFactorPair'], topic: 'mulfr' },
       u6: { gens: ['genCancelMul'], topic: 'mulfr' },
       u7: { gens: ['genMixedMul'], topic: 'mulfr' },
-      u8: { learn: 'divfr', card: 'מחלקים פיצה', gens: ['genDivFrFW'], topic: 'divfr' },
-      u9: { learn: 'divfr', card: 'כמה פעמים זה נכנס', gens: ['genDivFrWF'], topic: 'divfr' },
-      u10: { learn: 'divfr', card: 'שיטת KFC', gens: ['genFracDivFrac', 'genMixedDiv'], topic: 'divfr' },
+      u8: DIVL({ learn: 'divfr', card: 'מחלקים פיצה' }, ['genDivFrFW']),
+      u9: DIVL({ learn: 'divfr', card: 'כמה פעמים זה נכנס' }, ['genDivFrWF']),
+      u10: DIVL({ learn: 'divfr', card: 'שיטת KFC' }, ['genFracDivFrac', 'genMixedDiv']),
       u11: { gens: ['genBigSmall', 'genFracOpWord'], topic: 'divfr,mulfr' }
     },
     MODULES: [{ t: 'לפני שמתחילים', u: ['u1'] }, { t: 'כפל שברים', u: ['u2', 'u3', 'u4'] }, { t: 'מפרקים ומצמצמים', u: ['u5', 'u6', 'u7'] }, { t: 'חילוק שברים', u: ['u8', 'u9', 'u10'] }, { t: 'יישום ואתגר', u: ['u11', 'u12'] }],
