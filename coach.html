@@ -380,7 +380,13 @@
   .ppage .phint { font-size: 0.9rem; color: #444; }
   .ppage .pspace { height: 8em; border: 1.5px dashed #999; border-radius: 8px; margin-top: 8px; }
   .ppage svg.fig { max-width: 100%; height: auto; }
-  #psheet.nokey .pkeypage, #psheet.noremind .premindsec { display: none; }
+  .ppage table.ptrack { width: 100%; border-collapse: collapse; font-size: 0.85rem; table-layout: fixed; }
+  .ppage table.ptrack th, .ppage table.ptrack td { border: 1px solid #333; padding: 2px 3px; text-align: center; }
+  .ppage table.ptrack td { height: 1.65em; }
+  .ppage table.ptrack th small { font-weight: 400; color: #444; }
+  .ppage table.ptrack .pn { width: 26%; text-align: start; }
+  .ppage table.ptrack .ps { width: 8%; } .ppage table.ptrack .pr { width: 17%; }
+  .ppage ul.pmap { columns: 2; font-size: 0.9rem; padding-inline-start: 1.2em; }
   @media (max-width: 600px) { .ppage { padding: 16px 14px; font-size: 1rem; } }
   @media print {
     html.printing body > *:not(#psheet) { display: none !important; }
@@ -418,7 +424,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.7</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.8</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -1024,19 +1030,19 @@
   }
   const psItem = (it, withHint) => `<li>${R(it.q)}${it.fig && it.type !== 'shade' && it.type !== 'line' ? fig(it.fig) : ''}${psSlot(it)}${withHint && it.hints && it.hints.length ? `<div class="phint">💡 רמז: ${R(it.hints[0])}</div>` : ''}</li>`;
   const psKey = items => `<ol class="pq">${items.map(it => `<li><b>${R(ansText(it))}</b>${it.exp ? ` <span class="phint">– ${R(it.exp)}</span>` : ''}</li>`).join('')}</ol>`;
-  // פותח תצוגה מקדימה להדפסה. pages = HTML של העמודים; remind = יש מתג "תזכורת"
-  function openSheet(pages, remind, label) {
+  // פותח תצוגה מקדימה להדפסה. pages = HTML של העמודים.
+  // parts = [{ cls, label, on }] – מתג לכל חלק בדף (למשל דף התשובות); onClose – אחרי הסגירה
+  function openSheet(pages, parts, label, onClose) {
     const ps = document.createElement('div');
     ps.id = 'psheet'; ps.setAttribute('role', 'dialog'); ps.setAttribute('aria-label', label);
     ps.innerHTML = `<div class="ptools nosay"><button id="psPrint">🖨️ הדפסה</button>
-        ${remind ? '<label><input type="checkbox" id="psRem" checked> תזכורת והסברים</label>' : ''}
-        <label><input type="checkbox" id="psKey" checked> דף תשובות בסוף</label>
+        ${parts.map((x, i) => `<label><input type="checkbox" data-part="${i}"${x.on === false ? '' : ' checked'}> ${x.label}</label>`).join('')}
         <button class="sec" id="psClose">סגירה</button></div>${pages}`;
     document.body.appendChild(ps);
-    const close = () => { ps.remove(); document.documentElement.classList.remove('printing'); };
-    ps.querySelector('#psClose').onclick = close;
-    if (remind) ps.querySelector('#psRem').onchange = e => ps.classList.toggle('noremind', !e.target.checked);
-    ps.querySelector('#psKey').onchange = e => ps.classList.toggle('nokey', !e.target.checked);
+    const show = (i, on) => ps.querySelectorAll('.' + parts[i].cls).forEach(e => { e.hidden = !on; });
+    parts.forEach((x, i) => show(i, x.on !== false));
+    ps.querySelectorAll('[data-part]').forEach(c => c.onchange = () => show(+c.dataset.part, c.checked));
+    ps.querySelector('#psClose').onclick = () => { ps.remove(); document.documentElement.classList.remove('printing'); if (onClose) onClose(); };
     ps.querySelector('#psPrint').onclick = () => {
       document.documentElement.classList.add('printing');
       window.addEventListener('afterprint', () => document.documentElement.classList.remove('printing'), { once: true });
@@ -1063,7 +1069,8 @@
         ${nb && !U.deep ? `<h2>📓 משימה</h2>${R(nb.html.replace(/במחברת/g, 'על הדף או במחברת'))}<div class="pspace"></div>` : ''}
       </div>
       <div class="ppage pkeypage pbreak"><h2 style="margin-top:0">✔️ תשובות – ${u.title}</h2>${psKey(guided.concat(alone))}
-        ${nb && nb.verify && nb.verify.ans ? `<p><b>משימה:</b> ${R(nb.verify.q)} – ${nb.verify.ans.join(', ')}</p>` : ''}</div>`, !!remind, 'דף עבודה להדפסה');
+        ${nb && nb.verify && nb.verify.ans ? `<p><b>משימה:</b> ${R(nb.verify.q)} – ${nb.verify.ans.join(', ')}</p>` : ''}</div>`,
+      (remind ? [{ cls: 'premindsec', label: 'תזכורת והסברים' }] : []).concat([{ cls: 'pkeypage', label: 'דף תשובות בסוף' }]), 'דף עבודה להדפסה');
     log('worksheet', { unit: id });
     if (!T) tr('דף עבודה', u.title);
   }
@@ -1154,15 +1161,26 @@
       <p class="muted">${items.length} שאלות קבועות, בלי עזרה. טעות בשאלה מחזירה את השיעור שלה למסלול (חיזוק).</p>${items.map((it, i) => taskHtml(it, `${i + 1}. <span class="muted small">(שיעור ${lessonNo(it.u)})</span>`)).join('')}`);
     m.el.querySelector('#mPrint').onclick = () => { m.close(); examSheet(id); };
   }
-  function examSheet(id) {
-    const items = examItems(id);
-    openSheet(`<div class="ppage">
-        <div class="phead"><div><div class="small">${esc(K.title)}</div><h1>${EXAM_IC[id]} ${EXAM_NAME[id]}</h1></div>
-          <div>שם: <span class="pline"></span> &nbsp; תאריך: <span class="pline" style="min-width:5em"></span> &nbsp; ציון: <span class="pline" style="min-width:3em"></span> מתוך ${items.length}</div></div>
+  // דף מבדק להדפסה: המבדק לתלמידים · דף תשובות · טבלת מעקב לכיתה (✓/✗ לכל שאלה, ציון ושיעורים לחזרה)
+  function examSheet(id, onClose) {
+    const items = examItems(id), n = items.length;
+    const us = [...new Set(items.map(it => it.u))].sort((a, b) => lessonNo(a) - lessonNo(b));
+    const head = (t, extra) => `<div class="phead"><div><div class="small">${esc(K.title)}</div><h1>${t}</h1></div><div>${extra}</div></div>`;
+    const rows = Array.from({ length: 30 }, () => `<tr><td class="pn"></td>${items.map(() => '<td></td>').join('')}<td class="ps"></td><td class="pr"></td></tr>`).join('');
+    openSheet(`<div class="ppage pexampage">
+        ${head(`${EXAM_IC[id]} ${EXAM_NAME[id]}`, `שם: <span class="pline"></span> &nbsp; תאריך: <span class="pline" style="min-width:5em"></span> &nbsp; ציון: <span class="pline" style="min-width:3em"></span> מתוך ${n}`)}
         <p>פותרים לבד, בלי עזרה. כתבו את הדרך ליד כל תרגיל.</p>
         <ol class="pq">${items.map(it => psItem(it, false)).join('')}</ol></div>
-      <div class="ppage pkeypage pbreak"><h2 style="margin-top:0">✔️ תשובות – ${EXAM_NAME[id]}</h2>${psKey(items)}
-        <p class="phint">שאלה שנענתה לא נכון → כדאי לחזור על השיעור שלה: ${items.map((it, i) => `${i + 1}–שיעור ${lessonNo(it.u)}`).join(' · ')}</p></div>`, false, 'דף מבדק להדפסה');
+      <div class="ppage pkeypage pbreak"><h2 style="margin-top:0">✔️ תשובות – ${EXAM_NAME[id]}</h2>
+        <ol class="pq">${items.map(it => `<li><b>${R(ansText(it))}</b> <span class="phint">(שיעור ${lessonNo(it.u)})${it.exp ? ' – ' + R(it.exp) : ''}</span></li>`).join('')}</ol>
+        <h3>איזו שאלה בודקת איזה שיעור</h3>
+        <ul class="pmap">${us.map(u => `<li>שיעור ${lessonNo(u)} – ${unitDef(u).title}: שאלה ${items.map((it, i) => it.u === u ? i + 1 : 0).filter(Boolean).join(', ')}</li>`).join('')}</ul></div>
+      <div class="ppage ptrackpage pbreak">
+        ${head(`📊 טבלת מעקב – ${EXAM_NAME[id]}`, `כיתה: <span class="pline" style="min-width:4em"></span> &nbsp; תאריך: <span class="pline" style="min-width:5em"></span>`)}
+        <p class="phint">סמנו ✓ או ✗ בכל שאלה. ✗ בשאלה ← כדאי לחזור על השיעור שלה (מספר השיעור כתוב מתחת למספר השאלה).</p>
+        <table class="ptrack"><thead><tr><th class="pn">שם התלמיד/ה</th>${items.map((it, i) => `<th>${i + 1}<br><small>ש' ${lessonNo(it.u)}</small></th>`).join('')}<th class="ps">ציון<br><small>מתוך ${n}</small></th><th class="pr">שיעורים לחזרה</th></tr></thead><tbody>${rows}</tbody></table>
+</div>`,
+      [{ cls: 'pexampage', label: 'המבדק' }, { cls: 'pkeypage', label: 'דף תשובות' }, { cls: 'ptrackpage', label: 'טבלת מעקב לכיתה' }], 'דף מבדק להדפסה', onClose);
   }
   function diagTasks() {
     const html = `<h2>📋 שאלות האבחון</h2><p class="muted">המבדק מסתגל: כל ילד מקבל רק חלק מהשאלות (עד ${(K.DIAG && K.DIAG.maxQ) || 12}).</p>` +
@@ -1558,7 +1576,7 @@
     const card = ({ id, c, pl, g }) => {
       const t = c ? c.title : pl.title, sub = c ? c.sub : pl.sub;
       const meta = c ? `${c.MODULES.length} פרקים · ${c.UNITS.length} שיעורים` : 'בהכנה';
-      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? (c.draft ? 'טיוטה – רק מורים רואים' : 'קורס') : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button></div>` : ''}</div>`;
+      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? (c.draft ? 'טיוטה – רק מורים רואים' : 'קורס') : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button>${T && c.EXAMS ? `<button class="ghost small nosay" data-cx="${id}:mid">🖨️ מבדק אמצע</button><button class="ghost small nosay" data-cx="${id}:final">🖨️ מבדק סיכום</button>` : ''}</div>` : ''}</div>`;
     };
     // קורסים פעילים קודם, ואחריהם "בקרוב"
     const sortA = a => a.slice().sort((x, y) => (y.c ? 1 : 0) - (x.c ? 1 : 0));
@@ -1568,6 +1586,7 @@
       <div class="cats">${sortA(mine).map(card).join('') || '<div class="card">עוד אין קורסים לכיתה הזו.</div>'}</div>
       ${other.length ? (all ? `<h2 style="margin:26px 4px 12px">קורסים לכיתות אחרות</h2><div class="cats">${sortA(other).map(card).join('')}</div>` : '<div class="row"><button class="sec" id="allc">להציג גם קורסים לכיתות אחרות</button></div>') : ''}`;
     main.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { setCourse(b.dataset.c); entry(); });
+    main.querySelectorAll('[data-cx]').forEach(b => b.onclick = () => { const [cid, ex] = b.dataset.cx.split(':'); setCourse(cid); examSheet(ex, () => setCourse(null)); });
     if ($('allc')) $('allc').onclick = () => catalog(true);
   }
   $('brand').onclick = () => { if (!st || st.phase === 'course' || st.phase === 'end' || window.confirm('לחזור לרשימת הקורסים?')) { if (st && st.phase !== 'end') { E.store.clear(); } catalog(); } };
