@@ -37,6 +37,18 @@
     area: (a, b, o) => Object.assign({ k: 'area', a, b }, o || {}),
     tree: (n, a, b, o) => Object.assign({ k: 'tree', n, a, b }, o || {})
   };
+  // שאלות למבדק אמצע ולמבדק סיכום (K.EXAMS = { mid: [...], final: [...] }). u = השיעור שהשאלה בודקת.
+  // בבחירה: התשובה הנכונה נכתבת ראשונה, והסדר מסתובב לפי המזהה – כדי שהיא לא תהיה תמיד במקום הראשון.
+  const rot = (id, n) => { let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 997; return h % n; };
+  C.ex = {
+    ch: (u, id, q, opts, o) => {
+      const list = opts.map(x => typeof x === 'string' ? { t: x } : x), k = rot(id, list.length);
+      return Object.assign({ u, id, type: 'choice', q, ans: (list.length - k) % list.length, opts: list.slice(k).concat(list.slice(0, k)) }, o || {});
+    },
+    num: (u, id, q, ans, o) => Object.assign({ u, id, type: 'num', q: q.includes('bigmx') ? q : `${q}<div class="bigmx">⟦?⟧</div>`, ans }, o || {}),
+    fr: (u, id, q, ans, o) => Object.assign({ u, id, type: 'frac', q, ans }, o || {}),
+    mx: (u, id, q, ans, o) => Object.assign({ u, id, type: 'mixed', q, ans }, o || {})
+  };
   // שאלת "נכון/לא נכון" קצרה עם משוב לתשובה השגויה
   C.yn = (id, q, yes, msgWrong, exp, o) => Object.assign({ id, type: 'choice', q, ans: yes ? 0 : 1, opts: [{ t: 'כן', msg: yes ? '' : msgWrong }, { t: 'לא', msg: yes ? msgWrong : '' }], exp }, o || {});
 })();
