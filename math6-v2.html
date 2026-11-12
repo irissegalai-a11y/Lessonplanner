@@ -1085,6 +1085,28 @@ html.embed body { padding-top: 0; }
   .op-dots span.on { border-color: #1f1e1c; color: #1f1e1c; background: rgba(239,201,106,0.45); font-weight: 700; }
   .op-dots span.done { color: #1f1e1c; }
   .op-slide h2 { margin-top: 0; }
+  .zl svg { width: 100%; max-width: 760px; height: auto; display: block; margin: 6px auto; touch-action: manipulation; }
+  .zl svg text { font-size: 14px; fill: var(--ink, #23264a); }
+  .zl .zl-end { font-size: 16px; font-weight: 700; }
+  .zl .zl-sub { font-size: 11.5px; fill: #6b6f80; }
+  .zl .zl-bar { stroke: var(--ink, #23264a); stroke-width: 1.3; }
+  .zl .zl-ax, .zl .zl-tk { stroke: var(--ink, #23264a); stroke-width: 2; }
+  .zl .zl-arw { fill: var(--ink, #23264a); }
+  .zl .zl-sel { stroke: #e8590c; stroke-width: 8; stroke-linecap: round; opacity: 0.8; }
+  .zl .zl-dot { fill: #e8590c; }
+  .zl .zl-hit { fill: transparent; cursor: pointer; }
+  .zl .zl-hit:hover { fill: rgba(232, 89, 12, 0.1); }
+  .zl .zl-new { animation: zlIn 0.8s ease both; }
+  .zl .zl-new.zl-tk, .zl line.zl-new { stroke: #2f5bd3; }
+  .zl text.zl-new { fill: #2f5bd3; }
+  @keyframes zlIn { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .zl .zl-new { animation: none; } }
+  .zl-msg { min-height: 3.2em; line-height: 1.7; }
+  .zl-pre[hidden] { display: none; }
+  .zl-ov { position: fixed; inset: 0; background: rgba(20, 22, 40, 0.55); z-index: 900; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 16px; }
+  .zl-card { width: 100%; max-width: 860px; margin: 0; }
+  .zl-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .zl-top h2 { margin: 0; }
   .cmp-big svg { max-width: min(100%, 420px) !important; height: auto; }
   .cmp-way { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 6px 0; }
   .cmp-way .cmp-fig { width: 220px; max-width: 100%; }
@@ -2136,7 +2158,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -7473,6 +7495,168 @@ function nlineSVG(a, b, parts, pos, showAll) {
   }
   return `<svg class="fig" viewBox="0 0 360 96" width="360" height="96">${g}</svg>`;
 }
+/* ---------- הישר שנמתח (צפיפות): בוחרים קטע על ישר המספרים, הקטע נמתח לכל הרוחב, ומופיעים בו מספרים חדשים ----------
+   עשרוניים: עשיריות → מאיות → אלפיות → 4 ספרות. שברים: זוג שברים → מכנה משותף → מחלקים כל חלק לשניים → מתקרבים שוב.
+   מצב: Q = המכנה (השנתות הן k/Q), A..B = הקטע שעל המסך, sel = הקטע שנבחר. */
+function zoomLab(root, o = {}) {
+  const X0 = 28, X1 = 332, Y = 70, HH = 136, MAXQ = { dec: 10000, frac: 384 };
+  const PRE = [[[1, 3], [1, 2]], [[2, 5], [1, 2]], [[1, 4], [1, 3]], [[3, 4], [1, 1]]];
+  const slow = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  let mode = o.mode || 'dec', pre = 0, s = null, hist = [], busy = false, fresh = null;
+  root.classList.add('zl');
+  root.innerHTML = `${o.only ? '' : `<div class="sc-chips zl-modes"><button type="button" class="sc-chip btn" data-zm="dec">מספרים עשרוניים</button><button type="button" class="sc-chip btn" data-zm="frac">שברים</button></div>`}
+    <div class="sc-chips zl-pre"></div>
+    <div class="zl-fig"></div>
+    <div class="zl-msg" aria-live="polite"></div>
+    <div class="lbtns zl-btns"><button type="button" data-za="in">🔍 מתקרבים</button><button type="button" class="secondary" data-za="split">✂️ מחלקים כל חלק לשניים</button><button type="button" class="secondary" data-za="out">🔭 מתרחקים</button><button type="button" class="secondary" data-za="reset">↺ מההתחלה</button></div>`;
+  const q = sel => root.querySelector(sel);
+  // תוויות
+  const decStr = (k, Q, pad) => {
+    const p = String(Q).length - 1, w = Math.floor(k / Q), r = String(k % Q).padStart(p, '0');
+    const t = pad ? r : r.replace(/0+$/, '');
+    return t ? `${w}.${t}` : String(w);
+  };
+  const svgFr = (x, y, n, d, cls) => `<text x="${x}" y="${y}" text-anchor="middle" class="${cls}">${n}</text><line x1="${x - 10}" y1="${y + 5}" x2="${x + 10}" y2="${y + 5}" class="zl-bar ${cls}"/><text x="${x}" y="${y + 20}" text-anchor="middle" class="${cls}">${d}</text>`;
+  const frHTML = (n, d) => d === 1 ? M(String(n)) : M(F(n, d));
+  const valHTML = (k, Q) => mode === 'dec' ? M(decStr(k, Q)) : frHTML(k, Q);
+  function start() {
+    hist = []; fresh = null;
+    if (mode === 'dec') s = { Q: 10, A: 0, B: 10, sel: null, view: [0, 1] };
+    else { const [[a, b], [c, d]] = PRE[pre], Q = lcm(b, d); s = { Q, A: a * Q / b, B: c * Q / d, sel: 'r', first: true, view: [0, 1] }; }
+    paint();
+  }
+  // הקטעים שאפשר לבחור (בין שתי שנתות סמוכות)
+  const ticks = () => {
+    const [vl, vh] = s.view, out = [];
+    if (s.first) return [...new Set([0, s.A, s.B, s.Q])].sort((x, y) => x - y);
+    for (let k = Math.max(s.A, Math.ceil(vl * s.Q - 1e-9)); k <= Math.min(s.B, Math.floor(vh * s.Q + 1e-9)); k++) out.push(k);
+    return out;
+  };
+  function draw(labels) {
+    const [vl, vh] = s.view, px = v => X0 + (v - vl) / (vh - vl) * (X1 - X0), ks = ticks();
+    const isNew = k => fresh && fresh(k);
+    let g = `<line x1="${X0 - 14}" y1="${Y}" x2="${X1 + 18}" y2="${Y}" class="zl-ax"/><polygon points="${X1 + 20},${Y} ${X1 + 11},${Y - 5} ${X1 + 11},${Y + 5}" class="zl-arw"/>`;
+    // הקטע שנבחר
+    const selR = s.sel === 'r' ? [s.A, s.B] : s.sel != null ? [s.sel, s.sel + 1] : null;
+    if (selR) g += `<line x1="${px(selR[0] / s.Q)}" y1="${Y}" x2="${px(selR[1] / s.Q)}" y2="${Y}" class="zl-sel"/>`;
+    let iIn = 0;
+    ks.forEach(k => {
+      const x = px(k / s.Q), end = k === s.A || k === s.B || (s.first && (k === 0 || k === s.Q)), nw = isNew(k) ? ' zl-new' : '';
+      g += `<line x1="${x}" y1="${Y - (end ? 11 : 7)}" x2="${x}" y2="${Y + (end ? 11 : 7)}" class="zl-tk${nw}"/>`;
+      if (s.first && (k === s.A || k === s.B)) g += `<circle cx="${x}" cy="${Y}" r="5" class="zl-dot"/>`;
+      if (!labels && !(selR && (k === selR[0] || k === selR[1]))) return;
+      const up = !end && iIn++ % 2 === 0;
+      if (mode === 'dec') {
+        g += `<text x="${x}" y="${up ? Y - 17 : Y + 27}" text-anchor="middle" class="${end ? 'zl-end' : 'zl-lb'}${nw}">${decStr(k, s.Q)}</text>`;
+        if (end && labels && s.Q > 10 && k % 10 === 0) g += `<text x="${x}" y="${Y + 43}" text-anchor="middle" class="zl-sub">(${decStr(k, s.Q, true)})</text>`;
+      } else {
+        let [n, d] = [k, s.Q];
+        if (s.first) { const c = gcd(k, s.Q) || 1; [n, d] = [k / c, s.Q / c]; }
+        if (k % s.Q === 0 && (s.first || k === 0)) g += `<text x="${x}" y="${Y + 27}" text-anchor="middle" class="zl-end${nw}">${k / s.Q}</text>`;
+        else g += svgFr(x, up ? Y - 46 : Y + 24, n, d, (end ? 'zl-end' : 'zl-lb') + nw);
+      }
+    });
+    // אזורי לחיצה
+    let hits = '';
+    if (!busy) {
+      if (s.first) hits = `<rect x="${px(s.A / s.Q)}" y="${Y - 24}" width="${px(s.B / s.Q) - px(s.A / s.Q)}" height="48" class="zl-hit" data-k="r"/>`;
+      else for (let k = s.A; k < s.B; k++) hits += `<rect x="${px(k / s.Q)}" y="${Y - 24}" width="${px((k + 1) / s.Q) - px(k / s.Q)}" height="48" class="zl-hit" data-k="${k}"><title>הקטע</title></rect>`;
+    }
+    q('.zl-fig').innerHTML = `<svg viewBox="0 0 360 ${HH}" dir="ltr" role="img" aria-label="ישר מספרים">${g}${hits}</svg>`;
+    root.querySelectorAll('.zl-hit').forEach(h => h.onclick = () => { if (busy) return; s.sel = h.dataset.k === 'r' ? 'r' : +h.dataset.k; fresh = null; paint(); });
+  }
+  function msg() {
+    const can = s.Q * (mode === 'dec' ? 10 : 2) <= MAXQ[mode], selTxt = s.sel === 'r' ? `${valHTML(s.A, s.Q)} ל-${valHTML(s.B, s.Q)}` : s.sel != null ? `${valHTML(s.sel, s.Q)} ל-${valHTML(s.sel + 1, s.Q)}` : '';
+    const inner = (from, to) => { const r = []; for (let k = from + 1; k < to; k++) r.push(valHTML(k, s.Q)); return r.length > 4 ? `${r.slice(0, 2).join(', ')} … ${r[r.length - 1]}` : r.join(', '); };
+    if (mode === 'dec') {
+      if (!hist.length && s.sel == null) return 'הישר מחולק לעשיריות. <b>לחצו על קטע</b> בין שתי שנתות – ואז 🔍 מתקרבים.';
+      if (s.sel != null && can) return `בחרתם את הקטע בין ${selTxt}. מה יש שם? 🔍 מתקרבים!`;
+      const p = String(s.Q).length - 1, nm = { 2: 'שתי ספרות אחרי הנקודה (מאיות)', 3: 'שלוש ספרות אחרי הנקודה (אלפיות)', 4: 'ארבע ספרות אחרי הנקודה' }[p] || '';
+      const found = hist.length ? `הקטע נמתח – ובין ${valHTML(s.A, s.Q)} ל-${valHTML(s.B, s.Q)} יש עוד מספרים: ${inner(s.A, s.B)} – מספרים עם ${nm}.` : '';
+      return can ? `${found} <b>בחרו קטע חדש</b> ומתקרבים שוב.` : `${found}<div class="rule">💡 ואפשר להמשיך להתקרב בלי סוף! <b>בין כל שני מספרים יש תמיד עוד מספרים.</b> לזה קוראים <b>צפיפות</b>.</div>`;
+    }
+    const [[a, b], [c, d]] = PRE[pre];
+    if (s.first) return `על הישר ${frHTML(a, b)} ו-${frHTML(c, d)}. מה יש ביניהם? 🔍 מתקרבים לקטע.`;
+    const between = s.B - s.A > 1;
+    if (s.sel != null && s.sel !== 'r' && between) return `בחרתם את הקטע בין ${selTxt}. 🔍 מתקרבים!`;
+    if (!between) {
+      const eq = hist.length === 1 && s.Q !== b && s.Q !== d ? `מרחיבים לאותו מכנה: ${frHTML(a, b)} = ${frHTML(s.A, s.Q)}, ${frHTML(c, d)} = ${frHTML(s.B, s.Q)}. ` : '';
+      return can ? `${eq}בין ${valHTML(s.A, s.Q)} ל-${valHTML(s.B, s.Q)} אין שבר עם המכנה ${s.Q}… <b>✂️ מחלקים כל חלק לשניים</b> (מרחיבים פי 2).`
+        : `<div class="rule">💡 ואפשר להמשיך לחלק ולהתקרב בלי סוף! <b>בין כל שני שברים יש תמיד עוד שברים.</b> לזה קוראים <b>צפיפות</b>.</div>`;
+    }
+    const lo = s.A, hi = s.B;
+    return `מצאנו! בין ${valHTML(lo, s.Q)} ל-${valHTML(hi, s.Q)} נמצא ${inner(lo, hi)}. ${can ? '<b>בחרו קטע</b> ומתקרבים שוב – או מחלקים עוד.' : ''}`;
+  }
+  function paint() {
+    draw(true);
+    q('.zl-msg').innerHTML = msg();
+    root.querySelectorAll('[data-zm]').forEach(b => b.classList.toggle('on', b.dataset.zm === mode));
+    q('.zl-pre').innerHTML = mode === 'frac' ? PRE.map(([[a, b], [c, d]], i) => `<button type="button" class="sc-chip btn${i === pre ? ' on' : ''}" data-zp="${i}">${frHTML(a, b)} ו-${frHTML(c, d)}</button>`).join('') : '';
+    q('.zl-pre').hidden = mode !== 'frac';
+    root.querySelectorAll('[data-zp]').forEach(b => b.onclick = () => { if (busy) return; pre = +b.dataset.zp; start(); });
+    const can = s.Q * (mode === 'dec' ? 10 : 2) <= MAXQ[mode];
+    const hasSel = s.sel === 'r' || (s.sel != null && (mode === 'dec' ? can : s.B - s.A > 1));
+    q('[data-za="in"]').disabled = busy || !hasSel;
+    q('[data-za="split"]').hidden = mode !== 'frac';
+    q('[data-za="split"]').disabled = busy || s.first || !can || s.B - s.A >= 8;
+    q('[data-za="out"]').disabled = busy || !hist.length;
+  }
+  // הקטע נמתח: הקצוות שלו זזים בהדרגה אל קצוות המסך
+  function anim(to, done) {
+    const from = s.view.slice(), t0 = performance.now(), dur = slow ? 1300 : 0;
+    busy = true; paint();
+    const step = now => {
+      const t = dur ? Math.min(1, (now - t0) / dur) : 1, e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      s.view = [from[0] + (to[0] - from[0]) * e, from[1] + (to[1] - from[1]) * e];
+      draw(false);
+      if (t < 1) requestAnimationFrame(step); else { busy = false; done(); paint(); }
+    };
+    requestAnimationFrame(step);
+  }
+  const snap = () => JSON.parse(JSON.stringify(s));
+  function zoomIn() {
+    if (busy) return;
+    const lo = s.sel === 'r' ? s.A : s.sel, hi = s.sel === 'r' ? s.B : s.sel + 1, Q = s.Q;
+    hist.push(snap());
+    fresh = null;
+    anim([lo / Q, hi / Q], () => {
+      s.first = false; s.sel = null;
+      if (mode === 'dec') { s.Q = Q * 10; s.A = lo * 10; s.B = hi * 10; fresh = k => k % 10 !== 0; }
+      else { s.A = lo; s.B = hi; }
+    });
+  }
+  function split() {
+    if (busy || s.first) return;
+    hist.push(snap());
+    s.Q *= 2; s.A *= 2; s.B *= 2; s.sel = null; fresh = k => k % 2 !== 0;
+    paint();
+  }
+  function zoomOut() {
+    if (busy || !hist.length) return;
+    const cur = s.view.slice(), prev = hist.pop();
+    s = prev; s.view = cur; fresh = null;
+    anim(prev.first ? [0, 1] : [prev.A / prev.Q, prev.B / prev.Q], () => {});
+  }
+  root.querySelectorAll('[data-zm]').forEach(b => b.onclick = () => { if (busy) return; mode = b.dataset.zm; start(); });
+  q('[data-za="in"]').onclick = zoomIn;
+  q('[data-za="split"]').onclick = split;
+  q('[data-za="out"]').onclick = zoomOut;
+  q('[data-za="reset"]').onclick = () => { if (!busy) start(); };
+  start();
+}
+// חלון מעל המסך (למשל מתוך משימות הצפיפות)
+function zoomLabOpen() {
+  const ov = document.createElement('div');
+  ov.className = 'zl-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'הישר שנמתח');
+  ov.innerHTML = `<div class="card zl-card"><div class="zl-top"><h2>🔍 הישר שנמתח – מה יש בין לבין?</h2><button type="button" class="secondary" data-zx>${ic('close')} סגירה</button></div><div class="zl-host"></div></div>`;
+  document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', esc); };
+  const esc = e => { if (e.key === 'Escape') close(); };
+  ov.querySelector('[data-zx]').onclick = close;
+  ov.onclick = e => { if (e.target === ov) close(); };
+  document.addEventListener('keydown', esc);
+  zoomLab(ov.querySelector('.zl-host'));
+}
 
 Object.assign(LESSONS, {
   place: {
@@ -7682,6 +7866,17 @@ Object.assign(LESSONS, {
           type: 'num', q: `איזה מספר צריך להיות במלבן?<div class="center">${nlineSVG(2, 3, 10, 7, false)}</div>`, ans: 2.7,
           hint: 'בין 2 ל-3 יש 10 חלקים – כל חלק שווה 0.1.', exp: `כל חלק = ${M('0.1')}, והמלבן 7 חלקים אחרי 2: ${M('2.7')}`,
           traps: [{ v: 2.07, m: 'כל חלק שווה 0.1 (עשירית), לא 0.01 – כי הקטע הוא שלם אחד מחולק ל-10.' }, { v: 7, m: 'המלבן נמצא בין 2 ל-3. מתחילים לספור מ-2.' }]
+        }
+      },
+      {
+        title: 'הישר שנמתח – מה יש בין לבין? 🔍',
+        html: `<p>יש מספר בין ${M('0.3')} ל-${M('0.4')}? נראה שאין… אבל אם <b>מתקרבים</b> לקטע – הוא נמתח, ומגלים בו עוד ועוד מספרים.</p>
+          <div data-zl></div>
+          <div class="rule">💡 <b>בין כל שני מספרים יש תמיד עוד מספרים</b> – גם בין שני מספרים עשרוניים וגם בין שני שברים. לזה קוראים <b>צפיפות</b>.</div>`,
+        setup(root) { zoomLab(root.querySelector('[data-zl]')); },
+        try: {
+          type: 'num', q: `כתבו מספר עשרוני שנמצא בין ${M('0.3')} ל-${M('0.4')}:`, check: v => v > 0.3 + 1e-9 && v < 0.4 - 1e-9, ans: 0.35,
+          hint: 'מתקרבים: כותבים 0.30 ו-0.40 – ומה באמצע?', exp: `למשל ${M('0.35')} (וגם ${M('0.31')}, ${M('0.32')} … ${M('0.39')}, ואפילו ${M('0.345')})`
         }
       },
       {
@@ -8548,7 +8743,7 @@ function lessonCheck(v, raw) {
   const tip = raw != null ? numWritingTip(raw, v) : '';
   const show = (kind, html) => { fb.className = `fb show ${kind}`; fb.innerHTML = html + (kind === 'hint' ? '' : tip); };
   if (v == null || (typeof v === 'number' && Number.isNaN(v))) { show('hint', 'כתבו מספר ואז לחצו "בדיקה" 🙂'); return; }
-  const ok = tr.type === 'choice' ? v === tr.ans : Math.abs(v - tr.ans) < 1e-9;
+  const ok = tr.type === 'choice' ? v === tr.ans : typeof tr.check === 'function' ? !!tr.check(v) : Math.abs(v - tr.ans) < 1e-9; // check – כל תשובה שעונה על התנאי
   const btn = tr.type === 'choice' ? lv.box.querySelector(`.ltry .choices button[data-c="${v}"]`) : null;
   if (ok) {
     lv.done = true;
@@ -8567,7 +8762,7 @@ function lessonCheck(v, raw) {
   }
   lv.done = true;
   markLearned(lv.id, lv.k);
-  show('info', `<div class="head">לא נורא – ככה לומדים! 💙</div>${trap ? `🤔 ${trap.m}<br>` : ''}התשובה: <b>${tr.type === 'choice' ? tr.choices[tr.ans] : M(fmt(tr.ans))}</b><br>${tr.exp}`);
+  show('info', `<div class="head">לא נורא – ככה לומדים! 💙</div>${trap ? `🤔 ${trap.m}<br>` : ''}התשובה: <b>${tr.type === 'choice' ? tr.choices[tr.ans] : (tr.check ? 'למשל ' : '') + M(fmt(tr.ans))}</b><br>${tr.exp}`);
 }
 
 function startLessonPractice(id) {
@@ -18378,7 +18573,7 @@ function opDecLine(vals) {
   let g = `<line x1="10" y1="40" x2="450" y2="40" stroke="#1f1e1c" stroke-width="2.2"/>`;
   for (let k = 0; k <= 10; k++) g += `<line x1="${X(k / 10)}" y1="${k % 5 ? 34 : 30}" x2="${X(k / 10)}" y2="${k % 5 ? 46 : 50}" stroke="#1f1e1c" stroke-width="${k % 5 ? 1.4 : 2.2}"/>` + (k === 0 || k === 10 || k === 5 ? `<text x="${X(k / 10)}" y="68" text-anchor="middle" font-size="14">${k / 10}</text>` : '');
   vals.forEach((v, i) => { const col = i ? '#d9482b' : '#2f5bd3'; g += `<circle cx="${X(v)}" cy="40" r="6" fill="${col}"/><text x="${X(v)}" y="${i ? 22 : 18}" text-anchor="middle" font-size="15" font-weight="700" fill="${col}">${fmt(v)}</text>`; });
-  return `<svg class="fig" viewBox="0 0 460 76" width="460" height="76" aria-hidden="true" style="max-width:520px">${g}</svg>`;
+  return `<svg class="fig" viewBox="0 0 460 76" width="460" height="76" aria-hidden="true" style="max-width:min(520px, 100%);height:auto">${g}</svg>`;
 }
 function opPvTable(vals) {
   const row = v => { const s = (Math.round(v * 100) / 100).toFixed(2).split('.'); return `<tr><td>${s[0]}</td><td class="pv-dot">.</td><td>${s[1][0]}</td><td>${s[1][1]}</td></tr>`; };
@@ -18507,7 +18702,7 @@ const OP_DENSITY = [
   () => { // על ישר המספרים
     const opts = shuffle([0.5, 1.5, 2.5, 0.25, 2.75, 1.25, 0.75, 2.25]).slice(0, 4);
     const X = v => 20 + v * 120, ticks = [0, 0.5, 1, 1.5, 2, 2.5, 3];
-    const svg = `<svg class="fig" viewBox="0 0 400 62" width="400" height="62" aria-hidden="true" style="max-width:520px"><line x1="10" y1="30" x2="395" y2="30" stroke="#1f1e1c" stroke-width="2.5"/>${ticks.map(t => `<line x1="${X(t)}" y1="22" x2="${X(t)}" y2="38" stroke="#1f1e1c" stroke-width="2.5"/><text x="${X(t)}" y="55" text-anchor="middle" font-size="13">${t}</text>`).join('')}</svg>`;
+    const svg = `<svg class="fig" viewBox="0 0 400 62" width="400" height="62" aria-hidden="true" style="max-width:min(520px, 100%);height:auto"><line x1="10" y1="30" x2="395" y2="30" stroke="#1f1e1c" stroke-width="2.5"/>${ticks.map(t => `<line x1="${X(t)}" y1="22" x2="${X(t)}" y2="38" stroke="#1f1e1c" stroke-width="2.5"/><text x="${X(t)}" y="55" text-anchor="middle" font-size="13">${t}</text>`).join('')}</svg>`;
     const sorted = opts.slice().sort((a, b) => a - b);
     return { title: 'על ישר המספרים', q: `<p>מתחו קו מכל מספר אל מקומו המשוער על ישר המספרים:</p><div class="op-nums">${opts.map(v => `<span>${M(fmt(v))}</span>`).join('')}</div>${svg}`, a: `מהקטן לגדול: ${M(sorted.map(v => fmt(v)).join(' , '))}.<br>💡 ${M('0.5')} נמצא באמצע בין 0 ל-1, ${M('1.5')} באמצע בין 1 ל-2, וכן הלאה. ${M('0.25')} זה רבע הדרך.` };
   },
@@ -18953,7 +19148,7 @@ function opDraw() {
   navPush('op');
   const s = op.slides[op.k], last = op.k === op.slides.length - 1;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('bulb')} ${op.label || 'פתיח שיעור'} · ${opName(op.topic)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('bulb')} ${op.label || 'פתיח שיעור'} · ${opName(op.topic)}</span><span class="toollinks">${op.topic === 'density' ? '<button class="secondary" id="opZoom">🔍 הישר שנמתח</button>' : ''}${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
     <div class="op-dots">${op.slides.map((x, k) => `<span class="${k === op.k ? 'on' : k < op.k ? 'done' : ''}">${x.title}</span>`).join('')}</div>
     <div class="card op-slide">
       <h2>${s.title}</h2>
@@ -18967,6 +19162,7 @@ function opDraw() {
       ${last ? `<button id="opNew" class="race-go">${op.back ? (op.backLabel || 'חזרה לדף') : 'פתיח חדש'}</button>` : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
     </div>`;
   fsBind();
+  if ($('opZoom')) $('opZoom').onclick = zoomLabOpen;
   $('opBack').onclick = () => { if (op.back) op.back(); else if (OP_SPECIAL.some(x => x.id === op.topic)) classSub('open'); else opHome(); };
   if ($('opPrev')) $('opPrev').onclick = () => { op.k--; op.show = false; opDraw(); };
   if ($('opShow')) $('opShow').onclick = () => { op.show = true; opDraw(); };
