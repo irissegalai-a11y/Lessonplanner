@@ -347,6 +347,43 @@
   }
   [hidden] { display: none !important; }
   @media print { .top, footer, .noprint { display: none !important; } body { background: #fff; } .wrap { padding: 0; } .card { box-shadow: none; border: none; } }
+
+  /* דף עבודה תומך להדפסה (תצוגת מורה) */
+  #psheet { position: fixed; inset: 0; z-index: 60; overflow: auto; background: #d9d5cc; padding: 12px; }
+  #psheet .ptools { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: center; background: #fffdf8; border-radius: 12px; padding: 10px; margin: 0 auto 12px; max-width: 800px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); color: #1f1e1c; }
+  #psheet .ptools label { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; }
+  .ppage { background: #fff; color: #111; max-width: 800px; margin: 0 auto 14px; padding: 26px 30px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18); font-size: 1.05rem; line-height: 1.5; }
+  .ppage h1 { font-size: 1.4rem; margin: 0; padding: 0; background: none; }
+  .ppage h2 { font-size: 1.15rem; margin: 18px 0 8px; padding: 0; background: none; }
+  .ppage h3 { font-size: 1.02rem; margin: 10px 0 4px; }
+  .ppage .phead { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #111; padding-bottom: 8px; margin-bottom: 12px; }
+  .ppage .pline { display: inline-block; min-width: 8em; border-bottom: 1.5px solid #555; }
+  .ppage .premind { border: 2px solid #111; border-radius: 10px; padding: 8px 14px; }
+  .ppage .premind .pcard { break-inside: avoid; }
+  .ppage .bigmx { font-size: 1.35rem; margin: 6px 0; }
+  .ppage .qbox { color: transparent; min-width: 2.2em; }
+  .ppage .warnbox, .ppage .rulebox { background: none; border: 1.5px solid #111; }
+  .ppage ol.pq { padding-inline-start: 1.7em; margin: 0; }
+  .ppage ol.pq > li { margin: 0 0 18px; break-inside: avoid; }
+  .ppage .pans { margin-top: 8px; }
+  .ppage .abox { display: inline-block; width: 3em; height: 1.6em; border: 1.5px solid #444; border-radius: 6px; vertical-align: middle; }
+  .ppage .afr { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; vertical-align: middle; }
+  .ppage .afr i { width: 2.6em; border-top: 2px solid #111; }
+  .ppage .popts { list-style: none; padding: 0; margin: 6px 0 0; }
+  .ppage .popts li { margin: 4px 0; }
+  .ppage .phint { font-size: 0.9rem; color: #444; }
+  .ppage .pspace { height: 8em; border: 1.5px dashed #999; border-radius: 8px; margin-top: 8px; }
+  .ppage svg.fig { max-width: 100%; height: auto; }
+  #psheet.nokey .pkeypage, #psheet.noremind .premindsec { display: none; }
+  @media (max-width: 600px) { .ppage { padding: 16px 14px; font-size: 1rem; } }
+  @media print {
+    html.printing body > *:not(#psheet) { display: none !important; }
+    html.printing body { background: #fff !important; }
+    html.printing #psheet { position: static; overflow: visible; background: #fff; padding: 0; }
+    html.printing #psheet .ptools { display: none; }
+    html.printing .ppage { box-shadow: none; max-width: none; margin: 0; padding: 0; border-radius: 0; }
+    html.printing .pbreak { break-before: page; }
+  }
 </style>
 </head>
 <body>
@@ -375,7 +412,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.3</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.4</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -771,7 +808,7 @@
       if (act) btn = `<button class="small" data-open="${u.id}" data-ver="${p.ver}">להתחיל</button>`;
       else if (inPath && !dn) btn = `<button class="sec small" data-open="${u.id}" data-ver="${p.ver}">כניסה</button>`;
       else if (skip && !T) btn = `<button class="ghost small" data-open="${u.id}" data-ver="reinforce">לעבור בכל זאת</button>`;
-      if (T) btn = `<button class="sec small nosay" data-open="${u.id}" data-ver="teach">הקניה</button>${u.deep ? '' : `<button class="ghost small nosay" data-open="${u.id}" data-ver="reinforce">חיזוק</button>`}<button class="ghost small nosay" data-tasks="${u.id}">📋 משימות</button>`;
+      if (T) btn = `<button class="sec small nosay" data-open="${u.id}" data-ver="teach">הקניה</button>${u.deep ? '' : `<button class="ghost small nosay" data-open="${u.id}" data-ver="reinforce">חיזוק</button>`}<button class="ghost small nosay" data-tasks="${u.id}">📋 משימות</button><button class="ghost small nosay" data-print="${u.id}">🖨️ דף עבודה</button>`;
       const tv = T && p ? `<span class="tag">${{ teach: 'הקניה', reinforce: 'חיזוק', deep: 'העמקה' }[p.ver]}</span>` : '';
       return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}${skip ? ' skip' : ''}"><span class="ic">${dn || skip ? '✓' : lessonNo(u.id)}</span><span class="t"><b>שיעור ${lessonNo(u.id)}: ${u.title}</b>${tv}<br><span class="meta">כ-${u.min} דקות</span> ${chip}</span>${btn}</li>`;
     };
@@ -799,6 +836,7 @@
     if (done) $('cert').onclick = certificate;
     main.querySelectorAll('[data-open]').forEach(b => b.onclick = () => openUnit(b.dataset.open, b.dataset.ver));
     main.querySelectorAll('[data-tasks]').forEach(b => b.onclick = () => tasks(b.dataset.tasks));
+    main.querySelectorAll('[data-print]').forEach(b => b.onclick = () => worksheet(b.dataset.print));
     if ($('tDiag')) $('tDiag').onclick = diagTasks;
   }
   function certificate() {
@@ -910,14 +948,74 @@
     const sec = (t, items, pre) => items && items.length ? `<h3>${t}</h3>${items.map((it, i) => taskHtml(it, (pre || '') + (i + 1) + '.')).join('')}` : '';
     const scr = U.teach.filter(x => x.kind === 'practice').flatMap(x => x.items || []);
     const nb = U.teach.find(x => x.kind === 'notebook');
-    const html = `<h2>📋 ${u.title} – כל המשימות</h2><p class="muted">התשובות הנכונות מסומנות ב-✓. גרסת הקניה: בדיקה א' ואם לא עבר – ב'. גרסת חיזוק: ב' ואם לא עבר – ג'.</p>
+    const html = `<h2>📋 ${u.title} – כל המשימות</h2><div class="row"><button class="sec small nosay" id="mPrint">🖨️ דף עבודה להדפסה</button></div><p class="muted">התשובות הנכונות מסומנות ב-✓. גרסת הקניה: בדיקה א' ואם לא עבר – ב'. גרסת חיזוק: ב' ואם לא עבר – ג'.</p>
       ${sec('תרגול מונחה', scr)}
       ${nb ? `<h3>מחברת – משימת ציור</h3><div class="titem">${R(nb.html)}${nb.verify ? `<div class="tans">✔ שאלת אימות: ${R(nb.verify.q)} – ${nb.verify.ans ? nb.verify.ans.join(', ') : 'לפי התנאי'}</div>` : ''}</div>` : ''}
       ${sl.gens && !U.deep ? `<h3>תרגול נוסף ותרגול במחברת (מהאתר)</h3><p class="muted">שאלות משתנות בכל פעם, ממחוללי האתר: ${sl.gens.map(g => `<code>${g}</code>`).join(', ')}. תרגול נוסף – 8 שאלות (6 כדי להמשיך); מחברת – ${sl.nb || 6} תרגילים, ${sl.min || 10} דקות.</p>` : ''}
       ${['A', 'B', 'C'].map((k, i) => sec(`${U.deep ? 'משימות אתגר' : 'בדיקת הבנה'} – סט ${'אבג'[i]}`, U.sets[k], 'אבג'[i] + '')).join('')}
-      ${U.alt ? `<h3>הסבר בדרך אחרת (סולם העזרה)</h3><div class="titem"><b>${U.alt.title}</b>${R(U.alt.html)}${fig(U.alt.fig)}</div>` : ''}
+      ${U.alt ? `<h3>הסבר בדרך אחרת (סולם העזרה)</h3><div class="titem"><b>${R(U.alt.title)}</b>${R(U.alt.html)}${fig(U.alt.fig)}</div>` : ''}
       ${U.simpler ? `<h3>משימה פשוטה (סולם העזרה)</h3>${taskHtml(U.simpler, '•')}` : ''}`;
-    modal(html);
+    const m = modal(html);
+    m.el.querySelector('#mPrint').onclick = () => { m.close(); worksheet(id); };
+  }
+  /* ---------- דף עבודה תומך להדפסה (מורה) ----------
+     תזכורת (ההסברים של השיעור) · פותרים יחד (תרגול מונחה, עם רמז) · פותרים לבד (סטים א'–ג') · משימה · דף תשובות */
+  function worksheet(id) {
+    const U = K.units[id], u = unitDef(id);
+    if (!U) return;
+    const seen = new Set(), uniq = list => (list || []).filter(it => it && !seen.has(it.id) && seen.add(it.id));
+    const guided = uniq(U.teach.filter(x => x.kind === 'practice').flatMap(x => x.items || []));
+    const alone = uniq([].concat(U.sets.A || [], U.sets.B || [], U.sets.C || []));
+    const info = U.teach.filter(x => x.kind === 'info');
+    const nb = U.teach.find(x => x.kind === 'notebook');
+    const LET = 'אבגדהוזח';
+    const fr = '<span class="afr" dir="ltr"><span class="abox"></span><i></i><span class="abox"></span></span>';
+    const slot = it => {
+      switch (it.type) {
+        case 'num': return /\?/.test(it.q) ? '' : '<div class="pans">תשובה: <span class="abox"></span></div>';
+        case 'frac': case 'open': return `<div class="pans">תשובה: ${fr}</div>`;
+        case 'mixed': return `<div class="pans">תשובה: <span dir="ltr" style="display:inline-flex;gap:6px;align-items:center"><span class="abox"></span>${fr}</span></div>`;
+        case 'choice': case 'multi': return `<ul class="popts">${it.opts.map((o, i) => `<li>${it.type === 'multi' ? '☐' : '◯'} ${LET[i]}. ${o.t ? R(o.t) : ''}${o.fig && !o.t ? fig(o.fig) : ''}</li>`).join('')}</ul>`;
+        case 'shade': return `<div class="pans">${V.bar({ n: 0, d: it.d, w: 320 })}</div>`;
+        case 'line': return `<div class="pans">${V.line({ d: it.d })}</div>`;
+        case 'nums': return `<div class="pans">${it.labels.map(l => `${esc(l)}: <span class="abox"></span>`).join(' &nbsp; ')}</div>`;
+      }
+      return '';
+    };
+    const q = (it, withHint) => `<li>${R(it.q)}${it.fig && it.type !== 'shade' && it.type !== 'line' ? fig(it.fig) : ''}${slot(it)}${withHint && it.hints && it.hints.length ? `<div class="phint">💡 רמז: ${R(it.hints[0])}</div>` : ''}</li>`;
+    const all = guided.concat(alone);
+    const d = new Date().toLocaleDateString('he-IL');
+    const remind = info.length ? `<section class="premindsec"><h2>📖 נזכרים</h2><div class="premind">${info.map(c => `<div class="pcard"><h3>${R(c.title)}</h3>${R(c.html)}${fig(c.fig)}</div>`).join('')}</div></section>` : '';
+    const html = `<div class="ptools nosay"><button id="psPrint">🖨️ הדפסה</button>
+        <label><input type="checkbox" id="psRem" checked> תזכורת והסברים</label>
+        <label><input type="checkbox" id="psKey" checked> דף תשובות בסוף</label>
+        <button class="sec" id="psClose">סגירה</button></div>
+      <div class="ppage">
+        <div class="phead"><div><div class="small">${esc(K.title)} · שיעור ${lessonNo(id)}</div><h1>${u.title}</h1></div>
+          <div>שם: <span class="pline"></span> &nbsp; תאריך: <span class="pline" style="min-width:5em"></span></div></div>
+        ${U.teach[0] && U.teach[0].kind === 'goal' ? `<p>${R(U.teach[0].html)}</p>` : ''}
+        ${remind}
+        ${guided.length ? `<h2>✏️ פותרים יחד – עם רמז</h2><ol class="pq">${guided.map(it => q(it, true)).join('')}</ol>` : ''}
+        ${alone.length ? `<h2>💪 ${U.deep ? 'משימות אתגר' : 'פותרים לבד'}</h2><ol class="pq" start="${guided.length + 1}">${alone.map(it => q(it, false)).join('')}</ol>` : ''}
+        ${nb && !U.deep ? `<h2>📓 משימה</h2>${R(nb.html.replace(/במחברת/g, 'על הדף או במחברת'))}<div class="pspace"></div>` : ''}
+      </div>
+      <div class="ppage pkeypage pbreak"><h2 style="margin-top:0">✔️ תשובות – ${u.title}</h2>
+        <ol class="pq">${all.map(it => `<li><b>${R(ansText(it))}</b>${it.exp ? ` <span class="phint">– ${R(it.exp)}</span>` : ''}</li>`).join('')}</ol>
+        ${nb && nb.verify && nb.verify.ans ? `<p><b>משימה:</b> ${R(nb.verify.q)} – ${nb.verify.ans.join(', ')}</p>` : ''}</div>`;
+    const ps = document.createElement('div');
+    ps.id = 'psheet'; ps.setAttribute('role', 'dialog'); ps.setAttribute('aria-label', 'דף עבודה להדפסה');
+    ps.innerHTML = html;
+    document.body.appendChild(ps);
+    log('worksheet', { unit: id });
+    const close = () => { ps.remove(); document.documentElement.classList.remove('printing'); };
+    ps.querySelector('#psClose').onclick = close;
+    ps.querySelector('#psRem').onchange = e => ps.classList.toggle('noremind', !e.target.checked);
+    ps.querySelector('#psKey').onchange = e => ps.classList.toggle('nokey', !e.target.checked);
+    ps.querySelector('#psPrint').onclick = () => {
+      document.documentElement.classList.add('printing');
+      window.addEventListener('afterprint', () => document.documentElement.classList.remove('printing'), { once: true });
+      window.print();
+    };
   }
   function diagTasks() {
     const html = `<h2>📋 שאלות האבחון</h2><p class="muted">המבדק מסתגל: כל ילד מקבל רק חלק מהשאלות (עד ${(K.DIAG && K.DIAG.maxQ) || 12}).</p>` +
@@ -1001,7 +1099,7 @@
       $('nx').onclick = next;
     } else if (sc.kind === 'cutlab') cutlab();
     else if (sc.kind === 'info') {
-      frame(sc.step, `<h3>${sc.title}</h3>${R(sc.html)}${sc.anim ? '<div id="anim"></div>' : ''}${fig(sc.fig)}<div class="row"><button id="nx">הבנתי, ממשיכים</button>${siteOf(st.unit.id).learn ? '<button class="sec" id="lsn">📖 רוצים עוד הסבר? לשיעור המלא</button>' : ''}</div>`);
+      frame(sc.step, `<h3>${R(sc.title)}</h3>${R(sc.html)}${sc.anim ? '<div id="anim"></div>' : ''}${fig(sc.fig)}<div class="row"><button id="nx">הבנתי, ממשיכים</button>${siteOf(st.unit.id).learn ? '<button class="sec" id="lsn">📖 רוצים עוד הסבר? לשיעור המלא</button>' : ''}</div>`);
       if (sc.anim) halfAnim($('anim'));
       if ($('lsn')) $('lsn').onclick = lessonModal;
       $('nx').onclick = next;
@@ -1067,7 +1165,7 @@
   function practice(sc, j) {
     const item = sc.items[j];
     if (!item) return next();
-    frame(sc.step, `<h3>${sc.title} <span class="muted small">(${j + 1} מתוך ${sc.items.length})</span></h3>${fig(item.figTop)}<div id="ib"></div>`);
+    frame(sc.step, `<h3>${R(sc.title)} <span class="muted small">(${j + 1} מתוך ${sc.items.length})</span></h3>${fig(item.figTop)}<div id="ib"></div>`);
     askItem($('ib'), item, 'learn', rec => { if (rec.fixed) st.unit.ev.fixed = true; if (rec.firstTag === 'additive') st.unit.ev.additive = true; save(); practice(sc, j + 1); });
   }
 
@@ -1133,7 +1231,7 @@
   function ladder(sc) {
     const U = K.units[st.unit.id];
     log('ladder');
-    frame(4, `<h3>בואו ננסה בדרך אחרת</h3><p>עוד לא הגעתם לשליטה, וזה בסדר. ננסה להבין את זה בדרך נוספת.</p><h3>${U.alt.title}</h3>${R(U.alt.html)}${fig(U.alt.fig)}<div class="row"><button id="nx">הבנתי</button></div>`);
+    frame(4, `<h3>בואו ננסה בדרך אחרת</h3><p>עוד לא הגעתם לשליטה, וזה בסדר. ננסה להבין את זה בדרך נוספת.</p><h3>${R(U.alt.title)}</h3>${R(U.alt.html)}${fig(U.alt.fig)}<div class="row"><button id="nx">הבנתי</button></div>`);
     const sl = siteOf(st.unit.id);
     const simpler = () => {
       frame(4, '<h3>משימה קצרה</h3><div id="ib"></div>');
@@ -1261,7 +1359,7 @@
     } else if (h === 'alt') {
       const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]];
       log('alt');
-      modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`);
+      modal(`<h2>${R(U.alt.title)}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`);
     } else if (h === 'hint') {
       if (!(cur && cur.hint && cur.hint())) say('כרגע אין שאלה פתוחה. אם משהו לא ברור, לחצו "לא הבנתי".');
       else say('הוספתי רמז ליד השאלה. 💡');
@@ -1273,7 +1371,7 @@
     log('lost', { k });
     if (k === 'words') modal(`<h2>מילון קטן</h2>${K.GLOSSARY.map(([w, t, f]) => `<p><b>${w}:</b> ${R(t)}</p>${f ? fig(f) : ''}`).join('')}`);
     else if (k === 'what') say(it && it.rephrase ? it.rephrase : 'קראו שוב את השאלה לאט: מה מבקשים למצוא? אפשר גם ללחוץ "הקרא לי".');
-    else if (k === 'idea' && lessonModal()) { /* השיעור המלא */ } else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]]; modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
+    else if (k === 'idea' && lessonModal()) { /* השיעור המלא */ } else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]]; modal(`<h2>${R(U.alt.title)}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
     else if (k === 'start') say(it && it.start ? it.start : 'מתחילים מהמספר שידוע בשני השברים: פי כמה הוא גדל?');
     else if (k === 'calc') {
       let t = '<table class="mt">';
