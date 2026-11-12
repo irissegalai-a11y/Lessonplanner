@@ -33,7 +33,9 @@
     pv: n => ({ k: 'pv', n }),
     vert: (rows, op, res) => ({ k: 'vert', rows, op, res }),
     arr: (r, c, o) => Object.assign({ k: 'arr', r, c }, o || {}),
-    groups: (g, n, o) => Object.assign({ k: 'groups', g, n }, o || {})
+    groups: (g, n, o) => Object.assign({ k: 'groups', g, n }, o || {}),
+    area: (a, b, o) => Object.assign({ k: 'area', a, b }, o || {}),
+    tree: (n, a, b, o) => Object.assign({ k: 'tree', n, a, b }, o || {})
   };
   // שאלת "נכון/לא נכון" קצרה עם משוב לתשובה השגויה
   C.yn = (id, q, yes, msgWrong, exp, o) => Object.assign({ id, type: 'choice', q, ans: yes ? 0 : 1, opts: [{ t: 'כן', msg: yes ? '' : msgWrong }, { t: 'לא', msg: yes ? msgWrong : '' }], exp }, o || {});

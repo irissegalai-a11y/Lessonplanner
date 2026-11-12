@@ -56,6 +56,16 @@
   .fr { display: inline-flex; flex-direction: column; text-align: center; line-height: 1.15; }
   .fr > span:first-child { border-bottom: 2px solid currentColor; padding: 0 0.2em 1px; }
   .fr > span:last-child { padding-top: 1px; }
+  .fr .op { margin: 0 0.12em; font-size: 0.85em; }
+  .wh { margin-inline-end: 0.08em; }
+  /* צמצום: גורם מחוק. xa – מונה-מכנה באותו שבר (ורוד), xb – באלכסון (כחול). xn – המספר שנשאר */
+  .xo { position: relative; display: inline-block; }
+  .xo .xv { position: relative; display: inline-block; }
+  .xo .xv::after { content: ''; position: absolute; left: -0.12em; right: -0.12em; top: 52%; border-top: 3px solid; transform: rotate(-24deg); }
+  .xa .xv::after { border-color: #d6337f; } .xb .xv::after { border-color: #2f6fd6; }
+  .xo .xn { position: absolute; top: -0.85em; right: -0.55em; font-size: 0.62em; font-weight: 700; }
+  .xa .xn { color: #d6337f; } .xb .xn { color: #2f6fd6; }
+  .mixin { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
   .bigmx { font-size: 1.8rem; text-align: center; margin: 14px 0; }
   .bigmx .mx { gap: 0.4em; }
   .qbox { display: inline-block; min-width: 1.2em; border: 2px dashed var(--muted); border-radius: 6px; padding: 0 0.15em; }
@@ -365,7 +375,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 3.9</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.0</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -375,6 +385,7 @@
 <script src="coach/courses/equiv-units.js"></script>
 <script src="coach/courses/dec.js"></script>
 <script src="coach/courses/mult.js"></script>
+<script src="coach/courses/fracop.js"></script>
 <script>
 (function () {
   const C = window.COACH, V = C.V, E = C.E;
@@ -387,6 +398,8 @@
     fracop: { title: 'כפל וחילוק שברים', sub: 'כפל וחילוק של שברים ומספרים מעורבים', grades: [6, 6] },
     area: { title: 'שטח והיקף', sub: 'שטח והיקף של מצולעים וצורות מורכבות', grades: [4, 6] }
   };
+  // קורס בטיוטה (draft) – רק בתצוגת מורה; לתלמידים הוא נשאר "בקרוב" עד שהתוכן מאושר
+  const canEnter = id => !!C.courses[id] && (!C.courses[id].draft || E.teacher());
   const GN = ['', "א'", "ב'", "ג'", "ד'", "ה'", "ו'"];
   const gradeText = g => !g ? '' : g[0] === g[1] ? `כיתה ${GN[g[0]]}` : `כיתות ${GN[g[0]]}–${GN[g[1]]}`;
   const MYG = +(E.URLP.get('grade') || 0);
@@ -457,6 +470,7 @@
     let body = `<div class="q">${R(item.q, { input: item.type === 'num' })}</div>`;
     if (item.fig && item.type !== 'shade' && item.type !== 'line') body += fig(item.fig);
     if (item.type === 'frac' || item.type === 'open') body += `<div class="bigmx"><span class="fracin" dir="ltr"><input class="nin" data-p="n" inputmode="numeric" maxlength="3" aria-label="מונה"><span class="bar"></span><input class="nin" data-p="d" inputmode="numeric" maxlength="3" aria-label="מכנה"></span></div>`;
+    if (item.type === 'mixed') body += `<div class="bigmx"><span class="mixin" dir="ltr"><input class="nin" data-p="w" inputmode="numeric" maxlength="3" aria-label="שלמים"><span class="fracin"><input class="nin" data-p="n" inputmode="numeric" maxlength="3" aria-label="מונה"><span class="bar"></span><input class="nin" data-p="d" inputmode="numeric" maxlength="3" aria-label="מכנה"></span></span></div><p class="muted small" style="text-align:center">שלמים משמאל, השבר מימין. אין שלמים – משאירים ריק. יצא מספר שלם – כותבים רק אותו.</p>`;
     if (item.type === 'shade') body += `<div class="shade">${V.bar({ n: 0, d: item.d, w: 320 })}</div><p class="muted small">צבועים: <b class="cnt">0</b></p>`;
     if (item.type === 'line') body += `<div class="clickline">${V.line({ d: item.d, click: true })}</div>`;
     if (item.type === 'choice' || item.type === 'multi') {
@@ -493,6 +507,14 @@
       switch (item.type) {
         case 'num': { const v = num(box.querySelector('input.slot').value); return v == null ? null : { v, key: String(+v.toFixed(6)) }; }
         case 'frac': case 'open': { const n = num(box.querySelector('[data-p="n"]').value.trim()), d = num(box.querySelector('[data-p="d"]').value.trim()); return (n == null || d == null || d === 0) ? null : { n, d, key: `${n}/${d}` }; }
+        case 'mixed': {
+          const raw = p => box.querySelector(`[data-p="${p}"]`).value.trim();
+          const w = raw('w') === '' ? 0 : num(raw('w')), n = num(raw('n')), d = num(raw('d'));
+          if (w == null) return null;
+          if (raw('n') === '' && raw('d') === '') return w ? { w, n: 0, d: 1, key: String(w) } : null; // מספר שלם בלבד
+          if (n == null || d == null || d === 0) return null;
+          return { w, n, d, key: w ? `${w}_${n}/${d}` : `${n}/${d}` };
+        }
         case 'choice': return box.dataset.sel == null ? null : { i: +box.dataset.sel, key: String(box.dataset.sel) };
         case 'multi': return sel.size ? { s: [...sel].sort(), key: [...sel].sort().join(',') } : null;
         case 'shade': return { v: shaded.size, key: String(shaded.size) };
@@ -513,9 +535,20 @@
       if (t === 'num') return Object.assign({ ok: Math.abs(a.v - item.ans) < 1e-9 }, trapOf(a.key));
       if (t === 'shade' || t === 'line') return Object.assign({ ok: a.v === item.ans }, trapOf(a.v));
       if (t === 'frac') {
-        const ok = a.n === item.ans[0] && a.d === item.ans[1];
+        const ok = (a.n === item.ans[0] && a.d === item.ans[1]) || (!!item.anyForm && a.n * item.ans[1] === a.d * item.ans[0]);
         let { tag, msg } = trapOf(a.key);
         if (!ok && !tag && !msg && a.n * item.ans[1] === a.d * item.ans[0]) { tag = 'partialReduce'; msg = 'זה אותו שבר – אבל אפשר לצמצם עוד. יש מספר שמחלק גם את המונה וגם את המכנה?'; }
+        return { ok, tag, msg: learn ? msg : '' };
+      }
+      // מספר מעורב: ans = [שלמים, מונה, מכנה] בצורה הסופית (שבר מצומצם וקטן מ-1). anyForm – כל צורה שווה בערכה
+      if (t === 'mixed') {
+        const [W, N, Dd] = item.ans, val = (w, n, d) => (w * d + n) * Dd, same = val(a.w, a.n, a.d) === (W * Dd + N) * a.d;
+        const ok = same && (item.anyForm || (a.w === W && (N === 0 ? a.n === 0 : a.n === N && a.d === Dd)));
+        let { tag, msg } = trapOf(a.key);
+        if (!ok && same && !tag && !msg) {
+          if (a.n >= a.d) { tag = 'notMixed'; msg = 'הערך נכון – אבל השבר מדומה. הוציאו שלמים: כמה פעמים המכנה נכנס במונה?'; }
+          else { tag = 'partialReduce'; msg = 'זה אותו מספר – אבל אפשר לצמצם עוד. יש מספר שמחלק גם את המונה וגם את המכנה?'; }
+        }
         return { ok, tag, msg: learn ? msg : '' };
       }
       if (t === 'open') { const ok = item.check(a.n, a.d); return { ok, tag: ok ? '' : ((item.bad && item.bad(a.n, a.d)) ? 'additive' : ''), msg: ok ? '' : (item.bad && item.bad(a.n, a.d)) || '' }; }
@@ -853,6 +886,7 @@
     switch (it.type) {
       case 'num': return it.ans != null ? `⟦${it.ans}⟧` : 'כל תשובה שעונה על התנאי';
       case 'frac': return `⟦${it.ans[0]}/${it.ans[1]}⟧`;
+      case 'mixed': return it.ans[1] ? `⟦${it.ans[0] ? it.ans[0] + '_' : ''}${it.ans[1]}/${it.ans[2]}⟧` : `⟦${it.ans[0]}⟧`;
       case 'choice': return optT(o[it.ans]) || (o[it.ans] && o[it.ans].fig ? 'הציור המסומן ✓' : '');
       case 'multi': return it.ans.map(i => optT(o[i])).join(' · ');
       case 'shade': return `לצבוע ${it.ans} חלקים`;
@@ -866,7 +900,7 @@
     if (!it) return '';
     const o = it.opts || [];
     const opts = (it.type === 'choice' || it.type === 'multi') ? `<ul class="topts">${o.map((x, i) => { const ok = it.type === 'multi' ? it.ans.includes(i) : it.ans === i; return `<li class="${ok ? 'ok' : ''}">${ok ? '✓ ' : ''}${R(optT(x))}${x.fig && !x.t ? fig(x.fig) : ''}${!ok && x.msg ? `<span class="tmsg"> – משוב: ${R(x.msg)}</span>` : ''}</li>`; }).join('')}</ul>` : '';
-    const traps = it.traps && it.type !== 'choice' ? Object.keys(it.traps).map(v => `<div class="tmsg">אם עונים ${esc(v)}: ${R(String(it.traps[v]))}</div>`).join('') : '';
+    const traps = it.traps && it.type !== 'choice' ? Object.keys(it.traps).map(v => `<div class="tmsg">אם עונים ${/^(\d+_)?\d+\/\d+$/.test(v) ? R(`⟦${v}⟧`) : esc(v)}: ${R(String(it.traps[v]))}</div>`).join('') : '';
     return `<div class="titem"><div class="tq"><b>${k}</b> ${R(it.q)}</div>${it.fig && it.type !== 'shade' ? fig(it.fig) : ''}${opts}
       <div class="tans">✔ תשובה: ${R(ansText(it))}</div>${traps}${it.hints && it.hints.length ? `<div class="tmsg">💡 רמז: ${R(it.hints[0])}</div>` : ''}</div>`;
   }
@@ -1188,7 +1222,7 @@
     const nxt = (st.path || []).find(p => !st.done[p.id] && ready(p.id) && !p.optional);
     const fin = courseDone();
     if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills, K)}`); }
-    frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${U.learned}</div>${ev.nbTodo ? `<div class="fb info">📌 במחברת ${ev.nbTodo === 1 ? 'נשאר תרגיל אחד' : `נשארו ${ev.nbTodo} תרגילים`} עם הסימן "להשלים". השלימו אותם בבית או בשיעור הבא.</div>` : ''}
+    frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${R(U.learned)}</div>${ev.nbTodo ? `<div class="fb info">📌 במחברת ${ev.nbTodo === 1 ? 'נשאר תרגיל אחד' : `נשארו ${ev.nbTodo} תרגילים`} עם הסימן "להשלים". השלימו אותם בבית או בשיעור הבא.</div>` : ''}
       ${newB.length ? `<h3 style="margin-top:16px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
       <div class="row">${fin ? '<button id="cert">🎓 סיימת את הקורס – לתעודה</button>' : nxt ? `<button id="nl">לשיעור הבא: ${unitDef(nxt.id).title}</button>` : ''}<button class="sec" id="cr">לתוכנית הקורס</button></div>`);
     $('cr').onclick = course;
@@ -1237,7 +1271,7 @@
   function lost(k) {
     const it = cur && cur.item;
     log('lost', { k });
-    if (k === 'words') modal(`<h2>מילון קטן</h2>${K.GLOSSARY.map(([w, t, f]) => `<p><b>${w}:</b> ${t}</p>${f ? fig(f) : ''}`).join('')}`);
+    if (k === 'words') modal(`<h2>מילון קטן</h2>${K.GLOSSARY.map(([w, t, f]) => `<p><b>${w}:</b> ${R(t)}</p>${f ? fig(f) : ''}`).join('')}`);
     else if (k === 'what') say(it && it.rephrase ? it.rephrase : 'קראו שוב את השאלה לאט: מה מבקשים למצוא? אפשר גם ללחוץ "הקרא לי".');
     else if (k === 'idea' && lessonModal()) { /* השיעור המלא */ } else if (k === 'idea') { const U = K.units[(st.unit && st.unit.id) || Object.keys(K.units)[0]]; modal(`<h2>${U.alt.title}</h2>${R(U.alt.html)}${fig(U.alt.fig)}`); }
     else if (k === 'start') say(it && it.start ? it.start : 'מתחילים מהמספר שידוע בשני השברים: פי כמה הוא גדל?');
@@ -1270,13 +1304,13 @@
   function catalog(all) {
     st = null; setCourse(null); layout(false);
     const fits = g => !MYG || !g || (MYG >= g[0] && MYG <= g[1]);
-    const list = C.COURSE_IDS.map(id => ({ id, c: C.courses[id], pl: PLANNED[id] })).filter(x => x.c || x.pl)
+    const list = C.COURSE_IDS.map(id => ({ id, c: canEnter(id) ? C.courses[id] : null, pl: PLANNED[id] })).filter(x => x.c || x.pl)
       .map(x => Object.assign(x, { g: x.c ? x.c.grades : x.pl.grades }));
     const mine = list.filter(x => fits(x.g)), other = list.filter(x => !fits(x.g));
     const card = ({ id, c, pl, g }) => {
       const t = c ? c.title : pl.title, sub = c ? c.sub : pl.sub;
       const meta = c ? `${c.MODULES.length} פרקים · ${c.UNITS.length} שיעורים` : 'בהכנה';
-      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? 'קורס' : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button></div>` : ''}</div>`;
+      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? (c.draft ? 'טיוטה – רק מורים רואים' : 'קורס') : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button></div>` : ''}</div>`;
     };
     // קורסים פעילים קודם, ואחריהם "בקרוב"
     const sortA = a => a.slice().sort((x, y) => (y.c ? 1 : 0) - (x.c ? 1 : 0));
@@ -1293,7 +1327,7 @@
   /* ---------- התחלה ---------- */
   if (st && st.phase !== 'end') setCourse(st.course || 'equiv');
   const want = E.URLP.get('course');
-  if ((!st || st.phase === 'end') && want && C.courses[want]) { st = null; setCourse(want); entry(); }
+  if ((!st || st.phase === 'end') && want && canEnter(want)) { st = null; setCourse(want); entry(); }
   else if (!st || st.phase === 'end' || !K) { st = null; catalog(); }
   else if (st.phase === 'diagIntro') diagIntro();
   else if (st.phase === 'diag') diagQ();

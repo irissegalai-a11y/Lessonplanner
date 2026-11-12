@@ -22,15 +22,28 @@
 
   // ---------- ביטוי מתמטי: "3/4 = ?/12" ----------
   // opts.input = true → כל "?" הופך לתיבת הקלדה
+  // מספר מעורב: 2_1/2 · מכפלה במונה/במכנה: 4×8/5×8
+  // גורם מחוק: ~8 (צמצום מונה-מכנה באותו שבר), ^4 (צמצום באלכסון); ~32>4 = מחוק, ומעליו 4
+  const FAC = /^[~^]?(\d+|\?)(>\d+)?$/;
+  const isPart = s => s.split('×').every(f => FAC.test(f));
   function M(expr, opts = {}) {
     const toks = String(expr).trim().split(/\s+/);
     const say = [];
+    const slot = () => opts.input ? `<input class="slot" inputmode="decimal" autocomplete="off" maxlength="7" aria-label="המספר החסר">` : '<span class="qbox">?</span>';
+    const part = s => s.split('×').map(f => {
+      const m = f.match(/^([~^]?)(\d+|\?)(?:>(\d+))?$/);
+      const v = m[2] === '?' ? slot() : m[2];
+      if (!m[1]) return v;
+      return `<span class="xo ${m[1] === '~' ? 'xa' : 'xb'}"><span class="xv">${v}</span>${m[3] ? `<span class="xn">${m[3]}</span>` : ''}</span>`;
+    }).join('<span class="op">×</span>');
+    const plain = s => s.replace(/[~^]/g, '').replace(/>\d+/g, '');
     const html = toks.map(t => {
-      const m = t.match(/^(\d+|\?)\/(\d+|\?)$/);
-      if (m) {
-        say.push(fracSay(m[1], m[2]));
-        const cell = v => v === '?' ? (opts.input ? `<input class="slot" inputmode="decimal" autocomplete="off" maxlength="7" aria-label="המספר החסר">` : '<span class="qbox">?</span>') : v;
-        return `<span class="fr"><span>${cell(m[1])}</span><span>${cell(m[2])}</span></span>`;
+      const m = t.match(/^(?:(\d+)_)?([^/]+)\/([^/]+)$/);
+      if (m && isPart(m[2]) && isPart(m[3])) {
+        const n = plain(m[2]), d = plain(m[3]);
+        const simple = /^(\d+|\?)$/.test(n) && /^(\d+|\?)$/.test(d);
+        say.push((m[1] ? m[1] + ' ו' : '') + (simple ? fracSay(n, d) : `${n.replace(/×/g, ' כפול ')} חלקי ${d.replace(/×/g, ' כפול ')}`));
+        return `${m[1] ? `<span class="wh">${m[1]}</span>` : ''}<span class="fr"><span>${part(m[2])}</span><span>${part(m[3])}</span></span>`;
       }
       if (t === '?') { say.push('כמה'); return opts.input ? `<input class="slot" inputmode="decimal" autocomplete="off" maxlength="7" aria-label="המספר החסר">` : '<span class="qbox">?</span>'; }
       say.push(OPS[t] || t);
@@ -149,7 +162,28 @@
     }
     return `<svg class="fig groups" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${g} קבוצות של ${n}">${out}</svg>`;
   }
-  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups };
+  // מודל שטח לכפל שברים: { k:'area', a:[n1,d1], b:[n2,d2], only:'a' }
+  // השלם = מלבן. a – עמודות (צבע ורוד בהיר), b – שורות (תכלת). החפיפה (ורוד מלא) = המכפלה.
+  function area(f) {
+    const W = f.w || 240, H = f.h || 150, [n1, d1] = f.a, [n2, d2] = f.b || [0, 1], cw = W / d1, rh = H / d2;
+    let out = '';
+    for (let i = 0; i < d1; i++) for (let j = 0; j < d2; j++) {
+      const inA = i < n1, inB = f.only !== 'a' && j < n2;
+      out += `<rect x="${2 + i * cw}" y="${2 + j * rh}" width="${cw}" height="${rh}" fill="${inA && inB ? FILL : inA ? FILL2 : inB ? '#d6e4ff' : '#fff'}" stroke="${INK}" stroke-width="1"/>`;
+    }
+    out += `<rect x="2" y="2" width="${W}" height="${H}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    return `<svg class="fig area" viewBox="0 0 ${W + 4} ${H + 4}" width="${W + 4}" height="${H + 4}" role="img" aria-label="מלבן מחולק">${out}</svg>`;
+  }
+  // פירוק לשני גורמים: { k:'tree', n:32, a:4, b:8, hl:'b' } – המספר למעלה, שני הגורמים למטה
+  function tree(f) {
+    const W = 170, H = 112, cx = W / 2;
+    const t = (x, y, v, on) => `${on ? `<circle cx="${x}" cy="${y - 8}" r="20" fill="${FILL2}" stroke="${FILL}" stroke-width="2"/>` : ''}<text x="${x}" y="${y}" text-anchor="middle" font-size="24" font-weight="700" fill="${INK}">${v}</text>`;
+    let out = `<line x1="${cx - 8}" y1="36" x2="${cx - 48}" y2="74" stroke="${INK}" stroke-width="2"/><line x1="${cx + 8}" y1="36" x2="${cx + 48}" y2="74" stroke="${INK}" stroke-width="2"/>`;
+    out += t(cx, 26, f.n) + t(cx - 56, 100, f.a, f.hl === 'a') + t(cx + 56, 100, f.b, f.hl === 'b');
+    out += `<text x="${cx}" y="100" text-anchor="middle" font-size="22" fill="${INK}">×</text>`;
+    return `<svg class="fig tree" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${f.n} שווה ${f.a} כפול ${f.b}">${out}</svg>`;
+  }
+  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups, area, tree };
   function fig(f) {
     if (!f) return '';
     if (Array.isArray(f)) return `<div class="figs">${f.map(fig).join('')}</div>`;
