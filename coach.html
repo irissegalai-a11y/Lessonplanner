@@ -133,7 +133,9 @@
   .ulist li.done .ic { border-color: var(--ok); background: var(--ok); color: #fff; }
   .ulist li.active .ic { border-color: var(--brand); background: var(--brand); color: #fff; }
   .ulist li.skip .ic { border-color: var(--ok); color: var(--ok); }
-  .ulist .t { flex: 1; }
+  .ulist .t { flex: 1; min-width: 0; }
+  .ulist .ubtns { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+  @media (max-width: 640px) { .ulist li { flex-wrap: wrap; } .ulist .ubtns { flex: 1 0 100%; justify-content: flex-start; padding-inline-start: 46px; } }
   .ulist li.done .t b { text-decoration: line-through; color: var(--muted); }
   .ulist .meta { font-size: 0.85rem; color: var(--muted); }
   .chip { display: inline-block; font-size: 0.78rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; margin-inline-start: 6px; background: var(--info-bg); color: var(--muted); }
@@ -412,7 +414,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.4</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.5</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -809,8 +811,9 @@
       else if (inPath && !dn) btn = `<button class="sec small" data-open="${u.id}" data-ver="${p.ver}">כניסה</button>`;
       else if (skip && !T) btn = `<button class="ghost small" data-open="${u.id}" data-ver="reinforce">לעבור בכל זאת</button>`;
       if (T) btn = `<button class="sec small nosay" data-open="${u.id}" data-ver="teach">הקניה</button>${u.deep ? '' : `<button class="ghost small nosay" data-open="${u.id}" data-ver="reinforce">חיזוק</button>`}<button class="ghost small nosay" data-tasks="${u.id}">📋 משימות</button><button class="ghost small nosay" data-print="${u.id}">🖨️ דף עבודה</button>`;
+      if (!T && !u.deep) btn += `<button class="ghost small nosay" data-print="${u.id}" title="דף עבודה להדפסה">🖨️ דף עבודה</button>`;
       const tv = T && p ? `<span class="tag">${{ teach: 'הקניה', reinforce: 'חיזוק', deep: 'העמקה' }[p.ver]}</span>` : '';
-      return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}${skip ? ' skip' : ''}"><span class="ic">${dn || skip ? '✓' : lessonNo(u.id)}</span><span class="t"><b>שיעור ${lessonNo(u.id)}: ${u.title}</b>${tv}<br><span class="meta">כ-${u.min} דקות</span> ${chip}</span>${btn}</li>`;
+      return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}${skip ? ' skip' : ''}"><span class="ic">${dn || skip ? '✓' : lessonNo(u.id)}</span><span class="t"><b>שיעור ${lessonNo(u.id)}: ${u.title}</b>${tv}<br><span class="meta">כ-${u.min} דקות</span> ${chip}</span>${btn ? `<span class="ubtns">${btn}</span>` : ''}</li>`;
     };
     const mods = K.MODULES.map((m, i) => {
       const us = m.u.map(unitDef);
@@ -1007,6 +1010,7 @@
     ps.innerHTML = html;
     document.body.appendChild(ps);
     log('worksheet', { unit: id });
+    if (!T) tr('דף עבודה', u.title);
     const close = () => { ps.remove(); document.documentElement.classList.remove('printing'); };
     ps.querySelector('#psClose').onclick = close;
     ps.querySelector('#psRem').onchange = e => ps.classList.toggle('noremind', !e.target.checked);
@@ -1322,8 +1326,9 @@
     if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills, K)}`); }
     frame(5, `${coachSay(`כל הכבוד, ${esc(first())}! 🎉 ${line}`)}<h3>מה למדתי?</h3><div class="rulebox">${R(U.learned)}</div>${ev.nbTodo ? `<div class="fb info">📌 במחברת ${ev.nbTodo === 1 ? 'נשאר תרגיל אחד' : `נשארו ${ev.nbTodo} תרגילים`} עם הסימן "להשלים". השלימו אותם בבית או בשיעור הבא.</div>` : ''}
       ${newB.length ? `<h3 style="margin-top:16px">הישגים חדשים</h3><div class="badges">${newB.map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('')}</div>` : ''}
-      <div class="row">${fin ? '<button id="cert">🎓 סיימת את הקורס – לתעודה</button>' : nxt ? `<button id="nl">לשיעור הבא: ${unitDef(nxt.id).title}</button>` : ''}<button class="sec" id="cr">לתוכנית הקורס</button></div>`);
+      <div class="row">${fin ? '<button id="cert">🎓 סיימת את הקורס – לתעודה</button>' : nxt ? `<button id="nl">לשיעור הבא: ${unitDef(nxt.id).title}</button>` : ''}<button class="sec" id="cr">לתוכנית הקורס</button>${U.deep ? '' : '<button class="ghost nosay" id="wsb">🖨️ דף עבודה לתרגול בבית</button>'}</div>`);
     $('cr').onclick = course;
+    if ($('wsb')) $('wsb').onclick = () => worksheet(u.id);
     if ($('nl')) $('nl').onclick = () => openUnit(nxt.id, nxt.ver);
     if ($('cert')) $('cert').onclick = certificate;
   }
