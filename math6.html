@@ -452,9 +452,50 @@ html.embed body { padding-top: 0; }
   .wschoices, .ex-choices { display: grid; grid-template-columns: 1fr; gap: 0; line-height: 1.8; font-size: 0.98rem; margin-top: 4px; }
   .wschoices.pics, .ex-choices.pics { grid-template-columns: 1fr 1fr; gap: 0 10px; }
   .ex-grid { flex: 0 0 44%; margin: 2px 0; min-height: 2.6cm; }
+  .ex-q.ex-open { flex-direction: column; gap: 3mm; } .ex-q.ex-open .ex-grid { flex-basis: auto; width: 100%; }
+  /* מבחן שחולק שווה בין עמודים – משבצות גדולות יותר, כדי לנצל את המקום */
+  .ex-roomy .ex-grid { min-height: 3.6cm; } .ex-roomy .ex-grid.big { min-height: 4.6cm; } .ex-roomy .ex-grid.xl { min-height: 7cm !important; }
   .ex-grid.big { min-height: 4cm; }
   .ex-grid.sm { min-height: 2.2cm; }
-  .wsqs.dsk-dense .ex-grid { min-height: 1.7cm; } .wsqs.dsk-dense .ex-grid.big { min-height: 2.4cm; }
+  .wsqs.dsk-dense .ex-grid { min-height: 1.9cm; } .wsqs.dsk-dense .ex-grid.big { min-height: 2.4cm; }
+  /* כרטיס צפוף (חילוק שברים, מ-6 שאלות): השאלה לכל הרוחב, ומתחתיה משבצות החישוב ולצידן שורת התשובה – כך 8 שאלות נכנסות בעמוד */
+  .ws-pastel .wsqs.dsk-dense .wsq { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "h h" "f f" "g a"; column-gap: 10px; row-gap: 2px; align-items: end; padding-top: 7px; padding-bottom: 8px; }
+  .ws-pastel .wsqs.dsk-dense .qmain { display: contents; }
+  .ws-pastel .wsqs.dsk-dense .wsqhead { grid-area: h; }
+  .ws-pastel .wsqs.dsk-dense .qmain > svg { grid-area: f; }
+  .ws-pastel .wsqs.dsk-dense .wsans { grid-area: a; margin: 0; padding: 0; }
+  .ws-pastel .wsqs.dsk-dense .wsq .ex-grid { grid-area: g; margin: 4px 0 0; }
+  .wsqs.dsk-dense .wsbox { height: 24px; width: 30px; }
+  .dsqfig { max-width: 100%; width: 170px; height: auto; margin: 2px 0 0; }
+  .dsk-tips.short li { margin: 2px 0; }
+  .dswhy { display: block; margin-top: 4px; font-size: 0.95em; color: #3d3a5c; }
+  .dsmean { margin-bottom: 3px; } .dscalc { color: #2c2a48; }
+  /* גרסה מהודקת (עד 8 שאלות שגלשו לעמוד שני): תזכורת צפופה, צעדים בשני טורים, משבצות קצת נמוכות */
+  .dsk-tight .dsk-tips { font-size: 0.8em; padding-top: 4px; padding-bottom: 4px; line-height: 1.35; margin-bottom: 6px; }
+  .dsk-tight .dswhy { font-size: 0.88em; line-height: 1.3; margin-top: 2px; }
+  .dsk-tight .dsk-tips .fr { font-size: 0.85em; }
+  .dsk-tight .dsk-tips ul { margin-top: 2px; margin-bottom: 0; } .dsk-tight .dsk-tips li { margin: 0; }
+  .dsk-tight .wshead h1 { font-size: 1.35em; margin: 0; } .dsk-tight .wsskill { margin: 0 0 2px; }
+  .dsk-tight .wsfoot { display: none; }
+  .ws-pastel.dsk-tight .wsqs.dsk-dense { gap: 7px 12px; }
+  .ws-pastel.dsk-tight .wsqs.dsk-dense .wsq { padding-top: 5px; padding-bottom: 6px; }
+  .dsk-tight .dsk-tips ol.dssteps { columns: 2; column-gap: 18px; }
+  .dsk-tight .dsk-tips ol.dssteps li { break-inside: avoid; }
+  .dsk-tight .dsk-tips .dsfig { width: 150px; }
+  .dsk-tight .wsqs.dsk-dense .ex-grid { min-height: 1.6cm; } .dsk-tight .wsqs.dsk-dense .ex-grid.big { min-height: 1.9cm; }
+  .dsk-tight .dsqfig { width: 140px; }
+  .wsopen { --lh: 0.95cm; height: calc(var(--n, 4) * var(--lh)); margin-top: 6px; background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--lh) - 1px), #b8b8c8 calc(var(--lh) - 1px), #b8b8c8 var(--lh)); }
+  .dsk-l3fit .wsopen { --lh: 0.8cm; }
+  .ws-pastel .wsqs .wsq.wsopenq.wide { grid-column: 1 / -1; }
+  .ws-pastel .wsqs.dsk-dense .wsq.wsopenq { display: block; }
+  .wskind { display: inline-block; font-size: 0.78em; font-weight: 700; background: #efe9fb; color: #4b3a7a; border-radius: 8px; padding: 0 7px; }
+  .wskey.dsk-key ol { columns: 1; line-height: 1.65; font-size: 1.02rem; }
+  .wskey.dsk-key li { padding: 6px 0 7px; border-bottom: 1px dashed #cfc8de; break-inside: avoid; }
+  .wskey.dsk-key .wsexp { font-size: 0.95rem; color: #333; margin-top: 2px; }
+  .kmodel { margin-top: 2px; }
+  .wskey.dsk-key.dsk-keyc ol { font-size: 0.93rem; line-height: 1.45; } .wskey.dsk-key.dsk-keyc li { padding: 3px 0 4px; }
+  .dsk-split .wsqs.dsk-dense .ex-grid { min-height: 2.6cm; } .dsk-split .wsqs.dsk-dense .ex-grid.big { min-height: 3cm; }
+  .dsk-tight .wshead { margin-bottom: 4px; }
   .wsqs.nogrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; }
   .wsqs.nogrid .wsq { display: block; padding: 4px 0 6px; }
   .wsqs.nogrid .qmain { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; }
@@ -1092,6 +1133,11 @@ html.embed body { padding-top: 0; }
   .dsk-tips li.dstip { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
   .dsk-tips li.dstip > div { flex: 1 1 260px; }
   .dsk-tips .dsfig { max-width: 100%; height: auto; flex: 0 0 auto; }
+  .dsk-tips.multi ul { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; font-size: 0.92em; } .dsk-tips.multi li.dstip { display: block; break-inside: avoid; }
+  @media screen and (max-width: 640px) { .dsk-tips.multi ul { grid-template-columns: 1fr; } }
+  ol.dssteps { margin: 4px 0 2px; padding-inline-start: 1.4em; } ol.dssteps li { margin: 2px 0; }
+  .dsk-lv table { border-collapse: collapse; font-size: 0.9em; margin-top: 6px; } .dsk-lv th, .dsk-lv td { border: 1px solid #d8cdea; padding: 4px 6px; vertical-align: top; text-align: start; }
+  @media (max-width: 640px) { .dsk-lv tr { display: block; margin-bottom: 6px; } .dsk-lv th, .dsk-lv td { display: block; } }
   .zl svg { width: 100%; max-width: 760px; height: auto; display: block; margin: 6px auto; touch-action: manipulation; }
   .zl svg text { font-size: 14px; fill: var(--ink, #23264a); }
   .zl .zl-end { font-size: 16px; font-weight: 700; }
@@ -2165,7 +2211,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רעב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6144,10 +6190,31 @@ function genDivFrW(kind) {
     exp: `${M(`${wf}${F(n, d)} : ${w} = ${F(I, d)} : ${w} = ${F(m, d)}`)}${m >= d ? ` = ${FX(m, d)}` : ''}` };
 }
 /* ===== חילוק שברים לפי מיומנות – למחולל דפי התרגול (?print) =====
-   שלושה ממדים נפרדים: מיומנות (skill) · רמת קושי (lv: מספרים ושלבים בלבד) · שיטת ההסבר (method).
+   שלושה ממדים נפרדים: מיומנות (skill) · רמת קושי (lv) · שיטת ההסבר (method).
+   הרמה נקבעת לפי מורכבות ההבנה והחישוב (כמה צעדים, איזו המרה צריך) – לא לפי סוג התשובה: גם ברמה קלה התשובה יכולה להיות שבר.
    skill: fw – שבר : שלם · wu – שלם : שבר יחידה · same – מכנים שווים · diff – מכנים שונים · mixed – מספרים מעורבים
-   method: concept (משמעות החילוק – ברירת המחדל) · algo (צעדים, בלי הופכי) · kfc (כפל בהופכי – רק אם המורה בחרה)
-   כל שאלה נושאת meta = { skill, a: [n, d], b: [n, d], word } – לבדיקה אוטומטית של התשובה. */
+   method: concept (משמעות החילוק – ברירת המחדל) · algo (צעד אחר צעד, בלי הופכי) · kfc (כפל בהופכי – רק אם המורה בחרה)
+   כל שאלה נושאת meta = { skill, a: [n, d], b: [n, d], word, lv, tpl } – לבדיקה אוטומטית. */
+// משוואה אחת = מקטע LTR אחד. כשמשוואה נבנית מכמה חלקים מתמטיים (M, FX) שביניהם רק =, ×, :, − או רווח –
+// בטקסט RTL הם מוצגים בסדר הפוך (למשל "11/12 = 5/6 × 1 1/10"). כאן מאחדים אותם למקטע אחד, ומשטחים מקטעים מקוננים.
+function dsMath(html) {
+  if (!html || typeof document === 'undefined') return html;
+  const t = document.createElement('template'); t.innerHTML = html;
+  t.content.querySelectorAll('.m .m').forEach(x => x.replaceWith(...x.childNodes));
+  const OP = /^\s*[=×:−+-]?\s*$/;
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const m of t.content.querySelectorAll('.m')) {
+      const tx = m.nextSibling, nx = tx && tx.nodeType === 3 ? tx.nextSibling : tx;
+      if (!nx || nx.nodeType !== 1 || !nx.classList.contains('m')) continue;
+      if (tx !== nx && !OP.test(tx.textContent)) continue;
+      if (tx !== nx) m.append(document.createTextNode(' ' + tx.textContent.trim() + ' ')), tx.remove(); else m.append(document.createTextNode(' '));
+      m.append(...nx.childNodes); nx.remove(); changed = true; break;
+    }
+  }
+  return t.innerHTML;
+}
 const DSK = [
   { id: 'fw', name: 'חילוק שבר במספר שלם', ex: () => M(`${F(3, 4)} : 3`) },
   { id: 'wu', name: 'חילוק מספר שלם בשבר יחידה', ex: () => M(`3 : ${F(1, 4)}`) },
@@ -6155,100 +6222,180 @@ const DSK = [
   { id: 'diff', name: 'חילוק שברים בעלי מכנים שונים', ex: () => M(`${F(3, 4)} : ${F(1, 2)}`) },
   { id: 'mixed', name: 'חילוק מספרים מעורבים', ex: () => M(`2${F(1, 4)} : ${F(3, 4)}`) }
 ];
+// מה כל רמה אומרת בכל מיומנות (מוצג למורה בפאנל ובדוגמאות)
+const DSK_LEVELS = {
+  fw: ['צעד אחד: המונה מתחלק במספר השלם; מכנים עד 10, מחלקים ב-2 עד 4', 'שני צעדים: המונה לא מתחלק – מרחיבים ואז מחלקים; מכנים עד 8, מחלקים עד 5', 'שבר מדומה ומספרים גדולים יותר; התשובה דורשת צמצום או מספר מעורב'],
+  wu: ['חצאים ורבעים; מספרים שלמים עד 12', 'שלישים, חמישיות, שישיות, שמיניות ועשיריות; תוצאה עד 60', 'מכנים עד 20 ומספרים שלמים גדולים יותר'],
+  same: ['צעד אחד: סופרים כמה פעמים נכנס; מכנים עד 8, תשובה עד 4 (שלמה או "וחצי")', 'מכנים עד 12; גם מחלק גדול מהמחולק (תשובה קטנה מ-1) ותשובות שצריך לצמצם', 'שברים מדומים ומספרים גדולים יותר; תשובה כמספר מעורב'],
+  diff: ['המרה אחת: מכנה אחד כפולה של השני (חצאים, רבעים, שמיניות, שלישים, שישיות); המחולק גדול מהמחלק', 'המרה אחת, מכנים עד 12, בכל סדר; תשובה שעשויה להיות קטנה מ-1 או לדרוש צמצום', 'שתי המרות: אף מכנה אינו כפולה של השני – מרחיבים את שני השברים; גם שבר מדומה'],
+  mixed: ['המרה אחת: מספר מעורב (חצאים, שלישים, רבעים) חלקי שבר באותו מכנה', 'שתי המרות: מספר מעורב חלקי שבר במכנה אחר (עד 8)', 'המרה של שני המספרים: מספר מעורב חלקי מספר מעורב']
+};
 const dsRed = (n, d) => { const g = gcd(n, d) || 1; return [n / g, d / g]; };
 // מספר להצגה: שלם, שבר (גם מדומה), או מספר מעורב (mix)
 const dsNum = (x, mix) => x[1] === 1 ? String(x[0]) : mix && x[0] > x[1] ? `${Math.floor(x[0] / x[1])}${F(x[0] % x[1], x[1])}` : F(x[0], x[1]);
 const dsOk = x => gcd(x[0], x[1]) === 1;
-// בעיות מילוליות. חלוקה לחלקים שווים (fw): "כמה מקבל כל אחד?". הכלה (שאר המיומנויות): "כמה פעמים נכנס?"
-// int – התשובה מספר שלם · gt – גדולה מ-1 ולא שלמה · lt – קטנה מ-1
+// בעיות מילוליות. כל תבנית: u – סוג היחידה (קובע אילו מכנים טבעיים לה), ok – תנאי סבירות (גודל כוס, משך משחק...).
+// בסיפור שבר מדומה נכתב כמספר מעורב, וכל המכנים חייבים להיות "טבעיים" ליחידה (אין 5/7 ליטר או 7/12 ק"מ).
+const DSK_DEN = { metric: [2, 3, 4, 5, 8, 10, 20, 100], hours: [2, 3, 4, 5, 6, 10, 12, 20], cups: [2, 3, 4], pizza: [2, 3, 4, 6, 8], part: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], sliced: [4, 6, 8, 10, 12] };
+const dsV = x => x[0] / x[1];
+const dsPl = (x, one, many) => dsV(x) > 1 ? many : one;
 const DSK_WORD = {
+  // שבר : שלם – חלוקה לחלקים שווים ("כמה מקבל כל אחד?"). u: 'part' – חלק מהשלם (רק שבר קטן מ-1)
+  fw: [
+    { u: 'part', ok: a => a[0] < a[1], t: (A, w) => `נשארו ${A} מהעוגה. ${w} ילדים מתחלקים בה שווה בשווה. איזה חלק מהעוגה מקבל כל ילד?` },
+    { u: 'part', ok: a => a[0] < a[1], t: (A, w) => `נועה רוצה לקרוא ${A} מהספר ב-${w} ימים, אותו חלק בכל יום. איזה חלק מהספר תקרא בכל יום?` },
+    { u: 'part', ok: a => a[0] < a[1], t: (A, w) => `${A} משטח הגינה מחולק שווה בשווה ל-${w} ערוגות. איזה חלק מהגינה תופסת כל ערוגה?` },
+    { u: 'part', ok: a => a[0] < a[1], t: (A, w) => `${w} ילדים צבעו יחד ${A} מהקיר, וכל אחד צבע חלק שווה. איזה חלק מהקיר צבע כל ילד?` },
+    { u: 'metric', ok: (a, w) => dsV(a) <= 2 && dsV(a) / w <= 0.5, t: (A, w) => `בבקבוק יש ${A} ליטר מיץ. מוזגים את כל המיץ שווה בשווה ל-${w} כוסות. כמה ליטר מיץ יש בכל כוס?` },
+    { u: 'metric', ok: a => dsV(a) <= 5, t: (A, w) => `סרט באורך ${A} מטר נחתך ל-${w} חתיכות שוות. מה אורך כל חתיכה, במטרים?` },
+    { u: 'metric', ok: a => dsV(a) <= 5, t: (A, w) => `${A} ק"ג קמח מחולקים שווה בשווה ל-${w} שקיות. כמה ק"ג קמח יש בכל שקית?` },
+    { u: 'metric', ok: a => dsV(a) <= 6, t: (A, w) => `דני רץ ${A} ק"מ ב-${w} הקפות שוות סביב המגרש. מה אורך כל הקפה, בק"מ?` },
+    { u: 'metric', ok: a => dsV(a) <= 3, t: (A, w) => `${A} ליטר צבע הספיקו בדיוק לצביעת ${w} כיסאות זהים. כמה ליטר צבע הלכו לכל כיסא?` }
+  ],
+  // הכלה – התשובה מספר שלם ("כמה פעמים נכנס?")
   int: [
-    (a, b) => `יש ${a} ליטר מיץ. ממלאים כוסות של ${b} ליטר. כמה כוסות אפשר למלא?`,
-    (a, b) => `מסרט באורך ${a} מטר חותכים חתיכות של ${b} מטר. כמה חתיכות יתקבלו?`,
-    (a, b) => `לכל עוגה צריך ${b} ק"ג קמח. כמה עוגות אפשר לאפות מ-${a} ק"ג קמח?`,
-    (a, b) => `יש ${a} ק"ג אגוזים. אורזים אותם בשקיות של ${b} ק"ג. כמה שקיות ימולאו?`,
-    (a, b) => `בכל צעד הרובוט מתקדם ${b} מטר. כמה צעדים יעשה הרובוט כדי להתקדם ${a} מטר?`,
-    (a, b) => `כל משחקון בתחרות נמשך ${b} שעה. כמה משחקונים ייכנסו ב-${a} שעה?`,
-    (a, b) => `לצביעת כיסא אחד צריך ${b} ליטר צבע. לכמה כיסאות יספיקו ${a} ליטר צבע?`,
-    (a, b) => `צוות עבודה סולל ${b} ק"מ כביש בכל יום. בכמה ימים יסלול ${a} ק"מ?`
+    { u: 'metric', ok: (a, b) => dsV(b) <= 0.5 && dsV(b) >= 0.1 && dsV(a) <= 6, t: (A, B) => `יש ${A} ליטר מיץ. ממלאים כוסות, ובכל כוס ${B} ליטר. כמה כוסות אפשר למלא?` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 1, t: (A, B) => `מסרט באורך ${A} מטר חותכים חתיכות באורך ${B} מטר כל אחת. כמה חתיכות יתקבלו?` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 1 && dsV(b) >= 0.1, t: (A, B) => `לכל עוגה צריך ${B} ק"ג קמח. כמה עוגות אפשר לאפות מ-${A} ק"ג קמח?` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 1, t: (A, B) => `יש ${A} ק"ג אגוזים. אורזים אותם בשקיות, ובכל שקית ${B} ק"ג. כמה שקיות ימולאו?` },
+    { u: 'hours', ok: (a, b) => dsV(b) <= 1 && Number.isInteger(60 * dsV(b)) && dsV(a) <= 6, t: (A, B, a) => `כל משחקון בתחרות נמשך ${B} שעה. כמה משחקונים אפשר לקיים ב-${A} ${dsPl(a, 'שעה', 'שעות')}?` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 1, t: (A, B) => `לצביעת כיסא אחד צריך ${B} ליטר צבע. לכמה כיסאות יספיקו ${A} ליטר צבע?` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 2 && dsV(b) >= 0.1, t: (A, B) => `צוות עבודה סולל ${B} ק"מ של כביש בכל יום. בכמה ימים יסלול הצוות ${A} ק"מ?` },
+    { u: 'pizza', ok: (a, b) => b[0] === 1 && a[1] === 1, t: (A, B) => `הזמינו ${A} פיצות. כל ילד מקבל ${B} פיצה. כמה ילדים יקבלו פיצה?` }
   ],
+  // הכלה – התשובה גדולה מ-1 ולא שלמה. שואלים על כמות שכוללת חלק מיחידה (הקפות, ימים, דקות) או "פי כמה" –
+  // ולא "כמה בקבוקים אפשר למלא", שהתשובה הטבעית עליו היא מספר בקבוקים שלמים
   gt: [
-    (a, b) => `חבל אדום באורך ${a} מטר וחבל כחול באורך ${b} מטר. פי כמה ארוך החבל האדום מהחבל הכחול?`,
-    (a, b) => `בקבוק גדול מכיל ${a} ליטר, ובקבוק קטן מכיל ${b} ליטר. פי כמה גדול הבקבוק הגדול מהקטן?`,
-    (a, b) => `מסלול הריצה הארוך הוא ${a} ק"מ, והמסלול הקצר הוא ${b} ק"מ. פי כמה ארוך המסלול הארוך מהקצר?`,
-    (a, b) => `כדי למלא דלי צריך ${b} ליטר מים. יש ${a} ליטר מים. כמה דליים אפשר למלא? (אפשר לענות במספר מעורב – דליים מלאים וחלק מדלי)`,
-    (a, b) => `שקית אחת מכילה ${b} ק"ג קמח. כמה שקיות כאלה יש ב-${a} ק"ג קמח? (אפשר לענות במספר מעורב – שקיות שלמות וחלק משקית)`
+    { u: 'metric', ok: (a, b, q) => q >= 1.2, t: (A, B) => `חבל אדום באורך ${A} מטר, וחבל כחול באורך ${B} מטר. פי כמה ארוך החבל האדום מהחבל הכחול?` },
+    { u: 'metric', ok: (a, b, q) => q >= 1.2 && dsV(a) <= 3, t: (A, B) => `בקבוק גדול מכיל ${A} ליטר, ובקבוק קטן מכיל ${B} ליטר. פי כמה גדול הבקבוק הגדול מהקטן?` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 2 && dsV(a) <= 10, t: (A, B) => `הקפה אחת סביב המגרש היא ${B} ק"מ. נועה רצה ${A} ק"מ. כמה הקפות רצה נועה? (התשובה כוללת גם חלק של הקפה – כתבו אותה כמספר מעורב.)` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 2 && dsV(b) >= 0.1, t: (A, B) => `צוות עבודה סולל ${B} ק"מ של כביש בכל יום. כמה ימי עבודה יידרשו לסלילת ${A} ק"מ? (התשובה כוללת גם חלק של יום – כתבו אותה כמספר מעורב.)` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 2 && dsV(a) <= 10, t: (A, B) => `ברז ממלא ${B} ליטר מים בכל דקה. כמה דקות יידרשו כדי למלא ${A} ליטר? (התשובה כוללת גם חלק של דקה – כתבו אותה כמספר מעורב.)` }
   ],
+  // הכלה – התשובה קטנה מ-1 ("איזה חלק?")
   lt: [
-    (a, b) => `לכל עוגה צריך ${b} ק"ג קמח, אבל יש רק ${a} ק"ג. איזה חלק מהעוגה אפשר להכין?`,
-    (a, b) => `כדי למלא דלי צריך ${b} ליטר מים. יש רק ${a} ליטר. איזה חלק מהדלי אפשר למלא?`,
-    (a, b) => `אורך המסלול הוא ${b} ק"מ. מיכל הלכה ${a} ק"מ. איזה חלק מהמסלול הלכה מיכל?`,
-    (a, b) => `שקית אחת מכילה ${b} ק"ג סוכר. יש ${a} ק"ג סוכר. איזה חלק מהשקית אפשר למלא?`
-  ]
+    { u: 'metric', ok: (a, b) => dsV(b) <= 2, t: (A, B) => `לעוגה אחת צריך ${B} ק"ג קמח, אבל יש רק ${A} ק"ג. איזה חלק מהעוגה אפשר להכין?` },
+    { u: 'metric', ok: (a, b) => dsV(b) >= 0.25 && dsV(b) <= 2, t: (A, B) => `בקבוק אחד מכיל ${B} ליטר. יש רק ${A} ליטר מיץ. איזה חלק מהבקבוק אפשר למלא?` },
+    { u: 'metric', ok: () => true, t: (A, B) => `אורך המסלול הוא ${B} ק"מ. מיכל הלכה ${A} ק"מ. איזה חלק מהמסלול הלכה מיכל?` },
+    { u: 'metric', ok: (a, b) => dsV(b) <= 2, t: (A, B) => `הקפה אחת סביב המגרש היא ${B} ק"מ. דני רץ ${A} ק"מ. איזה חלק מההקפה רץ דני?` }
+  ],
+  // מכנה שווה: הקשר "חתוך" – כך השברים הלא מצומצמים טבעיים (פיצה ב-8 משולשים: 6/8 פיצה)
+  sliced: {
+    int: [
+      { ok: a => a[0] <= a[1], t: (A, B, a, b, d) => `פיצה חתוכה ל-${d} משולשים שווים, ונשארו ממנה ${A} פיצה. כל ילד מקבל ${B} פיצה. כמה ילדים יקבלו פיצה?` },
+      { ok: () => true, t: (A, B, a, b, d) => `כל טבלת שוקולד מחולקת ל-${d} קוביות שוות. יש ${A} ${dsPl(a, 'טבלה', 'טבלאות')}, וכל ילד מקבל ${B} טבלה. כמה ילדים יקבלו שוקולד?` }
+    ],
+    gt: [
+      { ok: () => true, t: (A, B, a, b, d) => `כל טבלת שוקולד מחולקת ל-${d} קוביות שוות. מנה אחת היא ${B} ${dsPl(b, 'טבלה', 'טבלאות')}. כמה מנות יש ב-${A} ${dsPl(a, 'טבלה', 'טבלאות')}? (התשובה כוללת גם חלק של מנה – כתבו אותה כמספר מעורב.)` },
+      { ok: () => true, t: (A, B, a, b, d) => `כל פיצה חתוכה ל-${d} משולשים שווים. נשארו ${A} ${dsPl(a, 'פיצה', 'פיצות')}. מנה אחת היא ${B} ${dsPl(b, 'פיצה', 'פיצות')}. כמה מנות יש בפיצה שנשארה? (התשובה כוללת גם חלק של מנה – כתבו אותה כמספר מעורב.)` }
+    ],
+    lt: [
+      { ok: () => true, t: (A, B, a, b, d) => `כל טבלת שוקולד מחולקת ל-${d} קוביות שוות. לעוגה אחת צריך ${B} ${dsPl(b, 'טבלה', 'טבלאות')}, ויש רק ${A} טבלה. איזה חלק מהעוגה אפשר להכין?` }
+    ]
+  }
 };
-// שבר : שלם – חלוקה לחלקים שווים. fw1 = חלק מהשלם (רק שבר קטן מ-1), fw2 = מידות (גם שבר מדומה)
-function dsWordFw(a, w) {
-  const f = M(F(a[0], a[1]));
-  return a[0] < a[1] && Math.random() < 0.5 ? pick(DIVFR_CTX.fw1)(f, w) : pick(DIVFR_CTX.fw2)(f, w);
-}
+// יחידה / הקשר לתשובה בדף התשובות, לפי תבנית הסיפור (pre – לפני התשובה, למשל "פי")
+const DSK_KEYU = { fw0: 'מהעוגה', fw1: 'מהספר', fw2: 'מהגינה', fw3: 'מהקיר', fw4: 'ליטר', fw5: 'מטר', fw6: 'ק"ג', fw7: 'ק"מ', fw8: 'ליטר',
+  int0: 'כוסות', int1: 'חתיכות', int2: 'עוגות', int3: 'שקיות', int4: 'משחקונים', int5: 'כיסאות', int6: 'ימים', int7: 'ילדים',
+  gt0: { pre: 'פי' }, gt1: { pre: 'פי' }, gt2: 'הקפות', gt3: 'ימי עבודה', gt4: 'דקות',
+  lt0: 'מהעוגה', lt1: 'מהבקבוק', lt2: 'מהמסלול', lt3: 'מההקפה',
+  slint0: 'ילדים', slint1: 'ילדים', slgt0: 'מנות', slgt1: 'מנות', sllt0: 'מהעוגה' };
 // דוגמה לפי מיומנות ורמה: מחזירה { a, b, mixA, mixB } – a : b
 function dsPick(skill, lv) {
   const P = (lo, hi) => { let n, d; do { d = R(lo, hi); n = R(1, d - 1); } while (!dsOk([n, d])); return [n, d]; };
-  const multPair = () => { let q, s; do { q = R(2, 12); s = R(2, 12); } while (q === s || (q % s && s % q)); return [q, s]; };
-  for (let guard = 0; guard < 2000; guard++) {
+  const qOf = (a, b) => dsRed(a[0] * b[1], a[1] * b[0]);
+  for (let guard = 0; guard < 3000; guard++) {
     if (skill === 'fw') {
-      if (lv === 1) { const d = R(4, 12), w = R(2, 5), m = R(1, 3); if (w * m >= d || !dsOk([w * m, d])) continue; return { a: [w * m, d], b: [w, 1] }; }
-      if (lv === 2) {
-        if (Math.random() < 0.35) { const d = R(7, 12), w = R(2, 5), m = R(2, 3); if (w * m >= d || !dsOk([w * m, d])) continue; return { a: [w * m, d], b: [w, 1] }; }
-        const [n, d] = P(2, 8), w = R(2, 5); if (n % w === 0) continue; return { a: [n, d], b: [w, 1] };
-      }
+      if (lv === 1) { const d = R(4, 12), w = R(2, 4), m = R(1, 3); if (w * m >= d || !dsOk([w * m, d])) continue; return { a: [w * m, d], b: [w, 1] }; }
+      if (lv === 2) { const [n, d] = P(2, 8), w = R(2, 5); if (n % w === 0) continue; return { a: [n, d], b: [w, 1] }; }
       const d = R(2, 6), n = R(d + 1, 4 * d), w = R(2, 6); if (!dsOk([n, d]) || n % d === 0) continue; return { a: [n, d], b: [w, 1] };
     }
     if (skill === 'wu') {
-      if (lv === 1) return { a: [R(2, 8), 1], b: [1, R(2, 5)] };
-      if (lv === 2) { const d = R(2, 10), w = R(3, 10); if (w * d > 60) continue; return { a: [w, 1], b: [1, d] }; }
+      if (lv === 1) return { a: [R(2, 12), 1], b: [1, pick([2, 4])] };
+      if (lv === 2) { const d = pick([3, 5, 6, 8, 10]), w = R(2, 10); if (w * d > 60) continue; return { a: [w, 1], b: [1, d] }; }
       const d = pick([6, 8, 10, 12, 20]), w = d >= 20 ? R(3, 9) : R(6, 15); return { a: [w, 1], b: [1, d] };
     }
     if (skill === 'same') {
-      const d = lv === 1 ? R(5, 12) : lv === 2 ? R(4, 12) : R(3, 9);
-      if (lv === 1) { const r = R(1, 3), k = R(2, 5); if (r * k >= d || r === 1 && Math.random() < 0.6) continue; return { a: [r * k, d], b: [r, d] }; }
-      if (lv === 2) { const p = R(1, d - 1), r = R(2, d - 1); if (p === r || p % r === 0) continue; return { a: [p, d], b: [r, d] }; }
-      const p = R(d + 1, 4 * d), r = R(2, Math.min(2 * d, 15)); if (p % d === 0 || r % d === 0 || p === r || p % r === 0 && Math.random() < 0.5) continue; return { a: [p, d], b: [r, d] };
+      if (lv === 1) { const d = R(4, 8), r = R(1, 3), p = R(r + 1, d - 1); if (p % r && r !== 2) continue; if (p / r > 4) continue; return { a: [p, d], b: [r, d] }; }
+      if (lv === 2) { const d = R(4, 12), p = R(1, d - 1), r = R(2, d - 1); if (p === r || (p % r === 0 && Math.random() < 0.7) || (r === 2 && p > r && Math.random() < 0.7)) continue; return { a: [p, d], b: [r, d] }; }
+      const d = R(3, 9), p = R(d + 1, 4 * d), r = R(2, Math.min(2 * d, 15)); if (p % d === 0 || r % d === 0 || p === r || p % r === 0) continue; return { a: [p, d], b: [r, d] };
     }
     if (skill === 'diff') {
+      const mult = (hi) => { let q, s; do { q = R(2, hi); s = R(2, hi); } while (q === s || (q % s && s % q)); return [q, s]; };
       if (lv <= 2) {
-        const [q, s] = multPair(), a = P(q, q), b = P(s, s);
-        if (a[1] !== q || b[1] !== s) continue;
-        const [n, d] = dsRed(a[0] * b[1], a[1] * b[0]);
-        if (lv === 1 ? (d !== 1 || n < 2 || n > 6) : (d === 1 || n > 30)) continue;
+        const [q, s] = mult(lv === 1 ? 8 : 12), a = P(q, q), b = P(s, s);
+        const [n, d] = qOf(a, b);
+        if (lv === 1 && [q, s].some(x => x === 5 || x === 7 || x > 9)) continue;
+        if (lv === 1 ? (dsV(a) <= dsV(b) || n / d > 8) : (n > 30 || d > 24)) continue;
         return { a, b };
       }
       let q, s; do { q = R(2, 9); s = R(2, 9); } while (q === s || !(q % s) || !(s % q));
       const a = Math.random() < 0.3 ? [R(q + 1, 2 * q), q] : P(q, q), b = P(s, s);
-      if (a[1] !== q || b[1] !== s || !dsOk(a)) continue;
-      const [n] = dsRed(a[0] * b[1], a[1] * b[0]); if (n > 40) continue;
+      if (!dsOk(a)) continue;
+      const [n] = qOf(a, b); if (n > 40) continue;
       return { a, b };
     }
     if (skill === 'mixed') {
-      const mk = (dLo, dHi) => { const d = R(dLo, dHi), n = R(1, d - 1), w = R(1, 3); return dsOk([n, d]) ? [w * d + n, d] : null; };
-      if (lv === 1) { const a = mk(2, 6); if (!a) continue; const r = R(1, a[1] - 1); if (a[0] % r || a[0] / r > 12 || !dsOk([r, a[1]])) continue; return { a, b: [r, a[1]], mixA: true }; }
+      const mk = (dLo, dHi, wHi) => { const d = R(dLo, dHi), n = R(1, d - 1), w = R(1, wHi); return dsOk([n, d]) ? [w * d + n, d] : null; };
+      if (lv === 1) { const a = mk(2, 4, 3); if (!a) continue; const r = R(1, a[1] - 1); if (!dsOk([r, a[1]])) continue; const [n] = qOf(a, [r, a[1]]); if (n > 30) continue; return { a, b: [r, a[1]], mixA: true }; }
       if (lv === 2) {
-        const a = mk(2, 8); if (!a) continue;
-        const s = pick([2, 3, 4, 5, 6, 8]), r = R(1, s - 1); if (!dsOk([r, s])) continue;
-        const [n, d] = dsRed(a[0] * s, a[1] * r); if (n > 40 || d === 1 && Math.random() < 0.5) continue;
+        const a = mk(2, 8, 3); if (!a) continue;
+        const s = pick([2, 3, 4, 5, 6, 8]), r = R(1, s - 1); if (!dsOk([r, s]) || s === a[1] || (s % a[1] && a[1] % s)) continue;
+        const [n] = qOf(a, [r, s]); if (n > 40) continue;
         return { a, b: [r, s], mixA: true };
       }
-      const a = mk(2, 6), b = mk(2, 6); if (!a || !b || (a[0] === b[0] && a[1] === b[1])) continue;
-      const [n] = dsRed(a[0] * b[1], a[1] * b[0]); if (n > 40) continue;
+      const a = mk(2, 6, 3), b = mk(2, 6, 2); if (!a || !b || (a[0] === b[0] && a[1] === b[1])) continue;
+      const [n] = qOf(a, b); if (n > 40) continue;
       return { a, b, mixA: true, mixB: true };
     }
   }
   return { a: [3, 4], b: [3, 1] };
 }
+// המחשה ליד תרגיל ברמה הקלה – מראה את הפעולה ולא רק את המחולק. כל פס = שלם אחד (תמיד באותו אורך).
+// מכנה שווה / מעורב: המחולק צבוע בקבוצות בגודל המחלק (צבע לכל קבוצה, קו עבה בין קבוצות, קבוצה חלקית – בהיר ומקווקו).
+// שבר : שלם – המחולק מחולק לחלקים שווים (צבע לכל חלק). שלם : שבר יחידה – כל חלק של השלם הוא קבוצה.
+// מכנים שונים – פס של המחלק (לגודל הקבוצה), ומתחתיו המחולק במכנה המשותף, בקבוצות בגודל המחלק.
+const DS_GC = ['#f4a3c0', '#9fc3ee', '#b9e0a5', '#f6d48b'], DS_PART = '#fdeaf1';
+function dsCells(rows, w = 230, h = 18) {
+  let g = '';
+  rows.forEach((row, r) => {
+    const pw = w / row.d, y = 2 + r * (h + 7);
+    for (let i = 0; i < row.d; i++) g += `<rect x="${2 + i * pw}" y="${y}" width="${pw}" height="${h}" fill="${row.fills[i] || '#fff'}" stroke="#23264a" stroke-width="1.2"${row.dash && row.dash[i] ? ' stroke-dasharray="3 2"' : ''}/>`;
+    (row.cuts || []).forEach(k => { const x = 2 + k * pw; g += `<line x1="${x}" y1="${y - 2}" x2="${x}" y2="${y + h + 2}" stroke="#23264a" stroke-width="3"/>`; });
+  });
+  const H = rows.length * (h + 7) + 2;
+  return `<svg class="dsqfig" viewBox="0 0 ${w + 4} ${H}" width="${w + 4}" height="${H}" aria-hidden="true">${g}</svg>`;
+}
+// n חלקים צבועים מתוך שורות של d, בקבוצות של g (קבוצה שלא הושלמה – בהיר ומקווקו)
+function dsGroups(rowsN, d, n, g, pal = 2) {
+  return Array.from({ length: rowsN }, (_, r) => {
+    const fills = [], dash = [], cuts = [];
+    for (let c = 0; c < d; c++) {
+      const k = r * d + c, grp = Math.floor(k / g), full = (grp + 1) * g <= n;
+      fills.push(k < n ? (full ? DS_GC[grp % pal] : DS_PART) : null); dash.push(k < n && !full);
+      if (c > 0 && k % g === 0 && k <= n) cuts.push(c);
+    }
+    return { d, fills, dash, cuts };
+  });
+}
+function dsQFig(skill, a, b) {
+  if (skill === 'same' && a[1] === b[1]) return dsCells(dsGroups(1, a[1], a[0], b[0]));
+  if (skill === 'mixed' && a[1] === b[1]) { const W = Math.ceil(a[0] / a[1]); return W <= 3 ? dsCells(dsGroups(W, a[1], a[0], b[0])) : ''; }
+  if (skill === 'fw' && a[0] % b[0] === 0) return dsCells(dsGroups(1, a[1], a[0], a[0] / b[0], 4));
+  if (skill === 'wu') return a[0] <= 4 ? dsCells(dsGroups(a[0], b[1], a[0] * b[1], 1)) : '';
+  if (skill === 'diff') {
+    const L = lcm(a[1], b[1]), n = a[0] * L / a[1], g = b[0] * L / b[1];
+    if (L > 16) return '';
+    const top = { d: b[1], fills: Array.from({ length: b[1] }, (_, i) => i < b[0] ? '#9fc3ee' : null) };
+    return dsCells([top].concat(dsGroups(1, L, n, g).map(r => Object.assign(r, { fills: r.fills.map(f => f === '#9fc3ee' ? '#c7b8ee' : f) }))));
+  }
+  return '';
+}
 // הסבר הפתרון לפי שיטת ההסבר שנבחרה (לדף התשובות)
 function dsExp(skill, a, b, mixA, mixB, method) {
   const [qn, qd] = dsRed(a[0] * b[1], a[1] * b[0]);
   const A = dsNum(a, mixA), B = dsNum(b, mixB), head = `${A} : ${B}`;
+  const fin = (n, d) => d === 1 ? M(String(n)) : gcd(n, d) > 1 || n > d ? `${M(F(n, d))} = ${FX(n, d)}` : M(F(n, d));
   if (method === 'kfc') {
     const Ai = dsNum(a, false), Bi = dsNum(b, false), inv = b[0] === 1 ? String(b[1]) : F(b[1], b[0]);
     const pn = a[0] * b[1], pd = a[1] * b[0], prod = pd === 1 ? String(pn) : F(pn, pd);
@@ -6257,50 +6404,232 @@ function dsExp(skill, a, b, mixA, mixB, method) {
   }
   if (skill === 'fw') {
     const w = b[0], n = a[0], d = a[1];
-    if (n % w === 0) return `${method === 'algo' ? 'המונה מתחלק ב-' + w + ' – מחלקים את המונה' : `${M(F(n, d))} הם ${n} חלקים של ${M(F(1, d))}. מחלקים אותם ל-${w} קבוצות שוות: ${M(`${n} : ${w} = ${n / w}`)}`}: ${M(`${head} = ${F(n / w, d)}`)}${gcd(n / w, d) > 1 || n / w > d ? ` = ${FX(n / w, d)}` : ''}`;
-    return `${method === 'algo' ? `${n} לא מתחלק ב-${w} – כופלים את המכנה ב-${w}` : `${n} חלקים לא מתחלקים ל-${w} קבוצות שוות, אז חותכים כל חלק ל-${w}: ${M(`${F(n, d)} = ${F(n * w, d * w)}`)}, ועכשיו ${M(`${n * w} : ${w} = ${n}`)}`}: ${M(`${head} = ${F(n, d * w)}`)}${gcd(n, d * w) > 1 || n > d * w ? ` = ${FX(n, d * w)}` : ''}`;
+    if (n % w === 0) return method === 'algo' ? `המונה ${n} מתחלק ב-${w}, אז מחלקים את המונה והמכנה נשאר: ${M(`${head} = ${F(n / w, d)}`)}${gcd(n / w, d) > 1 || n / w > d ? ` = ${FX(n / w, d)}` : ''}.`
+      : `מחלקים ל-${w} חלקים שווים: ${M(F(n, d))} הם ${n} חלקים של ${M(F(1, d))}, ולכל חלק ${M(`${n} : ${w} = ${n / w}`)} חלקים כאלה: ${M(`${head} = ${F(n / w, d)}`)}${gcd(n / w, d) > 1 || n / w > d ? ` = ${FX(n / w, d)}` : ''}.`;
+    return method === 'algo' ? `המונה ${n} לא מתחלק ב-${w}, אז מרחיבים פי ${w}: ${M(`${F(n, d)} = ${F(n * w, d * w)}`)}, ועכשיו מחלקים את המונה: ${M(`${n * w} : ${w} = ${n}`)}. ${M(`${head} = `)}${fin(n, d * w)}.`
+      : `${n} חלקים לא מתחלקים שווה ל-${w}, אז חותכים כל חלק ל-${w} חלקים קטנים: ${M(`${F(n, d)} = ${F(n * w, d * w)}`)}. לכל חלק ${M(`${n * w} : ${w} = ${n}`)} חלקים קטנים: ${M(`${head} = `)}${fin(n, d * w)}.`;
   }
   if (skill === 'wu') {
     const w = a[0], d = b[1];
-    return method === 'algo' ? `${M(`${head} = ${w} × ${d} = ${w * d}`)} – כופלים את השלם במכנה.`
+    return method === 'algo' ? `בכל שלם יש ${d} חלקים של ${M(F(1, d))}, אז כופלים את השלם במכנה: ${M(`${head} = ${w} × ${d} = ${w * d}`)}.`
       : `כמה ${M(F(1, d))} נכנסים ב-${w}? בכל שלם יש ${d} חלקים כאלה, וב-${w} שלמים: ${M(`${w} × ${d} = ${w * d}`)}.`;
   }
   // מכנים שווים / שונים / מעורבים: מכנה משותף, ואז "כמה פעמים נכנס" = מונה : מונה
-  const L = lcm(a[1], b[1]), P = a[0] * L / a[1], Q = b[0] * L / b[1];
-  const conv = (skill === 'same' && !mixA && !mixB) ? '' : `${mixA || mixB ? 'הופכים לשבר מדומה' : ''}${(mixA || mixB) && a[1] !== b[1] ? ' ו' : ''}${a[1] !== b[1] ? 'מרחיבים למכנה משותף' : ''}: ${M(`${head} = ${F(P, L)} : ${F(Q, L)}`)}. `;
-  const div = `${M(`${P} : ${Q} = ${qd === 1 ? qn : F(P, Q)}`)}${qd === 1 ? '' : ` = ${FX(qn, qd)}`}`;
-  return method === 'algo' ? `${conv}מחלקים מונה במונה: ${div}.`
-    : `${conv}כמה פעמים ${M(F(Q, L))} נכנס ב-${M(F(P, L))}? ${P === 1 ? 'חלק אחד' : P + ' חלקים'} של ${M(F(1, L))} לעומת ${Q === 1 ? 'חלק אחד' : Q + ' חלקים'}: ${div}.`;
+  const L = lcm(a[1], b[1]), P = a[0] * L / a[1], Q = b[0] * L / b[1], parts = [];
+  if (mixA || mixB) parts.push(`הופכים לשבר מדומה: ${[mixA ? M(`${A} = ${F(a[0], a[1])}`) : '', mixB ? M(`${B} = ${F(b[0], b[1])}`) : ''].filter(Boolean).join(', ')}`);
+  if (a[1] !== b[1]) parts.push(`מכנה משותף ${L}: ${[a[1] !== L ? M(`${F(a[0], a[1])} = ${F(P, L)}`) : '', b[1] !== L ? M(`${F(b[0], b[1])} = ${F(Q, L)}`) : ''].filter(Boolean).join(', ')}`);
+  const div = qd === 1 ? M(`${P} : ${Q} = ${qn}`) : `${M(`${P} : ${Q} = ${F(P, Q)}`)}${gcd(P, Q) > 1 || P > Q ? ` = ${FX(qn, qd)}` : ''}`;
+  if (method === 'algo') return parts.concat([`מחלקים מונה במונה (אותו מכנה = חלקים באותו גודל): ${div}`]).map((x, i) => `${i + 1}. ${x}.`).join('<br>');
+  return `${parts.map(x => x + '.<br>').join('')}כמה פעמים ${M(F(Q, L))} נכנס ב-${M(F(P, L))}? ${P === 1 ? 'חלק אחד' : P + ' חלקים'} של ${M(F(1, L))} לעומת ${Q === 1 ? 'חלק אחד' : Q + ' חלקים'}: ${div}.`;
+}
+// בעיה מילולית שמתאימה לתרגיל (או null אם אין תבנית סבירה למספרים האלה)
+function dsWord(skill, a, b) {
+  const [qn, qd] = dsRed(a[0] * b[1], a[1] * b[0]), q = qn / qd;
+  if (qd > 12) return null;
+  // בסיפור: שבר מדומה → מספר מעורב
+  const A = M(dsNum(a, true)), B = M(dsNum(b, true));
+  const dens = [a, b].filter(x => x[1] > 1).map(x => x[1]);
+  const natural = u => dens.every(d => DSK_DEN[u].includes(d));
+  const choose = (list, tag) => { const ok = list.map((x, i) => [x, i]).filter(([x]) => x.ok(a, b, q)); if (!ok.length) return null; const [x, i] = pick(ok); return { x, tpl: tag + i }; };
+  if (skill === 'fw') {
+    const c = choose(DSK_WORD.fw.filter(x => natural(x.u)).map(x => ({ ok: (aa) => x.ok(aa, b[0]), t: x.t, src: x })), 'fw');
+    if (!c) return null;
+    return { text: c.x.t(A, b[0]), tpl: 'fw' + DSK_WORD.fw.indexOf(c.x.src), kind: 'partitive' };
+  }
+  const kind = qd === 1 ? 'int' : q > 1 ? 'gt' : 'lt';
+  // מכנה שווה ושברים לא מצומצמים – רק הקשר "חתוך"; אחרת גם התבניות הרגילות
+  if (skill === 'same' && DSK_DEN.sliced.includes(a[1]) && (!dsOk(a) || !dsOk(b) || Math.random() < 0.4)) {
+    const c = choose(DSK_WORD.sliced[kind], 'sl' + kind);
+    if (c) return { text: c.x.t(A, B, a, b, a[1]), tpl: c.tpl, kind };
+  }
+  if (skill === 'same' && (!dsOk(a) || !dsOk(b))) return null;
+  const pool = DSK_WORD[kind].map((x, i) => [x, i]).filter(([x]) => natural(x.u) && x.ok(a, b, q));
+  if (!pool.length) return null;
+  const [x, i] = pick(pool); return { text: x.t(A, B, a, b), tpl: kind + i, kind };
 }
 // שאלה אחת. o = { word, method }
 function genDivSkill(skill, lv, o = {}) {
-  const { a, b, mixA, mixB } = dsPick(skill, lv);
-  const [qn, qd] = dsRed(a[0] * b[1], a[1] * b[0]);
-  const A = M(dsNum(a, mixA)), B = M(dsNum(b, mixB));
-  let text = `פתרו: ${M(`${dsNum(a, mixA)} : ${dsNum(b, mixB)} =`)}`, word = false;
-  if (o.word) {
-    word = true;
-    if (skill === 'fw') text = dsWordFw(a, b[0]);
-    else if (skill === 'wu') text = pick(DIVFR_CTX.wu)(a[0], B);
-    else text = pick(DSK_WORD[qd === 1 ? 'int' : qn > qd ? 'gt' : 'lt'])(A, B);
+  for (let k = 0; k < 300; k++) {
+    const { a, b, mixA, mixB } = dsPick(skill, lv);
+    const [qn, qd] = dsRed(a[0] * b[1], a[1] * b[0]);
+    let text = `פתרו: ${M(`${dsNum(a, mixA)} : ${dsNum(b, mixB)} =`)}`, tpl = '', word = false;
+    if (o.word) { const w = dsWord(skill, a, b); if (!w) continue; text = w.text; tpl = w.tpl; word = true; }
+    const steps = [{}, {}].concat(word || mixA || mixB || a[1] !== b[1] ? [{}] : []);
+    const exp = dsMath(dsExp(skill, a, b, mixA, mixB, o.method || 'concept'));
+    text = dsMath(text);
+    const meta = { skill, a, b, word, lv, tpl, mixA: !!mixA, mixB: !!mixB };
+    const fig = o.fig && lv === 1 && !word ? dsQFig(skill, a, b) : '';
+    const ku = DSK_KEYU[tpl], keyUnit = typeof ku === 'string' ? ku : '', keyPre = ku && ku.pre ? ku.pre : '';
+    if (qd === 1) return { type: 'num', ans: qn, text, exp, steps, word, meta, topic: 'divfr', lv, fig, keyUnit, keyPre };
+    return { type: 'frac', form: 'any', noWhole: qn < qd, ans: { n: qn, d: qd }, text, exp, steps, word, meta, topic: 'divfr', lv, fig, keyUnit, keyPre };
   }
-  const steps = [{}, {}].concat(mixA || mixB || a[1] !== b[1] ? [{}] : []);
-  const exp = dsExp(skill, a, b, mixA, mixB, o.method || 'concept');
-  const meta = { skill, a, b, word, lv };
-  if (qd === 1) return { type: 'num', ans: qn, text, exp, steps, word, meta, topic: 'divfr', lv };
-  return { type: 'frac', form: 'any', noWhole: qn < qd, ans: { n: qn, d: qd }, text, exp, steps, word, meta, topic: 'divfr', lv };
+  return genDivSkill(skill, lv, Object.assign({}, o, { word: false }));
 }
-// שאלות לדף: מיומנויות שנבחרו (במעורב – לסירוגין), רמה (mix = מהקל אל הקשה), mode: calc / word / mix
-function buildDivSkillQs(skills, level, count, mode, method, seen = new Set()) {
-  const out = [];
+// ---------- משימות חשיבה (רמה 3) ומשימות קצרות של הסבר וסבירות (רמה 2) ----------
+// כל משימה: type 'open' – מקום כתיבה בשורות (lines), ובדף התשובות model (פתרון לדוגמה) ואם יש כמה תשובות – multi: true.
+// meta.think = סוג המשימה; meta.a / meta.b = התרגיל שעליו היא בנויה (לבדיקה אוטומטית).
+const dsQ = (a, b) => dsRed(a[0] * b[1], a[1] * b[0]);
+const dsH = (x, mix) => x[1] === 1 ? M(String(x[0])) : mix && x[0] > x[1] ? M(dsNum(x, true)) : M(F(x[0], x[1]));
+const dsRes = q => q[1] === 1 ? M(String(q[0])) : FX(q[0], q[1]);
+// בדיקה בכפל: תוצאה × מחלק = מחולק
+const dsCheck = (q, b, a, mixA, mixB) => `${dsRes(q)} ${M('×')} ${dsH(b, mixB)} ${M('=')} ${dsH(a, mixA)}`;
+const DSK_THINK = ['error', 'claim', 'create', 'missing', 'pattern', 'multi', 'compare'];
+const DSK_THINK_NAME = { error: 'ניתוח טעות', claim: 'בדיקת טענה', create: 'יצירת תרגיל לפי תנאי', missing: 'השלמת נתון חסר', pattern: 'חוקיות והכללה', multi: 'בעיה לא שגרתית', compare: 'השוואת דרכי פתרון', estimate: 'בדיקת סבירות', story: 'מעבר בין ייצוגים' };
+function dsThink(skill, kind, method) {
+  const mixS = skill === 'mixed', T = (text, model, a, b, lines, multi) => ({ type: 'open', text: dsMath(text), model: dsMath(model), lines: Math.min(lines || 4, 5), multi: !!multi, word: false, topic: 'divfr', lv: 3, meta: { skill, think: kind, a, b, lv: 3 } });
+  const pickNI = (lv, cond) => { for (let k = 0; k < 400; k++) { const p = dsPick(skill, lv); if (!cond || cond(p)) return p; } return null; };
+  const A_ = (p) => dsH(p.a, p.mixA), B_ = (p) => dsH(p.b, p.mixB);
+  if (kind === 'error') {
+    if (skill === 'fw') {
+      const p = pickNI(2); const w = p.b[0], q = dsQ(p.a, p.b);
+      return T(`נועם פתר: ${M(`${F(p.a[0], p.a[1])} : ${w} = ${F(p.a[0] * w, p.a[1])}`)}<br>האם נועם צדק? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+        `<b>לא.</b> נועם כפל את המונה ב-${w}, ולכן התוצאה שלו גדולה מ-${A_(p)}. אבל כשמחלקים ל-${w} חלקים שווים, כל חלק <b>קטן</b> מהכמות שחילקנו. הפתרון הנכון: ${M(`${F(p.a[0], p.a[1])} : ${w} = `)}${dsRes(q)}. בדיקה: ${dsCheck(q, p.b, p.a)}.`, p.a, p.b);
+    }
+    if (skill === 'wu') {
+      const p = pickNI(2); const w = p.a[0], d = p.b[1];
+      return T(`מיכל פתרה: ${M(`${w} : ${F(1, d)} = ${F(w, d)}`)}<br>האם מיכל צדקה? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+        `<b>לא.</b> ${M(`${w} : ${F(1, d)}`)} שואל: כמה חלקים של ${M(F(1, d))} נכנסים ב-${w}? בכל שלם יש ${d} חלקים כאלה, ולכן ${M(`${w} × ${d} = ${w * d}`)}. המנה צריכה להיות <b>גדולה</b> מהמחולק ${w}, כי המחלק ${M(F(1, d))} קטן מ-1. בדיקה: ${dsCheck([w * d, 1], p.b, p.a)}.`, p.a, p.b);
+    }
+    if (skill === 'same') {
+      const p = pickNI(1, x => dsQ(x.a, x.b)[1] === 1 && x.b[0] > 1); if (!p) return null; const k = dsQ(p.a, p.b)[0], d = p.a[1];
+      return T(`יואב פתר: ${M(`${F(p.a[0], d)} : ${F(p.b[0], d)} = ${F(k, d)}`)}<br>האם יואב צדק? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+        `<b>לא.</b> השאלה היא כמה פעמים ${B_(p)} נכנס ב-${A_(p)}: ${p.a[0]} חלקים לעומת ${p.b[0]} חלקים – ${k} פעמים. התשובה היא <b>מספר פעמים</b>, ולכן המכנה לא נשאר: ${M(`${F(p.a[0], d)} : ${F(p.b[0], d)} = ${k}`)}. בדיקה: ${dsCheck([k, 1], p.b, p.a)}.`, p.a, p.b);
+    }
+    if (skill === 'diff') {
+      const p = pickNI(2, x => { const w = dsRed(x.a[0], x.b[0]), q = dsQ(x.a, x.b); return !(w[0] === q[0] && w[1] === q[1]); }); if (!p) return null;
+      const q = dsQ(p.a, p.b), wr = dsRed(p.a[0], p.b[0]), L = lcm(p.a[1], p.b[1]), P = p.a[0] * L / p.a[1], Qn = p.b[0] * L / p.b[1];
+      return T(`שירה פתרה: ${M(`${F(p.a[0], p.a[1])} : ${F(p.b[0], p.b[1])} = ${p.a[0]} : ${p.b[0]} =`)} ${dsRes(wr)}<br>שירה חילקה מונה במונה. האם היא צדקה? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+        `<b>לא.</b> מותר לחלק מונה במונה רק כשהמכנים שווים – רק אז החלקים באותו גודל. קודם מכנה משותף ${L}: ${M(`${F(p.a[0], p.a[1])} : ${F(p.b[0], p.b[1])} = ${F(P, L)} : ${F(Qn, L)}`)}, ואז ${M(`${P} : ${Qn} =`)} ${dsRes(q)}. בדיקה: ${dsCheck(q, p.b, p.a)}.`, p.a, p.b);
+    }
+    // mixed: מחלק שלמים בשלמים ושבר בשבר
+    for (let k = 0; k < 200; k++) {
+      const d = pick([2, 3, 4]), n = R(1, d - 1), W2 = R(1, 2), m = R(2, 4), W1 = W2 * m; if (gcd(n, d) !== 1) continue;
+      const a = [W1 * d + n, d], b = [W2 * d + n, d], q = dsQ(a, b); if (q[1] === 1 && q[0] === m + 1) continue;
+      return T(`אלון פתר את ${M(`${dsNum(a, true)} : ${dsNum(b, true)}`)} כך: "מחלקים שלמים בשלמים – ${M(`${W1} : ${W2} = ${m}`)}, ושבר בשבר – ${M(`${F(n, d)} : ${F(n, d)} = 1`)}, ומחברים: ${M(`${m} + 1 = ${m + 1}`)}".<br>האם אלון צדק? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+        `<b>לא.</b> אי אפשר לחלק כל חלק לחוד. הופכים לשבר מדומה: ${M(`${dsNum(a, true)} = ${F(a[0], d)}`)}, ${M(`${dsNum(b, true)} = ${F(b[0], d)}`)}, ומחלקים מונה במונה: ${M(`${a[0]} : ${b[0]} =`)} ${dsRes(q)}. בדיקה: ${dsCheck(q, b, a, true, true)} (ואילו ${M(`${m + 1} × ${dsNum(b, true)}`)} גדול מ-${M(dsNum(a, true))}).`, a, b);
+    }
+    return null;
+  }
+  if (kind === 'claim') {
+    // מחולק / מחלק / מנה במפורש. הכלל (למספרים חיוביים): מחלק גדול מ-1 – המנה קטנה מהמחולק; מחלק בין 0 ל-1 – המנה גדולה מהמחולק; מחלק 1 – המנה שווה למחולק.
+    // אין כאן מסקנה על הקשר בין המנה למחלק.
+    const RULE = 'הכלל: כשהמחלק גדול מ-1, המנה קטנה מהמחולק; כשהמחלק בין 0 ל-1, המנה גדולה מהמחולק; וכשהמחלק הוא 1, המנה שווה למחולק.';
+    if (skill === 'fw') {
+      const p = pickNI(2), w = p.b[0], q = dsQ(p.a, p.b);
+      return T(`רון טוען: "כשמחלקים שבר במספר שלם גדול מ-1, המנה (התוצאה) תמיד קטנה מהמחולק – מהשבר שמחלקים אותו."<br>בדקו את הטענה בעזרת התרגיל ${M(`${F(p.a[0], p.a[1])} : ${w}`)}. האם הטענה נכונה? נמקו.`,
+        `<b>הטענה נכונה.</b> ${M(`${F(p.a[0], p.a[1])} : ${w} =`)} ${dsRes(q)}, והמנה קטנה מהמחולק ${A_(p)}: מחלקים את ${A_(p)} ל-${w} חלקים שווים, וכל חלק קטן מהכמות כולה. המחלק ${w} גדול מ-1, ולכן המנה קטנה מהמחולק. ${RULE}`, p.a, p.b, 4);
+    }
+    const p = pickNI(2, x => dsV(x.b) < 1); if (!p) return null; const q = dsQ(p.a, p.b);
+    return T(`רון טוען: "בחילוק, המנה (התוצאה) תמיד קטנה מהמחולק – מהמספר שמחלקים אותו."<br>בדקו את הטענה בעזרת התרגיל ${M(`${dsNum(p.a, mixS)} : ${dsNum(p.b, mixS)}`)}. האם הטענה נכונה? נמקו.`,
+      `<b>הטענה לא נכונה.</b> ${M(`${dsNum(p.a, mixS)} : ${dsNum(p.b, mixS)} =`)} ${dsRes(q)}, והמנה <b>גדולה</b> מהמחולק ${A_(p)}. המחלק ${B_(p)} קטן מ-1, ולכן המנה גדולה מהמחולק. ${RULE}`, p.a, p.b, 4);
+  }
+  if (kind === 'create') {
+    if (skill === 'fw') { const k = pick([6, 8, 10, 12]);
+      return T(`כתבו תרגיל של <b>שבר חלקי מספר שלם</b> שהתוצאה שלו ${M(F(1, k))}. בדקו את התרגיל שכתבתם.`,
+        `לדוגמה: ${M(`${F(1, k / 2)} : 2 = ${F(1, k)}`)} (חצי מ-${M(F(1, k / 2))} הוא ${M(F(1, k))}). יש עוד תשובות נכונות, למשל ${M(`${F(3, k)} : 3 = ${F(1, k)}`)}. בדיקה: ${M(`2 × ${F(1, k)} = ${F(1, k / 2)}`)}.`, [1, k / 2], [2, 1], 4, true); }
+    if (skill === 'wu') { const N = pick([12, 18, 20, 24, 30]), ds = []; for (let d = 2; d <= N / 2; d++) if (N % d === 0) ds.push(d);
+      const [d1, d2] = [ds[0], ds[ds.length - 1]];
+      return T(`כתבו <b>שני</b> תרגילים שונים של מספר שלם חלקי שבר יחידה, שהתוצאה של כל אחד מהם ${N}. הסבירו איך מצאתם אותם.`,
+        `לדוגמה: ${M(`${N / d1} : ${F(1, d1)} = ${N}`)} ו-${M(`${N / d2} : ${F(1, d2)} = ${N}`)}. מחפשים שלם ומכנה שהמכפלה שלהם ${N}. יש עוד תשובות נכונות: ${ds.map(d => M(`${N / d} : ${F(1, d)}`)).join(', ')}.`, [N / d1, 1], [1, d1], 5, true); }
+    if (skill === 'same') { const k = pick([2, 3, 4]);
+      return T(`כתבו תרגיל חילוק של שני שברים <b>עם אותו מכנה</b>, שהתוצאה שלו ${k}. הסבירו למה התוצאה היא ${k}.`,
+        `לדוגמה: ${M(`${F(2 * k, 9)} : ${F(2, 9)} = ${k}`)} – ${2 * k} תשיעיות הן ${k} פעמים 2 תשיעיות. יש עוד תשובות נכונות: כל שני שברים עם אותו מכנה שהמונה הראשון גדול פי ${k} מהשני.`, [2 * k, 9], [2, 9], 5, true); }
+    if (skill === 'diff') { const k = pick([2, 3, 4]);
+      return T(`כתבו תרגיל חילוק של שני שברים <b>עם מכנים שונים</b>, שהתוצאה שלו ${k}. הראו איך בדקתם.`,
+        `לדוגמה: ${M(`${F(1, 2)} : ${F(1, 2 * k)} = ${k}`)}, כי ${M(`${F(1, 2)} = ${F(k, 2 * k)}`)}, ו-${k} חלקים של ${M(F(1, 2 * k))} הם ${k} פעמים ${M(F(1, 2 * k))}. יש עוד תשובות נכונות, למשל ${M(`${F(3, 4)} : ${F(3, 4 * k)}`)}.`, [1, 2], [1, 2 * k], 5, true); }
+    const k = pick([3, 5, 7]);
+    return T(`כתבו תרגיל שבו <b>מספר מעורב</b> מחולק בשבר, והתוצאה ${k}. הראו איך בדקתם.`,
+      `לדוגמה: ${M(`${dsNum([k, 2], true)} : ${F(1, 2)} = ${k}`)}, כי ${M(`${dsNum([k, 2], true)} = ${F(k, 2)}`)} – ${k} חצאים. יש עוד תשובות נכונות, למשל ${M(`${dsNum([3 * k, 4], true)} : ${F(3, 4)} = ${k}`)}.`, [k, 2], [1, 2], 5, true);
+  }
+  if (kind === 'missing') {
+    const p = pickNI(2, x => dsQ(x.a, x.b)[0] <= 30); if (!p) return null; const q = dsQ(p.a, p.b), first = Math.random() < 0.5 || skill === 'fw';
+    const Ad = dsNum(p.a, mixS), Bd = dsNum(p.b, mixS);
+    return T(`השלימו את המספר החסר, והסבירו איך מצאתם אותו:<div class="center">${first ? `${M(`${BOX} : ${Bd} =`)} ${dsRes(q)}` : `${M(`${Ad} : ${BOX} =`)} ${dsRes(q)}`}</div>`,
+      first ? `${A_(p)}. בעזרת כפל: ${dsCheck(q, p.b, p.a, p.mixA, p.mixB)} – התוצאה כפול המחלק נותנת את המחולק.`
+        : `${B_(p)}. מחלקים את המחולק בתוצאה: ${M(`${Ad} :`)} ${dsRes(q)} ${M('=')} ${B_(p)}. בדיקה בכפל: ${dsCheck(q, p.b, p.a, p.mixA, p.mixB)}.`, p.a, p.b, 3);
+  }
+  if (kind === 'pattern') {
+    if (skill === 'wu') { const w = R(2, 4);
+      return T(`חשבו: ${M(`${w} : ${F(1, 2)}`)}, ${M(`${w} : ${F(1, 3)}`)}, ${M(`${w} : ${F(1, 4)}`)}. מה החוקיות? בלי לחשב: כמה זה ${M(`${w} : ${F(1, 10)}`)}? הסבירו.`,
+        `${w * 2}, ${w * 3}, ${w * 4}. בכל פעם המחלק קטן יותר, ולכן הוא נכנס יותר פעמים: ${M(`${w} : ${F(1, 'n')}`)} = ${w} × n. לכן ${M(`${w} : ${F(1, 10)} = ${w * 10}`)}.`, [w, 1], [1, 10], 5); }
+    if (skill === 'same') { const r = R(2, 3), k = R(2, 3), p = r * k;
+      return T(`חשבו: ${M(`${F(p, 10)} : ${F(r, 10)}`)}, ${M(`${F(p, 11)} : ${F(r, 11)}`)}, ${M(`${F(p, 13)} : ${F(r, 13)}`)}. מה שמתם לב? למה זה קורה?`,
+        `כל התוצאות הן ${k}. כשהמכנים שווים, השאלה היא כמה פעמים ${r} חלקים נכנסים ב-${p} חלקים מאותו גודל – וזה ${M(`${p} : ${r} = ${k}`)}, לא משנה מה גודל החלק (המכנה).`, [p, 10], [r, 10], 5); }
+    if (skill === 'diff') {
+      return T(`חשבו: ${M(`${F(1, 2)} : ${F(1, 4)}`)}, ${M(`${F(1, 2)} : ${F(1, 8)}`)}, ${M(`${F(1, 2)} : ${F(1, 16)}`)}. מה קורה לתוצאה כשהמחלק קטן פי 2? למה?`,
+        `2, 4, 8 – כשהמחלק קטן פי 2, התוצאה גדלה פי 2: חלק קטן פי 2 נכנס פי 2 פעמים בתוך אותה כמות.`, [1, 2], [1, 16], 5); }
+    if (skill === 'fw') { const [n, d] = pick([[3, 4], [2, 3], [4, 5]]);
+      return T(`חשבו: ${M(`${F(n, d)} : 1`)}, ${M(`${F(n, d)} : 2`)}, ${M(`${F(n, d)} : 4`)}. מה קורה לתוצאה כשהמספר השלם גדל פי 2? למה?`,
+        `${M(F(n, d))}, ${FX(n, 2 * d)}, ${FX(n, 4 * d)} – כשמחלקים לפי 2 חלקים שווים, כל חלק קטן פי 2.`, [n, d], [4, 1], 5); }
+    const d = pick([2, 4]);
+    return T(`חשבו: ${M(`1${F(1, d)} : ${F(1, d)}`)}, ${M(`2${F(1, d)} : ${F(1, d)}`)}, ${M(`3${F(1, d)} : ${F(1, d)}`)}. מה החוקיות? בלי לחשב: כמה זה ${M(`10${F(1, d)} : ${F(1, d)}`)}?`,
+      `${d + 1}, ${2 * d + 1}, ${3 * d + 1} – כל שלם מוסיף ${d} חלקים של ${M(F(1, d))}. לכן ${M(`10${F(1, d)} : ${F(1, d)} = ${10 * d + 1}`)}.`, [10 * d + 1, d], [1, d], 5);
+  }
+  if (kind === 'multi') {
+    if (skill === 'fw') { const p = pickNI(2, x => DSK_DEN.metric.includes(x.a[1])); if (!p) return null; const w = p.b[0], q = dsQ(p.a, [2 * w, 1]);
+      return T(`סרט באורך ${A_(p)} מטר נחתך ל-${w} חתיכות שוות. אחר כך כל חתיכה נחתכת לשני חלקים שווים. מה אורך כל חלק קטן? פתרו בשתי דרכים.`,
+        `${dsRes(q)} מטר. דרך א': קודם ${M(`${F(p.a[0], p.a[1])} : ${w} =`)} ${dsRes(dsQ(p.a, p.b))}, ואז חצי מזה. דרך ב': בסך הכול יש ${2 * w} חלקים שווים: ${M(`${F(p.a[0], p.a[1])} : ${2 * w} =`)} ${dsRes(q)}.`, p.a, [2 * w, 1], 6, true); }
+    if (skill === 'wu') { const p = pickNI(1, x => x.b[1] <= 8); const w = p.a[0], d = p.b[1], have = w * d; let N; do { N = have + pick([-3, -2, 2, 3, 4]) * 1; } while (N <= 0);
+      const diff = Math.abs(N - have), q = dsRed(diff, d);
+      return T(`יש ${w} פיצות, וכל ילד מקבל ${M(F(1, d))} פיצה. במסיבה ${N} ילדים. האם הפיצות יספיקו לכולם? כמה פיצה ${N > have ? 'חסרה' : 'תישאר'}?`,
+        `${M(`${w} : ${F(1, d)} = ${have}`)} – הפיצות מספיקות ל-${have} ילדים. ${N > have ? `חסרות מנות ל-${diff} ילדים` : `נשארות ${diff} מנות`}, כלומר ${M(`${diff} × ${F(1, d)} =`)} ${dsRes(q)} פיצה ${N > have ? 'חסרה' : 'תישאר'}.`, [w, 1], [1, d], 6); }
+    const p = pickNI(2, x => { const q = dsQ(x.a, x.b); return q[1] > 1 && q[0] > q[1] && dsV(x.b) <= 1 && [x.a, x.b].every(y => y[1] === 1 || DSK_DEN.metric.includes(y[1])); }); if (!p) return null;
+    const q = dsQ(p.a, p.b), whole = Math.floor(q[0] / q[1]), left = dsRed(p.a[0] * p.b[1] - whole * p.b[0] * p.a[1], p.a[1] * p.b[1]);
+    return T(`לכל עוגה צריך ${dsH(p.b, true)} ק"ג קמח, ויש ${dsH(p.a, true)} ק"ג. כמה עוגות <b>שלמות</b> אפשר לאפות, וכמה קמח יישאר? אפשר לפתור בציור או בחישוב.`,
+      `${dsH(p.a, true)} ${M(':')} ${dsH(p.b, true)} ${M('=')} ${dsRes(q)} – כלומר <b>${whole} ${whole === 1 ? 'עוגה שלמה' : 'עוגות שלמות'}</b> ועוד חלק של עוגה. הקמח שיישאר: ${dsH(p.a, true)} ${M(`− ${whole} ×`)} ${dsH(p.b, true)} ${M('=')} ${dsRes(left)} ק"ג. (דרך נוספת: מחסרים ${dsH(p.b, true)} שוב ושוב עד שאי אפשר.)`, p.a, p.b, 6, true);
+  }
+  if (kind === 'compare') {
+    if (skill === 'fw' || skill === 'wu') return null;
+    const p = pickNI(2, x => { const q = dsQ(x.a, x.b); return q[0] > q[1]; }); if (!p) return null; const q = dsQ(p.a, p.b), L = lcm(p.a[1], p.b[1]), P = p.a[0] * L / p.a[1], Qn = p.b[0] * L / p.b[1];
+    const other = method === 'kfc' ? 'בכפל בהופכי' : 'בעזרת ציור של פסים ("כמה פעמים נכנס")';
+    return T(`תמר פתרה את ${M(`${dsNum(p.a, mixS)} : ${dsNum(p.b, mixS)}`)} במכנה משותף, ויונתן פתר ${other}. הראו את שתי הדרכים. האם יוצאת אותה תשובה? למה?`,
+      `שתי הדרכים נותנות ${dsRes(q)}. תמר: ${M(`${F(P, L)} : ${F(Qn, L)} = ${P} : ${Qn}`)}. יונתן: ${method === 'kfc' ? M(`${F(p.a[0], p.a[1])} × ${p.b[0] === 1 ? p.b[1] : F(p.b[1], p.b[0])}`) : `מסמן את ${A_(p)} בפס ב-${L} חלקים, וסופר כמה קבוצות של ${Qn === 1 ? 'חלק אחד' : Qn + ' חלקים'} יש`}. אותה תשובה, כי שתי הדרכים עונות על אותה שאלה: כמה פעמים ${B_(p)} נכנס ב-${A_(p)}.`, p.a, p.b, 6);
+  }
+  if (kind === 'estimate') {
+    const p = pickNI(2); const q = dsQ(p.a, p.b);
+    if (skill === 'fw') return T(`בלי לחשב: האם התוצאה של ${M(`${F(p.a[0], p.a[1])} : ${p.b[0]}`)} גדולה מ-${A_(p)} או קטנה ממנו? כתבו משפט אחד שמסביר.`,
+      `קטנה – מחלקים את ${A_(p)} ל-${p.b[0]} חלקים שווים, וכל חלק קטן מהכמות כולה. (התוצאה: ${dsRes(q)}.)`, p.a, p.b, 2);
+    const big = q[0] > q[1];
+    return T(`בלי לחשב: האם התוצאה של ${M(`${dsNum(p.a, mixS)} : ${dsNum(p.b, mixS)}`)} גדולה מ-1 או קטנה מ-1? כתבו משפט אחד שמסביר.`,
+      `${big ? 'גדולה מ-1' : 'קטנה מ-1'} – ${big ? `${A_(p)} גדול מ-${B_(p)}, ולכן ${B_(p)} נכנס בו יותר מפעם אחת` : `${B_(p)} גדול מ-${A_(p)}, ולכן הוא לא נכנס בו אפילו פעם אחת שלמה`}. (התוצאה: ${dsRes(q)}.)`, p.a, p.b, 2);
+  }
+  if (kind === 'story') {
+    for (let k = 0; k < 60; k++) { const p = dsPick(skill, 2), w = dsWord(skill, p.a, p.b); if (!w) continue; const q = dsQ(p.a, p.b);
+      return T(`כתבו סיפור קצר שמתאים לתרגיל ${M(`${dsNum(p.a, mixS)} : ${dsNum(p.b, mixS)}`)}, ופתרו אותו.`,
+        `סיפור לדוגמה: "${w.text}" התשובה: ${dsRes(q)}. כל סיפור ש${skill === 'fw' ? 'מחלק כמות לחלקים שווים' : 'שואל כמה פעמים כמות אחת נכנסת בשנייה'} – נכון.`, p.a, p.b, 3, true); }
+    return null;
+  }
+  return null;
+}
+// שאלות לדף לפי רמה. רמה 1: תרגול וביסוס – מדורג מהקל אל המורכב. רמה 2: תרגול ויישום – בכל 4 שאלות אחת קצרה של סבירות/ייצוג (במצב "מעורב").
+// רמה 3: חשיבה – 1–2 תרגילי חישוב, והשאר משימות חשיבה מגוונות (בלי לחזור על אותו סוג כשאפשר). mode: calc / word / mix
+function buildDivSkillQs(skills, level, count, mode, method, seen = new Set(), fig = false) {
+  const out = [], lvOf = i => level === 'mix' ? Math.min(3, 1 + Math.floor(3 * i / count)) : Number(level);
+  const n3 = Array.from({ length: count }, (_, i) => lvOf(i)).filter(l => l === 3).length, calc3 = n3 >= 5 ? 2 : n3 >= 2 ? 1 : 0;
+  const kinds = shuffle(DSK_THINK.slice()), used = new Set();
+  let i3 = 0;
   for (let tries = 0; out.length < count && tries < count * 300; tries++) {
-    const i = out.length, sk = skills[i % skills.length];
-    const lv = level === 'mix' ? Math.min(3, 1 + Math.floor(3 * i / count)) : Number(level);
-    const word = mode === 'word' ? true : mode === 'calc' ? false : (i % 3 === 2);
-    const q = genDivSkill(sk, lv, { word, method });
-    const key = `${q.meta.a.join('/')}:${q.meta.b.join('/')}`;
-    if (seen.has(key) || (word && out.some(x => x.text.slice(0, 18) === q.text.slice(0, 18)) && tries % 5)) continue;
-    seen.add(key); out.push(q);
+    const i = out.length, sk = skills[i % skills.length], lv = lvOf(i);
+    let q = null;
+    if (lv === 3 && i3 >= calc3 && (mode !== 'word' || i3 % 2 === 1)) {
+      const rot = kinds.slice(tries % kinds.length).concat(kinds.slice(0, tries % kinds.length));
+      const order = mode === 'word' ? ['multi'] : kinds.filter(k => !used.has(k)).concat(rot);
+      for (const k of order) { q = dsThink(sk, k, method); if (q) { used.add(k); break; } }
+    }
+    if (!q && lv === 2 && mode === 'mix' && i % 4 === 3) q = dsThink(sk, i % 8 === 7 ? 'story' : 'estimate', method);
+    if (!q) {
+      const word = mode === 'word' ? true : mode === 'calc' ? false : (i % 3 === 2);
+      q = genDivSkill(sk, lv, { word, method, fig });
+    }
+    const key = `${q.meta.think || ''}${q.meta.a.join('/')}:${q.meta.b.join('/')}`;
+    // בלי כפילויות, ובלי אותו סיפור פעמיים ברצף בדף
+    if (seen.has(key) || (q.meta.tpl && out.slice(-3).some(x => x.meta.tpl === q.meta.tpl) && tries % 7)) continue;
+    seen.add(key); out.push(q); if (lv === 3) i3++;
+  }
+  // רמה 1: מהקל אל המורכב (מכנים קטנים, תשובה שלמה, תרגיל לפני סיפור)
+  if (level === '1') {
+    const score = q => q.meta.a[1] + q.meta.b[1] + (q.type === 'frac' ? 4 : 0) + (q.word ? 6 : 0) + (q.meta.mixA ? 3 : 0);
+    out.sort((x, y) => score(x) - score(y));
   }
   return out;
 }
@@ -6314,9 +6643,9 @@ function dsFig(wholes, d, filled, group) {
   }
   return `<svg class="dsfig" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">${g}</svg>`;
 }
-// תזכורת לפי מיומנות ושיטה. concept – משמעות החילוק עם ציור; algo – צעדים בלי הופכי; kfc – כפל בהופכי
+// תזכורת לפי מיומנות ושיטה. concept – משמעות החילוק עם ציור; algo – צעד אחר צעד, בלי הופכי; kfc – כפל בהופכי
 function dsTip(skill, method) {
-  const fr = (n, d) => M(F(n, d));
+  const fr = (n, d) => M(F(n, d)), ol = items => `<ol class="dssteps">${items.map(x => `<li>${x}</li>`).join('')}</ol>`;
   if (method === 'kfc') return {
     fw: `${M(`${F(3, 4)} : 3 = ${F(3, 4)} × ${F(1, 3)} = ${F(3, 12)} = ${F(1, 4)}`)} – לחלק ב-3 זה לכפול ב-${fr(1, 3)}.`,
     wu: `${M(`3 : ${F(1, 4)} = 3 × 4 = 12`)} – ההופכי של ${fr(1, 4)} הוא 4.`,
@@ -6325,25 +6654,67 @@ function dsTip(skill, method) {
     mixed: `${M(`2${F(1, 4)} : ${F(3, 4)} = ${F(9, 4)} × ${F(4, 3)} = ${F(36, 12)} = 3`)} – קודם שבר מדומה, ואז כפל בהופכי.`
   }[skill];
   if (method === 'algo') return {
-    fw: `אם המונה מתחלק במספר – מחלקים את המונה: ${M(`${F(6, 7)} : 3 = ${F(2, 7)}`)}. אם לא – כופלים את המכנה: ${M(`${F(2, 3)} : 4 = ${F(2, 12)} = ${F(1, 6)}`)}.`,
-    wu: `כופלים את השלם במכנה: ${M(`3 : ${F(1, 4)} = 3 × 4 = 12`)}.`,
-    same: `כשהמכנים שווים – מחלקים מונה במונה: ${M(`${F(6, 7)} : ${F(2, 7)} = 6 : 2 = 3`)}.`,
-    diff: `מרחיבים למכנה משותף, ואז מחלקים מונה במונה: ${M(`${F(3, 4)} : ${F(1, 2)} = ${F(3, 4)} : ${F(2, 4)} = 3 : 2 = 1${F(1, 2)}`)}.`,
-    mixed: `הופכים לשבר מדומה, מרחיבים למכנה משותף ומחלקים מונה במונה: ${M(`2${F(1, 4)} : ${F(3, 4)} = ${F(9, 4)} : ${F(3, 4)} = 9 : 3 = 3`)}.`
+    fw: `דוגמה: ${M(`${F(2, 3)} : 4`)}${ol([
+      `בודקים: האם המונה מתחלק במספר השלם? אם כן – מחלקים את המונה, והמכנה נשאר: ${M(`${F(6, 7)} : 3 = ${F(2, 7)}`)}.`,
+      `אם לא (2 לא מתחלק ב-4) – מרחיבים את השבר פי 4: ${M(`${F(2, 3)} = ${F(8, 12)}`)}.`,
+      `עכשיו מחלקים את המונה: ${M(`8 : 4 = 2`)}, והתשובה ${M(F(2, 12))}.`,
+      `מצמצמים אם אפשר: ${M(`${F(2, 12)} = ${F(1, 6)}`)}.`])}`,
+    wu: `דוגמה: ${M(`3 : ${F(1, 4)}`)}${ol([`כמה רבעים יש בשלם אחד? 4.`, `ב-3 שלמים: ${M('3 × 4 = 12')}.`, `כלומר: כופלים את השלם במכנה – ${M(`3 : ${F(1, 4)} = 12`)}.`])}`,
+    same: `דוגמה: ${M(`${F(5, 8)} : ${F(2, 8)}`)}${ol([`המכנים שווים – שני השברים בשמיניות.`, `שואלים: כמה פעמים 2 שמיניות נכנסות ב-5 שמיניות? כל החלקים באותו גודל (שמיניות), אז זו בדיוק השאלה כמה פעמים 2 נכנס ב-5 – מחלקים מונה במונה: ${M(`5 : 2`)}.`, `כותבים כשבר, ואם צריך – כמספר מעורב: ${M(`5 : 2 = ${F(5, 2)} = 2${F(1, 2)}`)}.`])}`,
+    diff: `דוגמה: ${M(`${F(3, 4)} : ${F(1, 2)}`)}${ol([
+      `מוצאים <b>מכנה משותף</b> – מספר ששני המכנים מתחלקים בו: 4 מתחלק ב-4 וגם ב-2, אז המכנה המשותף הוא 4.`,
+      `<b>מרחיבים</b> כל שבר למכנה המשותף: ${M(`${F(1, 2)} = ${F(2, 4)}`)}; ${fr(3, 4)} נשאר כמו שהוא.`,
+      `עכשיו שני השברים ברבעים: ${M(`${F(3, 4)} : ${F(2, 4)}`)}. <b>מחלקים מונה במונה</b>: ${M('3 : 2')}.<br><span class="dswhy">💡 <b>למה מותר לחלק רק את המונים?</b> כששני השברים באותו מכנה, כל החלקים באותו גודל (כאן – רבעים). אז השאלה "כמה פעמים 2 רבעים נכנסים ב-3 רבעים" היא בדיוק "כמה פעמים 2 נכנס ב-3" – כמו 3 תפוחים : 2 תפוחים. המכנה רק אומר מה גודל החלק, ולכן הוא לא משתתף בחילוק.</span>`,
+      `כותבים את התוצאה כשבר, ואם צריך – כמספר מעורב: ${M(`3 : 2 = ${F(3, 2)} = 1${F(1, 2)}`)}.`])}`,
+    mixed: `דוגמה: ${M(`2${F(1, 4)} : ${F(1, 2)}`)}${ol([
+      `הופכים כל מספר מעורב לשבר מדומה: ${M(`2${F(1, 4)} = ${F(9, 4)}`)} (כי ${M('2 × 4 + 1 = 9')}).`,
+      `מוצאים <b>מכנה משותף</b> ומרחיבים: ${M(`${F(1, 2)} = ${F(2, 4)}`)}.`,
+      `<b>מחלקים מונה במונה</b> – שני השברים ברבעים, אז שואלים כמה פעמים 2 רבעים נכנסים ב-9 רבעים: ${M(`${F(9, 4)} : ${F(2, 4)} = 9 : 2`)}.`,
+      `כותבים כשבר וכמספר מעורב: ${M(`9 : 2 = ${F(9, 2)} = 4${F(1, 2)}`)}.`])}`
   }[skill];
+  // מושגית: קודם "מה זה אומר?" – סיפור קצר שמראה את משמעות החילוק, ורק אחר כך "איך מחשבים?"
+  const mean = (story, calc) => `<div class="dsmean"><b>מה זה אומר?</b> ${story}</div><div class="dscalc"><b>איך מחשבים?</b> ${calc}</div>`;
   return {
-    fw: [`<b>חלוקה לחלקים שווים:</b> ${M(`${F(3, 4)} : 3`)} – מחלקים ${fr(3, 4)} ל-3 חלקים שווים. כמה מקבל כל חלק? ${fr(3, 4)} הם 3 רבעים, ולכל חלק – רבע אחד: ${M(`${F(3, 4)} : 3 = ${F(1, 4)}`)}.`, dsFig(1, 4, 3, 1)],
-    wu: [`<b>כמה פעמים נכנס?</b> ${M(`3 : ${F(1, 4)}`)} – כמה רבעים יש ב-3 שלמים? בכל שלם 4 רבעים, ובשלושה שלמים 12: ${M(`3 : ${F(1, 4)} = 12`)}.`, dsFig(3, 4, 12, 1)],
-    same: [`<b>כמה פעמים נכנס?</b> ${M(`${F(6, 7)} : ${F(2, 7)}`)} – כמה פעמים ${fr(2, 7)} נכנס ב-${fr(6, 7)}? 6 שביעיות, ובכל קבוצה 2 שביעיות – 3 קבוצות: ${M(`${F(6, 7)} : ${F(2, 7)} = 3`)}.`, dsFig(1, 7, 6, 2)],
-    diff: [`<b>כמה פעמים נכנס?</b> ${M(`${F(3, 4)} : ${F(1, 2)}`)} – כדי להשוות, כותבים את שניהם ברבעים: ${M(`${F(1, 2)} = ${F(2, 4)}`)}. כמה פעמים 2 רבעים נכנסים ב-3 רבעים? פעם אחת שלמה ועוד חצי פעם: ${M(`${F(3, 4)} : ${F(1, 2)} = 1${F(1, 2)}`)}.`, dsFig(1, 4, 3, 2)],
-    mixed: [`<b>כמה פעמים נכנס?</b> ${M(`2${F(1, 4)} : ${F(3, 4)}`)} – כותבים ברבעים: ${M(`2${F(1, 4)} = ${F(9, 4)}`)}. כמה פעמים 3 רבעים נכנסים ב-9 רבעים? ${M(`9 : 3 = 3`)}.`, dsFig(3, 4, 9, 3)]
+    fw: [mean(`נשארו ${fr(3, 4)} פיצה, ו-3 ילדים מתחלקים בה <b>שווה בשווה</b>. כמה פיצה מקבל כל ילד? זו <b>חלוקה לחלקים שווים</b>: ${M(`${F(3, 4)} : 3`)}.`,
+      `${fr(3, 4)} הם 3 רבעים. 3 רבעים ל-3 ילדים – רבע לכל ילד: ${M(`${F(3, 4)} : 3 = ${F(1, 4)}`)}.`), dsFig(1, 4, 3, 1)],
+    wu: [mean(`יש 3 פיצות, וכל ילד מקבל ${fr(1, 4)} פיצה. כמה ילדים יקבלו? זו שאלת <b>הכלה</b> – כמה פעמים ${fr(1, 4)} נכנס ב-3: ${M(`3 : ${F(1, 4)}`)}.`,
+      `בכל פיצה יש 4 רבעים, ובשלוש פיצות 12 רבעים: ${M(`3 : ${F(1, 4)} = 12`)}.`), dsFig(3, 4, 12, 1)],
+    same: [mean(`יש ${fr(5, 8)} טבלת שוקולד, ומנה אחת היא ${fr(2, 8)} טבלה. כמה מנות יש? כמה פעמים ${fr(2, 8)} נכנס ב-${fr(5, 8)}: ${M(`${F(5, 8)} : ${F(2, 8)}`)}.`,
+      `5 שמיניות, ובכל מנה 2 שמיניות – 2 מנות שלמות ועוד חצי מנה: ${M(`${F(5, 8)} : ${F(2, 8)} = 2${F(1, 2)}`)}.`), dsFig(1, 8, 5, 2)],
+    diff: [mean(`הקפה סביב המגרש היא ${fr(1, 2)} ק"מ, ונועה רצה ${fr(3, 4)} ק"מ. כמה הקפות רצה? כמה פעמים ${fr(1, 2)} נכנס ב-${fr(3, 4)}: ${M(`${F(3, 4)} : ${F(1, 2)}`)}.`,
+      `כדי להשוות, כותבים את שניהם ברבעים: ${M(`${F(1, 2)} = ${F(2, 4)}`)}. כמה פעמים 2 רבעים נכנסים ב-3 רבעים? פעם אחת ועוד חצי: ${M(`${F(3, 4)} : ${F(1, 2)} = 1${F(1, 2)}`)} הקפות.<br><span class="dswhy">💡 <b>למה מותר לחלק רק את המונים?</b> כששני השברים באותו מכנה, כל החלקים באותו גודל (כאן – רבעים). אז השאלה "כמה פעמים 2 רבעים נכנסים ב-3 רבעים" היא בדיוק "כמה פעמים 2 נכנס ב-3" – כמו 3 תפוחים : 2 תפוחים. המכנה רק אומר מה גודל החלק, ולכן הוא לא משתתף בחילוק.</span>`), dsFig(1, 4, 3, 2)],
+    mixed: [mean(`נשארו ${M(`2${F(1, 4)}`)} פיצות, וכל ילד מקבל ${fr(3, 4)} פיצה. כמה ילדים יקבלו? כמה פעמים ${fr(3, 4)} נכנס ב-${M(`2${F(1, 4)}`)}: ${M(`2${F(1, 4)} : ${F(3, 4)}`)}.`,
+      `כותבים הכול ברבעים: ${M(`2${F(1, 4)} = ${F(9, 4)}`)}. כמה פעמים 3 רבעים נכנסים ב-9 רבעים? ${M('9 : 3 = 3')} ילדים.`), dsFig(3, 4, 9, 3)]
   }[skill];
 }
-function dsTipsHTML(skills, method) {
+// תזכורת קצרה – שורה אחת לכל מיומנות (concept: משמעות; algo: הצעדים בקיצור)
+const DSK_SHORT = {
+  concept: {
+    fw: () => `${M(F(3, 4))} פיצה ל-3 ילדים שווה בשווה – כמה לכל ילד? 3 רבעים ל-3 ילדים: ${M(`${F(3, 4)} : 3 = ${F(1, 4)}`)}.`,
+    wu: () => `3 פיצות, ${M(F(1, 4))} לכל ילד – כמה ילדים? כמה רבעים ב-3: ${M(`3 : ${F(1, 4)} = 12`)}.`,
+    same: () => `מנות של ${M(F(2, 8))} טבלה מתוך ${M(F(5, 8))} טבלה – כמה מנות? 5 שמיניות : 2 שמיניות = ${M(`2${F(1, 2)}`)}.`,
+    diff: () => `הקפה של ${M(F(1, 2))} ק"מ, רצו ${M(F(3, 4))} ק"מ – כמה הקפות? באותו מכנה (${M(`${F(1, 2)} = ${F(2, 4)}`)}): 3 רבעים : 2 רבעים = ${M(`1${F(1, 2)}`)}.`,
+    mixed: () => `${M(`2${F(1, 4)}`)} פיצות, ${M(F(3, 4))} לכל ילד – כמה ילדים? ברבעים: ${M(`${F(9, 4)} : ${F(3, 4)}`)} = 9 : 3 = 3.`
+  },
+  algo: {
+    fw: () => `המונה מתחלק – מחלקים את המונה; לא מתחלק – מרחיבים ואז מחלקים: ${M(`${F(2, 3)} : 4 = ${F(8, 12)} : 4 = ${F(2, 12)}`)}.`,
+    wu: () => `שלם כפול המכנה: ${M(`3 : ${F(1, 4)} = 3 × 4 = 12`)}.`,
+    same: () => `מכנה שווה – מונה חלקי מונה: ${M(`${F(5, 8)} : ${F(2, 8)} = 5 : 2 = 2${F(1, 2)}`)}.`,
+    diff: () => `מכנה משותף ← מונה חלקי מונה: ${M(`${F(3, 4)} : ${F(1, 2)} = ${F(3, 4)} : ${F(2, 4)} = 3 : 2 = 1${F(1, 2)}`)}.`,
+    mixed: () => `שבר מדומה ← מכנה משותף ← מונה חלקי מונה: ${M(`2${F(1, 4)} : ${F(3, 4)} = ${F(9, 4)} : ${F(3, 4)} = 9 : 3 = 3`)}.`
+  }
+};
+function dsTipsHTML(skills, method) { return dsMath(dsTipsHTML0(skills, method)); }
+function dsTipsHTML0(skills, method) {
   if (!method || method === 'none') return '';
-  const title = { concept: 'מה המשמעות של החילוק?', algo: 'צעדי הפתרון', kfc: 'כפל בהופכי (KFC)' }[method];
+  // קצרה: כשהמורה בחרה בה, או בתרגול של יותר משתי מיומנויות (כדי שלא ייווצר עמוד שלם של תזכורות)
+  if (method === 'short' || (skills.length > 2 && (method === 'concept' || method === 'algo'))) {
+    const set = DSK_SHORT[method === 'algo' ? 'algo' : 'concept'];
+    return `<div class="wstips dsk-tips short"><b>📘 תזכורת קצרה – ${method === 'algo' ? 'צעדי החישוב' : 'מה המשמעות של החילוק'}</b><ul>${skills.map(sk => `<li><b>${DSK.find(x => x.id === sk).name}:</b> ${set[sk]()}</li>`).join('')}</ul></div>`;
+  }
+  const title = { concept: 'מושגית: מה המשמעות של החילוק?', algo: 'אלגוריתמית: צעד אחר צעד', kfc: 'כפל בהופכי (KFC)' }[method];
   const items = skills.map(sk => { const t = dsTip(sk, method), [txt, fig] = Array.isArray(t) ? t : [t, '']; return `<li class="dstip"><div>${skills.length > 1 ? `<b>${DSK.find(x => x.id === sk).name}:</b> ` : ''}${txt}</div>${fig}</li>`; }).join('');
-  return `<div class="wstips dsk-tips"><b>📘 תזכורת – ${title}</b><ul>${items}</ul></div>`;
+  return `<div class="wstips dsk-tips${skills.length > 2 ? ' multi' : ''}"><b>📘 תזכורת – ${title}</b><ul>${items}</ul></div>`;
 }
 // ===== מחוללים לקורס "כפל וחילוק שברים" (coach.html?course=fracop) – לא משויכים לנושא, כדי לא לשבש קודי חוברות =====
 function genDivFrFW() { return genDivFrW(pick(['fw1', 'fw2'])); }
@@ -9326,6 +9697,7 @@ function solHTML(q) {
   return `<div class="sol">${ex ? `<div class="sol-ex"><b>${calc ? 'תרגיל:' : 'הסבר:'}</b> ${ex}</div>` : ''}<div class="sol-ans"><b>תשובה סופית:</b> ${correctHTML(q)}</div></div>`;
 }
 function correctHTML(q) {
+  if (q.type === 'open') return q.model || '';
   if (q.type === 'num') return M(fmt(q.ans)) + (q.unit ? ' ' + q.unit : '');
   if (q.type === 'choice') return q.choices[q.ans];
   const { n, d } = q.ans;
@@ -19626,22 +19998,27 @@ function wsQuestionHTML(q, n, noGrid) {
   let ans;
   if (q.type === 'num') ans = (q.est ? `<div class="wsans wsest">אומדן: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>` : '') + `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
+  else if (q.type === 'open') ans = `<div class="wsopen" style="--n:${q.lines || 4}"></div>`; // משימת חשיבה – שורות לכתיבת נימוק ודרך
   else ans = `<div class="wschoices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
-  const grid = noGrid ? '' : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
-  return `<div class="wsq"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${q.text}</div></div>${seqPlain(q.fig)}${ans}</div>${grid}</div>`;
+  const grid = noGrid || q.type === 'open' ? '' : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
+  const kind = q.type === 'open' && q.meta && typeof DSK_THINK_NAME !== 'undefined' && DSK_THINK_NAME[q.meta.think] ? `<span class="wskind">${DSK_THINK_NAME[q.meta.think]}</span> ` : '';
+  return `<div class="wsq${q.type === 'open' ? ' wsopenq' + ((q.lines || 0) >= 4 ? ' wide' : '') : ''}"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${kind}${q.text}</div></div>${seqPlain(q.fig)}${ans}</div>${grid}</div>`;
 }
 
 function examQuestionHTML(q, n) {
   let ans;
   if (q.type === 'choice') ans = `<div class="ex-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
+  else if (q.type === 'open') ans = `<div class="wsans">תשובה / מסקנה: <span class="wsline long"></span></div>`;
   else ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   const plain = q.text.replace(/<[^>]+>/g, '');
-  const wordy = q.steps && q.steps.length >= 3 && plain.length > 60;
-  const work = wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : '';
-  const grid = `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
-  return `<div class="ex-q"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${q.text}</div></div>${seqPlain(q.fig)}${work}${ans}</div>${grid}</div>`;
+  const open = q.type === 'open', wordy = !open && q.steps && q.steps.length >= 3 && plain.length > 60;
+  const work = open ? '<div class="ex-work">הציגו את דרך הפתרון והנימוק במשבצות.</div>' : wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : '';
+  // משימת חשיבה: משבצות לכל הרוחב, בגובה לפי היקף המשימה
+  const grid = open ? `<div class="ex-grid xl" style="min-height:${((q.lines || 4) * 0.95 + 1.2).toFixed(1)}cm"></div>` : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
+  const kind = open && q.meta && typeof DSK_THINK_NAME !== 'undefined' && DSK_THINK_NAME[q.meta.think] ? `<span class="wskind">${DSK_THINK_NAME[q.meta.think]}</span> ` : '';
+  return `<div class="ex-q${open ? ' ex-open' : ''}"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${kind}${q.text}</div></div>${seqPlain(q.fig)}${work}${ans}</div>${grid}</div>`;
 }
 
 // "תרגילים בלבד": מחוללים של שאלות מילוליות (לפי שם המחולל), ועוד שאלות ארוכות עם יחידה בלי איור
@@ -19805,12 +20182,15 @@ function printBuilder() {
           <label>תזכורת לפני התרגול:
             <select id="dskTip">
               <option value="none">ללא תזכורת</option>
+              <option value="short">קצרה וממוקדת – שורה אחת לכל מיומנות</option>
               <option value="concept" selected>מושגית – הסבר והמחשה (משמעות החילוק)</option>
               <option value="algo">אלגוריתמית – צעדי הפתרון (מכנה משותף, בלי הופכי)</option>
               <option value="kfc">אלגוריתמית – כפל בהופכי (KFC) – רק אם כבר נלמד</option>
             </select>
           </label>
-          <p class="muted small">כשנבחרה מיומנות אחת – כל השאלות בדף ממנה בלבד. כמה מיומנויות – לסירוגין. <b>רמת הקושי</b> משנה רק את המספרים ואת מספר השלבים, לא את המיומנות. גם ההסברים בדף התשובות לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).</p>
+          <label class="chk"><input type="checkbox" id="dskFig" checked> 🖍️ המחשה חזותית ליד תרגילי הרמה הקלה (פס שברים לסימון קבוצות)</label>
+          <p class="muted small">כשנבחרה מיומנות אחת – כל השאלות בדף ממנה בלבד. כמה מיומנויות – לסירוגין, ובתרגול של יותר משתי מיומנויות התזכורת מוצגת בקצרה (שורה לכל מיומנות). <b>רמת הקושי</b> נקבעת לפי מורכבות ההבנה והחישוב בתוך המיומנות – לא מוסיפה מיומנות אחרת, ולא קובעת אם התשובה שלמה. ההסברים בדף התשובות – לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).</p>
+          <details class="dsk-lv"><summary>מה משתנה בין הרמות בכל מיומנות?</summary><table>${DSK.map(k => `<tr><th>${k.name}</th>${DSK_LEVELS[k.id].map((t, i) => `<td><b>${['קלה', 'בינונית', 'קשה'][i]}:</b> ${t}</td>`).join('')}</tr>`).join('')}</table></details>
         </div>` : ''}
         <label>רמה:
           <select id="wl">
@@ -19838,6 +20218,7 @@ function printBuilder() {
           <select id="wstyle">
             <option value="pastel">🎨 עיצוב פסטל – כרטיסים צבעוניים</option>
             <option value="note">✏️ עיצוב מחברת – פשוט</option>
+            <option value="exam">📝 סגנון מבחן – משבצות לדרך הפתרון ומקום לתשובה</option>
           </select>
         </label>
         <label class="chk"><input type="checkbox" id="wwhole"> 🔢 מספרים שלמים בלבד (בלי שברים, עשרוניים ואחוזים)</label>
@@ -19978,13 +20359,13 @@ function printBuilder() {
     $('dskAll').onchange = () => boxes().forEach(c => { c.checked = $('dskAll').checked; });
     boxes().forEach(c => c.addEventListener('change', () => { $('dskAll').checked = boxes().every(x => x.checked); }));
   }
-  const dskOpts = topics => topics.includes('divfr') && $('dskPanel') ? { skills: [...app.querySelectorAll('.dsk-skills input:not(#dskAll):checked')].map(x => x.value), method: $('dskTip').value } : null;
+  const dskOpts = topics => topics.includes('divfr') && $('dskPanel') ? { skills: [...app.querySelectorAll('.dsk-skills input:not(#dskAll):checked')].map(x => x.value), method: $('dskTip').value, fig: $('dskFig').checked } : null;
   $('wgo').onclick = () => wsGate(() => {
     const topics = [...app.querySelectorAll('.wstopics:not(.drtopics) input:checked')].map(x => x.value).filter(id => TOPIC[id]);
     if (!topics.length) { $('wmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
     const dsk = dskOpts(topics), dskOnly = !!dsk && topics.length === 1;
     if (dsk && !dsk.skills.length) { $('wmsg').textContent = 'בחרו לפחות מיומנות אחת בחילוק שברים 🙂'; return; }
-    const dskM = dsk && dsk.method !== 'none' ? dsk.method : 'concept';
+    const dskM = dsk && dsk.method !== 'none' && dsk.method !== 'short' ? dsk.method : 'concept';
     const dskNames = dsk ? (dsk.skills.length === 1 ? DSK.find(k => k.id === dsk.skills[0]).name : dsk.skills.length === DSK.length ? 'תרגול מעורב – כל המיומנויות' : 'תרגול מעורב: ' + dsk.skills.map(id => DSK.find(k => k.id === id).name).join(' · ')) : '';
     const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
     const wq = $('wwq').value, wordOnly = wq === 'only', drill = wq !== 'auto' && !wordOnly, nWord = drill ? Number(wq) : 0;
@@ -19995,12 +20376,16 @@ function printBuilder() {
     const skillLine = dsk ? `<div class="wsskill">➗ ${dskNames} · ${$('wl').selectedOptions[0].textContent.trim()}</div>` : '';
     const noGrid = !$('wgrid').checked;
     const wholeOnly = $('wwhole') && $('wwhole').checked;
-    const pastel = !$('wstyle') || $('wstyle').value === 'pastel', pcl = pastel ? ' ws-pastel' : '';
+    const examSt = !!$('wstyle') && $('wstyle').value === 'exam';
+    const pastel = !$('wstyle') || $('wstyle').value === 'pastel', pcl = examSt ? ' ex-body' : pastel ? ' ws-pastel' : '', kcl = examSt ? '' : pcl;
+    // רשימת השאלות לפי הפריסה: מבחן – מספור, משבצות לדרך ומקום לתשובה (תמיד עם משבצות); תרגול – כרטיסים
+    const qList = (qs, start = 0, dense = false) => examSt ? `<div class="ex-qs">${qs.map((q, i) => examQuestionHTML(q, start + i + 1)).join('')}</div>`
+      : `<div class="wsqs${noGrid ? ' nogrid' : ''}${dense ? ' dsk-dense' : ''}">${qs.map((q, i) => wsQuestionHTML(q, start + i + 1, noGrid)).join('')}</div>`;
     let wordShort = false;
     // חילוק שברים לפי מיומנות: שאלות "חילוק שבר ומספר שלם" מוחלפות בשאלות מהמיומנויות שנבחרו (באותה רמה, ותרגיל ↔ מילולית נשמר)
-    const dskFix = qs => { if (!dsk) return qs; const seen = new Set(); let k = 0; return qs.map(q => q.topic !== 'divfr' ? q : buildDivSkillQs([dsk.skills[k++ % dsk.skills.length]], String(q.lv || (level === 'mix' ? 2 : level)), 1, isWordQ(q) ? 'word' : 'calc', dskM, seen)[0] || q); };
+    const dskFix = qs => { if (!dsk) return qs; const seen = new Set(); let k = 0; return qs.map(q => q.topic !== 'divfr' ? q : buildDivSkillQs([dsk.skills[k++ % dsk.skills.length]], String(q.lv || (level === 'mix' ? 2 : level)), 1, isWordQ(q) ? 'word' : 'calc', dskM, seen, dsk.fig)[0] || q); };
     const sheets = Array.from({ length: versions }, () => {
-      if (dskOnly) { const seen = new Set(); return buildDivSkillQs(dsk.skills, level, count, wordOnly ? 'word' : drill ? 'calc' : 'mix', dskM, seen).concat(nWord ? buildDivSkillQs(dsk.skills, level, nWord, 'word', dskM, seen) : []); }
+      if (dskOnly) { const seen = new Set(); return buildDivSkillQs(dsk.skills, level, count, wordOnly ? 'word' : drill ? 'calc' : 'mix', dskM, seen, dsk.fig).concat(nWord ? buildDivSkillQs(dsk.skills, level, nWord, 'word', dskM, seen) : []); }
       if (wordOnly) { const w = dskFix(buildWordQs(topics, level, count, wholeOnly, true)); if (w.length < count) wordShort = true; return w; }
       const a = dskFix(buildWorksheet(topics, level, count, drill, wholeOnly)), w = nWord ? dskFix(buildWordQs(topics, level, nWord, wholeOnly)) : []; if (w.length < nWord) wordShort = true; return a.concat(w);
     });
@@ -20013,18 +20398,59 @@ function printBuilder() {
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
         </div>
         ${tips}
-        <div class="wsqs${noGrid ? ' nogrid' : ''}${dsk && qs.length >= 8 ? ' dsk-dense' : ''}">${qs.map((q, i) => wsQuestionHTML(q, i + 1, noGrid)).join('')}</div>
+        ${qList(qs, 0, dsk && qs.length >= 6)}
         <div class="wsfoot">בהצלחה! 🌟</div>
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
-      <section class="ws-page wskey${pcl}">
+      <section class="ws-page wskey${dsk ? ' dsk-key' : ''}${kcl}">
         <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>${skillLine}
-        <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
+        <ol>${qs.map(q => dsk && q.type === 'open' ? `<li><span class="wskind">${DSK_THINK_NAME[q.meta.think] || ''}</span> <div class="kmodel">${correctHTML(q)}</div>${q.multi ? '<div class="wsexp">✱ יש עוד תשובות נכונות – זה פתרון לדוגמה.</div>' : ''}</li>`
+          : `<li><b>${q.keyPre ? q.keyPre + ' ' : ''}${correctHTML(q)}${q.keyUnit ? ' ' + q.keyUnit : ''}</b>${dsk || $('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
     $('wsout').dataset.what = `${base}: ${topics.map(t => TOPIC[t].name).join(', ')}${dsk ? ` (${dskNames})` : ''} · ${$('wl').selectedOptions[0].textContent.trim()}${versions > 1 ? ` · ${versions} נוסחים` : ''}${wordOnly ? ` · ${count} שאלות מילוליות` : drill ? ` · ${count} תרגילים + ${nWord} מילוליות` : ''}`;
     if (tips) dropTipsIfOverflow();
     paginateSheets();
+    // חילוק שברים לפי מיומנות – איזון עמודים: עד 8 שאלות תרגול – לנסות עמוד אחד (גרסה מהודקת), ואם לא – חצי-חצי;
+    // דף עם עמוד אחרון חלש (משימה-שתיים) – חלוקה שווה לעמוד אחד פחות, ואם לא נכנס – חלוקה שווה לאותו מספר עמודים
+    if (dsk) {
+      const secs = () => [...$('wsout').querySelectorAll('.ws-page:not(.wskey)')];
+      const pagesOf = () => secs().map(sec => [...sec.querySelectorAll('.ws-pg')].map(pp => pp.querySelectorAll('.wsq, .ex-q').length));
+      // נכנס לעמוד אחד – גם עם מרווח ביטחון להדפסה (255 מ"מ במקום 270)
+      const fits = () => { const o = $('wsout'); o.classList.add('measure'); const ok = secs().every(sec => { const pp = sec.querySelectorAll('.ws-pg'); return pp.length === 1 && pp[0].getBoundingClientRect().height <= 255 * 96 / 25.4; }); o.classList.remove('measure'); return ok; };
+      const ki = out.indexOf('<section class="ws-page wskey'), keyPart0 = ki >= 0 ? out.slice(ki) : '';
+      let keyCls = '', curCh = qs => [qs], curCls = '';
+      const blk = (v, part, start, head, foot, cls) => `
+      <section class="ws-page${cls}${pcl}">
+        ${head ? `<div class="wshead">
+          <h1>${esc(title)}${vname(v)}</h1>${skillLine}
+          <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
+        </div>
+        ${tips}` : ''}
+        ${qList(part, start, part.length >= 6 || count >= 6)}
+        ${foot ? '<div class="wsfoot">בהצלחה! 🌟</div>' : ''}
+      </section>`;
+      const render = (chunksOf, cls) => {
+        curCh = chunksOf; curCls = cls;
+        $('wsout').innerHTML = sheets.map((qs, v) => { const ch = chunksOf(qs); let st = 0; return ch.map((part, j) => { const h = blk(v, part, st, j === 0, j === ch.length - 1, cls); st += part.length; return h; }).join(''); }).join('') + keyPart0.split(' dsk-key').join(' dsk-key' + keyCls);
+        paginateSheets();
+      };
+      const even = P => qs => { const per = Math.ceil(qs.length / P), r = []; for (let k = 0; k < qs.length; k += per) r.push(qs.slice(k, k + per)); return r; };
+      const think = sheets.some(qs => qs.some(q => q.type === 'open' && (q.lines || 0) >= 4));
+      const pg = pagesOf()[0] || [];
+      if (pg.length === 1 && !fits() && !examSt) render(qs => [qs], think ? ' dsk-l3fit' : ' dsk-tight');
+      if (pg.length > 1) {
+        if (examSt) { if (pg[pg.length - 1] <= Math.max(1, Math.floor(Math.max(...pg) / 2))) { const tries = [[pg.length - 1, ' ex-roomy'], [pg.length - 1, ''], [pg.length, ' ex-roomy'], [pg.length, '']]; for (const [P, c] of tries) { render(even(P), c); if (fits()) break; } } }
+        else if (!think && count + nWord <= 8) { render(qs => [qs], ' dsk-tight'); if (!fits()) render(even(2), ' dsk-split'); }
+        else if (pg[pg.length - 1] <= Math.max(2, Math.floor(Math.max(...pg) / 2))) {
+          render(even(pg.length - 1), think ? ' dsk-l3fit' : ' dsk-tight');
+          if (!fits()) render(even(pg.length), think ? '' : ' dsk-split');
+        }
+      }
+      // דף התשובות: אם בעמוד האחרון נשארו פריט-שניים – פריסה מעט צפופה יותר, כדי שלא יהיה עמוד כמעט ריק
+      const kp = [...$('wsout').querySelectorAll('.wskey')].map(sec => [...sec.querySelectorAll('.ws-pg')].map(pp => pp.querySelectorAll('li').length));
+      if (kp.some(k => k.length > 1 && k[k.length - 1] <= 2)) { keyCls = ' dsk-keyc'; render(curCh, curCls); }
+    }
     $('wprint').classList.remove('hidden');
     $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
     $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".' + (wordShort ? (wordOnly ? ' (אלו כל השאלות המילוליות שיש בנושאים שנבחרו.)' : ' (בנושאים שנבחרו אין מספיק שאלות מילוליות – נוספו כמה שיש.)') : '');
