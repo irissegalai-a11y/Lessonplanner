@@ -454,6 +454,7 @@ html.embed body { padding-top: 0; }
   .ex-grid { flex: 0 0 44%; margin: 2px 0; min-height: 2.6cm; }
   .ex-grid.big { min-height: 4cm; }
   .ex-grid.sm { min-height: 2.2cm; }
+  .wsqs.dsk-dense .ex-grid { min-height: 1.7cm; } .wsqs.dsk-dense .ex-grid.big { min-height: 2.4cm; }
   .wsqs.nogrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; }
   .wsqs.nogrid .wsq { display: block; padding: 4px 0 6px; }
   .wsqs.nogrid .qmain { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; }
@@ -1085,6 +1086,34 @@ html.embed body { padding-top: 0; }
   .op-dots span.on { border-color: #1f1e1c; color: #1f1e1c; background: rgba(239,201,106,0.45); font-weight: 700; }
   .op-dots span.done { color: #1f1e1c; }
   .op-slide h2 { margin-top: 0; }
+  .dsk-panel { border: 2px dashed #b9a5dc; border-radius: 12px; padding: 10px 12px; margin: 8px 0; background: #faf7ff; }
+  .dsk-skills { display: flex; flex-direction: column; gap: 4px; margin: 6px 0; }
+  .wsskill { font-size: 0.95em; color: #4b3a7a; margin: 2px 0 6px; }
+  .dsk-tips li.dstip { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .dsk-tips li.dstip > div { flex: 1 1 260px; }
+  .dsk-tips .dsfig { max-width: 100%; height: auto; flex: 0 0 auto; }
+  .zl svg { width: 100%; max-width: 760px; height: auto; display: block; margin: 6px auto; touch-action: manipulation; }
+  .zl svg text { font-size: 14px; fill: var(--ink, #23264a); }
+  .zl .zl-end { font-size: 16px; font-weight: 700; }
+  .zl .zl-sub { font-size: 11.5px; fill: #6b6f80; }
+  .zl .zl-bar { stroke: var(--ink, #23264a); stroke-width: 1.3; }
+  .zl .zl-ax, .zl .zl-tk { stroke: var(--ink, #23264a); stroke-width: 2; }
+  .zl .zl-arw { fill: var(--ink, #23264a); }
+  .zl .zl-sel { stroke: #e8590c; stroke-width: 8; stroke-linecap: round; opacity: 0.8; }
+  .zl .zl-dot { fill: #e8590c; }
+  .zl .zl-hit { fill: transparent; cursor: pointer; }
+  .zl .zl-hit:hover { fill: rgba(232, 89, 12, 0.1); }
+  .zl .zl-new { animation: zlIn 0.8s ease both; }
+  .zl .zl-new.zl-tk, .zl line.zl-new { stroke: #2f5bd3; }
+  .zl text.zl-new { fill: #2f5bd3; }
+  @keyframes zlIn { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .zl .zl-new { animation: none; } }
+  .zl-msg { min-height: 3.2em; line-height: 1.7; }
+  .zl-pre[hidden] { display: none; }
+  .zl-ov { position: fixed; inset: 0; background: rgba(20, 22, 40, 0.55); z-index: 900; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 16px; }
+  .zl-card { width: 100%; max-width: 860px; margin: 0; }
+  .zl-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .zl-top h2 { margin: 0; }
   .cmp-big svg { max-width: min(100%, 420px) !important; height: auto; }
   .cmp-way { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin: 6px 0; }
   .cmp-way .cmp-fig { width: 220px; max-width: 100%; }
@@ -2136,7 +2165,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6114,6 +6143,208 @@ function genDivFrW(kind) {
     hint: `קודם הופכים את ${wf}${F(n, d)} לשבר מדומה, ואז מחלקים ב-${w}.`,
     exp: `${M(`${wf}${F(n, d)} : ${w} = ${F(I, d)} : ${w} = ${F(m, d)}`)}${m >= d ? ` = ${FX(m, d)}` : ''}` };
 }
+/* ===== חילוק שברים לפי מיומנות – למחולל דפי התרגול (?print) =====
+   שלושה ממדים נפרדים: מיומנות (skill) · רמת קושי (lv: מספרים ושלבים בלבד) · שיטת ההסבר (method).
+   skill: fw – שבר : שלם · wu – שלם : שבר יחידה · same – מכנים שווים · diff – מכנים שונים · mixed – מספרים מעורבים
+   method: concept (משמעות החילוק – ברירת המחדל) · algo (צעדים, בלי הופכי) · kfc (כפל בהופכי – רק אם המורה בחרה)
+   כל שאלה נושאת meta = { skill, a: [n, d], b: [n, d], word } – לבדיקה אוטומטית של התשובה. */
+const DSK = [
+  { id: 'fw', name: 'חילוק שבר במספר שלם', ex: () => M(`${F(3, 4)} : 3`) },
+  { id: 'wu', name: 'חילוק מספר שלם בשבר יחידה', ex: () => M(`3 : ${F(1, 4)}`) },
+  { id: 'same', name: 'חילוק שברים בעלי מכנה שווה', ex: () => M(`${F(6, 7)} : ${F(2, 7)}`) },
+  { id: 'diff', name: 'חילוק שברים בעלי מכנים שונים', ex: () => M(`${F(3, 4)} : ${F(1, 2)}`) },
+  { id: 'mixed', name: 'חילוק מספרים מעורבים', ex: () => M(`2${F(1, 4)} : ${F(3, 4)}`) }
+];
+const dsRed = (n, d) => { const g = gcd(n, d) || 1; return [n / g, d / g]; };
+// מספר להצגה: שלם, שבר (גם מדומה), או מספר מעורב (mix)
+const dsNum = (x, mix) => x[1] === 1 ? String(x[0]) : mix && x[0] > x[1] ? `${Math.floor(x[0] / x[1])}${F(x[0] % x[1], x[1])}` : F(x[0], x[1]);
+const dsOk = x => gcd(x[0], x[1]) === 1;
+// בעיות מילוליות. חלוקה לחלקים שווים (fw): "כמה מקבל כל אחד?". הכלה (שאר המיומנויות): "כמה פעמים נכנס?"
+// int – התשובה מספר שלם · gt – גדולה מ-1 ולא שלמה · lt – קטנה מ-1
+const DSK_WORD = {
+  int: [
+    (a, b) => `יש ${a} ליטר מיץ. ממלאים כוסות של ${b} ליטר. כמה כוסות אפשר למלא?`,
+    (a, b) => `מסרט באורך ${a} מטר חותכים חתיכות של ${b} מטר. כמה חתיכות יתקבלו?`,
+    (a, b) => `לכל עוגה צריך ${b} ק"ג קמח. כמה עוגות אפשר לאפות מ-${a} ק"ג קמח?`,
+    (a, b) => `יש ${a} ק"ג אגוזים. אורזים אותם בשקיות של ${b} ק"ג. כמה שקיות ימולאו?`,
+    (a, b) => `בכל צעד הרובוט מתקדם ${b} מטר. כמה צעדים יעשה הרובוט כדי להתקדם ${a} מטר?`,
+    (a, b) => `כל משחקון בתחרות נמשך ${b} שעה. כמה משחקונים ייכנסו ב-${a} שעה?`,
+    (a, b) => `לצביעת כיסא אחד צריך ${b} ליטר צבע. לכמה כיסאות יספיקו ${a} ליטר צבע?`,
+    (a, b) => `צוות עבודה סולל ${b} ק"מ כביש בכל יום. בכמה ימים יסלול ${a} ק"מ?`
+  ],
+  gt: [
+    (a, b) => `חבל אדום באורך ${a} מטר וחבל כחול באורך ${b} מטר. פי כמה ארוך החבל האדום מהחבל הכחול?`,
+    (a, b) => `בקבוק גדול מכיל ${a} ליטר, ובקבוק קטן מכיל ${b} ליטר. פי כמה גדול הבקבוק הגדול מהקטן?`,
+    (a, b) => `מסלול הריצה הארוך הוא ${a} ק"מ, והמסלול הקצר הוא ${b} ק"מ. פי כמה ארוך המסלול הארוך מהקצר?`,
+    (a, b) => `כדי למלא דלי צריך ${b} ליטר מים. יש ${a} ליטר מים. כמה דליים אפשר למלא? (אפשר לענות במספר מעורב – דליים מלאים וחלק מדלי)`,
+    (a, b) => `שקית אחת מכילה ${b} ק"ג קמח. כמה שקיות כאלה יש ב-${a} ק"ג קמח? (אפשר לענות במספר מעורב – שקיות שלמות וחלק משקית)`
+  ],
+  lt: [
+    (a, b) => `לכל עוגה צריך ${b} ק"ג קמח, אבל יש רק ${a} ק"ג. איזה חלק מהעוגה אפשר להכין?`,
+    (a, b) => `כדי למלא דלי צריך ${b} ליטר מים. יש רק ${a} ליטר. איזה חלק מהדלי אפשר למלא?`,
+    (a, b) => `אורך המסלול הוא ${b} ק"מ. מיכל הלכה ${a} ק"מ. איזה חלק מהמסלול הלכה מיכל?`,
+    (a, b) => `שקית אחת מכילה ${b} ק"ג סוכר. יש ${a} ק"ג סוכר. איזה חלק מהשקית אפשר למלא?`
+  ]
+};
+// שבר : שלם – חלוקה לחלקים שווים. fw1 = חלק מהשלם (רק שבר קטן מ-1), fw2 = מידות (גם שבר מדומה)
+function dsWordFw(a, w) {
+  const f = M(F(a[0], a[1]));
+  return a[0] < a[1] && Math.random() < 0.5 ? pick(DIVFR_CTX.fw1)(f, w) : pick(DIVFR_CTX.fw2)(f, w);
+}
+// דוגמה לפי מיומנות ורמה: מחזירה { a, b, mixA, mixB } – a : b
+function dsPick(skill, lv) {
+  const P = (lo, hi) => { let n, d; do { d = R(lo, hi); n = R(1, d - 1); } while (!dsOk([n, d])); return [n, d]; };
+  const multPair = () => { let q, s; do { q = R(2, 12); s = R(2, 12); } while (q === s || (q % s && s % q)); return [q, s]; };
+  for (let guard = 0; guard < 2000; guard++) {
+    if (skill === 'fw') {
+      if (lv === 1) { const d = R(4, 12), w = R(2, 5), m = R(1, 3); if (w * m >= d || !dsOk([w * m, d])) continue; return { a: [w * m, d], b: [w, 1] }; }
+      if (lv === 2) {
+        if (Math.random() < 0.35) { const d = R(7, 12), w = R(2, 5), m = R(2, 3); if (w * m >= d || !dsOk([w * m, d])) continue; return { a: [w * m, d], b: [w, 1] }; }
+        const [n, d] = P(2, 8), w = R(2, 5); if (n % w === 0) continue; return { a: [n, d], b: [w, 1] };
+      }
+      const d = R(2, 6), n = R(d + 1, 4 * d), w = R(2, 6); if (!dsOk([n, d]) || n % d === 0) continue; return { a: [n, d], b: [w, 1] };
+    }
+    if (skill === 'wu') {
+      if (lv === 1) return { a: [R(2, 8), 1], b: [1, R(2, 5)] };
+      if (lv === 2) { const d = R(2, 10), w = R(3, 10); if (w * d > 60) continue; return { a: [w, 1], b: [1, d] }; }
+      const d = pick([6, 8, 10, 12, 20]), w = d >= 20 ? R(3, 9) : R(6, 15); return { a: [w, 1], b: [1, d] };
+    }
+    if (skill === 'same') {
+      const d = lv === 1 ? R(5, 12) : lv === 2 ? R(4, 12) : R(3, 9);
+      if (lv === 1) { const r = R(1, 3), k = R(2, 5); if (r * k >= d || r === 1 && Math.random() < 0.6) continue; return { a: [r * k, d], b: [r, d] }; }
+      if (lv === 2) { const p = R(1, d - 1), r = R(2, d - 1); if (p === r || p % r === 0) continue; return { a: [p, d], b: [r, d] }; }
+      const p = R(d + 1, 4 * d), r = R(2, Math.min(2 * d, 15)); if (p % d === 0 || r % d === 0 || p === r || p % r === 0 && Math.random() < 0.5) continue; return { a: [p, d], b: [r, d] };
+    }
+    if (skill === 'diff') {
+      if (lv <= 2) {
+        const [q, s] = multPair(), a = P(q, q), b = P(s, s);
+        if (a[1] !== q || b[1] !== s) continue;
+        const [n, d] = dsRed(a[0] * b[1], a[1] * b[0]);
+        if (lv === 1 ? (d !== 1 || n < 2 || n > 6) : (d === 1 || n > 30)) continue;
+        return { a, b };
+      }
+      let q, s; do { q = R(2, 9); s = R(2, 9); } while (q === s || !(q % s) || !(s % q));
+      const a = Math.random() < 0.3 ? [R(q + 1, 2 * q), q] : P(q, q), b = P(s, s);
+      if (a[1] !== q || b[1] !== s || !dsOk(a)) continue;
+      const [n] = dsRed(a[0] * b[1], a[1] * b[0]); if (n > 40) continue;
+      return { a, b };
+    }
+    if (skill === 'mixed') {
+      const mk = (dLo, dHi) => { const d = R(dLo, dHi), n = R(1, d - 1), w = R(1, 3); return dsOk([n, d]) ? [w * d + n, d] : null; };
+      if (lv === 1) { const a = mk(2, 6); if (!a) continue; const r = R(1, a[1] - 1); if (a[0] % r || a[0] / r > 12 || !dsOk([r, a[1]])) continue; return { a, b: [r, a[1]], mixA: true }; }
+      if (lv === 2) {
+        const a = mk(2, 8); if (!a) continue;
+        const s = pick([2, 3, 4, 5, 6, 8]), r = R(1, s - 1); if (!dsOk([r, s])) continue;
+        const [n, d] = dsRed(a[0] * s, a[1] * r); if (n > 40 || d === 1 && Math.random() < 0.5) continue;
+        return { a, b: [r, s], mixA: true };
+      }
+      const a = mk(2, 6), b = mk(2, 6); if (!a || !b || (a[0] === b[0] && a[1] === b[1])) continue;
+      const [n] = dsRed(a[0] * b[1], a[1] * b[0]); if (n > 40) continue;
+      return { a, b, mixA: true, mixB: true };
+    }
+  }
+  return { a: [3, 4], b: [3, 1] };
+}
+// הסבר הפתרון לפי שיטת ההסבר שנבחרה (לדף התשובות)
+function dsExp(skill, a, b, mixA, mixB, method) {
+  const [qn, qd] = dsRed(a[0] * b[1], a[1] * b[0]);
+  const A = dsNum(a, mixA), B = dsNum(b, mixB), head = `${A} : ${B}`;
+  if (method === 'kfc') {
+    const Ai = dsNum(a, false), Bi = dsNum(b, false), inv = b[0] === 1 ? String(b[1]) : F(b[1], b[0]);
+    const pn = a[0] * b[1], pd = a[1] * b[0], prod = pd === 1 ? String(pn) : F(pn, pd);
+    const chain = [head].concat(mixA || mixB ? [`${Ai} : ${Bi}`] : [], [`${Ai} × ${inv}`, prod]).join(' = ');
+    return `${M(chain)}${pd !== 1 && (gcd(pn, pd) > 1 || pn > pd) ? ` = ${FX(qn, qd)}` : ''}`;
+  }
+  if (skill === 'fw') {
+    const w = b[0], n = a[0], d = a[1];
+    if (n % w === 0) return `${method === 'algo' ? 'המונה מתחלק ב-' + w + ' – מחלקים את המונה' : `${M(F(n, d))} הם ${n} חלקים של ${M(F(1, d))}. מחלקים אותם ל-${w} קבוצות שוות: ${M(`${n} : ${w} = ${n / w}`)}`}: ${M(`${head} = ${F(n / w, d)}`)}${gcd(n / w, d) > 1 || n / w > d ? ` = ${FX(n / w, d)}` : ''}`;
+    return `${method === 'algo' ? `${n} לא מתחלק ב-${w} – כופלים את המכנה ב-${w}` : `${n} חלקים לא מתחלקים ל-${w} קבוצות שוות, אז חותכים כל חלק ל-${w}: ${M(`${F(n, d)} = ${F(n * w, d * w)}`)}, ועכשיו ${M(`${n * w} : ${w} = ${n}`)}`}: ${M(`${head} = ${F(n, d * w)}`)}${gcd(n, d * w) > 1 || n > d * w ? ` = ${FX(n, d * w)}` : ''}`;
+  }
+  if (skill === 'wu') {
+    const w = a[0], d = b[1];
+    return method === 'algo' ? `${M(`${head} = ${w} × ${d} = ${w * d}`)} – כופלים את השלם במכנה.`
+      : `כמה ${M(F(1, d))} נכנסים ב-${w}? בכל שלם יש ${d} חלקים כאלה, וב-${w} שלמים: ${M(`${w} × ${d} = ${w * d}`)}.`;
+  }
+  // מכנים שווים / שונים / מעורבים: מכנה משותף, ואז "כמה פעמים נכנס" = מונה : מונה
+  const L = lcm(a[1], b[1]), P = a[0] * L / a[1], Q = b[0] * L / b[1];
+  const conv = (skill === 'same' && !mixA && !mixB) ? '' : `${mixA || mixB ? 'הופכים לשבר מדומה' : ''}${(mixA || mixB) && a[1] !== b[1] ? ' ו' : ''}${a[1] !== b[1] ? 'מרחיבים למכנה משותף' : ''}: ${M(`${head} = ${F(P, L)} : ${F(Q, L)}`)}. `;
+  const div = `${M(`${P} : ${Q} = ${qd === 1 ? qn : F(P, Q)}`)}${qd === 1 ? '' : ` = ${FX(qn, qd)}`}`;
+  return method === 'algo' ? `${conv}מחלקים מונה במונה: ${div}.`
+    : `${conv}כמה פעמים ${M(F(Q, L))} נכנס ב-${M(F(P, L))}? ${P === 1 ? 'חלק אחד' : P + ' חלקים'} של ${M(F(1, L))} לעומת ${Q === 1 ? 'חלק אחד' : Q + ' חלקים'}: ${div}.`;
+}
+// שאלה אחת. o = { word, method }
+function genDivSkill(skill, lv, o = {}) {
+  const { a, b, mixA, mixB } = dsPick(skill, lv);
+  const [qn, qd] = dsRed(a[0] * b[1], a[1] * b[0]);
+  const A = M(dsNum(a, mixA)), B = M(dsNum(b, mixB));
+  let text = `פתרו: ${M(`${dsNum(a, mixA)} : ${dsNum(b, mixB)} =`)}`, word = false;
+  if (o.word) {
+    word = true;
+    if (skill === 'fw') text = dsWordFw(a, b[0]);
+    else if (skill === 'wu') text = pick(DIVFR_CTX.wu)(a[0], B);
+    else text = pick(DSK_WORD[qd === 1 ? 'int' : qn > qd ? 'gt' : 'lt'])(A, B);
+  }
+  const steps = [{}, {}].concat(mixA || mixB || a[1] !== b[1] ? [{}] : []);
+  const exp = dsExp(skill, a, b, mixA, mixB, o.method || 'concept');
+  const meta = { skill, a, b, word, lv };
+  if (qd === 1) return { type: 'num', ans: qn, text, exp, steps, word, meta, topic: 'divfr', lv };
+  return { type: 'frac', form: 'any', noWhole: qn < qd, ans: { n: qn, d: qd }, text, exp, steps, word, meta, topic: 'divfr', lv };
+}
+// שאלות לדף: מיומנויות שנבחרו (במעורב – לסירוגין), רמה (mix = מהקל אל הקשה), mode: calc / word / mix
+function buildDivSkillQs(skills, level, count, mode, method, seen = new Set()) {
+  const out = [];
+  for (let tries = 0; out.length < count && tries < count * 300; tries++) {
+    const i = out.length, sk = skills[i % skills.length];
+    const lv = level === 'mix' ? Math.min(3, 1 + Math.floor(3 * i / count)) : Number(level);
+    const word = mode === 'word' ? true : mode === 'calc' ? false : (i % 3 === 2);
+    const q = genDivSkill(sk, lv, { word, method });
+    const key = `${q.meta.a.join('/')}:${q.meta.b.join('/')}`;
+    if (seen.has(key) || (word && out.some(x => x.text.slice(0, 18) === q.text.slice(0, 18)) && tries % 5)) continue;
+    seen.add(key); out.push(q);
+  }
+  return out;
+}
+// ציור לתזכורת המושגית: שורות של פסים (wholes), כל פס מחולק ל-d; הקבוצות צבועות לסירוגין
+function dsFig(wholes, d, filled, group) {
+  const cw = Math.min(34, Math.floor(300 / d)), W = d * cw + 4, H = wholes * 30 + 4, COL = ['#f4a3c0', '#9fc3ee', '#b9e0a5', '#f6d48b'];
+  let g = '';
+  for (let r = 0; r < wholes; r++) for (let c = 0; c < d; c++) {
+    const k = r * d + c, fill = k < filled ? COL[Math.floor(k / group) % COL.length] : '#fff';
+    g += `<rect x="${2 + c * cw}" y="${2 + r * 30}" width="${cw}" height="24" fill="${fill}" stroke="#23264a" stroke-width="1.4"/>`;
+  }
+  return `<svg class="dsfig" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">${g}</svg>`;
+}
+// תזכורת לפי מיומנות ושיטה. concept – משמעות החילוק עם ציור; algo – צעדים בלי הופכי; kfc – כפל בהופכי
+function dsTip(skill, method) {
+  const fr = (n, d) => M(F(n, d));
+  if (method === 'kfc') return {
+    fw: `${M(`${F(3, 4)} : 3 = ${F(3, 4)} × ${F(1, 3)} = ${F(3, 12)} = ${F(1, 4)}`)} – לחלק ב-3 זה לכפול ב-${fr(1, 3)}.`,
+    wu: `${M(`3 : ${F(1, 4)} = 3 × 4 = 12`)} – ההופכי של ${fr(1, 4)} הוא 4.`,
+    same: `${M(`${F(6, 7)} : ${F(2, 7)} = ${F(6, 7)} × ${F(7, 2)} = ${F(42, 14)} = 3`)} – שומרים, הופכים : ל-×, ההופכי של השני.`,
+    diff: `${M(`${F(3, 4)} : ${F(1, 2)} = ${F(3, 4)} × ${F(2, 1)} = ${F(6, 4)} = 1${F(1, 2)}`)} – שומרים, הופכים : ל-×, ההופכי של השני.`,
+    mixed: `${M(`2${F(1, 4)} : ${F(3, 4)} = ${F(9, 4)} × ${F(4, 3)} = ${F(36, 12)} = 3`)} – קודם שבר מדומה, ואז כפל בהופכי.`
+  }[skill];
+  if (method === 'algo') return {
+    fw: `אם המונה מתחלק במספר – מחלקים את המונה: ${M(`${F(6, 7)} : 3 = ${F(2, 7)}`)}. אם לא – כופלים את המכנה: ${M(`${F(2, 3)} : 4 = ${F(2, 12)} = ${F(1, 6)}`)}.`,
+    wu: `כופלים את השלם במכנה: ${M(`3 : ${F(1, 4)} = 3 × 4 = 12`)}.`,
+    same: `כשהמכנים שווים – מחלקים מונה במונה: ${M(`${F(6, 7)} : ${F(2, 7)} = 6 : 2 = 3`)}.`,
+    diff: `מרחיבים למכנה משותף, ואז מחלקים מונה במונה: ${M(`${F(3, 4)} : ${F(1, 2)} = ${F(3, 4)} : ${F(2, 4)} = 3 : 2 = 1${F(1, 2)}`)}.`,
+    mixed: `הופכים לשבר מדומה, מרחיבים למכנה משותף ומחלקים מונה במונה: ${M(`2${F(1, 4)} : ${F(3, 4)} = ${F(9, 4)} : ${F(3, 4)} = 9 : 3 = 3`)}.`
+  }[skill];
+  return {
+    fw: [`<b>חלוקה לחלקים שווים:</b> ${M(`${F(3, 4)} : 3`)} – מחלקים ${fr(3, 4)} ל-3 חלקים שווים. כמה מקבל כל חלק? ${fr(3, 4)} הם 3 רבעים, ולכל חלק – רבע אחד: ${M(`${F(3, 4)} : 3 = ${F(1, 4)}`)}.`, dsFig(1, 4, 3, 1)],
+    wu: [`<b>כמה פעמים נכנס?</b> ${M(`3 : ${F(1, 4)}`)} – כמה רבעים יש ב-3 שלמים? בכל שלם 4 רבעים, ובשלושה שלמים 12: ${M(`3 : ${F(1, 4)} = 12`)}.`, dsFig(3, 4, 12, 1)],
+    same: [`<b>כמה פעמים נכנס?</b> ${M(`${F(6, 7)} : ${F(2, 7)}`)} – כמה פעמים ${fr(2, 7)} נכנס ב-${fr(6, 7)}? 6 שביעיות, ובכל קבוצה 2 שביעיות – 3 קבוצות: ${M(`${F(6, 7)} : ${F(2, 7)} = 3`)}.`, dsFig(1, 7, 6, 2)],
+    diff: [`<b>כמה פעמים נכנס?</b> ${M(`${F(3, 4)} : ${F(1, 2)}`)} – כדי להשוות, כותבים את שניהם ברבעים: ${M(`${F(1, 2)} = ${F(2, 4)}`)}. כמה פעמים 2 רבעים נכנסים ב-3 רבעים? פעם אחת שלמה ועוד חצי פעם: ${M(`${F(3, 4)} : ${F(1, 2)} = 1${F(1, 2)}`)}.`, dsFig(1, 4, 3, 2)],
+    mixed: [`<b>כמה פעמים נכנס?</b> ${M(`2${F(1, 4)} : ${F(3, 4)}`)} – כותבים ברבעים: ${M(`2${F(1, 4)} = ${F(9, 4)}`)}. כמה פעמים 3 רבעים נכנסים ב-9 רבעים? ${M(`9 : 3 = 3`)}.`, dsFig(3, 4, 9, 3)]
+  }[skill];
+}
+function dsTipsHTML(skills, method) {
+  if (!method || method === 'none') return '';
+  const title = { concept: 'מה המשמעות של החילוק?', algo: 'צעדי הפתרון', kfc: 'כפל בהופכי (KFC)' }[method];
+  const items = skills.map(sk => { const t = dsTip(sk, method), [txt, fig] = Array.isArray(t) ? t : [t, '']; return `<li class="dstip"><div>${skills.length > 1 ? `<b>${DSK.find(x => x.id === sk).name}:</b> ` : ''}${txt}</div>${fig}</li>`; }).join('');
+  return `<div class="wstips dsk-tips"><b>📘 תזכורת – ${title}</b><ul>${items}</ul></div>`;
+}
 // ===== מחוללים לקורס "כפל וחילוק שברים" (coach.html?course=fracop) – לא משויכים לנושא, כדי לא לשבש קודי חוברות =====
 function genDivFrFW() { return genDivFrW(pick(['fw1', 'fw2'])); }
 function genDivFrWF() { return genDivFrW(pick(['wu', 'wn'])); }
@@ -7473,6 +7704,168 @@ function nlineSVG(a, b, parts, pos, showAll) {
   }
   return `<svg class="fig" viewBox="0 0 360 96" width="360" height="96">${g}</svg>`;
 }
+/* ---------- הישר שנמתח (צפיפות): בוחרים קטע על ישר המספרים, הקטע נמתח לכל הרוחב, ומופיעים בו מספרים חדשים ----------
+   עשרוניים: עשיריות → מאיות → אלפיות → 4 ספרות. שברים: זוג שברים → מכנה משותף → מחלקים כל חלק לשניים → מתקרבים שוב.
+   מצב: Q = המכנה (השנתות הן k/Q), A..B = הקטע שעל המסך, sel = הקטע שנבחר. */
+function zoomLab(root, o = {}) {
+  const X0 = 28, X1 = 332, Y = 70, HH = 136, MAXQ = { dec: 10000, frac: 384 };
+  const PRE = [[[1, 3], [1, 2]], [[2, 5], [1, 2]], [[1, 4], [1, 3]], [[3, 4], [1, 1]]];
+  const slow = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  let mode = o.mode || 'dec', pre = 0, s = null, hist = [], busy = false, fresh = null;
+  root.classList.add('zl');
+  root.innerHTML = `${o.only ? '' : `<div class="sc-chips zl-modes"><button type="button" class="sc-chip btn" data-zm="dec">מספרים עשרוניים</button><button type="button" class="sc-chip btn" data-zm="frac">שברים</button></div>`}
+    <div class="sc-chips zl-pre"></div>
+    <div class="zl-fig"></div>
+    <div class="zl-msg" aria-live="polite"></div>
+    <div class="lbtns zl-btns"><button type="button" data-za="in">🔍 מתקרבים</button><button type="button" class="secondary" data-za="split">✂️ מחלקים כל חלק לשניים</button><button type="button" class="secondary" data-za="out">🔭 מתרחקים</button><button type="button" class="secondary" data-za="reset">↺ מההתחלה</button></div>`;
+  const q = sel => root.querySelector(sel);
+  // תוויות
+  const decStr = (k, Q, pad) => {
+    const p = String(Q).length - 1, w = Math.floor(k / Q), r = String(k % Q).padStart(p, '0');
+    const t = pad ? r : r.replace(/0+$/, '');
+    return t ? `${w}.${t}` : String(w);
+  };
+  const svgFr = (x, y, n, d, cls) => `<text x="${x}" y="${y}" text-anchor="middle" class="${cls}">${n}</text><line x1="${x - 10}" y1="${y + 5}" x2="${x + 10}" y2="${y + 5}" class="zl-bar ${cls}"/><text x="${x}" y="${y + 20}" text-anchor="middle" class="${cls}">${d}</text>`;
+  const frHTML = (n, d) => d === 1 ? M(String(n)) : M(F(n, d));
+  const valHTML = (k, Q) => mode === 'dec' ? M(decStr(k, Q)) : frHTML(k, Q);
+  function start() {
+    hist = []; fresh = null;
+    if (mode === 'dec') s = { Q: 10, A: 0, B: 10, sel: null, view: [0, 1] };
+    else { const [[a, b], [c, d]] = PRE[pre], Q = lcm(b, d); s = { Q, A: a * Q / b, B: c * Q / d, sel: 'r', first: true, view: [0, 1] }; }
+    paint();
+  }
+  // הקטעים שאפשר לבחור (בין שתי שנתות סמוכות)
+  const ticks = () => {
+    const [vl, vh] = s.view, out = [];
+    if (s.first) return [...new Set([0, s.A, s.B, s.Q])].sort((x, y) => x - y);
+    for (let k = Math.max(s.A, Math.ceil(vl * s.Q - 1e-9)); k <= Math.min(s.B, Math.floor(vh * s.Q + 1e-9)); k++) out.push(k);
+    return out;
+  };
+  function draw(labels) {
+    const [vl, vh] = s.view, px = v => X0 + (v - vl) / (vh - vl) * (X1 - X0), ks = ticks();
+    const isNew = k => fresh && fresh(k);
+    let g = `<line x1="${X0 - 14}" y1="${Y}" x2="${X1 + 18}" y2="${Y}" class="zl-ax"/><polygon points="${X1 + 20},${Y} ${X1 + 11},${Y - 5} ${X1 + 11},${Y + 5}" class="zl-arw"/>`;
+    // הקטע שנבחר
+    const selR = s.sel === 'r' ? [s.A, s.B] : s.sel != null ? [s.sel, s.sel + 1] : null;
+    if (selR) g += `<line x1="${px(selR[0] / s.Q)}" y1="${Y}" x2="${px(selR[1] / s.Q)}" y2="${Y}" class="zl-sel"/>`;
+    let iIn = 0;
+    ks.forEach(k => {
+      const x = px(k / s.Q), end = k === s.A || k === s.B || (s.first && (k === 0 || k === s.Q)), nw = isNew(k) ? ' zl-new' : '';
+      g += `<line x1="${x}" y1="${Y - (end ? 11 : 7)}" x2="${x}" y2="${Y + (end ? 11 : 7)}" class="zl-tk${nw}"/>`;
+      if (s.first && (k === s.A || k === s.B)) g += `<circle cx="${x}" cy="${Y}" r="5" class="zl-dot"/>`;
+      if (!labels && !(selR && (k === selR[0] || k === selR[1]))) return;
+      const up = !end && iIn++ % 2 === 0;
+      if (mode === 'dec') {
+        g += `<text x="${x}" y="${up ? Y - 17 : Y + 27}" text-anchor="middle" class="${end ? 'zl-end' : 'zl-lb'}${nw}">${decStr(k, s.Q)}</text>`;
+        if (end && labels && s.Q > 10 && k % 10 === 0) g += `<text x="${x}" y="${Y + 43}" text-anchor="middle" class="zl-sub">(${decStr(k, s.Q, true)})</text>`;
+      } else {
+        let [n, d] = [k, s.Q];
+        if (s.first) { const c = gcd(k, s.Q) || 1; [n, d] = [k / c, s.Q / c]; }
+        if (k % s.Q === 0 && (s.first || k === 0)) g += `<text x="${x}" y="${Y + 27}" text-anchor="middle" class="zl-end${nw}">${k / s.Q}</text>`;
+        else g += svgFr(x, up ? Y - 46 : Y + 24, n, d, (end ? 'zl-end' : 'zl-lb') + nw);
+      }
+    });
+    // אזורי לחיצה
+    let hits = '';
+    if (!busy) {
+      if (s.first) hits = `<rect x="${px(s.A / s.Q)}" y="${Y - 24}" width="${px(s.B / s.Q) - px(s.A / s.Q)}" height="48" class="zl-hit" data-k="r"/>`;
+      else for (let k = s.A; k < s.B; k++) hits += `<rect x="${px(k / s.Q)}" y="${Y - 24}" width="${px((k + 1) / s.Q) - px(k / s.Q)}" height="48" class="zl-hit" data-k="${k}"><title>הקטע</title></rect>`;
+    }
+    q('.zl-fig').innerHTML = `<svg viewBox="0 0 360 ${HH}" dir="ltr" role="img" aria-label="ישר מספרים">${g}${hits}</svg>`;
+    root.querySelectorAll('.zl-hit').forEach(h => h.onclick = () => { if (busy) return; s.sel = h.dataset.k === 'r' ? 'r' : +h.dataset.k; fresh = null; paint(); });
+  }
+  function msg() {
+    const can = s.Q * (mode === 'dec' ? 10 : 2) <= MAXQ[mode], selTxt = s.sel === 'r' ? `${valHTML(s.A, s.Q)} ל-${valHTML(s.B, s.Q)}` : s.sel != null ? `${valHTML(s.sel, s.Q)} ל-${valHTML(s.sel + 1, s.Q)}` : '';
+    const inner = (from, to) => { const r = []; for (let k = from + 1; k < to; k++) r.push(valHTML(k, s.Q)); return r.length > 4 ? `${r.slice(0, 2).join(', ')} … ${r[r.length - 1]}` : r.join(', '); };
+    if (mode === 'dec') {
+      if (!hist.length && s.sel == null) return 'הישר מחולק לעשיריות. <b>לחצו על קטע</b> בין שתי שנתות – ואז 🔍 מתקרבים.';
+      if (s.sel != null && can) return `בחרתם את הקטע בין ${selTxt}. מה יש שם? 🔍 מתקרבים!`;
+      const p = String(s.Q).length - 1, nm = { 2: 'שתי ספרות אחרי הנקודה (מאיות)', 3: 'שלוש ספרות אחרי הנקודה (אלפיות)', 4: 'ארבע ספרות אחרי הנקודה' }[p] || '';
+      const found = hist.length ? `הקטע נמתח – ובין ${valHTML(s.A, s.Q)} ל-${valHTML(s.B, s.Q)} יש עוד מספרים: ${inner(s.A, s.B)} – מספרים עם ${nm}.` : '';
+      return can ? `${found} <b>בחרו קטע חדש</b> ומתקרבים שוב.` : `${found}<div class="rule">💡 ואפשר להמשיך להתקרב בלי סוף! <b>בין כל שני מספרים יש תמיד עוד מספרים.</b> לזה קוראים <b>צפיפות</b>.</div>`;
+    }
+    const [[a, b], [c, d]] = PRE[pre];
+    if (s.first) return `על הישר ${frHTML(a, b)} ו-${frHTML(c, d)}. מה יש ביניהם? 🔍 מתקרבים לקטע.`;
+    const between = s.B - s.A > 1;
+    if (s.sel != null && s.sel !== 'r' && between) return `בחרתם את הקטע בין ${selTxt}. 🔍 מתקרבים!`;
+    if (!between) {
+      const eq = hist.length === 1 && s.Q !== b && s.Q !== d ? `מרחיבים לאותו מכנה: ${frHTML(a, b)} = ${frHTML(s.A, s.Q)}, ${frHTML(c, d)} = ${frHTML(s.B, s.Q)}. ` : '';
+      return can ? `${eq}בין ${valHTML(s.A, s.Q)} ל-${valHTML(s.B, s.Q)} אין שבר עם המכנה ${s.Q}… <b>✂️ מחלקים כל חלק לשניים</b> (מרחיבים פי 2).`
+        : `<div class="rule">💡 ואפשר להמשיך לחלק ולהתקרב בלי סוף! <b>בין כל שני שברים יש תמיד עוד שברים.</b> לזה קוראים <b>צפיפות</b>.</div>`;
+    }
+    const lo = s.A, hi = s.B;
+    return `מצאנו! בין ${valHTML(lo, s.Q)} ל-${valHTML(hi, s.Q)} נמצא ${inner(lo, hi)}. ${can ? '<b>בחרו קטע</b> ומתקרבים שוב – או מחלקים עוד.' : ''}`;
+  }
+  function paint() {
+    draw(true);
+    q('.zl-msg').innerHTML = msg();
+    root.querySelectorAll('[data-zm]').forEach(b => b.classList.toggle('on', b.dataset.zm === mode));
+    q('.zl-pre').innerHTML = mode === 'frac' ? PRE.map(([[a, b], [c, d]], i) => `<button type="button" class="sc-chip btn${i === pre ? ' on' : ''}" data-zp="${i}">${frHTML(a, b)} ו-${frHTML(c, d)}</button>`).join('') : '';
+    q('.zl-pre').hidden = mode !== 'frac';
+    root.querySelectorAll('[data-zp]').forEach(b => b.onclick = () => { if (busy) return; pre = +b.dataset.zp; start(); });
+    const can = s.Q * (mode === 'dec' ? 10 : 2) <= MAXQ[mode];
+    const hasSel = s.sel === 'r' || (s.sel != null && (mode === 'dec' ? can : s.B - s.A > 1));
+    q('[data-za="in"]').disabled = busy || !hasSel;
+    q('[data-za="split"]').hidden = mode !== 'frac';
+    q('[data-za="split"]').disabled = busy || s.first || !can || s.B - s.A >= 8;
+    q('[data-za="out"]').disabled = busy || !hist.length;
+  }
+  // הקטע נמתח: הקצוות שלו זזים בהדרגה אל קצוות המסך
+  function anim(to, done) {
+    const from = s.view.slice(), t0 = performance.now(), dur = slow ? 1300 : 0;
+    busy = true; paint();
+    const step = now => {
+      const t = dur ? Math.min(1, (now - t0) / dur) : 1, e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      s.view = [from[0] + (to[0] - from[0]) * e, from[1] + (to[1] - from[1]) * e];
+      draw(false);
+      if (t < 1) requestAnimationFrame(step); else { busy = false; done(); paint(); }
+    };
+    requestAnimationFrame(step);
+  }
+  const snap = () => JSON.parse(JSON.stringify(s));
+  function zoomIn() {
+    if (busy) return;
+    const lo = s.sel === 'r' ? s.A : s.sel, hi = s.sel === 'r' ? s.B : s.sel + 1, Q = s.Q;
+    hist.push(snap());
+    fresh = null;
+    anim([lo / Q, hi / Q], () => {
+      s.first = false; s.sel = null;
+      if (mode === 'dec') { s.Q = Q * 10; s.A = lo * 10; s.B = hi * 10; fresh = k => k % 10 !== 0; }
+      else { s.A = lo; s.B = hi; }
+    });
+  }
+  function split() {
+    if (busy || s.first) return;
+    hist.push(snap());
+    s.Q *= 2; s.A *= 2; s.B *= 2; s.sel = null; fresh = k => k % 2 !== 0;
+    paint();
+  }
+  function zoomOut() {
+    if (busy || !hist.length) return;
+    const cur = s.view.slice(), prev = hist.pop();
+    s = prev; s.view = cur; fresh = null;
+    anim(prev.first ? [0, 1] : [prev.A / prev.Q, prev.B / prev.Q], () => {});
+  }
+  root.querySelectorAll('[data-zm]').forEach(b => b.onclick = () => { if (busy) return; mode = b.dataset.zm; start(); });
+  q('[data-za="in"]').onclick = zoomIn;
+  q('[data-za="split"]').onclick = split;
+  q('[data-za="out"]').onclick = zoomOut;
+  q('[data-za="reset"]').onclick = () => { if (!busy) start(); };
+  start();
+}
+// חלון מעל המסך (למשל מתוך משימות הצפיפות)
+function zoomLabOpen() {
+  const ov = document.createElement('div');
+  ov.className = 'zl-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'הישר שנמתח');
+  ov.innerHTML = `<div class="card zl-card"><div class="zl-top"><h2>🔍 הישר שנמתח – מה יש בין לבין?</h2><button type="button" class="secondary" data-zx>${ic('close')} סגירה</button></div><div class="zl-host"></div></div>`;
+  document.body.appendChild(ov);
+  const close = () => { ov.remove(); document.removeEventListener('keydown', esc); };
+  const esc = e => { if (e.key === 'Escape') close(); };
+  ov.querySelector('[data-zx]').onclick = close;
+  ov.onclick = e => { if (e.target === ov) close(); };
+  document.addEventListener('keydown', esc);
+  zoomLab(ov.querySelector('.zl-host'));
+}
 
 Object.assign(LESSONS, {
   place: {
@@ -7682,6 +8075,17 @@ Object.assign(LESSONS, {
           type: 'num', q: `איזה מספר צריך להיות במלבן?<div class="center">${nlineSVG(2, 3, 10, 7, false)}</div>`, ans: 2.7,
           hint: 'בין 2 ל-3 יש 10 חלקים – כל חלק שווה 0.1.', exp: `כל חלק = ${M('0.1')}, והמלבן 7 חלקים אחרי 2: ${M('2.7')}`,
           traps: [{ v: 2.07, m: 'כל חלק שווה 0.1 (עשירית), לא 0.01 – כי הקטע הוא שלם אחד מחולק ל-10.' }, { v: 7, m: 'המלבן נמצא בין 2 ל-3. מתחילים לספור מ-2.' }]
+        }
+      },
+      {
+        title: 'הישר שנמתח – מה יש בין לבין? 🔍',
+        html: `<p>יש מספר בין ${M('0.3')} ל-${M('0.4')}? נראה שאין… אבל אם <b>מתקרבים</b> לקטע – הוא נמתח, ומגלים בו עוד ועוד מספרים.</p>
+          <div data-zl></div>
+          <div class="rule">💡 <b>בין כל שני מספרים יש תמיד עוד מספרים</b> – גם בין שני מספרים עשרוניים וגם בין שני שברים. לזה קוראים <b>צפיפות</b>.</div>`,
+        setup(root) { zoomLab(root.querySelector('[data-zl]')); },
+        try: {
+          type: 'num', q: `כתבו מספר עשרוני שנמצא בין ${M('0.3')} ל-${M('0.4')}:`, check: v => v > 0.3 + 1e-9 && v < 0.4 - 1e-9, ans: 0.35,
+          hint: 'מתקרבים: כותבים 0.30 ו-0.40 – ומה באמצע?', exp: `למשל ${M('0.35')} (וגם ${M('0.31')}, ${M('0.32')} … ${M('0.39')}, ואפילו ${M('0.345')})`
         }
       },
       {
@@ -8548,7 +8952,7 @@ function lessonCheck(v, raw) {
   const tip = raw != null ? numWritingTip(raw, v) : '';
   const show = (kind, html) => { fb.className = `fb show ${kind}`; fb.innerHTML = html + (kind === 'hint' ? '' : tip); };
   if (v == null || (typeof v === 'number' && Number.isNaN(v))) { show('hint', 'כתבו מספר ואז לחצו "בדיקה" 🙂'); return; }
-  const ok = tr.type === 'choice' ? v === tr.ans : Math.abs(v - tr.ans) < 1e-9;
+  const ok = tr.type === 'choice' ? v === tr.ans : typeof tr.check === 'function' ? !!tr.check(v) : Math.abs(v - tr.ans) < 1e-9; // check – כל תשובה שעונה על התנאי
   const btn = tr.type === 'choice' ? lv.box.querySelector(`.ltry .choices button[data-c="${v}"]`) : null;
   if (ok) {
     lv.done = true;
@@ -8567,7 +8971,7 @@ function lessonCheck(v, raw) {
   }
   lv.done = true;
   markLearned(lv.id, lv.k);
-  show('info', `<div class="head">לא נורא – ככה לומדים! 💙</div>${trap ? `🤔 ${trap.m}<br>` : ''}התשובה: <b>${tr.type === 'choice' ? tr.choices[tr.ans] : M(fmt(tr.ans))}</b><br>${tr.exp}`);
+  show('info', `<div class="head">לא נורא – ככה לומדים! 💙</div>${trap ? `🤔 ${trap.m}<br>` : ''}התשובה: <b>${tr.type === 'choice' ? tr.choices[tr.ans] : (tr.check ? 'למשל ' : '') + M(fmt(tr.ans))}</b><br>${tr.exp}`);
 }
 
 function startLessonPractice(id) {
@@ -18378,7 +18782,7 @@ function opDecLine(vals) {
   let g = `<line x1="10" y1="40" x2="450" y2="40" stroke="#1f1e1c" stroke-width="2.2"/>`;
   for (let k = 0; k <= 10; k++) g += `<line x1="${X(k / 10)}" y1="${k % 5 ? 34 : 30}" x2="${X(k / 10)}" y2="${k % 5 ? 46 : 50}" stroke="#1f1e1c" stroke-width="${k % 5 ? 1.4 : 2.2}"/>` + (k === 0 || k === 10 || k === 5 ? `<text x="${X(k / 10)}" y="68" text-anchor="middle" font-size="14">${k / 10}</text>` : '');
   vals.forEach((v, i) => { const col = i ? '#d9482b' : '#2f5bd3'; g += `<circle cx="${X(v)}" cy="40" r="6" fill="${col}"/><text x="${X(v)}" y="${i ? 22 : 18}" text-anchor="middle" font-size="15" font-weight="700" fill="${col}">${fmt(v)}</text>`; });
-  return `<svg class="fig" viewBox="0 0 460 76" width="460" height="76" aria-hidden="true" style="max-width:520px">${g}</svg>`;
+  return `<svg class="fig" viewBox="0 0 460 76" width="460" height="76" aria-hidden="true" style="max-width:min(520px, 100%);height:auto">${g}</svg>`;
 }
 function opPvTable(vals) {
   const row = v => { const s = (Math.round(v * 100) / 100).toFixed(2).split('.'); return `<tr><td>${s[0]}</td><td class="pv-dot">.</td><td>${s[1][0]}</td><td>${s[1][1]}</td></tr>`; };
@@ -18507,7 +18911,7 @@ const OP_DENSITY = [
   () => { // על ישר המספרים
     const opts = shuffle([0.5, 1.5, 2.5, 0.25, 2.75, 1.25, 0.75, 2.25]).slice(0, 4);
     const X = v => 20 + v * 120, ticks = [0, 0.5, 1, 1.5, 2, 2.5, 3];
-    const svg = `<svg class="fig" viewBox="0 0 400 62" width="400" height="62" aria-hidden="true" style="max-width:520px"><line x1="10" y1="30" x2="395" y2="30" stroke="#1f1e1c" stroke-width="2.5"/>${ticks.map(t => `<line x1="${X(t)}" y1="22" x2="${X(t)}" y2="38" stroke="#1f1e1c" stroke-width="2.5"/><text x="${X(t)}" y="55" text-anchor="middle" font-size="13">${t}</text>`).join('')}</svg>`;
+    const svg = `<svg class="fig" viewBox="0 0 400 62" width="400" height="62" aria-hidden="true" style="max-width:min(520px, 100%);height:auto"><line x1="10" y1="30" x2="395" y2="30" stroke="#1f1e1c" stroke-width="2.5"/>${ticks.map(t => `<line x1="${X(t)}" y1="22" x2="${X(t)}" y2="38" stroke="#1f1e1c" stroke-width="2.5"/><text x="${X(t)}" y="55" text-anchor="middle" font-size="13">${t}</text>`).join('')}</svg>`;
     const sorted = opts.slice().sort((a, b) => a - b);
     return { title: 'על ישר המספרים', q: `<p>מתחו קו מכל מספר אל מקומו המשוער על ישר המספרים:</p><div class="op-nums">${opts.map(v => `<span>${M(fmt(v))}</span>`).join('')}</div>${svg}`, a: `מהקטן לגדול: ${M(sorted.map(v => fmt(v)).join(' , '))}.<br>💡 ${M('0.5')} נמצא באמצע בין 0 ל-1, ${M('1.5')} באמצע בין 1 ל-2, וכן הלאה. ${M('0.25')} זה רבע הדרך.` };
   },
@@ -18953,7 +19357,7 @@ function opDraw() {
   navPush('op');
   const s = op.slides[op.k], last = op.k === op.slides.length - 1;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('bulb')} ${op.label || 'פתיח שיעור'} · ${opName(op.topic)}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
+    <div class="topbar"><span class="title">${ic('bulb')} ${op.label || 'פתיח שיעור'} · ${opName(op.topic)}</span><span class="toollinks">${op.topic === 'density' ? '<button class="secondary" id="opZoom">🔍 הישר שנמתח</button>' : ''}${fsBtnHTML()}<button class="secondary" id="opBack">${ic('close')} יציאה</button></span></div>
     <div class="op-dots">${op.slides.map((x, k) => `<span class="${k === op.k ? 'on' : k < op.k ? 'done' : ''}">${x.title}</span>`).join('')}</div>
     <div class="card op-slide">
       <h2>${s.title}</h2>
@@ -18967,6 +19371,7 @@ function opDraw() {
       ${last ? `<button id="opNew" class="race-go">${op.back ? (op.backLabel || 'חזרה לדף') : 'פתיח חדש'}</button>` : '<button id="opNext" class="race-go">השקף הבא ←</button>'}
     </div>`;
   fsBind();
+  if ($('opZoom')) $('opZoom').onclick = zoomLabOpen;
   $('opBack').onclick = () => { if (op.back) op.back(); else if (OP_SPECIAL.some(x => x.id === op.topic)) classSub('open'); else opHome(); };
   if ($('opPrev')) $('opPrev').onclick = () => { op.k--; op.show = false; opDraw(); };
   if ($('opShow')) $('opShow').onclick = () => { op.show = true; opDraw(); };
@@ -19393,6 +19798,20 @@ function printBuilder() {
         <p class="muted small">שאלות מהנושאים שתבחרו – תרגילים, שאלות מילוליות או שילוב, עם משבצות חישוב. כאן אפשר גם להדפיס מבחן בסגנון מבדק.</p>
         <div class="lbl2">נושאים:</div>
         <div class="wstopics">${TOPICS.map((t, i) => `<label class="chk"><input type="checkbox" value="${t.id}" ${i === 0 ? 'checked' : ''}> ${t.icon} ${t.name}</label>`).join('')}</div>
+        ${TOPIC.divfr ? `<div class="dsk-panel" id="dskPanel" hidden>
+          <div class="lbl2">➗ חילוק שברים – איזו מיומנות תרצו לתרגל?</div>
+          <div class="dsk-skills">${DSK.map((k, i) => `<label class="chk"><input type="checkbox" value="${k.id}" ${i === 0 ? 'checked' : ''}> ${i + 1}. ${k.name} <span class="muted">(למשל ${k.ex()})</span></label>`).join('')}
+            <label class="chk"><input type="checkbox" id="dskAll"> 6. 🔀 תרגול מעורב – כל המיומנויות</label></div>
+          <label>תזכורת לפני התרגול:
+            <select id="dskTip">
+              <option value="none">ללא תזכורת</option>
+              <option value="concept" selected>מושגית – הסבר והמחשה (משמעות החילוק)</option>
+              <option value="algo">אלגוריתמית – צעדי הפתרון (מכנה משותף, בלי הופכי)</option>
+              <option value="kfc">אלגוריתמית – כפל בהופכי (KFC) – רק אם כבר נלמד</option>
+            </select>
+          </label>
+          <p class="muted small">כשנבחרה מיומנות אחת – כל השאלות בדף ממנה בלבד. כמה מיומנויות – לסירוגין. <b>רמת הקושי</b> משנה רק את המספרים ואת מספר השלבים, לא את המיומנות. גם ההסברים בדף התשובות לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).</p>
+        </div>` : ''}
         <label>רמה:
           <select id="wl">
             <option value="mix">מדורגת – מהקל אל הקשה</option>
@@ -19551,41 +19970,59 @@ function printBuilder() {
   pkSetup();
   $('wg').onchange = () => { location.search = '?print' + ($('wg').value !== '6' ? '&grade=' + $('wg').value : '') + (NEUTRAL ? '&neutral=1' : ''); };
   const letters = 'אבג';
+  // חילוק שברים: פאנל מיומנות מופיע כשהנושא מסומן
+  const dskSync = () => { const on = !!app.querySelector('.wstopics:not(.drtopics) input[value="divfr"]:checked'); if ($('dskPanel')) $('dskPanel').hidden = !on; };
+  app.querySelectorAll('.wstopics:not(.drtopics) input').forEach(c => c.addEventListener('change', dskSync));
+  if ($('dskAll')) {
+    const boxes = () => [...app.querySelectorAll('.dsk-skills input:not(#dskAll)')];
+    $('dskAll').onchange = () => boxes().forEach(c => { c.checked = $('dskAll').checked; });
+    boxes().forEach(c => c.addEventListener('change', () => { $('dskAll').checked = boxes().every(x => x.checked); }));
+  }
+  const dskOpts = topics => topics.includes('divfr') && $('dskPanel') ? { skills: [...app.querySelectorAll('.dsk-skills input:not(#dskAll):checked')].map(x => x.value), method: $('dskTip').value } : null;
   $('wgo').onclick = () => wsGate(() => {
     const topics = [...app.querySelectorAll('.wstopics:not(.drtopics) input:checked')].map(x => x.value).filter(id => TOPIC[id]);
     if (!topics.length) { $('wmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
+    const dsk = dskOpts(topics), dskOnly = !!dsk && topics.length === 1;
+    if (dsk && !dsk.skills.length) { $('wmsg').textContent = 'בחרו לפחות מיומנות אחת בחילוק שברים 🙂'; return; }
+    const dskM = dsk && dsk.method !== 'none' ? dsk.method : 'concept';
+    const dskNames = dsk ? (dsk.skills.length === 1 ? DSK.find(k => k.id === dsk.skills[0]).name : dsk.skills.length === DSK.length ? 'תרגול מעורב – כל המיומנויות' : 'תרגול מעורב: ' + dsk.skills.map(id => DSK.find(k => k.id === id).name).join(' · ')) : '';
     const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
     const wq = $('wwq').value, wordOnly = wq === 'only', drill = wq !== 'auto' && !wordOnly, nWord = drill ? Number(wq) : 0;
     const base = wordOnly ? 'שאלות מילוליות' : 'דף תרגול';
-    const title = $('wt').value.trim() || (topics.length === 1 ? `${base} – ${TOPIC[topics[0]].name}` : `${base} במתמטיקה`);
-    const tips = $('wtips').checked ? `<div class="wstips"><b>📘 תזכורת</b><ul>${topics.flatMap(t => TOPIC[t].tips.slice(0, topics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
+    const title = $('wt').value.trim() || (dskOnly ? `${base} – חילוק שברים` : topics.length === 1 ? `${base} – ${TOPIC[topics[0]].name}` : `${base} במתמטיקה`);
+    const tTopics = dsk ? topics.filter(t => t !== 'divfr') : topics;
+    const tips = ($('wtips').checked && tTopics.length ? `<div class="wstips"><b>📘 תזכורת</b><ul>${tTopics.flatMap(t => TOPIC[t].tips.slice(0, tTopics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '') + (dsk ? dsTipsHTML(dsk.skills, dsk.method) : '');
+    const skillLine = dsk ? `<div class="wsskill">➗ ${dskNames} · ${$('wl').selectedOptions[0].textContent.trim()}</div>` : '';
     const noGrid = !$('wgrid').checked;
     const wholeOnly = $('wwhole') && $('wwhole').checked;
     const pastel = !$('wstyle') || $('wstyle').value === 'pastel', pcl = pastel ? ' ws-pastel' : '';
     let wordShort = false;
+    // חילוק שברים לפי מיומנות: שאלות "חילוק שבר ומספר שלם" מוחלפות בשאלות מהמיומנויות שנבחרו (באותה רמה, ותרגיל ↔ מילולית נשמר)
+    const dskFix = qs => { if (!dsk) return qs; const seen = new Set(); let k = 0; return qs.map(q => q.topic !== 'divfr' ? q : buildDivSkillQs([dsk.skills[k++ % dsk.skills.length]], String(q.lv || (level === 'mix' ? 2 : level)), 1, isWordQ(q) ? 'word' : 'calc', dskM, seen)[0] || q); };
     const sheets = Array.from({ length: versions }, () => {
-      if (wordOnly) { const w = buildWordQs(topics, level, count, wholeOnly, true); if (w.length < count) wordShort = true; return w; }
-      const a = buildWorksheet(topics, level, count, drill, wholeOnly), w = nWord ? buildWordQs(topics, level, nWord, wholeOnly) : []; if (w.length < nWord) wordShort = true; return a.concat(w);
+      if (dskOnly) { const seen = new Set(); return buildDivSkillQs(dsk.skills, level, count, wordOnly ? 'word' : drill ? 'calc' : 'mix', dskM, seen).concat(nWord ? buildDivSkillQs(dsk.skills, level, nWord, 'word', dskM, seen) : []); }
+      if (wordOnly) { const w = dskFix(buildWordQs(topics, level, count, wholeOnly, true)); if (w.length < count) wordShort = true; return w; }
+      const a = dskFix(buildWorksheet(topics, level, count, drill, wholeOnly)), w = nWord ? dskFix(buildWordQs(topics, level, nWord, wholeOnly)) : []; if (w.length < nWord) wordShort = true; return a.concat(w);
     });
     if (wordOnly && sheets.every(s => !s.length)) { $('wmsg').textContent = 'בנושאים שנבחרו אין שאלות מילוליות 🙂 נסו נושא אחר (למשל חיבור/חיסור, כפל/חילוק, שברים, מדידה או עשרוניים).'; return; }
     const vname = v => versions > 1 ? ` – נוסח ${letters[v]}` : '';
     let out = sheets.map((qs, v) => `
       <section class="ws-page${pcl}">
         <div class="wshead">
-          <h1>${esc(title)}${vname(v)}</h1>
+          <h1>${esc(title)}${vname(v)}</h1>${skillLine}
           <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div>
         </div>
         ${tips}
-        <div class="wsqs${noGrid ? ' nogrid' : ''}">${qs.map((q, i) => wsQuestionHTML(q, i + 1, noGrid)).join('')}</div>
+        <div class="wsqs${noGrid ? ' nogrid' : ''}${dsk && qs.length >= 8 ? ' dsk-dense' : ''}">${qs.map((q, i) => wsQuestionHTML(q, i + 1, noGrid)).join('')}</div>
         <div class="wsfoot">בהצלחה! 🌟</div>
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey${pcl}">
-        <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>
+        <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>${skillLine}
         <ol>${qs.map(q => `<li><b>${correctHTML(q)}</b>${$('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
-    $('wsout').dataset.what = `${base}: ${topics.map(t => TOPIC[t].name).join(', ')} · ${$('wl').selectedOptions[0].textContent.trim()}${versions > 1 ? ` · ${versions} נוסחים` : ''}${wordOnly ? ` · ${count} שאלות מילוליות` : drill ? ` · ${count} תרגילים + ${nWord} מילוליות` : ''}`;
+    $('wsout').dataset.what = `${base}: ${topics.map(t => TOPIC[t].name).join(', ')}${dsk ? ` (${dskNames})` : ''} · ${$('wl').selectedOptions[0].textContent.trim()}${versions > 1 ? ` · ${versions} נוסחים` : ''}${wordOnly ? ` · ${count} שאלות מילוליות` : drill ? ` · ${count} תרגילים + ${nWord} מילוליות` : ''}`;
     if (tips) dropTipsIfOverflow();
     paginateSheets();
     $('wprint').classList.remove('hidden');
@@ -19913,7 +20350,7 @@ function dropTipsIfOverflow() {
   nikudify(out);
   out.classList.add('measure');
   out.querySelectorAll('.ws-page:not(.wskey)').forEach(sec => {
-    const tips = sec.querySelector('.wstips');
+    const tips = sec.querySelector('.wstips:not(.dsk-tips)');
     if (!tips) return;
     // בודקים גם ב-A4 וגם בדף קצר יותר (Letter), כדי שלא תגלוש שאלה לעמוד נוסף
     const withTips = [273, 255].map(h => sheetPages(sec, h));
