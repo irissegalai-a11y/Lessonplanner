@@ -33,6 +33,7 @@
   - סוג שאלה `mixed` (שלמים + שבר, `ans: [w, n, d]`, `anyForm` לקבל כל צורה שווה). גם `frac` מקבל `anyForm` (באבחון).
   - בקורס הזה אפשרויות הבחירה מסתובבות לפי מזהה השאלה (`ch` ב-fracop.js) – התשובה הנכונה לא תמיד ראשונה.
   - מחוללים באתר לקורס (לא משויכים לנושא): `genFracMulFrac`, `genFactorPair`, `genCancelMul`, `genMixedMul`, `genFracDivFrac`, `genMixedDiv`, `genBigSmall`, `genFracOpWord`, `genDivFrFW`, `genDivFrWF`.
+- `pct` (אחוזים, כיתה ו', `coach/courses/pct.js`, **`draft: true` – טיוטה שכתב Claude, ממתינה לאישור הנוסח של איריס**): 12 שיעורים – מה זה אחוז · שברים · עשרוניים · השלם 100% · 50/25/10/1% מכמות · כל אחוז מכמות · איזה אחוז זה · הנחה · התייקרות (שניהם מיומנות 8) · מהחלק לשלם · בעיות · אתגר. ציור `C.f.hund(n, {rc})` (ריבוע 100), תיבת תשובה באחוזים `⟦? %⟧` (העוזר `pc`). מחוללים באתר לקורס: `genPctOfAny` (= `genPctOf(2)`), `genPctRaise` (התייקרות). כשאיריס מאשרת – מוחקים `draft: true` ואת `pct` מ-`PLANNED`.
 - ב-`SITE`: `topic` יכול להיות רשימה (`'muldiv,ops'` – הראשון שקיים בכיתה), `card` יכול להיות חלופות (`'א|ב'` – הראשונה שקיימת בכיתה).
 - ציורים בקורסים: `C.f.arr(r, c, {split, hl})` (מערך), `C.f.groups(g, n)` (קבוצות שוות), וגם bar/pie/hund/line/pv/vert.
 - **לא נוגעים ב-`math6-v2.html` כדי לשנות את המאמן** (חוץ ממצב `EMBED` ומחוללים חדשים שהקורס צריך). שינוי במאמן = עדכון `גרסה` בפוטר של `coach.html` ו-`VER` ב-`engine.js`.
