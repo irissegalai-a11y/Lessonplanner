@@ -414,7 +414,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.5</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.6</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -517,7 +517,7 @@
       body += `<div class="opts${figs ? ' figopts' : ''}">${item.opts.map((o, i) => `<button class="opt" data-i="${i}">${o.t ? R(o.t) : ''}${o.fig && !o.t ? fig(o.fig) : ''}</button>`).join('')}</div>`;
     }
     if (item.type === 'nums') body += `<div class="row">${item.labels.map((l, i) => `<label class="chk">${esc(l)}: <input class="nin" data-k="${i}" inputmode="decimal" maxlength="7"></label>`).join('')}</div>`;
-    body += `<div class="fbarea" aria-live="polite"></div><div class="row acts"><button class="go">${learn ? 'בדיקה' : 'המשך'}</button>${learn && item.hints ? '<button class="sec hintb">רמז</button>' : ''}${learn && item.showFig ? '<button class="sec showfig">הראו לי בציור</button>' : ''}${!learn && item.id !== 'NB' ? '<button class="ghost skip">עוד לא למדתי</button>' : ''}</div><div class="sure" hidden></div>`;
+    body += `<div class="fbarea" aria-live="polite"></div><div class="row acts"><button class="go">${learn ? 'בדיקה' : 'המשך'}</button>${learn && item.hints ? '<button class="sec hintb">רמז</button>' : ''}${learn && item.showFig ? '<button class="sec showfig">הראו לי בציור</button>' : ''}${learn && T ? '<button class="ghost small nosay tshow">👩‍🏫 התשובה והמשך</button>' : ''}${!learn && item.id !== 'NB' ? '<button class="ghost skip">עוד לא למדתי</button>' : ''}</div><div class="sure" hidden></div>`;
     box.innerHTML = body;
 
     // אינטראקציה
@@ -617,6 +617,16 @@
     if (sf) sf.onclick = () => { sf.remove(); box.querySelector('.q').insertAdjacentHTML('afterend', fig(item.showFig)); log('drawing', { item: item.id }); if (st.unit) st.unit.ev.drawing = true; };
     const sk = box.querySelector('.skip');
     if (sk) sk.onclick = () => finish({ skip: true, correct: false, tag: 'skip' });
+    // מורה: רואים את התשובה וממשיכים בלי לפתור. השיעור לא יסומן כהושלם (tPreview)
+    const ts = box.querySelector('.tshow');
+    if (ts) ts.onclick = () => {
+      if (finished) return;
+      if (st && st.unit) { st.unit.tPreview = true; save(); }
+      if (item.type === 'choice') { const o = box.querySelector(`.opt[data-i="${item.ans}"]`); if (o) o.classList.add('right'); }
+      fbs('ok', `👩‍🏫 התשובה: ${ansText(item) || 'לפי התנאי'}${item.exp ? '<br>' + item.exp : ''}`);
+      box.querySelector('.acts').innerHTML = '<button class="go2">המשך</button>';
+      box.querySelector('.go2').onclick = () => finish({ correct: true, pass: true, hinted: false, attempts: 1, answers: [], firstTag: '', fixed: false, teacher: true });
+    };
 
     box.querySelector('.go').onclick = () => {
       if (finished) return;
@@ -916,10 +926,16 @@
     if (!T) return;
     const u = st.unit, list = screens(), i = u.i + d;
     if (i < 0) return;
-    if (i >= list.length) return course();
+    if (i >= list.length) return tUnit(1);
     u.results = []; u.setI = 0;
     if (list[i].kind === 'summary' && !u.mastered) { u.mastered = true; u.masteredSet = u.masteredSet || (u.ver === 'reinforce' ? 'B' : 'A'); u.tPreview = true; }
     u.i = i; save(); screen();
+  }
+  // מורה: לשיעור הקודם / הבא לפי סדר הקורס (גרסת הקניה)
+  function tUnit(d) {
+    if (!T || !st.unit) return;
+    const k = K.UNITS.findIndex(x => x.id === st.unit.id), nx = K.UNITS[k + d];
+    return nx ? openUnit(nx.id, 'teach') : course();
   }
   const optT = o => typeof o === 'string' ? o : (o.t || '');
   function ansText(it) {
@@ -1064,13 +1080,15 @@
     const s = Math.max(0, stepIdx - 1);
     const mi = K.MODULES.findIndex(m => m.u.includes(st.unit.id));
     const nScr = screens().length;
-    main.innerHTML = `${tview(`${{ teach: 'גרסת הקניה', reinforce: 'גרסת חיזוק' }[st.unit.ver]} · מסך ${st.unit.i + 1} מתוך ${nScr} <span class="tnav"><button class="ghost small" id="tPrev"${st.unit.i ? '' : ' disabled'}>→ מסך קודם</button><button class="ghost small" id="tNext">מסך הבא ←</button><button class="ghost small" id="tAll">📋 כל המשימות</button></span>`)}<div class="card" id="ucard"><div class="lhead"><div><div class="crumb">פרק ${mi + 1}: ${K.MODULES[mi].t} · שיעור ${lessonNo(st.unit.id)} מתוך ${K.UNITS.length}</div><h2 style="margin:0">${u.title}</h2></div><button class="ghost small nosay" id="back">→ לתוכנית הקורס</button></div>
+    main.innerHTML = `${tview(`${{ teach: 'גרסת הקניה', reinforce: 'גרסת חיזוק' }[st.unit.ver]} · מסך ${st.unit.i + 1} מתוך ${nScr} <span class="tnav"><button class="ghost small" id="tPrev"${st.unit.i ? '' : ' disabled'}>→ מסך קודם</button><button class="ghost small" id="tNext">מסך הבא ←</button><button class="ghost small" id="tAll">📋 כל המשימות</button><button class="ghost small" id="tPrevU"${lessonNo(st.unit.id) > 1 ? '' : ' disabled'}>⏮ שיעור קודם</button><button class="ghost small" id="tNextU">${lessonNo(st.unit.id) < K.UNITS.length ? 'שיעור הבא ⏭' : 'לתוכנית הקורס ⏭'}</button></span>`)}<div class="card" id="ucard"><div class="lhead"><div><div class="crumb">פרק ${mi + 1}: ${K.MODULES[mi].t} · שיעור ${lessonNo(st.unit.id)} מתוך ${K.UNITS.length}</div><h2 style="margin:0">${u.title}</h2></div><button class="ghost small nosay" id="back">→ לתוכנית הקורס</button></div>
       <div class="pills nosay">${PILLS.map((p, i) => `<span class="pill${i === s ? ' on' : i < s ? ' done' : ''}">${p}</span>`).join('')}</div><div id="ubody">${inner}</div></div>`;
     $('back').onclick = course;
     if (T) {
       $('tPrev').onclick = () => tJump(-1);
       $('tNext').onclick = () => tJump(1);
       $('tAll').onclick = () => tasks(st.unit.id);
+      $('tPrevU').onclick = () => tUnit(-1);
+      $('tNextU').onclick = () => tUnit(1);
     }
     say('אני כאן אם צריך עזרה.');
     return $('ubody');
