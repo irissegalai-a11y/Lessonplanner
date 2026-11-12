@@ -5593,7 +5593,26 @@ function genPctWhole() {
   };
 }
 
-[[genPctGrid, 0], [genPctConvert, 1], [genPctOf, 2], [genPctDiscount, 3], [genPctWhat, 4], [genPctWhole, 4]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
+// לקורס "אחוזים" במאמן (לא משויכים לנושא): אחוז מכמות – כל אחוז, והתייקרות
+function genPctOfAny() { return genPctOf(2); }
+function genPctRaise() {
+  const p = pick([10, 20, 25, 50, 5]), price = pick([20, 40, 60, 80, 100, 120, 200, 240]);
+  const up = price * p / 100;
+  if (up % 1) return genPctRaise();
+  const askNew = Math.random() < 0.7;
+  const item = pick(['כרטיס להופעה', 'משחק', 'ספר', 'תיק']);
+  const ans = askNew ? price + up : up;
+  return {
+    type: 'num', unit: '₪', text: `${item} עלה ${price} ₪, והמחיר התייקר ב-${P(p)}.<br>${askNew ? 'מה המחיר החדש?' : 'בכמה שקלים התייקר?'}`, ans,
+    traps: (askNew ? [{ v: price - up, m: 'הורדתם – אבל המחיר <b>התייקר</b>. מוסיפים למחיר.' }, { v: price + p, m: `הוספתם ${p} שקלים. ההתייקרות היא ${p}% מהמחיר.` }, { v: up, m: 'זו ההתייקרות. מה המחיר <b>החדש</b>?' }]
+      : [{ v: price + up, m: 'זה המחיר החדש. שואלים בכמה שקלים התייקר.' }]).filter(t => t.v !== ans),
+    steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: up }].concat(askNew ? [{ p: M(`${price} + ${up} =`), a: ans }] : []),
+    hint: `קודם חשבו כמה שקלים הם ${p}% מ-${price}. בהתייקרות – מוסיפים.`,
+    exp: `ההתייקרות: ${M(`${price} × ${p} : 100 = ${up}`)} ₪.${askNew ? ` המחיר החדש: ${M(`${price} + ${up} = ${ans}`)} ₪.` : ''}`
+  };
+}
+
+[[genPctGrid, 0], [genPctConvert, 1], [genPctOf, 2], [genPctOfAny, 2], [genPctDiscount, 3], [genPctRaise, 3], [genPctWhat, 4], [genPctWhole, 4]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
 
 /* =========================================================
    כיתה א'
