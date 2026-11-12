@@ -1607,6 +1607,33 @@ html.embed body { padding-top: 0; }
   .sc-mk.key svg { max-height: 30mm; }
   .sc-mk.sm svg { max-height: 120px; }
   .sc-quarters.halves { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .sc-quarters.halves .sc-ql { flex-wrap: wrap; }
+  .sc-quarters.halves .sc-ql.cols2 { display: grid; grid-template-columns: 1fr 1fr; align-content: space-around; gap: 10px 24px; }
+  .sc-quarters.halves .sc-ql.vgl > li { flex: 1 1 30%; text-align: center; }
+  .sc-ql.vgl { gap: 6px; }
+  .sc-quarters.halves .sc-ql li.w { font-size: 0.95rem; line-height: 1.45; }
+  .wskey .sc-ql.vgl { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .wskey .sc-ql.vgl > li { flex: 0 0 auto; }
+  .wskey .sc-vx { --vc: 5mm; }
+  .sc-ql.vgl > li { text-align: center; }
+  /* כפל במאונך – דף משובץ */
+  .sc-vx { --vc: 6.5mm; display: inline-block; }
+  .sc-vg { display: inline-grid; grid-auto-rows: var(--vc); border-top: 0.6px solid #9fb3c8; border-left: 0.6px solid #9fb3c8; direction: ltr; vertical-align: top; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sc-vc { border-right: 0.6px solid #9fb3c8; border-bottom: 0.6px solid #9fb3c8; display: flex; align-items: center; justify-content: center; font-size: calc(var(--vc) * 0.72); font-weight: 700; line-height: 1; position: relative; }
+  .sc-vc.car { font-size: calc(var(--vc) * 0.5); }
+  .sc-vc.ln { border-bottom: 2px solid #111; }
+  .sc-vc .sc-vs { font-weight: 800; }
+  .sc-vc .sc-kv { font-size: inherit; }
+  .sc-vc .sc-kp { color: #4c5fd5; }
+  .sc-vg input { width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background: transparent; text-align: center; font: inherit; color: #4c5fd5; border-radius: 0; }
+  .sc-expr .sc-vg input.sc-in { width: 100%; height: 100%; border: 0; border-radius: 0; padding: 0; font: inherit; color: #111; background: #fffbe6; }
+  .sc-expr .sc-vg input.sc-in.ok { background: #e3f4dc; }
+  .sc-vg input:focus { outline: 2px solid #4c5fd5; outline-offset: -2px; }
+  .sc-vc.car input { color: #d9482b; }
+  .sc-expr .sc-vx { --vc: 2.3rem; }
+  .sc-expr.sm .sc-vx { --vc: 1.5rem; }
+  .sc-sample .sc-vx { --vc: 1.6rem; }
+  @media screen and (max-width: 640px) { .sc-expr .sc-vx { --vc: 2.05rem; } }
   .sc-quarters.halves .sc-ql { flex-direction: row; align-items: flex-start; gap: 18px; }
   .sc-quarters.halves .sc-ql > li { flex: 1 1 0; min-width: 0; }
   .sc-quarters.halves .sc-mk svg, .sc-quarters.halves .sc-mk .mk-fig { max-height: 46mm; }
@@ -2106,7 +2133,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רסב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -21267,7 +21294,7 @@ const SCD = {
       gen: p => { const ix = scIx(); return [ix[0], ix[2], ix[4]].map(i => { const L = [[11, 19], [12, 29], [21, 49], [31, 79], [41, 99]][i];
         let a = R(L[0], L[1]), b = p.kind === '21' ? R(2 + Math.min(i, 3), 9) : R(L[0], L[1]); if (p.kind === '32') a = R(100 + 50 * i, 300 + 170 * i);
         if (a % 10 === 0) a++; if (b % 10 === 0) b++;
-        return { x: [`${fmt(a)} × ${fmt(b)} =`, { b: 1 }], k: 'num', a: [a * b], hint: b < 10 ? `מפרקים את ${fmt(a)}: ${fmt(a - a % 10)} × ${b} ועוד ${a % 10} × ${b} – ואז מחברים.` : `מפרקים: ${fmt(a)} × ${b - b % 10} ועוד ${fmt(a)} × ${b % 10} – ואז מחברים.`, m: { a, b } }; }); } },
+        return { vert: { a, b }, x: [`${fmt(a)} × ${fmt(b)} =`, { b: 1 }], k: 'vd', a: [a * b], hint: b < 10 ? `מפרקים את ${fmt(a)}: ${fmt(a - a % 10)} × ${b} ועוד ${a % 10} × ${b} – ואז מחברים.` : `מפרקים: ${fmt(a)} × ${b - b % 10} ועוד ${fmt(a)} × ${b % 10} – ואז מחברים.`, m: { a, b } }; }); } },
     ldiv: { big: 1, minG: 4, noWq: 1, name: 'חילוק ארוך', opts: [{ k: 'dv', type: 'radio', label: 'המחלק', o: [['1', 'חד-ספרתי (852 : 4)'], ['2', 'דו-ספרתי (936 : 12)']] }, { k: 'rem', type: 'radio', label: 'שארית', o: [['no', 'בלי שארית'], ['yes', 'עם שארית'], ['mix', 'גם וגם']] }],
       title: p => `חילוק ארוך · ${p.dv === '2' ? 'מחלק דו-ספרתי' : 'מחלק חד-ספרתי'} · ${{ no: 'בלי שארית', yes: 'עם שארית', mix: 'עם ובלי שארית' }[p.rem]}`,
       gen: p => { const ix = scIx(); return [ix[0], ix[2], ix[4]].map((i, j) => { const d = p.dv === '2' ? R(11 + 2 * i, 19 + 8 * i) : R(2 + Math.min(i, 4), 9);
@@ -21373,7 +21400,11 @@ const SC_WORD = {
 };
 // לכל מיומנות: גם סוג השאלות
 const SC_LV = { k: 'lv', type: 'radio', label: 'רמה', o: [['1', 'קלה'], ['2', 'בינונית'], ['3', 'מאתגרת'], ['g', 'מהקל לקשה']] };
-const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', '5 תרגילים'], ['one', '4 תרגילים + שאלה מילולית'], ['one3', '3 תרגילים + שאלה מילולית'], ['word', '3 שאלות מילוליות']] };
+const SC_WQ = { k: 'wq', type: 'radio', label: 'סוג השאלות', o: [['ex', 'תרגילים בלבד'], ['one', 'תרגילים + שאלה מילולית בסוף'], ['word', 'שאלות מילוליות בלבד']] };
+// מספר התרגילים במבדק (המורה בוחרת). מיומנות "גדולה" (כפל במאונך, שרטוט) – פחות תרגילים
+const SC_N = { k: 'n', type: 'radio', label: 'מספר תרגילים', o: ['2', '3', '4', '5', '6', '8', '10'].map(v => [v, v]) };
+const SC_NB = { k: 'n', type: 'radio', label: 'מספר תרגילים', o: ['2', '3', '4', '6'].map(v => [v, v]) };
+const SC_NW = 6; // שאלות מילוליות – עד 6 במבדק
 // מתאימים לשכבה: טווחי מספרים שלא עוברים את מה שלומדים בכיתה, ומיומנויות של כיתות גבוהות מוסתרות
 const SC_GMAX = { 1: 100, 2: 1000, 3: 10000 }[GRADE] || 1000000;
 const scOptG = o => {
@@ -21385,7 +21416,7 @@ const scOptG = o => {
 };
 const scSkOk = S => (!S.minG || GRADE >= S.minG) && (!S.maxG || GRADE <= S.maxG);
 const scSkills = D => Object.entries(D.skills).filter(([, S]) => scSkOk(S));
-const scOpts = S => S.opts.map(scOptG).concat(S.noLv ? [] : [SC_LV], S.noWq ? [] : [SC_WQ]);
+const scOpts = S => S.opts.map(scOptG).concat(S.noLv ? [] : [SC_LV], S.noWq ? [] : [SC_WQ], [S.big ? SC_NB : SC_N]);
 // ---- תחומים נוספים למבדקי ההצלחה ----
 const scHe = A => ({ he: scVb(A, 'הוא', 'היא'), got: scVb(A, 'קיבל', 'קיבלה'), gave: scVb(A, 'נתן', 'נתנה'), bought: scVb(A, 'קנה', 'קנתה'), paid: scVb(A, 'שילם', 'שילמה'), ran: scVb(A, 'רץ', 'רצה'), read: scVb(A, 'קרא', 'קראה'), ans: scVb(A, 'ענה', 'ענתה'), ate: scVb(A, 'אכל', 'אכלה') });
 const SC_THINGS = ['מדבקות', 'גולות', 'קלפים', 'סוכריות', 'בולים'];
@@ -21809,31 +21840,56 @@ SC_MORE.pc.skills.pc_what = { name: 'איזה אחוז זה?', minG: 6, noWq: 1,
 const scRangeDef = o => { const want = { 1: ['10', '20'], 2: ['100', '20'], 3: ['1000', '100'] }[GRADE] || []; const f = want.find(w => o.o.some(x => x[0] === w)); return f || o.o[0][0]; };
 function scDefaults(dom, sk) {
   const p = {};
-  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'tset' ? o.vals.filter(t => { const Q = scMkPool().find(x => x.t === t); return !Q || !Q.min || GRADE >= Q.min; }).concat([]).filter((t, i, a) => a.indexOf(t) === i) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'lv' ? 'g' : o.k === 'range' ? scRangeDef(o) : o.o[0][0]; });
+  scOpts(SCD[dom].skills[sk]).forEach(o => { p[o.k] = o.type === 'tables' ? (GRADE <= 2 ? [2, 5, 10] : [2, 3, 4, 5, 6, 7, 8, 9]) : o.type === 'tset' ? o.vals.filter(t => { const Q = scMkPool().find(x => x.t === t); return !Q || !Q.min || GRADE >= Q.min; }).concat([]).filter((t, i, a) => a.indexOf(t) === i) : o.type === 'set' ? (GRADE <= 3 ? o.vals.filter(v => [2, 5, 10].includes(v)) : o.vals.slice()) : o.type === 'check' ? false : o.k === 'n' ? (SCD[dom].skills[sk].big ? '3' : '5') : o.k === 'lv' ? 'g' : o.k === 'range' ? scRangeDef(o) : o.o[0][0]; });
   return p;
 }
 const scSkill = c => SCD[c.d] && SCD[c.d].skills[c.s];
 const scTitle = c => { const S = scSkill(c); return S.title(c.p) + ({ word: ' · שאלות מילוליות', mix: ' · עם שאלה מילולית', one: ' · עם שאלה מילולית', one3: ' · עם שאלה מילולית' }[c.p.wq] || '') + (S.noLv ? '' : ({ 1: ' · רמה קלה', 2: ' · רמה בינונית', 3: ' · רמה מאתגרת' }[c.p.lv] || ' · מהקל לקשה')); };
 // 5 תרגילים לפי הרמה – בלי שני תרגילים זהים באותו מבדק
 function scGen(c) {
-  const S = scSkill(c), wq = c.p.wq || 'ex', key = q => scRender(q, 'key');
+  const S = scSkill(c), wq = SC_WORD[c.s] ? c.p.wq || 'ex' : 'ex', key = q => scRender(q, 'key');
   let qs;
   try {
     SC_LVL = c.p.lv || 'g';
     qs = S.gen(c.p);
     for (let i = 1; i < qs.length; i++) for (let t = 0; t < 25 && qs.slice(0, i).some(x => key(x) === key(qs[i])); t++) qs[i] = (t < 15 ? S.gen(c.p) : (SC_LVL = 'g', S.gen(c.p)))[t < 15 ? i : Math.min(i + (t - 15) % 3, qs.length - 1)];
   } finally { SC_LVL = 'g'; }
-  // כמה ואיזה: 3 שאלות מילוליות (קל, בינוני, קשה) / שאלה מילולית אחת בסוף + 3 או 4 תרגילים
-  if (wq === 'word') return [0, 2, 4].map(i => SC_WORD[c.s](qs[i]));
-  if (wq === 'one3') return [qs[0], qs[1], qs[3], SC_WORD[c.s](qs[4])];
-  if (wq === 'one' || wq === 'mix') return qs.map((q, i) => i === 4 ? SC_WORD[c.s](q) : q);
-  return qs;
+  // בלי בחירת מספר (קישורים ישנים): 3 שאלות מילוליות (קל, בינוני, קשה) / שאלה מילולית אחת בסוף + 3 או 4 תרגילים
+  if (!c.p.n) {
+    if (wq === 'word') return [0, 2, 4].map(i => SC_WORD[c.s](qs[i]));
+    if (wq === 'one3') return [qs[0], qs[1], qs[3], SC_WORD[c.s](qs[4])];
+    if (wq === 'one' || wq === 'mix') return qs.map((q, i) => i === 4 ? SC_WORD[c.s](q) : q);
+    return qs;
+  }
+  // מספר שבחרה המורה – מהקל לקשה, בלי תרגילים זהים
+  const n = Math.max(1, Math.min(wq === 'word' ? SC_NW : 12, Number(c.p.n) || 5)), out = scPickN(c, qs, n, key);
+  if (wq === 'word') return out.map(q => SC_WORD[c.s](q));
+  if ((wq === 'one' || wq === 'one3' || wq === 'mix') && n > 1) return out.map((q, i) => i === n - 1 ? SC_WORD[c.s](q) : q);
+  return out;
+}
+// בוחרים n תרגילים מתוך סדרות של המחולל (כל סדרה מהקל לקשה): פחות – פיזור על פני הסדרה, יותר – עוד סדרות
+function scPickN(c, qs, n, key) {
+  const L = qs.length;
+  if (n <= L) return n === 1 ? [qs[L - 1]] : Array.from({ length: n }, (_, j) => qs[Math.round(j * (L - 1) / (n - 1))]);
+  const S = scSkill(c), sets = [qs], out = [], used = {};
+  try {
+    SC_LVL = c.p.lv || 'g';
+    for (let j = 0; j < n; j++) {
+      const d = Math.floor(j * L / n), k = used[d] = (used[d] ?? -1) + 1;
+      while (sets.length <= k) sets.push(S.gen(c.p));
+      let q = sets[k][Math.min(d, sets[k].length - 1)];
+      for (let t = 0; t < 25 && out.some(x => key(x) === key(q)); t++) { const g = S.gen(c.p); q = g[Math.min(d, g.length - 1)]; }
+      out.push(q);
+    }
+  } finally { SC_LVL = 'g'; }
+  return out;
 }
 const scEnc = c => btoa(JSON.stringify(c)).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
 const scDec = s => { try { const c = JSON.parse(atob(s.replace(/-/g, '+').replace(/_/g, '/'))); if (c.d === 'mul' && c.s === 'mul22') c.d = 'm2'; return scSkill(c) ? c : null; } catch (e) { return null; } };
 
 // ציור תרגיל: mode = 'screen' (משבצות להקלדה) / 'print' (משבצות ריקות) / 'key' (עם התשובות)
 function scRender(q, mode) {
+  if (q.vert) return scVert(q, mode);
   if (q.mk) return mode === 'key' ? `<div class="sc-mk key">${q.mk.parts.map(p => `${p.l ? p.l + ' ' : ''}${p.show}`).join(' · ')}</div>` : `<div class="sc-mk">${mkQHTML(Object.assign({}, q.mk, { parts: q.mk.parts.map(p => p.k === 'draw' && !p.figPrint && p.fig ? Object.assign({}, p, { figPrint: p.fig }) : p) }), 'print', 1).replace(/<h3 class="mk-h">[^<]*<\/h3>/, '')}</div>`;
   let bi = 0;
   const ans = q.k === 'fv' ? scFvShow(q) : q.a;
@@ -21849,6 +21905,41 @@ function scRender(q, mode) {
   const parts = q.x.map(tok);
   return `<span class="sc-x${q.rtl ? ' word' : ''}" dir="${q.rtl ? 'rtl' : 'ltr'}">${parts.join(' ')}</span>`;
 }
+// כפל במאונך על דף משובץ: כל ספרה במשבצת. שורת נשא, הגורמים, מכפלות חלקיות (אם הכופל דו-ספרתי ומעלה) ותוצאה.
+// screen – משבצות להקלדה (רק שורת התוצאה נבדקת), print – ריק, key – עם המכפלות החלקיות והתוצאה
+function scVert(q, mode) {
+  const { a, b } = q.vert, P = String(a * b), W = String(a).length + String(b).length, C = W + 3, bd = String(b).split('').reverse().map(Number);
+  const parts = bd.length > 1 ? bd.map((d, j) => String(a * d * 10 ** j)) : [];
+  const rows = [['', ''], [String(a), ''], [String(b), '×']].concat(parts.map((x, j) => [x, j === parts.length - 1 ? '+' : '', 'p'])).concat([[P, '', 'r'], ['', '']]);
+  const lineAfter = [2, parts.length ? 2 + parts.length : -1];
+  let r0 = 0, html = '';
+  rows.forEach(([num, sign, kind], r) => {
+    for (let c = 0; c < C; c++) {
+      const p = C - 2 - c; // מקום הספרה מימין (0 = אחדות)
+      const dig = p >= 0 && p < W, line = lineAfter.includes(r) && (dig || p === W) ? ' ln' : '';
+      let in_ = '';
+      if (c === C - 2 - W && sign) in_ = `<b class="sc-vs">${sign}</b>`;
+      else if (dig) {
+        const ch = p < num.length ? num[num.length - 1 - p] : '';
+        if (r === 1 || r === 2) in_ = ch ? `<b>${ch}</b>` : '';
+        else if (kind === 'r') in_ = mode === 'screen' ? `<input class="sc-in sc-vd" data-bi="${W - 1 - p}" data-r="${r}" data-c="${c}" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="ספרה בתוצאה">` : mode === 'key' ? `<b class="sc-kv">${ch}</b>` : '';
+        else if (kind === 'p') in_ = mode === 'screen' ? `<input class="sc-vscr" data-r="${r}" data-c="${c}" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="משבצת עזר">` : mode === 'key' && ch ? `<b class="sc-kv sc-kp">${ch}</b>` : '';
+        else if (r === 0 && mode === 'screen' && p < String(a).length + 1) in_ = `<input class="sc-vscr sc-vcar" data-r="0" data-c="${c}" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="נשא">`;
+      }
+      html += `<span class="sc-vc${line}${r === 0 ? ' car' : ''}">${in_}</span>`;
+    }
+  });
+  return `<span class="sc-x sc-vx" dir="ltr"><span class="sc-vg" style="grid-template-columns:repeat(${C},var(--vc))">${html}</span></span>`;
+}
+// הקלדה בכפל במאונך: אחרי ספרה – למשבצת שמשמאל (כמו שפותרים, מימין לשמאל)
+function scVertWire(root) {
+  root.querySelectorAll('.sc-vg input').forEach(x => x.addEventListener('input', () => {
+    x.value = x.value.replace(/\D/g, '').slice(-1);
+    if (!x.value) return;
+    const nx = x.closest('.sc-vg').querySelector(`input[data-r="${x.dataset.r}"][data-c="${Number(x.dataset.c) - 1}"]`);
+    if (nx && !nx.disabled) nx.focus();
+  }));
+}
 // התשובה לשבר: מספר מעורב אם צריך (שלם, מונה, מכנה), אחרת מונה ומכנה
 function scFvShow(q) {
   const [n, d] = q.v;
@@ -21861,6 +21952,7 @@ const scNum = v => { v = String(v).trim().replace(/\s/g, ''); v = /^\d{1,3}(,\d{
 function scCheckAns(q, vals) {
   if (q.k === 'cmp') return vals[0] === q.a[0];
   if (q.k === 'num') return vals.every((v, i) => v !== '' && scNum(v) === q.a[i]);
+  if (q.k === 'vd') { const i0 = vals.findIndex(v => v !== ''); return i0 >= 0 && vals.slice(i0).every(v => /^\d$/.test(v)) && Number(vals.join('')) === q.a[0]; }
   // fv: שבר שווה בערכו (גם לא מצומצם). מספר מעורב: שלם + שבר
   let w = 0, n, d;
   if (q.mixedRes) { [w, n, d] = vals; w = Number(w || 0); if (n === '' && d === '') { n = 0; d = 1; } } else [n, d] = vals;
@@ -21896,12 +21988,12 @@ function scDialog(dom, start, onOk) {
   ov.addEventListener('click', e => { if (e.target === ov) close(); });
   const draw = () => {
     const D = SCD[dom], S = D.skills[c.s], many = scSkills(D).length > 1;
-    const opts = scOpts(S), main = opts.filter(o => o.k !== 'lv' && o.k !== 'wq'), lv = opts.find(o => o.k === 'lv'), wq = opts.find(o => o.k === 'wq');
+    const opts = scOpts(S), main = opts.filter(o => o.k !== 'lv' && o.k !== 'wq' && o.k !== 'n'), lv = opts.find(o => o.k === 'lv'), wq = SC_WORD[c.s] ? opts.find(o => o.k === 'wq') : null, nO = opts.find(o => o.k === 'n');
     ov.innerHTML = `<div class="modal sc-modal" role="dialog" aria-modal="true" aria-labelledby="scdT">
       <h2 id="scdT">⭐ ${D.name}</h2>
       ${many ? `<div class="sc-sec"><b>מה בודקים?</b><div class="sc-chips sc-skills">${scSkills(D).map(([k, X]) => `<button type="button" class="sc-chip btn${c.s === k ? ' on' : ''}" data-sk="${k}">${X.name}</button>`).join('')}</div></div>` : ''}
       ${main.length ? `<div class="sc-sec sc-dial"><b>דיוק התוכן</b>${main.map(o => scOptHTML(c, o)).join('')}</div>` : ''}
-      ${lv || wq ? `<div class="sc-sec">${lv ? scOptHTML(c, lv) : ''}${wq ? scOptHTML(c, wq) : ''}</div>` : ''}
+      ${lv || wq || nO ? `<div class="sc-sec">${lv ? scOptHTML(c, lv) : ''}${wq ? scOptHTML(c, wq) : ''}${nO ? scOptHTML(c, c.p.wq === 'word' && wq ? Object.assign({}, nO, { o: nO.o.filter(([v]) => Number(v) <= SC_NW) }) : nO) : ''}</div>` : ''}
       <div class="sc-now">📋 <b>${scTitle(c)}</b></div>
       <div class="sc-sample"><b>לדוגמה:</b> ${(() => { const q = scGen(c)[0]; if (q.mk) return `<div class="sc-mk sm">${scRender(q, 'print')}</div>`; return `${q.pre ? `<span class="sc-pre">יודעים ש: ${M(q.pre)}</span> ` : ''}${scRender(q, 'print')}`; })()}</div>
       <div class="actions" style="justify-content:center"><button id="scdOk" class="race-go">✔ אישור</button><button id="scdNo" class="ghost">↩ חזור</button></div>
@@ -21910,7 +22002,7 @@ function scDialog(dom, start, onOk) {
     ov.querySelectorAll('[data-sk]').forEach(b => b.onclick = () => { const s = b.dataset.sk, p = scDefaults(dom, s); ['T', 'lv', 'wq'].forEach(k => { if (c.p[k] !== undefined && p[k] !== undefined) p[k] = Array.isArray(c.p[k]) ? c.p[k].slice() : c.p[k]; }); set({ d: dom, s, p }); });
     ov.querySelectorAll('[data-tbl]').forEach(x => x.onchange = () => { const t = Number(x.dataset.tbl); let T = c.p.T.filter(y => y !== t); if (x.checked) T.push(t); if (!T.length) T = [t]; set({ ...c, p: { ...c.p, T: T.sort((a, b) => a - b) } }); });
     ov.querySelectorAll('[data-taball]').forEach(x => x.onclick = () => set({ ...c, p: { ...c.p, T: [2, 3, 4, 5, 6, 7, 8, 9, 10] } }));
-    ov.querySelectorAll('[data-rad]').forEach(x => x.onchange = () => set({ ...c, p: { ...c.p, [x.dataset.rad]: x.value } }));
+    ov.querySelectorAll('[data-rad]').forEach(x => x.onchange = () => { const p = { ...c.p, [x.dataset.rad]: x.value }; if (x.dataset.rad === 'wq' && x.value === 'word' && Number(p.n) > 3) p.n = '3'; set({ ...c, p }); });
     ov.querySelectorAll('[data-set]').forEach(x => x.onchange = () => { const k = x.dataset.set, t = Number(x.value); let V = c.p[k].filter(y => y !== t); if (x.checked) V.push(t); if (!V.length) V = [t]; set({ ...c, p: { ...c.p, [k]: V.sort((a, b) => a - b) } }); });
     ov.querySelectorAll('[data-chk]').forEach(x => x.onchange = () => set({ ...c, p: { ...c.p, [x.dataset.chk]: x.checked } }));
     ov.querySelectorAll('[data-tset]').forEach(x => x.onchange = () => { const k = x.dataset.tset, t = x.value; let V = c.p[k].filter(y => y !== t); if (x.checked) V.push(t); if (!V.length) V = [t]; const O = scOpts(SCD[dom].skills[c.s]).find(o => o.k === k).vals; set({ ...c, p: { ...c.p, [k]: O.filter(y => V.includes(y)) } }); });
@@ -21928,7 +22020,7 @@ function succHome() {
   app.innerHTML = `
     <div class="topbar noprint"><span class="title">⭐ מבדקי הצלחה</span><button class="secondary" id="scBack">${ic('home')} חזרה</button></div>
     <div class="card noprint sc-build">
-      <p class="sc-intro">מבדק הצלחה = <b>עד 5 תרגילים קצרים על מיומנות אחת</b> – ברמה שבוחרים, או מהקל לקשה. בדף המודפס – 4 מבדקים ברבעים, לגזור. בעמוד השני – דף תשובות.</p>
+      <p class="sc-intro">מבדק הצלחה = <b>תרגילים קצרים על מיומנות אחת</b> – ברמה שבוחרים, או מהקל לקשה. את מספר התרגילים בוחרים ב"שינוי הגדרות". בדף המודפס – 4 מבדקים ברבעים, לגזור (מעל 5 תרגילים – 2 מבדקים בעמוד). בעמוד השני – דף תשובות.</p>
       <div class="sc-opt"><b>בדף:</b> <span class="sc-chips">
         <label class="sc-chip${S.mode === 'same' ? ' on' : ''}"><input type="radio" name="scmode" value="same" ${S.mode === 'same' ? 'checked' : ''}>אותו מבדק ב-4 הרבעים</label>
         <label class="sc-chip${S.mode === 'diff' ? ' on' : ''}"><input type="radio" name="scmode" value="diff" ${S.mode === 'diff' ? 'checked' : ''}>מבדק שונה בכל רבע</label></span></div>
@@ -21979,13 +22071,13 @@ function scSheet() {
   const quarter = i => `<div class="sc-quarter">
       <div class="sc-qh"><b>⭐ מבדק הצלחה</b><span>שם: <span class="wsline"></span></span></div>
       <div class="sc-qt">${scTitle(cfgOf(i))}${same && S.vers ? ` · נוסח ${VER[i]}'` : ''}</div>
-      <ol class="sc-ql n${qsets[i].length}">${qsets[i].map(li).join('')}</ol>
+      <ol class="sc-ql n${qsets[i].length}${qsets[i].length > 5 && !qsets[i].some(q => q.vert || q.mk) ? ' cols2' : ''}${qsets[i].some(q => q.vert) ? ' vgl' : ''}">${qsets[i].map(li).join('')}</ol>
       <div class="sc-foot"><span class="sc-stamp">✔ הצלחתי!</span><span class="sc-self">איך היה לי? 😊 🙂 😐</span></div>
     </div>`;
   const keyQ = i => { mode0 = 'key'; const h = `<div class="sc-quarter key"><div class="sc-qh"><b>🔑 ${one ? 'כל הרבעים (נוסח אחד)' : same ? `נוסח ${VER[i]}'` : `רבע ${i + 1}`}</b></div><div class="sc-qt">${scTitle(cfgOf(i))}</div>
-      <ol class="sc-ql n${qsets[i].length}">${qsets[i].map(li).join('')}</ol></div>`; mode0 = 'print'; return h; };
+      <ol class="sc-ql n${qsets[i].length}${qsets[i].length > 5 && !qsets[i].some(q => q.vert || q.mk) ? ' cols2' : ''}${qsets[i].some(q => q.vert) ? ' vgl' : ''}">${qsets[i].map(li).join('')}</ol></div>`; mode0 = 'print'; return h; };
   // שרטוט צריך רשת גדולה: 2 מבדקים בעמוד (חצי עמוד לכל מבדק, המשימות זו לצד זו)
-  const big = S.slots.some((c, i) => i === 0 || !same ? scSkill(cfgOf(i)).big : false);
+  const big = S.slots.some((c, i) => i === 0 || !same ? scSkill(cfgOf(i)).big : false) || qsets.some(q => q.length > 5);
   const sheet = big ? [[0, 1], [2, 3]].map(pr => `<section class="ws-page sc-page"><div class="sc-quarters halves">${pr.map(quarter).join('')}</div></section>`).join('')
     : `<section class="ws-page sc-page"><div class="sc-quarters">${[0, 1, 2, 3].map(quarter).join('')}</div></section>`;
   $('wsout').innerHTML = `${sheet}
@@ -22017,12 +22109,13 @@ function succRun(cfg, fromBuilder) {
       </div>`;
     $('scOut').onclick = back;
     const ins = [...app.querySelectorAll('.sc-in')];
-    if (ins[0]) setTimeout(() => ins[0].focus(), 30);
+    if (q.vert) { scVertWire(app); const f0 = ins[ins.length - 1]; if (f0) setTimeout(() => f0.focus(), 30); }
+    else if (ins[0]) setTimeout(() => ins[0].focus(), 30);
     st.tries = 0;
     const next = () => { st.i++; if (st.i < qs.length) show(); else done(); };
-    const lock = () => { ins.forEach(x => x.disabled = true); app.querySelectorAll('.sc-cb').forEach(x => x.disabled = true); };
+    const lock = () => { ins.forEach(x => x.disabled = true); app.querySelectorAll('.sc-vscr').forEach(x => x.disabled = true); app.querySelectorAll('.sc-cb').forEach(x => x.disabled = true); };
     const check = vals => {
-      const miss = q.k === 'fv' && q.mixedRes ? (vals[0] === '' && (vals[1] === '' || vals[2] === '')) || ((vals[1] === '') !== (vals[2] === '')) : vals.some(v => v === '');
+      const miss = q.k === 'vd' ? vals[vals.length - 1] === '' : q.k === 'fv' && q.mixedRes ? (vals[0] === '' && (vals[1] === '' || vals[2] === '')) || ((vals[1] === '') !== (vals[2] === '')) : vals.some(v => v === '');
       if (miss) { $('scMsg').innerHTML = '✋ השלימו את כל המשבצות, ואז "בדיקה".'; return; }
       st.tries++;
       if (scCheckAns(q, vals)) {
@@ -22043,7 +22136,7 @@ function succRun(cfg, fromBuilder) {
       }
     };
     if ($('scCheck')) $('scCheck').onclick = () => check(ins.map(x => x.value.trim()));
-    ins.forEach((x, k) => x.addEventListener('keydown', e => { if (e.key === 'Enter' && !x.disabled) { if (k < ins.length - 1 && !ins[k + 1].value) ins[k + 1].focus(); else $('scCheck').click(); } }));
+    ins.forEach((x, k) => x.addEventListener('keydown', e => { if (e.key === 'Enter' && !x.disabled) { if (!q.vert && k < ins.length - 1 && !ins[k + 1].value) ins[k + 1].focus(); else $('scCheck').click(); } }));
     app.querySelectorAll('.sc-cb').forEach(b => b.onclick = () => { app.querySelectorAll('.sc-cb').forEach(x => x.classList.toggle('sel', x === b)); const sl = app.querySelector('.sc-slot'); if (sl) sl.textContent = b.dataset.cmp; check([b.dataset.cmp]); });
     window.scrollTo(0, 0);
   };
