@@ -467,6 +467,7 @@ html.embed body { padding-top: 0; }
   .ws-pastel .wsqs.dsk-dense .wsq .ex-grid { grid-area: g; margin: 4px 0 0; }
   .wsqs.dsk-dense .wsbox { height: 24px; width: 30px; }
   .dsqfig { max-width: 100%; width: 170px; height: auto; margin: 2px 0 0; }
+  .box.fbx { min-width: 1.9em; min-height: 1.25em; border-width: 1.5px; vertical-align: middle; }
   .dsk-tips.short li { margin: 2px 0; }
   .dswhy { display: block; margin-top: 4px; font-size: 0.95em; color: #3d3a5c; }
   .dsmean { margin-bottom: 3px; } .dscalc { color: #2c2a48; }
@@ -2211,7 +2212,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רעב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רעג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6716,6 +6717,770 @@ function dsTipsHTML0(skills, method) {
   const items = skills.map(sk => { const t = dsTip(sk, method), [txt, fig] = Array.isArray(t) ? t : [t, '']; return `<li class="dstip"><div>${skills.length > 1 ? `<b>${DSK.find(x => x.id === sk).name}:</b> ` : ''}${txt}</div>${fig}</li>`; }).join('');
   return `<div class="wstips dsk-tips${skills.length > 2 ? ' multi' : ''}"><b>📘 תזכורת – ${title}</b><ul>${items}</ul></div>`;
 }
+/* ===== שברים לפי מיומנות – למחולל דפי התרגול (?print), כיתות ה'–ו' =====
+   אותו מבנה כמו חילוק שברים: מיומנות · רמה · שיטת הסבר (concept – מושגית, ברירת המחדל · algo – צעד אחר צעד).
+   מחוללי השברים הקיימים (genExpand, genAddDiff...) לא משתנים – כאן מחולל נפרד, רק לדף התרגול לפי מיומנות.
+   skill: exp הרחבה · red צמצום · mix מדומה ↔ מעורב · cmp השוואה · same חיבור וחיסור במכנה שווה · diff במכנים שונים
+          mixas מספרים מעורבים · qty שבר מכמות · comp השלמה לשלם
+   כל שאלה: meta = { skill, lv, k (מפתח לבדיקת כפילויות), sc (קושי – למיון ברמה 1), think (במשימת חשיבה) };
+   keyHTML – התשובה בדף התשובות (גם שבר לא מצומצם, למשל בהרחבה). */
+const FSK = [
+  { id: 'exp', name: 'הרחבת שברים', ex: () => M(`${F(2, 3)} = ${F('?', 12)}`) },
+  { id: 'red', name: 'צמצום שברים', ex: () => M(`${F(6, 8)} = ${F(3, 4)}`) },
+  { id: 'mix', name: 'שבר מדומה ↔ מספר מעורב', ex: () => M(`${F(11, 4)} = 2${F(3, 4)}`) },
+  { id: 'cmp', name: 'השוואת שברים', ex: () => M(`${F(3, 4)} ◯ ${F(2, 3)}`) },
+  { id: 'same', name: 'חיבור וחיסור – מכנה שווה', ex: () => M(`${F(2, 7)} + ${F(3, 7)}`) },
+  { id: 'diff', name: 'חיבור וחיסור – מכנים שונים', ex: () => M(`${F(1, 2)} + ${F(1, 3)}`) },
+  { id: 'mixas', name: 'חיבור וחיסור מספרים מעורבים', ex: () => M(`2${F(1, 2)} + 1${F(3, 4)}`) },
+  { id: 'qty', name: 'שבר מכמות', ex: () => `${M(F(3, 4))} מ-24` },
+  { id: 'comp', name: 'השלמה לשלם', ex: () => M(`1 − ${F(3, 8)}`) }
+];
+const FSK_LEVELS = {
+  exp: ['הרחבה פי 2 או פי 3; מכנים עד 6', 'מספר חסר במונה או במכנה; הרחבה פי 4 עד 10, מכנים עד 10', 'הרחבה למכנה נתון (למשל 3/8 = ?/40), ושרשרת שברים שווים'],
+  red: ['צעד אחד, במחלק בולט (2, 5 או 10)', 'צמצום עד הסוף (לפעמים בשני צעדים); מספרים עד 100', 'מספרים גדולים: כמה צעדים, או צעד אחד במחלק המשותף הגדול ביותר'],
+  mix: ['מכנים 2 עד 5, עד 3 שלמים', 'מכנים עד 10 ועד 6 שלמים, בשני הכיוונים', 'מספרים גדולים, והמרה שדורשת גם צמצום'],
+  cmp: ['אותו מכנה או אותו מונה', 'מכנים שונים – בעזרת מכנה משותף (עד 24)', 'השוואה לחצי או ל-1 בלי מכנה משותף, ומספרים מעורבים'],
+  same: ['התוצאה קטנה מ-1', 'התוצאה גדולה מ-1 – כותבים כמספר מעורב', 'מספרים מעורבים, עם מעבר שלם או פריטה'],
+  diff: ['מכנה אחד כפולה של השני', 'המכנה המשותף הוא מכפלת המכנים', 'מכנה משותף קטן ממכפלת המכנים, וצמצום בסוף'],
+  mixas: ['בלי מעבר שלם (מכנים שווים או מכנה אחד כפולה של השני)', 'עם מעבר שלם בחיבור, ופריטה בחיסור במכנה שווה', 'חיסור עם פריטה ומכנים שונים'],
+  qty: ['שבר יחידה מכמות (למשל ⅓ מ-24)', 'שבר שאינו שבר יחידה (למשל ¾ מ-24)', 'מציאת השלם לפי החלק, ובעיה דו-שלבית'],
+  comp: ['1 פחות שבר', 'מספר שלם פחות שבר', 'מספר מעורב פחות שבר, עם פריטה']
+};
+const FSK_NOWORD = ['exp', 'red'];
+const FS_GIRL = ['נועה', 'מאיה', 'דנה', 'מיכל', 'תמר', 'שירה'], FS_BOY = ['יואב', 'עומר', 'דני', 'איתי', 'רון', 'אורי'];
+const FS_P = '#f4a3c0', FS_C = '#9fc3ee';
+// שבר אמיתי מצומצם, מכנה בין lo ל-hi
+const fsCop = (lo, hi) => { for (;;) { const d = R(lo, hi), n = R(1, d - 1); if (gcd(n, d) === 1) return [n, d]; } };
+// הצגה בתוך M: שלם / שבר / מספר מעורב – בלי לצמצם (כמו שנכתב בתרגיל)
+const fsMx = (N, d) => N % d === 0 ? String(N / d) : N > d ? `${Math.floor(N / d)}${F(N % d, d)}` : F(N, d);
+// תשובה בדף התשובות: השבר שהתקבל, ואם אפשר – מצומצם / כמספר מעורב
+const fsKey = (N, d) => { if (d === 1) return M(String(N)); const g = gcd(N, d); return g > 1 || N > d ? M(`${F(N, d)} = ${fsMx(N / g, d / g)}`) : M(F(N, d)); };
+const fsKeyMx = (N, d) => { const g = gcd(N, d); return M(g > 1 && N % d ? `${fsMx(N, d)} = ${fsMx(N / g, d / g)}` : fsMx(N, d)); };
+const fsNum = x => M(fsMx(x[0], x[1]));
+// שורה בפס שברים: segs = [[כמה, צבע, מקווקו?], ...] משמאל לימין
+const fsRow = (d, ...segs) => { const fills = [], dash = []; segs.forEach(([k, c, ds]) => { for (let i = 0; i < k; i++) { fills.push(c); dash.push(!!ds); } }); return { d, fills, dash }; };
+const fsWholes = (N, d, col = FS_P) => Array.from({ length: Math.ceil(N / d) }, (_, r) => fsRow(d, [Math.max(0, Math.min(d, N - r * d)), col]));
+// שבר מכמות: פס של d חלקים, n צבועים, והכמות כולה רשומה מעל
+function fsQtyFig(d, n, N) {
+  const w = 230, pw = w / d;
+  let g = `<line x1="2" y1="9" x2="${w + 2}" y2="9" stroke="#23264a" stroke-width="1.2"/><line x1="2" y1="5" x2="2" y2="13" stroke="#23264a"/><line x1="${w + 2}" y1="5" x2="${w + 2}" y2="13" stroke="#23264a"/>`
+    + `<rect x="${w / 2 - 16}" y="0" width="36" height="16" fill="#fff"/><text x="${w / 2 + 2}" y="13" text-anchor="middle" font-size="13" font-weight="700">${N}</text>`;
+  for (let i = 0; i < d; i++) g += `<rect x="${2 + i * pw}" y="20" width="${pw}" height="18" fill="${i < n ? FS_P : '#fff'}" stroke="#23264a" stroke-width="1.2"/>`;
+  return `<svg class="dsqfig" viewBox="0 0 ${w + 4} 40" width="${w + 4}" height="40" aria-hidden="true">${g}</svg>`;
+}
+// משבצת ריקה בתוך תרגיל (לשאלות "השלימו")
+const FB = '<span class="box fbx">&nbsp;</span>';
+const fsOp = op => op === '+' ? '+' : '−';
+const fsV = x => x[0] / x[1];
+const fsPrimes = k => { const out = []; for (let p = 2; k > 1; p++) while (k % p === 0) { out.push(p); k /= p; } return out; };
+
+// ---------- בעיות מילוליות בחיבור וחיסור (מכנה שווה, מכנים שונים, מעורבים) ----------
+// u – סוג היחידה (אילו מכנים טבעיים לה, DSK_DEN); le1 – רק כששני המספרים והתוצאה עד 1 (חלק משלם); cut – הקשר "חתוך", שבו גם שבר לא מצומצם טבעי
+const FS_AS = {
+  '+': [
+    { u: 'pizza', le1: true, cut: true, t: (A, B, g, b, d) => `פיצה חתוכה ל-${d} משולשים שווים. ${g} אכלה ${A} מהפיצה, ו${b} אכל ${B} מהפיצה. איזה חלק מהפיצה אכלו יחד?`, ku: 'מהפיצה' },
+    { u: 'part', le1: true, t: (A, B) => `ביום ראשון צבעו ${A} מהגדר, וביום שני – עוד ${B} מהגדר. איזה חלק מהגדר צבעו בשני הימים?`, ku: 'מהגדר' },
+    { u: 'part', le1: true, t: (A, B, g) => `${g} קראה ביום ראשון ${A} מהספר, וביום שני ${B} מהספר. איזה חלק מהספר קראה בשני הימים יחד?`, ku: 'מהספר' },
+    { u: 'metric', t: (A, B) => `בבקבוק אחד יש ${A} ליטר מיץ, ובבקבוק שני ${B} ליטר מיץ. כמה ליטר מיץ יש בשני הבקבוקים יחד?`, ku: 'ליטר' },
+    { u: 'metric', t: (A, B, g) => `${g} הלכה ${A} ק"מ בבוקר ו-${B} ק"מ בערב. כמה ק"מ הלכה בסך הכול?`, ku: 'ק"מ' },
+    { u: 'metric', t: (A, B) => `לעוגה צריך ${A} ק"ג קמח, ולעוגיות צריך ${B} ק"ג קמח. כמה ק"ג קמח צריך בסך הכול?`, ku: 'ק"ג' },
+    { u: 'hours', t: (A, B, g) => `האימון של ${g} נמשך ${A} שעה, ואחריו היא שיחקה עוד ${B} שעה. כמה זמן נמשכו האימון והמשחק יחד?`, ku: 'שעות', le: 1, one: true },
+    { u: 'hours', t: (A, B, g) => `${g} התאמנה ${A} שעות ביום ראשון ו-${B} שעות ביום שני. כמה שעות התאמנה בשני הימים יחד?`, ku: 'שעות', big: true }
+  ],
+  '−': [
+    { u: 'pizza', le1: true, cut: true, t: (A, B, g, b, d) => `פיצה חתוכה ל-${d} משולשים שווים, ונשארו ממנה ${A} פיצה. ${b} אכל ${B} פיצה. איזה חלק מהפיצה נשאר עכשיו?`, ku: 'מהפיצה' },
+    { u: 'part', le1: true, t: (A, B, g, b) => `${g} ו${b} קוראים את אותו ספר. ${g} קראה ${A} מהספר, ו${b} קרא ${B} מהספר. איזה חלק מהספר קראה ${g} יותר מ${b}?`, ku: 'מהספר' },
+    { u: 'metric', t: (A, B) => `בשק היו ${A} ק"ג קמח. השתמשו ב-${B} ק"ג קמח לאפייה. כמה ק"ג קמח נשארו בשק?`, ku: 'ק"ג' },
+    { u: 'metric', t: (A, B) => `סרט באורך ${A} מטר. חתכו ממנו חתיכה באורך ${B} מטר. מה אורך הסרט שנשאר?`, ku: 'מטר' },
+    { u: 'metric', t: (A, B) => `בבקבוק היו ${A} ליטר מים. שתו ${B} ליטר. כמה ליטר מים נשארו בבקבוק?`, ku: 'ליטר' },
+    { u: 'metric', t: (A, B, g, b) => `אורך המסלול ${A} ק"מ. ${b} כבר רץ ${B} ק"מ. כמה ק"מ נשאר לו לרוץ?`, ku: 'ק"מ' }
+  ]
+};
+// בעיה מילולית לתרגיל a op b (שברים כ-[מונה, מכנה]; mix – המספרים מוצגים כמעורבים). מחזירה { text, ku, tpl } או null
+function fsWordAS(a, b, op, opts = {}) {
+  const res = op === '+' ? fsV(a) + fsV(b) : fsV(a) - fsV(b);
+  const dens = [a, b].map(x => x[1]), red = [a, b].every(x => gcd(x[0], x[1]) === 1 || x[0] % x[1] === 0);
+  const g = pick(FS_GIRL), bo = pick(FS_BOY);
+  const pool = FS_AS[op].map((x, i) => [x, i]).filter(([x]) => dens.every(d => DSK_DEN[x.u].includes(d))
+    && (!x.le1 || (fsV(a) < 1 && fsV(b) < 1 && res <= 1)) && (x.cut ? a[1] === b[1] : red)
+    && (!x.one || (fsV(a) < 1 && fsV(b) < 1)) && (!x.big || fsV(a) > 1 || fsV(b) > 1));
+  if (!pool.length) return null;
+  const [x, i] = pick(pool);
+  return { text: x.t(fsNum(a), fsNum(b), g, bo, a[1]), ku: x.ku, tpl: 'as' + op + i };
+}
+
+// ---------- הסברים לחיבור וחיסור ----------
+// a, b – [מונה, מכנה] (גם מדומה). mixed – המספרים מוצגים כמעורבים (שלמים לחוד ושברים לחוד)
+function fsExpAS(a, b, op, method, mixed) {
+  const L = lcm(a[1], b[1]), A = a[0] * L / a[1], B = b[0] * L / b[1], res = op === '+' ? A + B : A - B, o = fsOp(op);
+  const steps = [], con = method !== 'algo';
+  if (!mixed) {
+    if (a[1] !== b[1]) steps.push(con ? `החלקים בגדלים שונים (${M(F(1, a[1]))} ו-${M(F(1, b[1]))}), ולכן אי אפשר ${op === '+' ? 'לחבר' : 'לחסר'} אותם ישר. מחלקים את שניהם לחלקים קטנים באותו גודל – ${M(F(1, L))} (מכנה משותף ${L}): ${[a[1] !== L ? M(`${F(a[0], a[1])} = ${F(A, L)}`) : '', b[1] !== L ? M(`${F(b[0], b[1])} = ${F(B, L)}`) : ''].filter(Boolean).join(', ')}`
+      : `מכנה משותף ${L}${L < a[1] * b[1] ? ` (הקטן ביותר – לא ${a[1] * b[1]})` : ''}. מרחיבים: ${[a[1] !== L ? M(`${F(a[0], a[1])} = ${F(A, L)}`) : '', b[1] !== L ? M(`${F(b[0], b[1])} = ${F(B, L)}`) : ''].filter(Boolean).join(', ')}`);
+    steps.push(con ? `${A} חלקים ${op === '+' ? 'ועוד' : 'פחות'} ${B} חלקים של ${M(F(1, L))}: ${M(`${F(A, L)} ${o} ${F(B, L)} = ${F(res, L)}`)}. המכנה לא משתנה – הוא רק אומר מה גודל החלק`
+      : `${op === '+' ? 'מחברים' : 'מחסרים'} את המונים, והמכנה נשאר: ${M(`${F(A, L)} ${o} ${F(B, L)} = ${F(res, L)}`)}`);
+    const g = gcd(res, L);
+    if (res && (g > 1 || res > L)) steps.push(`${g > 1 ? 'מצמצמים' : 'כותבים כמספר מעורב'}: ${M(`${F(res, L)} = ${fsMx(res / g, L / g)}`)}`);
+    return steps.length > 1 && !con ? steps.map((x, i) => `${i + 1}. ${x}.`).join('<br>') : steps.join('. ') + '.';
+  }
+  // מעורבים: שלמים לחוד וחלקים לחוד
+  const w1 = Math.floor(a[0] / a[1]), w2 = Math.floor(b[0] / b[1]), r1 = A - w1 * L, r2 = B - w2 * L;
+  const D = (w, r) => `${w || ''}${r ? F(r, L) : ''}` || '0';
+  if (a[1] !== b[1]) steps.push(`מכנה משותף לשברים – ${L}: ${M(`${D(w1, r1)} ${o} ${D(w2, r2)}`)}`);
+  if (op === '+') {
+    const W = w1 + w2, S = r1 + r2;
+    steps.push(`${con ? 'שלמים עם שלמים' : 'מחברים את השלמים'}: ${M(`${w1} + ${w2} = ${W}`)}; ${con ? 'חלקים עם חלקים' : 'מחברים את השברים'}: ${M(`${F(r1, L)} + ${F(r2, L)} = ${F(S, L)}`)}`);
+    if (S >= L) steps.push(`${M(`${F(S, L)} = ${D(1, S - L)}`)} – ${con ? 'מהחלקים נוצר עוד שלם' : 'מעבירים שלם אחד'}: ${M(`${W} + ${D(1, S - L)} = ${D(W + 1, S - L)}`)}`);
+    else steps.push(`ביחד: ${M(D(W, S))}`);
+  } else {
+    let W1 = w1, R1 = r1;
+    if (r1 < r2) { W1 = w1 - 1; R1 = r1 + L; steps.push(`${con ? `ב-${M(F(r1, L))} אין מספיק חלקים כדי להוריד ${M(F(r2, L))}, ולכן פורטים שלם אחד ל-${L} חלקים` : 'השבר הראשון קטן מהשני – פורטים שלם אחד'}: ${M(`${D(w1, r1)} = ${D(W1, R1)}`)}`); }
+    if (w2) steps.push(`${con ? 'שלמים פחות שלמים' : 'מחסרים את השלמים'}: ${M(`${W1} − ${w2} = ${W1 - w2}`)}; ${con ? 'חלקים פחות חלקים' : 'מחסרים את השברים'}: ${M(`${F(R1, L)} − ${F(r2, L)} = ${F(R1 - r2, L)}`)}. ביחד: ${M(D(W1 - w2, R1 - r2))}`);
+    else steps.push(`מחסרים את השבר: ${M(`${F(R1, L)} − ${F(r2, L)} = ${F(R1 - r2, L)}`)}${W1 ? `, והשלמים (${W1}) נשארים` : ''}. ביחד: ${M(D(W1, R1 - r2))}`);
+  }
+  const g = gcd(res, L);
+  if (g > 1 && res % L) steps.push(`מצמצמים: ${M(`${fsMx(res, L)} = ${fsMx(res / g, L / g)}`)}`);
+  return con ? steps.join('. ') + '.' : steps.map((x, i) => `${i + 1}. ${x}.`).join('<br>');
+}
+
+// ---------- שאלה אחת לפי מיומנות ורמה. o = { word, method, fig } ----------
+// כל מחולל מחזיר שאלה או null (ואז מנסים שוב)
+const FS_GEN = {
+  exp(lv, o) {
+    const con = o.method !== 'algo';
+    if (lv === 1) {
+      const [a, b] = fsCop(2, 6), k = R(2, 3);
+      // המחשה: השבר צבוע, ומתחתיו פס באותו אורך ב-b×k חלקים – לצביעה (לא מראים את התשובה)
+      const fig = o.fig ? dsCells([fsRow(b, [a, FS_P]), fsRow(b * k)]) : '';
+      const exp = con ? `מחלקים כל חלק ל-${k} חלקים שווים: יש פי ${k} חלקים, וגם פי ${k} חלקים צבועים. החלקים קטנים יותר, אבל <b>הכמות לא משתנה</b>: ${M(`${F(a, b)} = ${F(a * k, b * k)}`)}.`
+        : `כופלים את המונה ואת המכנה ב-${k}: ${M(`${a} × ${k} = ${a * k}`)}, ${M(`${b} × ${k} = ${b * k}`)}. ${M(`${F(a, b)} = ${F(a * k, b * k)}`)}.`;
+      if (Math.random() < 0.5) return { type: 'frac', noWhole: true, ans: { n: a * k, d: b * k }, keyHTML: M(F(a * k, b * k)), text: `הרחיבו את השבר פי ${k}: ${M(`${F(a, b)} =`)}`, exp, fig, meta: { k: `x${a}/${b}*${k}`, sc: b * k } };
+      return { type: 'num', ans: a * k, text: `השלימו את המספר החסר: ${M(`${F(a, b)} = ${F(BOX, b * k)}`)}`, exp, fig, meta: { k: `n${a}/${b}*${k}`, sc: b * k } };
+    }
+    if (lv === 2) {
+      const [a, b] = fsCop(3, 10), k = R(4, 10); if (b * k > 100) return null;
+      const top = Math.random() < 0.5;
+      const exp = top ? (con ? `המכנה גדל פי ${k} (${M(`${b} × ${k} = ${b * k}`)}) – כל חלק נחתך ל-${k} חלקים קטנים, ולכן גם מספר החלקים שלקחנו גדל פי ${k}: ${M(`${a} × ${k} = ${a * k}`)}.`
+        : `פי כמה גדל המכנה? ${M(`${b * k} : ${b} = ${k}`)}. מרחיבים גם את המונה פי ${k}: ${M(`${a} × ${k} = ${a * k}`)}. ${M(`${F(a, b)} = ${F(a * k, b * k)}`)}.`)
+        : (con ? `המונה גדל פי ${k} (${M(`${a} × ${k} = ${a * k}`)}): יש פי ${k} חלקים, ולכן כל חלק קטן פי ${k} – גם המכנה גדל פי ${k}: ${M(`${b} × ${k} = ${b * k}`)}.`
+          : `פי כמה גדל המונה? ${M(`${a * k} : ${a} = ${k}`)}. מרחיבים גם את המכנה פי ${k}: ${M(`${b} × ${k} = ${b * k}`)}. ${M(`${F(a, b)} = ${F(a * k, b * k)}`)}.`);
+      return { type: 'num', ans: top ? a * k : b * k, text: `השלימו את המספר החסר: ${M(`${F(a, b)} = ${top ? F(BOX, b * k) : F(a * k, BOX)}`)}`, exp, meta: { k: `${top ? 'n' : 'd'}${a}/${b}*${k}`, sc: b * k } };
+    }
+    if (Math.random() < 0.6) {
+      const [a, b] = fsCop(3, 12), k = R(3, 12), D = b * k; if (D > 144 || D < 24) return null;
+      return { type: 'frac', noWhole: true, ans: { n: a * k, d: D }, keyHTML: M(F(a * k, D)), text: `הרחיבו את ${M(F(a, b))} לשבר שהמכנה שלו ${D}:`,
+        exp: `${M(`${D} : ${b} = ${k}`)} – המכנה גדל פי ${k}${con ? ' (כל חלק נחתך ל-' + k + ' חלקים קטנים)' : ''}, ולכן גם המונה: ${M(`${a} × ${k} = ${a * k}`)}. ${M(`${F(a, b)} = ${F(a * k, D)}`)}.`, meta: { k: `t${a}/${b}>${D}`, sc: D } };
+    }
+    const [a, b] = fsCop(2, 6), ks = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3).sort((x, y) => x - y);
+    const parts = ks.map((k, i) => (i + R(0, 1)) % 2 ? F(a * k, FB) : F(FB, b * k)), full = ks.map(k => F(a * k, b * k));
+    return { type: 'fill', text: `השלימו את שרשרת השברים השווים:<div class="center">${M(`${F(a, b)} = ${parts.join(' = ')}`)}</div>`, keyHTML: M(`${F(a, b)} = ${full.join(' = ')}`),
+      exp: `${con ? 'כל השברים מתארים אותה כמות – רק החלקים בגודל אחר. ' : ''}מרחיבים פי ${ks.join(', פי ')}: ${ks.map(k => M(`${F(a, b)} = ${F(a * k, b * k)}`)).join(', ')}. בכל שבר בודקים פי כמה גדל המספר הידוע, ומרחיבים את השני פי אותו מספר.`,
+      meta: { k: `c${a}/${b}:${ks}`, sc: 40 } };
+  },
+  red(lv, o) {
+    const con = o.method !== 'algo';
+    let a, b, k;
+    if (lv === 1) { k = pick([2, 2, 5, 10]); [a, b] = fsCop(2, k === 10 ? 9 : 10); if (k === 5 && b > 9) return null; }
+    else if (lv === 2) { k = pick([3, 4, 6, 8, 9, 12]); [a, b] = fsCop(2, 12); if (b * k > 100) return null; }
+    else { k = pick([12, 14, 15, 16, 18, 20, 21, 24, 25, 28, 30, 36]); [a, b] = fsCop(3, 12); if (b * k > 300 || a * k < 10) return null; }
+    const X = a * k, Y = b * k, ps = fsPrimes(k);
+    let chain = [F(X, Y)], cx = X, cy = Y; ps.forEach(p => { cx /= p; cy /= p; chain.push(F(cx, cy)); });
+    const exp = con ? `מאחדים כל ${k} חלקים לחלק אחד גדול: יש פי ${k} פחות חלקים, וגם פי ${k} פחות חלקים שלקחנו. החלקים גדלים, אבל <b>הכמות לא משתנה</b>: ${M(`${F(X, Y)} = ${F(a, b)}`)}.`
+      + (ps.length > 1 ? ` אפשר גם בכמה צעדים: ${M(chain.join(' = '))}.` : '')
+      : (lv === 1 ? `גם ${X} וגם ${Y} מתחלקים ב-${k}: ${M(`${X} : ${k} = ${a}`)}, ${M(`${Y} : ${k} = ${b}`)}. ${M(`${F(X, Y)} = ${F(a, b)}`)}.`
+        : `המחלק המשותף הגדול ביותר של ${X} ושל ${Y} הוא ${k}: ${M(`${X} : ${k} = ${a}`)}, ${M(`${Y} : ${k} = ${b}`)}. ${M(`${F(X, Y)} = ${F(a, b)}`)}.${ps.length > 1 ? ` אפשר גם בכמה צעדים: ${M(chain.join(' = '))}. בודקים בסוף: אין עוד מחלק משותף חוץ מ-1.` : ''}`);
+    const fig = o.fig && lv === 1 && Y <= 24 ? dsCells([fsRow(Y, [X, FS_P]), fsRow(b)]) : '';
+    return { type: 'frac', noWhole: true, ans: { n: a, d: b }, keyHTML: M(`${F(X, Y)} = ${F(a, b)}`), text: `${lv === 1 ? 'צמצמו את השבר' : 'צמצמו את השבר עד הסוף'}: ${M(`${F(X, Y)} =`)}`, exp, fig, meta: { k: `r${X}/${Y}`, sc: Y } };
+  },
+  mix(lv, o) {
+    const con = o.method !== 'algo';
+    let d, w, r, k = 1;
+    if (lv === 1) { d = R(2, 5); w = R(1, 3); }
+    else if (lv === 2) { d = R(2, 10); w = R(1, 6); }
+    else if (Math.random() < 0.5) { d = R(6, 12); w = R(5, 12); }
+    else { d = R(2, 6); w = R(1, 5); k = R(2, 3); }
+    do { r = R(1, d - 1); } while (gcd(r, d) !== 1);
+    const N = w * d + r, toMix = k > 1 || Math.random() < 0.5;
+    const fig = o.fig && lv === 1 && !o.word ? dsCells(fsWholes(N, d)) : '';
+    const W = w === 1 ? 'שלם אחד' : `${w} שלמים`;
+    if (toMix) {
+      if (k > 1) {
+        const ND = N * k, DD = d * k;
+        return { type: 'frac', ans: { n: ND, d: DD }, keyHTML: M(`${F(ND, DD)} = ${w}${F(r * k, DD)} = ${w}${F(r, d)}`), text: `כתבו כמספר מעורב, וצמצמו עד הסוף: ${M(`${F(ND, DD)} =`)}`,
+          exp: `${M(`${ND} : ${DD} = ${w}`)}, שארית ${r * k}: ${M(`${F(ND, DD)} = ${w}${F(r * k, DD)}`)}. מצמצמים את השבר ב-${k}: ${M(`${w}${F(r * k, DD)} = ${w}${F(r, d)}`)}. (אפשר גם לצמצם קודם: ${M(`${F(ND, DD)} = ${F(N, d)}`)}.)`, meta: { k: `m${ND}/${DD}`, sc: 40 } };
+      }
+      const exp = con ? `כל ${d} חלקים של ${M(F(1, d))} הם שלם אחד. ב-${N} חלקים יש ${W} (${M(`${w} × ${d} = ${w * d}`)} חלקים), ונשארים עוד ${r}: ${M(`${F(N, d)} = ${w}${F(r, d)}`)}.`
+        : `מחלקים את המונה במכנה: ${M(`${N} : ${d} = ${w}`)}, שארית ${r}. המנה היא השלם, השארית היא המונה, והמכנה נשאר: ${M(`${F(N, d)} = ${w}${F(r, d)}`)}.`;
+      const meta = { k: `m${N}/${d}`, sc: d + w };
+      if (o.word) {
+        const T = [];
+        if (DSK_DEN.pizza.includes(d)) T.push([`במגש יש ${N} משולשי פיצה, וכל משולש הוא ${M(F(1, d))} פיצה. כמה פיצות הם כל המשולשים יחד? כתבו כמספר מעורב.`, 'פיצות', 'p']);
+        if ([2, 4, 5, 10].includes(d)) T.push([`מזגו מיץ ל-${N} כוסות, ובכל כוס ${M(F(1, d))} ליטר. כמה ליטר מיץ מזגו בסך הכול? כתבו כמספר מעורב.`, 'ליטר', 'c']);
+        if (d === 4) T.push([`${pick(FS_GIRL)} התאמנה ${N} רבעי שעה. כמה שעות התאמנה? כתבו כמספר מעורב.`, 'שעות', 'h']);
+        if (!T.length) return null;
+        const [t, ku, tp] = pick(T);
+        return { type: 'frac', ans: { n: N, d }, keyHTML: M(`${w}${F(r, d)}`), text: t, exp: `${M(`${N} × ${F(1, d)} = ${F(N, d)}`)}. ${exp}`, word: true, keyUnit: ku, steps: [{}, {}, {}], meta: Object.assign(meta, { tpl: 'mx' + tp }) };
+      }
+      return { type: 'frac', ans: { n: N, d }, keyHTML: M(`${w}${F(r, d)}`), text: `כתבו כמספר מעורב: ${M(`${F(N, d)} =`)}`, exp, fig, meta };
+    }
+    const exp = con ? `בכל שלם יש ${d} חלקים של ${M(F(1, d))}. ב-${W}: ${M(`${w} × ${d} = ${w * d}`)} חלקים, ועוד ${r}: ${M(`${w * d} + ${r} = ${N}`)}. ${M(`${w}${F(r, d)} = ${F(N, d)}`)}.`
+      : `כופלים את השלם במכנה ומוסיפים את המונה: ${M(`${w} × ${d} + ${r} = ${N}`)}. המכנה נשאר ${d}: ${M(`${w}${F(r, d)} = ${F(N, d)}`)}.`;
+    const meta = { k: `i${N}/${d}`, sc: d + w + 1 };
+    if (o.word) {
+      const T = [[`יש ${M(`${w}${F(r, d)}`)} עוגות, וכל עוגה חתוכה ל-${d} פרוסות שוות. כמה פרוסות יש בסך הכול?`, 'פרוסות', 'k']];
+      if ([2, 4, 5, 10].includes(d)) T.push([`בכד יש ${M(`${w}${F(r, d)}`)} ליטר מיץ. כמה כוסות של ${M(F(1, d))} ליטר אפשר למלא?`, 'כוסות', 'c']);
+      if (DSK_DEN.pizza.includes(d)) T.push([`נשארו ${M(`${w}${F(r, d)}`)} פיצות, וכל פיצה חתוכה ל-${d} משולשים שווים. כמה משולשי פיצה נשארו?`, 'משולשים', 'p']);
+      const [t, ku, tp] = pick(T);
+      return { type: 'num', ans: N, text: t, exp, word: true, keyUnit: ku, steps: [{}, {}, {}], meta: Object.assign(meta, { tpl: 'im' + tp }) };
+    }
+    return { type: 'frac', noWhole: true, ans: { n: N, d }, keyHTML: M(F(N, d)), text: `כתבו כשבר מדומה: ${M(`${w}${F(r, d)} =`)}`, exp, fig, meta };
+  },
+  cmp(lv, o) {
+    const con = o.method !== 'algo';
+    let x, y, kind;
+    if (lv === 1) {
+      if (Math.random() < 0.5) { const d = R(3, 12), n1 = R(1, d - 1); let n2; do { n2 = R(1, d - 1); } while (n2 === n1); x = [n1, d]; y = [n2, d]; kind = 'sd'; }
+      else { const n = R(1, 5); let d1, d2; do { d1 = R(n + 1, 12); d2 = R(n + 1, 12); } while (d1 === d2); x = [n, d1]; y = [n, d2]; kind = 'sn'; }
+    } else if (lv === 2) {
+      if (Math.random() < 0.15) { x = fsCop(2, 6); const k = R(2, 4); y = [x[0] * k, x[1] * k]; if (Math.random() < 0.5) [x, y] = [y, x]; kind = 'cd'; }
+      else { x = fsCop(2, 12); y = fsCop(2, 12); if (x[1] === y[1] || x[0] === y[0] || lcm(x[1], y[1]) > 24) return null; kind = 'cd'; }
+    } else {
+      const t = R(0, 2);
+      if (t === 0) { x = fsCop(5, 12); y = fsCop(5, 12); if ((2 * x[0] - x[1]) * (2 * y[0] - y[1]) >= 0 || lcm(x[1], y[1]) <= 24) return null; kind = 'half'; }
+      else if (t === 1) { const d1 = R(4, 12), d2 = R(4, 12); if (d1 === d2) return null; const m = Math.random() < 0.7 ? 1 : 2; if (gcd(d1 - m, d1) > 1 || gcd(d2 - m, d2) > 1) return null; x = [d1 - m, d1]; y = [d2 - m, d2]; kind = 'one'; }
+      else {
+        const w = R(1, 4), p = fsCop(2, 9), q = fsCop(2, 9); if (p[1] === q[1] || lcm(p[1], q[1]) > 36 || fsV(p) === fsV(q)) return null;
+        x = [w * p[1] + p[0], p[1]]; y = [w * q[1] + q[0], q[1]]; kind = Math.random() < 0.5 ? 'mx' : 'mi';
+      }
+    }
+    const s = Math.sign(x[0] * y[1] - y[0] * x[1]), ix = kind === 'mi' ? false : kind === 'mx';
+    const A = kind === 'mi' ? F(x[0], x[1]) : ix ? fsMx(x[0], x[1]) : F(x[0], x[1]), B = kind === 'mx' || kind === 'mi' ? fsMx(y[0], y[1]) : F(y[0], y[1]);
+    const rel = s > 0 ? '&gt;' : s < 0 ? '&lt;' : '=', big = s > 0 ? A : B;
+    const L = lcm(x[1], y[1]), X = x[0] * L / x[1], Y = y[0] * L / y[1];
+    const viaL = `${M(`${F(x[0], x[1])} = ${F(X, L)}`)}, ${M(`${F(y[0], y[1])} = ${F(Y, L)}`)}. משווים את המונים: ${M(`${X} ${s > 0 ? '&gt;' : s < 0 ? '&lt;' : '='} ${Y}`)}`;
+    let exp;
+    if (kind === 'sd') exp = con ? `אותו מכנה – החלקים באותו גודל (${M(F(1, x[1]))}), ולכן משווים את מספר החלקים: ${M(`${x[0]} ${rel} ${y[0]}`)}.` : `המכנים שווים – משווים את המונים: ${M(`${x[0]} ${rel} ${y[0]}`)}.`;
+    else if (kind === 'sn') exp = con ? `אותו מספר חלקים (${x[0]}), אבל ${M(F(1, Math.min(x[1], y[1])))} גדול מ-${M(F(1, Math.max(x[1], y[1])))}: ככל שהמכנה גדול יותר, השלם מחולק ליותר חלקים, וכל חלק קטן יותר.` : `המונים שווים – השבר עם המכנה הקטן יותר הוא הגדול יותר (החלקים שלו גדולים יותר).`;
+    else if (kind === 'cd') exp = `${con ? 'כותבים את שני השברים בחלקים באותו גודל – ' : ''}מכנה משותף ${L}: ${viaL}.${s === 0 ? ' השברים שווים.' : ''}`;
+    else if (kind === 'half') { const hx = 2 * x[0] > x[1]; exp = `משווים לחצי: ${M(F(x[0], x[1]))} ${hx ? 'גדול' : 'קטן'} מחצי (המונה ${x[0]} ${hx ? 'גדול' : 'קטן'} מחצי המכנה: ${M(`${x[0]} × 2 = ${2 * x[0]}`)}, ${hx ? 'יותר' : 'פחות'} מ-${x[1]}), ו-${M(F(y[0], y[1]))} ${hx ? 'קטן' : 'גדול'} מחצי (${M(`${y[0]} × 2 = ${2 * y[0]}`)}, ${hx ? 'פחות' : 'יותר'} מ-${y[1]}). לכן ${M(big)} גדול יותר. (במכנה משותף ${L}: ${viaL}.)`; }
+    else if (kind === 'one') { const m = x[1] - x[0]; exp = `משווים ל-1: ל-${M(F(x[0], x[1]))} חסר ${M(F(m, x[1]))} עד השלם, ול-${M(F(y[0], y[1]))} חסר ${M(F(m, y[1]))}. ${M(F(m, Math.max(x[1], y[1])))} קטן יותר – למי שחסר פחות, הוא הגדול יותר: ${M(big)}.`; }
+    else { const wx = Math.floor(x[0] / x[1]); exp = `${kind === 'mi' ? `קודם כותבים כמספר מעורב: ${M(`${F(x[0], x[1])} = ${fsMx(x[0], x[1])}`)}. ` : ''}השלמים שווים (${wx}), ולכן משווים את השברים: ${M(`${F(x[0] - wx * x[1], x[1])} = ${F(X - wx * L, L)}`)}, ${M(`${F(y[0] - wx * y[1], y[1])} = ${F(Y - wx * L, L)}`)}. לכן ${M(big)} גדול יותר.`; }
+    const meta = { k: `q${x}|${y}`, sc: x[1] + y[1] };
+    if (o.word && lv <= 2) {
+      const g = pick(FS_GIRL), b = pick(FS_BOY), red = gcd(x[0], x[1]) === 1 && gcd(y[0], y[1]) === 1;
+      const T = [], nat = u => [x[1], y[1]].every(d => DSK_DEN[u].includes(d));
+      if (nat('part')) T.push([`${g} אכלה ${M(A)} מפיצה, ו${b} אכל ${M(B)} מפיצה באותו גודל. מי אכל יותר פיצה?`, 'אכלו אותה כמות']);
+      if (nat('part') && red) T.push([`${g} ו${b} קוראים את אותו ספר. ${g} קראה ${M(A)} מהספר, ו${b} קרא ${M(B)} מהספר. מי קרא חלק גדול יותר מהספר?`, 'קראו אותו חלק']);
+      if (nat('metric') && red) T.push([`${g} רצה ${M(A)} ק"מ, ו${b} רץ ${M(B)} ק"מ. מי רץ מרחק ארוך יותר?`, 'רצו אותו מרחק']);
+      if (nat('metric') && red) T.push([`בבקבוק של ${g} יש ${M(A)} ליטר מים, ובבקבוק של ${b} יש ${M(B)} ליטר. אצל מי יש יותר מים?`, 'יש להם אותה כמות']);
+      if (!T.length) return null;
+      const [t, same] = pick(T);
+      return { type: 'choice', choices: [g, b, same], ans: s > 0 ? 0 : s < 0 ? 1 : 2, keyHTML: `${s > 0 ? g : s < 0 ? b : same} (${M(`${A} ${rel} ${B}`)})`, text: t, exp, word: true, steps: [{}, {}, {}], meta: Object.assign(meta, { tpl: 'cw' + same }) };
+    }
+    const choices = [M(`${A} &gt; ${B}`), M(`${A} &lt; ${B}`), M(`${A} = ${B}`)];
+    const lead = kind === 'half' || kind === 'one' ? 'השוו בלי למצוא מכנה משותף' : 'השוו';
+    return { type: 'choice', choices, ans: s > 0 ? 0 : s < 0 ? 1 : 2, keyHTML: M(`${A} ${rel} ${B}`), text: `${lead}: ${M(`${A} ◯ ${B}`)}. איזה משפט נכון?`, exp,
+      fig: o.fig && lv === 1 && Math.max(x[1], y[1]) <= 12 ? dsCells([fsRow(x[1], [x[0], FS_P]), fsRow(y[1], [y[0], FS_C])]) : '', meta };
+  },
+  same(lv, o) {
+    let a, b, op;
+    const d = R(3, 12);
+    if (lv === 1) { op = Math.random() < 0.6 ? '+' : '−'; const n1 = R(1, d - 1), n2 = R(1, d - 1); if (op === '+' ? n1 + n2 >= d : n1 <= n2) return null; a = [n1, d]; b = [n2, d]; }
+    else if (lv === 2) {
+      op = Math.random() < 0.75 ? '+' : '−';
+      if (op === '+') { const n1 = R(1, d - 1), n2 = R(1, d - 1); if (n1 + n2 <= d) return null; a = [n1, d]; b = [n2, d]; }
+      else { const N1 = R(d + 2, 3 * d - 1), n2 = R(1, d - 1); if (N1 % d === 0 || N1 - n2 <= d) return null; a = [N1, d]; b = [n2, d]; }
+    } else {
+      op = Math.random() < 0.5 ? '+' : '−';
+      const w1 = R(2, 6), w2 = R(1, op === '+' ? 4 : w1 - 1), r1 = R(1, d - 1), r2 = R(1, d - 1);
+      if (op === '+' ? r1 + r2 <= d : r1 >= r2) return null;
+      a = [w1 * d + r1, d]; b = [w2 * d + r2, d];
+    }
+    return fsASq('same', lv, a, b, op, lv === 3, o);
+  },
+  diff(lv, o) {
+    let d1, d2;
+    if (lv === 1) { d1 = R(2, 6); d2 = d1 * R(2, 4); if (d2 > 12) return null; if (Math.random() < 0.5) [d1, d2] = [d2, d1]; }
+    else if (lv === 2) { d1 = R(2, 9); d2 = R(2, 9); if (d1 === d2 || gcd(d1, d2) > 1 || d1 * d2 > 40) return null; }
+    else { [d1, d2] = shuffle(pick([[4, 6], [6, 8], [6, 9], [4, 10], [6, 10], [8, 10], [8, 12], [9, 12], [10, 12], [6, 15], [10, 15], [4, 14]]).slice()); }
+    const a = fsCop(d1, d1), b = fsCop(d2, d2);
+    let op = Math.random() < 0.55 ? '+' : '−';
+    if (op === '−' && fsV(a) <= fsV(b)) return null;
+    if (lv === 3) { const L = lcm(d1, d2), res = op === '+' ? a[0] * L / d1 + b[0] * L / d2 : a[0] * L / d1 - b[0] * L / d2; if (gcd(res, L) === 1 && Math.random() < 0.7) return null; }
+    return fsASq('diff', lv, a, b, op, false, o);
+  },
+  mixas(lv, o) {
+    let d1, d2, op;
+    if (lv === 1) { d1 = R(2, 6); d2 = Math.random() < 0.5 ? d1 : d1 * R(2, 3); if (d2 > 12) return null; op = Math.random() < 0.55 ? '+' : '−'; }
+    else if (lv === 2) { op = Math.random() < 0.65 ? '+' : '−'; d1 = R(2, 8); d2 = op === '+' && Math.random() < 0.5 ? d1 * 2 : d1; if (d2 > 12) return null; }
+    else { op = Math.random() < 0.7 ? '−' : '+'; d1 = R(2, 9); d2 = R(2, 9); if (d1 === d2 || lcm(d1, d2) > 24 || (op === '+' && gcd(d1, d2) > 1)) return null; }
+    if (Math.random() < 0.5) [d1, d2] = [d2, d1];
+    const p = fsCop(d1, d1), q = fsCop(d2, d2), L = lcm(d1, d2), P = p[0] * L / d1, Q = q[0] * L / d2;
+    const w1 = R(op === '−' ? 2 : 1, 6), w2 = R(1, op === '−' ? w1 - 1 : 4);
+    if (lv === 1 && (op === '+' ? P + Q >= L : P < Q)) return null;
+    if (lv >= 2 && (op === '+' ? P + Q <= L : P >= Q)) return null;
+    return fsASq('mixas', lv, [w1 * d1 + p[0], d1], [w2 * d2 + q[0], d2], op, true, o);
+  },
+  qty(lv, o) {
+    const con = o.method !== 'algo';
+    if (lv <= 2 || Math.random() < 0.15) {
+      const lv0 = Math.min(lv, 2), d = R(lv0 === 1 ? 2 : 3, 10), u = R(2, 12), N = d * u;
+      let n = 1; if (lv0 === 2) { do { n = R(2, d - 1); } while (gcd(n, d) !== 1); }
+      const P = n * u, fr = M(F(n, d));
+      const exp = con ? `מחלקים את ${N} ל-${d} חלקים שווים: ${M(`${N} : ${d} = ${u}`)} – זה ${M(F(1, d))} מ-${N}.${n > 1 ? ` ${fr} הם ${n} חלקים כאלה: ${M(`${n} × ${u} = ${P}`)}.` : ''}`
+        : `מחלקים במכנה${n > 1 ? ' וכופלים במונה' : ''}: ${M(`${N} : ${d} = ${u}`)}${n > 1 ? `, ${M(`${u} × ${n} = ${P}`)}` : ''}.`;
+      const meta = { k: `f${n}/${d}*${N}`, sc: d + (n > 1 ? 3 : 0) };
+      if (o.word) {
+        const g = pick(FS_GIRL), b = pick(FS_BOY);
+        const T = [[`בכיתה ${N} תלמידים. ${fr} מהם הגיעו לטיול. כמה תלמידים הגיעו לטיול?`, 'תלמידים'], [`בספר ${N} עמודים. ${g} קראה ${fr} מהספר. כמה עמודים קראה?`, 'עמודים'],
+          [`ל${b} היו ${N} ₪. הוא הוציא ${fr} מהכסף על ספר. כמה עלה הספר?`, '₪'], [`בשקית ${N} סוכריות, ו-${fr} מהן אדומות. כמה סוכריות אדומות יש בשקית?`, 'סוכריות']];
+        T.push([`הטיול נמשך ${N} דקות. ${fr} מהזמן הלכו ברגל. כמה דקות הלכו ברגל?`, 'דקות']);
+        const [t, ku] = pick(T);
+        return { type: 'num', ans: P, text: t, exp, word: true, keyUnit: ku, steps: [{}, {}, {}], meta: Object.assign(meta, { tpl: 'qy' + ku }) };
+      }
+      return { type: 'num', ans: P, text: `חשבו: ${fr} מ-${N} =`, exp, fig: o.fig && lv === 1 && d <= 10 ? fsQtyFig(d, n, N) : '', meta };
+    }
+    // רמה 3: מציאת השלם, או בעיה דו-שלבית
+    const d = R(3, 10), u = R(2, 12), N = d * u; let n; do { n = R(2, d - 1); } while (gcd(n, d) !== 1);
+    const P = n * u, fr = M(F(n, d));
+    const t = o.word ? R(0, 2) : 0;
+    if (t === 0) {
+      const exp = `${P} הם ${n} חלקים מתוך ${d}. חלק אחד (${M(F(1, d))}): ${M(`${P} : ${n} = ${u}`)}. השלם הוא ${d} חלקים: ${M(`${u} × ${d} = ${N}`)}.`;
+      if (o.word) {
+        const g = pick(FS_GIRL), b = pick(FS_BOY);
+        const [tx, ku] = pick([[`${fr} מהתלמידים בכיתה הם ${P} תלמידים. כמה תלמידים יש בכיתה?`, 'תלמידים'], [`${g} קראה ${fr} מהספר, שהם ${P} עמודים. כמה עמודים יש בספר?`, 'עמודים'], [`${b} הוציא ${fr} מהכסף שלו, שהם ${P} ₪. כמה כסף היה ל${b}?`, '₪']]);
+        return { type: 'num', ans: N, text: tx, exp, word: true, keyUnit: ku, steps: [{}, {}, {}], meta: { k: `w${P}/${n}/${d}`, sc: 30, tpl: 'qw' + ku } };
+      }
+      return { type: 'num', ans: N, text: `${fr} ממספר הם ${P}. מהו המספר?`, exp, meta: { k: `w${P}/${n}/${d}`, sc: 30 } };
+    }
+    if (t === 1) {
+      const [tx, ku, other] = pick([[`בכיתה ${N} תלמידים, ו-${fr} מהם בנות. כמה בנים יש בכיתה?`, 'בנים', 'הבנים'], [`בשקית ${N} סוכריות, ו-${fr} מהן אדומות. השאר ירוקות. כמה סוכריות ירוקות יש בשקית?`, 'סוכריות', 'הירוקות']]);
+      return { type: 'num', ans: N - P, text: tx, word: true, keyUnit: ku, steps: [{}, {}, {}], meta: { k: `o${n}/${d}*${N}`, sc: 30, tpl: 'qo' + ku },
+        exp: `${fr} מ-${N}: ${M(`${N} : ${d} = ${u}`)}, ${M(`${u} × ${n} = ${P}`)}. ${other}: ${M(`${N} − ${P} = ${N - P}`)}. (או: ${other} הם ${M(F(d - n, d))} מהכמות – ${M(`${u} × ${d - n} = ${N - P}`)}.)` };
+    }
+    const [a, b] = pick([[2, 3], [3, 4], [4, 3], [2, 4], [3, 2], [4, 5], [5, 4]]), M0 = a * b * R(2, 6) * (a === 2 ? 2 : 1), sp1 = M0 / a, rest = M0 - sp1, sp2 = rest / b;
+    if (!Number.isInteger(sp2)) return null;
+    const nm = pick(FS_BOY);
+    return { type: 'num', ans: rest - sp2, word: true, keyUnit: '₪', steps: [{}, {}, {}], meta: { k: `t${M0}/${a}/${b}`, sc: 30, tpl: 'qt' },
+      text: `ל${nm} היו ${M0} ₪. הוא הוציא ${M(F(1, a))} מהכסף על ספר, ו-${M(F(1, b))} ממה שנשאר – על משחק. כמה כסף נשאר ל${nm}?`,
+      exp: `הספר: ${M(`${M0} : ${a} = ${sp1}`)} ₪. נשארו ${M(`${M0} − ${sp1} = ${rest}`)} ₪. המשחק: ${M(`${rest} : ${b} = ${sp2}`)} ₪. נשארו: ${M(`${rest} − ${sp2} = ${rest - sp2}`)} ₪.` };
+  },
+  comp(lv, o) {
+    const con = o.method !== 'algo';
+    if (lv === 1) {
+      const [n, d] = fsCop(2, 12), m = d - n, fr = M(F(n, d));
+      const exp = con ? `שלם אחד הוא ${M(F(d, d))} – ${d} חלקים. יש ${n}, ולכן חסרים ${m}: ${M(`1 − ${F(n, d)} = ${F(m, d)}`)}.` : `כותבים את 1 כשבר עם אותו מכנה ומחסרים את המונים: ${M(`${F(d, d)} − ${F(n, d)} = ${F(m, d)}`)}.`;
+      const meta = { k: `c1-${n}/${d}`, sc: d };
+      if (o.word) {
+        const T = [[`צבעו ${fr} מהקיר. איזה חלק מהקיר עוד צריך לצבוע?`, 'מהקיר'], [`${pick(FS_GIRL)} קראה ${fr} מהספר. איזה חלק מהספר נשאר לה לקרוא?`, 'מהספר']];
+        if (DSK_DEN.pizza.includes(d)) T.push([`אכלו ${fr} מהפיצה. איזה חלק מהפיצה נשאר?`, 'מהפיצה']);
+        const [t, ku] = pick(T);
+        return { type: 'frac', noWhole: true, ans: { n: m, d }, keyHTML: M(F(m, d)), text: t, exp, word: true, keyUnit: ku, meta: Object.assign(meta, { tpl: 'c1' + ku }) };
+      }
+      return { type: 'frac', noWhole: true, ans: { n: m, d }, keyHTML: M(F(m, d)), text: Math.random() < 0.5 ? `פתרו: ${M(`1 − ${F(n, d)} =`)}` : `כמה חסר ל-${fr} כדי להשלים לשלם?`, exp,
+        fig: o.fig ? dsCells([fsRow(d, [n, FS_P])]) : '', meta };
+    }
+    if (lv === 2) {
+      const [n, d] = fsCop(2, 12), w = R(2, 5), res = w * d - n;
+      const exp = con ? `מפרקים שלם אחד ל-${d} חלקים: ${M(`${w} = ${w - 1}${F(d, d)}`)}. מורידים ${n} חלקים, ונשארים ${d - n}: ${M(`${w} − ${F(n, d)} = ${w - 1}${F(d - n, d)}`)}.`
+        : `כותבים את ${w} כשלם ושבר: ${M(`${w} = ${w - 1}${F(d, d)}`)}, ומחסרים: ${M(`${w - 1}${F(d, d)} − ${F(n, d)} = ${w - 1}${F(d - n, d)}`)}.`;
+      const meta = { k: `c${w}-${n}/${d}`, sc: d + w };
+      if (o.word) {
+        const T = [];
+        if (DSK_DEN.pizza.includes(d)) T.push([`הזמינו ${w} פיצות, ואכלו ${M(F(n, d))} פיצה. כמה פיצות נשארו?`, 'פיצות']);
+        if (DSK_DEN.metric.includes(d)) T.push([`בבקבוקים היו ${w} ליטר מיץ. שתו ${M(F(n, d))} ליטר. כמה ליטר מיץ נשאר?`, 'ליטר'], [`היו ${w} ק"ג קמח. השתמשו ב-${M(F(n, d))} ק"ג. כמה ק"ג קמח נשארו?`, 'ק"ג']);
+        if (!T.length) return null;
+        const [t, ku] = pick(T);
+        return { type: 'frac', ans: { n: res, d }, keyHTML: fsKeyMx(res, d), text: t, exp, word: true, keyUnit: ku, steps: [{}, {}, {}], meta: Object.assign(meta, { tpl: 'c2' + ku }) };
+      }
+      return { type: 'frac', ans: { n: res, d }, keyHTML: fsKeyMx(res, d), text: `פתרו: ${M(`${w} − ${F(n, d)} =`)}`, exp, meta };
+    }
+    let d1 = R(3, 10), d2 = Math.random() < 0.6 ? d1 : d1 * R(2, 3); if (d2 > 12) return null; if (Math.random() < 0.5 && d1 !== d2) [d1, d2] = [d2, d1];
+    const p = fsCop(d1, d1), q = fsCop(d2, d2), L = lcm(d1, d2); if (p[0] * L / d1 >= q[0] * L / d2) return null;
+    const w = R(1, 6), a = [w * d1 + p[0], d1];
+    const r = fsASq('comp', 3, a, q, '−', true, o);
+    if (r) r.meta.k = `c3${a}-${q}`;
+    return r;
+  }
+};
+// שאלת חיבור/חיסור (גם השלמה לשלם ברמה 3): תרגיל או סיפור
+function fsASq(skill, lv, a, b, op, mixed, o) {
+  const L = lcm(a[1], b[1]), res = op === '+' ? a[0] * L / a[1] + b[0] * L / b[1] : a[0] * L / a[1] - b[0] * L / b[1];
+  if (res <= 0) return null;
+  const exp = fsExpAS(a, b, op, o.method, mixed), key = mixed ? fsKeyMx(res, L) : fsKey(res, L);
+  const meta = { k: `${a}${op}${b}`, sc: a[1] + b[1] + (mixed ? 6 : 0) + (op === '−' ? 1 : 0) };
+  const base = { type: 'frac', ans: { n: res, d: L }, noWhole: res < L, keyHTML: key, exp, steps: mixed || a[1] !== b[1] ? [{}, {}, {}] : [{}, {}] };
+  if (o.word) {
+    const w = fsWordAS(a, b, op);
+    if (!w) return null;
+    const ku = w.ku === 'שעות' && res < L ? 'שעה' : w.ku;
+    return Object.assign(base, { text: w.text, word: true, keyUnit: ku, steps: [{}, {}, {}], meta: Object.assign(meta, { tpl: w.tpl }) });
+  }
+  let fig = '';
+  if (o.fig && lv === 1 && !mixed && L <= 12) {
+    const A = a[0] * L / a[1], B = b[0] * L / b[1];
+    const last = op === '+' ? fsRow(L, [A, FS_P], [B, FS_C]) : fsRow(L, [A - B, FS_P], [B, '#fdeaf1', true]);
+    fig = dsCells(a[1] !== L ? [fsRow(a[1], [a[0], FS_P]), last] : [last]);
+  }
+  const sh = x => mixed ? fsMx(x[0], x[1]) : F(x[0], x[1]);
+  return Object.assign(base, { text: `פתרו: ${M(`${sh(a)} ${fsOp(op)} ${sh(b)} =`)}`, fig, meta });
+}
+function genFracSkill(skill, lv, o = {}) {
+  const word = !!o.word && !FSK_NOWORD.includes(skill);
+  for (let k = 0; k < 400; k++) {
+    const q = FS_GEN[skill](lv, Object.assign({}, o, { word: word && k < 300 }));
+    if (!q) continue;
+    q.text = dsMath(q.text); q.exp = dsMath(q.exp); if (q.keyHTML) q.keyHTML = dsMath(q.keyHTML);
+    return Object.assign({ topic: 'frac', lv, word: false, steps: [{}, {}], fig: '', keyUnit: '', keyPre: '' }, q, { meta: Object.assign({ skill, lv }, q.meta) });
+  }
+  return null;
+}
+// ---------- משימות חשיבה (רמה 3) ומשימות קצרות של סבירות וייצוג (רמה 2) ----------
+// אותם סוגים ושמות כמו בחילוק שברים (DSK_THINK_NAME). null – אין משימה מהסוג הזה במיומנות.
+function fsThink(skill, kind, method) {
+  const T = (text, model, lines = 4, multi = false) => ({ type: 'open', text: dsMath(text), model: dsMath(model), lines: Math.min(lines, 5), multi, word: false, topic: 'frac', lv: kind === 'estimate' || kind === 'story' ? 2 : 3,
+    meta: { skill, think: kind, lv: 3, k: kind + ':' + text.replace(/<[^>]+>/g, '').slice(0, 90) } });
+  const g = pick(FS_GIRL), b = pick(FS_BOY), fr = (n, d) => M(F(n, d));
+  if (skill === 'exp') {
+    const [a, d] = fsCop(2, 7), k = R(2, 5);
+    if (kind === 'error') return T(`${b} הרחיב: ${M(`${F(a, d)} = ${F(a + k, d + k)}`)}<br>האם ${b} צדק? אם לא – הסבירו מה הטעות, ותקנו.`,
+      `<b>לא.</b> ${b} <b>הוסיף</b> ${k} למונה ולמכנה. בהרחבה <b>כופלים</b> את המונה ואת המכנה באותו מספר – רק כך כל חלק נחתך לחלקים שווים והכמות לא משתנה. ${M(F(a + k, d + k))} כבר לא אותה כמות: הוא קרוב יותר ל-1 (חסר לו ${fr(d - a, d + k)}, ול-${fr(a, d)} חסר ${fr(d - a, d)}). הרחבה נכונה, למשל פי ${k}: ${M(`${F(a, d)} = ${F(a * k, d * k)}`)}.`);
+    if (kind === 'claim') return T(`${g} טוענת: "כשמרחיבים שבר הוא גדל, כי המונה והמכנה גדלים."<br>האם הטענה נכונה? הסבירו בעזרת ציור או דוגמה.`,
+      `<b>הטענה לא נכונה.</b> למשל ${M(`${F(1, 2)} = ${F(2, 4)}`)}: כל חצי נחתך לשני רבעים. יש פי 2 חלקים, אבל כל חלק קטן פי 2 – <b>הכמות לא משתנה</b>. המספרים גדלים, אבל השבר נשאר אותו שבר.`, 4);
+    if (kind === 'create') return T(`כתבו שלושה שברים ששווים ל-${fr(a, d)}, שהמכנה של כל אחד מהם גדול מ-20. הסבירו איך מצאתם אותם.`,
+      `לדוגמה: ${[Math.ceil(21 / d), Math.ceil(21 / d) + 1, Math.ceil(21 / d) + 3].map(m => M(F(a * m, d * m))).join(', ')} – מרחיבים פי מספר שהופך את המכנה לגדול מ-20. יש עוד תשובות נכונות: כל שבר שמתקבל מכפל המונה והמכנה באותו מספר.`, 4, true);
+    if (kind === 'missing') { const k1 = R(2, 4), k2 = k1 + R(2, 4);
+      return T(`השלימו את המספרים החסרים, והסבירו איך מצאתם אותם:<div class="center">${M(`${F(a, d)} = ${F(BOX, d * k1)} = ${F(a * k2, BOX)}`)}</div>`,
+        `${M(`${F(a, d)} = ${F(a * k1, d * k1)} = ${F(a * k2, d * k2)}`)}. במכנה ${d * k1} – המכנה גדל פי ${k1}, ולכן גם המונה: ${M(`${a} × ${k1} = ${a * k1}`)}. בשבר האחרון המונה גדל פי ${k2}, ולכן גם המכנה: ${M(`${d} × ${k2} = ${d * k2}`)}.`, 3); }
+    if (kind === 'pattern') return T(`הנה רשימה של שברים: ${[1, 2, 3, 4].map(m => fr(a * m, d * m)).join(', ')}, ...<br>מה החוקיות? כתבו את השבר העשירי ברשימה. האם ${fr(15 * a, 15 * d)} נמצא ברשימה? הסבירו.`,
+      `בכל צעד מוסיפים ${a} למונה ו-${d} למכנה – אלה הרחבות של ${fr(a, d)} פי 1, 2, 3, 4... כל השברים שווים ל-${fr(a, d)}. השבר העשירי: ${fr(10 * a, 10 * d)}. ${fr(15 * a, 15 * d)} נמצא ברשימה – זו הרחבה פי 15 (השבר ה-15).`, 5);
+    if (kind === 'multi') { const k2 = R(3, 9);
+      return T(`מצאו שבר ששווה ל-${fr(a, d)}, שסכום המונה והמכנה שלו הוא ${(a + d) * k2}. הסבירו איך מצאתם.`,
+        `${M(`${F(a * k2, d * k2)}`)}. ב-${fr(a, d)} הסכום הוא ${M(`${a} + ${d} = ${a + d}`)}. כשמרחיבים פי מספר מסוים, גם הסכום גדל פי אותו מספר: ${M(`${(a + d) * k2} : ${a + d} = ${k2}`)} – מרחיבים פי ${k2}. בדיקה: ${M(`${a * k2} + ${d * k2} = ${(a + d) * k2}`)}.`, 5); }
+    return null;
+  }
+  if (skill === 'red') {
+    const [a, d] = fsCop(2, 7), k = pick([2, 3, 4]), X = a * k, Y = d * k;
+    if (kind === 'error') { const s = R(1, X - 1);
+      return T(`${b} צמצם: ${M(`${F(X, Y)} = ${F(X - s, Y - s)}`)}<br>האם ${b} צדק? אם לא – הסבירו מה הטעות, ותקנו.`,
+        `<b>לא.</b> ${b} <b>חיסר</b> ${s} מהמונה ומהמכנה – זה משנה את השבר (${fr(X - s, Y - s)} קטן מ-${fr(X, Y)}). בצמצום <b>מחלקים</b> את המונה ואת המכנה באותו מספר: ${M(`${F(X, Y)} = ${F(a, d)}`)} (מחלקים ב-${k}).`); }
+    if (kind === 'claim') return T(`${g} טוענת: "צמצום מקטין את השבר."<br>האם הטענה נכונה? הסבירו בעזרת ציור או דוגמה.`,
+      `<b>הטענה לא נכונה.</b> למשל ${M(`${F(X, Y)} = ${F(a, d)}`)}: מאחדים כל ${k} חלקים לחלק אחד. יש פחות חלקים, אבל כל חלק גדול יותר – <b>הכמות לא משתנה</b>. רק המספרים קטנים.`, 4);
+    if (kind === 'create') return T(`כתבו שלושה שברים שונים שאפשר לצמצם ל-${fr(a, d)}. איך אפשר לבדוק שכתבתם נכון?`,
+      `לדוגמה: ${[2, 5, 10].map(m => M(F(a * m, d * m))).join(', ')} – מרחיבים את ${fr(a, d)} (כופלים את המונה ואת המכנה באותו מספר). בדיקה: מצמצמים כל שבר וחוזרים ל-${fr(a, d)}. יש עוד תשובות נכונות.`, 4, true);
+    if (kind === 'missing') { const k1 = pick([2, 3]), k2 = k1 * pick([2, 3]), A = a * k2, B = d * k2;
+      return T(`השלימו את המספרים החסרים, והסבירו:<div class="center">${M(`${F(A, BOX)} = ${F(BOX, d * k1)} = ${F(a, d)}`)}</div>`,
+        `${M(`${F(A, B)} = ${F(a * k1, d * k1)} = ${F(a, d)}`)}. כל השברים שווים ל-${fr(a, d)}: המונה ${A} הוא פי ${k2} מ-${a}, ולכן המכנה פי ${k2} מ-${d}: ${B}. במכנה ${d * k1} – פי ${k1}, ולכן המונה ${a * k1}.`, 3); }
+    if (kind === 'compare') { const K = pick([12, 18, 24]), [p, q] = fsCop(2, 7), N = p * K, D = q * K, ps = fsPrimes(K); let cx = N, cy = D; const ch = [F(N, D)]; ps.forEach(z => { cx /= z; cy /= z; ch.push(F(cx, cy)); });
+      return T(`${g} צמצמה את ${fr(N, D)} בכמה צעדים קטנים, ו${b} צמצם בצעד אחד. הראו את שתי הדרכים. האם יוצאת אותה תשובה? איזו דרך קצרה יותר, ולמה?`,
+        `${g}: ${M(ch.join(' = '))} (מחלקים ב-${ps.join(', ואז ב-')}). ${b}: מחלקים ישר ב-${K} – המחלק המשותף הגדול ביותר: ${M(`${F(N, D)} = ${F(p, q)}`)}. אותה תשובה, כי ${M(`${ps.join(' × ')} = ${K}`)}. צעד אחד קצר יותר, אבל צריך למצוא את המחלק המשותף הגדול ביותר; בצעדים קטנים קל יותר לראות במה לחלק.`, 5); }
+    if (kind === 'multi') { const D0 = pick([8, 9, 10, 12]), ok = []; for (let n = 1; n < D0; n++) if (gcd(n, D0) === 1) ok.push(n);
+      return T(`כתבו את כל השברים האמיתיים שהמכנה שלהם ${D0} ושאי אפשר לצמצם אותם. איך ידעתם אילו שברים לפסול?`,
+        `${ok.map(n => fr(n, D0)).join(', ')}. פוסלים כל מונה שיש לו מחלק משותף עם ${D0} (חוץ מ-1): ${Array.from({ length: D0 - 1 }, (_, i) => i + 1).filter(n => gcd(n, D0) > 1).map(n => `${fr(n, D0)} = ${FX(n, D0)}`).join(', ')}.`, 5); }
+    return null;
+  }
+  if (skill === 'mix') {
+    const d = R(3, 8), w = R(2, 5); let r; do { r = R(1, d - 1); } while (gcd(r, d) !== 1); const N = w * d + r;
+    if (kind === 'error') return T(`${g} כתבה: ${M(`${w}${F(r, d)} = ${F(w + r, d)}`)}<br>האם ${g} צדקה? אם לא – הסבירו מה הטעות, ותקנו.`,
+      `<b>לא.</b> ${g} חיברה את השלם ${w} למונה, כאילו כל שלם הוא חלק אחד של ${fr(1, d)}. אבל בכל שלם יש ${d} חלקים כאלה: ${M(`${w} × ${d} + ${r} = ${N}`)}, ולכן ${M(`${w}${F(r, d)} = ${F(N, d)}`)}. (${M(F(w + r, d))} ${w + r >= d ? 'הוא רק ' + M(fsMx(w + r, d)) : 'קטן מ-1'} – הרבה פחות מ-${w}.)`);
+    if (kind === 'claim') return T(`${b} טוען: "אפשר לכתוב כל שבר מדומה כמספר מעורב – שלם ועוד שבר."<br>האם הטענה נכונה? הסבירו ותנו דוגמאות.`,
+      `<b>לא תמיד.</b> כשהמונה מתחלק במכנה יוצא מספר שלם, בלי שבר: ${M(`${F(3 * d, d)} = 3`)}, ${M(`${F(d, d)} = 1`)}. כשהמונה לא מתחלק במכנה – יוצא מספר מעורב: ${M(`${F(N, d)} = ${w}${F(r, d)}`)}.`, 4);
+    if (kind === 'create') return T(`כתבו שלושה שברים מדומים שהמכנה שלהם ${d} ושנמצאים בין ${w} ל-${w + 1}. כתבו כל אחד גם כמספר מעורב.`,
+      `לדוגמה: ${[1, 2, d - 1].filter((x, i, A) => A.indexOf(x) === i).map(x => M(`${F(w * d + x, d)} = ${w}${F(x, d)}`)).join(', ')}. המונה צריך להיות בין ${w * d} ל-${(w + 1) * d} (לא כולל) – כל מונה כזה מתאים.`, 4, true);
+    if (kind === 'missing') { const d2 = R(3, 9), w2 = R(2, 6), N2 = w2 * d2 + 1;
+      return T(`השלימו, והסבירו איך מצאתם:<div class="center">${M(`${F(BOX, d)} = ${w}${F(r, d)}`)} &nbsp; ; &nbsp; ${M(`${F(N2, d2)} = ${FB}${F(FB, d2)}`)}</div>`,
+        `${M(`${F(N, d)} = ${w}${F(r, d)}`)}, כי ${M(`${w} × ${d} + ${r} = ${N}`)}. ${M(`${F(N2, d2)} = ${w2}${F(1, d2)}`)}, כי ${M(`${N2} : ${d2} = ${w2}`)} ושארית 1.`, 3); }
+    if (kind === 'pattern') { const dd = pick([3, 4, 5]), P = R(4, 9) * dd + R(1, dd - 1), Q = R(2, 4) * dd;
+      return T(`סופרים ב${dd === 3 ? 'שלישים' : dd === 4 ? 'רבעים' : 'חמישיות'}: ${[1, 2, 3, 4, 5, 6].map(x => fr(x, dd)).join(', ')}, ...<br>איזה שבר יהיה במקום ה-${P}? כתבו אותו גם כמספר מעורב. באילו מקומות ברשימה יוצא מספר שלם?`,
+        `במקום ה-${P}: ${M(`${F(P, dd)} = ${fsMx(P, dd)}`)}. מספר שלם יוצא בכל מקום שהוא כפולה של ${dd} (${dd}, ${2 * dd}, ${3 * dd}...): למשל ${M(`${F(Q, dd)} = ${Q / dd}`)}, כי כל ${dd} חלקים הם שלם אחד.`, 5); }
+    if (kind === 'multi') { const dd = pick([6, 8, 10, 12]), NN = R(3, 6) * dd + R(1, dd - 1), ww = Math.floor(NN / dd), rr = NN % dd;
+      return T(`במסיבה חתכו כל עוגה ל-${dd} פרוסות שוות. ${NN} ילדים קיבלו כל אחד פרוסה אחת, ואת העוגות חתכו בזו אחר זו. כמה עוגות חתכו? כמה פרוסות נשארו מהעוגה האחרונה? כתבו כמספר מעורב כמה עוגות אכלו.`,
+        `אכלו ${M(`${F(NN, dd)} = ${ww}${F(rr, dd)}`)} עוגות: ${ww} עוגות שלמות ועוד ${rr} פרוסות מעוגה נוספת. לכן חתכו ${ww + 1} עוגות, ומהאחרונה נשארו ${M(`${dd} − ${rr} = ${dd - rr}`)} פרוסות.`, 5); }
+    if (kind === 'estimate') return T(`בלי לחשב בדיוק: בין אילו שני מספרים שלמים נמצא ${fr(N, d)}? הסבירו במשפט אחד.`,
+      `בין ${w} ל-${w + 1}: ${M(`${w} = ${F(w * d, d)}`)} ו-${M(`${w + 1} = ${F((w + 1) * d, d)}`)}, ו-${N} נמצא בין ${w * d} ל-${(w + 1) * d}. (${M(`${F(N, d)} = ${w}${F(r, d)}`)}.)`, 2);
+    if (kind === 'story') return T(`כתבו סיפור קצר שבו צריך לכתוב את ${fr(N, d)} כמספר מעורב, ופתרו אותו.`,
+      `סיפור לדוגמה: "במגש ${N} פרוסות, וכל פרוסה היא ${fr(1, d)} עוגה. כמה עוגות זה?" ${M(`${F(N, d)} = ${w}${F(r, d)}`)} עוגות. כל סיפור שבו ${N} חלקים של ${fr(1, d)} מתחברים לשלמים – נכון.`, 3, true);
+    return null;
+  }
+  if (skill === 'cmp') {
+    if (kind === 'error') { for (let t = 0; t < 200; t++) { const x = fsCop(3, 9), y = fsCop(2, 9); if (x[0] > y[0] && x[1] > y[1] && fsV(x) < fsV(y)) {
+      const L = lcm(x[1], y[1]);
+      return T(`${g} אמרה: "${fr(x[0], x[1])} גדול מ-${fr(y[0], y[1])}, כי ${x[0]} גדול מ-${y[0]} ו-${x[1]} גדול מ-${y[1]}."<br>האם ${g} צדקה? הסבירו, ובדקו.`,
+        `<b>לא.</b> אי אפשר להשוות שברים לפי המונה והמכנה בנפרד: מכנה גדול פירושו חלקים <b>קטנים</b>. במכנה משותף ${L}: ${M(`${F(x[0], x[1])} = ${F(x[0] * L / x[1], L)}`)}, ${M(`${F(y[0], y[1])} = ${F(y[0] * L / y[1], L)}`)} – ולכן ${M(`${F(x[0], x[1])} &lt; ${F(y[0], y[1])}`)}.`); } } return null; }
+    if (kind === 'claim') { const [p, q, P, Q] = pick([[3, 4, 1, 3], [4, 5, 1, 2], [5, 6, 2, 5], [2, 3, 1, 2], [7, 8, 3, 4]]);
+      return T(`${b} טוען: "מבין שני שברים, השבר עם המכנה הגדול יותר הוא תמיד הקטן יותר."<br>האם הטענה נכונה? הסבירו, ותנו דוגמה.`,
+        `<b>הטענה לא נכונה.</b> היא נכונה רק כשהמונים שווים (למשל ${M(`${F(1, 3)} &gt; ${F(1, 4)}`)} – אותו מספר חלקים, והחלקים של ${fr(1, 3)} גדולים יותר). דוגמה נגדית: ${M(`${F(p, q)} &gt; ${F(P, Q)}`)}, אף שהמכנה ${q} גדול מ-${Q}.`, 4); }
+    if (kind === 'create') { const [x, y] = pick([[[1, 3], [1, 2]], [[1, 4], [1, 3]], [[2, 5], [1, 2]], [[1, 2], [2, 3]], [[3, 4], [1, 1]], [[1, 5], [1, 4]]]);
+      let L = lcm(x[1], y[1]), X = x[0] * L / x[1], Y = y[0] * L / y[1]; while (Y - X < 2) { L *= 2; X *= 2; Y *= 2; }
+      const Bd = y[1] === 1 ? '1' : fr(y[0], y[1]);
+      return T(`כתבו שבר שנמצא בין ${fr(x[0], x[1])} ל-${Bd}. הסבירו איך מצאתם, ובדקו.`,
+        `לדוגמה ${fr(X + 1, L)}: במכנה ${L} – ${M(`${F(x[0], x[1])} = ${F(X, L)}`)} ו-${M(`${y[1] === 1 ? '1' : F(y[0], y[1])} = ${F(Y, L)}`)}, וכל שבר שהמונה שלו בין ${X} ל-${Y} נמצא ביניהם. יש עוד תשובות נכונות (במכנה גדול יותר יש אפילו יותר).`, 4, true); }
+    if (kind === 'compare') { for (let t = 0; t < 300; t++) { const x = fsCop(5, 12), y = fsCop(5, 12); if ((2 * x[0] - x[1]) * (2 * y[0] - y[1]) >= 0 || lcm(x[1], y[1]) <= 30) continue;
+      const L = lcm(x[1], y[1]), big = fsV(x) > fsV(y) ? x : y;
+      return T(`השוו בין ${fr(x[0], x[1])} ל-${fr(y[0], y[1])} בשתי דרכים: (א) במכנה משותף; (ב) בהשוואה לחצי. איזו דרך קצרה יותר כאן? למה?`,
+        `${fr(big[0], big[1])} גדול יותר. (א) מכנה משותף ${L}: ${M(`${F(x[0], x[1])} = ${F(x[0] * L / x[1], L)}`)}, ${M(`${F(y[0], y[1])} = ${F(y[0] * L / y[1], L)}`)}. (ב) ${fr(x[0], x[1])} ${2 * x[0] > x[1] ? 'גדול' : 'קטן'} מחצי, ו-${fr(y[0], y[1])} ${2 * y[0] > y[1] ? 'גדול' : 'קטן'} מחצי. כאן ההשוואה לחצי קצרה בהרבה – המכנה המשותף גדול (${L}).`, 5); } return null; }
+    if (kind === 'missing') { const [p, q] = pick([[2, 3], [3, 4], [1, 2], [3, 5]]), d = q * pick([2, 3]) + (Math.random() < 0.5 ? 0 : 1), ok = [];
+      for (let n = 1; n < d; n++) if (n * q > p * d) ok.push(n);
+      if (!ok.length) return null;
+      return T(`אילו מספרים אפשר לכתוב במשבצת, כדי שהמשפט יהיה נכון? כתבו את כל האפשרויות (השבר קטן מ-1):<div class="center">${M(`${F(BOX, d)} &gt; ${F(p, q)}`)}</div>`,
+        `${ok.join(', ')}. ${d % q === 0 ? `${M(`${F(p, q)} = ${F(p * d / q, d)}`)} – המונה צריך להיות גדול מ-${p * d / q}` : `${fr(p, q)} הוא בין ${fr(Math.floor(p * d / q), d)} ל-${fr(Math.floor(p * d / q) + 1, d)} – בודקים במכנה משותף ${q * d}`}, וקטן מ-${d}.`, 3); }
+    if (kind === 'pattern') return T(`סדרו מהקטן לגדול: ${[[3, 4], [1, 2], [5, 6], [2, 3], [4, 5]].map(([n, d]) => fr(n, d)).join(', ')}. מה החוקיות? איזה גדול יותר: ${fr(99, 100)} או ${fr(100, 101)}? הסבירו.`,
+      `${M([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]].map(([n, d]) => F(n, d)).join(' &lt; '))}. לכל שבר חסר חלק אחד עד השלם: ${fr(1, 2)}, ${fr(1, 3)}, ${fr(1, 4)}... החלק החסר הולך וקטן, ולכן השבר הולך וגדל. ${fr(100, 101)} גדול יותר – חסר לו ${fr(1, 101)}, פחות מ-${fr(1, 100)}.`, 5);
+    if (kind === 'multi') { const S = pick([[[3, 7], [5, 9], [1, 10], [11, 12]], [[4, 9], [2, 3], [1, 8], [9, 10]], [[5, 11], [4, 7], [2, 15], [6, 7]]]), srt = S.slice().sort((x, y) => fsV(x) - fsV(y));
+      return T(`סדרו מהקטן לגדול, <b>בלי</b> למצוא מכנה משותף לכולם: ${shuffle(S.slice()).map(([n, d]) => fr(n, d)).join(', ')}. הסבירו כל צעד.`,
+        `${M(srt.map(([n, d]) => F(n, d)).join(' &lt; '))}. ${fr(srt[0][0], srt[0][1])} קטן מאוד (רחוק מחצי); ${fr(srt[1][0], srt[1][1])} קטן מחצי (פי 2 מהמונה – פחות מהמכנה); ${fr(srt[2][0], srt[2][1])} גדול מחצי; ${fr(srt[3][0], srt[3][1])} קרוב מאוד ל-1 (חסר לו רק ${fr(srt[3][1] - srt[3][0], srt[3][1])}).`, 5); }
+    return null;
+  }
+  if (skill === 'same' || skill === 'diff') {
+    const sameD = skill === 'same';
+    const two = () => { for (;;) { if (sameD) { const d = R(5, 12), n1 = R(1, d - 1), n2 = R(1, d - 1); if (gcd(n1, d) === 1 && gcd(n2, d) === 1 && n1 !== n2) return [[n1, d], [n2, d]]; }
+      else { const d1 = R(2, 8), d2 = R(2, 8); if (d1 !== d2 && lcm(d1, d2) <= 24) return [fsCop(d1, d1), fsCop(d2, d2)]; } } };
+    if (kind === 'error') { const [x, y] = two(), L = lcm(x[1], y[1]), S = x[0] * L / x[1] + y[0] * L / y[1];
+      return T(`${b} פתר: ${M(`${F(x[0], x[1])} + ${F(y[0], y[1])} = ${F(x[0] + y[0], x[1] + y[1])}`)}<br>האם ${b} צדק? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+        `<b>לא.</b> ${b} חיבר גם את המכנים. המכנה אומר מה גודל החלק, והוא לא מתחבר. אפשר לראות שהתשובה לא הגיונית: ${fr(x[0] + y[0], x[1] + y[1])} ${fsV([x[0] + y[0], x[1] + y[1]]) < Math.max(fsV(x), fsV(y)) ? 'קטן מאחד המחוברים' : 'לא הסכום'} – וסכום חייב להיות גדול מכל אחד מהמחוברים. הפתרון הנכון: ${x[1] !== y[1] ? `מכנה משותף ${L}: ` : ''}${M(`${F(x[0] * L / x[1], L)} + ${F(y[0] * L / y[1], L)} = ${F(S, L)}`)}${gcd(S, L) > 1 || S > L ? ' = ' + FX(S, L) : ''}.`); }
+    if (kind === 'claim') {
+      if (sameD) { const d = R(4, 9); return T(`${g} טוענת: "סכום של שני שברים שכל אחד מהם קטן מ-1 הוא תמיד קטן מ-1."<br>האם הטענה נכונה? הסבירו, ותנו דוגמה.`,
+        `<b>הטענה לא נכונה.</b> דוגמה נגדית: ${M(`${F(d - 1, d)} + ${F(d - 1, d)} = ${F(2 * d - 2, d)} = ${fsMx(2 * d - 2, d)}`)} – גדול מ-1. כל אחד קטן מ-1, אבל שניהם יחד יכולים לעבור את השלם (אבל לא את 2).`, 4); }
+      return T(`${g} טוענת: "המכנה המשותף של שני שברים הוא תמיד מכפלת המכנים."<br>האם הטענה נכונה? הסבירו, ותנו דוגמה.`,
+        `<b>לא תמיד.</b> מכפלת המכנים היא תמיד מכנה משותף, אבל לא תמיד <b>הקטן ביותר</b>. למשל ${M(`${F(1, 4)} + ${F(1, 6)}`)}: אפשר במכנה 24, אבל גם ב-12 – ${M(`${F(3, 12)} + ${F(2, 12)} = ${F(5, 12)}`)}. כשהמכנים זרים (כמו 3 ו-5) – המכנה המשותף הקטן ביותר הוא המכפלה.`, 4);
+    }
+    if (kind === 'create') {
+      if (sameD) { const d = R(5, 9), r = R(1, d - 2), N = d + r; return T(`כתבו שני תרגילי חיבור שונים של שני שברים עם מכנה ${d}, שהתוצאה של כל אחד מהם היא ${M(`1${F(r, d)}`)}. הסבירו.`,
+        `${M(`1${F(r, d)} = ${F(N, d)}`)}, ולכן מחפשים שני מונים שסכומם ${N}: למשל ${M(`${F(d - 1, d)} + ${F(r + 1, d)}`)} ו-${M(`${F(d - 2, d)} + ${F(r + 2, d)}`)}. יש עוד תשובות נכונות.`, 4, true); }
+      return T(`כתבו שני שברים <b>עם מכנים שונים</b> שסכומם 1. ועוד זוג כזה. הראו בדיקה.`,
+        `לדוגמה: ${M(`${F(1, 2)} + ${F(2, 4)} = ${F(2, 4)} + ${F(2, 4)} = 1`)}, ${M(`${F(1, 3)} + ${F(4, 6)} = ${F(2, 6)} + ${F(4, 6)} = 1`)}, ${M(`${F(3, 4)} + ${F(2, 8)} = 1`)}. יש עוד תשובות נכונות.`, 4, true);
+    }
+    if (kind === 'missing') { const [x, y] = two(), L = lcm(x[1], y[1]), S = x[0] * L / x[1] + y[0] * L / y[1], g2 = gcd(S, L);
+      return T(`השלימו את השבר החסר, והסבירו איך מצאתם:<div class="center">${M(`${F(x[0], x[1])} + ${BOX} = ${fsMx(S / g2, L / g2)}`)}</div>`,
+        `${fr(y[0], y[1])}. מחסרים: ${M(`${fsMx(S / g2, L / g2)} − ${F(x[0], x[1])} = ${F(S, L)} − ${F(x[0] * L / x[1], L)} = ${F(y[0] * L / y[1], L)}`)}${L !== y[1] ? ` = ${fr(y[0], y[1])}` : ''}. ${sameD ? 'במכנה שווה – רק המונים משתנים.' : 'אפשר גם במכנים אחרים, אם התשובה שווה.'}`, 3); }
+    if (kind === 'pattern' && sameD) { const d = pick([5, 6, 7, 8]);
+      return T(`חשבו: ${M(`${F(1, d)} + ${F(1, d)}`)}, ${M(`${F(1, d)} + ${F(1, d)} + ${F(1, d)}`)}, ... כמה פעמים צריך לחבר ${fr(1, d)} כדי לקבל 1? ו-2? ו-${M(`3${F(1, d)}`)}? הסבירו.`,
+        `${fr(2, d)}, ${fr(3, d)}... כל פעם מוסיפים חלק אחד. 1 = ${fr(d, d)} – ${d} פעמים; 2 = ${fr(2 * d, d)} – ${2 * d} פעמים; ${M(`3${F(1, d)} = ${F(3 * d + 1, d)}`)} – ${3 * d + 1} פעמים.`, 4); }
+    if (kind === 'pattern') return T(`חשבו: ${M(`${F(1, 2)} + ${F(1, 4)}`)}, ${M(`${F(1, 2)} + ${F(1, 4)} + ${F(1, 8)}`)}, ${M(`${F(1, 2)} + ${F(1, 4)} + ${F(1, 8)} + ${F(1, 16)}`)}. מה מתקבל? האם הסכום יגיע ל-1 אם נמשיך? הסבירו.`,
+      `${fr(3, 4)}, ${fr(7, 8)}, ${fr(15, 16)} – בכל פעם חסר עד 1 בדיוק החלק האחרון שהוספנו (${fr(1, 4)}, ${fr(1, 8)}, ${fr(1, 16)}). כל חלק חדש ממלא חצי ממה שחסר, ולכן הסכום מתקרב ל-1 – אבל לא מגיע אליו.`, 5);
+    if (kind === 'compare' && !sameD) { const [d1, d2] = pick([[4, 6], [6, 8], [6, 9], [4, 10], [8, 12]]), x = fsCop(d1, d1), y = fsCop(d2, d2), P = d1 * d2, L = lcm(d1, d2), S1 = x[0] * d2 + y[0] * d1, S2 = S1 * L / P;
+      return T(`${g} פתרה ${M(`${F(x[0], d1)} + ${F(y[0], d2)}`)} במכנה ${P} (מכפלת המכנים), ו${b} – במכנה ${L}. הראו את שתי הדרכים. האם יוצאת אותה תשובה? איזו דרך נוחה יותר?`,
+        `${g}: ${M(`${F(x[0] * d2, P)} + ${F(y[0] * d1, P)} = ${F(S1, P)}`)}. ${b}: ${M(`${F(x[0] * L / d1, L)} + ${F(y[0] * L / d2, L)} = ${F(S2, L)}`)}. אותה תשובה: ${M(`${F(S1, P)} = ${F(S2, L)}`)} = ${FX(S2, L)}. במכנה הקטן ביותר המספרים קטנים יותר, וכמעט לא צריך לצמצם.`, 5); }
+    if (kind === 'multi') {
+      if (sameD) { for (let t = 0; t < 200; t++) { const d = pick([6, 8, 10, 12]), n1 = R(1, 3), n2 = R(1, 3); const left = d - 2 * n1 - n2; if (left < 1) continue;
+        return T(`פיצה חתוכה ל-${d} משולשים שווים. ${g} אכלה ${fr(n1, d)} מהפיצה, ו${b} אכל ${fr(n2, d)} <b>יותר</b> ממנה. איזה חלק מהפיצה נשאר?`,
+          `${b} אכל ${M(`${F(n1, d)} + ${F(n2, d)} = ${F(n1 + n2, d)}`)}. שניהם יחד: ${M(`${F(n1, d)} + ${F(n1 + n2, d)} = ${F(2 * n1 + n2, d)}`)}. נשאר: ${M(`1 − ${F(2 * n1 + n2, d)} = ${F(left, d)}`)}${gcd(left, d) > 1 ? ' = ' + FX(left, d) : ''} מהפיצה.`, 5); } return null; }
+      const [p, q] = pick([[3, 4], [2, 3], [4, 6], [2, 5], [3, 6], [4, 5]]), L = lcm(p, q), left = L - L / p - L / q, k = R(2, 6), Rr = left * k;
+      return T(`${g} קראה ספר. ביום ראשון קראה ${fr(1, p)} מהספר, וביום שני ${fr(1, q)} מהספר. נשארו לה ${Rr} עמודים. כמה עמודים יש בספר?`,
+        `בשני הימים: ${M(`${F(1, p)} + ${F(1, q)} = ${F(L / p, L)} + ${F(L / q, L)} = ${F(L / p + L / q, L)}`)}. נשאר ${M(`${F(left, L)}`)} מהספר, וזה ${Rr} עמודים – כלומר ${M(F(1, L))} מהספר הוא ${M(`${Rr} : ${left} = ${k}`)} עמודים. בספר: ${M(`${k} × ${L} = ${k * L}`)} עמודים.`, 5);
+    }
+    if (kind === 'estimate') { for (let t = 0; t < 200; t++) { const [x, y] = two(); const hx = 2 * x[0] - x[1], hy = 2 * y[0] - y[1]; if (hx * hy <= 0) continue; const big = hx > 0;
+      return T(`בלי לחשב בדיוק: האם ${M(`${F(x[0], x[1])} + ${F(y[0], y[1])}`)} גדול מ-1 או קטן מ-1? הסבירו במשפט אחד.`,
+        `${big ? 'גדול' : 'קטן'} מ-1: שני השברים ${big ? 'גדולים' : 'קטנים'} מחצי, וחצי ועוד חצי הם 1. (התוצאה: ${FX(x[0] * y[1] + y[0] * x[1], x[1] * y[1])}.)`, 2); } return null; }
+    if (kind === 'story') { for (let t = 0; t < 100; t++) { const [x, y] = two(), op = Math.random() < 0.5 || fsV(x) <= fsV(y) ? '+' : '−', w = fsWordAS(x, y, op); if (!w) continue; const L = lcm(x[1], y[1]), S = op === '+' ? x[0] * L / x[1] + y[0] * L / y[1] : x[0] * L / x[1] - y[0] * L / y[1];
+      return T(`כתבו סיפור קצר שמתאים לתרגיל ${M(`${F(x[0], x[1])} ${fsOp(op)} ${F(y[0], y[1])}`)}, ופתרו אותו.`,
+        `סיפור לדוגמה: "${w.text}" התשובה: ${FX(S, L)}. כל סיפור ש${op === '+' ? 'מצרף שתי כמויות' : 'מוריד כמות מכמות, או משווה בין שתיהן'} – נכון.`, 3, true); } return null; }
+    return null;
+  }
+  if (skill === 'mixas' || skill === 'comp') {
+    const d = R(3, 8); let r1, r2; do { r1 = R(1, d - 1); r2 = R(r1 + 1, d); } while (r2 >= d || gcd(r1, d) > 1 || gcd(r2, d) > 1);
+    const w1 = R(3, 7), w2 = R(1, w1 - 2), A = w1 * d + r1, B = w2 * d + r2, Dif = A - B;
+    if (kind === 'error') {
+      if (skill === 'comp') { const w = R(2, 5); let n; do { n = R(1, d - 1); } while (gcd(n, d) > 1 || 2 * n === d);
+        return T(`${b} פתר: ${M(`${w} − ${F(n, d)} = ${w - 1}${F(n, d)}`)}<br>האם ${b} צדק? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+          `<b>לא.</b> ${b} הוריד שלם אחד, אבל השאיר ${fr(n, d)} – כאילו הוסיף את השבר במקום לחסר אותו. פורטים שלם אחד ל-${d} חלקים: ${M(`${w} = ${w - 1}${F(d, d)}`)}, ומורידים ${n} חלקים: ${M(`${w} − ${F(n, d)} = ${w - 1}${F(d - n, d)}`)}. בדיקה: ${M(`${w - 1}${F(d - n, d)} + ${F(n, d)} = ${w}`)}.`); }
+      return T(`${b} פתר: ${M(`${w1}${F(r1, d)} − ${w2}${F(r2, d)} = ${w1 - w2}${F(r2 - r1, d)}`)}<br>האם ${b} צדק? אם לא – הסבירו מה הטעות, ופתרו נכון.`,
+        `<b>לא.</b> ב-${fr(r1, d)} אי אפשר להוריד ${fr(r2, d)}, ולכן ${b} חיסר "הפוך" – ${M(`${r2} − ${r1}`)}. פורטים שלם אחד: ${M(`${w1}${F(r1, d)} = ${w1 - 1}${F(r1 + d, d)}`)}, ואז ${M(`${w1 - 1}${F(r1 + d, d)} − ${w2}${F(r2, d)} = ${fsMx(Dif, d)}`)}${gcd(Dif, d) > 1 ? ' = ' + FX(Dif, d) : ''}. בדיקה: ${M(`${fsMx(Dif, d)} + ${w2}${F(r2, d)} = ${w1}${F(r1, d)}`)}.`);
+    }
+    if (kind === 'claim') {
+      if (skill === 'comp') return T(`${g} טוענת: "כדי למצוא כמה חסר לשבר עד השלם, מחסרים את המונה מהמכנה, והמכנה נשאר."<br>האם הטענה נכונה? הסבירו, ותנו דוגמה.`,
+        `<b>הטענה נכונה</b> (לשבר שקטן מ-1). השלם הוא ${fr(d, d)} – ${d} חלקים. אם יש ${r1} חלקים, חסרים ${M(`${d} − ${r1} = ${d - r1}`)} חלקים מאותו גודל: ${M(`1 − ${F(r1, d)} = ${F(d - r1, d)}`)}.`, 4);
+      const x2 = [w1, d - 1], y2 = [w2, d - 1];
+      return T(`${b} טוען: "כשמחברים שני מספרים מעורבים, השלם בתוצאה הוא תמיד סכום השלמים."<br>האם הטענה נכונה? הסבירו, ותנו דוגמה.`,
+        `<b>הטענה לא נכונה.</b> כשסכום השברים גדול מ-1, נוצר עוד שלם. למשל ${M(`${x2[0]}${F(x2[1], d)} + ${y2[0]}${F(y2[1], d)}`)}: השלמים ${M(`${w1} + ${w2} = ${w1 + w2}`)}, אבל ${M(`${F(d - 1, d)} + ${F(d - 1, d)} = ${F(2 * d - 2, d)} = 1${F(d - 2, d)}`)} – התוצאה ${M(`${w1 + w2 + 1}${F(d - 2, d)}`)}${gcd(d - 2, d) > 1 ? ' = ' + FX((w1 + w2 + 1) * d + d - 2, d) : ''}.`, 4);
+    }
+    if (kind === 'create') {
+      if (skill === 'comp') return T(`כתבו שלושה זוגות של שברים שסכום כל זוג הוא 1. השתמשו במכנים שונים בכל זוג.`,
+        `לדוגמה: ${M(`${F(1, 4)} + ${F(3, 4)}`)}, ${M(`${F(2, 5)} + ${F(3, 5)}`)}, ${M(`${F(5, 8)} + ${F(3, 8)}`)} – בכל זוג, המונים מצטרפים למכנה. (גם זוג עם מכנים שונים אפשרי: ${M(`${F(1, 2)} + ${F(2, 4)}`)}.) יש עוד תשובות נכונות.`, 4, true);
+      const W = R(4, 8);
+      return T(`כתבו תרגיל חיבור של שני מספרים מעורבים, שהתוצאה שלו היא המספר השלם ${W}. ועוד תרגיל כזה, עם מכנה אחר. הסבירו.`,
+        `לדוגמה: ${M(`2${F(1, 4)} + ${W - 3}${F(3, 4)} = ${W}`)}, ${M(`1${F(2, 5)} + ${W - 2}${F(3, 5)} = ${W}`)}. השברים צריכים להשלים זה את זה לשלם, והשלמים – ל-${W - 1}. יש עוד תשובות נכונות.`, 4, true);
+    }
+    if (kind === 'missing') {
+      if (skill === 'comp') { const w = R(2, 5); let n; do { n = R(1, d - 1); } while (gcd(n, d) > 1);
+        return T(`השלימו, והסבירו איך מצאתם:<div class="center">${M(`${F(r1, d)} + ${BOX} = 1`)} &nbsp; ; &nbsp; ${M(`${BOX} + ${F(n, d)} = ${w}`)}</div>`,
+          `${fr(d - r1, d)}, כי ${M(`${F(r1, d)} + ${F(d - r1, d)} = ${F(d, d)} = 1`)}. ${M(`${w - 1}${F(d - n, d)}`)}, כי ${M(`${w} − ${F(n, d)} = ${w - 1}${F(d - n, d)}`)}.`, 3); }
+      const W = w1 + 1, X = W * d - A;
+      return T(`השלימו את המספר החסר, והסבירו:<div class="center">${M(`${w1}${F(r1, d)} + ${BOX} = ${W}`)}</div>`,
+        `${M(fsMx(X, d))}. ל-${M(`${w1}${F(r1, d)}`)} חסר ${fr(d - r1, d)} עד ${w1 + 1}${W > w1 + 1 ? `, ועוד ${W - w1 - 1} עד ${W}` : ''}. בדיקה: ${M(`${w1}${F(r1, d)} + ${fsMx(X, d)} = ${W}`)}.`, 3);
+    }
+    if (kind === 'pattern' && skill === 'comp') return T(`חשבו: ${['2', '3', '4', '5'].map(x => M(`1 − ${F(1, x)}`)).join(', ')}. מה החוקיות? בלי לחשב: מה התוצאה של ${M(`1 − ${F(1, 100)}`)}? ושל ${M(`5 − ${F(1, 100)}`)}?`,
+      `${fr(1, 2)}, ${fr(2, 3)}, ${fr(3, 4)}, ${fr(4, 5)} – המונה קטן ב-1 מהמכנה. ${M(`1 − ${F(1, 100)} = ${F(99, 100)}`)}, ${M(`5 − ${F(1, 100)} = 4${F(99, 100)}`)}.`, 4);
+    if (kind === 'compare' && skill === 'mixas') { const p = fsCop(2, 6), q = fsCop(2, 6); if (p[1] === q[1] || lcm(p[1], q[1]) > 12) return null; const L = lcm(p[1], q[1]), P = p[0] * L / p[1], Q = q[0] * L / q[1]; if (P >= Q) return null;
+      const x = [w1 * p[1] + p[0], p[1]], y = [w2 * q[1] + q[0], q[1]], X = x[0] * L / p[1], Y = y[0] * L / q[1];
+      return T(`פתרו בשתי דרכים: ${M(`${fsMx(x[0], x[1])} − ${fsMx(y[0], y[1])}`)}<br>(א) שלמים לחוד ושברים לחוד; (ב) הופכים את שני המספרים לשברים מדומים. איזו דרך נוחה לכם יותר? למה?`,
+        `התשובה: ${FX(X - Y, L)}. (א) ${fsExpAS(x, y, '−', 'concept', true)} (ב) ${M(`${F(X, L)} − ${F(Y, L)} = ${F(X - Y, L)}`)} = ${FX(X - Y, L)}. בדרך א' המספרים קטנים אבל צריך לפרוט שלם; בדרך ב' אין פריטה, אבל המספרים גדולים.`, 5); }
+    if (kind === 'multi') {
+      if (skill === 'comp') { const dd = pick([3, 4, 5]), n = R(1, dd - 1), k = R(2, 4), W = Math.ceil(k * n / dd) + R(1, 2), used = k * n, left = W * dd - used;
+        return T(`במכל היו ${W} ליטר מים. מילאו ממנו ${k} בקבוקים, ובכל בקבוק ${fr(n, dd)} ליטר. כמה מים נשארו במכל?`,
+          `מילאו ${M(`${k} × ${F(n, dd)} = ${F(used, dd)}`)}${used > dd ? ` = ${FX(used, dd)}` : ''} ליטר. נשארו: ${M(`${W} − ${fsMx(used, dd)} = ${fsMx(left, dd)}`)}${gcd(left, dd) > 1 && left % dd ? ' = ' + FX(left, dd) : ''} ליטר.`, 5); }
+      const ds = pick([[2, 4], [4, 8], [2, 8], [3, 6]]), parts = [[R(1, 2) * ds[1] + 1, ds[1]], [R(1, 2) * ds[0] + 1, ds[0]], [R(1, 2) * ds[1] + ds[1] - 1, ds[1]]], L = ds[1];
+      const tot = parts.reduce((s, x) => s + x[0] * L / x[1], 0), W = Math.ceil(tot / L) + pick([-1, 1]) , diff = W * L - tot;
+      return T(`לבניית מדף צריך שלושה קרשים: ${parts.map(x => fsNum(x) + ' מטר').join(', ')}. יש קרש אחד ארוך באורך ${W} מטר. האם הוא מספיק? כמה יישאר או כמה יחסר?`,
+        `יחד: ${M(`${parts.map(x => fsMx(x[0], x[1])).join(' + ')} = ${fsMx(tot, L)}`)}${gcd(tot, L) > 1 && tot % L ? ' = ' + FX(tot, L) : ''} מטר. ${diff >= 0 ? `הקרש מספיק, ויישאר ${M(`${W} − ${fsMx(tot, L)} =`)} ${FX(diff, L)} מטר.` : `הקרש לא מספיק – חסרים ${M(`${fsMx(tot, L)} − ${W} =`)} ${FX(-diff, L)} מטר.`}`, 5);
+    }
+    if (kind === 'estimate') {
+      if (skill === 'comp') return null;
+      const x = [w1 * d + r1, d], y = [w2 * d + d - r1, d];
+      return T(`בלי לחשב בדיוק: בין אילו שני מספרים שלמים נמצאת התוצאה של ${M(`${fsMx(x[0], d)} + ${fsMx(y[0], d)}`)}? הסבירו.`,
+        `השלמים: ${M(`${w1} + ${w2} = ${w1 + w2}`)}, והשברים יחד ${M(`${F(r1, d)} + ${F(d - r1, d)} = 1`)} – בדיוק שלם. התוצאה היא בדיוק ${w1 + w2 + 1}! (שאלה טובה לבדוק אם חושבים לפני שמחשבים.)`, 2);
+    }
+    if (kind === 'story') { const w = R(2, 4); let n, dd; do { dd = pick([2, 4, 5, 10]); n = R(1, dd - 1); } while (gcd(n, dd) > 1);
+      if (skill !== 'comp') return null;
+      return T(`כתבו סיפור קצר שמתאים לתרגיל ${M(`${w} − ${F(n, dd)}`)}, ופתרו אותו.`,
+        `סיפור לדוגמה: "בבקבוקים היו ${w} ליטר מיץ. שתו ${fr(n, dd)} ליטר. כמה ליטר מיץ נשאר?" התשובה: ${M(`${w - 1}${F(dd - n, dd)}`)} ליטר. כל סיפור שמוריד חלק משלמים – נכון.`, 3, true); }
+    return null;
+  }
+  if (skill === 'qty') {
+    const d = R(3, 8), u = R(3, 10), N = d * u; let n; do { n = R(2, d - 1); } while (gcd(n, d) > 1);
+    if (kind === 'error') return T(`${b} חישב ${fr(n, d)} מ-${N}: ${M(`${N} : ${d} = ${u}`)}, והתשובה שלו ${u}.<br>האם ${b} צדק? אם לא – הסבירו מה הטעות, ותקנו.`,
+      `<b>לא.</b> ${u} הוא רק ${fr(1, d)} מ-${N} – חלק אחד. ${fr(n, d)} הם ${n} חלקים כאלה: ${M(`${u} × ${n} = ${n * u}`)}.`);
+    if (kind === 'claim') { const [N1, N2] = pick([[12, 30], [10, 24], [8, 36], [14, 45]]);
+      return T(`${g} טוענת: "חצי ממשהו תמיד גדול משליש ממשהו."<br>האם הטענה נכונה? הסבירו, ותנו דוגמה.`,
+        `<b>לא תמיד.</b> זה נכון רק כשמדובר באותה כמות שלמה (חצי מ-${N2} גדול משליש מ-${N2}). אבל ${fr(1, 2)} מ-${N1} הוא ${N1 / 2}, ו-${fr(1, 3)} מ-${N2} הוא ${N2 / 3} – גדול יותר. גודל החלק תלוי גם בשלם.`, 4); }
+    if (kind === 'create') { const P = n * R(2, 6), W = P / n * d;
+      return T(`כתבו שאלה מילולית שבה מחשבים ${fr(n, d)} מכמות, והתשובה שלה ${P}. פתרו אותה.`,
+        `הכמות צריכה להיות ${W}: ${M(`${W} : ${d} = ${W / d}`)}, ${M(`${W / d} × ${n} = ${P}`)}. לדוגמה: "בכיתה ${W} תלמידים, ו-${fr(n, d)} מהם הגיעו לטיול. כמה תלמידים הגיעו?" יש עוד שאלות נכונות – אבל הכמות תמיד ${W}.`, 4, true); }
+    if (kind === 'missing') return T(`השלימו את המספר החסר, והסבירו איך מצאתם:<div class="center">${fr(n, d)} מ-${BOX} הם ${n * u}</div>`,
+      `${N}. ${n * u} הם ${n} חלקים, אז חלק אחד (${fr(1, d)}): ${M(`${n * u} : ${n} = ${u}`)}. השלם – ${d} חלקים: ${M(`${u} × ${d} = ${N}`)}. בדיקה: ${M(`${N} : ${d} × ${n} = ${n * u}`)}.`, 3);
+    if (kind === 'pattern') { const NN = pick([24, 36, 60]);
+      return T(`חשבו: ${[2, 3, 4, 6].map(x => `${fr(1, x)} מ-${NN}`).join(', ')}. מה קורה לתוצאה כשהמכנה גדל? למה? ומה יהיה ${fr(1, 12)} מ-${NN}?`,
+        `${[2, 3, 4, 6].map(x => NN / x).join(', ')} – ככל שהמכנה גדל, מחלקים ליותר חלקים, וכל חלק קטן יותר. ${fr(1, 12)} מ-${NN} הוא ${NN / 12}.`, 4); }
+    if (kind === 'compare') return T(`שתי דרכים לחשב ${fr(n, d)} מ-${N}: (א) קודם מחלקים ב-${d} ואז כופלים ב-${n}; (ב) קודם כופלים ב-${n} ואז מחלקים ב-${d}. פתרו בשתי הדרכים. האם יוצא אותו דבר? איזו דרך נוחה יותר?`,
+      `(א) ${M(`${N} : ${d} = ${u}`)}, ${M(`${u} × ${n} = ${n * u}`)}. (ב) ${M(`${N} × ${n} = ${N * n}`)}, ${M(`${N * n} : ${d} = ${n * u}`)}. אותה תשובה. דרך א' נוחה יותר כאן – המספרים נשארים קטנים.`, 5);
+    if (kind === 'multi') { const [a1, b1] = pick([[3, 4], [4, 3], [2, 3], [3, 2], [5, 4]]), M0 = a1 * b1 * R(2, 5) * 2, s1 = M0 / a1, rest = M0 - s1, s2 = rest / b1;
+      return T(`ל${b} היו ${M0} ₪. הוא הוציא ${fr(1, a1)} מהכסף על ספר, ו-${fr(1, b1)} ממה שנשאר – על משחק. כמה כסף נשאר ל${b}? ${g} אומרת שאפשר לפתור כך: ${M(`${F(1, a1)} + ${F(1, b1)}`)} מהכסף. האם היא צודקת?`,
+        `הספר: ${M(`${M0} : ${a1} = ${s1}`)} ₪; נשארו ${rest} ₪. המשחק: ${M(`${rest} : ${b1} = ${s2}`)} ₪. נשארו ${rest - s2} ₪. ${g} <b>לא</b> צודקת: ${fr(1, b1)} הוא ממה שנשאר, לא מכל הכסף (${fr(1, b1)} מ-${M0} הוא ${M0 / b1}, לא ${s2}).`, 5); }
+    if (kind === 'estimate') { const big = 2 * n > d;
+      return T(`בלי לחשב: האם ${fr(n, d)} מ-${N} גדול מ-${N / 2} או קטן ממנו? הסבירו במשפט אחד.`,
+        `${big ? 'גדול' : 'קטן'} – ${N / 2} הוא חצי מ-${N}, ו-${fr(n, d)} ${big ? 'גדול' : 'קטן'} מחצי. (התשובה: ${n * u}.)`, 2); }
+    if (kind === 'story') return T(`כתבו סיפור קצר שבו צריך לחשב ${fr(n, d)} מ-${N}, ופתרו אותו.`,
+      `סיפור לדוגמה: "בספר ${N} עמודים, ו${g} קראה ${fr(n, d)} מהספר. כמה עמודים קראה?" ${M(`${N} : ${d} × ${n} = ${n * u}`)} עמודים. כל סיפור שבו לוקחים ${n} חלקים מתוך ${d} חלקים שווים של ${N} – נכון.`, 3, true);
+    return null;
+  }
+  return null;
+}
+// שאלות לדף לפי רמה – כמו בחילוק שברים: רמה 1 מדורגת, רמה 2 עם משימה קצרה בכל 4 שאלות (במצב "מעורב"), רמה 3 – 1–2 תרגילים והשאר משימות חשיבה
+function buildFracSkillQs(skills, level, count, mode, method, seen = new Set(), fig = false) {
+  const out = [], lvOf = i => level === 'mix' ? Math.min(3, 1 + Math.floor(3 * i / count)) : Number(level);
+  const n3 = Array.from({ length: count }, (_, i) => lvOf(i)).filter(l => l === 3).length, calc3 = n3 >= 5 ? 2 : n3 >= 2 ? 1 : 0;
+  const kinds = shuffle(DSK_THINK.slice()), used = new Set();
+  let i3 = 0;
+  for (let tries = 0; out.length < count && tries < count * 300; tries++) {
+    const i = out.length, sk = skills[i % skills.length], lv = lvOf(i);
+    let q = null;
+    if (lv === 3 && i3 >= calc3 && (mode !== 'word' || i3 % 2 === 1)) {
+      const rot = kinds.slice(tries % kinds.length).concat(kinds.slice(0, tries % kinds.length));
+      const order = mode === 'word' ? ['multi'] : kinds.filter(k => !used.has(k)).concat(rot);
+      for (const k of order) { q = fsThink(sk, k, method); if (q) { used.add(k); break; } }
+    }
+    if (!q && lv === 2 && mode === 'mix' && i % 4 === 3) q = fsThink(sk, i % 8 === 7 ? 'story' : 'estimate', method);
+    if (!q) {
+      const word = mode === 'word' ? true : mode === 'calc' ? false : (i % 3 === 2);
+      q = genFracSkill(sk, lv, { word, method, fig });
+    }
+    if (!q) continue;
+    const key = q.meta.k;
+    if (seen.has(key) || (q.meta.tpl && out.slice(-3).some(x => x.meta.tpl === q.meta.tpl) && tries % 7)) continue;
+    seen.add(key); out.push(q); if (lv === 3) i3++;
+  }
+  if (level === '1') {
+    const score = q => (q.meta.sc || 0) + (q.word ? 6 : 0) + (q.type === 'frac' && !q.noWhole ? 3 : 0);
+    out.sort((x, y) => score(x) - score(y));
+  }
+  return out;
+}
+// ---------- תזכורות: מושגית (משמעות + ציור), אלגוריתמית (צעדים ממוספרים), קצרה ----------
+function fsTip(skill, method) {
+  const fr = (n, d) => M(F(n, d)), ol = items => `<ol class="dssteps">${items.map(x => `<li>${x}</li>`).join('')}</ol>`;
+  if (method === 'algo') return {
+    exp: `דוגמה: ${M(`${F(2, 3)} = ${F('?', 12)}`)}${ol([`פי כמה גדל המכנה? ${M('12 : 3 = 4')}.`, `מרחיבים גם את המונה פי 4: ${M('2 × 4 = 8')}.`, `${M(`${F(2, 3)} = ${F(8, 12)}`)}. כופלים <b>תמיד</b> את המונה ואת המכנה באותו מספר.`])}`,
+    red: `דוגמה: ${M(F(12, 18))}${ol([`מחפשים מספר שמחלק גם את המונה וגם את המכנה – רצוי הגדול ביותר: 6.`, `מחלקים את שניהם: ${M('12 : 6 = 2')}, ${M('18 : 6 = 3')}. ${M(`${F(12, 18)} = ${F(2, 3)}`)}.`, `בודקים: יש עוד מחלק משותף (חוץ מ-1)? אם כן – ממשיכים. אפשר גם בכמה צעדים: ${M(`${F(12, 18)} = ${F(6, 9)} = ${F(2, 3)}`)}.`])}`,
+    mix: `${ol([`<b>מדומה ← מעורב:</b> מחלקים את המונה במכנה. ${M('11 : 4 = 2')}, שארית 3: המנה היא השלם, השארית היא המונה – ${M(`${F(11, 4)} = 2${F(3, 4)}`)}.`, `<b>מעורב ← מדומה:</b> שלם × מכנה + מונה: ${M('2 × 4 + 3 = 11')}, והמכנה נשאר – ${M(`2${F(3, 4)} = ${F(11, 4)}`)}.`])}`,
+    cmp: `${ol([`אותו מכנה – משווים את המונים: ${M(`${F(5, 8)} &gt; ${F(3, 8)}`)}.`, `אותו מונה – המכנה הקטן יותר הוא של השבר הגדול יותר: ${M(`${F(2, 3)} &gt; ${F(2, 5)}`)}.`, `אחרת – מכנה משותף: ${M(`${F(3, 4)} = ${F(9, 12)}`)}, ${M(`${F(2, 3)} = ${F(8, 12)}`)}, ולכן ${M(`${F(3, 4)} &gt; ${F(2, 3)}`)}.`])}`,
+    same: `דוגמה: ${M(`${F(5, 8)} + ${F(7, 8)}`)}${ol([`המכנים שווים – מחברים (או מחסרים) רק את המונים: ${M('5 + 7 = 12')}.`, `המכנה נשאר: ${M(F(12, 8))}.`, `מצמצמים, ואם השבר מדומה – כותבים כמספר מעורב: ${M(`${F(12, 8)} = 1${F(4, 8)} = 1${F(1, 2)}`)}.`])}`,
+    diff: `דוגמה: ${M(`${F(3, 4)} + ${F(1, 6)}`)}${ol([`מוצאים <b>מכנה משותף</b> – מספר ששני המכנים מתחלקים בו, רצוי הקטן ביותר: 12.`, `<b>מרחיבים</b>: ${M(`${F(3, 4)} = ${F(9, 12)}`)}, ${M(`${F(1, 6)} = ${F(2, 12)}`)}.`, `מחברים (או מחסרים) את המונים: ${M(`${F(9, 12)} + ${F(2, 12)} = ${F(11, 12)}`)}.`, `מצמצמים אם אפשר.`])}`,
+    mixas: `דוגמה: ${M(`5${F(1, 4)} − 2${F(1, 2)}`)}${ol([`מכנה משותף לשברים: ${M(`2${F(1, 2)} = 2${F(2, 4)}`)}.`, `השבר הראשון (${fr(1, 4)}) קטן מהשני (${fr(2, 4)}) – פורטים שלם אחד: ${M(`5${F(1, 4)} = 4${F(5, 4)}`)}.`, `שלמים לחוד ושברים לחוד: ${M('4 − 2 = 2')}, ${M(`${F(5, 4)} − ${F(2, 4)} = ${F(3, 4)}`)}. התשובה: ${M(`2${F(3, 4)}`)}.`, `בחיבור: אם סכום השברים גדול מ-1 – מעבירים שלם אחד לשלמים.`])}`,
+    qty: `${ol([`<b>שבר מכמות</b> – ${fr(3, 4)} מ-24: מחלקים במכנה ${M('24 : 4 = 6')}, וכופלים במונה ${M('6 × 3 = 18')}.`, `<b>מציאת השלם</b> – ${fr(3, 4)} מהכיתה הם 18 תלמידים: מחלקים במונה ${M('18 : 3 = 6')} (זה רבע), וכופלים במכנה ${M('6 × 4 = 24')}.`])}`,
+    comp: `${ol([`כותבים את השלם כשבר עם אותו מכנה: ${M(`1 = ${F(8, 8)}`)}, ${M(`3 = 2${F(8, 8)}`)}.`, `מחסרים את המונים: ${M(`${F(8, 8)} − ${F(3, 8)} = ${F(5, 8)}`)}; ${M(`2${F(8, 8)} − ${F(3, 8)} = 2${F(5, 8)}`)}.`, `במספר מעורב, כשהשבר קטן מדי – פורטים שלם: ${M(`3${F(1, 4)} − ${F(3, 4)} = 2${F(5, 4)} − ${F(3, 4)} = 2${F(2, 4)}`)}.`])}`
+  }[skill];
+  const mean = (story, calc) => `<div class="dsmean"><b>מה זה אומר?</b> ${story}</div><div class="dscalc"><b>איך מחשבים?</b> ${calc}</div>`;
+  return {
+    exp: [mean(`מחלקים כל רבע ל-2 חלקים שווים: במקום 3 רבעים צבועים – 6 שמיניות צבועות. החלקים קטנים יותר, אבל יש יותר מהם – <b>הכמות לא משתנה</b>.`, `כופלים את המונה ואת המכנה באותו מספר: ${M(`${F(3, 4)} = ${F(6, 8)}`)}.`), dsCells([fsRow(4, [3, FS_P]), fsRow(8, [6, FS_P])], 200, 16)],
+    red: [mean(`מאחדים כל 2 שמיניות לרבע אחד: 6 שמיניות הן 3 רבעים. החלקים גדלים, ויש פחות מהם – <b>הכמות לא משתנה</b>.`, `מחלקים את המונה ואת המכנה באותו מספר: ${M(`${F(6, 8)} = ${F(3, 4)}`)}.`), dsCells([fsRow(8, [6, FS_P]), fsRow(4, [3, FS_P])], 200, 16)],
+    mix: [mean(`כל 4 רבעים הם שלם אחד. ב-11 רבעים יש 2 שלמים (8 רבעים) ועוד 3 רבעים.`, `${M(`${F(11, 4)} = 2${F(3, 4)}`)}, ובחזרה: ${M(`2 × 4 + 3 = 11`)}.`), dsCells(fsWholes(11, 4), 150, 14)],
+    cmp: [mean(`אותו מכנה – החלקים באותו גודל, ומשווים כמה חלקים יש (${M(`${F(5, 8)} &gt; ${F(3, 8)}`)}). אותו מונה – אותו מספר חלקים, ומשווים את גודל החלק: שליש גדול מחמישית, ולכן ${M(`${F(2, 3)} &gt; ${F(2, 5)}`)}.`, `אפשר להשוות לחצי או ל-1, או לכתוב את שני השברים באותו מכנה.`), dsCells([fsRow(3, [2, FS_P]), fsRow(5, [2, FS_C])], 200, 16)],
+    same: [mean(`אותו מכנה = חלקים באותו גודל. 2 שביעיות ועוד 3 שביעיות הן 5 שביעיות.`, `${M(`${F(2, 7)} + ${F(3, 7)} = ${F(5, 7)}`)} – מחברים את המונים. המכנה לא משתנה: הוא רק אומר מה גודל החלק.`), dsCells([fsRow(7, [2, FS_P], [3, FS_C])], 200, 16)],
+    diff: [mean(`חצי ושליש הם חלקים בגדלים שונים – אי אפשר לחבר אותם ישר. מחלקים את שניהם לחלקים קטנים באותו גודל – שישיות.`, `${M(`${F(1, 2)} = ${F(3, 6)}`)}, ${M(`${F(1, 3)} = ${F(2, 6)}`)}, ולכן ${M(`${F(1, 2)} + ${F(1, 3)} = ${F(5, 6)}`)}.`), dsCells([fsRow(2, [1, FS_P]), fsRow(3, [1, FS_C]), fsRow(6, [3, FS_P], [2, FS_C])], 200, 14)],
+    mixas: [mean(`שלמים עם שלמים, חלקים עם חלקים. ${M(`2${F(1, 2)} + 1${F(3, 4)}`)}: 3 שלמים, ו-${M(`${F(1, 2)} + ${F(3, 4)} = 1${F(1, 4)}`)} – עוד שלם ורבע. ביחד ${M(`4${F(1, 4)}`)}.`, `בחיסור, כשאין מספיק חלקים – פורטים שלם אחד לחלקים: ${M(`5${F(1, 4)} − 2${F(3, 4)} = 4${F(5, 4)} − 2${F(3, 4)} = 2${F(2, 4)}`)}.`), ''],
+    qty: [mean(`${fr(3, 4)} מ-24: מחלקים את 24 ל-4 חלקים שווים – בכל חלק 6. לוקחים 3 חלקים כאלה.`, `${M('24 : 4 = 6')}, ${M('3 × 6 = 18')}.`), fsQtyFig(4, 3, 24)],
+    comp: [mean(`שלם אחד = ${fr(8, 8)}. אם יש ${fr(3, 8)}, חסרים עוד 5 חלקים מאותו גודל.`, `${M(`1 − ${F(3, 8)} = ${F(5, 8)}`)}. מ-3 שלמים: מפרקים שלם אחד לשמיניות – ${M(`3 − ${F(3, 8)} = 2${F(5, 8)}`)}.`), dsCells([fsRow(8, [3, FS_P])], 200, 16)]
+  }[skill];
+}
+const FSK_SHORT = {
+  concept: {
+    exp: () => `מחלקים כל חלק לחלקים קטנים – יש יותר חלקים, אבל הכמות לא משתנה: ${M(`${F(3, 4)} = ${F(6, 8)}`)}.`,
+    red: () => `מאחדים חלקים לחלקים גדולים – יש פחות חלקים, אבל הכמות לא משתנה: ${M(`${F(6, 8)} = ${F(3, 4)}`)}.`,
+    mix: () => `כל 4 רבעים הם שלם: ${M(`${F(11, 4)} = 2${F(3, 4)}`)} (8 רבעים הם 2 שלמים, ועוד 3 רבעים).`,
+    cmp: () => `אותו מכנה – יותר חלקים = יותר; אותו מונה – מכנה גדול = חלקים קטנים: ${M(`${F(2, 3)} &gt; ${F(2, 5)}`)}.`,
+    same: () => `חלקים באותו גודל – סופרים חלקים: ${M(`${F(2, 7)} + ${F(3, 7)} = ${F(5, 7)}`)}; המכנה לא משתנה.`,
+    diff: () => `קודם חלקים באותו גודל: ${M(`${F(1, 2)} + ${F(1, 3)} = ${F(3, 6)} + ${F(2, 6)} = ${F(5, 6)}`)}.`,
+    mixas: () => `שלמים עם שלמים, חלקים עם חלקים; כשאין מספיק חלקים – פורטים שלם: ${M(`5${F(1, 4)} = 4${F(5, 4)}`)}.`,
+    qty: () => `${M(F(3, 4))} מ-24: 24 ב-4 חלקים שווים – 6 בכל חלק; 3 חלקים – 18.`,
+    comp: () => `שלם = ${M(F(8, 8))}; חסרים החלקים שאין: ${M(`1 − ${F(3, 8)} = ${F(5, 8)}`)}.`
+  },
+  algo: {
+    exp: () => `כופלים מונה ומכנה באותו מספר: ${M(`${F(2, 3)} = ${F(8, 12)}`)} (פי 4).`,
+    red: () => `מחלקים מונה ומכנה באותו מספר, עד הסוף: ${M(`${F(12, 18)} = ${F(2, 3)}`)} (ב-6).`,
+    mix: () => `מונה : מכנה = שלם ושארית: ${M(`${F(11, 4)} = 2${F(3, 4)}`)}; ובחזרה ${M('2 × 4 + 3 = 11')}.`,
+    cmp: () => `מכנה משותף ← משווים מונים: ${M(`${F(3, 4)} = ${F(9, 12)} &gt; ${F(8, 12)} = ${F(2, 3)}`)}.`,
+    same: () => `מחברים/מחסרים מונים, המכנה נשאר, ואז מצמצמים: ${M(`${F(5, 8)} + ${F(7, 8)} = ${F(12, 8)} = 1${F(1, 2)}`)}.`,
+    diff: () => `מכנה משותף ← מרחיבים ← מונים: ${M(`${F(3, 4)} + ${F(1, 6)} = ${F(9, 12)} + ${F(2, 12)} = ${F(11, 12)}`)}.`,
+    mixas: () => `מכנה משותף ← שלמים לחוד, שברים לחוד ← מעבר שלם / פריטה: ${M(`5${F(1, 4)} − 2${F(3, 4)} = 4${F(5, 4)} − 2${F(3, 4)} = 2${F(1, 2)}`)}.`,
+    qty: () => `מחלקים במכנה וכופלים במונה: ${M(`24 : 4 × 3 = 18`)}; השלם – מחלקים במונה וכופלים במכנה.`,
+    comp: () => `שלם כשבר באותו מכנה, ומחסרים מונים: ${M(`3 − ${F(3, 8)} = 2${F(8, 8)} − ${F(3, 8)} = 2${F(5, 8)}`)}.`
+  }
+};
+function fsTipsHTML(skills, method) {
+  if (!method || method === 'none') return '';
+  const nm = sk => FSK.find(x => x.id === sk).name;
+  if (method === 'short' || skills.length > 2) {
+    const set = FSK_SHORT[method === 'algo' ? 'algo' : 'concept'];
+    return dsMath(`<div class="wstips dsk-tips short"><b>📘 תזכורת קצרה – ${method === 'algo' ? 'צעדי החישוב' : 'מה המשמעות'}</b><ul>${skills.map(sk => `<li><b>${nm(sk)}:</b> ${set[sk]()}</li>`).join('')}</ul></div>`);
+  }
+  const title = method === 'algo' ? 'אלגוריתמית: צעד אחר צעד' : 'מושגית: מה זה אומר?';
+  const items = skills.map(sk => { const t = fsTip(sk, method), [txt, fig] = Array.isArray(t) ? t : [t, '']; return `<li class="dstip"><div>${skills.length > 1 ? `<b>${nm(sk)}:</b> ` : ''}${txt}</div>${fig}</li>`; }).join('');
+  return dsMath(`<div class="wstips dsk-tips"><b>📘 תזכורת – ${title}</b><ul>${items}</ul></div>`);
+}
+// ===== חבילות "תרגול לפי מיומנות" במחולל דפי התרגול: נושא ← מיומנויות, רמות, תזכורות ובניית שאלות =====
+// כל חבילה מקבלת פאנל משלה (מופיע כשהנושא מסומן). pfx – קידומת המזהים בפאנל (Panel / Tip / Fig / All).
+const SKP_NOTE = 'כשנבחרה מיומנות אחת – כל השאלות בדף ממנה בלבד. כמה מיומנויות – לסירוגין, ובתרגול של יותר משתי מיומנויות התזכורת מוצגת בקצרה (שורה לכל מיומנות). <b>רמת הקושי</b> נקבעת לפי מורכבות ההבנה והחישוב בתוך המיומנות – לא מוסיפה מיומנות אחרת';
+const SKP = [
+  { topic: 'divfr', pfx: 'dsk', icon: '➗', title: 'חילוק שברים', skills: DSK, levels: DSK_LEVELS, build: buildDivSkillQs, tips: dsTipsHTML, on: () => !!TOPIC.divfr,
+    tipOpts: [['none', 'ללא תזכורת'], ['short', 'קצרה וממוקדת – שורה אחת לכל מיומנות'], ['concept', 'מושגית – הסבר והמחשה (משמעות החילוק)', 1], ['algo', 'אלגוריתמית – צעדי הפתרון (מכנה משותף, בלי הופכי)'], ['kfc', 'אלגוריתמית – כפל בהופכי (KFC) – רק אם כבר נלמד']],
+    figLabel: 'המחשה חזותית ליד תרגילי הרמה הקלה (פס שברים לסימון קבוצות)',
+    note: SKP_NOTE + ', ולא קובעת אם התשובה שלמה. ההסברים בדף התשובות – לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).' },
+  { topic: 'frac', pfx: 'fsk', icon: '🍕', title: 'שברים', skills: FSK, levels: FSK_LEVELS, build: buildFracSkillQs, tips: fsTipsHTML, on: () => !!TOPIC.frac && GRADE >= 5,
+    tipOpts: [['none', 'ללא תזכורת'], ['short', 'קצרה וממוקדת – שורה אחת לכל מיומנות'], ['concept', 'מושגית – מה זה אומר, עם ציור של פסי שברים', 1], ['algo', 'אלגוריתמית – צעדי הפתרון, ממוספרים']],
+    figLabel: 'המחשה חזותית ליד תרגילי הרמה הקלה (פסי שברים)',
+    note: SKP_NOTE + '. בהרחבה ובצמצום אין בעיות מילוליות. ההסברים בדף התשובות – לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).' }
+];
+const skpPanelHTML = P => `<div class="dsk-panel" id="${P.pfx}Panel" hidden>
+          <div class="lbl2">${P.icon} ${P.title} – איזו מיומנות תרצו לתרגל?</div>
+          <div class="dsk-skills">${P.skills.map((k, i) => `<label class="chk"><input type="checkbox" value="${k.id}" ${i === 0 ? 'checked' : ''}> ${i + 1}. ${k.name} <span class="muted">(למשל ${k.ex()})</span></label>`).join('')}
+            <label class="chk"><input type="checkbox" id="${P.pfx}All"> ${P.skills.length + 1}. 🔀 תרגול מעורב – כל המיומנויות</label></div>
+          <label>תזכורת לפני התרגול:
+            <select id="${P.pfx}Tip">${P.tipOpts.map(([v, t, sel]) => `<option value="${v}"${sel ? ' selected' : ''}>${t}</option>`).join('')}</select>
+          </label>
+          <label class="chk"><input type="checkbox" id="${P.pfx}Fig" checked> 🖍️ ${P.figLabel}</label>
+          <p class="muted small">${P.note}</p>
+          <details class="dsk-lv"><summary>מה משתנה בין הרמות בכל מיומנות?</summary><table>${P.skills.map(k => `<tr><th>${k.name}</th>${P.levels[k.id].map((t, i) => `<td><b>${['קלה', 'בינונית', 'קשה'][i]}:</b> ${t}</td>`).join('')}</tr>`).join('')}</table></details>
+        </div>`;
 // ===== מחוללים לקורס "כפל וחילוק שברים" (coach.html?course=fracop) – לא משויכים לנושא, כדי לא לשבש קודי חוברות =====
 function genDivFrFW() { return genDivFrW(pick(['fw1', 'fw2'])); }
 function genDivFrWF() { return genDivFrW(pick(['wu', 'wn'])); }
@@ -9697,6 +10462,7 @@ function solHTML(q) {
   return `<div class="sol">${ex ? `<div class="sol-ex"><b>${calc ? 'תרגיל:' : 'הסבר:'}</b> ${ex}</div>` : ''}<div class="sol-ans"><b>תשובה סופית:</b> ${correctHTML(q)}</div></div>`;
 }
 function correctHTML(q) {
+  if (q.keyHTML) return q.keyHTML; // תשובה מוכנה לדף התשובות (למשל שבר לא מצומצם בהרחבה, או שרשרת שברים)
   if (q.type === 'open') return q.model || '';
   if (q.type === 'num') return M(fmt(q.ans)) + (q.unit ? ' ' + q.unit : '');
   if (q.type === 'choice') return q.choices[q.ans];
@@ -19999,6 +20765,7 @@ function wsQuestionHTML(q, n, noGrid) {
   if (q.type === 'num') ans = (q.est ? `<div class="wsans wsest">אומדן: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>` : '') + `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
   else if (q.type === 'open') ans = `<div class="wsopen" style="--n:${q.lines || 4}"></div>`; // משימת חשיבה – שורות לכתיבת נימוק ודרך
+  else if (q.type === 'fill') ans = ''; // משבצות בתוך התרגיל עצמו
   else ans = `<div class="wschoices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
   const grid = noGrid || q.type === 'open' ? '' : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
@@ -20011,6 +20778,7 @@ function examQuestionHTML(q, n) {
   if (q.type === 'choice') ans = `<div class="ex-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
   else if (q.type === 'open') ans = `<div class="wsans">תשובה / מסקנה: <span class="wsline long"></span></div>`;
+  else if (q.type === 'fill') ans = '';
   else ans = `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   const plain = q.text.replace(/<[^>]+>/g, '');
   const open = q.type === 'open', wordy = !open && q.steps && q.steps.length >= 3 && plain.length > 60;
@@ -20175,23 +20943,7 @@ function printBuilder() {
         <p class="muted small">שאלות מהנושאים שתבחרו – תרגילים, שאלות מילוליות או שילוב, עם משבצות חישוב. כאן אפשר גם להדפיס מבחן בסגנון מבדק.</p>
         <div class="lbl2">נושאים:</div>
         <div class="wstopics">${TOPICS.map((t, i) => `<label class="chk"><input type="checkbox" value="${t.id}" ${i === 0 ? 'checked' : ''}> ${t.icon} ${t.name}</label>`).join('')}</div>
-        ${TOPIC.divfr ? `<div class="dsk-panel" id="dskPanel" hidden>
-          <div class="lbl2">➗ חילוק שברים – איזו מיומנות תרצו לתרגל?</div>
-          <div class="dsk-skills">${DSK.map((k, i) => `<label class="chk"><input type="checkbox" value="${k.id}" ${i === 0 ? 'checked' : ''}> ${i + 1}. ${k.name} <span class="muted">(למשל ${k.ex()})</span></label>`).join('')}
-            <label class="chk"><input type="checkbox" id="dskAll"> 6. 🔀 תרגול מעורב – כל המיומנויות</label></div>
-          <label>תזכורת לפני התרגול:
-            <select id="dskTip">
-              <option value="none">ללא תזכורת</option>
-              <option value="short">קצרה וממוקדת – שורה אחת לכל מיומנות</option>
-              <option value="concept" selected>מושגית – הסבר והמחשה (משמעות החילוק)</option>
-              <option value="algo">אלגוריתמית – צעדי הפתרון (מכנה משותף, בלי הופכי)</option>
-              <option value="kfc">אלגוריתמית – כפל בהופכי (KFC) – רק אם כבר נלמד</option>
-            </select>
-          </label>
-          <label class="chk"><input type="checkbox" id="dskFig" checked> 🖍️ המחשה חזותית ליד תרגילי הרמה הקלה (פס שברים לסימון קבוצות)</label>
-          <p class="muted small">כשנבחרה מיומנות אחת – כל השאלות בדף ממנה בלבד. כמה מיומנויות – לסירוגין, ובתרגול של יותר משתי מיומנויות התזכורת מוצגת בקצרה (שורה לכל מיומנות). <b>רמת הקושי</b> נקבעת לפי מורכבות ההבנה והחישוב בתוך המיומנות – לא מוסיפה מיומנות אחרת, ולא קובעת אם התשובה שלמה. ההסברים בדף התשובות – לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).</p>
-          <details class="dsk-lv"><summary>מה משתנה בין הרמות בכל מיומנות?</summary><table>${DSK.map(k => `<tr><th>${k.name}</th>${DSK_LEVELS[k.id].map((t, i) => `<td><b>${['קלה', 'בינונית', 'קשה'][i]}:</b> ${t}</td>`).join('')}</tr>`).join('')}</table></details>
-        </div>` : ''}
+        ${SKP.filter(P => P.on()).map(skpPanelHTML).join('')}
         <label>רמה:
           <select id="wl">
             <option value="mix">מדורגת – מהקל אל הקשה</option>
@@ -20351,29 +21103,35 @@ function printBuilder() {
   pkSetup();
   $('wg').onchange = () => { location.search = '?print' + ($('wg').value !== '6' ? '&grade=' + $('wg').value : '') + (NEUTRAL ? '&neutral=1' : ''); };
   const letters = 'אבג';
-  // חילוק שברים: פאנל מיומנות מופיע כשהנושא מסומן
-  const dskSync = () => { const on = !!app.querySelector('.wstopics:not(.drtopics) input[value="divfr"]:checked'); if ($('dskPanel')) $('dskPanel').hidden = !on; };
+  // תרגול לפי מיומנות (חילוק שברים, שברים): פאנל המיומנויות של נושא מופיע כשהנושא מסומן
+  const packs = SKP.filter(P => P.on() && $(P.pfx + 'Panel'));
+  const pkBoxes = P => [...$(P.pfx + 'Panel').querySelectorAll('.dsk-skills input:not([id])')];
+  const dskSync = () => packs.forEach(P => { $(P.pfx + 'Panel').hidden = !app.querySelector(`.wstopics:not(.drtopics) input[value="${P.topic}"]:checked`); });
   app.querySelectorAll('.wstopics:not(.drtopics) input').forEach(c => c.addEventListener('change', dskSync));
-  if ($('dskAll')) {
-    const boxes = () => [...app.querySelectorAll('.dsk-skills input:not(#dskAll)')];
-    $('dskAll').onchange = () => boxes().forEach(c => { c.checked = $('dskAll').checked; });
-    boxes().forEach(c => c.addEventListener('change', () => { $('dskAll').checked = boxes().every(x => x.checked); }));
-  }
-  const dskOpts = topics => topics.includes('divfr') && $('dskPanel') ? { skills: [...app.querySelectorAll('.dsk-skills input:not(#dskAll):checked')].map(x => x.value), method: $('dskTip').value, fig: $('dskFig').checked } : null;
+  dskSync();
+  packs.forEach(P => {
+    const all = $(P.pfx + 'All');
+    all.onchange = () => pkBoxes(P).forEach(c => { c.checked = all.checked; });
+    pkBoxes(P).forEach(c => c.addEventListener('change', () => { all.checked = pkBoxes(P).every(x => x.checked); }));
+  });
+  // החבילות הפעילות בדף: [{ P, skills, method, fig }] או null
+  const dskOpts = topics => { const L = packs.filter(P => topics.includes(P.topic)).map(P => ({ P, skills: pkBoxes(P).filter(x => x.checked).map(x => x.value), method: $(P.pfx + 'Tip').value, fig: $(P.pfx + 'Fig').checked })); return L.length ? L : null; };
+  const dskName = x => x.skills.length === 1 ? x.P.skills.find(k => k.id === x.skills[0]).name : x.skills.length === x.P.skills.length ? 'תרגול מעורב – כל המיומנויות' : 'תרגול מעורב: ' + x.skills.map(id => x.P.skills.find(k => k.id === id).name).join(' · ');
+  const dskMeth = x => x.method !== 'none' && x.method !== 'short' ? x.method : 'concept';
   $('wgo').onclick = () => wsGate(() => {
     const topics = [...app.querySelectorAll('.wstopics:not(.drtopics) input:checked')].map(x => x.value).filter(id => TOPIC[id]);
     if (!topics.length) { $('wmsg').textContent = 'בחרו לפחות נושא אחד 🙂'; return; }
-    const dsk = dskOpts(topics), dskOnly = !!dsk && topics.length === 1;
-    if (dsk && !dsk.skills.length) { $('wmsg').textContent = 'בחרו לפחות מיומנות אחת בחילוק שברים 🙂'; return; }
-    const dskM = dsk && dsk.method !== 'none' && dsk.method !== 'short' ? dsk.method : 'concept';
-    const dskNames = dsk ? (dsk.skills.length === 1 ? DSK.find(k => k.id === dsk.skills[0]).name : dsk.skills.length === DSK.length ? 'תרגול מעורב – כל המיומנויות' : 'תרגול מעורב: ' + dsk.skills.map(id => DSK.find(k => k.id === id).name).join(' · ')) : '';
+    const dsk = dskOpts(topics), dskOnly = !!dsk && dsk.length === 1 && topics.length === 1;
+    const noSk = dsk && dsk.find(x => !x.skills.length);
+    if (noSk) { $('wmsg').textContent = `בחרו לפחות מיומנות אחת ב${noSk.P.title} 🙂`; return; }
+    const dskNames = dsk ? dsk.map(dskName).join(' | ') : '';
     const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
     const wq = $('wwq').value, wordOnly = wq === 'only', drill = wq !== 'auto' && !wordOnly, nWord = drill ? Number(wq) : 0;
     const base = wordOnly ? 'שאלות מילוליות' : 'דף תרגול';
-    const title = $('wt').value.trim() || (dskOnly ? `${base} – חילוק שברים` : topics.length === 1 ? `${base} – ${TOPIC[topics[0]].name}` : `${base} במתמטיקה`);
-    const tTopics = dsk ? topics.filter(t => t !== 'divfr') : topics;
-    const tips = ($('wtips').checked && tTopics.length ? `<div class="wstips"><b>📘 תזכורת</b><ul>${tTopics.flatMap(t => TOPIC[t].tips.slice(0, tTopics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '') + (dsk ? dsTipsHTML(dsk.skills, dsk.method) : '');
-    const skillLine = dsk ? `<div class="wsskill">➗ ${dskNames} · ${$('wl').selectedOptions[0].textContent.trim()}</div>` : '';
+    const title = $('wt').value.trim() || (dskOnly ? `${base} – ${dsk[0].P.title}` : topics.length === 1 ? `${base} – ${TOPIC[topics[0]].name}` : `${base} במתמטיקה`);
+    const tTopics = dsk ? topics.filter(t => !dsk.some(x => x.P.topic === t)) : topics;
+    const tips = ($('wtips').checked && tTopics.length ? `<div class="wstips"><b>📘 תזכורת</b><ul>${tTopics.flatMap(t => TOPIC[t].tips.slice(0, tTopics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '') + (dsk ? dsk.map(x => x.P.tips(x.skills, x.method)).join('') : '');
+    const skillLine = dsk ? dsk.map(x => `<div class="wsskill">${x.P.icon} ${dskName(x)} · ${$('wl').selectedOptions[0].textContent.trim()}</div>`).join('') : '';
     const noGrid = !$('wgrid').checked;
     const wholeOnly = $('wwhole') && $('wwhole').checked;
     const examSt = !!$('wstyle') && $('wstyle').value === 'exam';
@@ -20382,10 +21140,10 @@ function printBuilder() {
     const qList = (qs, start = 0, dense = false) => examSt ? `<div class="ex-qs">${qs.map((q, i) => examQuestionHTML(q, start + i + 1)).join('')}</div>`
       : `<div class="wsqs${noGrid ? ' nogrid' : ''}${dense ? ' dsk-dense' : ''}">${qs.map((q, i) => wsQuestionHTML(q, start + i + 1, noGrid)).join('')}</div>`;
     let wordShort = false;
-    // חילוק שברים לפי מיומנות: שאלות "חילוק שבר ומספר שלם" מוחלפות בשאלות מהמיומנויות שנבחרו (באותה רמה, ותרגיל ↔ מילולית נשמר)
-    const dskFix = qs => { if (!dsk) return qs; const seen = new Set(); let k = 0; return qs.map(q => q.topic !== 'divfr' ? q : buildDivSkillQs([dsk.skills[k++ % dsk.skills.length]], String(q.lv || (level === 'mix' ? 2 : level)), 1, isWordQ(q) ? 'word' : 'calc', dskM, seen, dsk.fig)[0] || q); };
+    // תרגול לפי מיומנות: שאלות הנושא (חילוק שברים / שברים) מוחלפות בשאלות מהמיומנויות שנבחרו (באותה רמה, ותרגיל ↔ מילולית נשמר)
+    const dskFix = qs => { if (!dsk) return qs; const seen = new Set(), k = {}; return qs.map(q => { const x = dsk.find(y => y.P.topic === q.topic); if (!x) return q; const i = k[q.topic] = (k[q.topic] || 0) + 1; return x.P.build([x.skills[(i - 1) % x.skills.length]], String(q.lv || (level === 'mix' ? 2 : level)), 1, isWordQ(q) ? 'word' : 'calc', dskMeth(x), seen, x.fig)[0] || q; }); };
     const sheets = Array.from({ length: versions }, () => {
-      if (dskOnly) { const seen = new Set(); return buildDivSkillQs(dsk.skills, level, count, wordOnly ? 'word' : drill ? 'calc' : 'mix', dskM, seen, dsk.fig).concat(nWord ? buildDivSkillQs(dsk.skills, level, nWord, 'word', dskM, seen) : []); }
+      if (dskOnly) { const x = dsk[0], seen = new Set(); return x.P.build(x.skills, level, count, wordOnly ? 'word' : drill ? 'calc' : 'mix', dskMeth(x), seen, x.fig).concat(nWord ? x.P.build(x.skills, level, nWord, 'word', dskMeth(x), seen) : []); }
       if (wordOnly) { const w = dskFix(buildWordQs(topics, level, count, wholeOnly, true)); if (w.length < count) wordShort = true; return w; }
       const a = dskFix(buildWorksheet(topics, level, count, drill, wholeOnly)), w = nWord ? dskFix(buildWordQs(topics, level, nWord, wholeOnly)) : []; if (w.length < nWord) wordShort = true; return a.concat(w);
     });
@@ -20721,9 +21479,11 @@ function paginateSheets() {
   const out = $('wsout');
   groupDigits(out);
   nikudify(out);
-  const H = 270 * 96 / 25.4;
+  const H0 = 270 * 96 / 25.4;
   out.classList.add('measure');
   out.querySelectorAll('.ws-page').forEach(sec => {
+    // דף תשובות עם הסברים ארוכים (תרגול לפי מיומנות): מרווח ביטחון, כדי שהרשימה לא תגלוש בהדפסה לעמוד נפרד מהכותרת
+    const H = sec.classList.contains('dsk-key') ? 255 * 96 / 25.4 : H0;
     const items = [];
     [...sec.children].forEach(ch => {
       if (ch.matches('.wsqs, .ex-qs, ol')) [...ch.children].forEach((el, idx) => items.push({ el, wrap: ch, idx }));
