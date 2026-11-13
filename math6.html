@@ -485,6 +485,9 @@ html.embed body { padding-top: 0; }
   .dsk-tight .dsk-tips .dsfig { width: 150px; }
   .dsk-tight .wsqs.dsk-dense .ex-grid { min-height: 1.6cm; } .dsk-tight .wsqs.dsk-dense .ex-grid.big { min-height: 1.9cm; }
   .dsk-tight .dsqfig { width: 140px; }
+  .wstwo, .ex-two { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 4px; } .ex-two .ex-grid.sp { width: 100%; }
+  .wsdraw { height: 3.6cm; border: 1.5px dashed #9a96b4; border-radius: 6px; margin-top: 6px; }
+  .wsrub { margin-top: 4px; font-size: 0.93rem; background: #f6f3fb; border-radius: 6px; padding: 4px 8px; } .wsrub ul { margin: 2px 0; padding-inline-start: 1.3em; }
   .wsopen { --lh: 0.95cm; height: calc(var(--n, 4) * var(--lh)); margin-top: 6px; background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--lh) - 1px), #b8b8c8 calc(var(--lh) - 1px), #b8b8c8 var(--lh)); }
   .dsk-l3fit .wsopen { --lh: 0.8cm; }
   .ws-pastel .wsqs .wsq.wsopenq.wide { grid-column: 1 / -1; }
@@ -1130,6 +1133,13 @@ html.embed body { padding-top: 0; }
   .op-slide h2 { margin-top: 0; }
   .dsk-panel { border: 2px dashed #b9a5dc; border-radius: 12px; padding: 10px 12px; margin: 8px 0; background: #faf7ff; }
   .dsk-skills { display: flex; flex-direction: column; gap: 4px; margin: 6px 0; }
+  .sktype { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; margin: 4px 0 0; }
+  .skgrp { border: 1px solid #ddd3ee; border-radius: 10px; padding: 4px 10px; background: #fff; } .skgrp > summary { cursor: pointer; font-weight: 700; padding: 2px 0; }
+  .skgrp .skgall { font-size: 0.92em; color: #5a4a80; }
+  .skrow { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; } .skrow .chk { flex: 1 1 auto; }
+  .sklv { border: 1px solid #b9a5dc; background: #f3eefb; color: #4b3a7a; border-radius: 50%; width: 1.7em; height: 1.7em; padding: 0; font-weight: 700; min-height: 0; }
+  .sklvbox { flex-basis: 100%; font-size: 0.88em; background: #faf7ff; border-radius: 8px; padding: 4px 8px; margin: 0 0 4px; }
+  .skmore > summary { cursor: pointer; margin: 6px 0 2px; }
   .wsskill { font-size: 0.95em; color: #4b3a7a; margin: 2px 0 6px; }
   .dsk-tips li.dstip { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
   .dsk-tips li.dstip > div { flex: 1 1 260px; }
@@ -2212,7 +2222,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAQ00lEQVR4nN2be7BfVXXHP2vvfc75ve4zIS9IeEiEEl4FH9gCDihabUt9FKa1jjqloAQ7aDtTO2NmUlBnHEeHUSsBdGxttU5Jy7TDKIqOGZERy0MJ1FSKvBIJgcBNcu/9vc7Ze6/+cX6/+8rvhgtDNcmaOXNvss5+rLX3Xuu7vvseYYDorZdZuXxrANCHrh7LM/uHqvp7Meg5weuaqFo3YHxUNCpJYlCd34cAISrx16SPkWiMNI2V3dbJT0XkO+1uuH30zC37Ftq0sJ/5xutlVmRreP4nfzZcGx67VtArKhV3PED0Ee8jUfXXbuBS9EYE5wzGGVDo5uGpGONXWlMHvrD8vG9M9m1b1AG6bbOTi67zUw998JJKNdniKumrupNdosaoiKJqEBH5DRn4YnoFUFVEoqiKc9YktQRf+F92WvnGoTNv/l7fxn4/ZqHxzYev3litZXdaMa+ammj5bu5VRIyAlZ7xh6sI0JujFRHTzb0emGh5i5xcrWV3Tm6/eqNcdJ3XbZvd3DYz27754FUfqo3Xt7SnulGjooo5nFb45eqtlShGqA5lZmqiefXw2bfc1LfZ6K3lL63tGy9M65Utnek8xKBiRAxHiRgjJgaVznQeqvXKltb2jReKbA1662VWVDcbtk9X20n74SxzJ3Y7PohgRQ+fFXxF9IAqIas4W+Th8SyvnMlZjbYRuS5O6fQ11eHKic1m7mNUG4IS4lH2BCVGtc1m7rOh7KSmNDeKXBdF/3tjY7IIO7LMHdfNg0ovMM54UCFxsriHjzC9QsxSJ3nudw05s8FNx/D2oeFsbaddxDQxZm4H5kW22BGqNzGG2Gik69qt4m3OiLlUjGiZ5+d3ojr/WShHql4RFSuqwjuMwmtiEQXVoybqv6iomlhEQeRcEwNrvI9weGOcV1RERAofQVnjFK31sf2RIiXsLc93jIqqMqCsOaTEqCDUnBHsoKay4PmN6qU0OsbyIDtnSJ0FIMSIMUKeR3xUjAjGgOih+6fs1zofFGP0kEDCxN+sHl/+HKoniBX27evy+PNt9k/mAKxcXmXV8iqNoZSi42l1AomVQ/YPZfHk+p4dNIHYy6OD9MyZoH0Z7ZekVyiCkqZCreL4/j172HrHk2z/xT6em+iQFxEBalXHsStrvPG1K/jTPziRU04cYXIqJ6qymH0z40xt/5C+VKgZo+KMAYG8CBgjGCNLbr9UfV5Esswy1fJsuuFn3Pa9XXgfqWSWxBmMEVRLpFcUkU43sHy8wt9euYErLl/P9HSBqpIO6L8v7qXm0RiVes3Rann2Txc0qo7GcEK76ZfUfqn6qEqaWvbsbfP+j/2Yn+6YYNlYhukFhaKIFEXEWiF1BmcN9aqj2w185FP3s38y56+v2MD+A13UDR4fwA3+78HifWRoNOP2O3fyyZseJs8j1YrjvZeeyJWXr6coIq9UMjUiRFWuuf5eHnxkHyuWVfAhkntluuUZG0mpVxOmmgX7JnOG6gkRsFY4ZlmFT3/555x16jgXnbeSTjdgFpnYkh3gfWRoJOOB7c9zzfX30skjldTQydt8asvDvPX8NZxwbJ1OvvhgS5UQlMZoyi1ff4S77ntuxvjCK5XMcv2VG3jrBWuoppapZsG/f3cnN37zf2e2eh/Qf+lfHuHC165ADpEil+SAwkeGhlMee3KSv/j4PfigDNcdMSqVzLBsJKNascTIIQcDmIHbi7ymlKvYnCz4xu1PUKs6Qi+IicAt172ei9+8ljCZU/jI8rGMTX9zLoWPfPHrjzA2khKCUqs6HvrFPp741TTrjx+ivcguMAvz8dzcC+CDMjSa8cjjB/iTj97F7r1tqhWLD+WMOt3A2tV1Vi2vUISIkUX66mEVSQxiBXoGHYQHVKlWLI8+OclTu5tUMoMxMN3yvPuSdVx80XFM7mmR55EQlE43ECa7vO8dJzE2nOJ9CeqsEaZbnqf3tGZI0kF2msXq56JQCh8ZG8340U/28O4P/5Cdz7Ro1BwhlMsoUjro2JVVsAbv48C+vFc0MWhQiudahFZBdIL3A94NSgSe39dl4kCOKhSF0up43vSGVYSO75EbOgOMut3AivEqa1fXyYuAGJnJMpPNgtgjdwY97qA8LEIMSpYZKi7hC//0P3zmKztQVRrVWeNntmxU1q6qo5Rnt7/J+nk+BMVVDc2H9nLgtkfR6QKcYex9p5GeMkZoeaydn6fbLc8Zp4zy9gvXcN/DL5Akhve/41X87rkraDc9IszA4L5xxgqVzBDjnKNkhGrFoSUZMvDUucTJvDwcIzTqjj1723z8hgf5j+/vYriRYIwpO5EFKUWE41bVsM6QJgbbA9b9etyIkqSW9t1PU+ycwo1X8HtbdO/dQ/3M5UgeD8IBqrBsJONrn/4dntrdpFFzrF5Ro/Dltncis/1HpZpaJlue5/d1ca48XqGXrk9YU8cIpInFDKh35+GAfu599Kkp3vNXP+KxnVMsG83K887BDIv2fl91TBVC7PNu8wzp8/WmkSBpid9NZvEHusQ8zntvrhRFeZyOX1PHOUOr4xFk3gKolrvOVRw/vf+5mSMK0OkGXnvGMo4/tk6nGw5euJ7M84lGSKqOu+9/jkeemOylH8U5w1SzYKielMHO93eCkjjD2HAKcbHArogIdjgrt1cvnMfpHO30LmniAq/RC5AC3TyQFxEjsjjGUOVrtz02ExOMlCjyXZeso1Ips8hiMs8BIhC7gXNOG2ekkeCDYo2wd6LD+uOH+OYNF3DCsQ26vZQSI2SpLUFI1FkPaM+ofuS3ghvLmHnBCLHlwUm5MyoOsVIGr9Qyl5mSQxheeGV0JOOObb/iO3fvZriRANBsezasH+Fdb1nHdLPAmsU8twAHGCO0256zThvnnZes4+Z/fZTlYxlX/PHJbNp4JmPDCXsnOjgnM5E4TSyV1PTuC3vpzQkmdcRugHYkTOWld015dMQIseM5cNujxDygzYLY8sSOZ+xd66luWI52D4bWcyVEpVa1/OqZJps+v53Eza5l4ZWPf/B0RkdS9h/o4jK7OBSeVy9L6YQiD3zqI2dz9m+NcdJxDS46fw1FJzA1VSzg1krIaq2Zjf5OCAdyXvj24xR7moSmRzse7QZMxZY7Q0CDMrVt18y44gyx5Zm88ylqG5aDCNIjauatn5QnyTlDiHDN9fey85kmw40EEWHvCx02vufVvO3N65jc18HZQ0MzFwbUyyGUZ/uKy9ZTdAOT+7sYU2LzEHWWPVNmYoEPSvARqikHtu3kwB1PYofTGSQkfYQ0R2wjYe7+FhH8ZE7R8RgZzBdELUkPl1g2bv4v7rrvWZaNZiAwsb/Lm96wik3XnElzslsGyTiY75hxwOB6XPAh8sJEB4A0MaDaW/HZaCpSTsgHnQEmJiqhWWAbCaaeoCX3dnAIFoidgOah7NQKeKW+fhQSQ+gEos7hC5D+PR9parn2E/dy6x1PMT6aoQov7O9y9qlj3Ph3rwcts0iZJcrsJCIMCgUH4YDZ+QnWloO63vmyttx6ff5chBLlaemkGBRnhdqpy5j+wS40dsuVd4JJbMnd9QKjFpH0pBEqpy3D1RLsSIodyUiPGyrprMQQdJYv8F6pVBzGCtd+8j6+fvsTLB/NCLHMFOefs4Jv3nABQ+MVQrOgXrGzOy6z0I20256FN54viQ9wVqikFo39HSDkRaTZ9oiUgTG0PbVzVrDyw2dTTObYsYx0OENqCXu/8hDF7iam4oi5Jz15lNHLT8G0C0DQqGge0F7a6o9bFEqt5phuea7e/BO+9cOnWT4Hn1gjrF1d57q/f4jdz7bIe6tfr1pGh1OOW1njovNWcc6Gcbrd+SX7kqrB/jl3zpZVXz849fL0VLMoV7ovUWm8bjUBJXgl6W1xO5RSxOky6Bnwz7cJk100D2VcmVuF9SREZXQs44mdU1y16R4e+PkEy8cyvJ9dMeeEf/vuUxRFxDkz08UsHaZ89h928M+fOZ9LLlhDa05qXDIfEBWMlTLnax9wCIVX9h3IyxQ39/1WUQ4elegMUnWYRtKjsEtDY8uDgjEGHXA+Q1QatYQfP/AcV226h2df6DA+kuF9nF2c3s/hRoIRmel/7lwSZ3j2+TZ33/8cb734uHnKpTNCClhhdDgtj0Bv5BCUvROdElLNHXUhR2gFW0sg9nRGCAe6ZZDslcdzJSpkieXpZ1tcteke9k50e+AslqsnJXINUYlBiTHOUg29dN6nyEOIdItYVq06f6j5OGDuhBc8faPGR9LZVaS8oHhmb3tm68qg9gJEqLx6jKkf7CRO5eAj1dOWYVILPh40B0XJMsuTT0/zwv6ckaEeMrXC5HRBCEqaGuoVR62RUK3YMhBHpZuXBGmnW8LoVjtw4bkruPTNaynaHjsHGwzEAX0D5ubhvqeXjWbz3jMi7NrTJBaxhxMGtLdCbBVkZx3D8o++hmJPk3RljeTkUXzbIwOutxVotjynnDjM6mOqPLZrimpm6XQDf/SmtbzlgjWsGM9YOV5hfDSjklmclZJK7zHEU82C/VM5IsLp60epVmyPH4T+n4otggMG8PZR0RBLZtbIzFZKnLDrmRZ5p4Su/YLkoPZacgfZqeNUTl8GQfG9OBHNgDQskBfK6HDKZz92Dp/76g6sFd55yTree+lJJKmh6AYKX94MhaD9DEsltYwOJaxcVgEpU3SrHeh0SrKkP0c4JA6Yf78upiyM1q0qy1NjBY1QyRy79jSZmi4Y7QWofkAfdD+vPkJRoknpbdlFxzdKXkQufsMq3vi6laBgM0t7uiDvBiKKRkjTg+8lVEu2KsaIanl0nJt7QHsOWCoOEIRu23P6KaOcvG6In+2YoN7LzaeeNEy16gg+DuYD5vY/J9VpfPF7AwFaLT8z6dgJWFuCNCJEWbzULUtqKTHKImMsOQuIgO+xLF/+xHn8422P0c4DJx7b4PK3HU+WWYr8lbsXmCvGzMYIO/Aq9+WLTD740q7GVEtu3mQOevk4+Eh3gfGLtT9c9H15STdDUG6pdieg7VCSnrF0yJH65xUvDQf0xPZpZ5nBNANXYLH2h4O+L0vGAUebfsYBS8YBR5l+xgFLxQFHm37GASFqdIpZCh9w1OkhGGtM04gsLMaOejFlIG8ZMex2zjCvxDvKRVU1cQZVdhuB+01iFJH44k2PEhGJJjEKPGAEbteoAjrLSh3NjwCoaFQRw3+6qsi3mtPFzjSza7u5j9LjTX/Tefr/S69ozFInzeliZ8PKt42cfuN0jPFLSS2REDT28+bc+/d5/174HEl6hRA0JrVEfIxfktNvnC4/mdkzXe1OtB9O5n4yw+FdzLwcvfY+mel2/RPV8eoZrGq0DVt3iKz+XDN6PhAVpGRXdGEOPdKfEFTFCFFRvP+ArP5ck607xMjlW4PqZbZ21o13tZudqyuN1ForGlWPmqwQo0ZjRSuN1Obt7tW1s265S7X8lLYMeLI16LbNbvjsW25qHWhvdKkz1WpioqrXIxgfqKpGVV+tJiZJrbQm2hvrZ958s27b7Pqf0M5+I3TRdX7bts2ufsZNWzrt4pIQ9ZdD4zWXZU5UNSqEI8EZWk4yqJbRfmS85kLUX3ba/i31s2/asm3Bp7MHlcr9Lyr33v3nQ0PLan9J1Cuzij0BEUIR8SHS/4urwy3IGSM4a7C92+xuNzwZVb/c3Nf54jHnf3XqRT+ennHC3M/nf3btaF6Jv68a3q7IuRp1jarWjYg5nBwQo0YRaYpht8ADzsm3ppru22O//fn9C22aK/8HVWM9Ob9eVBoAAAAASUVORK5CYII="><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רעג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רעד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6475,7 +6485,7 @@ const dsRes = q => q[1] === 1 ? M(String(q[0])) : FX(q[0], q[1]);
 // בדיקה בכפל: תוצאה × מחלק = מחולק
 const dsCheck = (q, b, a, mixA, mixB) => `${dsRes(q)} ${M('×')} ${dsH(b, mixB)} ${M('=')} ${dsH(a, mixA)}`;
 const DSK_THINK = ['error', 'claim', 'create', 'missing', 'pattern', 'multi', 'compare'];
-const DSK_THINK_NAME = { error: 'ניתוח טעות', claim: 'בדיקת טענה', create: 'יצירת תרגיל לפי תנאי', missing: 'השלמת נתון חסר', pattern: 'חוקיות והכללה', multi: 'בעיה לא שגרתית', compare: 'השוואת דרכי פתרון', estimate: 'בדיקת סבירות', story: 'מעבר בין ייצוגים' };
+const DSK_THINK_NAME = { check: 'בדיקת פתרון', error: 'ניתוח טעות', claim: 'בדיקת טענה', create: 'יצירת תרגיל לפי תנאי', missing: 'השלמת נתון חסר', pattern: 'חוקיות והכללה', multi: 'בעיה לא שגרתית', compare: 'השוואת דרכי פתרון', estimate: 'בדיקת סבירות', story: 'מעבר בין ייצוגים' };
 function dsThink(skill, kind, method) {
   const mixS = skill === 'mixed', T = (text, model, a, b, lines, multi) => ({ type: 'open', text: dsMath(text), model: dsMath(model), lines: Math.min(lines || 4, 5), multi: !!multi, word: false, topic: 'divfr', lv: 3, meta: { skill, think: kind, a, b, lv: 3 } });
   const pickNI = (lv, cond) => { for (let k = 0; k < 400; k++) { const p = dsPick(skill, lv); if (!cond || cond(p)) return p; } return null; };
@@ -7138,7 +7148,7 @@ function genFracSkill(skill, lv, o = {}) {
 // ---------- משימות חשיבה (רמה 3) ומשימות קצרות של סבירות וייצוג (רמה 2) ----------
 // אותם סוגים ושמות כמו בחילוק שברים (DSK_THINK_NAME). null – אין משימה מהסוג הזה במיומנות.
 function fsThink(skill, kind, method) {
-  const T = (text, model, lines = 4, multi = false) => ({ type: 'open', text: dsMath(text), model: dsMath(model), lines: Math.min(lines, 5), multi, word: false, topic: 'frac', lv: kind === 'estimate' || kind === 'story' ? 2 : 3,
+  const T = (text, model, lines = 4, multi = false) => ({ type: 'open', text: dsMath(text), model: dsMath(model), lines: Math.min(lines, 5), space: fsSpace(kind, lines), multi, word: false, topic: 'frac', lv: kind === 'estimate' || kind === 'story' ? 2 : 3,
     meta: { skill, think: kind, lv: 3, k: kind + ':' + text.replace(/<[^>]+>/g, '').slice(0, 90) } });
   const g = pick(FS_GIRL), b = pick(FS_BOY), fr = (n, d) => M(F(n, d));
   if (skill === 'exp') {
@@ -7366,33 +7376,56 @@ function fsThink(skill, kind, method) {
   return null;
 }
 // שאלות לדף לפי רמה – כמו בחילוק שברים: רמה 1 מדורגת, רמה 2 עם משימה קצרה בכל 4 שאלות (במצב "מעורב"), רמה 3 – 1–2 תרגילים והשאר משימות חשיבה
-function buildFracSkillQs(skills, level, count, mode, method, seen = new Set(), fig = false) {
-  const out = [], lvOf = i => level === 'mix' ? Math.min(3, 1 + Math.floor(3 * i / count)) : Number(level);
-  const n3 = Array.from({ length: count }, (_, i) => lvOf(i)).filter(l => l === 3).length, calc3 = n3 >= 5 ? 2 : n3 >= 2 ? 1 : 0;
-  const kinds = shuffle(DSK_THINK.slice()), used = new Set();
-  let i3 = 0;
-  for (let tries = 0; out.length < count && tries < count * 300; tries++) {
-    const i = out.length, sk = skills[i % skills.length], lv = lvOf(i);
+// ---------- בניית דף: שלושה סוגי דף, עצמאיים מהרמה – practice תרגול · think חשיבה · mixed משולב ----------
+// o = { type, order: 'alt' לסירוגין | 'block' גוש לכל מיומנות, est – משימת סבירות אחת, nWord – שאלות מילוליות נוספות }
+const FS_SCORE = q => (q.lv || 1) * 100 + (q.meta.sc || 0) + (q.word ? 6 : 0) + (q.type === 'frac' && !q.noWhole ? 3 : 0);
+// שטח כתיבה למשימה פתוחה: short · med · long · two (שתי דרכים, זו לצד זו) · draw (מקום לציור) · list
+const fsSpace = (kind, lines) => kind === 'compare' ? 'two' : lines <= 2 ? 'short' : lines <= 4 ? 'med' : 'long';
+// תרגול מדורג: בכל מיומנות מהקל אל המורכב, בלי לשנות את סדר המיומנויות בדף (לסירוגין נשאר לסירוגין)
+function fsPractice(skills, level, count, mode, method, seen, fig, order) {
+  const S = skills.length, out = [];
+  const lvOf = i => level === 'mix' ? Math.min(3, 1 + Math.floor(3 * i / count)) : Number(level);
+  const skOf = i => order === 'block' ? skills[Math.min(S - 1, Math.floor(i * S / count))] : skills[i % S];
+  for (let i = 0; i < count; i++) {
+    const sk = skOf(i), lv = lvOf(i), word = mode === 'word' ? true : mode === 'calc' ? false : (i % 3 === 2);
     let q = null;
-    if (lv === 3 && i3 >= calc3 && (mode !== 'word' || i3 % 2 === 1)) {
-      const rot = kinds.slice(tries % kinds.length).concat(kinds.slice(0, tries % kinds.length));
-      const order = mode === 'word' ? ['multi'] : kinds.filter(k => !used.has(k)).concat(rot);
-      for (const k of order) { q = fsThink(sk, k, method); if (q) { used.add(k); break; } }
+    for (let t = 0; t < 80 && !q; t++) {
+      const c = genFracSkill(sk, lv, { word, method, fig });
+      if (!c || seen.has(c.meta.k)) continue;
+      // אותו סיפור לא פעמיים ברצף באותה מיומנות
+      if (c.meta.tpl && t < 50 && out.filter(x => x.meta.skill === sk).slice(-2).some(x => x.meta.tpl === c.meta.tpl)) continue;
+      q = c;
     }
-    if (!q && lv === 2 && mode === 'mix' && i % 4 === 3) q = fsThink(sk, i % 8 === 7 ? 'story' : 'estimate', method);
-    if (!q) {
-      const word = mode === 'word' ? true : mode === 'calc' ? false : (i % 3 === 2);
-      q = genFracSkill(sk, lv, { word, method, fig });
-    }
-    if (!q) continue;
-    const key = q.meta.k;
-    if (seen.has(key) || (q.meta.tpl && out.slice(-3).some(x => x.meta.tpl === q.meta.tpl) && tries % 7)) continue;
-    seen.add(key); out.push(q); if (lv === 3) i3++;
+    if (q) { seen.add(q.meta.k); out.push(q); }
   }
-  if (level === '1') {
-    const score = q => (q.meta.sc || 0) + (q.word ? 6 : 0) + (q.type === 'frac' && !q.noWhole ? 3 : 0);
-    out.sort((x, y) => score(x) - score(y));
+  skills.forEach(sk => {
+    const idx = out.map((q, i) => q.meta.skill === sk ? i : -1).filter(i => i >= 0), qs = idx.map(i => out[i]).sort((a, b) => FS_SCORE(a) - FS_SCORE(b));
+    idx.forEach((i, j) => { out[i] = qs[j]; });
+  });
+  return out;
+}
+// משימות חשיבה מהמיומנויות שנבחרו – סוגים מגוונים (סוג לא חוזר כשאפשר), לסירוגין בין המיומנויות.
+// ברמות 1–2 קודם משימות הסבירות והייצוג. (בשלב זה רוב המשימות בנויות לרמה 3 – לפי האפיון הן ייבנו מחדש בשלב ג'.)
+function fsThinkSet(skills, level, n, method, seen = new Set()) {
+  const out = [], used = new Set(), low = level !== 'mix' && Number(level) < 3;
+  const kinds = (low ? ['estimate', 'story'] : []).concat(shuffle(DSK_THINK.slice()));
+  for (let tries = 0; out.length < n && tries < n * 30; tries++) {
+    const sk = skills[(out.length + tries) % skills.length];
+    let q = null;
+    for (const k of kinds.filter(x => !used.has(x)).concat(shuffle(kinds.slice()))) { const c = fsThink(sk, k, method); if (c && !seen.has(c.meta.k)) { q = c; break; } }
+    if (q) { seen.add(q.meta.k); used.add(q.meta.think); out.push(q); }
   }
+  return out;
+}
+function buildFracSkillQs(skills, level, count, mode, method, seen = new Set(), fig = false, o = {}) {
+  const type = o.type || 'practice';
+  if (type === 'think') return fsThinkSet(skills, level, Math.min(count, 6), method, seen);
+  const nT = type === 'mixed' ? (count <= 6 ? 1 : 2) : 0;
+  let out = fsPractice(skills, level, count - nT, mode, method, seen, fig, o.order);
+  if (o.nWord) out = out.concat(fsPractice(skills, level, o.nWord, 'word', method, seen, false, o.order));
+  if (o.est) for (const sk of shuffle(skills.slice())) { const q = fsThink(sk, 'estimate', method); if (q && !seen.has(q.meta.k)) { seen.add(q.meta.k); out.push(q); break; } }
+  // משולב: משימות החשיבה מאותן מיומנויות, ברמה של סוף התרגול
+  if (nT) out = out.concat(fsThinkSet(skills, level === 'mix' ? '3' : level, nT, method, seen));
   return out;
 }
 // ---------- תזכורות: מושגית (משמעות + ציור), אלגוריתמית (צעדים ממוספרים), קצרה ----------
@@ -7459,6 +7492,13 @@ function fsTipsHTML(skills, method) {
 }
 // ===== חבילות "תרגול לפי מיומנות" במחולל דפי התרגול: נושא ← מיומנויות, רמות, תזכורות ובניית שאלות =====
 // כל חבילה מקבלת פאנל משלה (מופיע כשהנושא מסומן). pfx – קידומת המזהים בפאנל (Panel / Tip / Fig / All).
+// קבוצות המיומנויות בפאנל (לפי האפיון – 14 מיומנויות; מוצגות רק המיומנויות שכבר נבנו)
+const FSK_GROUPS = [
+  { name: 'מושג השבר', ids: ['mean', 'eq', 'line'] },
+  { name: 'ייצוג והשוואה', ids: ['exp', 'red', 'mix', 'cmp'] },
+  { name: 'חיבור וחיסור', ids: ['same', 'diff', 'mixas', 'comp'] },
+  { name: 'שבר וכמות', ids: ['qty', 'whole', 'est'] }
+];
 const SKP_NOTE = 'כשנבחרה מיומנות אחת – כל השאלות בדף ממנה בלבד. כמה מיומנויות – לסירוגין, ובתרגול של יותר משתי מיומנויות התזכורת מוצגת בקצרה (שורה לכל מיומנות). <b>רמת הקושי</b> נקבעת לפי מורכבות ההבנה והחישוב בתוך המיומנות – לא מוסיפה מיומנות אחרת';
 const SKP = [
   { topic: 'divfr', pfx: 'dsk', icon: '➗', title: 'חילוק שברים', skills: DSK, levels: DSK_LEVELS, build: buildDivSkillQs, tips: dsTipsHTML, on: () => !!TOPIC.divfr,
@@ -7466,11 +7506,42 @@ const SKP = [
     figLabel: 'המחשה חזותית ליד תרגילי הרמה הקלה (פס שברים לסימון קבוצות)',
     note: SKP_NOTE + ', ולא קובעת אם התשובה שלמה. ההסברים בדף התשובות – לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).' },
   { topic: 'frac', pfx: 'fsk', icon: '🍕', title: 'שברים', skills: FSK, levels: FSK_LEVELS, build: buildFracSkillQs, tips: fsTipsHTML, on: () => !!TOPIC.frac && GRADE >= 5,
+    typed: true, think: fsThinkSet, groups: FSK_GROUPS, defType: () => GRADE === 6 ? 'mixed' : 'practice', defLevel: () => GRADE === 6 ? '2' : '1',
     tipOpts: [['none', 'ללא תזכורת'], ['short', 'קצרה וממוקדת – שורה אחת לכל מיומנות'], ['concept', 'מושגית – מה זה אומר, עם ציור של פסי שברים', 1], ['algo', 'אלגוריתמית – צעדי הפתרון, ממוספרים']],
     figLabel: 'המחשה חזותית ליד תרגילי הרמה הקלה (פסי שברים)',
     note: SKP_NOTE + '. בהרחבה ובצמצום אין בעיות מילוליות. ההסברים בדף התשובות – לפי שיטת התזכורת (בלי תזכורת – הסבר מושגי).' }
 ];
-const skpPanelHTML = P => `<div class="dsk-panel" id="${P.pfx}Panel" hidden>
+const SK_TYPES = [['practice', '📝 תרגול – ביסוס שליטה', 'מדורג מהקל אל המורכב. בדף התשובות: תשובה, שלבים ויחידות.'],
+  ['think', '🧠 חשיבה מתמטית', 'עד 6 משימות של נימוק, הסקה, הכללה, ניתוח טעויות והשוואת דרכים, עם שטח כתיבה לפי המשימה. בדף התשובות: פתרון לדוגמה.'],
+  ['mixed', '🔀 משולב', 'תרגול מדורג, ובסופו 1–2 משימות חשיבה מאותן מיומנויות.']];
+const SK_TNAME = { practice: 'דף תרגול', think: 'דף חשיבה', mixed: 'דף משולב' };
+// פאנל עם סוג דף וקבוצות מתקפלות (חבילה עם groups)
+const skpGroupedHTML = P => {
+  const first = P.skills[0], dt = P.defType();
+  const row = k => `<div class="skrow"><label class="chk"><input type="checkbox" value="${k.id}" ${k === first ? 'checked' : ''}> ${k.name} <span class="muted">(למשל ${k.ex()})</span></label><button type="button" class="sklv" aria-expanded="false" title="מה משתנה בין הרמות">?</button><div class="sklvbox" hidden>${P.levels[k.id].map((t, i) => `<div><b>${['קלה', 'בינונית', 'קשה'][i]}:</b> ${t}</div>`).join('')}</div></div>`;
+  const groups = P.groups.map(g => { const ks = g.ids.map(id => P.skills.find(k => k.id === id)).filter(Boolean); if (!ks.length) return '';
+    return `<details class="skgrp"${ks.includes(first) ? ' open' : ''}><summary>${g.name} <span class="muted small">(${ks.length})</span></summary><label class="chk skgall"><input type="checkbox" class="skgallc"> כל הקבוצה</label>${ks.map(row).join('')}</details>`; }).join('');
+  return `<div class="dsk-panel" id="${P.pfx}Panel" hidden>
+          <div class="lbl2">${P.icon} ${P.title} – דף לפי מיומנות</div>
+          <div class="sktype"><b>סוג הדף:</b> ${SK_TYPES.map(([v, t]) => `<label class="chk"><input type="radio" name="${P.pfx}Type" value="${v}"${v === dt ? ' checked' : ''}> ${t}</label>`).join('')}</div>
+          <p class="muted small" id="${P.pfx}TypeNote">${SK_TYPES.find(x => x[0] === dt)[2]}</p>
+          <p class="muted small">ברירת המחדל לכיתה ${GRADE === 6 ? 'ו\'' : 'ה\''}: ${SK_TNAME[dt]}, רמה ${P.defLevel()}. כל סוגי הדף וכל הרמות פתוחים.</p>
+          <div class="lbl2">מיומנויות:</div>
+          <div class="dsk-skills">${groups}
+            <label class="chk"><input type="checkbox" id="${P.pfx}All"> 🔀 תרגול מעורב – כל המיומנויות</label></div>
+          <label id="${P.pfx}OrderL" hidden>כשנבחרו כמה מיומנויות:
+            <select id="${P.pfx}Order"><option value="alt">לסירוגין</option><option value="block">גוש לכל מיומנות</option></select></label>
+          <details class="skmore"><summary>אפשרויות נוספות</summary>
+            <label>תזכורת לפני התרגול:
+              <select id="${P.pfx}Tip">${P.tipOpts.map(([v, t, sel]) => `<option value="${v}"${sel ? ' selected' : ''}>${t}</option>`).join('')}</select>
+            </label>
+            <label class="chk"><input type="checkbox" id="${P.pfx}Fig" checked> 🖍️ ${P.figLabel}</label>
+            <label class="chk"><input type="checkbox" id="${P.pfx}Est"> 🎯 להוסיף לדף התרגול משימת סבירות אחת</label>
+            <p class="muted small">${P.note}</p>
+          </details>
+        </div>`;
+};
+const skpPanelHTML = P => P.groups ? skpGroupedHTML(P) : `<div class="dsk-panel" id="${P.pfx}Panel" hidden>
           <div class="lbl2">${P.icon} ${P.title} – איזו מיומנות תרצו לתרגל?</div>
           <div class="dsk-skills">${P.skills.map((k, i) => `<label class="chk"><input type="checkbox" value="${k.id}" ${i === 0 ? 'checked' : ''}> ${i + 1}. ${k.name} <span class="muted">(למשל ${k.ex()})</span></label>`).join('')}
             <label class="chk"><input type="checkbox" id="${P.pfx}All"> ${P.skills.length + 1}. 🔀 תרגול מעורב – כל המיומנויות</label></div>
@@ -20764,15 +20835,28 @@ function wsQuestionHTML(q, n, noGrid) {
   let ans;
   if (q.type === 'num') ans = (q.est ? `<div class="wsans wsest">אומדן: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>` : '') + `<div class="wsans">תשובה: <span class="wsline"></span>${q.unit ? ' ' + q.unit : ''}</div>`;
   else if (q.type === 'frac') ans = `<div class="wsans">תשובה: <span class="wsfrac">${q.noWhole ? '' : '<span class="wsbox big"></span>'}<span class="wsstack"><span class="wsbox"></span><span class="wsbar"></span><span class="wsbox"></span></span></span></div>`;
-  else if (q.type === 'open') ans = `<div class="wsopen" style="--n:${q.lines || 4}"></div>`; // משימת חשיבה – שורות לכתיבת נימוק ודרך
+  else if (q.type === 'open') ans = q.space ? spaceHTML(q, false) : `<div class="wsopen" style="--n:${q.lines || 4}"></div>`; // משימת חשיבה – שטח כתיבה לפי המשימה (או שורות)
   else if (q.type === 'fill') ans = ''; // משבצות בתוך התרגיל עצמו
   else ans = `<div class="wschoices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
   const wordy = q.steps && q.steps.length >= 3 && q.text.replace(/<[^>]+>/g, '').length > 70;
   const grid = noGrid || q.type === 'open' ? '' : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
   const kind = q.type === 'open' && q.meta && typeof DSK_THINK_NAME !== 'undefined' && DSK_THINK_NAME[q.meta.think] ? `<span class="wskind">${DSK_THINK_NAME[q.meta.think]}</span> ` : '';
-  return `<div class="wsq${q.type === 'open' ? ' wsopenq' + ((q.lines || 0) >= 4 ? ' wide' : '') : ''}"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${kind}${q.text}</div></div>${seqPlain(q.fig)}${ans}</div>${grid}</div>`;
+  return `<div class="wsq${q.type === 'open' ? ' wsopenq' + ((q.lines || 0) >= 4 || (q.space && q.space !== 'short') ? ' wide' : '') : ''}"><div class="qmain"><div class="wsqhead"><span class="wsnum">${n}</span><div class="qtext">${kind}${q.text}</div></div>${seqPlain(q.fig)}${ans}</div>${grid}</div>`;
 }
 
+// שטח כתיבה למשימה פתוחה לפי q.space – בפסטל ובמחברת שורות, במבחן משבצות. two – שתי תיבות זו לצד זו ושורת מסקנה; draw – מקום לציור
+const SPACE_LINES = { short: 2, med: 4, long: 7, list: 5, draw: 3 }, SPACE_CM = { short: 2.5, med: 4, long: 6, list: 4.5, draw: 4 };
+function spaceHTML(q, exam) {
+  const s = q.space;
+  if (s === 'two') return exam ? `<div class="ex-two"><div><b>דרך א'</b><div class="ex-grid sp" style="min-height:4.5cm"></div></div><div><b>דרך ב'</b><div class="ex-grid sp" style="min-height:4.5cm"></div></div></div>`
+    : `<div class="wstwo"><div><b>דרך א'</b><div class="wsopen" style="--n:5"></div></div><div><b>דרך ב'</b><div class="wsopen" style="--n:5"></div></div></div><div class="wsans">מסקנה: <span class="wsline long"></span></div>`;
+  const draw = s === 'draw' ? '<div class="wsdraw"></div>' : '';
+  return draw + (exam ? `<div class="ex-grid sp" style="min-height:${SPACE_CM[s] || 4}cm"></div>` : `<div class="wsopen" style="--n:${SPACE_LINES[s] || 4}"></div>`);
+}
+// מחוון בדף התשובות: מה מצפים לראות, תשובות נוספות, טעות צפויה
+function rubricHTML(r) {
+  return `<div class="wsrub"><b>מחוון – מה מצפים לראות בתשובה:</b><ul>${(r.expect || []).map(x => `<li>${x}</li>`).join('')}</ul>${r.alt ? `<div><b>תשובות או דרכים נוספות:</b> ${r.alt}</div>` : ''}${r.mistake ? `<div><b>טעות צפויה:</b> ${r.mistake}</div>` : ''}</div>`;
+}
 function examQuestionHTML(q, n) {
   let ans;
   if (q.type === 'choice') ans = `<div class="ex-choices${chPics(q.choices) ? ' pics' : ''}">${q.choices.map((c, i) => `<div>${chLet(i)} ${c}</div>`).join('')}</div>`;
@@ -20784,7 +20868,7 @@ function examQuestionHTML(q, n) {
   const open = q.type === 'open', wordy = !open && q.steps && q.steps.length >= 3 && plain.length > 60;
   const work = open ? '<div class="ex-work">הציגו את דרך הפתרון והנימוק במשבצות.</div>' : wordy ? '<div class="ex-work">הציגו את דרך הפתרון.</div>' : '';
   // משימת חשיבה: משבצות לכל הרוחב, בגובה לפי היקף המשימה
-  const grid = open ? `<div class="ex-grid xl" style="min-height:${((q.lines || 4) * 0.95 + 1.2).toFixed(1)}cm"></div>` : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
+  const grid = open && q.space ? spaceHTML(q, true) : open ? `<div class="ex-grid xl" style="min-height:${((q.lines || 4) * 0.95 + 1.2).toFixed(1)}cm"></div>` : `<div class="ex-grid${wordy ? ' big' : q.type === 'choice' ? ' sm' : ''}"></div>`;
   const kind = open && q.meta && typeof DSK_THINK_NAME !== 'undefined' && DSK_THINK_NAME[q.meta.think] ? `<span class="wskind">${DSK_THINK_NAME[q.meta.think]}</span> ` : '';
   return `<div class="ex-q${open ? ' ex-open' : ''}"><div class="qmain"><div class="wsqhead"><span class="ex-num">${n}</span><div class="qtext">${kind}${q.text}</div></div>${seqPlain(q.fig)}${work}${ans}</div>${grid}</div>`;
 }
@@ -21105,17 +21189,37 @@ function printBuilder() {
   const letters = 'אבג';
   // תרגול לפי מיומנות (חילוק שברים, שברים): פאנל המיומנויות של נושא מופיע כשהנושא מסומן
   const packs = SKP.filter(P => P.on() && $(P.pfx + 'Panel'));
-  const pkBoxes = P => [...$(P.pfx + 'Panel').querySelectorAll('.dsk-skills input:not([id])')];
-  const dskSync = () => packs.forEach(P => { $(P.pfx + 'Panel').hidden = !app.querySelector(`.wstopics:not(.drtopics) input[value="${P.topic}"]:checked`); });
+  const pkBoxes = P => [...$(P.pfx + 'Panel').querySelectorAll('.dsk-skills input[type=checkbox][value]')];
+  // רמת ברירת המחדל לפי הכיתה – רק בפעם הראשונה שהפאנל נפתח, ורק אם המורה עוד לא בחרה רמה
+  $('wl').addEventListener('change', () => { $('wl').dataset.touched = '1'; });
+  const dskSync = () => packs.forEach(P => {
+    const pn = $(P.pfx + 'Panel'), on = !!app.querySelector(`.wstopics:not(.drtopics) input[value="${P.topic}"]:checked`);
+    if (on && pn.hidden && P.defLevel && !$('wl').dataset.touched && !pn.dataset.shown) $('wl').value = P.defLevel();
+    if (on) pn.dataset.shown = '1';
+    pn.hidden = !on;
+  });
   app.querySelectorAll('.wstopics:not(.drtopics) input').forEach(c => c.addEventListener('change', dskSync));
   dskSync();
   packs.forEach(P => {
     const all = $(P.pfx + 'All');
     all.onchange = () => pkBoxes(P).forEach(c => { c.checked = all.checked; });
     pkBoxes(P).forEach(c => c.addEventListener('change', () => { all.checked = pkBoxes(P).every(x => x.checked); }));
+    if (!P.groups) return;
+    // פאנל מקובץ: "כל הקבוצה", סדר המיומנויות (כשנבחרו כמה), "?" ליד מיומנות, הסבר לסוג הדף
+    const pn = $(P.pfx + 'Panel'), grs = [...pn.querySelectorAll('.skgrp')];
+    const sync = () => { grs.forEach(g => { const bx = [...g.querySelectorAll('input[value]')]; g.querySelector('.skgallc').checked = bx.every(x => x.checked); }); $(P.pfx + 'OrderL').hidden = pkBoxes(P).filter(x => x.checked).length < 2; };
+    grs.forEach(g => { g.querySelector('.skgallc').onchange = e => { g.querySelectorAll('input[value]').forEach(x => { x.checked = e.target.checked; }); all.checked = pkBoxes(P).every(x => x.checked); sync(); }; });
+    pkBoxes(P).forEach(c => c.addEventListener('change', sync));
+    all.addEventListener('change', () => { if (all.checked) grs.forEach(g => { g.open = true; }); sync(); });
+    pn.querySelectorAll('.sklv').forEach(bt => { bt.onclick = () => { const bx = bt.nextElementSibling; bx.hidden = !bx.hidden; bt.setAttribute('aria-expanded', String(!bx.hidden)); }; });
+    pn.querySelectorAll(`input[name="${P.pfx}Type"]`).forEach(r => { r.onchange = () => { $(P.pfx + 'TypeNote').textContent = SK_TYPES.find(x => x[0] === r.value)[2]; }; });
+    sync();
   });
   // החבילות הפעילות בדף: [{ P, skills, method, fig }] או null
-  const dskOpts = topics => { const L = packs.filter(P => topics.includes(P.topic)).map(P => ({ P, skills: pkBoxes(P).filter(x => x.checked).map(x => x.value), method: $(P.pfx + 'Tip').value, fig: $(P.pfx + 'Fig').checked })); return L.length ? L : null; };
+  const dskOpts = topics => { const L = packs.filter(P => topics.includes(P.topic)).map(P => ({ P, skills: pkBoxes(P).filter(x => x.checked).map(x => x.value), method: $(P.pfx + 'Tip').value, fig: $(P.pfx + 'Fig').checked,
+    type: P.typed ? (app.querySelector(`input[name="${P.pfx}Type"]:checked`) || { value: 'practice' }).value : null, order: $(P.pfx + 'Order') ? $(P.pfx + 'Order').value : 'alt', est: !!($(P.pfx + 'Est') && $(P.pfx + 'Est').checked) })); return L.length ? L : null; };
+  // אפשרויות הבנייה של חבילה עם סוגי דף (לחבילה בלי סוגי דף – לא נשלח כלום, והיא בונה כמו קודם)
+  const dskBo = (x, extra) => x.P.typed ? Object.assign({ type: x.type, order: x.order, est: x.est }, extra) : undefined;
   const dskName = x => x.skills.length === 1 ? x.P.skills.find(k => k.id === x.skills[0]).name : x.skills.length === x.P.skills.length ? 'תרגול מעורב – כל המיומנויות' : 'תרגול מעורב: ' + x.skills.map(id => x.P.skills.find(k => k.id === id).name).join(' · ');
   const dskMeth = x => x.method !== 'none' && x.method !== 'short' ? x.method : 'concept';
   $('wgo').onclick = () => wsGate(() => {
@@ -21124,14 +21228,17 @@ function printBuilder() {
     const dsk = dskOpts(topics), dskOnly = !!dsk && dsk.length === 1 && topics.length === 1;
     const noSk = dsk && dsk.find(x => !x.skills.length);
     if (noSk) { $('wmsg').textContent = `בחרו לפחות מיומנות אחת ב${noSk.P.title} 🙂`; return; }
+    const thinkMix = dsk && !dskOnly && dsk.find(x => x.type === 'think');
+    if (thinkMix) { $('wmsg').textContent = `דף חשיבה ב${thinkMix.P.title} – רק כשהנושא נבחר לבד. בחרו "משולב" או "תרגול", או השאירו רק את הנושא הזה 🙂`; return; }
+    const typed = dskOnly && dsk[0].P.typed ? dsk[0].type : null;
     const dskNames = dsk ? dsk.map(dskName).join(' | ') : '';
     const level = $('wl').value, count = Number($('wc').value), versions = Number($('wv').value);
     const wq = $('wwq').value, wordOnly = wq === 'only', drill = wq !== 'auto' && !wordOnly, nWord = drill ? Number(wq) : 0;
-    const base = wordOnly ? 'שאלות מילוליות' : 'דף תרגול';
+    const base = typed === 'think' ? 'דף חשיבה' : typed === 'mixed' ? 'דף תרגול וחשיבה' : wordOnly ? 'שאלות מילוליות' : 'דף תרגול';
     const title = $('wt').value.trim() || (dskOnly ? `${base} – ${dsk[0].P.title}` : topics.length === 1 ? `${base} – ${TOPIC[topics[0]].name}` : `${base} במתמטיקה`);
     const tTopics = dsk ? topics.filter(t => !dsk.some(x => x.P.topic === t)) : topics;
     const tips = ($('wtips').checked && tTopics.length ? `<div class="wstips"><b>📘 תזכורת</b><ul>${tTopics.flatMap(t => TOPIC[t].tips.slice(0, tTopics.length > 2 ? 2 : 4)).map(x => `<li>${x}</li>`).join('')}</ul></div>` : '') + (dsk ? dsk.map(x => x.P.tips(x.skills, x.method)).join('') : '');
-    const skillLine = dsk ? dsk.map(x => `<div class="wsskill">${x.P.icon} ${dskName(x)} · ${$('wl').selectedOptions[0].textContent.trim()}</div>`).join('') : '';
+    const skillLine = dsk ? dsk.map(x => `<div class="wsskill">${x.P.icon} ${dskName(x)}${x.type && x.type !== 'practice' && (dskOnly || x.type === 'mixed') ? ' · ' + SK_TNAME[x.type] : ''} · ${$('wl').selectedOptions[0].textContent.trim()}</div>`).join('') : '';
     const noGrid = !$('wgrid').checked;
     const wholeOnly = $('wwhole') && $('wwhole').checked;
     const examSt = !!$('wstyle') && $('wstyle').value === 'exam';
@@ -21141,11 +21248,15 @@ function printBuilder() {
       : `<div class="wsqs${noGrid ? ' nogrid' : ''}${dense ? ' dsk-dense' : ''}">${qs.map((q, i) => wsQuestionHTML(q, start + i + 1, noGrid)).join('')}</div>`;
     let wordShort = false;
     // תרגול לפי מיומנות: שאלות הנושא (חילוק שברים / שברים) מוחלפות בשאלות מהמיומנויות שנבחרו (באותה רמה, ותרגיל ↔ מילולית נשמר)
-    const dskFix = qs => { if (!dsk) return qs; const seen = new Set(), k = {}; return qs.map(q => { const x = dsk.find(y => y.P.topic === q.topic); if (!x) return q; const i = k[q.topic] = (k[q.topic] || 0) + 1; return x.P.build([x.skills[(i - 1) % x.skills.length]], String(q.lv || (level === 'mix' ? 2 : level)), 1, isWordQ(q) ? 'word' : 'calc', dskMeth(x), seen, x.fig)[0] || q; }); };
+    const dskFix = qs => { if (!dsk) return qs; const seen = new Set(), k = {}; return qs.map(q => { const x = dsk.find(y => y.P.topic === q.topic); if (!x) return q; const i = k[q.topic] = (k[q.topic] || 0) + 1; return x.P.build([x.skills[(i - 1) % x.skills.length]], String(q.lv || (level === 'mix' ? 2 : level)), 1, isWordQ(q) ? 'word' : 'calc', dskMeth(x), seen, x.fig, dskBo(x, { type: 'practice', est: false }))[0] || q; }); };
+    // משולב עם נושאים נוספים: 1–2 משימות חשיבה של החבילה בסוף הדף
+    const dskTail = qs => { if (!dsk || dskOnly) return qs; const seen = new Set(qs.map(q => q.meta && q.meta.k).filter(Boolean)); return dsk.filter(x => x.type === 'mixed' && x.P.think).reduce((a, x) => a.concat(x.P.think(x.skills, level === 'mix' ? '3' : level, count <= 6 ? 1 : 2, dskMeth(x), seen)), qs); };
     const sheets = Array.from({ length: versions }, () => {
-      if (dskOnly) { const x = dsk[0], seen = new Set(); return x.P.build(x.skills, level, count, wordOnly ? 'word' : drill ? 'calc' : 'mix', dskMeth(x), seen, x.fig).concat(nWord ? x.P.build(x.skills, level, nWord, 'word', dskMeth(x), seen) : []); }
-      if (wordOnly) { const w = dskFix(buildWordQs(topics, level, count, wholeOnly, true)); if (w.length < count) wordShort = true; return w; }
-      const a = dskFix(buildWorksheet(topics, level, count, drill, wholeOnly)), w = nWord ? dskFix(buildWordQs(topics, level, nWord, wholeOnly)) : []; if (w.length < nWord) wordShort = true; return a.concat(w);
+      if (dskOnly) { const x = dsk[0], seen = new Set(), md = wordOnly ? 'word' : drill ? 'calc' : 'mix';
+        if (x.P.typed) return x.P.build(x.skills, level, count, md, dskMeth(x), seen, x.fig, dskBo(x, { nWord }));
+        return x.P.build(x.skills, level, count, md, dskMeth(x), seen, x.fig).concat(nWord ? x.P.build(x.skills, level, nWord, 'word', dskMeth(x), seen) : []); }
+      if (wordOnly) { const w = dskFix(buildWordQs(topics, level, count, wholeOnly, true)); if (w.length < count) wordShort = true; return dskTail(w); }
+      const a = dskFix(buildWorksheet(topics, level, count, drill, wholeOnly)), w = nWord ? dskFix(buildWordQs(topics, level, nWord, wholeOnly)) : []; if (w.length < nWord) wordShort = true; return dskTail(a.concat(w));
     });
     if (wordOnly && sheets.every(s => !s.length)) { $('wmsg').textContent = 'בנושאים שנבחרו אין שאלות מילוליות 🙂 נסו נושא אחר (למשל חיבור/חיסור, כפל/חילוק, שברים, מדידה או עשרוניים).'; return; }
     const vname = v => versions > 1 ? ` – נוסח ${letters[v]}` : '';
@@ -21162,7 +21273,7 @@ function printBuilder() {
     if ($('wkey').checked) out += sheets.map((qs, v) => `
       <section class="ws-page wskey${dsk ? ' dsk-key' : ''}${kcl}">
         <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>${skillLine}
-        <ol>${qs.map(q => dsk && q.type === 'open' ? `<li><span class="wskind">${DSK_THINK_NAME[q.meta.think] || ''}</span> <div class="kmodel">${correctHTML(q)}</div>${q.multi ? '<div class="wsexp">✱ יש עוד תשובות נכונות – זה פתרון לדוגמה.</div>' : ''}</li>`
+        <ol>${qs.map(q => dsk && q.type === 'open' ? `<li><span class="wskind">${DSK_THINK_NAME[q.meta.think] || ''}</span> <div class="kmodel">${q.rubric ? '<b>פתרון לדוגמה:</b> ' : ''}${correctHTML(q)}</div>${q.multi ? '<div class="wsexp">✱ יש עוד תשובות נכונות – זה פתרון לדוגמה.</div>' : ''}${q.rubric ? rubricHTML(q.rubric) : ''}</li>`
           : `<li><b>${q.keyPre ? q.keyPre + ' ' : ''}${correctHTML(q)}${q.keyUnit ? ' ' + q.keyUnit : ''}</b>${dsk || $('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
       </section>`).join('');
     $('wsout').innerHTML = out;
@@ -21194,7 +21305,7 @@ function printBuilder() {
         paginateSheets();
       };
       const even = P => qs => { const per = Math.ceil(qs.length / P), r = []; for (let k = 0; k < qs.length; k += per) r.push(qs.slice(k, k + per)); return r; };
-      const think = sheets.some(qs => qs.some(q => q.type === 'open' && (q.lines || 0) >= 4));
+      const think = sheets.some(qs => qs.some(q => q.type === 'open' && ((q.lines || 0) >= 4 || ['long', 'two', 'draw', 'list'].includes(q.space))));
       const pg = pagesOf()[0] || [];
       if (pg.length === 1 && !fits() && !examSt) render(qs => [qs], think ? ' dsk-l3fit' : ' dsk-tight');
       if (pg.length > 1) {
@@ -21211,7 +21322,8 @@ function printBuilder() {
     }
     $('wprint').classList.remove('hidden');
     $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
-    $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".' + (wordShort ? (wordOnly ? ' (אלו כל השאלות המילוליות שיש בנושאים שנבחרו.)' : ' (בנושאים שנבחרו אין מספיק שאלות מילוליות – נוספו כמה שיש.)') : '');
+    $('wmsg').textContent = 'הדף מוכן – גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".' + (typed === 'think' && count > 6 ? ' (בדף חשיבה – עד 6 משימות.)' : '')
+      + (dsk && dsk.some(x => x.type && x.type !== 'practice') && level !== '3' && level !== 'mix' ? ' (שימו לב: בשלב זה רוב משימות החשיבה עדיין בנויות לרמה 3. משימות לרמות 1–2 ייבנו בהמשך.)' : '') + (wordShort ? (wordOnly ? ' (אלו כל השאלות המילוליות שיש בנושאים שנבחרו.)' : ' (בנושאים שנבחרו אין מספיק שאלות מילוליות – נוספו כמה שיש.)') : '');
   });
   $('wexam').onclick = () => wsGate(() => {
     const versions = Number($('wv').value);
