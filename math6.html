@@ -467,6 +467,7 @@ html.embed body { padding-top: 0; }
   .ws-pastel .wsqs.dsk-dense .wsq .ex-grid { grid-area: g; margin: 4px 0 0; }
   .wsqs.dsk-dense .wsbox { height: 24px; width: 30px; }
   .dsqfig { max-width: 100%; width: 170px; height: auto; margin: 2px 0 0; }
+  .fgfig { display: block; max-width: 100%; height: auto; margin: 3px 0 0; } .fgfig.fgsm { max-width: 60%; } .fgfig.fgline { width: 330px; }
   .box.fbx { min-width: 1.9em; min-height: 1.25em; border-width: 1.5px; vertical-align: middle; }
   .dsk-tips.short li { margin: 2px 0; }
   .dswhy { display: block; margin-top: 4px; font-size: 0.95em; color: #3d3a5c; }
@@ -497,6 +498,7 @@ html.embed body { padding-top: 0; }
   .wskey.dsk-key li { padding: 6px 0 7px; border-bottom: 1px dashed #cfc8de; break-inside: avoid; }
   .wskey.dsk-key .wsexp { font-size: 0.95rem; color: #333; margin-top: 2px; }
   .kmodel { margin-top: 2px; }
+  .wskey.dsk-key.dsk-keycc ol { font-size: 0.86rem; line-height: 1.32; } .wskey.dsk-key.dsk-keycc li { padding: 2px 0 3px; } .wskey.dsk-keycc .wsrub { font-size: 0.85rem; }
   .wskey.dsk-key.dsk-keyc ol { font-size: 0.93rem; line-height: 1.45; } .wskey.dsk-key.dsk-keyc li { padding: 3px 0 4px; }
   .dsk-split .wsqs.dsk-dense .ex-grid { min-height: 2.6cm; } .dsk-split .wsqs.dsk-dense .ex-grid.big { min-height: 3cm; }
   .dsk-tight .wshead { margin-bottom: 4px; }
@@ -2222,7 +2224,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רעד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רעה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6780,6 +6782,98 @@ function fsQtyFig(d, n, N) {
 }
 // משבצת ריקה בתוך תרגיל (לשאלות "השלימו")
 const FB = '<span class="box fbx">&nbsp;</span>';
+// ---------- המחשות להדפסה (שלב ב'): פסים, אוסף פריטים, עיגול, ישר מספרים, מודל פס לכמות ----------
+// כל ציור: SVG עם viewBox ורוחב קבוע, בלי גובה בכיווץ (class="fgfig": max-width 100%, height auto) – לא נמתח ולא נחתך.
+// טקסט ב-SVG – רק text-anchor="middle" (ב-RTL "end" מתהפך). שבר בציור – מונה, קו ומכנה זה מעל זה.
+const FG_INK = '#23264a', FG_P = '#f4a3c0', FG_C = '#9fc3ee', FG_G = '#b9e0a5', FG_LIGHT = '#fdeaf1';
+const fgSvg = (w, h, g, cls = '') => `<svg class="fgfig${cls ? ' ' + cls : ''}" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true">${g}</svg>`;
+const fgT = (x, y, t, size = 13, bold) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}"${bold ? ' font-weight="700"' : ''} fill="${FG_INK}">${t}</text>`;
+// שבר (או מספר מעורב) בציור, ממורכז ב-x; y – קו השבר
+function fgFrac(x, y, n, d, w = 0, size = 12) {
+  if (d === 1 || n === 0) return fgT(x, y + size * 0.4, String(w + (d === 1 ? n : 0)), size + 1);
+  const len = Math.max(String(n).length, String(d).length) * size * 0.62 + 4, wx = w ? x + len / 2 + 2 : x, ws = w ? fgT(x - len / 2 - 2, y + size * 0.4, String(w), size + 1) : '';
+  return ws + fgT(wx, y - 3, String(n), size) + `<line x1="${wx - len / 2}" y1="${y}" x2="${wx + len / 2}" y2="${y}" stroke="${FG_INK}" stroke-width="1.2"/>` + fgT(wx, y + size, String(d), size);
+}
+// סוגר מעל (או מתחת) לקטע, עם תווית באמצע
+function fgBrace(x1, x2, y, label, up = true) {
+  const t = up ? -5 : 5, mid = (x1 + x2) / 2;
+  return `<path d="M${x1} ${y + t} L${x1} ${y} L${x2} ${y} L${x2} ${y + t}" fill="none" stroke="${FG_INK}" stroke-width="1.2"/>`
+    + (label === '' ? '' : `<rect x="${mid - 18}" y="${y - (Array.isArray(label) ? 11 : 8)}" width="36" height="${Array.isArray(label) ? 26 : 16}" fill="#fff"/>` + (Array.isArray(label) ? fgFrac(mid, y, ...label) : fgT(mid, y + 5, label, 13, true)));
+}
+// פסים: rows = [{ d, fills: [צבע לכל חלק], dash: [..], widths: [יחסי – לחלוקה לא שווה] }], כל פס = שלם אחד באותו אורך.
+// o = { w, h (גובה פס), gap, top: { from, to, label } (סוגר מעל הפס הראשון, בחלקים), bottom: {...} (מתחת לאחרון) }
+function fgBars(rows, o = {}) {
+  const w = o.w || 230, h = o.h || 18, gap = o.gap || 8, padT = o.top ? 27 : 2, padB = o.bottom ? 27 : 2;
+  let g = '';
+  rows.forEach((row, r) => {
+    const y = padT + r * (h + gap), ws = row.widths || Array(row.d).fill(1), sum = ws.reduce((a, b) => a + b, 0);
+    let x = 2;
+    ws.forEach((pw, i) => { const ww = w * pw / sum; g += `<rect x="${x.toFixed(1)}" y="${y}" width="${ww.toFixed(1)}" height="${h}" fill="${(row.fills || [])[i] || '#fff'}" stroke="${FG_INK}" stroke-width="1.2"${row.dash && row.dash[i] ? ' stroke-dasharray="3 2"' : ''}/>`; x += ww; });
+  });
+  const H = padT + rows.length * (h + gap) - gap + padB, pw0 = w / rows[0].d, pwL = w / rows[rows.length - 1].d;
+  if (o.top) g += fgBrace(2 + o.top.from * pw0, 2 + o.top.to * pw0, padT - 12, o.top.label, true);
+  if (o.bottom) g += fgBrace(2 + o.bottom.from * pwL, 2 + o.bottom.to * pwL, H - padB + 12, o.bottom.label, false);
+  return fgSvg(w + 4, H, g);
+}
+const fgRow = (d, ...segs) => { const fills = [], dash = []; segs.forEach(([k, c, ds]) => { for (let i = 0; i < k; i++) { fills.push(c); dash.push(!!ds); } }); return { d, fills, dash }; };
+// עיגול מחולק ל-d חלקים (או לחלקים לא שווים: angles – זוויות במעלות שסכומן 360), n צבועים
+function fgCircle(d, n, o = {}) {
+  const R = o.r || 42, C = R + 3, ang = o.angles || Array(d).fill(360 / d);
+  let g = '', a0 = -90;
+  ang.forEach((a, i) => {
+    const a1 = a0 + a, p = t => [C + R * Math.cos(t * Math.PI / 180), C + R * Math.sin(t * Math.PI / 180)], [x0, y0] = p(a0), [x1, y1] = p(a1);
+    g += `<path d="M${C} ${C} L${x0.toFixed(1)} ${y0.toFixed(1)} A${R} ${R} 0 ${a > 180 ? 1 : 0} 1 ${x1.toFixed(1)} ${y1.toFixed(1)} Z" fill="${i < n ? FG_P : '#fff'}" stroke="${FG_INK}" stroke-width="1.2"/>`;
+    a0 = a1;
+  });
+  return fgSvg(2 * C, 2 * C, g, 'fgsm');
+}
+// אוסף פריטים: n פריטים, mark – כמה צבועים (מההתחלה) או רשימת מקומות; groups – חלוקה לקבוצות שוות (מסגרת סביב כל קבוצה)
+function fgSet(n, o = {}) {
+  const r = 7, s = 19, marked = i => Array.isArray(o.mark) ? o.mark.includes(i) : i < (o.mark || 0);
+  const dot = (x, y, i) => o.shape === 'square' ? `<rect x="${x - r}" y="${y - r}" width="${2 * r}" height="${2 * r}" rx="2" fill="${marked(i) ? FG_P : '#fff'}" stroke="${FG_INK}" stroke-width="1.2"/>`
+    : `<circle cx="${x}" cy="${y}" r="${r}" fill="${marked(i) ? FG_P : '#fff'}" stroke="${FG_INK}" stroke-width="1.2"/>`;
+  let g = '', W, H;
+  if (o.groups) {
+    const k = o.groups, per = n / k, cols = Math.ceil(Math.sqrt(per)), rows = Math.ceil(per / cols), gw = cols * s + 10, gh = rows * s + 10, perRow = Math.min(k, Math.max(1, Math.floor(330 / (gw + 8))));
+    for (let j = 0; j < k; j++) {
+      const gx = 2 + (j % perRow) * (gw + 8), gy = 2 + Math.floor(j / perRow) * (gh + 8);
+      g += `<rect x="${gx}" y="${gy}" width="${gw}" height="${gh}" rx="7" fill="none" stroke="#7d74a8" stroke-width="1.3" stroke-dasharray="4 3"/>`;
+      for (let i = 0; i < per; i++) g += dot(gx + 5 + s / 2 + (i % cols) * s, gy + 5 + s / 2 + Math.floor(i / cols) * s, j * per + i);
+    }
+    W = 4 + Math.min(k, perRow) * (gw + 8) - 8; H = 4 + Math.ceil(k / perRow) * (gh + 8) - 8;
+  } else {
+    const cols = o.cols || Math.min(n, 10), rows = Math.ceil(n / cols);
+    for (let i = 0; i < n; i++) g += dot(2 + s / 2 + (i % cols) * s, 2 + s / 2 + Math.floor(i / cols) * s, i);
+    W = cols * s + 4; H = rows * s + 4;
+  }
+  return fgSvg(W, H, g);
+}
+// ישר מספרים: מ-a עד b (שלמים), כל יחידה מחולקת ל-d. ticks: t = 0..(b-a)·d.
+// o = { w, labels: 'wholes' | 'ends' | 'all' | 'none' | [t...], points: [{ t, text }] (נקודה ואות מעל), boxes: [t...] (משבצת ריקה מתחת),
+//       hl: [t1, t2] (קטע מודגש), minor: false – בלי שנתות ביניים (רק שלמים, לשאלה "סמנו בעצמכם") }
+function fgLine(a, b, d, o = {}) {
+  const N = (b - a) * d, w = o.w || 330, m = 18, L = w - 2 * m, X = t => m + L * t / N, y = 30, boxes = o.boxes || [];
+  // שבר בתווית צריך כ-24 פיקסלים בין שנתות; צפוף יותר – תוויות רק לשלמים
+  if (o.labels === 'all' && L / N < 24) o = Object.assign({}, o, { labels: 'wholes' });
+  // משבצת ריקה – בשורה נפרדת מתחת לתוויות, עם קו מהשנתה, כדי שלא תסתיר מספר
+  const by = y + 40, H = boxes.length ? 92 : 66;
+  const lab = t => o.labels === 'all' || (Array.isArray(o.labels) ? o.labels.includes(t) : o.labels === 'ends' ? t === 0 || t === N : o.labels !== 'none' && t % d === 0);
+  let g = '';
+  if (o.hl) g += `<line x1="${X(o.hl[0])}" y1="${y}" x2="${X(o.hl[1])}" y2="${y}" stroke="${FG_P}" stroke-width="7" stroke-linecap="round"/>`;
+  g += `<line x1="${m - 10}" y1="${y}" x2="${w - m + 10}" y2="${y}" stroke="${FG_INK}" stroke-width="1.6"/><path d="M${w - m + 12} ${y} l-7 -4 v8 z" fill="${FG_INK}"/>`;
+  for (let t = 0; t <= N; t++) {
+    const whole = t % d === 0;
+    // minor: false – רק השנתות שמסומנות (תווית, משבצת, נקודה) ו-0: בלי לחשוף שנתות של שלמים שהתלמיד צריך למצוא
+    if (o.minor === false && t > 0 && !lab(t) && !boxes.includes(t) && !(o.points || []).some(p => p.t === t)) continue;
+    g += `<line x1="${X(t).toFixed(1)}" y1="${y - (whole ? 8 : 5)}" x2="${X(t).toFixed(1)}" y2="${y + (whole ? 8 : 5)}" stroke="${FG_INK}" stroke-width="${whole ? 1.8 : 1.2}"/>`;
+    if (boxes.includes(t)) g += `<line x1="${X(t).toFixed(1)}" y1="${y + 6}" x2="${X(t).toFixed(1)}" y2="${by}" stroke="${FG_INK}" stroke-width="1" stroke-dasharray="2 2"/><rect x="${(X(t) - 13).toFixed(1)}" y="${by}" width="26" height="22" rx="2" fill="#fff" stroke="${FG_INK}" stroke-width="1.2"/>`;
+    if (!boxes.includes(t) && lab(t)) { const v = a * d + t, wh = Math.floor(v / d), r = v % d; g += r === 0 ? fgT(X(t), y + 24, String(wh), 13) : fgFrac(X(t), y + 21, o.mixed && wh ? r : v, d, o.mixed ? wh : 0, 11); }
+  }
+  (o.points || []).forEach(p => { g += `<circle cx="${X(p.t)}" cy="${y}" r="4" fill="${FG_INK}"/>` + (p.text ? fgT(X(p.t), y - 12, p.text, 13, true) : ''); });
+  return fgSvg(w, H, g, 'fgline');
+}
+// מודל פס לכמות: d חלקים, n צבועים; top – תווית לשלם (מעל), part – תווית לחלק הצבוע (מתחת)
+const fgModel = (d, n, top, part, o = {}) => fgBars([fgRow(d, [n, FG_P])], Object.assign({ w: 260, h: 22, top: top == null ? null : { from: 0, to: d, label: top }, bottom: part == null ? null : { from: 0, to: n, label: part } }, o));
 const fsOp = op => op === '+' ? '+' : '−';
 const fsV = x => x[0] / x[1];
 const fsPrimes = k => { const out = []; for (let p = 2; k > 1; p++) while (k % p === 0) { out.push(p); k /= p; } return out; };
@@ -21271,7 +21365,7 @@ function printBuilder() {
         <div class="wsfoot">בהצלחה! 🌟</div>
       </section>`).join('');
     if ($('wkey').checked) out += sheets.map((qs, v) => `
-      <section class="ws-page wskey${dsk ? ' dsk-key' : ''}${kcl}">
+      <section class="ws-page wskey${dsk ? ' dsk-key' : ''}${dsk && dsk.some(x => x.P.typed) ? ' dsk-bal' : ''}${kcl}">
         <h2>🔑 דף תשובות – ${esc(title)}${vname(v)}</h2>${skillLine}
         <ol>${qs.map(q => dsk && q.type === 'open' ? `<li><span class="wskind">${DSK_THINK_NAME[q.meta.think] || ''}</span> <div class="kmodel">${q.rubric ? '<b>פתרון לדוגמה:</b> ' : ''}${correctHTML(q)}</div>${q.multi ? '<div class="wsexp">✱ יש עוד תשובות נכונות – זה פתרון לדוגמה.</div>' : ''}${q.rubric ? rubricHTML(q.rubric) : ''}</li>`
           : `<li><b>${q.keyPre ? q.keyPre + ' ' : ''}${correctHTML(q)}${q.keyUnit ? ' ' + q.keyUnit : ''}</b>${dsk || $('wexp').checked ? `<div class="wsexp">${q.exp}</div>` : ''}</li>`).join('')}</ol>
@@ -21307,6 +21401,19 @@ function printBuilder() {
       const even = P => qs => { const per = Math.ceil(qs.length / P), r = []; for (let k = 0; k < qs.length; k += per) r.push(qs.slice(k, k + per)); return r; };
       const think = sheets.some(qs => qs.some(q => q.type === 'open' && ((q.lines || 0) >= 4 || ['long', 'two', 'draw', 'list'].includes(q.space))));
       const pg = pagesOf()[0] || [];
+      if (dsk.some(x => x.P.typed)) {
+        // חבילה עם סוגי דף (שברים): מנסים חלוקות מאוזנות – קודם עמוד אחד פחות, ואז אותו מספר עמודים (עם יותר מקום לכתיבה);
+        // חלוקה תקפה רק אם כל חלק נכנס לעמוד אחד (עם מרווח ביטחון). אם אף אחת לא תקפה – זרימה רגילה.
+        const nat = Math.max(...pagesOf().map(x => x.length), 1);
+        const sizes = (n, P, sh) => { const a = Array.from({ length: P }, (_, i) => Math.floor(n / P) + (i < n % P ? 1 : 0)); if (sh && P > 1 && a[0] > 1) { a[0]--; a[P - 1]++; } return a; };
+        const chunk = (P, sh) => qs => { const r = []; let k = 0; sizes(qs.length, P, sh).forEach(n => { if (n) r.push(qs.slice(k, k + n)); k += n; }); return r; };
+        const big = examSt ? ' ex-roomy' : think ? '' : ' dsk-split', small = examSt ? '' : think ? ' dsk-l3fit' : ' dsk-tight';
+        const tries = [];
+        [nat - 1, nat].filter(P => P >= 1).forEach(P => (P < nat ? ['', small] : [big, '']).forEach(c => [false, true].forEach(sh => tries.push([P, c, sh]))));
+        let ok = false;
+        for (const [P, c, sh] of tries) { render(chunk(P, sh), c); if (fits()) { ok = true; break; } }
+        if (!ok) render(qs => [qs], '');
+      } else {
       if (pg.length === 1 && !fits() && !examSt) render(qs => [qs], think ? ' dsk-l3fit' : ' dsk-tight');
       if (pg.length > 1) {
         if (examSt) { if (pg[pg.length - 1] <= Math.max(1, Math.floor(Math.max(...pg) / 2))) { const tries = [[pg.length - 1, ' ex-roomy'], [pg.length - 1, ''], [pg.length, ' ex-roomy'], [pg.length, '']]; for (const [P, c] of tries) { render(even(P), c); if (fits()) break; } } }
@@ -21316,9 +21423,14 @@ function printBuilder() {
           if (!fits()) render(even(pg.length), think ? '' : ' dsk-split');
         }
       }
+      }
       // דף התשובות: אם בעמוד האחרון נשארו פריט-שניים – פריסה מעט צפופה יותר, כדי שלא יהיה עמוד כמעט ריק
       const kp = [...$('wsout').querySelectorAll('.wskey')].map(sec => [...sec.querySelectorAll('.ws-pg')].map(pp => pp.querySelectorAll('li').length));
       if (kp.some(k => k.length > 1 && k[k.length - 1] <= 2)) { keyCls = ' dsk-keyc'; render(curCh, curCls); }
+      // שברים: אם עדיין נשאר פריט בודד בעמוד האחרון של דף התשובות – פריסה צפופה עוד מעט
+      // (לפי גובה: עמוד אחרון שמלא בפחות משליש)
+      const keyLow = () => { const o = $('wsout'); o.classList.add('measure'); const r = [...o.querySelectorAll('.wskey')].some(sec => { const pp = [...sec.querySelectorAll('.ws-pg')]; if (pp.length < 2) return false; const last = pp[pp.length - 1], top = last.getBoundingClientRect().top, ol = last.querySelector('ol'); return ol && (ol.getBoundingClientRect().bottom - top) < 0.33 * 270 * 96 / 25.4; }); o.classList.remove('measure'); return r; };
+      if (dsk.some(x => x.P.typed)) for (const kc of [' dsk-keyc', ' dsk-keyc dsk-keycc']) { if (!keyLow()) break; keyCls = kc; render(curCh, curCls); }
     }
     $('wprint').classList.remove('hidden');
     $('wgo').textContent = '🔄 יצירה מחדש (מספרים חדשים)';
@@ -21595,7 +21707,7 @@ function paginateSheets() {
   out.classList.add('measure');
   out.querySelectorAll('.ws-page').forEach(sec => {
     // דף תשובות עם הסברים ארוכים (תרגול לפי מיומנות): מרווח ביטחון, כדי שהרשימה לא תגלוש בהדפסה לעמוד נפרד מהכותרת
-    const H = sec.classList.contains('dsk-key') ? 255 * 96 / 25.4 : H0;
+    let H = sec.classList.contains('dsk-key') ? 255 * 96 / 25.4 : H0;
     const items = [];
     [...sec.children].forEach(ch => {
       if (ch.matches('.wsqs, .ex-qs, ol')) [...ch.children].forEach((el, idx) => items.push({ el, wrap: ch, idx }));
@@ -21622,20 +21734,32 @@ function paginateSheets() {
       box.appendChild(it.el);
       return box;
     };
-    newPage();
-    let n = 0;
-    for (const it of items) {
-      const box = place(it);
-      n++;
-      if (n > 1 && page.getBoundingClientRect().height > H) {
-        it.el.remove();
-        if (box !== page && !box.children.length) box.remove();
-        // כותרת לא נשארת לבד בתחתית העמוד – עוברת יחד עם מה שאחריה
-        const last = page.lastElementChild, orphan = last && /^H[1-3]$/.test(last.tagName) && page.children.length > 2 ? last : null;
-        newPage(); n = 1;
-        if (orphan) { page.appendChild(orphan); n++; }
-        place(it);
+    const run = Hx => {
+      sec.innerHTML = '';
+      newPage();
+      let n = 0;
+      for (const it of items) {
+        const box = place(it);
+        n++;
+        if (n > 1 && page.getBoundingClientRect().height > Hx) {
+          it.el.remove();
+          if (box !== page && !box.children.length) box.remove();
+          // כותרת לא נשארת לבד בתחתית העמוד – עוברת יחד עם מה שאחריה
+          const last = page.lastElementChild, orphan = last && /^H[1-3]$/.test(last.tagName) && page.children.length > 2 ? last : null;
+          newPage(); n = 1;
+          if (orphan) { page.appendChild(orphan); n++; }
+          place(it);
+        }
       }
+      return sec.querySelectorAll('.ws-pg').length;
+    };
+    const P = run(H);
+    // dsk-bal (דף תשובות של שברים): אותו מספר עמודים, אבל הגובה מחולק שווה ביניהם – כדי שלא יישאר עמוד אחרון כמעט ריק
+    if (sec.classList.contains('dsk-bal') && P > 1) {
+      const used = [...sec.querySelectorAll('.ws-pg')].reduce((a, pg) => a + pg.getBoundingClientRect().height, 0);
+      let ok = false;
+      for (let x = used / P; x < H && !ok; x += 25) ok = run(x) <= P;
+      if (!ok) run(H);
     }
   });
   out.classList.remove('measure');
