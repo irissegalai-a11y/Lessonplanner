@@ -169,8 +169,13 @@
     let out = '';
     for (let i = 0; i < d1; i++) for (let j = 0; j < d2; j++) {
       const inA = i < n1, inB = f.only !== 'a' && j < n2;
-      out += `<rect x="${2 + i * cw}" y="${2 + j * rh}" width="${cw}" height="${rh}" fill="${inA && inB ? FILL : inA ? FILL2 : inB ? '#d6e4ff' : '#fff'}" stroke="${INK}" stroke-width="1"/>`;
+      // inOnly – מסמנים את השורות רק בתוך החלק הצבוע (המוסכמה של כפל שבר בשבר: "חלק מתוך חלק")
+      const col = inA && inB ? FILL : inA ? FILL2 : inB && !f.inOnly ? '#d6e4ff' : '#fff';
+      out += `<rect x="${2 + i * cw}" y="${2 + j * rh}" width="${cw}" height="${rh}" fill="${col}" stroke="${INK}" stroke-width="1"/>`;
+      if (f.inOnly && inA && inB) out += `<path d="M${2 + i * cw} ${2 + (j + 1) * rh} L${2 + (i + 1) * cw} ${2 + j * rh}" stroke="${INK}" stroke-width="1.2" opacity="0.55"/>`;
     }
+    // קווי השורות עוברים לאורך כל השלם – כך רואים שכל המשבצות שוות
+    if (f.only !== 'a') for (let j = 1; j < d2; j++) out += `<line x1="2" x2="${W + 2}" y1="${2 + j * rh}" y2="${2 + j * rh}" stroke="${INK}" stroke-width="1.6"/>`;
     out += `<rect x="2" y="2" width="${W}" height="${H}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
     return `<svg class="fig area" viewBox="0 0 ${W + 4} ${H + 4}" width="${W + 4}" height="${H + 4}" role="img" aria-label="מלבן מחולק">${out}</svg>`;
   }
@@ -188,8 +193,10 @@
     if (!f) return '';
     if (Array.isArray(f)) return `<div class="figs">${f.map(fig).join('')}</div>`;
     const svg = (KINDS[f.k] || bar)(f);
+    // whole – כיתוב מעל הציור ("שלם", "עוגה שלמה"): השלם תמיד מוגדר
+    if (f.whole) return `<figure class="figl figw"><figcaption class="wlab">${R(f.whole)}</figcaption>${svg}${f.label ? `<figcaption>${R(f.label)}</figcaption>` : ''}</figure>`;
     return f.label ? `<figure class="figl">${svg}<figcaption>${R(f.label)}</figcaption></figure>` : svg;
   }
 
-  C.V = { M, R, fig, bar, pie, line, fracSay, FILL };
+  C.V = { M, R, fig, bar, pie, line, area, fracSay, FILL, FILL2, INK };
 })();

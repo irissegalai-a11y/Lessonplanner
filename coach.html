@@ -102,6 +102,27 @@
   .fb.info { background: var(--info-bg); border-color: var(--brand); }
   .rulebox { background: var(--rule-bg); border-radius: 14px; padding: 16px 18px; border-inline-start: 5px solid #7048e8; }
   .warnbox { background: var(--bad-bg); border-radius: 14px; padding: 16px 18px; border-inline-start: 5px solid var(--bad); }
+  /* שיעור במבנה החדש */
+  .stages { display: flex; flex-wrap: wrap; gap: 6px 10px; padding: 0; margin: 10px 0; list-style: none; counter-reset: stg; }
+  .stages li { counter-increment: stg; background: var(--brand-soft); border-radius: 999px; padding: 4px 12px; font-weight: 600; font-size: 0.95rem; }
+  .stages li::before { content: counter(stg) ". "; }
+  .lvhead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 8px; }
+  .lvtag { background: var(--brand-soft); border-radius: 999px; padding: 3px 12px; font-weight: 600; font-size: 0.95rem; }
+  .streak { display: inline-flex; gap: 5px; }
+  .streak i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ok); display: inline-block; }
+  .streak i.on { background: var(--ok); }
+  .chain { display: flex; gap: 6px; justify-content: center; margin: 8px 0 12px; }
+  .chain span { width: 34px; height: 18px; border-radius: 10px; border: 3px solid var(--line); display: inline-block; }
+  .chain span.on { border-color: var(--ok); background: var(--ok-bg); }
+  .chain span.off { border-color: var(--bad); border-style: dashed; }
+  figure.figw figcaption.wlab { font-weight: 700; font-size: 1.05rem; margin-bottom: -2px; }
+  .fb.flash { margin: 0 0 12px; }
+  .revbox { border: 1px solid var(--line); border-radius: 14px; padding: 4px 14px 12px; margin: 10px 0; }
+  .nbq { border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 8px; }
+  .chk .fixb { margin-inline-start: 8px; }
+  .exrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+  .exrow > div { flex: 1 1 220px; }
+  .cn { color: #c2255c; font-weight: 700; } .cd { color: #1c7ed6; font-weight: 700; }
   ol.steps { margin: 8px 0; padding-inline-start: 1.4em; }
   ol.steps li { margin-bottom: 6px; }
 
@@ -437,6 +458,7 @@
 <script src="coach/courses/dec.js"></script>
 <script src="coach/courses/mult.js"></script>
 <script src="coach/courses/fracop.js"></script>
+<script src="coach/courses/fmul.js"></script>
 <script src="coach/courses/exams.js"></script>
 <script>
 (function () {
@@ -448,6 +470,7 @@
     frac: { title: 'שברים פשוטים', sub: 'מה זה שבר, השוואת שברים, שבר מכמות', grades: [5, 6] },
     pct: { title: 'אחוזים', sub: 'מה זה אחוז, אחוז מכמות, אחוזים בחיים', grades: [6, 6] },
     fracop: { title: 'כפל וחילוק שברים', sub: 'כפל וחילוק של שברים ומספרים מעורבים', grades: [5, 6] },
+    fdiv: { title: 'חילוק שברים', sub: 'חילוק שבר במספר שלם, שלם בשבר ושבר בשבר', grades: [6, 6] },
     area: { title: 'שטח והיקף', sub: 'שטח והיקף של מצולעים וצורות מורכבות', grades: [4, 6] }
   };
   // קורס בטיוטה (draft) – רק בתצוגת מורה; לתלמידים הוא נשאר "בקרוב" עד שהתוכן מאושר
@@ -462,6 +485,8 @@
   const main = $('main'), coachEl = $('coach');
   const T = E.teacher();
   const PILLS = ['מה נלמד', 'בואו נבין', 'מחברת ותרגול', 'בודקים הבנה', 'מה למדתי'];
+  // שיעור במבנה החדש (v2): מבינים → לומדים את הכלל → מתרגלים (ומחברת) → מראים שליטה
+  const PILLS2 = ['מבינים', 'לומדים את הכלל', 'מתרגלים', 'מראים שליטה', 'מה למדתי'];
   const BADGE_NAME = { persist: '💪 התמדה', fix: '🔧 תיקון טעות', explain: '💬 הסבר מתמטי', master: '⭐ שליטה' };
 
   let st = E.store.load() || null;
@@ -661,6 +686,13 @@
         } else finish(out);
         return;
       }
+      // "צמצמו עד הסוף" / "הוציאו שלמים" – התשובה נכונה בערכה: לא נחשב טעות, משלימים את אותה שאלה
+      if (item.reduceSoft && !j.ok && (j.tag === 'partialReduce' || j.tag === 'notMixed')) {
+        fbs('hint', j.tag === 'notMixed' ? 'נכון בערך! עכשיו הוציאו שלמים: כמה פעמים המכנה נכנס במונה?' : (item.reduceMsg || 'נכון! עכשיו צמצמו עד הסוף.'));
+        log('reduceNudge', { item: item.id, a: a.key });
+        if (st && st.unit) st.unit.ev.reduce = true;
+        return;
+      }
       attempts++;
       answers.push(a.key);
       if (j.ok) {
@@ -675,8 +707,15 @@
       if (!firstTag && j.tag) firstTag = j.tag;
       if (item.type === 'choice') box.querySelector(`.opt[data-i="${a.i}"]`).classList.add('wrong');
       log('wrong', { item: item.id, a: a.key, tag: j.tag });
+      if (item.oneTry) {
+        // סבב שטף: ניסיון אחד, משוב ממוקד, וממשיכים (תרגיל מקביל מגיע אחר כך)
+        fbs('bad', (j.msg || item.otherMsg || 'עוד לא.') + (item.exp ? '<br>' + item.exp : ''));
+        box.querySelector('.acts').innerHTML = '<button class="go2">המשך</button>';
+        box.querySelector('.go2').onclick = () => finish({ correct: false, pass: false, hinted, attempts, answers, firstTag: firstTag || j.tag });
+        return;
+      }
       if (attempts === 1) {
-        fbs('bad', (j.msg || 'עוד לא. קראו שוב את השאלה ונסו שוב.') + (j.fig ? fig(j.fig) : ''));
+        fbs('bad', (j.msg || item.otherMsg || 'עוד לא. קראו שוב את השאלה ונסו שוב.') + (j.fig ? fig(j.fig) : ''));
       } else if (attempts === 2) {
         hinted = true; hintI = Math.max(hintI, 1); log('hint', { item: item.id, auto: true });
         fbs('hint', '💡 ' + ((item.hints && item.hints[0]) || 'נסו שוב, לאט.') + (j.msg ? '<br>' + j.msg : ''));
@@ -713,7 +752,7 @@
       <p class="muted" style="font-size:1.1rem">${K.sub}.</p>
       <h3 style="margin-top:18px">בקורס הזה תלמדו</h3>
       <ul class="knows">${K.LEARN.map(x => `<li>${x}</li>`).join('')}</ul>
-      <p class="muted small">${K.MODULES.length} פרקים · ${K.UNITS.length} שיעורים קצרים · כל שיעור כ-10 דקות · המסלול נבנה אישית אחרי מבדק קצר</p>
+      <p class="muted small">${K.MODULES.length} פרקים · ${K.UNITS.length} שיעורים · ${K.noTime ? 'בלי שעון – מתקדמים בקצב שלכם, עד שליטה' : 'כל שיעור כ-10 דקות'} · המסלול נבנה אישית אחרי מבדק קצר</p>
     </div>
     <div class="card"><div class="coachline" style="margin-bottom:6px"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>שלום! אני אלווה אותך בקורס. בואו נכיר:</div></div>
       <label class="lb" for="nm">השם המלא שלי</label>
@@ -810,6 +849,10 @@
 
   // ---------- מסך הקורס ----------
   const unitDef = id => K.UNITS.find(u => u.id === id);
+  // שיעור העשרה נפתח רק אחרי שיעור מסוים (after)
+  const locked = id => { const u = unitDef(id); return !!(u && u.after && !st.done[u.after] && !T); };
+  // מבדק הסיכום – אחרי הפרק האחרון שיש בו שיעור שאינו העשרה
+  const lastCoreMod = () => { let k = K.MODULES.length - 1; while (k > 0 && K.MODULES[k].u.every(id => { const u = unitDef(id); return u.enrich || u.deep; })) k--; return k; };
   const ready = id => !!K.units[id];
   const first = () => (st && st.name ? st.name.split(' ')[0] : '');
   const coachSay = html => `<div class="coachline"><span class="avatar">מ</span><div class="say"><div class="who">המאמן שלך</div>${R(html)}</div></div>`;
@@ -827,21 +870,22 @@
     const skipped = K.UNITS.filter(u => !u.deep && !path.some(p => p.id === u.id)).length;
     const row = u => {
       const p = path.find(x => x.id === u.id), dn = !!st.done[u.id], act = next && next.id === u.id;
-      const inPath = !!p, skip = !inPath && !u.deep;
+      const inPath = !!p, skip = !inPath && !u.deep && !u.enrich, lock = locked(u.id);
       let chip = '', btn = '';
       if (dn) chip = '<span class="chip ok">הושלם</span>';
       else if (act) chip = '<span class="chip now">השיעור הבא</span>';
-      else if (inPath && p.optional) chip = '<span class="chip">רשות · אתגר</span>';
+      else if (lock) chip = `<span class="chip">נפתח אחרי שיעור ${lessonNo(u.after)}</span>`;
+      else if (inPath && p.optional) chip = `<span class="chip">${u.enrich ? 'העשרה · רשות' : 'רשות · אתגר'}</span>`;
       else if (inPath) chip = '<span class="chip">במסלול שלך</span>';
       else if (skip) chip = '<span class="chip ok">כבר יודע/ת</span>';
       else chip = '<span class="chip">נפתח אחרי השליטה</span>';
       if (act) btn = `<button class="small" data-open="${u.id}" data-ver="${p.ver}">להתחיל</button>`;
-      else if (inPath && !dn) btn = `<button class="sec small" data-open="${u.id}" data-ver="${p.ver}">כניסה</button>`;
+      else if (inPath && !dn && !lock) btn = `<button class="sec small" data-open="${u.id}" data-ver="${p.ver}">כניסה</button>`;
       else if (skip && !T) btn = `<button class="ghost small" data-open="${u.id}" data-ver="reinforce">לעבור בכל זאת</button>`;
       if (T) btn = `<button class="sec small nosay" data-open="${u.id}" data-ver="teach">הקניה</button>${u.deep ? '' : `<button class="ghost small nosay" data-open="${u.id}" data-ver="reinforce">חיזוק</button>`}<button class="ghost small nosay" data-tasks="${u.id}">📋 משימות</button><button class="ghost small nosay" data-print="${u.id}">🖨️ דף עבודה</button>`;
       if (!T && !u.deep) btn += `<button class="ghost small nosay" data-print="${u.id}" title="דף עבודה להדפסה">🖨️ דף עבודה</button>`;
       const tv = T && p ? `<span class="tag">${{ teach: 'הקניה', reinforce: 'חיזוק', deep: 'העמקה' }[p.ver]}</span>` : '';
-      return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}${skip ? ' skip' : ''}"><span class="ic">${dn || skip ? '✓' : lessonNo(u.id)}</span><span class="t"><b>שיעור ${lessonNo(u.id)}: ${u.title}</b>${tv}<br><span class="meta">כ-${u.min} דקות</span> ${chip}</span>${btn ? `<span class="ubtns">${btn}</span>` : ''}</li>`;
+      return `<li class="${dn ? 'done' : ''}${act ? ' active' : ''}${skip ? ' skip' : ''}"><span class="ic">${dn || skip ? '✓' : lessonNo(u.id)}</span><span class="t"><b>שיעור ${lessonNo(u.id)}: ${u.title}</b>${tv}<br>${K.noTime ? '' : `<span class="meta">כ-${u.min} דקות</span> `}${chip}</span>${btn ? `<span class="ubtns">${btn}</span>` : ''}</li>`;
     };
     // מבדק אמצע / סיכום – שורה בתוכנית הקורס
     const examRow = id => {
@@ -863,7 +907,7 @@
       const dn = us.filter(u => st.done[u.id] || (!u.deep && !path.some(p => p.id === u.id))).length;
       const rows = us.filter(u => !u.deep).map(row);
       if (i === midMods() - 1) rows.push(examRow('mid'));
-      if (i === K.MODULES.length - 1) rows.push(examRow('final'));
+      if (i === lastCoreMod()) rows.push(examRow('final'));
       rows.push(...us.filter(u => u.deep).map(row));
       return `<div class="mod"><h3><span>פרק ${i + 1}: ${m.t}</span><span class="muted">${dn}/${us.length}</span></h3><ul class="ulist">${rows.join('')}</ul></div>`;
     }).join('');
@@ -922,7 +966,7 @@
   }
   const screens = () => {
     const U = K.units[st.unit.id], list = st.unit.ver === 'reinforce' ? U.reinforce : U.teach;
-    if (!siteOf(st.unit.id).gens || U.deep) return list;
+    if (U.v2 || !siteOf(st.unit.id).gens || U.deep) return list;
     const i = list.findIndex(x => x.kind === 'check');
     return list.slice(0, i).concat([{ step: 3, kind: 'more' }, { step: 3, kind: 'sheet' }], list.slice(i));
   };
@@ -1004,15 +1048,18 @@
     return `<div class="titem"><div class="tq"><b>${k}</b> ${R(it.q)}</div>${it.fig && it.type !== 'shade' ? fig(it.fig) : ''}${opts}
       <div class="tans">✔ תשובה: ${R(ansText(it))}</div>${traps}${it.hints && it.hints.length ? `<div class="tmsg">💡 רמז: ${R(it.hints[0])}</div>` : ''}</div>`;
   }
+  // תרגול מונחה של שיעור: בשיעור רגיל – מסכי practice; בשיעור v2 – הבדיקה הקצרה, שאלת הכלל והרמות
+  const guidedOf = U => U.teach.flatMap(x => x.kind === 'practice' ? x.items || [] : x.kind === 'levels' ? x.levels.flatMap(l => l.items) : x.kind === 'rule' && x.item ? [x.item] : []);
+  const nbOf = U => U.teach.find(x => x.kind === 'notebook' || x.kind === 'notebook2');
   function tasks(id) {
     const U = K.units[id], u = unitDef(id), sl = siteOf(id);
     if (!U) return;
     const sec = (t, items, pre) => items && items.length ? `<h3>${t}</h3>${items.map((it, i) => taskHtml(it, (pre || '') + (i + 1) + '.')).join('')}` : '';
-    const scr = U.teach.filter(x => x.kind === 'practice').flatMap(x => x.items || []);
-    const nb = U.teach.find(x => x.kind === 'notebook');
+    const scr = guidedOf(U);
+    const nb = nbOf(U);
     const html = `<h2>📋 ${u.title} – כל המשימות</h2><div class="row"><button class="sec small nosay" id="mPrint">🖨️ דף עבודה להדפסה</button></div><p class="muted">התשובות הנכונות מסומנות ב-✓. גרסת הקניה: בדיקה א' ואם לא עבר – ב'. גרסת חיזוק: ב' ואם לא עבר – ג'.</p>
       ${sec('תרגול מונחה', scr)}
-      ${nb ? `<h3>מחברת – משימת ציור</h3><div class="titem">${R(nb.html)}${nb.verify ? `<div class="tans">✔ שאלת אימות: ${R(nb.verify.q)} – ${nb.verify.ans ? nb.verify.ans.join(', ') : 'לפי התנאי'}</div>` : ''}</div>` : ''}
+      ${nb ? `<h3>מחברת – משימת ציור</h3><div class="titem">${R(nb.html)}${nb.verify ? `<div class="tans">✔ שאלת אימות: ${R(nb.verify.q)} – ${nb.verify.ans ? nb.verify.ans.join(', ') : 'לפי התנאי'}</div>` : ''}${(nb.checks || []).map(it => `<div class="tans">✔ ${R(it.q)} – ${R(ansText(it))}</div>`).join('')}${nb.model ? fig(nb.model) : ''}</div>` : ''}
       ${sl.gens && !U.deep ? `<h3>תרגול נוסף ותרגול במחברת (מהאתר)</h3><p class="muted">שאלות משתנות בכל פעם, ממחוללי האתר: ${sl.gens.map(g => `<code>${g}</code>`).join(', ')}. תרגול נוסף – 8 שאלות (6 כדי להמשיך); מחברת – ${sl.nb || 6} תרגילים, ${sl.min || 10} דקות.</p>` : ''}
       ${['A', 'B', 'C'].map((k, i) => sec(`${U.deep ? 'משימות אתגר' : 'בדיקת הבנה'} – סט ${'אבג'[i]}`, U.sets[k], 'אבג'[i] + '')).join('')}
       ${U.alt ? `<h3>הסבר בדרך אחרת (סולם העזרה)</h3><div class="titem"><b>${R(U.alt.title)}</b>${R(U.alt.html)}${fig(U.alt.fig)}</div>` : ''}
@@ -1062,22 +1109,22 @@
     const U = K.units[id], u = unitDef(id);
     if (!U) return;
     const seen = new Set(), uniq = list => (list || []).filter(it => it && !seen.has(it.id) && seen.add(it.id));
-    const guided = uniq(U.teach.filter(x => x.kind === 'practice').flatMap(x => x.items || []));
+    const guided = uniq(guidedOf(U));
     const alone = uniq([].concat(U.sets.A || [], U.sets.B || [], U.sets.C || []));
-    const info = U.teach.filter(x => x.kind === 'info');
-    const nb = U.teach.find(x => x.kind === 'notebook');
+    const info = U.teach.filter(x => x.kind === 'info' || x.kind === 'rule');
+    const nb = nbOf(U);
     const remind = info.length ? `<section class="premindsec"><h2>📖 נזכרים</h2><div class="premind">${info.map(c => `<div class="pcard"><h3>${R(c.title)}</h3>${R(c.html)}${fig(c.fig)}</div>`).join('')}</div></section>` : '';
     openSheet(`<div class="ppage">
         <div class="phead"><div><div class="small">${esc(K.title)} · שיעור ${lessonNo(id)}</div><h1>${u.title}</h1></div>
           <div>שם: <span class="pline"></span> &nbsp; תאריך: <span class="pline" style="min-width:5em"></span></div></div>
-        ${U.teach[0] && U.teach[0].kind === 'goal' ? `<p>${R(U.teach[0].html)}</p>` : ''}
+        ${U.teach[0] && (U.teach[0].kind === 'goal' || U.teach[0].kind === 'intro') ? `<p>${R(U.teach[0].html)}</p>` : ''}
         ${remind}
         ${guided.length ? `<h2>✏️ פותרים יחד – עם רמז</h2><ol class="pq">${guided.map(it => psItem(it, true)).join('')}</ol>` : ''}
         ${alone.length ? `<h2>💪 ${U.deep ? 'משימות אתגר' : 'פותרים לבד'}</h2><ol class="pq" start="${guided.length + 1}">${alone.map(it => psItem(it, false)).join('')}</ol>` : ''}
         ${nb && !U.deep ? `<h2>📓 משימה</h2>${R(nb.html.replace(/במחברת/g, 'על הדף או במחברת'))}<div class="pspace"></div>` : ''}
       </div>
       <div class="ppage pkeypage pbreak"><h2 style="margin-top:0">✔️ תשובות – ${u.title}</h2>${psKey(guided.concat(alone))}
-        ${nb && nb.verify && nb.verify.ans ? `<p><b>משימה:</b> ${R(nb.verify.q)} – ${nb.verify.ans.join(', ')}</p>` : ''}</div>`,
+        ${nb && nb.verify && nb.verify.ans ? `<p><b>משימה:</b> ${R(nb.verify.q)} – ${nb.verify.ans.join(', ')}</p>` : ''}${nb && nb.checks ? `<p><b>משימה:</b> ${nb.checks.map(it => R(ansText(it))).join(' · ')}</p>` : ''}</div>`,
       (remind ? [{ cls: 'premindsec', label: 'תזכורת והסברים' }] : []).concat([{ cls: 'pkeypage', label: 'דף תשובות בסוף' }]), 'דף עבודה להדפסה');
     log('worksheet', { unit: id });
     if (!T) tr('דף עבודה', u.title);
@@ -1108,7 +1155,7 @@
     const core = path.find(x => !st.done[x.id] && ready(x.id) && !x.optional);
     if (core) return { unit: core };
     if (hasExam('final') && !examTaken('final')) return { exam: 'final' };
-    const opt = path.find(x => !st.done[x.id] && ready(x.id));
+    const opt = path.find(x => !st.done[x.id] && ready(x.id) && !locked(x.id));
     return opt ? { unit: opt } : null;
   }
   const stepLabel = s => s.exam ? `${EXAM_IC[s.exam]} ${EXAM_NAME[s.exam]}` : `שיעור ${lessonNo(s.unit.id)} – ${unitDef(s.unit.id).title}`;
@@ -1319,7 +1366,8 @@
     const mi = K.MODULES.findIndex(m => m.u.includes(st.unit.id));
     const nScr = screens().length;
     main.innerHTML = `${tview(`${{ teach: 'גרסת הקניה', reinforce: 'גרסת חיזוק' }[st.unit.ver]} · מסך ${st.unit.i + 1} מתוך ${nScr} <span class="tnav"><button class="ghost small" id="tPrev"${st.unit.i ? '' : ' disabled'}>→ מסך קודם</button><button class="ghost small" id="tNext">מסך הבא ←</button><button class="ghost small" id="tAll">📋 כל המשימות</button><button class="ghost small" id="tPrevU"${lessonNo(st.unit.id) > 1 ? '' : ' disabled'}>⏮ שיעור קודם</button><button class="ghost small" id="tNextU">${lessonNo(st.unit.id) < K.UNITS.length ? 'שיעור הבא ⏭' : 'לתוכנית הקורס ⏭'}</button></span>`)}<div class="card" id="ucard"><div class="lhead"><div><div class="crumb">פרק ${mi + 1}: ${K.MODULES[mi].t} · שיעור ${lessonNo(st.unit.id)} מתוך ${K.UNITS.length}</div><h2 style="margin:0">${u.title}</h2></div><button class="ghost small nosay" id="back">→ לתוכנית הקורס</button></div>
-      <div class="pills nosay">${PILLS.map((p, i) => `<span class="pill${i === s ? ' on' : i < s ? ' done' : ''}">${p}</span>`).join('')}</div><div id="ubody">${inner}</div></div>`;
+      <div class="pills nosay">${(K.units[st.unit.id].v2 ? PILLS2 : PILLS).map((p, i) => `<span class="pill${i === s ? ' on' : i < s ? ' done' : ''}">${p}</span>`).join('')}</div>${st.unit.flash ? `<div class="fb ok flash">${R(st.unit.flash)}</div>` : ''}<div id="ubody">${inner}</div></div>`;
+    st.unit.flash = '';
     $('back').onclick = course;
     if (T) {
       $('tPrev').onclick = () => tJump(-1);
@@ -1359,7 +1407,8 @@
       $('nx').onclick = next;
     } else if (sc.kind === 'cutlab') cutlab();
     else if (sc.kind === 'info') {
-      frame(sc.step, `<h3>${R(sc.title)}</h3>${R(sc.html)}${sc.anim ? '<div id="anim"></div>' : ''}${fig(sc.fig)}<div class="row"><button id="nx">הבנתי, ממשיכים</button>${siteOf(st.unit.id).learn ? '<button class="sec" id="lsn">📖 רוצים עוד הסבר? לשיעור המלא</button>' : ''}</div>`);
+      frame(sc.step, `<h3>${R(sc.title)}</h3>${R(sc.html)}${sc.anim ? '<div id="anim"></div>' : ''}${fig(sc.fig)}<div class="row"><button id="nx">הבנתי, ממשיכים</button>${siteOf(st.unit.id).learn ? '<button class="sec" id="lsn">📖 רוצים עוד הסבר? לשיעור המלא</button>' : ''}${U.v2 ? unclearBtn() : ''}</div>`);
+      bindUnclear(sc);
       if (sc.anim) halfAnim($('anim'));
       if ($('lsn')) $('lsn').onclick = lessonModal;
       $('nx').onclick = next;
@@ -1370,13 +1419,268 @@
         if (c.after && !$('aft').innerHTML) { $('aft').innerHTML = R(c.after) + fig(c.fig2); $('nx').textContent = 'הבנתי, ממשיכים'; return; }
         next();
       };
-    } else if (sc.kind === 'practice') practice(sc, 0);
+    } else if (sc.kind === 'intro') intro(sc);
+    else if (sc.kind === 'cake') cake(sc);
+    else if (sc.kind === 'rule') rule(sc);
+    else if (sc.kind === 'levels') levels(sc);
+    else if (sc.kind === 'notebook2') notebook2(sc);
+    else if (sc.kind === 'practice') practice(sc, 0);
     else if (sc.kind === 'notebook') notebook(sc);
     else if (sc.kind === 'more') more();
     else if (sc.kind === 'sheet') sheet();
     else if (sc.kind === 'check') check(sc);
     else if (sc.kind === 'summary') summary();
   }
+  /* =========================================================
+     שיעור במבנה החדש (v2): פתיחה (עם בדיקה קצרה למסלול המהיר) → המחשה → הכלל → תרגול ברמות → מחברת → שליטה
+     ========================================================= */
+  const unclearBtn = () => '<button class="ghost small" id="unclr">🤔 ההסבר הזה לא ברור לי</button>';
+  function bindUnclear(sc) {
+    const b = $('unclr');
+    if (!b) return;
+    b.onclick = () => {
+      const U = K.units[st.unit.id];
+      st.unit.ev.unclear = (st.unit.ev.unclear || 0) + 1;
+      log('unclear', { unit: st.unit.id, screen: sc.kind + (sc.title ? ': ' + sc.title.replace(/<[^>]+>/g, '') : '') });
+      modal(`<h2>תודה שאמרתם. ננסה בדרך אחרת:</h2><h3>${R(U.alt.title)}</h3>${R(U.alt.html)}${fig(U.alt.fig)}`);
+    };
+  }
+  const goKind = kind => { const i = screens().findIndex(x => x.kind === kind); st.unit.i = i < 0 ? st.unit.i + 1 : i; save(); screen(); };
+
+  function intro(sc) {
+    const u = st.unit;
+    frame(1, `${coachSay(coachIntro())}<h3>מה נלמד היום?</h3><p style="font-size:1.15rem">${R(sc.html)}</p>
+      <ol class="stages nosay">${PILLS2.slice(0, 4).map(p => `<li>${p}</li>`).join('')}</ol>
+      <p class="muted small">אין שעון. מתקדמים כשזה יושב טוב – בקצב שלכם.</p>
+      <div class="row"><button id="nx">מתחילים</button>${sc.quick ? '<button class="sec" id="qk">כבר יודעים? בדיקה קצרה</button>' : ''}</div>`);
+    $('nx').onclick = next;
+    if ($('qk')) $('qk').onclick = () => quick(sc, 0, 0);
+    u.fast = false;
+  }
+  // בדיקה קצרה: 3 שאלות, ניסיון אחד, בלי רמזים. כולן נכונות → לכלל, ותרגול מרמה 3. לא משנה מצב מיומנויות.
+  function quick(sc, j, ok) {
+    const u = st.unit;
+    if (j >= sc.quick.length) {
+      const all = ok === sc.quick.length;
+      log('quick', { ok, n: sc.quick.length });
+      u.fast = all; u.ev.quick = `${ok}/${sc.quick.length}`; save();
+      frame(1, `${coachSay(all ? 'מצוין! תתחילו מהכלל ומהדוגמאות, ואחר כך תרגול ברמה מתקדמת. משימת המחברת ובדיקת השליטה – כמו לכולם.' : 'נתחיל מההתחלה. זה יעזור לכם בהמשך.')}<div class="row"><button id="nx">${all ? 'לכלל' : 'מתחילים'}</button></div>`);
+      $('nx').onclick = () => all ? goKind('rule') : next();
+      return;
+    }
+    frame(1, `<h3>בדיקה קצרה <span class="muted small">(${j + 1} מתוך ${sc.quick.length})</span></h3><p class="muted small">ניסיון אחד לכל שאלה, בלי רמזים.</p><div id="ib"></div>`);
+    askItem($('ib'), sc.quick[j], 'diag', rec => quick(sc, j + 1, ok + (rec.correct ? 1 : 0)));
+  }
+
+  // ---------- המחשה אינטראקטיבית: עוגה – "חלק מתוך חלק" ----------
+  function cake(sc) {
+    const u = st.unit, c = { cols: new Set(), split: false, sel: new Set(), stage: 'pred' };
+    const D1 = sc.cols, N1 = sc.colN, D2 = sc.rows, N2 = sc.rowN;
+    frame(1, `<h3>${R(sc.title)}</h3><p style="font-size:1.12rem">${R(sc.story)}</p><div id="cpred"></div><div id="cwrap" hidden><div id="cfig"></div><div id="cstep"></div></div><div class="row">${unclearBtn()}</div>`);
+    bindUnclear(sc);
+    const draw = () => {
+      const W = 300, H = 170, cw = W / D1, rows = c.split ? D2 : 1, rh = H / rows;
+      let out = '';
+      for (let i = 0; i < D1; i++) for (let r = 0; r < rows; r++) {
+        const on = c.cols.has(i), k = `${i}:${r}`, s = c.sel.has(k);
+        out += `<rect class="ck" data-c="${i}" data-r="${r}" x="${2 + i * cw}" y="${2 + r * rh}" width="${cw}" height="${rh}" fill="${s ? V.FILL : on ? '#f6d4e2' : '#fff'}" stroke="#1f1e1c" stroke-width="1.2"/>`;
+        if (s) out += `<path d="M${2 + i * cw} ${2 + (r + 1) * rh} L${2 + (i + 1) * cw} ${2 + r * rh}" stroke="#1f1e1c" stroke-width="1.2" opacity="0.55" pointer-events="none"/>`;
+      }
+      if (c.split) for (let r = 1; r < rows; r++) out += `<line x1="2" x2="${W + 2}" y1="${2 + r * rh}" y2="${2 + r * rh}" stroke="#1f1e1c" stroke-width="2.4" pointer-events="none"/>`;
+      out += `<rect x="2" y="2" width="${W}" height="${H}" fill="none" stroke="#1f1e1c" stroke-width="3" pointer-events="none"/>`;
+      $('cfig').innerHTML = `<figure class="figl figw"><figcaption class="wlab">עוגה שלמה</figcaption><svg class="fig cake" viewBox="0 0 ${W + 4} ${H + 4}" width="${W + 4}" height="${H + 4}" role="img" aria-label="עוגה">${out}</svg></figure>`;
+      $('cfig').querySelectorAll('.ck').forEach(r => r.onclick = () => tap(+r.dataset.c, +r.dataset.r));
+    };
+    const fb = (cls, html) => { const b = $('cfb'); if (b) b.innerHTML = `<div class="fb ${cls}">${R(html)}</div>`; };
+    function tap(i, r) {
+      if (c.stage === 'cols') { c.cols.has(i) ? c.cols.delete(i) : c.cols.add(i); draw(); $('ccnt').textContent = c.cols.size; }
+      else if (c.stage === 'eat') {
+        if (!c.cols.has(i)) return fb('hint', sc.msgWhite);
+        const k = `${i}:${r}`; c.sel.has(k) ? c.sel.delete(k) : c.sel.add(k); draw(); $('ccnt').textContent = c.sel.size;
+      }
+    }
+    // ניבוי
+    $('cpred').innerHTML = `<p><b>מה אתם חושבים?</b></p><div class="opts">${sc.pred.map((t, i) => `<button class="opt" data-p="${i}">${R(t)}</button>`).join('')}</div>`;
+    $('cpred').querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+      if (c.stage !== 'pred') return;
+      u.ev.pred = +b.dataset.p; log('predict', { p: u.ev.pred });
+      b.classList.add('sel');
+      $('cpred').insertAdjacentHTML('beforeend', '<p class="muted">נבדוק בציור.</p>');
+      stepA();
+    });
+    function stepA() {
+      c.stage = 'cols'; $('cwrap').hidden = false; draw();
+      $('cstep').innerHTML = `<p><b>א.</b> ${R(sc.instrA)}</p><p class="muted small">צבועים: <b id="ccnt">0</b></p><div id="cfb"></div><div class="row"><button id="cgo">בדיקה</button></div>`;
+      $('cgo').onclick = () => {
+        if (c.cols.size !== N1) return fb('bad', sc.msgA);
+        c.stage = 'aDone';
+        $('cstep').innerHTML = `<div class="fb ok">✓ ${R(sc.okA)}</div><div class="row"><button id="csp">${sc.splitBtn}</button></div>`;
+        $('csp').onclick = stepB;
+      };
+    }
+    function stepB() {
+      c.split = true; c.stage = 'eat'; draw();
+      $('cstep').innerHTML = `<p><b>ב.</b> ${R(sc.instrB)}</p><p class="muted small">סימנתם: <b id="ccnt">0</b> משבצות</p><div id="cfb"></div><div class="row"><button id="cgo">בדיקה</button></div>`;
+      $('cgo').onclick = () => {
+        const n = c.sel.size;
+        if (n === N1 * D2) return fb('bad', sc.msgAll);
+        if (n !== N1 * N2) return fb('bad', sc.msgCount);
+        c.stage = 'bDone'; log('cakeEat', { ok: true });
+        $('cstep').innerHTML = `<div class="fb ok">✓ ${R(sc.okB)}</div><p><b>ג.</b> עכשיו נספור.</p><div id="ib"></div>`;
+        ask(0);
+      };
+    }
+    function ask(j) {
+      if (j >= sc.qs.length) return closing();
+      const box = document.createElement('div');
+      $('ib').innerHTML = ''; $('ib').appendChild(box);
+      askItem(box, sc.qs[j], 'learn', () => ask(j + 1));
+    }
+    function closing() {
+      const p = u.ev.pred, right = p === sc.predAns;
+      $('cstep').innerHTML = `<div class="fb ok">${R(sc.close)}</div><p>${R(right ? 'צדקתם בניבוי!' : sc.predMiss.replace('{x}', sc.predWord[p]))}</p><div class="rulebox">${R(sc.write)}</div><div class="row"><button id="nx">לכלל</button></div>`;
+      save();
+      $('nx').onclick = next;
+    }
+  }
+
+  // ---------- הכלל: כלל מפורש + דוגמאות פתורות + שאלה משובצת (לכולם, גם במסלול המהיר) ----------
+  function rule(sc) {
+    frame(2, `<h3>${R(sc.title)}</h3>${R(sc.html)}${fig(sc.fig)}<h3 style="margin-top:18px">נסו בעצמכם</h3><div id="ib"></div><div class="row" id="rnx">${unclearBtn()}</div>`);
+    bindUnclear(sc);
+    if (!sc.item) { $('rnx').insertAdjacentHTML('afterbegin', '<button id="nx">לתרגול</button>'); $('nx').onclick = next; return; }
+    askItem($('ib'), sc.item, 'learn', rec => {
+      log('ruleTry', { pass: rec.pass });
+      $('rnx').insertAdjacentHTML('afterbegin', '<button id="nx">לתרגול</button>');
+      $('nx').onclick = next; $('nx').focus();
+    });
+  }
+  const ruleHtml = () => { const r = screens().find(x => x.kind === 'rule'); return r ? `<h3>${R(r.title)}</h3>${R(r.html)}${fig(r.fig)}` : ''; };
+
+  // ---------- תרגול ברמות: עולים רמה אחרי 2 תשובות נכונות ברצף (ניסיון ראשון, בלי רמז) ----------
+  function levels(sc) {
+    const u = st.unit, N = sc.levels.length;
+    const lv = u.lv || (u.lv = { L: Math.min(N, u.fast ? (sc.fastStart || 3) : (sc.start || 1)), streak: 0, n: 0, used: {}, struggle: {}, rev: {}, k: 0 });
+    if (lv.L > N) return next();
+    const Ld = sc.levels[lv.L - 1];
+    const idx = lv.used[lv.L] || 0;
+    const item = idx < Ld.items.length ? Ld.items[idx] : (Ld.gen ? Ld.gen(lv.k++) : Ld.items[idx % Ld.items.length]);
+    lv.cur = item.id; save();
+    const dots = `<span class="streak" aria-label="רצף">${[0, 1].map(i => `<i class="${i < lv.streak ? 'on' : ''}"></i>`).join('')}</span>`;
+    frame(3, `<div class="lvhead"><h3 style="margin:0">מתרגלים</h3><span class="lvtag">רמה ${lv.L} מתוך ${N}: ${Ld.name}</span>${dots}</div>${Ld.intro ? `<p>${R(Ld.intro)}</p>` : ''}<div id="ib"></div>`);
+    askItem($('ib'), item, 'learn', rec => {
+      lv.used[lv.L] = idx + 1; lv.n++;
+      if (rec.fixed) u.ev.fixed = true;
+      const clean = !!rec.correct && rec.attempts === 1 && !rec.hinted;
+      lv.streak = clean ? lv.streak + 1 : 0;
+      if (!clean) lv.struggle[lv.L] = true;
+      log('level', { L: lv.L, item: item.id, clean });
+      if (lv.extra) { lv.extra--; if (!lv.extra) return levelUp(sc); save(); return levels(sc); }
+      if (lv.streak >= 2) return levelUp(sc);
+      if (lv.n >= 4) {
+        if (lv.L === 3 && sc.fluency && (lv.struggle[2] || lv.struggle[3]) && !lv.fluDone) { save(); return fluency(sc); }
+        lv.rev[lv.L] = (lv.rev[lv.L] || 0) + 1; lv.n = 0; save();
+        if (lv.rev[lv.L] > 2) return stuck(sc);
+        return review(sc);
+      }
+      save(); levels(sc);
+    });
+  }
+  function levelUp(sc, pre) {
+    const u = st.unit, lv = u.lv, N = sc.levels.length;
+    lv.L++; lv.streak = 0; lv.n = 0; lv.extra = 0;
+    if (lv.L > N) { u.flash = (pre ? pre + ' ' : '') + '🎉 סיימתם את התרגול! עכשיו משימת המחברת.'; save(); return next(); }
+    u.flash = pre ? `${pre} עכשיו: רמה ${lv.L} – ${sc.levels[lv.L - 1].name}` : `⬆️ עליתם רמה! עכשיו: ${sc.levels[lv.L - 1].name}`;
+    save(); levels(sc);
+  }
+  // 4 תרגילים בלי לעלות רמה → חוזרים לדוגמה הפתורה, ואז עוד תרגילים באותה רמה
+  function review(sc) {
+    log('review', { L: st.unit.lv.L });
+    frame(3, `<h3>בואו נציץ שוב בדוגמה הפתורה</h3><p class="muted">זה בסדר לחזור לדוגמה. אחר כך נתרגל עוד באותה רמה.</p><div class="revbox">${ruleHtml()}</div><div class="row"><button id="nx">חוזרים לתרגול</button>${unclearBtn()}</div>`);
+    bindUnclear({ kind: 'review' });
+    $('nx').onclick = () => levels(sc);
+  }
+  // אחרי שתי חזרות לדוגמה עדיין לא עולים רמה: הסבר בדרך אחרת, וממשיכים – בדיקת השליטה וסולם העזרה ישלימו
+  function stuck(sc) {
+    const U = K.units[st.unit.id];
+    st.unit.ev.stuck = true; log('levelStuck', { L: st.unit.lv.L });
+    frame(3, `<h3>ננסה בדרך אחרת</h3><h3>${R(U.alt.title)}</h3>${R(U.alt.html)}${fig(U.alt.fig)}<p>נמשיך הלאה. אם צריך, נחזור לזה בבדיקה, וגם אפשר לקרוא למורה.</p><div class="row"><button id="nx">ממשיכים</button></div>`);
+    $('nx').onclick = () => levelUp(sc, 'ממשיכים.');
+  }
+  // סבב שטף: רק למי שנעזר ברמז או טעה ברמות 2–3. 6 תרגילים, בלי שעון; כל תשובה נכונה בניסיון ראשון = חוליה בשרשרת
+  function fluency(sc) {
+    const u = st.unit, lv = u.lv, f = lv.flu || (lv.flu = { i: 0, ok: 0, run: 0, chain: [] }), F = sc.fluency, n = F.n || 6;
+    const chain = () => `<div class="chain nosay" aria-label="שרשרת">${Array.from({ length: n }, (_, i) => `<span class="${f.chain[i] === 1 ? 'on' : f.chain[i] === 0 ? 'off' : ''}"></span>`).join('')}</div>`;
+    if (!f.started) {
+      frame(3, `<h3>סבב שטף ⛓️</h3><p>${R(F.intro)}</p>${chain()}<div class="row"><button id="nx">מתחילים</button></div>`);
+      $('nx').onclick = () => { f.started = true; save(); fluency(sc); };
+      return;
+    }
+    const end = early => {
+      lv.fluDone = true; lv.flu = null;
+      log('fluency', { ok: f.ok, n: f.i, early });
+      u.ev.fluency = `${f.ok}/${f.i}`;
+      lv.L = 3; save();
+      if (early) return levelUp(sc, `⛓️ ${f.run} ברצף בסבב השטף – הכלל יושב טוב!`);
+      if (f.ok >= n - 1) {
+        frame(3, `<h3>סבב שטף ⛓️</h3>${chain()}<div class="fb ok">פתרתם ${f.ok} מתוך ${n} בניסיון ראשון. הכלל יושב טוב!</div><div class="row"><button id="nx">ממשיכים</button></div>`);
+        $('nx').onclick = () => levelUp(sc);
+        return;
+      }
+      frame(3, `<h3>סבב שטף ⛓️</h3>${chain()}<div class="fb info">פתרתם ${f.ok} מתוך ${n} בניסיון ראשון. עוד שני תרגילים וממשיכים.</div><div class="row"><button id="nx">ממשיכים</button></div>`);
+      $('nx').onclick = () => { lv.extra = 2; lv.n = 0; lv.streak = 0; save(); levels(sc); };
+    };
+    if (f.run >= 4) return end(true);
+    if (f.i >= n) return end(false);
+    const item = Object.assign({}, F.gen(f.i), { oneTry: true });
+    frame(3, `<div class="lvhead"><h3 style="margin:0">סבב שטף ⛓️</h3><span class="lvtag">תרגיל ${f.i + 1} מתוך ${n} · אין שעון</span></div>${chain()}<div id="ib"></div>`);
+    askItem($('ib'), item, 'learn', rec => {
+      const ok = !!rec.correct && rec.attempts === 1;
+      f.chain[f.i] = ok ? 1 : 0; f.i++;
+      if (ok) { f.ok++; f.run++; } else f.run = 0;
+      save();
+      if (ok) return fluency(sc);
+      // טעות: תרגיל מקביל, עם כל העזרה – ואז ממשיכים בסבב
+      frame(3, `<h3>נסו את זה:</h3><p class="muted">תרגיל דומה – עם רמזים אם צריך.</p><div id="ib"></div>`);
+      askItem($('ib'), F.gen(100 + f.i), 'learn', () => fluency(sc));
+    });
+  }
+
+  // ---------- משימת מחברת (חובה לכולם, בלי שעון): כותבים במחברת → 2 תשובות למאמן → ציור לדוגמה ובדיקה עצמית ----------
+  function notebook2(sc) {
+    const u = st.unit;
+    frame(3, `<h3>${R(sc.title || 'משימת מחברת')} ✏️</h3>${R(sc.html)}<div class="row"><button id="nb">סיימתי – בודקים</button></div><div id="nb2"></div>`);
+    $('nb').onclick = () => {
+      $('nb').closest('.row').remove();
+      $('nb2').innerHTML = `<h3 style="margin-top:14px">בודקים את המחברת</h3><p>כתבו כאן את התשובות שקיבלתם במחברת:</p><div id="ib"></div>`;
+      const res = [];
+      const ask = j => {
+        if (j >= sc.checks.length) return self();
+        const box = document.createElement('div'); box.className = 'nbq';
+        $('ib').appendChild(box);
+        askItem(box, sc.checks[j], 'learn', rec => { res.push(rec.pass ? 1 : 0); box.querySelectorAll('.acts').forEach(a => a.remove()); ask(j + 1); });
+      };
+      ask(0);
+      function self() {
+        u.nb2 = `${res.reduce((a, b) => a + b, 0)}/${res.length}`;
+        $('nb2').insertAdjacentHTML('beforeend', `<div class="fb info"><b>השוו לציור לדוגמה:</b>${fig(sc.model)}${sc.modelText ? `<p>${R(sc.modelText)}</p>` : ''}
+          <p><b>סמנו מה יש אצלכם במחברת:</b></p>${sc.selfcheck.map((t, i) => `<div class="chk" data-row="${i}"><label class="chk"><input type="checkbox" data-c="${i}"> ${R(t)}</label></div>`).join('')}</div>
+          <div id="nbm"></div><div class="row"><button id="nx">בדקתי – ממשיכים</button></div>`);
+        $('nx').onclick = () => {
+          const miss = [...$('nb2').querySelectorAll('input[data-c]')].filter(x => !x.checked);
+          if (!miss.length) { log('notebook', { checks: u.nb2, fixed: u.ev.nbFixed || 0 }); save(); return next(); }
+          $('nbm').innerHTML = `<div class="fb hint">${R("השלימו או תקנו במחברת בצבע אחר, ולחצו 'תיקנתי'.")}</div>`;
+          miss.forEach(x => {
+            const row = x.closest('[data-row]');
+            if (row.querySelector('.fixb')) return;
+            row.insertAdjacentHTML('beforeend', '<button class="sec small fixb">תיקנתי</button>');
+            row.querySelector('.fixb').onclick = e => { x.checked = true; e.target.remove(); u.ev.nbFixed = (u.ev.nbFixed || 0) + 1; };
+          });
+        };
+      }
+    };
+  }
+
   function halfAnim(el) {
     const seq = [[1, 2, 1], [2, 4, 2], [4, 8, 4]];
     let i = 0;
@@ -1459,13 +1763,17 @@
       log('check', { set: setName, passes, mastered });
       if (u.results.some(r => !r.pass && r.correct) || u.results.some(r => r.attempts > 1)) { if (mastered) u.ev.persist = true; }
       if (mastered) { u.mastered = true; u.masteredSet = setName; save(); return next(); }
+      // v2: שתי הראשונות עברו ורק שאלת ההבנה (האחרונה) לא – הסבר בדרך אחרת מיד, ושאלת ההבנה מהסט הבא
+      const last = items.length - 1, nextSet = sc.sets[u.setI + 1];
+      if (U.v2 && !u.conceptRetry && nextSet && u.results.slice(0, last).every(r => r.pass) && !u.results[last].pass) return conceptRetry(sc, setName, U.sets[nextSet][last]);
       u.setI++; u.results = [];
       save();
       if (U.deep) return deepRetry(sc);
       if (!sc.sets[u.setI]) return referral(true);
       return ladder(sc);
     }
-    frame(4, `<h3>בודקים הבנה <span class="muted small">(${j + 1} מתוך ${items.length})</span></h3><div id="ib"></div>`);
+    frame(4, U.v2 ? `<h3>מראים שליטה <span class="muted small">(${j + 1} מתוך ${items.length})</span></h3>${j === 0 ? '<p>שלוש שאלות. אפשר לבקש רמז, אבל את השאלה האחרונה פותרים לבד.</p>' : j === items.length - 1 ? '<p class="muted">זו השאלה האחרונה – פותרים לבד, בלי רמז.</p>' : ''}<div id="ib"></div>`
+      : `<h3>בודקים הבנה <span class="muted small">(${j + 1} מתוך ${items.length})</span></h3><div id="ib"></div>`);
     askItem($('ib'), items[j], 'learn', rec => {
       u.results.push(rec);
       if (rec.fixed) u.ev.fixed = true;
@@ -1475,6 +1783,22 @@
       save();
       check(sc);
     });
+  }
+  function conceptRetry(sc, setName, item) {
+    const U = K.units[st.unit.id], u = st.unit;
+    u.conceptRetry = true; save();
+    log('conceptRetry', { set: setName });
+    frame(4, `<h3>עוד צעד קטן</h3><p>את שני התרגילים פתרתם יפה. שאלת ההבנה עוד לא ישבה – בואו נראה את זה בדרך אחרת.</p><h3>${R(U.alt.title)}</h3>${R(U.alt.html)}${fig(U.alt.fig)}<div class="row"><button id="nx">הבנתי – לשאלה</button></div>`);
+    $('nx').onclick = () => {
+      frame(4, '<h3>מראים שליטה – שאלת הבנה</h3><div id="ib"></div>');
+      askItem($('ib'), item, 'learn', rec => {
+        if (rec.pass) { u.mastered = true; u.masteredSet = setName + '+'; u.ev.persist = true; save(); return next(); }
+        u.lastWrong = { q: item.q, answers: rec.answers };
+        u.setI++; u.results = []; save();
+        if (!sc.sets[u.setI]) return referral(true);
+        ladder(sc);
+      });
+    };
   }
   // אתגר המומחים: בלי סולם עזרה ובלי הפניה – הוא רשות
   function deepRetry(sc) {
@@ -1576,7 +1900,7 @@
     if (ev.persist || u.setI > 0) give('persist');
     if (!st.done[u.id] && !u.tPreview) { st.done[u.id] = true; [].concat(U.skill).forEach(k => { st.skills[k] = 'mastered'; }); }
     save();
-    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet}${u.more ? ' · תרגול נוסף ' + u.more.join(', ') : ''}${u.sheet ? ' · מחברת ' + u.sheet : ''} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
+    tr(U.deep ? 'מומחיות' : 'יחידה', `${unitDef(u.id).title} (${u.ver === 'teach' ? 'הקניה' : 'חיזוק'}) · שליטה ✓ · סט ${u.masteredSet}${u.more ? ' · תרגול נוסף ' + u.more.join(', ') : ''}${u.sheet ? ' · מחברת ' + u.sheet : ''}${u.nb2 ? ' · מחברת ' + u.nb2 + (ev.nbFixed ? ` (תיקן ${ev.nbFixed})` : '') : ''}${u.fast ? ' · מסלול מהיר' : ''}${ev.fluency ? ' · סבב שטף ' + ev.fluency : ''}${ev.unclear ? ' · "לא ברור" ×' + ev.unclear : ''} · רמזים ${(st.log || []).filter(l => l.type === 'hint').length}`);
     const nst = nextStep(), nxt = nst && !(nst.unit && nst.unit.optional) ? nst : null;
     const fin = finished();
     if (fin && !st.finTracked) { st.finTracked = true; save(); tr('סיום קורס', `${K.title} · ${E.skillLine(st.skills, K)}`); }
