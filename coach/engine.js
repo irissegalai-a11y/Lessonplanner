@@ -4,10 +4,10 @@
    ========================================================= */
 (function () {
   const C = window.COACH = window.COACH || {};
-  const VER = '4.11';
+  const VER = '4.12';
   C.VER = VER;
   // סדר קבוע! המיקום ברשימה נכנס לקוד ההמשך. קורס חדש מוסיפים רק בסוף.
-  C.COURSE_IDS = ['equiv', 'dec', 'pct', 'fracop', 'area', 'mult', 'frac', 'fmul'];
+  C.COURSE_IDS = ['equiv', 'dec', 'pct', 'fracop', 'area', 'mult', 'frac', 'fmul', 'fdiv'];
 
   /* ---------- מבדק אבחון ----------
      מיומנות "נשלטת" אחרי 2 תשובות נכונות, "עדיין לא" אחרי 2 שגויות או "עוד לא למדתי",
