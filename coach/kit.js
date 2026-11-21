@@ -26,7 +26,7 @@
   // u.levels – [{ name, intro, items, gen(k) }]; u.fluency – { intro, gen(k), n } (סבב שטף למי שנעזר/טעה ברמות 2–3)
   // u.notebook – { title, html, checks:[items], model, modelText, selfcheck:[…] }. A,B,C – בדיקת שליטה (השאלה האחרונה = שאלת הבנה)
   C.mk2 = function (u) {
-    const explore = u.explore ? [Object.assign({ step: 1, kind: 'cake' }, u.explore)] : [];
+    const explore = [u.explore, u.explore2].filter(Boolean).map(x => Object.assign({ step: 1, kind: 'cake' }, x));
     const rule = Object.assign({ step: 2, kind: 'rule' }, u.rule);
     const lv = start => ({ step: 3, kind: 'levels', levels: u.levels, fluency: u.fluency, start, fastStart: u.fastStart || 3 });
     const nb = Object.assign({ step: 3, kind: 'notebook2' }, u.notebook);
@@ -49,7 +49,8 @@
     arr: (r, c, o) => Object.assign({ k: 'arr', r, c }, o || {}),
     groups: (g, n, o) => Object.assign({ k: 'groups', g, n }, o || {}),
     area: (a, b, o) => Object.assign({ k: 'area', a, b }, o || {}),
-    tree: (n, a, b, o) => Object.assign({ k: 'tree', n, a, b }, o || {})
+    tree: (n, a, b, o) => Object.assign({ k: 'tree', n, a, b }, o || {}),
+    jug: (L, d, n, o) => Object.assign({ k: 'jug', L, d, n }, o || {})
   };
   // שאלות למבדק אמצע ולמבדק סיכום (K.EXAMS = { mid: [...], final: [...] }). u = השיעור שהשאלה בודקת.
   // בבחירה: התשובה הנכונה נכתבת ראשונה, והסדר מסתובב לפי המזהה – כדי שהיא לא תהיה תמיד במקום הראשון.

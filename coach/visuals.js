@@ -188,7 +188,42 @@
     out += `<text x="${cx}" y="100" text-anchor="middle" font-size="22" fill="${INK}">×</text>`;
     return `<svg class="fig tree" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${f.n} שווה ${f.a} כפול ${f.b}">${out}</svg>`;
   }
-  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups, area, tree };
+  // קנקן מיץ: L ליטר, cut[p] = לכמה חלקים מחולק הליטר ה-p (מלמטה), fill(k) = צבע החלק (null = ריק)
+  const JUICE = '#f5a524', JUICE2 = '#fbd38d';
+  function jugSvg(o) {
+    const L = o.L, cut = o.cut, lh = o.lh || (L <= 1 ? 150 : L === 2 ? 90 : 64), x0 = 50, bw = 92, top = 16, bot = top + L * lh;
+    let out = '', k = 0;
+    for (let p = 0; p < L; p++) {
+      const D = cut[p] || 1, sh = lh / D;
+      for (let s = 0; s < D; s++, k++) {
+        const y = bot - p * lh - (s + 1) * sh, c = o.fill(k, p, s);
+        out += `<rect class="${o.click ? 'ck' : ''}" ${D > 1 || o.parts ? `data-k="${k}"` : `data-p="${p}"`} x="${x0}" y="${y.toFixed(2)}" width="${bw}" height="${sh.toFixed(2)}" fill="${c || '#fff'}" stroke="${INK}" stroke-width="${D > 1 ? 1 : 0}" ${D > 1 ? 'stroke-dasharray="4 3"' : ''}/>`;
+        if (o.num && o.num(k) != null) out += `<text x="${x0 + bw / 2}" y="${(y + sh / 2 + 5).toFixed(1)}" text-anchor="middle" font-size="${Math.min(15, sh + 2)}" font-weight="700" pointer-events="none">${o.num(k)}</text>`;
+      }
+      const yl = bot - (p + 1) * lh;
+      out += `<line x1="${x0 - 10}" x2="${x0 + bw}" y1="${yl}" y2="${yl}" stroke="${INK}" stroke-width="2.4" pointer-events="none"/><text x="${x0 - 26}" y="${yl + 5}" text-anchor="middle" font-size="13" pointer-events="none">${p + 1} ליטר</text>`;
+    }
+    if (o.g) for (let q = o.g; q < k; q += o.g) { let kk = 0, y = bot; for (let p = 0; p < L; p++) { const D = cut[p] || 1; for (let s = 0; s < D; s++, kk++) if (kk === q) y = bot - p * lh - s * lh / D; } out += `<line x1="${x0}" x2="${x0 + bw}" y1="${y}" y2="${y}" stroke="${INK}" stroke-width="3" pointer-events="none"/>`; }
+    out += `<path d="M${x0 - 12} ${top - 8} L${x0} ${top + 6} V${bot} H${x0 + bw} V${top - 8}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round" pointer-events="none"/>`;
+    out += `<path d="M${x0 + bw} ${top + 18} C${x0 + bw + 36} ${top + 18} ${x0 + bw + 36} ${bot - 22} ${x0 + bw} ${bot - 22}" fill="none" stroke="${INK}" stroke-width="5" pointer-events="none"/>`;
+    const W = x0 + bw + 40, H = bot + 6;
+    return `<svg class="fig jug${o.click ? ' cake' : ''}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="קנקן מיץ, ${L} ליטר">${out}</svg>`;
+  }
+  // כוס: parts = צבעי החלקים שבתוכה (מלמטה), cap = כמה חלקים נכנסים בכוס מלאה, sh = גובה חלק
+  function cupSvg(o) {
+    const w = 46, sh = o.sh, h = o.cap * sh, top = 8, bot = top + h, x0 = 8;
+    let out = '';
+    o.parts.forEach((c, i) => { out += `<rect x="${x0}" y="${(bot - (i + 1) * sh).toFixed(2)}" width="${w}" height="${sh.toFixed(2)}" fill="${c}" stroke="${INK}" stroke-width="1" stroke-dasharray="4 3"/>`; });
+    out += `<path d="M${x0 - 3} ${top - 4} L${x0} ${bot} H${x0 + w} L${x0 + w + 3} ${top - 4}" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/>`;
+    if (o.label != null) out += `<text x="${x0 + w / 2}" y="${bot + 18}" text-anchor="middle" font-size="13" font-weight="700">${o.label}</text>`;
+    return `<svg class="fig cupg" viewBox="0 0 ${w + 16} ${bot + 24}" width="${w + 16}" height="${bot + 24}" role="img" aria-label="כוס">${out}</svg>`;
+  }
+  // ציור סטטי: קנקן עם L ליטר, כל ליטר מחולק ל-d, n חלקים מלאים; g = קו עבה כל g חלקים (כוסות)
+  function jug(f) {
+    const tones = [JUICE, JUICE2];
+    return jugSvg({ L: f.L, cut: Array(f.L).fill(f.d), parts: true, fill: k => k < f.n ? (f.g ? tones[Math.floor(k / f.g) % 2] : JUICE) : null, g: f.g, lh: f.lh });
+  }
+  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups, area, tree, jug };
   function fig(f) {
     if (!f) return '';
     if (Array.isArray(f)) return `<div class="figs">${f.map(fig).join('')}</div>`;
@@ -198,5 +233,5 @@
     return f.label ? `<figure class="figl">${svg}<figcaption>${R(f.label)}</figcaption></figure>` : svg;
   }
 
-  C.V = { M, R, fig, bar, pie, line, area, fracSay, FILL, FILL2, INK };
+  C.V = { M, R, fig, bar, pie, line, area, fracSay, FILL, FILL2, INK, jugSvg, cupSvg, JUICE, JUICE2 };
 })();
