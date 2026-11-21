@@ -449,7 +449,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.13</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.14</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -2059,13 +2059,14 @@
   function catalog(all) {
     st = null; setCourse(null); layout(false);
     const fits = g => !MYG || !g || (MYG >= g[0] && MYG <= g[1]);
-    const list = C.COURSE_IDS.map(id => ({ id, c: canEnter(id) ? C.courses[id] : null, pl: PLANNED[id] })).filter(x => x.c || x.pl)
+    // hidden – קורס שהוחלף: לא מוצג לתלמידים בקטלוג, אבל קישור ישיר וקוד המשך עדיין עובדים (מי שהתחיל יכול לסיים)
+    const list = C.COURSE_IDS.filter(id => !(C.courses[id] && C.courses[id].hidden && !E.teacher())).map(id => ({ id, c: canEnter(id) ? C.courses[id] : null, pl: PLANNED[id] })).filter(x => x.c || x.pl)
       .map(x => Object.assign(x, { g: x.c ? x.c.grades : x.pl.grades }));
     const mine = list.filter(x => fits(x.g)), other = list.filter(x => !fits(x.g));
     const card = ({ id, c, pl, g }) => {
       const t = c ? c.title : pl.title, sub = c ? c.sub : pl.sub;
       const meta = c ? `${c.MODULES.length} פרקים · ${c.UNITS.length} שיעורים` : 'בהכנה';
-      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? (c.draft ? 'טיוטה – רק מורים רואים' : 'קורס') : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button>${T && c.EXAMS ? `<button class="ghost small nosay" data-cx="${id}:mid">🖨️ מבדק אמצע</button><button class="ghost small nosay" data-cx="${id}:final">🖨️ מבדק סיכום</button>` : ''}</div>` : ''}</div>`;
+      return `<div class="card ccard${c ? '' : ' soon'}"><div class="crumb">${c ? (c.draft ? 'טיוטה – רק מורים רואים' : c.hidden ? 'מוסתר מתלמידים (הוחלף בקורסים החדשים)' : 'קורס') : 'בקרוב'} · ${gradeText(g)}</div><h2>${t}</h2><p class="muted">${sub}</p><p class="small muted">${meta}</p>${c ? `<div class="row"><button data-c="${id}">לקורס</button>${T && c.EXAMS ? `<button class="ghost small nosay" data-cx="${id}:mid">🖨️ מבדק אמצע</button><button class="ghost small nosay" data-cx="${id}:final">🖨️ מבדק סיכום</button>` : ''}</div>` : ''}</div>`;
     };
     // קורסים פעילים קודם, ואחריהם "בקרוב"
     const sortA = a => a.slice().sort((x, y) => (y.c ? 1 : 0) - (x.c ? 1 : 0));
