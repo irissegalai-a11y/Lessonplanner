@@ -119,6 +119,7 @@
   figure.figw figcaption.wlab { font-weight: 700; font-size: 1.05rem; margin-bottom: -2px; }
   .fb.flash { margin: 0 0 12px; }
   .revbox { border: 1px solid var(--line); border-radius: 14px; padding: 4px 14px 12px; margin: 10px 0; }
+  svg.cake .ck { cursor: pointer; }
   .nbq { border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 8px; }
   .chk .fixb { margin-inline-start: 8px; }
   .exrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
@@ -448,7 +449,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.12</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.13</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -460,6 +461,7 @@
 <script src="coach/courses/mult.js"></script>
 <script src="coach/courses/fracop.js"></script>
 <script src="coach/courses/fmul.js"></script>
+<script src="coach/courses/fdiv.js"></script>
 <script src="coach/courses/exams.js"></script>
 <script>
 (function () {
@@ -1422,6 +1424,7 @@
       };
     } else if (sc.kind === 'intro') intro(sc);
     else if (sc.kind === 'cake') cake(sc);
+    else if (sc.kind === 'measure') measure(sc);
     else if (sc.kind === 'rule') rule(sc);
     else if (sc.kind === 'levels') levels(sc);
     else if (sc.kind === 'notebook2') notebook2(sc);
@@ -1530,6 +1533,74 @@
         $('cstep').innerHTML = `<div class="fb ok">✓ ${R(sc.okB)}</div><p><b>ג.</b> עכשיו נספור.</p><div id="ib"></div>`;
         ask(0);
       };
+    }
+    function ask(j) {
+      if (j >= sc.qs.length) return closing();
+      const box = document.createElement('div');
+      $('ib').innerHTML = ''; $('ib').appendChild(box);
+      askItem(box, sc.qs[j], 'learn', () => ask(j + 1));
+    }
+    function closing() {
+      const p = u.ev.pred, right = p === sc.predAns;
+      $('cstep').innerHTML = `<div class="fb ok">${R(sc.close)}</div><p>${R(right ? 'צדקתם בניבוי!' : sc.predMiss.replace('{x}', sc.predWord[p]))}</p><div class="rulebox">${R(sc.write)}</div><div class="row"><button id="nx">לכלל</button></div>`;
+      save();
+      $('nx').onclick = next;
+    }
+  }
+
+  // ---------- המחשה "כמה פעמים נכנס" (שלם : שבר): חותכים כל שלם לחלקים שווים, ומסמנים קבוצות בגודל המחלק ----------
+  // sc: W שלמים, d חלקים בכל שלם, n חלקים בכל קבוצה. לחיצה על שלם חותכת אותו; לחיצה על חלק יוצרת את הקבוצה הבאה (n חלקים)
+  function measure(sc) {
+    const u = st.unit, W = sc.W, D = sc.d, N = sc.n, m = { cut: new Set(), grp: [], stage: 'pred' };
+    const GC = ['#f6c9a8', '#bfe0c4', '#c9d6f2', '#f2d38a', '#e7c3ea', '#bfe5e6', '#f3b9b9', '#d9d2c3'];
+    frame(1, `<h3>${R(sc.title)}</h3><p style="font-size:1.12rem">${R(sc.story)}</p><div id="cpred"></div><div id="cwrap" hidden><div id="cfig"></div><div id="cstep"></div></div><div class="row">${unclearBtn()}</div>`);
+    bindUnclear(sc);
+    const owner = k => m.grp.findIndex(gp => gp.includes(k));
+    const free = () => { const f = []; for (let k = 0; k < W * D; k++) if (owner(k) < 0) f.push(k); return f; };
+    const draw = () => {
+      const r = 44, gap = 14, SW = W * (2 * r + gap), H = 2 * r + 30;
+      let out = '';
+      for (let p = 0; p < W; p++) {
+        const cx = SW - (gap / 2 + r + p * (2 * r + gap)), cy = r + 4; // מימין לשמאל: השלם הראשון מימין
+        if (!m.cut.has(p)) out += `<circle class="ck" data-p="${p}" cx="${cx}" cy="${cy}" r="${r}" fill="${V.FILL2}" stroke="${V.INK}" stroke-width="2.4"/>`;
+        else for (let s = 0; s < D; s++) {
+          const k = p * D + s, o = owner(k), a0 = -Math.PI / 2 + s * 2 * Math.PI / D, a1 = a0 + 2 * Math.PI / D, P = a => `${(cx + r * Math.cos(a)).toFixed(2)} ${(cy + r * Math.sin(a)).toFixed(2)}`;
+          out += `<path class="ck" data-k="${k}" d="M${cx} ${cy} L${P(a0)} A${r} ${r} 0 0 1 ${P(a1)} Z" fill="${o < 0 ? V.FILL2 : GC[o % GC.length]}" stroke="${V.INK}" stroke-width="1.6"/>`;
+          if (o >= 0) { const am = (a0 + a1) / 2; out += `<text x="${(cx + r * 0.58 * Math.cos(am)).toFixed(1)}" y="${(cy + r * 0.58 * Math.sin(am) + 5).toFixed(1)}" text-anchor="middle" font-size="15" font-weight="700" pointer-events="none">${o + 1}</text>`; }
+        }
+        out += `<text x="${cx}" y="${2 * r + 24}" text-anchor="middle" font-size="13" pointer-events="none">${R(sc.wholeName || 'שלם')}</text>`;
+      }
+      $('cfig').innerHTML = `<figure class="figl"><svg class="fig cake" viewBox="0 0 ${SW} ${H}" width="${SW}" height="${H}" role="img" aria-label="${R(sc.wholeName || 'שלם')}">${out}</svg></figure>`;
+      $('cfig').querySelectorAll('.ck').forEach(el => el.onclick = () => el.dataset.p != null ? cutP(+el.dataset.p) : grpK(+el.dataset.k));
+    };
+    const fb = (cls, html) => { const b = $('cfb'); if (b) b.innerHTML = `<div class="fb ${cls}">${R(html)}</div>`; };
+    function cutP(p) {
+      if (m.stage !== 'cut' || m.cut.has(p)) return;
+      m.cut.add(p); draw(); $('ccnt').textContent = m.cut.size * D;
+      if (m.cut.size === W) { m.stage = 'grp'; log('measureCut', { ok: true }); stepB(); }
+    }
+    function grpK() {
+      if (m.stage !== 'grp') return fb('hint', sc.msgCutFirst || 'קודם חותכים את כולם.');
+      const f = free();
+      if (f.length < N) return fb('hint', sc.msgRest);
+      m.grp.push(f.slice(0, N)); draw(); $('gcnt').textContent = m.grp.length;
+      if (free().length < N) { m.stage = 'done'; log('measureGroups', { n: m.grp.length }); doneB(); }
+    }
+    $('cpred').innerHTML = `<p><b>מה אתם חושבים?</b></p><div class="opts">${sc.pred.map((t, i) => `<button class="opt" data-p="${i}">${R(t)}</button>`).join('')}</div>`;
+    $('cpred').querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+      if (m.stage !== 'pred') return;
+      u.ev.pred = +b.dataset.p; log('predict', { p: u.ev.pred });
+      b.classList.add('sel');
+      $('cpred').insertAdjacentHTML('beforeend', '<p class="muted">נבדוק בציור.</p>');
+      m.stage = 'cut'; $('cwrap').hidden = false; draw();
+      $('cstep').innerHTML = `<p><b>א.</b> ${R(sc.instrA)}</p><p class="muted small">${R(sc.countName)}: <b id="ccnt">0</b></p><div id="cfb"></div>`;
+    });
+    function stepB() {
+      $('cstep').innerHTML = `<div class="fb ok">✓ ${R(sc.okA)}</div><p><b>ב.</b> ${R(sc.instrB)}</p><p class="muted small">${R(sc.groupName)}: <b id="gcnt">0</b></p><div id="cfb"></div>`;
+    }
+    function doneB() {
+      $('cstep').innerHTML = `<div class="fb ok">✓ ${R(sc.okB)}</div><p><b>ג.</b> עכשיו נספור.</p><div id="ib"></div>`;
+      ask(0);
     }
     function ask(j) {
       if (j >= sc.qs.length) return closing();
