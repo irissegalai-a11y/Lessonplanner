@@ -14499,13 +14499,34 @@ function stopRace() { if (race && race.timer) clearInterval(race.timer); if (rac
 
 
 // מסלול שברים – רק במרוץ (לא בבינגו/מלחמה, שמשתמשים ב-RACE_TRACKS): תשובה בבחירה מתוך 4
-const RACE_ALL = RACE_TRACKS.concat(GRADE >= 5 ? [{ id: 'frac', name: GRADE === 6 ? 'כפל וחילוק שברים' : 'כפל שבר ומספר שלם', ch: true }] : []);
+const RACE_ALL = RACE_TRACKS.concat(GRADE >= 5 ? [{ id: 'frac', name: GRADE === 6 ? 'כפל וחילוק שברים' : 'כפל שבר ומספר שלם', ch: true }, { id: 'dlab', name: '🧪 מעבדת העשרוניים' }] : []);
+// מסלול מעבדת העשרוניים: כיתה ה' – רק מהות (פירוק לשלמים/עשיריות/מאיות, קיבוץ, החלק החסר); כיתה ו' – גם חיבור עם המרה וחיסור עם פריטה
+function raceDlQ() {
+  const k = R(0, GRADE >= 6 ? 5 : 2);
+  if (k === 0) { const p = [R(1, 9), Math.random() < 0.3 ? 0 : R(1, 9), R(1, 9)], parts = [p[0], p[1] ? `0.${p[1]}` : null, `0.0${p[2]}`].filter(Boolean); return { t: `${parts.join(' + ')} =`, ans: dlV(p) }; }
+  if (k === 1) { const w = R(1, 5), t = R(1, 8), h = R(11, 19); return { t: `${w} + 0.${t} + ${fmt(h / 100)} =`, ans: rnd(w + t / 10 + h / 100) }; }
+  if (k === 2) { const p = [R(1, 9), R(1, 9), R(1, 9)], v = dlV(p); return Math.random() < 0.5 ? { t: `${fmt(v)} = ${p[0]} + 0.${p[1]} +`, ans: rnd(p[2] / 100) } : { t: `${fmt(v)} = ${p[0]} + 0.0${p[2]} +`, ans: rnd(p[1] / 10) }; }
+  // כיתה ו': חיבור וחיסור בראש – צעד אחד של המרה או פריטה (לא תרגיל מאונך מלא, כדי שיתאים למרוץ)
+  if (k === 3) {
+    if (Math.random() < 0.6) { const a = rnd(R(0, 4) + R(3, 9) / 10), t = R(10 - Math.round(a * 10) % 10, 9) / 10; return { t: `${fmt(a)} + ${fmt(t)} =`, ans: rnd(a + t) }; } // 2.6 + 0.8
+    const a = rnd(R(0, 3) + R(1, 8) / 10 + R(1, 9) / 100), h = R(10 - Math.round(a * 100) % 10, 9) / 100; return { t: `${fmt(a)} + ${fmt(h)} =`, ans: rnd(a + h) }; // 1.37 + 0.05
+  }
+  if (k === 4) {
+    const z = R(0, 2);
+    if (z === 0) { const w = R(1, 5), t = R(1, 9) / 10; return { t: `${w} - ${fmt(t)} =`, ans: rnd(w - t) }; } // 3 - 0.4
+    if (z === 1) { const a = rnd(R(1, 5) + R(1, 6) / 10), t = R(Math.round(a * 10) % 10 + 1, 9) / 10; return { t: `${fmt(a)} - ${fmt(t)} =`, ans: rnd(a - t) }; } // 2.3 - 0.5
+    const x = pick([0.25, 0.75, 0.5, 0.05, 0.95, 0.15, 0.45]); return { t: `1 - ${fmt(x)} =`, ans: rnd(1 - x) }; // 1 - 0.25
+  }
+  const up = Math.random() < 0.5, step = pick([0.1, 0.01]);
+  const base = step === 0.1 ? (up ? rnd(R(1, 8) + 0.9 + R(1, 9) / 100) : rnd(R(1, 8) + R(1, 9) / 100)) : (up ? rnd(R(1, 8) + R(0, 8) / 10 + 0.09) : rnd(R(1, 8) + R(1, 9) / 10));
+  return { t: `${fmt(base)} ${up ? '+' : '-'} ${fmt(step)} =`, ans: rnd(base + (up ? step : -step)) };
+}
 const raceTr = id => RACE_ALL.find(t => t.id === id) || RACE_ALL[0];
 function raceFracQ() {
   const q = GRADE === 6 && Math.random() < 0.5 ? frDivQ() : frMulQ();
   return { t: `${q.t} =`, ans: frKey(q.n, q.d), ansH: frRes(q.n, q.d), ch: frChoices(q) };
 }
-const raceGetQ = track => track === 'frac' ? raceFracQ() : raceQ(track);
+const raceGetQ = track => track === 'frac' ? raceFracQ() : track === 'dlab' ? raceDlQ() : raceQ(track);
 // הצגת תשובה (מספר או שבר)
 const raceAnsH = q => q.ansH != null ? q.ansH : fmt(q.ans);
 // שיא אישי: 60 שניות – המפתח הישן (המסלול); 30 שניות – מסלול@30
@@ -14605,7 +14626,7 @@ function raceTeamEnd(g) {
 function raceStart(trackId, o = {}) {
   const r = raceData(), secs = o.secs === 30 ? 30 : 60, team = o.team != null && raceTeams ? raceTeams.teams[o.team] : null;
   r.plays = (r.plays || 0) + 1; r.lastTrack = trackId; saveStore(store);
-  const tr = raceTr(trackId), ch = !!tr.ch;
+  const tr = raceTr(trackId), ch = !!tr.ch, decPad = trackId === 'dec' || trackId === 'dlab';
   race = { track: trackId, secs, team: team ? o.team : null, score: 0, streak: 0, wrong: [], q: null, left: secs, best: team ? 0 : r.best[raceBestKey(trackId, secs)] || 0, timer: null, typed: '' };
   const touch = window.matchMedia && matchMedia('(pointer: coarse)').matches;
   app.innerHTML = `
@@ -14618,8 +14639,8 @@ function raceStart(trackId, o = {}) {
       </div>
       <div id="rTrack"></div>
       <div class="race-q" id="rQ"></div>
-      ${ch ? '<div class="race-ch" id="rCh" dir="ltr"></div>' : `<div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : `inputmode="${trackId === 'dec' ? 'decimal' : 'numeric'}"`} autocomplete="off" aria-label="תשובה" dir="ltr"></div>
-      <div class="race-pad${trackId === 'dec' ? ' dec' : ''}" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}${trackId === 'dec' ? '<button class="secondary" data-k="." aria-label="נקודה עשרונית">.</button><button class="secondary" data-k="0">0</button><button class="secondary" data-k="del" aria-label="מחיקה">⌫</button>' : '<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button>'}<button data-k="ok" aria-label="בדיקה">✓</button></div>`}
+      ${ch ? '<div class="race-ch" id="rCh" dir="ltr"></div>' : `<div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : `inputmode="${decPad ? 'decimal' : 'numeric'}"`} autocomplete="off" aria-label="תשובה" dir="ltr"></div>
+      <div class="race-pad${decPad ? ' dec' : ''}" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}${decPad ? '<button class="secondary" data-k="." aria-label="נקודה עשרונית">.</button><button class="secondary" data-k="0">0</button><button class="secondary" data-k="del" aria-label="מחיקה">⌫</button>' : '<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button>'}<button data-k="ok" aria-label="בדיקה">✓</button></div>`}
       <button class="ghost race-skip" id="rSkip">דילוג ←</button>
       <div class="race-count" id="rCount"></div>
     </div>`;
@@ -16423,10 +16444,9 @@ function dlValQ(d, t) {
     return { kind: 'val', text: 'איזה מספר מוצג בקוביות?', fig: dlBlocks(p), ans: v, hint: 'סופרים: כמה שלמים (ריבועים גדולים), כמה עשיריות (מוטות) וכמה מאיות (קוביות קטנות). אם אין עשיריות – כותבים 0 במקומן.', exp: `${p[0]} שלמים, ${p[1]} עשיריות ו-${p[2]} מאיות = ${M(fmt(v))}` }; }
   if (T === 1) { const c = Math.random() < 0.5 ? 1 : 2, p = [R(0, 3), R(0, 9), R(0, 9)]; p[c] = R(11, 19); if (c === 1) p[2] = R(0, 9); const v = dlV(p);
     return { kind: 'val', text: `${p[0]} שלמים, ${p[1]} עשיריות ו-${p[2]} מאיות.<br>איזה מספר זה?`, fig: dlBlocks(p), ans: v, hint: `10 ${DL_PL[c]} = ${DL_ONE[c - 1]}. קודם מקבצים!`, exp: `${M(p[c])} ${DL_PL[c]} = ${DL_ONE[c - 1]} ועוד ${M(p[c] - 10)} ${DL_PL[c]}. לכן המספר הוא ${M(fmt(v))}.` }; }
-  if (T === 2) { if (Math.random() < 0.5) { const w = R(1, 9), t = R(1, 9), v = rnd(w + t / 10);
-      return { kind: 'val', text: `כמה <b>עשיריות</b> יש בסך הכול במספר ${M(fmt(v))}?`, ans: w * 10 + t, hint: 'בכל שלם יש 10 עשיריות.', exp: `${M(w)} שלמים = ${M(w * 10)} עשיריות, ועוד ${M(t)}: ${M(w * 10 + t)} עשיריות.` }; }
-    const t = R(1, 9);
-    return { kind: 'val', text: `${M(`0.${t}`)} = ? <b>מאיות</b>`, ans: t * 10, hint: 'בכל עשירית יש 10 מאיות.', exp: `${M(t)} עשיריות = ${M(t * 10)} מאיות, כי ${M(`0.${t} = 0.${t}0`)}.` }; }
+  // איריס 21.11: בלי שאלות "0.5 = ? מאיות" – רק "כמה עשיריות בסך הכול"
+  if (T === 2) { const w = R(1, 9), t = R(1, 9), v = rnd(w + t / 10);
+    return { kind: 'val', text: `כמה <b>עשיריות</b> יש בסך הכול במספר ${M(fmt(v))}?`, ans: w * 10 + t, hint: 'בכל שלם יש 10 עשיריות.', exp: `${M(w)} שלמים = ${M(w * 10)} עשיריות, ועוד ${M(t)}: ${M(w * 10 + t)} עשיריות.` }; }
   if (T === 3) { const p = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3), c = R(1, 2), v = dlV(p), val = rnd(p[c] / 10 ** c);
     return { kind: 'val', text: `מה <b>הערך</b> של הספרה ${M(p[c])} במספר ${M(fmt(v))}?<br><span class="small muted">כתבו כמספר, למשל 0.3</span>`, ans: val, hint: 'באיזה טור הספרה – עשיריות או מאיות?', exp: `הספרה ${M(p[c])} בטור ה${DL_PL[c]}, ולכן הערך שלה ${M(fmt(val))}.` }; }
   if (T === 4) { const p = [R(1, 9), Math.random() < 0.35 ? 0 : R(1, 9), R(1, 9)], v = dlV(p), parts = [p[0], p[1] ? `0.${p[1]}` : null, `0.0${p[2]}`].filter(Boolean);
@@ -16446,25 +16466,56 @@ function dlPlan(mode) {
 }
 // ---- מסכים ----
 const dlCoins = c => `<div class="dl-coins">${c.map(x => `<span class="dl-coin${x === 2 ? ' g' : x === 1 ? ' s' : x === 0 ? ' x' : ''}">${x === 2 ? '🥇' : x === 1 ? '🥈' : ''}</span>`).join('')}</div>`;
-function dlHome() {
+function dlHome(mode) {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('dlab');
-  const d = (store.dlab = store.dlab || {});
-  app.innerHTML = `
-    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים</span><button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></div>
+  const d = (store.dlab = store.dlab || {}), T = teacherOn();
+  mode = T ? (mode || 'teams') : 'solo';
+  let nTeams = 3, nQ = 10;
+  const names = JEO_TEAMS.map(t => t.name);
+  const keep = () => app.querySelectorAll('[data-dltn]').forEach(inp => { names[Number(inp.dataset.dltn)] = inp.value.trim() || JEO_TEAMS[Number(inp.dataset.dltn)].name; });
+  const draw = () => {
+    const tm = mode === 'teams';
+    app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים${tm ? ' – קבוצות' : ''}</span><button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></div>
+    ${T ? `<div class="name-row" style="justify-content:center"><span class="lbl2">איך משחקים?</span><span class="seg"><button data-dlpm="teams" class="${tm ? 'sel' : ''}">קבוצות (בכיתה)</button><button data-dlpm="solo" class="${tm ? '' : 'sel'}">אישי</button></span></div>` : ''}
     <div class="card race-intro">
       ${dlBlocks([1, 3, 5])}
-      <p class="race-how">10 אתגרים בשברים עשרוניים, מהקל אל הקשה. נכון בניסיון ראשון – <b>מדליית זהב</b>, בניסיון שני – מדליית כסף.${GRADE >= 6 ? '<br>יש <b>קוביות עזר</b>: פורטים שלם ל-10 עשיריות, עשירית ל-10 מאיות – ומקבצים בחזרה.' : '<br>שלם = ריבוע גדול, עשירית = מוט, מאית = קובייה קטנה.'}</p>
+      ${tm ? `<div class="cq-rules"><ol class="cq-steps">
+        <li>על המסך מופיע <b>אתגר</b>. כל קבוצה פותרת יחד – במחברת או על לוח קטן (אפשר להפעיל שעון).</li>
+        <li>כשהזמן נגמר – כל הקבוצות מרימות את התשובה, והמורה חושפת את הפתרון${GRADE >= 6 ? ' ומדגימה בקוביות העזר' : ''}.</li>
+        <li>כל קבוצה שצדקה מקבלת <b>נקודה</b>. קבוצה שנציג/ה שלה מסביר/ה נכון <b>למה</b> – עוד <b>נקודת בונוס</b>.</li>
+        <li>בסוף – הקבוצה עם הכי הרבה נקודות מנצחת!</li>
+      </ol></div>`
+      : `<p class="race-how">10 אתגרים בשברים עשרוניים, מהקל אל הקשה. נכון בניסיון ראשון – <b>מדליית זהב</b>, בניסיון שני – מדליית כסף.${GRADE >= 6 ? '<br>יש <b>קוביות עזר</b>: פורטים שלם ל-10 עשיריות, עשירית ל-10 מאיות – ומקבצים בחזרה.' : '<br>שלם = ריבוע גדול, עשירית = מוט, מאית = קובייה קטנה.'}</p>`}
     </div>
-    <div class="dl-modes">${DL_MODES.map(([id, icn, nm, ds]) => `<button class="game-card dl-mode" data-dlm="${id}"><span class="gc-ic">${icn}</span><span class="gc-nm">${nm}</span><span class="gc-ds">${ds}</span>${d[id] ? `<span class="gc-st">${ic('star')} השיא: ${d[id]} מדליות זהב</span>` : ''}</button>`).join('')}</div>`;
-  $('dlHomeB').onclick = home;
-  app.querySelectorAll('[data-dlm]').forEach(b => b.onclick = () => dlStart(b.dataset.dlm));
+    ${tm ? `<div class="name-row" style="justify-content:center"><span class="lbl2">כמה קבוצות?</span><span class="seg">${[2, 3, 4, 5, 6].map(k => `<button data-dlt="${k}" class="${k === nTeams ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
+    <div class="jeo-teams">${JEO_TEAMS.slice(0, nTeams).map((t, i) => `<label class="jeo-tname" style="--tc:${t.color}"><span class="jdot"></span><input data-dltn="${i}" value="${esc(names[i])}" maxlength="16" aria-label="שם קבוצה ${i + 1}"></label>`).join('')}</div>
+    <div class="name-row" style="justify-content:center"><span class="lbl2">כמה אתגרים?</span><span class="seg">${[5, 10].map(k => `<button data-dlq="${k}" class="${k === nQ ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
+    <h2 style="text-align:center">בחרו סוג – ומתחילים</h2>` : ''}
+    <div class="dl-modes">${DL_MODES.map(([id, icn, nm, ds]) => `<button class="game-card dl-mode" data-dlm="${id}"><span class="gc-ic">${icn}</span><span class="gc-nm">${nm}</span><span class="gc-ds">${ds}</span>${!tm && d[id] ? `<span class="gc-st">${ic('star')} השיא: ${d[id]} מדליות זהב</span>` : ''}</button>`).join('')}</div>`;
+    $('dlHomeB').onclick = home;
+    app.querySelectorAll('[data-dlpm]').forEach(b => b.onclick = () => { keep(); mode = b.dataset.dlpm; draw(); });
+    app.querySelectorAll('[data-dlt]').forEach(b => b.onclick = () => { keep(); nTeams = Number(b.dataset.dlt); draw(); });
+    app.querySelectorAll('[data-dlq]').forEach(b => b.onclick = () => { keep(); nQ = Number(b.dataset.dlq); draw(); });
+    app.querySelectorAll('[data-dlm]').forEach(b => b.onclick = () => {
+      keep();
+      if (mode === 'teams') dlStart(b.dataset.dlm, { n: nQ, teams: JEO_TEAMS.slice(0, nTeams).map((t, i) => ({ name: names[i], color: t.color, score: 0 })) });
+      else dlStart(b.dataset.dlm);
+    });
+  };
+  draw();
   window.scrollTo(0, 0);
 }
-function dlStart(mode) {
+function dlStart(mode, o = {}) {
   if (!DL_MODES.some(m => m[0] === mode)) mode = DL_MODES[0][0];
-  dlab = { mode, qs: dlPlan(mode), i: 0, tries: 0, coins: Array(10).fill(-1), kit: null };
+  let qs = dlPlan(mode);
+  if (o.teams && o.n === 5) qs = qs.filter((q, i) => i % 2 === 0); // 5 אתגרים: עדיין מהקל אל הקשה
+  dlab = { mode, qs, i: 0, tries: 0, coins: Array(qs.length).fill(-1), kit: null };
+  if (o.teams) { Object.assign(dlab, { teams: o.teams, marks: {}, shown: false, hist: [] }); return dlTeamDraw(); }
   dlDraw();
 }
+// פתיחת קוביות העזר לאתגר הנוכחי (במשחק האישי ובהדגמה של המורה)
+const dlKitOpen = q => { dlab.kit = { p: q.kit.start.slice(), rem: q.kit.remove ? q.kit.remove.slice() : null, fresh: [0, 0, 0] }; dlKitDraw(); };
 function dlDraw() {
   navPush('dlab');
   const q = dlab.qs[dlab.i];
@@ -16486,7 +16537,7 @@ function dlDraw() {
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); dlCheck(); } });
   $('dlCheck').onclick = dlCheck;
   $('dlHint').onclick = () => { $('dlFb').innerHTML = `<div class="fb show hint">${ic('bulb')} ${q.hint}</div>`; };
-  if ($('dlKitB')) $('dlKitB').onclick = () => { if (dlab.kit) return; dlab.kit = { p: q.kit.start.slice(), rem: q.kit.remove ? q.kit.remove.slice() : null, fresh: [0, 0, 0] }; dlKitDraw(); $('dlKitB').disabled = true; };
+  if ($('dlKitB')) $('dlKitB').onclick = () => { if (dlab.kit) return; dlKitOpen(q); $('dlKitB').disabled = true; };
   window.scrollTo(0, 0);
 }
 // קוביות עזר: פריטה, קיבוץ, ובחיסור – הורדה של מה שמחסרים
@@ -16534,6 +16585,78 @@ function dlCheck() {
   document.querySelector('.dl-top').innerHTML = dlCoins(dlab.coins);
   $('dlNext').onclick = () => { if (last) return dlEnd(); dlab.i++; dlab.tries = 0; dlDraw(); };
   $('dlNext').focus();
+}
+// ---- מעבדה קבוצתית (מורה, בהקרנה): כל הקבוצות פותרות את אותו אתגר, חשיפה + הדגמה בקוביות, נקודה + בונוס הסבר ----
+function dlTeamDraw() {
+  stopJeoTimer(); navPush('dlab');
+  const g = dlab, q = g.qs[g.i], last = g.i + 1 >= g.qs.length, Mk = g.marks;
+  const pts = i => g.teams[i].score + (g.shown && Mk[i] ? (Mk[i].ok ? 1 : 0) + (Mk[i].bonus ? 1 : 0) : 0);
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים – קבוצות</span><span class="toollinks"><span class="muted">אתגר ${g.i + 1} מתוך ${g.qs.length}</span>${fsBtnHTML()}<button class="secondary" id="dlQuit">${ic('close')} יציאה</button></span></div>
+    <div class="card dl-top">${raceTeamBar({ teams: g.teams.map((t, i) => ({ name: t.name, color: t.color, score: pts(i) })) }, -1)}</div>
+    <div class="card city-q dl-q">
+      <div class="qtext">${q.text}</div>
+      ${q.fig || ''}
+      <div id="dlVert">${g.shown ? q.vertA || '' : q.vert || ''}</div>
+      ${g.shown ? `<div class="fb show ok"><div class="head">התשובה: ${M(fmt(q.ans))}</div>${q.exp}</div>
+      ${q.kit ? `<div class="actions" style="justify-content:center"><button class="secondary" id="dlKitB" ${g.kit ? 'disabled' : ''}>🧱 הדגמה בקוביות</button></div>` : ''}
+      <div id="dlKit"></div>
+      <p class="muted">סמנו כל קבוצה שצדקה, ובונוס לקבוצה שהסבירה נכון <b>למה</b>.</p>
+      <div class="tf-tv dl-tv">${g.teams.map((tm, i) => `<div class="tvr" style="--tc:${tm.color}"><b>${esc(tm.name)} · ${pts(i)}</b><button data-dlk="${i}:ok" class="${Mk[i] && Mk[i].ok ? 'on' : ''}">${ic('check')} צדקו</button><button data-dlk="${i}:bonus" class="${Mk[i] && Mk[i].bonus ? 'on' : ''}">⭐ בונוס הסבר</button></div>`).join('')}</div>
+      <div class="actions" style="justify-content:center"><button id="dlTNext" class="race-go">${last ? 'לתוצאות ←' : 'לאתגר הבא ←'}</button></div>`
+      : `<p class="muted">כל קבוצה פותרת יחד במחברת או על לוח קטן. כשהזמן נגמר – מרימים את התשובה!</p>
+      <div class="jeo-tools" style="justify-content:center"><button class="secondary" data-dlclk="30">${ic('clock')} 30 שניות</button><button class="secondary" data-dlclk="60">${ic('clock')} 60 שניות</button><span class="jeo-clock" id="dlClock"></span></div>
+      <div class="actions" style="justify-content:center"><button class="secondary" id="dlHint">${ic('bulb')} רמז</button><button id="dlShow" class="race-go">חשיפת התשובה</button></div>
+      <div id="dlFb"></div>`}
+    </div>`;
+  fsBind();
+  $('dlQuit').onclick = () => { if (confirm('לצאת מהמשחק?')) { stopJeoTimer(); dlHome('teams'); } };
+  if (g.kit) dlKitDraw();
+  app.querySelectorAll('[data-dlclk]').forEach(b => b.onclick = () => {
+    stopJeoTimer();
+    const end = Date.now() + Number(b.dataset.dlclk) * 1000, el = $('dlClock');
+    const tick = () => { if (!el.isConnected) return stopJeoTimer(); const s2 = Math.max(0, Math.ceil((end - Date.now()) / 1000)); el.textContent = s2 || 'הזמן נגמר!'; el.classList.toggle('low', s2 <= 5); if (!s2) stopJeoTimer(); };
+    tick(); jeoTimer = setInterval(tick, 250);
+  });
+  if ($('dlHint')) $('dlHint').onclick = () => { $('dlFb').innerHTML = `<div class="fb show hint">${ic('bulb')} ${q.hint}</div>`; };
+  if ($('dlShow')) $('dlShow').onclick = () => { g.shown = true; dlTeamDraw(); };
+  if ($('dlKitB')) $('dlKitB').onclick = () => { if (g.kit) return; dlKitOpen(q); $('dlKitB').disabled = true; };
+  app.querySelectorAll('[data-dlk]').forEach(b => b.onclick = () => {
+    const [i, k] = b.dataset.dlk.split(':'), m = (Mk[i] = Mk[i] || {});
+    m[k] = !m[k];
+    if (k === 'bonus' && m.bonus) m.ok = true; // הסבר נכון = גם תשובה נכונה
+    if (k === 'ok' && !m.ok) m.bonus = false;
+    const y = window.scrollY; dlTeamDraw(); window.scrollTo(0, y);
+  });
+  if ($('dlTNext')) $('dlTNext').onclick = () => {
+    g.teams.forEach((t, i) => { t.score = pts(i); });
+    g.hist.push({ kind: q.kind, ok: g.teams.filter((t, i) => Mk[i] && Mk[i].ok).length });
+    if (last) return dlTeamEnd();
+    g.i++; g.shown = false; g.marks = {}; g.kit = null; dlTeamDraw(); window.scrollTo(0, 0);
+  };
+  if (!g.shown) window.scrollTo(0, 0);
+}
+function dlTeamEnd() {
+  stopJeoTimer();
+  const g = dlab, ranked = g.teams.slice().sort((a, b) => b.score - a.score), top = ranked[0].score, winners = ranked.filter(t => t.score === top);
+  const kinds = { val: 'מהות', add: 'חיבור עם המרה', sub: 'חיסור עם פריטה' }, miss = {};
+  g.hist.forEach(h => { if (h.ok * 2 < g.teams.length) miss[h.kind] = (miss[h.kind] || 0) + 1; });
+  const tip = Object.keys(miss).sort((a, b) => miss[b] - miss[a])[0];
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים – קבוצות</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></span></div>
+    <div class="card center race-end rec">
+      <div class="muted">${g.qs.length} אתגרים</div>
+      <h2>${winners.length > 1 ? 'תיקו!' : 'המנצחים:'}</h2>
+      <div class="jeo-win">${winners.map(w => `<span style="--tc:${w.color}">${esc(w.name)}</span>`).join(' ')}</div>
+      <ol class="jeo-rank">${ranked.map(t => `<li style="--tc:${t.color}"><span class="jdot"></span><span>${esc(t.name)}</span><b data-raw>${t.score} נקודות</b></li>`).join('')}</ol>
+      ${tip ? `<p class="muted">רוב הקבוצות התקשו ב: <b>${kinds[tip]}</b> – כדאי לחזור על זה.</p>` : '<p class="compare">כל הכבוד לכל הקבוצות!</p>'}
+      <div class="actions" style="justify-content:center"><button id="dlAgain">${ic('retry')} עוד סבב לאותן קבוצות</button><button class="secondary" id="dlModes">משחק חדש</button></div>
+    </div>`;
+  fsBind();
+  $('dlHomeB').onclick = home;
+  $('dlAgain').onclick = () => dlStart(g.mode, { n: g.qs.length, teams: g.teams.map(t => ({ name: t.name, color: t.color, score: 0 })) });
+  $('dlModes').onclick = () => dlHome('teams');
+  window.scrollTo(0, 0);
 }
 function dlEnd() {
   const gold = dlab.coins.filter(x => x === 2).length, silver = dlab.coins.filter(x => x === 1).length;
@@ -23138,6 +23261,11 @@ function classSub(kind) {
             <span class="gc-nm">מיליונר קבוצתי</span>
             <span class="gc-ds">2–6 קבוצות עונות על אותן שאלות – כל קבוצה מטפסת בסולם שלה עד מיליון!</span>
           </button>
+          ${GRADE >= 5 ? `<button class="game-card" id="dlTeamGo">
+            <span class="gc-ic" style="--gw:rgba(44,122,91,0.5)">🧪</span>
+            <span class="gc-nm">מעבדת העשרוניים – קבוצות</span>
+            <span class="gc-ds">${GRADE >= 6 ? 'מהות, חיבור עם המרה וחיסור עם פריטה' : 'מהות המספר העשרוני: שלמים, עשיריות ומאיות'}. כל הקבוצות פותרות יחד, חושפים ומדגימים בקוביות – נקודה לכל קבוצה שצדקה ובונוס על הסבר.</span>
+          </button>` : ''}
           <button class="game-card" id="tfTeamGo">
             <span class="gc-ic" style="--gw:rgba(127,168,214,0.6)">${ic('check')}</span>
             <span class="gc-nm">אמת או שקר – קבוצות</span>
@@ -23164,7 +23292,7 @@ function classSub(kind) {
   app.innerHTML = `<div class="topbar"><span class="title">${ic(T[0])} ${T[1]}</span><button class="secondary" id="clsBack">${ic('home')} חזרה</button></div>${body}`;
   $('clsBack').onclick = () => { homeTab = 'class'; home(); };
   const on = (id, fn) => { if ($(id)) $(id).onclick = fn; };
-  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('tfTeamGo', () => tfHome('teams')); on('cmpSheetGo', () => cmpSheetHome());
+  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('tfTeamGo', () => tfHome('teams')); on('dlTeamGo', () => dlHome('teams')); on('cmpSheetGo', () => cmpSheetHome());
   app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { const n = opNPref(); op = { topic: b.dataset.org, n, slides: opBuild(b.dataset.org, null, n), k: 0, show: false }; opDraw(); });
   app.querySelectorAll('[data-opn]').forEach(b => b.onclick = () => { try { localStorage.setItem(OPN_KEY, b.dataset.opn); } catch (e) { /* לא חובה */ } const y = window.scrollY; classSub('open'); window.scrollTo(0, y); });
   window.scrollTo(0, 0);
@@ -26843,7 +26971,7 @@ function lpSetKind(p, k) {
 const LP_SUMS = [['board', '3 שאלות בדיקה על הלוח (קלה, בינונית, מאתגרת)'], ['talk', 'סבב שיחה: "היום למדתי... / היה לי קשה... "'], ['thumbs', 'הערכה עצמית: 👍 👌 👎 – כמה הבנתי?'], ['paper', 'מבדק הצלחה מודפס (מדפיסים מראש)']];
 const lpBookPref = () => { try { return localStorage.getItem('math-lp-book') || LP_BOOKS[0]; } catch (e) { return LP_BOOKS[0]; } };
 const LP_GAMES = [['jeo', "ג'פרדי בקבוצות – לפי נושא השיעור"], ['mil', 'מיליונר בקבוצות – לפי נושא השיעור'], ['cq', 'כיבוש שטחים – לפי נושא השיעור'], ['war', 'מלחמת תרגילים – לפי נושא השיעור'], ['bingo', 'בינגו – לפי נושא השיעור'], ['tf', 'אמת או שקר – לפי נושא השיעור'], ['wheel', 'גלגל המזל – נושא לבחירה'],
-  ...(GRADE >= 5 ? [['fj', '🐸 קפיצות שברים – כפל שלם בשבר (כל תלמיד/ה במכשיר)'], ['dlab', '🧪 מעבדת העשרוניים (כל תלמיד/ה במכשיר)']] : []),
+  ...(GRADE >= 5 ? [['fj', '🐸 קפיצות שברים – כפל שלם בשבר (כל תלמיד/ה במכשיר)'], ['dlab', '🧪 מעבדת העשרוניים (קבוצות בהקרנה, או כל תלמיד/ה במכשיר)']] : []),
   ...(GRADE === 6 ? [['fd', '🐸 קפיצות חילוק – ⁦שלם ‎:‎ שבר⁩ (במכשיר או בהקרנה)']] : [])];
 // משחקים אישיים (כל תלמיד/ה במכשיר) – לא "לפי נושא השיעור" אלא מסבירים נושא מסוים
 const LP_SOLO = ['fj', 'dlab', 'fd'];
