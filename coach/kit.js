@@ -50,7 +50,8 @@
     groups: (g, n, o) => Object.assign({ k: 'groups', g, n }, o || {}),
     area: (a, b, o) => Object.assign({ k: 'area', a, b }, o || {}),
     tree: (n, a, b, o) => Object.assign({ k: 'tree', n, a, b }, o || {}),
-    jug: (L, d, n, o) => Object.assign({ k: 'jug', L, d, n }, o || {})
+    jug: (L, d, n, o) => Object.assign({ k: 'jug', L, d, n }, o || {}),
+    marea: (a, b, o) => Object.assign({ k: 'marea', a, b }, o || {})
   };
   // שאלות למבדק אמצע ולמבדק סיכום (K.EXAMS = { mid: [...], final: [...] }). u = השיעור שהשאלה בודקת.
   // בבחירה: התשובה הנכונה נכתבת ראשונה, והסדר מסתובב לפי המזהה – כדי שהיא לא תהיה תמיד במקום הראשון.
