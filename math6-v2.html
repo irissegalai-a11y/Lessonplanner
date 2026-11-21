@@ -6052,12 +6052,12 @@ const LEVEL_DESC3 = {
    ========================================================= */
 const TOPICS6 = [
   {
-    id: 'place', name: 'מבנה עשרוני', icon: '🔢', color: '#4c5fd5',
-    desc: 'ערך הספרה, עיגול, השוואה, הרכבת מספרים',
+    id: 'place', name: 'מבנה עשרוני – עד מיליונים', icon: '🔢', color: '#4c5fd5',
+    desc: 'מספרים טבעיים עד מיליונים: ערך הספרה, עיגול, השוואה, הרכבת מספרים',
     levels: {
       1: [genDigitValue, genCompose],
       2: [genHowMany, genRound, genCompare],
-      3: [genDecimalPlace, genExpandedDecimal, genRound]
+      3: [genPlaceShift, genRoundRange, genRound]
     },
     tips: ['כל מקום שווה פי 10 מהמקום שמימינו: יחידות, עשרות, מאות, אלפים...', 'אחרי הנקודה: עשיריות, מאיות, אלפיות.', 'עיגול: מסתכלים על הספרה שמימין למקום העיגול – 5 ומעלה מעגלים למעלה.']
   },
@@ -9772,7 +9772,8 @@ function genDerivedLv(lv, labels) { for (let i = 0; i < 30; i++) { const q = gen
    בכל רמה המחוללים מסודרים מהקל לקשה (ordered) – לפי זה ג'פרדי ומיליונר עולים בהדרגה גם בתוך הרמה. */
 function g6Pools() {
   const P = {
-    place: [[genDigitValue, genCompose], [genCompare, genRound, genHowMany, genDecimalPlace, genExpandedDecimal], [genPlaceShift, genRoundRange]],
+    place: [[genDigitValue, genCompose], [genCompare, genRound, genHowMany], [genPlaceShift, genRoundRange]],
+    placeDec: [[genDecimalPlace, genDecimalPlace], [genExpandedDecimal, genDecimalPlace], [genExpandedDecimal, genDecCompare]],
     ops: [[() => genMul(1), () => genDiv(1), () => genOrderSame(1), () => genOrder(1)], [() => genMul(2), () => genDiv(2), () => genOrder(2), () => genMissing(2), genPrime, genEstimate], [genOpsShift, () => genMissing(3), genPrimeProduct, genWord, genBuildings]],
     frac: [[genReduce, genExpand, genAddSame], [genCompareFrac, genImproperToMixed, genMixedToImproper, genAddDiff, genSubDiff, genFromWhole, () => genFracOfQty(1), genMixedAddSub], [genFracShort, genFracReason, genFracWord, () => genFracOfQty(2)]],
     dec: [[genDecimalPlace, genFracToDec, genDecToFrac], [genDecCompare, genDecAddSub, genNumberLine, genSequence], [genDecEst, genFracPlusDec, genDecErr]],
@@ -9964,6 +9965,17 @@ if (GRADE === 6) TOPICS.push({
     3: [() => genVolMissing(3), genVolWater, genTriPrismV, genVolScale, genVolFit, () => genVolUnit(3)]
   },
   tips: ['נפח = כמה קוביות יחידה נכנסות (סמ"ק). תיבה: אורך × רוחב × גובה.', 'מנסרה: שטח הבסיס × גובה. גובה = נפח : שטח הבסיס.', '1 סמ"ק = 1 מ"ל · 1,000 סמ"ק = 1 ליטר · 1 מ"ק = 1,000 ליטר.', 'מקצוע פי 2 → נפח פי 8 (2 × 2 × 2).']
+});
+// מבנה עשרוני אחרי הנקודה (כיתה ו') – נפרד מ"מבנה עשרוני – עד מיליונים" (21.11). נוסף בסוף כדי לא לשבש קודי חוברות
+if (GRADE === 6) TOPICS.push({
+  id: 'placeDec', name: 'מבנה עשרוני – אחרי הנקודה', icon: '🔟', color: '#1e8a8a',
+  desc: 'עשיריות, מאיות ואלפיות: ערך הספרה, פירוק לפי המקומות, השוואה',
+  levels: {
+    1: [genDecimalPlace, genDecimalPlace],
+    2: [genExpandedDecimal, genDecimalPlace],
+    3: [genExpandedDecimal, genDecCompare]
+  },
+  tips: ['אחרי הנקודה: הספרה הראשונה – עשיריות, השנייה – מאיות, השלישית – אלפיות.', 'כל מקום שווה פי 10 מהמקום שמימינו – גם אחרי הנקודה: 10 מאיות = עשירית אחת.', 'משווים מספרים עשרוניים מקום אחר מקום משמאל: קודם השלמים, אחר כך העשיריות.']
 });
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
 if (GRADE === 6) g6Pools();
@@ -13380,7 +13392,7 @@ const TOPIC_CATS = [
 ];
 // נושא שלא מופיע כאן – "מספרים טבעיים"
 const CAT_OF = {
-  dec: 'dec',
+  dec: 'dec', placeDec: 'dec',
   frac: 'frac', mulfr: 'frac', divfr: 'frac',
   shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', solids: 'geo', solidsN: 'geo', solidsS: 'geo', solidsV: 'geo', drawGo: 'geo', quadGo: 'geo',
   pct: 'pct',
@@ -13405,7 +13417,8 @@ function topicCatsHTML() {
     ] : []),
     { id: 'wpGo', h: () => extra('wpGo', '#3d7a6e', 'שאלות מילוליות', 'בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים') }
   ];
-  const groups = TOPIC_CATS.map(c => ({ c, topics: TOPICS.filter(t => catOf(t.id) === c.id), extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
+  const groups = TOPIC_CATS.map(c => ({ c, topics: TOPICS.filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
+    extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
     .filter(g => g.topics.length || g.extra.length);
   const jump = groups.length > 1 ? `<nav class="tcat-jump" aria-label="קטגוריות">${groups.map(g => `<button type="button" class="tcat-chip" style="--c:${g.c.color}" onclick="document.getElementById('tcat-${g.c.id}').scrollIntoView({ behavior: 'smooth', block: 'start' })">${g.c.icon} ${g.c.name}</button>`).join('')}</nav>` : '';
   return jump + groups.map(g => `<section class="tcat" id="tcat-${g.c.id}" style="--c:${g.c.color}">
@@ -13509,7 +13522,8 @@ function todaySuggestion() {
 
 /* ---------- בחירת רמה ---------- */
 const LEVEL_DESC6 = {
-  place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'ספרות אחרי הנקודה העשרונית'],
+  place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'פי כמה גדל ערך הספרה, טווח עיגול'],
+  placeDec: ['ערך ספרה אחרי הנקודה: עשיריות, מאיות, אלפיות', 'פירוק מספר עשרוני לפי המקומות', 'פירוק והשוואה של מספרים עשרוניים'],
   ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן, ראשוניים ופריקים', 'בעיות מילוליות, ראשוניים ופריקים ותרגילים מאתגרים'],
   frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
   dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
