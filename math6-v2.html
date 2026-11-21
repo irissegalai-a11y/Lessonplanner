@@ -1354,6 +1354,12 @@ html.embed body { padding-top: 0; }
   .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 4px; }
   .tool-row .tool-chip { font: inherit; font-size: 0.95rem; padding: 5px 12px; border: 2px solid #1f1e1c; border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; }
   .tool-row .tool-chip:hover { background: #eef6f0; }
+  .tcat-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
+  .tcat-jump .tcat-chip { font: inherit; font-size: 1rem; padding: 5px 13px; border: 2px solid var(--c); border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; transform: none; }
+  .tcat-jump .tcat-chip:hover { background: color-mix(in srgb, var(--c) 14%, #fffdf8); }
+  .tcat { margin: 0 0 22px; scroll-margin-top: 12px; }
+  .tcat-h { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; padding: 4px 12px; font-size: 1.35rem; border-inline-start: 6px solid var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); border-radius: 6px; }
+  .tcat .tool-row { margin: 10px 0 0; }
   .tp-head { border-top: 6px solid var(--c); display: flex; flex-direction: column; gap: 8px; }
   .tp-head .ds { color: var(--muted); }
   .tp-head .best { color: var(--c); font-weight: 600; font-size: 0.95rem; }
@@ -12979,35 +12985,7 @@ function home() {
             <button type="button" id="contGo">${cont.btn} ←</button>
           </div>` : ''}
           ${champCard()}
-          <div class="topics">
-            ${TOPICS.map((t, i) => {
-              const s = store.topics[t.id];
-              const m = s ? s.mastery : 0;
-              return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
-                <span class="ic">${i + 1}</span>
-                <span class="nm">${t.name}</span>
-                <span class="ds">${t.desc}</span>
-                <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
-                <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}${topicLessons(t.id).length ? ' · 📖 יש הסבר' : ''}</span>
-              </button>`;
-            }).join('')}
-            ${GRADE >= 4 ? `<button class="topic" style="--c:#2f8f55" id="drawGo">
-                <span class="ic">${TOPICS.length + 1}</span>
-                <span class="nm">שרטוט בגאומטריה</span>
-                <span class="ds">משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ולפי אלכסונים</span>
-              </button>
-              <button class="topic" style="--c:#4c5fd5" id="quadGo">
-                <span class="ic">${TOPICS.length + 2}</span>
-                <span class="nm">מרובעים</span>
-                <span class="ds">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span>
-              </button>` : ''}
-            <button class="topic" style="--c:#3d7a6e" id="wpGo">
-              <span class="ic">${TOPICS.length + (GRADE >= 4 ? 3 : 1)}</span>
-              <span class="nm">שאלות מילוליות</span>
-              <span class="ds">בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים</span>
-            </button>
-          </div>
-          ${toolRow()}
+          ${topicCatsHTML()}
           <div class="practice-more">
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -13389,6 +13367,52 @@ const TOOL_CARDS = [
   { id: 'mulAreaGo', cls: 'b10-card3', on: GRADE >= 4, topics: ['mul22'], go: () => mulArea(), chip: '▦ שיטת המלבנים',
     html: `<span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span>` }
 ].filter(c => c.on);
+// נושאים לפי קטגוריות (21.11): כל נושא, כרטיס נוסף וכלי המחשה – בקטגוריה אחת. קטגוריה ריקה בכיתה – לא מוצגת
+const TOPIC_CATS = [
+  { id: 'nat', name: 'מספרים טבעיים', icon: '🔢', color: '#4c5fd5' },
+  { id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a' },
+  { id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c' },
+  { id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55' },
+  { id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b' },
+  { id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1' },
+  { id: 'word', name: 'שאלות מילוליות', icon: '💬', color: '#3d7a6e' }
+];
+// נושא שלא מופיע כאן – "מספרים טבעיים"
+const CAT_OF = {
+  dec: 'dec',
+  frac: 'frac', mulfr: 'frac', divfr: 'frac',
+  shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', solids: 'geo', solidsN: 'geo', solidsS: 'geo', solidsV: 'geo', drawGo: 'geo', quadGo: 'geo',
+  pct: 'pct',
+  data: 'data',
+  wpm: 'word', wpGo: 'word'
+};
+const catOf = id => CAT_OF[id] || 'nat';
+function topicCatsHTML() {
+  let n = 0;
+  const topicBtn = t => { const s = store.topics[t.id], m = s ? s.mastery : 0; return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
+                <span class="ic">${++n}</span>
+                <span class="nm">${t.name}</span>
+                <span class="ds">${t.desc}</span>
+                <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
+                <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}${topicLessons(t.id).length ? ' · 📖 יש הסבר' : ''}</span>
+              </button>`; };
+  const extra = (id, c, nm, ds) => `<button class="topic" style="--c:${c}" id="${id}"><span class="ic">${++n}</span><span class="nm">${nm}</span><span class="ds">${ds}</span></button>`;
+  const EXTRA = [
+    ...(GRADE >= 4 ? [
+      { id: 'drawGo', h: () => extra('drawGo', '#2f8f55', 'שרטוט בגאומטריה', 'משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ולפי אלכסונים') },
+      { id: 'quadGo', h: () => extra('quadGo', '#4c5fd5', 'מרובעים', `מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט`) }
+    ] : []),
+    { id: 'wpGo', h: () => extra('wpGo', '#3d7a6e', 'שאלות מילוליות', 'בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים') }
+  ];
+  const groups = TOPIC_CATS.map(c => ({ c, topics: TOPICS.filter(t => catOf(t.id) === c.id), extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
+    .filter(g => g.topics.length || g.extra.length);
+  const jump = groups.length > 1 ? `<nav class="tcat-jump" aria-label="קטגוריות">${groups.map(g => `<button type="button" class="tcat-chip" style="--c:${g.c.color}" onclick="document.getElementById('tcat-${g.c.id}').scrollIntoView({ behavior: 'smooth', block: 'start' })">${g.c.icon} ${g.c.name}</button>`).join('')}</nav>` : '';
+  return jump + groups.map(g => `<section class="tcat" id="tcat-${g.c.id}" style="--c:${g.c.color}">
+            <h3 class="tcat-h"><span class="tcat-i">${g.c.icon}</span>${g.c.name}</h3>
+            <div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>
+            ${g.tools.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${g.tools.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : ''}
+          </section>`).join('');
+}
 const toolRow = () => TOOL_CARDS.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${TOOL_CARDS.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
 function topicHome(id) {
   const t = TOPIC[id];
