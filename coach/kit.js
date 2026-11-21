@@ -18,7 +18,7 @@
       { step: 2, kind: 'practice', title: 'תרגול ממוקד', items: u.practice },
       Object.assign({ step: 3, kind: 'notebook' }, u.notebook),
       { step: 4, kind: 'check', sets: ['B', 'C'] }, { step: 5, kind: 'summary' }];
-    return { teach, reinforce, sets: { A: u.A, B: u.B, C: u.C }, alt: u.alt, simpler: u.simpler, waiting: u.waiting || [], skill: u.skill, learned: u.learned, did: u.did };
+    return { teach, reinforce, sets: { A: u.A, B: u.B, C: u.C }, anim: u.anim, alt: u.alt, simpler: u.simpler, waiting: u.waiting || [], skill: u.skill, learned: u.learned, did: u.did };
   };
   // שיעור במבנה החדש (v2): מבינים → לומדים את הכלל → מתרגלים (רמות + מחברת) → מראים שליטה → מה למדתי
   // u.quick – 3 שאלות לבדיקה הקצרה (מסלול מהיר: כולן נכונות → לכלל, ותרגול מרמה u.fastStart||3)
@@ -32,7 +32,7 @@
     const nb = Object.assign({ step: 3, kind: 'notebook2' }, u.notebook);
     const teach = [{ step: 1, kind: 'intro', html: u.goal, quick: u.quick }].concat(explore, [rule, lv(1), nb, { step: 4, kind: 'check', sets: ['A', 'B'] }, { step: 5, kind: 'summary' }]);
     const reinforce = [{ step: 1, kind: 'intro', html: u.goalR || u.goal, quick: u.quick }, rule, lv(u.startR || 2), nb, { step: 4, kind: 'check', sets: ['B', 'C'] }, { step: 5, kind: 'summary' }];
-    return { v2: true, teach, reinforce, sets: { A: u.A, B: u.B, C: u.C }, alt: u.alt, simpler: u.simpler, waiting: u.waiting || [], skill: u.skill, learned: u.learned, did: u.did };
+    return { v2: true, teach, reinforce, sets: { A: u.A, B: u.B, C: u.C }, anim: u.anim, alt: u.alt, simpler: u.simpler, waiting: u.waiting || [], skill: u.skill, learned: u.learned, did: u.did };
   };
   // אתגר מומחים: 4 משימות, 3 נכונות בלי רמז
   C.mkDeep = function (u) {

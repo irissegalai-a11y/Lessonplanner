@@ -111,6 +111,8 @@
     return `<svg class="fig line" viewBox="0 0 ${w + 48} 84" width="${w + 48}" height="84" role="img" aria-label="ישר מספרים">${out}</svg>`;
   }
   // ריבוע של 100 משבצות; הצביעה לפי עמודות (כל עמודה = עשירית)
+  // pre – משבצות שהיו צבועות מראש (ורוד); מה שנוסף אחריהן – בכתום
+  const ADD = '#f2a65a';
   // cut – חלוקה לחלקים שווים בקווים עבים (2 חצאים, 4 רבעים, 5 פסים, 10 עמודות, 20, 25); kp – כמה חלקים צבועים
   // on – קבוצת משבצות צבועות (למסך האינטראקטיבי), click – משבצות לחיצות (data-i)
   const hundPart = (col, row, cut) => ({ 2: col < 5 ? 0 : 1, 4: (row < 5 ? 0 : 2) + (col < 5 ? 0 : 1), 5: Math.floor(col / 2), 10: col, 20: col * 2 + (row < 5 ? 0 : 1), 25: Math.floor(col / 2) * 5 + Math.floor(row / 2) })[cut];
@@ -119,7 +121,7 @@
     for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
       const i = col * 10 + row;
       const on = f.on ? f.on.has(i) : (cut && f.kp != null) ? hundPart(col, row, cut) < f.kp : f.rc ? (col < f.rc[0] && row < f.rc[1]) : i < n;
-      out += `<rect${f.click ? ` class="hc" data-i="${i}"` : ''} x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
+      out += `<rect${f.click ? ` class="hc" data-i="${i}"` : ''} x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? (f.pre != null && i >= f.pre ? ADD : FILL) : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
     }
     if (cut) for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
       const p = hundPart(col, row, cut), x = 2 + col * c, y = 2 + row * c;
