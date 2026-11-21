@@ -4,10 +4,10 @@
    ========================================================= */
 (function () {
   const C = window.COACH = window.COACH || {};
-  const VER = '4.10';
+  const VER = '4.12';
   C.VER = VER;
   // סדר קבוע! המיקום ברשימה נכנס לקוד ההמשך. קורס חדש מוסיפים רק בסוף.
-  C.COURSE_IDS = ['equiv', 'dec', 'pct', 'fracop', 'area', 'mult', 'frac'];
+  C.COURSE_IDS = ['equiv', 'dec', 'pct', 'fracop', 'area', 'mult', 'frac', 'fmul'];
 
   /* ---------- מבדק אבחון ----------
      מיומנות "נשלטת" אחרי 2 תשובות נכונות, "עדיין לא" אחרי 2 שגויות או "עוד לא למדתי",
@@ -81,6 +81,8 @@
   function buildPath(course, skills, done) {
     const path = [];
     course.UNITS.forEach(u => {
+      // העשרה: תמיד רשות (לא חוסמת, לא במבדק ולא בתעודה)
+      if (u.enrich) { path.push({ id: u.id, ver: 'teach', optional: true }); return; }
       if (done && done[u.id]) { path.push({ id: u.id, ver: 'teach' }); return; }
       if (u.deep) {
         if (course.DIAG.top.every(s => skills[s] === 'mastered')) path.push({ id: u.id, ver: 'deep', optional: true });
