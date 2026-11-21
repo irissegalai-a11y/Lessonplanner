@@ -363,6 +363,8 @@ html.embed body { padding-top: 0; }
   .pvt { border-collapse: collapse; margin: 10px auto; direction: ltr; font-size: 0.95rem; }
   .pvt th { background: #eef1fb; padding: 6px 8px; border: 1px solid var(--line); font-size: 0.85rem; }
   .pvt td { border: 1px solid var(--line); padding: 6px 10px; text-align: center; min-width: 54px; }
+  .pvt.pvd .pvdot { min-width: 0; padding: 6px 2px; border-left: none; border-right: none; background: transparent; font-size: 1.3rem; }
+  .pvt.pvd .pvv td { font-size: 0.85rem; }
   .pvt .pvd td { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
   .pvt .pvd td.off { background: #f7f7f7; }
   .pvt .pvv td { color: var(--muted); font-size: 0.9rem; }
@@ -2254,7 +2256,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצא</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13341,6 +13343,7 @@ function home() {
   if ($('balGo')) $('balGo').onclick = balTool;
   if ($('b10twoGo')) $('b10twoGo').onclick = b10Two;
   if ($('mulAreaGo')) $('mulAreaGo').onclick = mulArea;
+  if ($('dlTool')) $('dlTool').onclick = () => dlHome();
   if ($('erGo0')) $('erGo0').onclick = escapeRoom;
   if ($('whGo0')) $('whGo0').onclick = wheelGame;
   if ($('eulerGo')) $('eulerGo').onclick = () => { location.href = 'euler.html?back=' + encodeURIComponent((location.pathname.split('/').pop() || 'math6.html') + location.search); };
@@ -13378,7 +13381,9 @@ const TOOL_CARDS = [
   { id: 'b10twoGo', cls: 'b10-card2', on: GRADE <= 3, topics: ['addsub', 'add20', 'add100'], go: () => b10Two(), chip: '🔁 מעבר עשרת',
     html: `<span class="b10c-ic">🔁</span><span class="b10c-t">מעבר עשרת – שני מספרים</span><span class="b10c-d">חיבור או חיסור של שני מספרים, צעד-צעד, כולל רגע ההמרה של 10 אחדות לעשרת.</span>` },
   { id: 'mulAreaGo', cls: 'b10-card3', on: GRADE >= 4, topics: ['mul22'], go: () => mulArea(), chip: '▦ שיטת המלבנים',
-    html: `<span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span>` }
+    html: `<span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span>` },
+  { id: 'dlTool', cls: 'b10-card2', cat: 'dec', on: GRADE >= 5, topics: ['dec', 'placeDec'], go: () => dlHome(), chip: '🧪 מעבדת העשרוניים',
+    html: `<span class="b10c-ic">🧪</span><span class="b10c-t">מעבדת העשרוניים</span><span class="b10c-d">שלמים, עשיריות ומאיות בקוביות שאפשר לפרוט ולקבץ${GRADE >= 6 ? ' – גם חיבור עם המרה וחיסור עם פריטה' : ''}.</span>` }
 ].filter(c => c.on);
 // נושאים לפי קטגוריות (21.11): כל נושא, כרטיס נוסף וכלי המחשה – בקטגוריה אחת. קטגוריה ריקה בכיתה – לא מוצגת
 const TOPIC_CATS = [
@@ -19122,6 +19127,154 @@ function dfgHome() {
     </div>`;
   $('dfgBack').onclick = home;
   $('dfgStart').onclick = dfgPlay;
+}
+// 🔟 כרטיסיות הסבר – מבנה עשרוני אחרי הנקודה (כיתה ו', נושא placeDec, 21.11)
+const PVD_NAMES = ['עשרות', 'יחידות', '', 'עשיריות', 'מאיות', 'אלפיות'];
+const PVD_DEN = [null, null, null, 10, 100, 1000];
+function pvdTable(str) {
+  const [w, d = ''] = str.split('.');
+  const W = w.padStart(2, ' '), D = d.padEnd(3, ' ');
+  const cells = [W[0], W[1], '.', D[0], D[1], D[2]];
+  const val = (ch, i) => {
+    if (i === 2 || !ch.trim()) return '';
+    const n = Number(ch);
+    if (i === 0) return fmt(n * 10);
+    if (i === 1) return fmt(n);
+    return fmt(rnd(n / PVD_DEN[i])) + (n ? ` <span class="muted">(${M(F(n, PVD_DEN[i]))})</span>` : '');
+  };
+  const on = (ch, i) => i === 2 || ch.trim() || (i === 0 ? false : i < 2 || D.slice(0, i - 3 + 1).trim());
+  return `<table class="pvt pvd"><tr>${PVD_NAMES.map((n, i) => `<th${i === 2 ? ' class="pvdot"' : ''}>${n}</th>`).join('')}</tr>
+    <tr class="pvd">${cells.map((c, i) => `<td class="${i === 2 ? 'pvdot' : on(c, i) ? '' : 'off'}">${i === 2 ? '<b>.</b>' : c.trim()}</td>`).join('')}</tr>
+    <tr class="pvv">${cells.map((c, i) => `<td${i === 2 ? ' class="pvdot"' : ''}>${val(c, i)}</td>`).join('')}</tr></table>`;
+}
+function pvdExpanded(str) {
+  const [w, d = ''] = str.split('.');
+  const parts = [];
+  if (Number(w)) parts.push(fmt(Number(w)));
+  d.split('').forEach((ch, k) => { if (Number(ch)) parts.push(fmt(rnd(Number(ch) / 10 ** (k + 1)))); });
+  return parts.join(' + ') || '0';
+}
+if (GRADE === 6) {
+  Object.assign(LESSONS, {
+    placeDec: {
+      id: 'placeDec', name: 'מבנה עשרוני – אחרי הנקודה', icon: '🔟', color: '#1e8a8a', topic: 'placeDec',
+      desc: 'עשיריות, מאיות ואלפיות: טבלת המקומות, פי 10 גם אחרי הנקודה, ערך הספרה, פירוק והשוואה',
+      practice: [genDecimalPlace, genDecimalPlace, genExpandedDecimal, genDecimalPlace, genExpandedDecimal, genDecCompare, genExpandedDecimal, genDecCompare],
+      cards: [
+        {
+          title: 'טבלת המקומות ממשיכה אחרי הנקודה',
+          html: `<p>הטבלה שמכירים (יחידות, עשרות, מאות...) <b>ממשיכה ימינה</b> אחרי הנקודה העשרונית. כתבו מספר עשרוני וראו איפה כל ספרה נמצאת:</p>
+            <div class="center"><input class="ans" data-pvdin value="23.457" inputmode="decimal" maxlength="6" aria-label="מספר עשרוני" dir="ltr"></div>
+            <div data-pvdt>${pvdTable('23.457')}</div>
+            <div class="explain center" data-pvdx>${M(`23.457 = ${pvdExpanded('23.457')}`)}</div>
+            <div class="rule">💡 אחרי הנקודה: הספרה הראשונה – <b>עשיריות</b>, השנייה – <b>מאיות</b>, השלישית – <b>אלפיות</b>.</div>
+            <div class="warn">⚠️ אין "אחדיות" אחרי הנקודה! הנקודה מפרידה בין השלמים (משמאל) לחלקים של שלם (מימין).</div>`,
+          setup(root) {
+            const inp = root.querySelector('[data-pvdin]');
+            inp.addEventListener('input', () => {
+              let v = inp.value.replace(/[^\d.]/g, '');
+              const k = v.indexOf('.');
+              let w = k < 0 ? v : v.slice(0, k), d = k < 0 ? '' : v.slice(k + 1).replace(/\./g, '');
+              w = w.replace(/^0+(?=\d)/, '').slice(-2); d = d.slice(0, 3);
+              inp.value = k < 0 ? w : `${w}.${d}`;
+              if (!w && !d) return;
+              const str = `${w || '0'}${d ? '.' + d : ''}`;
+              root.querySelector('[data-pvdt]').innerHTML = pvdTable(str);
+              root.querySelector('[data-pvdx]').innerHTML = M(`${str} = ${pvdExpanded(str)}`);
+            });
+          },
+          try: {
+            type: 'choice', q: `מה <b>הערך</b> של הספרה 6 במספר ${M('3.465')}?`,
+            choices: ['6 מאיות', '6 עשיריות', '6 אלפיות', '6 יחידות'], ans: 0,
+            hint: 'ספרו מהנקודה ימינה: עשיריות, מאיות, אלפיות.', exp: `ה-6 היא הספרה השנייה אחרי הנקודה – מקום המאיות. ערכה ${M('0.06')} = ${M(F(6, 100))}.`,
+            traps: [{ c: '6 עשיריות', m: 'הספרה הראשונה אחרי הנקודה היא 4. ה-6 היא השנייה.' }, { c: '6 אלפיות', m: 'ספרתם מהסוף. סופרים מהנקודה ימינה: 4 – עשיריות, 6 – מאיות.' }]
+          }
+        },
+        {
+          title: 'פי 10 – גם אחרי הנקודה',
+          html: `<p>כמו במספרים הטבעיים: כל מקום שווה <b>פי 10</b> מהמקום שמימינו. וכל מקום ימינה – קטן <b>פי 10</b>.</p>
+            <div class="frow"><div data-pvdgrid></div><div class="dval" data-pvdval></div></div>
+            <div class="lbtns"><button class="secondary" data-pz="0">שלם אחד</button><button class="secondary" data-pz="1">עשירית</button><button class="secondary" data-pz="2">מאית</button></div>
+            <ul class="recap">
+              <li>שלם אחד = 10 עשיריות</li>
+              <li>עשירית אחת (${M('0.1')}) = 10 מאיות</li>
+              <li>מאית אחת (${M('0.01')}) = 10 אלפיות</li>
+            </ul>
+            <div class="rule">💡 מקום אחד שמאלה ← <b>פי 10</b>. שני מקומות ← <b>פי 100</b>. שלושה מקומות ← <b>פי 1,000</b>.</div>`,
+          setup(root) {
+            const T = [['שלם אחד = 100 מאיות = 10 עשיריות', 100, '1'], ['עשירית = עמודה = 10 מאיות', 10, '0.1'], ['מאית = משבצת אחת', 1, '0.01']];
+            const show = z => {
+              root.querySelector('[data-pvdgrid]').innerHTML = gridSVG(T[z][1]);
+              root.querySelector('[data-pvdval]').innerHTML = `<div class="fbig">${M(T[z][2])}</div><div class="muted">${T[z][0]}</div>`;
+            };
+            root.querySelectorAll('[data-pz]').forEach(b => b.onclick = () => show(Number(b.dataset.pz)));
+            show(1);
+          },
+          try: {
+            type: 'num', q: `כמה <b>אלפיות</b> יש במאית אחת (${M('0.01')})?`, ans: 10,
+            hint: 'אלפיות נמצאות מקום אחד ימינה מהמאיות. מקום אחד = פי 10.', exp: `מאית אחת = 10 אלפיות: ${M('10 × 0.001 = 0.01')}.`,
+            traps: [{ v: 100, m: 'בין מאיות לאלפיות יש מקום אחד בלבד – פי 10, לא פי 100.' }, { v: 1000, m: 'שלם אחד = 1,000 אלפיות. אבל כאן שואלים על <b>מאית</b> אחת.' }]
+          }
+        },
+        {
+          title: 'אותה ספרה – ערך שונה',
+          html: `<p>במספר ${M('5.555')} יש ארבע ספרות זהות – אבל לכל אחת <b>ערך אחר</b>:</p>
+            <div class="same5" style="gap: 6px 10px">
+              <div><span class="big5 c1">5</span><span>5 יחידות = <b>5</b></span></div>
+              <div><span class="big5 c2">5</span><span>5 עשיריות = <b>${M('0.5')}</b></span></div>
+              <div><span class="big5 c3">5</span><span>5 מאיות = <b>${M('0.05')}</b></span></div>
+              <div><span class="big5 c1">5</span><span>5 אלפיות = <b>${M('0.005')}</b></span></div>
+            </div>
+            <div class="rule">💡 <b>הספרה</b> אומרת "כמה", <b>המקום</b> אומר "מה". כמו במספרים טבעיים.</div>`,
+          try: {
+            type: 'num', q: `במספר ${M('7.707')}: פי כמה גדול ערך ה-7 השמאלי מערך ה-7 הימני?`, ans: 1000,
+            hint: 'מה הערך של כל 7? (7 יחידות ו-7 אלפיות)', exp: `ה-7 השמאלי שווה 7, והימני ${M('0.007')}. בין יחידות לאלפיות שלושה מקומות: ${M('10 × 10 × 10 = 1,000')}.`,
+            traps: [{ v: 100, m: 'ספרו את המקומות: עשיריות, מאיות, <b>אלפיות</b> – שלושה מקומות, פי 1,000.' }, { v: 30, m: 'כל מקום הוא <b>פי</b> 10 – כופלים, לא מחברים.' }]
+          }
+        },
+        {
+          title: 'פירוק – והאפס שומר מקום',
+          html: `<p>מפרקים מספר עשרוני לפי המקומות, בדיוק כמו מספר טבעי:</p>
+            <div class="explain center">${M('4.075 = 4 + 0.07 + 0.005')}<br>${M(`= 4 + ${F(7, 100)} + ${F(5, 1000)}`)}</div>
+            <div class="rule">💡 במקום שאין בו כלום – כותבים <b>0</b>. כאן אין עשיריות, ולכן אחרי הנקודה בא קודם 0.</div>
+            <div class="warn">⚠️ 4 שלמים ו-7 <b>מאיות</b> כותבים ${M('4.07')}, ולא ${M('4.7')}<br>${M('4.7')} הוא 4 שלמים ו-7 <b>עשיריות</b>.</div>`,
+          try: {
+            type: 'num', q: `כתבו כמספר עשרוני: ${M('3 + 0.04 + 0.006')}`, ans: 3.046,
+            hint: 'סדרו לפי מקומות: שלמים, עשיריות, מאיות, אלפיות. אין עשיריות – מה כותבים?', exp: `אין עשיריות – כותבים 0: ${M('3.046')}.`,
+            traps: [{ v: 3.46, m: 'שכחתם את האפס במקום העשיריות. 4 הוא <b>מאיות</b> – הספרה השנייה אחרי הנקודה.' }, { v: 3.406, m: 'ה-4 הוא מאיות, לא עשיריות. במקום העשיריות כותבים 0.' }]
+          }
+        },
+        {
+          title: 'השוואת מספרים עשרוניים',
+          html: `<ol class="lsteps">
+              <li><b>קודם השלמים:</b> ${M('3.1 > 2.999')}, כי 3 שלמים יותר מ-2 שלמים.</li>
+              <li><b>אותם שלמים?</b> משווים מקום אחר מקום <b>משמאל</b>: עשיריות, אחר כך מאיות...<br>${M('0.5 > 0.45')}, כי בעשיריות ${M('5 > 4')}.</li>
+            </ol>
+            <div class="rule">💡 אפס בסוף לא משנה את הערך: ${M('0.5 = 0.50 = 0.500')}. משלימים אפסים ומשווים כמו מספרים רגילים: 50 מאיות מול 45 מאיות.</div>
+            <div class="warn">⚠️ מספר עם יותר ספרות אחרי הנקודה <b>לא</b> בהכרח גדול יותר!</div>`,
+          try: {
+            type: 'choice', q: 'איזה מספר הוא <b>הגדול ביותר</b>?',
+            choices: [M('0.7'), M('0.65'), M('0.699'), M('0.07')], ans: 0,
+            hint: 'לכולם 0 שלמים. השוו את העשיריות – הספרה הראשונה אחרי הנקודה.', exp: `בעשיריות: 7, 6, 6, 0. הגדול ביותר – ${M('0.7')} (= ${M('0.700')}).`,
+            traps: [{ c: M('0.699'), m: 'יותר ספרות לא אומר גדול יותר. בעשיריות יש לו 6, ול-0.7 יש 7.' }, { c: M('0.65'), m: `השוו את העשיריות: 6 מול 7. ${M('0.7 = 0.70')}, ו-70 מאיות יותר מ-65 מאיות.` }]
+          }
+        },
+        {
+          title: 'כללים לזכור 📌',
+          html: `<ul class="recap">
+              <li>🔟 אחרי הנקודה: <b>עשיריות</b>, <b>מאיות</b>, <b>אלפיות</b>.</li>
+              <li>🏛️ כל מקום שווה <b>פי 10</b> מהמקום שמימינו – גם אחרי הנקודה.</li>
+              <li>🔢 <b>ערך הספרה</b> לפי המקום: במספר ${M('3.465')} ערך ה-6 הוא ${M('0.06')}.</li>
+              <li>0️⃣ <b>אפס שומר מקום</b>: 4 שלמים ו-7 מאיות כותבים ${M('4.07')}.</li>
+              <li>⚖️ <b>השוואה:</b> קודם השלמים, אחר כך מקום אחר מקום משמאל. אפס בסוף לא משנה.</li>
+            </ul>
+            <p class="center"><b>כל הכבוד! סיימתם את הכרטיסיות של המבנה העשרוני אחרי הנקודה 🎉</b></p>`
+        }
+      ]
+    }
+  });
+  const pdi = LESSON_ORDER.indexOf('dec');
+  LESSON_ORDER.splice(pdi >= 0 ? pdi : LESSON_ORDER.length, 0, 'placeDec');
 }
 function dfgPlay() {
   const G = Math.max(3, Math.min(6, GRADE)), END = Date.now() + 60000;
