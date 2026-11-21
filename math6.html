@@ -209,7 +209,8 @@ html.embed body { padding-top: 0; }
   .choices.pics:has(.lgopt) { grid-template-columns: repeat(5, 1fr); gap: 6px; }
   .choices.pics:has(.lgopt) button { padding: 6px 2px; gap: 2px; }
   .fig.lgopt { width: 100%; max-width: 76px; margin: 2px auto; }
-  .fig.lgfig { max-width: 290px; }
+  .fig.lgfig { max-width: 320px; }
+  .fig.lgfig.lgwide { max-width: 440px; }
   div.choices > button { display: flex; align-items: center; gap: 10px; justify-content: flex-start; text-align: right; }
   div.choices.pics > button { flex-direction: column; justify-content: center; text-align: center; }
   .chl { font-weight: 800; flex-shrink: 0; }
@@ -12992,7 +12993,7 @@ function home() {
     { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', ...(GRADE >= 2 ? {} : { grp: 'לומדים ומתרגלים' }) },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }, { id: 'hiluk', label: 'אימון חילוק', icon: 'divide', wash: 'rgba(122,79,181,0.22)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
-    ...(GRADE >= 4 ? [{ id: 'excel', label: 'מצוינות', icon: 'star', wash: 'rgba(242,201,76,0.34)' }] : []),
+    // מצוינות (21.11): עברה לקטגוריה באריחים – הלשונית הוסרה. הפאנל נשאר מוסתר (הכפתורים שלו מופעלים מהקטגוריה)
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
     ...(T ? [] : [{ id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' }]),
@@ -13063,7 +13064,7 @@ function home() {
           <p class="muted">חילוק הוא "כפל הפוך": ${M('56 : 8 = ?')} שואלים – <b>8 כפול מה זה 56?</b> באימון: מפה אישית של עובדות החילוק, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
         </section>` : ''}
         ${wpPanelHTML()}
-        ${GRADE >= 4 ? `<section class="panel" data-panel="excel" ${homeTab === 'excel' ? '' : 'hidden'}>
+        ${GRADE >= 4 ? `<section class="panel" data-panel="excel" hidden>
           <h2>מצוינות</h2>
           <p class="muted">אתגרים למי שאוהב לחשוב: חידות, תבניות וגילויים מתמטיים.</p>
           <button class="game-card" id="palGo">
@@ -13372,7 +13373,7 @@ function home() {
   if ($('mkGo')) $('mkGo').onclick = mkHome;
   if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
-  ['pal', 'euler', 'cub', 'mag', 'grw'].forEach(k => { const b = $('x' + k + 'Go'); if (b) b.onclick = () => { excBack = 'practice'; $(k + 'Go').click(); }; });
+  ['pal', 'euler', 'cub', 'mag', 'grw'].forEach(k => { const b = $('x' + k + 'Go'); if (b) b.onclick = () => $(k + 'Go').click(); });
   if ($('champGo')) $('champGo').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('tframeGo')) $('tframeGo').onclick = tenFrame;
@@ -13410,7 +13411,6 @@ document.addEventListener('click', e => {
 });
 // דף נושא: ① ללמוד ← ② לתרגל ← ③ בודקים את עצמי, ומתחת – כלי המחשה של הנושא
 let topicBack = null;
-let excBack = null; // חזרה מפעילות מצוינות: לאריחים (practice) אם נכנסו מהקטגוריה
 const topicLessons = id => LESSON_ORDER.filter(l => lessonTopic(LESSONS[l]) === id);
 const TOOL_CARDS = [
   { id: 'dfGo', cls: 'b10-card2', on: GRADE >= 3, topics: ['muldiv', 'mul22', 'times', 'dfacts'], go: () => dfTool(), chip: '🧩 עובדות נגזרות',
@@ -13542,7 +13542,7 @@ function topicHome(id) {
     </section>
     <section class="card tp-step">${step('בודקים את עצמי')}
       <button type="button" class="tp-check" id="tpCheck">✅ סבב בדיקה קצר<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, בלי שינוי רמה – רואים כמה כבר יודעים</span></button>
-      ${id === 'logic' ? `<button type="button" class="tp-check" id="tpExam">⏱️ מבחן לדוגמה<span class="desc">15 חידות מהקל לקשה, 20 דקות, אפשר לדלג ולחזור – הציון וההסברים בסוף</span></button>` : ''}
+      ${catOf(id) === 'exc' ? `<button type="button" class="tp-check" id="tpExam">⏱️ מבחן לדוגמה<span class="desc">15 חידות מכל הסוגים, מהקל לקשה, 20 דקות, אפשר לדלג ולחזור – הציון וההסברים בסוף</span></button>` : ''}
     </section>
     ${tools.length ? `<section class="card tp-step"><h2 class="tp-h">🧰 כלי המחשה</h2>
       ${tools.map(c => `<button type="button" class="b10-card${c.cls ? ' ' + c.cls : ''}" data-tool="${c.id}">${c.html}</button>`).join('')}
@@ -13560,7 +13560,7 @@ function topicHome(id) {
   if ($('tpExam')) $('tpExam').onclick = go(logicExam);
   app.querySelectorAll('[data-tool]').forEach(b => b.onclick = go(TOOL_CARDS.find(c => c.id === b.dataset.tool).go));
 }
-let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
+let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t === 'excel' ? 'practice' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
 
 // "מה עושים היום?" – הצעה אחת ברורה לצעד הבא
 // "ממשיכים מאיפה שהפסקתי": הפעילות האחרונה (כרטיסיות או תרגול בנושא), ואם אין – הצעה להיום
@@ -13765,20 +13765,381 @@ function genLogicNum(lv) {
       lgKind: 'num', lgRows: rows }, ans, wr);
   }
 }
-const LG_LEVELS = { 1: [() => genLogicPie(1), () => genLogicShapes(1), () => genLogicNum(1)],
-  2: [() => genLogicPie(2), () => genLogicShapes(2), () => genLogicNum(2)],
-  3: [() => genLogicPie(3), () => genLogicShapes(3), () => genLogicNum(3)] };
-const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [{
-  id: 'logic', name: 'חידות מטריצה – חשיבה', icon: '🧠', color: '#6b3fa0',
-  desc: 'מוצאים את הכלל ומשלימים את התא החסר: עיגולים מסתובבים, צורות ומספרים – בסגנון מבחני מחוננים',
-  levels: LG_LEVELS,
-  tips: ['קוראים כל שורה מימין לשמאל.', 'בודקים כל תכונה לחוד: צורה, צבע, כמות, כיוון.', 'מצאתם כלל? בדקו אותו גם בשורה השנייה לפני שבוחרים.']
-}] : [];
-XTOPICS.forEach(t => { TOPIC[t.id] = t; CAT_OF[t.id] = 'exc'; LEVEL_DESC[t.id] = ['כלל אחד בכל שורה (סיבוב, צורה, חיבור וחיסור)', 'שני כללים יחד, כיוונים שונים, כפל', 'הרכבת ציורים, כלל לפי שורה, כללים בשני צעדים']; });
+// ---------- מצוינות: סוגי חידות נוספים (21.11) ----------
+// בכל מחולל: "כללים מתחרים" – אם כלל אחר מתאים לנתונים ונותן תשובה אחרת, החידה נפסלת ונוצרת חדשה
+function lgNumOpts(ans, cand) {
+  const out = [], add = v => { if (Number.isInteger(v) && v > 0 && v !== ans && !out.includes(v)) out.push(v); };
+  shuffle(cand).forEach(add);
+  [1, -1, 2, -2, 10, -10, 3].forEach(d => out.length < 8 && add(ans + d));
+  return shuffle(out).slice(0, 4);
+}
+const lgBox = (x, y, w, h, inner, q) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${q ? '#f4effc' : '#fff'}" stroke="#23264a" stroke-width="2.5"/>${inner}`;
+const lgTxt = (x, y, t, sz = 30, col = '#23264a') => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz}" font-weight="bold" fill="${col}" font-family="Arial">${t}</text>`;
+const LG_Q = (x, y) => lgTxt(x, y, '?', 36, '#8a5cd1');
+
+// 1. סדרות מספרים
+const LG_SER = {
+  arith: t => { const d = t[1] - t[0]; return t.every((v, i) => !i || v - t[i - 1] === d) ? t[t.length - 1] + d : null; },
+  geom: t => { if (!t[0] || t[1] % t[0]) return null; const r = t[1] / t[0]; return r > 1 && t.every((v, i) => !i || v === t[i - 1] * r) ? t[t.length - 1] * r : null; },
+  half: t => t.every((v, i) => !i || v * 2 === t[i - 1]) ? t[t.length - 1] / 2 : null,
+  quad: t => { const d = t.slice(1).map((v, i) => v - t[i]), e = d.slice(1).map((v, i) => v - d[i]); return e.every(x => x === e[0]) ? t[t.length - 1] + d[d.length - 1] + e[0] : null; },
+  fib: t => t.every((v, i) => i < 2 || v === t[i - 1] + t[i - 2]) ? t[t.length - 1] + t[t.length - 2] : null,
+  lin2: t => { const c = t[1] - 2 * t[0]; return t.every((v, i) => !i || v === 2 * t[i - 1] + c) ? 2 * t[t.length - 1] + c : null; },
+  lin3: t => { const c = t[1] - 3 * t[0]; return t.every((v, i) => !i || v === 3 * t[i - 1] + c) ? 3 * t[t.length - 1] + c : null; },
+  dgeom: t => { const d = t.slice(1).map((v, i) => v - t[i]); if (!d[0] || d[1] % d[0]) return null; const r = d[1] / d[0]; return r > 1 && d.every((v, i) => !i || v === d[i - 1] * r) ? t[t.length - 1] + d[d.length - 1] * r : null; },
+  alt: t => { // שתי פעולות לסירוגין: חיבור קבוע וכפל קבוע (בשני הסדרים)
+    const n = t.length;
+    for (const ph of [0, 1]) {
+      let a = null, r = null, ok = true;
+      for (let i = 1; i < n && ok; i++) {
+        if ((i + ph) % 2) { const v = t[i] - t[i - 1]; if (a === null) a = v; else if (v !== a) ok = false; }
+        else { if (!t[i - 1] || t[i] % t[i - 1]) ok = false; else { const v = t[i] / t[i - 1]; if (r === null) r = v; else if (v !== r) ok = false; } }
+      }
+      if (ok && a && r > 1) return (n + ph) % 2 ? t[n - 1] + a : t[n - 1] * r;
+    }
+    return null;
+  }
+};
+// inter – שתי סדרות חשבוניות שזורות: האיבר הבא ממשיך את הסדרה של האיבר שלפני האחרון
+LG_SER.inter = t => { const n = t.length; if (n < 5) return null; const a = t[2] - t[0], b = t[3] - t[1];
+  for (let i = 2; i < n; i++) if (t[i] - t[i - 2] !== (i % 2 ? b : a)) return null; return t[n - 2] + (n % 2 ? b : a); };
+function genLgSeries(lv) {
+  lv = lv || 1;
+  for (;;) {
+    let t = [], kind, ex;
+    const N = lv === 1 ? 5 : 6;
+    if (lv === 1) {
+      kind = pick(['arith', 'arith', 'down', 'geom']);
+      if (kind === 'arith') { const s = R(1, 30), d = R(2, 12); t = [...Array(N)].map((_, i) => s + d * i); ex = `בכל צעד מוסיפים ${d}.`; }
+      else if (kind === 'down') { const d = R(2, 9), s = d * N + R(3, 40); t = [...Array(N)].map((_, i) => s - d * i); ex = `בכל צעד מחסירים ${d}.`; }
+      else { const r = pick([2, 3]), s = R(1, r === 2 ? 6 : 3); t = [...Array(N)].map((_, i) => s * r ** i); ex = `בכל צעד כופלים ב-${r}.`; }
+    } else if (lv === 2) {
+      kind = pick(['quad', 'sq', 'alt', 'dgeom']);
+      if (kind === 'quad') { const s = R(1, 20), d = R(1, 5), e = R(1, 3); let v = s; t = [v]; for (let i = 0; i < N - 1; i++) { v += d + e * i; t.push(v); } ex = `ההפרשים גדלים כל פעם ב-${e}: ${t.slice(1).map((v, i) => '+' + (v - t[i])).join(', ')} – ולכן הבא +${d + e * (N - 1)}.`; }
+      else if (kind === 'sq') { const s = R(1, 5); t = [...Array(N)].map((_, i) => (s + i) ** 2); ex = `אלה מספרים ריבועיים: ${t.map((v, i) => `${s + i}×${s + i}`).join(', ')} – והבא ${s + N}×${s + N}.`; }
+      else if (kind === 'alt') { const a = R(1, 6), r = 2; let v = R(1, 5); t = [v]; for (let i = 1; i < N; i++) { v = i % 2 ? v + a : v * r; t.push(v); } ex = `שתי פעולות לסירוגין: +${a}, ואז ×${r}, ושוב +${a}, ×${r}…`; }
+      else { const s = R(1, 10), d = R(1, 3); let v = s, dd = d; t = [v]; for (let i = 1; i < N; i++) { v += dd; t.push(v); dd *= 2; } ex = `ההפרשים מוכפלים כל פעם: ${t.slice(1).map((v, i) => '+' + (v - t[i])).join(', ')} – והבא +${dd}.`; }
+    } else {
+      kind = pick(['inter', 'fib', 'lin']);
+      if (kind === 'inter') { const a = R(1, 20), b = R(30, 60), da = R(2, 6), db = -R(2, 6); t = [...Array(N)].map((_, i) => i % 2 ? b + db * ((i - 1) / 2) : a + da * (i / 2)); ex = `שתי סדרות שזורות זו בזו: במקומות האי-זוגיים ${t.filter((_, i) => !(i % 2)).join(', ')} (+${da} כל פעם), ובזוגיים ${t.filter((_, i) => i % 2).join(', ')} (${db} כל פעם). האיבר הבא שייך לסדרה הראשונה.`; }
+      else if (kind === 'fib') { let a = R(1, 5), b = R(a, a + 5); t = [a, b]; while (t.length < N) t.push(t[t.length - 1] + t[t.length - 2]); ex = 'כל מספר הוא סכום שני המספרים שלפניו.'; }
+      else { const r = pick([2, 3]), c = pick([1, -1, 2]); let v = R(2, 5); t = [v]; for (let i = 1; i < N; i++) { v = r * v + c; t.push(v); } ex = `בכל צעד כופלים ב-${r} ואז ${c > 0 ? 'מוסיפים ' + c : 'מחסירים ' + -c}.`; }
+    }
+    if (t.some(v => v < 0 || v > 999)) continue;
+    const outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
+    if (outs.size !== 1) continue;
+    const ans = [...outs][0];
+    if (ans <= 0 || ans > 999 || !Number.isInteger(ans)) continue;
+    const L = t[N - 1], D = L - t[N - 2];
+    const wr = lgNumOpts(ans, [L + D, L + 2 * D, L * 2, L + t[N - 2], ans + 1, ans - 1, L - D].filter(v => v !== ans));
+    // ציור: הסדרה בתיבות, מימין לשמאל
+    const W = 62, gap = 6, tot = (N + 1) * (W + gap);
+    let s = '';
+    [...t, null].forEach((v, i) => { const x = tot - (i + 1) * (W + gap) + gap / 2; s += lgBox(x, 4, W, 52, v == null ? LG_Q(x + W / 2, 43) : lgTxt(x + W / 2, 40, v, v > 99 ? 22 : 26), v == null); });
+    return choiceQ({ type: 'choice', text: 'איזה מספר בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} 60" width="${tot}" height="60" role="img">${s}</svg>`,
+      hint: 'קוראים מימין לשמאל ובודקים: כמה מוסיפים או כופלים בכל צעד? אם ההפרש משתנה – בודקים איך הוא משתנה.',
+      exp: `${ex}<br>לכן המספר החסר: <b>${ans}</b>.`, lgKind: 'series', lgT: t }, ans, wr);
+  }
+}
+
+// 2. סדרת צורות: חץ שמסתובב, נקודה שזזה סביב המסגרת, צבע שמתחלף
+const LG_DOT = [[14, 14], [50, 10], [86, 14], [90, 50], [86, 86], [50, 90], [14, 86], [10, 50]];
+function lgFig(o) {
+  let s = `<rect x="4" y="4" width="92" height="92" rx="6" fill="none" stroke="#c9cfdf" stroke-width="2"/>`;
+  s += `<g transform="rotate(${o.a * 45} 50 50)"><polygon points="50,18 66,40 56,40 56,76 44,76 44,40 34,40" fill="${o.f ? '#23264a' : '#fff'}" stroke="#23264a" stroke-width="3" stroke-linejoin="round"/></g>`;
+  if (o.p != null) s += `<circle cx="${LG_DOT[o.p][0]}" cy="${LG_DOT[o.p][1]}" r="7" fill="#d94a8c" stroke="#23264a" stroke-width="1.5"/>`;
+  return s;
+}
+const lgFK = o => `${o.a}|${o.p}|${o.f}`;
+// כללים אפשריים לתכונה מחזורית (מודולו 8): צעד קבוע, צעד שגדל ב-1, צעד שקטן ב-1
+function lgCyc(v) {
+  const d = v.slice(1).map((x, i) => ((x - v[i]) % 8 + 8) % 8), out = new Set();
+  if (d.every(x => x === d[0])) out.add((v[v.length - 1] + d[0]) % 8);
+  if (d.every((x, i) => !i || x === (d[i - 1] + 1) % 8)) out.add((v[v.length - 1] + d[d.length - 1] + 1) % 8);
+  if (d.every((x, i) => !i || x === (d[i - 1] + 7) % 8)) out.add((v[v.length - 1] + d[d.length - 1] + 7) % 8);
+  if (v.length >= 4 && v.every((x, i) => i < 2 || x === v[i - 2])) out.add(v[v.length - 2]);
+  return out;
+}
+const LG_STEP = { 1: '45° (שמינית סיבוב)', 2: '90° (רבע סיבוב)', 3: '135°', 4: '180° (חצי סיבוב)' };
+function genLgFigSeq(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const N = 4, frames = [];
+    const sa = lv === 3 && Math.random() < 0.5 ? 'grow' : 'const';
+    const da = pick([1, 2, 6, 7]), a0 = R(0, 7), p0 = R(0, 7), dp = pick([1, 2, 7, 6]), useDot = lv >= 2 || Math.random() < 0.4, useA = lv >= 2 || !useDot;
+    const fAlt = lv === 3 && sa === 'const';
+    for (let i = 0; i <= N; i++) {
+      const a = useA ? (sa === 'grow' ? (a0 + i * (i + 1) / 2) % 8 : (a0 + da * i) % 8) : a0;
+      frames.push({ a, p: useDot ? (p0 + dp * i) % 8 : null, f: fAlt ? i % 2 : 1 });
+    }
+    const shown = frames.slice(0, N), ans = frames[N];
+    // חד-משמעיות: כל תכונה בנפרד – כל הכללים שמתאימים נותנים את אותו המשך
+    const oa = lgCyc(shown.map(o => o.a)), op = useDot ? lgCyc(shown.map(o => o.p)) : new Set([null]);
+    const fv = shown.map(o => o.f), of = new Set([fv.every(x => x === fv[0]) ? fv[0] : null, fv.every((x, i) => i < 2 || x === fv[i - 2]) ? fv[N - 2] : null].filter(x => x !== null));
+    if (oa.size !== 1 || op.size !== 1 || of.size !== 1) continue;
+    if (useA && sa === 'const' && da === 4) continue;
+    const K = lgFK, cand = [], add = o => { if (K(o) !== K(ans) && !cand.some(x => K(x) === K(o))) cand.push(o); };
+    [1, 2, 4, 6, 7].forEach(k => add({ ...ans, a: (ans.a + k) % 8 }));
+    if (useDot) [1, 2, 4, 7].forEach(k => add({ ...ans, p: (ans.p + k) % 8 }));
+    if (fAlt) add({ ...ans, f: 1 - ans.f });
+    add(shown[N - 1]);
+    const wr = shuffle(cand);
+    // בחירת מסיחים: לפחות אחד שמשנה כל תכונה
+    const pickW = [];
+    [o => o.a !== ans.a && o.p === ans.p && o.f === ans.f, o => o.p !== ans.p && o.a === ans.a, o => o.f !== ans.f].forEach(t => { const w = wr.find(o => t(o) && !pickW.includes(o)); if (w) pickW.push(w); });
+    wr.forEach(o => pickW.length < 4 && !pickW.includes(o) && pickW.push(o));
+    const C = 76, gap = 8, tot = (N + 1) * (C + gap);
+    let s = '';
+    [...shown, null].forEach((o, i) => { const x = tot - (i + 1) * (C + gap) + gap / 2; s += o ? `<g transform="translate(${x} 4) scale(${C / 100})">${lgFig(o)}</g>` : lgBox(x, 4, C, C, LG_Q(x + C / 2, 4 + C / 2 + 12), true); });
+    const dirA = da <= 4 ? 'עם כיוון השעון' : 'נגד כיוון השעון', stA = LG_STEP[da <= 4 ? da : 8 - da];
+    const ex = [];
+    if (useA) ex.push(sa === 'grow' ? '<b>החץ:</b> מסתובב עם כיוון השעון, ובכל צעד בזווית גדולה יותר: 45°, 90°, 135°… – הצעד הבא 180°.' : `<b>החץ:</b> מסתובב ${stA} ${dirA} בכל צעד.`);
+    if (useDot) ex.push(`<b>הנקודה:</b> זזה ${dp <= 4 ? dp : 8 - dp} ${dp === 1 || dp === 7 ? 'מקום' : 'מקומות'} ${dp <= 4 ? 'עם' : 'נגד'} כיוון השעון סביב המסגרת.`);
+    if (fAlt) ex.push('<b>הצבע:</b> מתחלף – מלא, ריק, מלא, ריק…');
+    ex.push('מפעילים כל כלל צעד אחד נוסף, ומקבלים את הציור החסר.');
+    return choiceQ({ type: 'choice', text: 'איזה ציור בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} ${C + 8}" width="${tot}" height="${C + 8}" role="img">${s}</svg>`,
+      hint: 'בודקים כל חלק בציור לחוד: לאן החץ מצביע בכל פעם? איפה הנקודה? האם הצבע משתנה?',
+      exp: ex.join('<br>'), lgKind: 'figseq', lgShown: shown, lgDot: useDot }, lgOpt(lgFig(ans)), pickW.slice(0, 4).map(o => lgOpt(lgFig(o))));
+  }
+}
+
+// 3. אנלוגיות: מכונת מספרים (נכנס ← יוצא) ואנלוגיה של ציורים
+const LG_FN = [
+  { lv: 1, mk: () => { const k = R(2, 15); return { f: x => x + k, t: `מוסיפים ${k}` }; } },
+  { lv: 1, mk: () => { const k = R(2, 9); return { f: x => x * k, t: `כופלים ב-${k}` }; } },
+  { lv: 2, mk: () => { const k = R(2, 6), m = R(1, 9); return { f: x => x * k + m, t: `כופלים ב-${k} ואז מוסיפים ${m}` }; } },
+  { lv: 2, mk: () => { const k = R(3, 6), m = R(1, 5); return { f: x => x * k - m, t: `כופלים ב-${k} ואז מחסירים ${m}` }; } },
+  { lv: 3, mk: () => ({ f: x => x * x, t: 'כופלים את המספר בעצמו (בריבוע)' }) },
+  { lv: 3, mk: () => { const m = R(1, 6); return { f: x => x * x + m, t: `כופלים את המספר בעצמו ומוסיפים ${m}` }; } },
+  { lv: 3, mk: () => ({ f: x => x * (x + 1), t: 'כופלים את המספר במספר שאחריו' }) },
+  { lv: 3, mk: () => ({ f: x => 2 * x * x, t: 'כופלים את המספר בעצמו, ואז פי 2' }) }
+];
+// כללים מתחרים: חיבור קבוע, כפל קבוע, קו ישר (שני פרמטרים שלמים), ריבוע ועוד, חזקה של 2
+function lgFnFits(pairs) {
+  const P = pairs, fs = [];
+  const k1 = P[0][1] - P[0][0]; fs.push(x => x + k1);
+  if (P[0][0] && P[0][1] % P[0][0] === 0) { const k = P[0][1] / P[0][0]; fs.push(x => x * k); }
+  if (P[1] && P[1][0] !== P[0][0]) { const k = (P[1][1] - P[0][1]) / (P[1][0] - P[0][0]); if (Number.isInteger(k)) { const m = P[0][1] - k * P[0][0]; fs.push(x => k * x + m); } }
+  const m2 = P[0][1] - P[0][0] ** 2; fs.push(x => x * x + m2);
+  const m3 = P[0][1] - P[0][0] * (P[0][0] + 1); fs.push(x => x * (x + 1) + m3);
+  const m4 = P[0][1] - 2 * P[0][0] ** 2; fs.push(x => 2 * x * x + m4);
+  const m5 = P[0][1] - P[0][0] * (P[0][0] - 1); fs.push(x => x * (x - 1) + m5);
+  fs.push(x => 2 ** x);
+  return fs.filter(f => P.every(([a, b]) => f(a) === b));
+}
+const LG_TF = {
+  rot: (m, k) => lgRot(m, k), mir: m => m.slice().reverse(), inv: m => m.map(x => 1 - x)
+};
+function lgTfAll(n) { // כל ההפיכות: סיבוב (כולל 0), שיקוף, היפוך צבעים – וצירופים שלהם
+  const out = [];
+  for (let k = 0; k < n; k++) for (const mi of [0, 1]) for (const iv of [0, 1]) out.push({ k, mi, iv, f: m => { let r = lgRot(m, k); if (mi) r = r.slice().reverse(); if (iv) r = r.map(x => 1 - x); return r; } });
+  return out;
+}
+function genLgAnalogy(lv) {
+  lv = lv || 1;
+  if (lv === 3 || Math.random() < 0.5) { // מכונת מספרים
+    for (;;) {
+      const R0 = pick(LG_FN.filter(r => r.lv === lv)).mk(), nP = lv === 1 ? 2 : 3;
+      const xs = shuffle([...Array(lv === 1 ? 20 : 9)].map((_, i) => i + 2)).slice(0, nP + 1), pairs = xs.slice(0, nP).map(x => [x, R0.f(x)]), q = xs[nP], ans = R0.f(q);
+      if (ans > 999 || pairs.some(p => p[1] > 999)) continue;
+      const fits = lgFnFits(pairs), outs = new Set(fits.map(f => f(q)));
+      if (outs.size !== 1 || !outs.has(ans)) continue;
+      const cand = []; [x => x + (pairs[0][1] - pairs[0][0]), x => x * 2, x => x * x, x => R0.f(x) + 1, x => R0.f(x - 1), x => R0.f(x + 1)].forEach(f => cand.push(f(q)));
+      const wr = lgNumOpts(ans, cand);
+      const rows = [...pairs, [q, null]];
+      const W = 300, H = 36 * (rows.length + 1) + 8;
+      let s = `<rect x="2" y="2" width="${W - 4}" height="${H - 4}" rx="10" fill="#fff" stroke="#23264a" stroke-width="2.5"/>`;
+      s += `<rect x="2" y="2" width="${W - 4}" height="36" rx="10" fill="#efe8fa"/>` + lgTxt(225, 28, 'נכנס', 20) + lgTxt(75, 28, 'יוצא', 20) + `<line x1="150" y1="2" x2="150" y2="${H - 2}" stroke="#23264a" stroke-width="2"/>`;
+      rows.forEach(([a, b], i) => { const y = 36 * (i + 1) + 28; s += `<line x1="2" y1="${36 * (i + 1) + 2}" x2="${W - 2}" y2="${36 * (i + 1) + 2}" stroke="#c9cfdf"/>` + lgTxt(225, y, a, 24) + (b == null ? LG_Q(75, y + 2) : lgTxt(75, y, b, 24)); });
+      return choiceQ({ type: 'choice', text: 'מכונת מספרים: כל מספר שנכנס יוצא לפי <b>אותו כלל</b>. מה יֵצא במקום <b>?</b>',
+        fig: `<svg class="fig lgfig" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img">${s}</svg>`,
+        hint: 'מנחשים כלל לפי השורה הראשונה – ובודקים אותו בכל השורות. אם הוא לא מתאים לכולן, מחפשים כלל אחר (אולי שני צעדים).',
+        exp: `<b>הכלל:</b> ${R0.t}.<br>${pairs.map(([a, b]) => `${a} ← ${b} ✓`).join(' · ')}<br>ולכן ${q} ← <b>${ans}</b>.`, lgKind: 'fn', lgPairs: pairs, lgQ: q }, ans, wr);
+    }
+  }
+  // אנלוגיה של ציורים: א : ב = ג : ?
+  for (;;) {
+    const n = pick([4, 6, 8]), A = lgMask(n, 2, n - 2), C = lgMask(n, 2, n - 2);
+    if (lgKey(A) === lgKey(C)) continue;
+    const opts1 = [{ k: 1, mi: 0, iv: 0 }, { k: n - 1, mi: 0, iv: 0 }, { k: 0, mi: 0, iv: 1 }, { k: 0, mi: 1, iv: 0 }];
+    const tf = lv === 1 ? pick(opts1) : pick([{ k: 1, mi: 0, iv: 1 }, { k: n - 1, mi: 0, iv: 1 }, { k: 2, mi: 0, iv: 0 }, { k: 0, mi: 1, iv: 1 }, { k: 1, mi: 1, iv: 0 }]);
+    const T = lgTfAll(n).find(t => t.k === tf.k && t.mi === tf.mi && t.iv === tf.iv);
+    const B = T.f(A), ans = T.f(C);
+    if (lgKey(A) === lgKey(B)) continue;
+    const fits = lgTfAll(n).filter(t => lgKey(t.f(A)) === lgKey(B)), outs = new Set(fits.map(t => lgKey(t.f(C))));
+    if (outs.size !== 1) continue;
+    const wr = lgPieOpts(ans, lgTfAll(n).map(t => t.f(C)));
+    if (wr.length < 4) continue;
+    const parts = [];
+    if (tf.k) parts.push(tf.k === 1 ? 'מסתובב בחלק אחד עם כיוון השעון' : tf.k === n - 1 ? 'מסתובב בחלק אחד נגד כיוון השעון' : `מסתובב ב-${tf.k} חלקים עם כיוון השעון`);
+    if (tf.mi) parts.push('מתהפך כמו בתמונת מראה (שיקוף ימין-שמאל)');
+    if (tf.iv) parts.push('הצבעים מתהפכים: מה שהיה צבוע – לבן, ומה שהיה לבן – צבוע');
+    // ציור: א ← ב   |   ג ← ?   (מימין לשמאל)
+    const C0 = 70, arr = x => `<path d="M${x + 22} 41 L${x} 41 M${x + 8} 33 L${x} 41 L${x + 8} 49" stroke="#23264a" stroke-width="3" fill="none"/>`;
+    const at = (x, m) => `<g transform="translate(${x} 6) scale(${C0 / 100})">${lgPie(m)}</g>`;
+    let s = at(380 - C0, A) + arr(380 - C0 - 30) + at(380 - 2 * C0 - 38, B);
+    s += `<line x1="190" y1="8" x2="190" y2="76" stroke="#c9cfdf" stroke-width="2" stroke-dasharray="5 4"/>`;
+    s += at(180 - C0, C) + arr(180 - C0 - 30) + lgBox(180 - 2 * C0 - 38, 6, C0, C0, LG_Q(180 - 2 * C0 - 38 + C0 / 2, 6 + C0 / 2 + 12), true);
+    return choiceQ({ type: 'choice', text: 'הציור הראשון השתנה לשני. מה יקרה לציור השלישי <b>באותו אופן</b>?',
+      fig: `<svg class="fig lgfig lgwide" viewBox="0 0 384 84" width="384" height="84" role="img">${s}</svg>`,
+      hint: 'מה קרה לציור הראשון? סיבוב? שיקוף? הצבעים התהפכו? בדקו מה השתנה – ועשו בדיוק אותו דבר לציור השלישי.',
+      exp: `מהציור הראשון לשני הציור ${parts.join(', וגם ')}.<br>עושים את אותו הדבר לציור השלישי.`, lgKind: 'figana', lgA: A, lgB: B, lgC: C }, lgOpt(lgPie(ans)), wr.map(m => lgOpt(lgPie(m))));
+  }
+}
+
+// 4. יוצא דופן
+const lgPrime = n => { if (n < 2) return false; for (let d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; };
+const lgDS = n => String(n).split('').reduce((a, b) => a + +b, 0);
+const LG_PROPS = [
+  ['זוגיים', n => n % 2 === 0], ['מתחלקים ב-3', n => n % 3 === 0], ['מתחלקים ב-4', n => n % 4 === 0], ['מתחלקים ב-5', n => n % 5 === 0],
+  ['מתחלקים ב-6', n => n % 6 === 0], ['מתחלקים ב-7', n => n % 7 === 0], ['מתחלקים ב-8', n => n % 8 === 0], ['מתחלקים ב-9', n => n % 9 === 0], ['מתחלקים ב-10', n => n % 10 === 0],
+  ['ראשוניים', lgPrime], ['מספרים ריבועיים', n => Number.isInteger(Math.sqrt(n))], ['שסכום הספרות שלהם זוגי', n => lgDS(n) % 2 === 0],
+  ['דו-ספרתיים', n => n >= 10 && n < 100], ['שספרת האחדות שלהם 5', n => n % 10 === 5], ['שהספרות שלהם שוות', n => n > 10 && new Set(String(n)).size === 1],
+  ['שסכום הספרות שלהם 10', n => lgDS(n) === 10], ['שמתחלקים ב-11', n => n % 11 === 0], ['שמתחלקים ב-12', n => n % 12 === 0]
+];
+function genLgOdd(lv) {
+  lv = lv || 1;
+  if (Math.random() < 0.55) {
+    const pool = lv === 1 ? [0, 3, 8] : lv === 2 ? [1, 2, 4, 5, 7] : [9, 10, 15];
+    for (;;) {
+      const pi = pick(pool), [nm, P] = LG_PROPS[pi], lo = 10, hi = lv === 1 ? 99 : 120;
+      const yes = shuffle([...Array(hi - lo)].map((_, i) => i + lo).filter(P)).slice(0, 4), noL = [...Array(hi - lo)].map((_, i) => i + lo).filter(n => !P(n) && (lv === 1 || n % 2 === yes[0] % 2));
+      if (yes.length < 4 || !noL.length) continue;
+      const odd = pick(noL), items = shuffle([...yes, odd]);
+      const singled = new Set();
+      LG_PROPS.forEach(([, Q]) => { const t = items.filter(Q); if (t.length === 1) singled.add(t[0]); if (t.length === 4) singled.add(items.find(x => !Q(x))); });
+      if (singled.size !== 1 || !singled.has(odd)) continue;
+      return choiceQ({ type: 'choice', text: 'ארבעה מספרים שייכים לאותה קבוצה, ואחד <b>יוצא דופן</b>. איזה?', hint: 'מחפשים תכונה משותפת: זוגי? מתחלק במשהו? ראשוני? ריבועי? סכום הספרות?',
+        exp: `כל המספרים חוץ מ-${odd} הם ${nm}: ${yes.join(', ')}.<br>${odd} – לא.`, lgKind: 'oddnum', lgItems: items }, odd, items.filter(x => x !== odd), true);
+    }
+  }
+  for (;;) { // ציורים: ארבעה הם אותו ציור מסובב, אחד שונה
+    const n = pick([6, 8]), base = lgMask(n, 2, n - 2), mir = base.slice().reverse();
+    const rotClass = m => { for (let k = 0; k < n; k++) if (lgKey(lgRot(m, k)) === lgKey(base)) return true; return false; };
+    if (lv === 3 && rotClass(mir)) continue; // צריך ציור "ימני" ששיקופו שונה
+    const ks = shuffle([...Array(n)].map((_, i) => i)).slice(0, 5), same = ks.slice(0, 4).map(k => lgRot(base, k));
+    let odd;
+    if (lv === 1) { odd = lgRot(base, ks[4]).slice(); const i = odd.indexOf(0); odd[i] = 1; }
+    else if (lv === 2) { odd = lgMask(n, 2, n - 2); const cnt = m => m.reduce((a, b) => a + b, 0); if (cnt(odd) !== cnt(base) || rotClass(odd) || rotClass(odd.slice().reverse())) continue; }
+    else odd = lgRot(mir, ks[4]);
+    const items = shuffle([...same, odd]), K = lgKey;
+    if (new Set(items.map(K)).size !== 5) continue;
+    // בדיקה: לפי מספר החלקים הצבועים / לפי "אותו ציור מסובב" – רק האחד הזה יוצא דופן
+    const cnt = m => m.reduce((a, b) => a + b, 0), single = new Set();
+    const byCnt = items.filter(m => cnt(m) !== cnt(same[0])); if (byCnt.length === 1) single.add(K(byCnt[0]));
+    const byRot = items.filter(m => !rotClass(m)); if (byRot.length === 1) single.add(K(byRot[0]));
+    if (single.size !== 1 || !single.has(K(odd))) continue;
+    const opt = m => lgOpt(lgPie(m));
+    const why = lv === 1 ? `בכל הציורים צבועים ${cnt(base)} חלקים – ורק בציור הזה ${cnt(odd)}.` : lv === 2 ? 'ארבעה ציורים הם אותו ציור בדיוק, רק מסובב. הציור הזה בנוי אחרת – אי אפשר לקבל אותו בסיבוב.'
+      : 'ארבעה ציורים הם אותו ציור מסובב. הציור הזה הוא <b>תמונת המראה</b> שלו – אי אפשר לקבל אותו בסיבוב, רק בשיקוף.';
+    return choiceQ({ type: 'choice', text: 'ארבעה ציורים שייכים לאותה קבוצה, ואחד <b>יוצא דופן</b>. איזה?', hint: 'ספרו חלקים צבועים. אם המספר זהה – נסו "לסובב בראש" את הציורים: האם כולם אותו ציור?',
+      exp: why, lgKind: 'oddfig', lgItems: items }, opt(odd), items.filter(m => K(m) !== K(odd)).map(opt), true);
+  }
+}
+
+// 5. מאזניים
+const LG_SHP = {
+  c: (x, y) => `<circle cx="${x}" cy="${y - 10}" r="10" fill="#4c8fd5" stroke="#23264a" stroke-width="2"/>`,
+  s: (x, y) => `<rect x="${x - 10}" y="${y - 20}" width="20" height="20" fill="#e0703a" stroke="#23264a" stroke-width="2"/>`,
+  t: (x, y) => `<polygon points="${x},${y - 20} ${x - 11},${y} ${x + 11},${y}" fill="#2f8f55" stroke="#23264a" stroke-width="2"/>`
+};
+const LG_SHN2 = { c: ['עיגול', 'עיגולים'], s: ['ריבוע', 'ריבועים'], t: ['משולש', 'משולשים'] };
+function lgScale(left, right, y0) { // left/right = רשימת צורות. הכף הימנית מצוירת מימין
+  const pan = (cx, list) => { let s = `<path d="M${cx - 62} ${y0 + 34} L${cx + 62} ${y0 + 34}" stroke="#23264a" stroke-width="4" stroke-linecap="round"/>`;
+    const per = Math.min(list.length, 5), rows = Math.ceil(list.length / 5);
+    list.forEach((k, i) => { const r = Math.floor(i / 5), c = i % 5, inRow = r === rows - 1 ? list.length - 5 * r : 5; s += LG_SHP[k](cx + (c - (inRow - 1) / 2) * 24, y0 + 32 - r * 23); });
+    return s; };
+  return `<line x1="160" y1="${y0 + 34}" x2="160" y2="${y0 + 62}" stroke="#23264a" stroke-width="4"/><polygon points="160,${y0 + 56} 146,${y0 + 70} 174,${y0 + 70}" fill="#23264a"/>`
+    + `<line x1="78" y1="${y0 + 34}" x2="242" y2="${y0 + 34}" stroke="#23264a" stroke-width="2" opacity="0"/>` + pan(240, right) + pan(80, left);
+}
+function genLgBalance(lv) {
+  lv = lv || 1;
+  for (;;) {
+    let c, s, eqs, ask; // משקלים ביחידות של משולש (משולש = 1)
+    const rep = (k, n) => Array(n).fill(k);
+    if (lv === 1) { c = R(2, 4); const m = R(2, 3); s = c * m; eqs = [[['c'], rep('t', c)], [['s'], rep('c', m)]]; ask = 's'; }
+    else if (lv === 2) { c = R(2, 4); const a = R(2, 3), b = R(1, 3); s = c + b; eqs = [[rep('c', a), rep('t', a * c)], [['s'], [...rep('c', 1), ...rep('t', b)]]]; ask = pick(['s', 's']); }
+    else { c = R(1, 4); s = c + R(1, 4); eqs = [[['c', 's'], rep('t', c + s)], [['s'], ['c', ...rep('t', s - c)]]]; ask = pick(['s', 'c']); }
+    if (eqs.some(e => e[0].length > 10 || e[1].length > 10)) continue;
+    const W = { c, s, t: 1 }, sum = l => l.reduce((a, k) => a + W[k], 0);
+    if (!eqs.every(e => sum(e[0]) === sum(e[1]))) continue;
+    // פתרון בלתי תלוי: מערכת לינארית בשני נעלמים (c, s) – חייבת פתרון יחיד
+    const row = e => { const r = { c: 0, s: 0, t: 0 }; e[0].forEach(k => r[k]++); e[1].forEach(k => r[k]--); return r; };
+    const [r1, r2] = eqs.map(row), det = r1.c * r2.s - r1.s * r2.c;
+    if (!det) continue;
+    const solC = (-r1.t * r2.s + r2.t * r1.s) / det, solS = (-r1.c * r2.t + r2.c * r1.t) / det;
+    if (solC !== c || solS !== s) continue;
+    const ans = W[ask];
+    const wr = lgNumOpts(ans, [c + s, s - c, c * s, ans + 1, ans - 1, ask === 's' ? c : s].filter(v => v !== ans));
+    const fig = `<svg class="fig lgfig" viewBox="0 0 320 170" width="320" height="170" role="img">${lgScale(eqs[0][1], eqs[0][0], 6)}${lgScale(eqs[1][1], eqs[1][0], 92)}</svg>`;
+    const how = lv === 1 ? `עיגול אחד שוקל כמו ${c} משולשים. ריבוע שוקל כמו ${s / c} עיגולים, כלומר ${s / c} × ${c} = <b>${s}</b> משולשים.`
+      : lv === 2 ? `${eqs[0][0].length} עיגולים = ${eqs[0][1].length} משולשים, ולכן עיגול אחד = ${c} משולשים.<br>ריבוע = עיגול + ${s - c} משולשים = ${c} + ${s - c} = ${s} משולשים.`
+      : `במאזניים התחתונים: ריבוע = עיגול + ${s - c} משולשים. מחליפים את הריבוע במאזניים העליונים: עיגול + עיגול + ${s - c} משולשים = ${c + s} משולשים.<br>אז שני עיגולים = ${2 * c} משולשים, עיגול = ${c}, וריבוע = ${c} + ${s - c} = ${s}.`;
+    return choiceQ({ type: 'choice', text: `המאזניים מאוזנים. כמה <b>משולשים</b> שוקלים כמו <b>${LG_SHN2[ask][0]} אחד</b>?`, fig,
+      hint: lv === 3 ? 'נסו להחליף: במקום הריבוע במאזניים העליונים – שימו את מה שהוא שוקל לפי המאזניים התחתונים.' : 'מתחילים מהמאזניים שבהם יש צורה אחת מול משולשים: כמה שוקלת הצורה הזאת?',
+      exp: how + `<br>לכן ${LG_SHN2[ask][0]} אחד = <b>${ans}</b> משולשים.`, lgKind: 'bal', lgEqs: eqs, lgAsk: ask }, ans, wr);
+  }
+}
+
+// 6. מספר במרכז המשולש
+const LG_CR = [
+  { lv: 1, f: (a, b, c) => a + b + c, t: 'המספר במרכז = סכום שלושת המספרים בפינות' },
+  { lv: 1, f: (a, b, c) => a + b + c + 1, t: 'המספר במרכז = סכום המספרים בפינות, ועוד 1' },
+  { lv: 2, f: (a, b, c) => a * b + c, t: 'המספר במרכז = המספר העליון × המספר הימני, ועוד המספר השמאלי' },
+  { lv: 2, f: (a, b, c) => (a + b) * c, t: 'המספר במרכז = (העליון + הימני) × השמאלי' },
+  { lv: 2, f: (a, b, c) => a * b - c, t: 'המספר במרכז = העליון × הימני, פחות השמאלי' },
+  { lv: 3, f: (a, b, c) => a * b * c, t: 'המספר במרכז = מכפלת שלושת המספרים' },
+  { lv: 3, f: (a, b, c) => 2 * (a + b + c), t: 'המספר במרכז = פעמיים הסכום של המספרים בפינות' },
+  { lv: 3, f: (a, b, c) => a * a + b + c, t: 'המספר במרכז = העליון בריבוע, ועוד שני המספרים התחתונים' },
+  { lv: 3, f: (a, b, c) => (a + b + c) * a, t: 'המספר במרכז = סכום הפינות × המספר העליון' }
+];
+const LG_CCHK = (() => { // כל הכללים בכל סידור של הפינות, ועוד כללים קרובים
+  const base = LG_CR.map(r => r.f).concat([(a, b, c) => a + b - c, (a, b, c) => a * b + c + 1, (a, b, c) => a + b * c, (a, b, c) => (a + b) * c - 1, (a, b, c) => a * b + b * c, (a, b, c) => a + b + c - 1, (a, b, c) => 3 * (a + b + c)]);
+  const perms = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]], out = [];
+  base.forEach(f => perms.forEach(p => out.push(v => f(v[p[0]], v[p[1]], v[p[2]]))));
+  return out;
+})();
+function genLgCenter(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const rule = pick(LG_CR.filter(r => r.lv === lv)), hi = lv === 1 ? 12 : 7;
+    const tri = [...Array(4)].map(() => [R(1, hi), R(1, hi), R(1, hi)]);
+    if (new Set(tri.map(String)).size < 4) continue;
+    const vals = tri.map(v => rule.f(...v));
+    if (vals.some(v => v < 1 || v > 400)) continue;
+    const fits = LG_CCHK.filter(f => tri.slice(0, 3).every((v, i) => f(v) === vals[i]));
+    if (new Set(fits.map(f => f(tri[3]))).size !== 1) continue;
+    const ans = vals[3];
+    const q = tri[3], wr = lgNumOpts(ans, [q[0] + q[1] + q[2], q[0] * q[1] + q[2], q[0] * q[1] * q[2], (q[0] + q[1]) * q[2], ans + 1, ans - 1]);
+    const one = (x, y, v, m) => `<polygon points="${x},${y} ${x + 66},${y + 112} ${x - 66},${y + 112}" fill="${m == null ? '#f4effc' : '#fff'}" stroke="#23264a" stroke-width="2.5" stroke-linejoin="round"/>`
+      + lgTxt(x, y + 32, v[0], 20) + lgTxt(x + 40, y + 104, v[1], 20) + lgTxt(x - 40, y + 104, v[2], 20) + (m == null ? LG_Q(x, y + 84) : lgTxt(x, y + 80, m, m > 99 ? 22 : 26, '#6b3fa0'));
+    const s = one(240, 6, tri[0], vals[0]) + one(80, 6, tri[1], vals[1]) + one(240, 130, tri[2], vals[2]) + one(80, 130, tri[3], null);
+    return choiceQ({ type: 'choice', text: 'בכל משולש המספר שבמרכז נבנה מהמספרים שבפינות <b>לפי אותו כלל</b>. מה המספר במקום <b>?</b>',
+      fig: `<svg class="fig lgfig" viewBox="0 0 320 250" width="320" height="250" role="img">${s}</svg>`,
+      hint: 'נסו קודם לחבר את הפינות. לא מתאים? נסו כפל – אולי של שתי פינות, ואז משהו עם השלישית. בדקו את הכלל בכל שלושת המשולשים.',
+      exp: `<b>הכלל:</b> ${rule.t}.<br>${tri.slice(0, 3).map((v, i) => `(${v.join(', ')}) ← ${vals[i]} ✓`).join(' · ')}<br>במשולש האחרון: <b>${ans}</b>.`, lgKind: 'center', lgTri: tri, lgVals: vals }, ans, wr);
+  }
+}
+const LG_TIPS = ['קוראים מימין לשמאל.', 'בודקים כל תכונה לחוד: צורה, צבע, כמות, כיוון.', 'מצאתם כלל? בדקו אותו בכל הדוגמאות לפני שבוחרים.'];
+const LG_T = (id, name, icon, desc, gens, ld) => ({ id, name, icon, color: '#6b3fa0', desc, tips: LG_TIPS, lgLD: ld,
+  levels: { 1: gens.map(g => () => g(1)), 2: gens.map(g => () => g(2)), 3: gens.map(g => () => g(3)) } });
+const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [
+  LG_T('logic', 'חידות מטריצה', '🧠', 'משלימים את התא החסר: עיגולים מסתובבים, צורות ומספרים', [genLogicPie, genLogicShapes, genLogicNum],
+    ['כלל אחד בכל שורה (סיבוב, צורה, חיבור וחיסור)', 'שני כללים יחד, כיוונים שונים, כפל', 'הרכבת ציורים, כלל לפי שורה, כללים בשני צעדים']),
+  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות מספרים וסדרות ציורים: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq],
+    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב', 'הפרשים שגדלים, שתי פעולות לסירוגין, חץ ונקודה יחד', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד']),
+  LG_T('lgAna', 'אנלוגיות ויוצא דופן', '🔀', 'מכונת מספרים, "א ל-ב כמו ג ל-?" ומי לא שייך לקבוצה', [genLgAnalogy, genLgOdd],
+    ['כלל של צעד אחד, הפיכה אחת, תכונה פשוטה', 'כלל של שני צעדים, שתי הפיכות, מתחלקים ב...', 'ריבועים, ראשוניים, תמונת מראה']),
+  LG_T('lgNum', 'מאזניים ומספר במרכז', '⚖️', 'כמה שוקלת כל צורה? ואיך נבנה המספר שבמרכז המשולש?', [genLgBalance, genLgCenter],
+    ['החלפה פשוטה, סכום הפינות', 'שני שלבים, כפל וחיבור בפינות', 'הצבה במאזניים, כללים מורכבים'])
+] : [];
+const LG_LEVELS = XTOPICS.length ? XTOPICS[0].levels : {};
+XTOPICS.forEach(t => { TOPIC[t.id] = t; CAT_OF[t.id] = 'exc'; LEVEL_DESC[t.id] = t.lgLD; });
 // מבחן לדוגמה: 15 שאלות מהקל לקשה (5 בכל רמה, הסוגים מתחלפים), עם שעון
 function logicExam() {
   const qs = [];
-  [1, 2, 3].forEach(lv => { const order = shuffle([0, 1, 2]); for (let i = 0; i < 5; i++) qs.push(mk('logic', LG_LEVELS[lv][order[i % 3]], lv)); });
+  const all = XTOPICS.flatMap(t => [0, 1, 2].map(k => t.levels[1][k] ? k : -1).filter(k => k >= 0).map(k => ({ t: t.id, k })));
+  [1, 2, 3].forEach(lv => shuffle(all).slice(0, 5).forEach(g => qs.push(mk(g.t, TOPIC[g.t].levels[lv][g.k], lv))));
   startSim(20, qs);
 }
 if (TOPIC.solids) {
@@ -21618,7 +21979,7 @@ function magDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · ריבועי קסם</span><button class="secondary" id="magBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${MAG_SECS.map(([id, t]) => `<button type="button" class="pl-pill${mag.sec === id ? ' on' : ''}" data-msec="${id}">${t}</button>`).join('')}</div>
     <div id="magBody"></div>`;
-  $('magBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
+  $('magBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-msec]').forEach(b => b.onclick = () => { mag.sec = b.dataset.msec; magDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: magLearn, play: magPlay, print: el => magPrint(el) })[mag.sec]($('magBody'));
   track('מצוינות: ריבועי קסם', MAG_SECS.find(s => s[0] === mag.sec)[1]);
@@ -21836,7 +22197,7 @@ function grwDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · תבניות גדילה</span><button class="secondary" id="grwBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${GRW_SECS.map(([id, t]) => `<button type="button" class="pl-pill${grw.sec === id ? ' on' : ''}" data-gsec="${id}">${t}</button>`).join('')}</div>
     <div id="grwBody"></div>`;
-  $('grwBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
+  $('grwBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-gsec]').forEach(b => b.onclick = () => { grw.sec = b.dataset.gsec; grwDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: grwLearn, play: grwPlay, print: el => grwPrint(el) })[grw.sec]($('grwBody'));
   track('מצוינות: תבניות גדילה', GRW_SECS.find(s => s[0] === grw.sec)[1]);
@@ -22087,7 +22448,7 @@ function cubDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · כמה קוביות?</span><button class="secondary" id="cubBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${CUB_SECS.map(([id, t]) => `<button type="button" class="pl-pill${cub.sec === id ? ' on' : ''}" data-csec="${id}">${t}</button>`).join('')}</div>
     <div id="cubBody"></div>`;
-  $('cubBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
+  $('cubBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-csec]').forEach(b => b.onclick = () => { cub.sec = b.dataset.csec; cubDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: cubLearn, quiz: el => cubQuiz(el, false), fill: el => cubQuiz(el, true), print: el => cubPrint(el) })[cub.sec]($('cubBody'));
   track('מצוינות: קוביות', CUB_SECS.find(s => s[0] === cub.sec)[1]);
@@ -22330,7 +22691,7 @@ function palDraw() {
     <div class="pl-nav">${PAL_SECS.map(([id, t]) => `<button type="button" class="pl-pill${pal.sec === id ? ' on' : ''}" data-psec="${id}">${t}</button>`).join('')}</div>
     <div id="plBody"></div>
     <p class="pl-credit">${PAL_CREDIT}</p>`;
-  $('palBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
+  $('palBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-psec]').forEach(b => b.onclick = () => { pal.sec = b.dataset.psec; palDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: palLearn, quiz: palQuiz, rev: palRevAdd, grid: palGrid, riddle: palRiddle, print: palPrint })[pal.sec]($('plBody'));
   track('מצוינות: פלינדרום', PAL_SECS.find(s => s[0] === pal.sec)[1]);
