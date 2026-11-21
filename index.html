@@ -3,65 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>איריס לומדת קלוד קוד</title>
-<style>
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 40px;
-    font-family: "Segoe UI", "Arial Hebrew", Arial, sans-serif;
-    background-color: #cdeafc;
-    transition: background-color 0.4s ease;
-    direction: rtl;
-    text-align: right;
-  }
-
-  h1 {
-    font-size: 3rem;
-    color: #2c2c54;
-    margin-bottom: 30px;
-  }
-
-  button {
-    font-size: 1.3rem;
-    padding: 14px 32px;
-    border: none;
-    border-radius: 12px;
-    background-color: #2c2c54;
-    color: #fff;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.15s ease;
-  }
-
-  button:hover {
-    transform: scale(1.05);
-  }
-
-  button:active {
-    transform: scale(0.97);
-  }
-</style>
+<title>מתרגלים מתמטיקה – איריס סגל</title>
+<script>
+  // דף הכניסה של הכתובת הראשית (mathinclass.com/) – מעבירים מיד לדף הבית math.html, עם כל הפרמטרים
+  location.replace('math.html' + location.search + location.hash);
+</script>
+<noscript><meta http-equiv="refresh" content="0; url=math.html"></noscript>
+<link rel="canonical" href="math.html">
+<meta name="description" content="אתר תרגול במתמטיקה לכיתות א'–ו': שיעורים, תרגול, משחקים ודפי עבודה">
+<meta property="og:title" content="מתרגלים מתמטיקה – איריס סגל">
+<meta property="og:description" content="אתר תרגול במתמטיקה לכיתות א'–ו': שיעורים, תרגול, משחקים ודפי עבודה">
+<meta property="og:site_name" content="מתרגלים מתמטיקה – איריס סגל">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://irissegalai-a11y.github.io/Lessonplanner/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="מתרגלים מתמטיקה – איריס סגל">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#fbf8f1">
+<style>body { font-family: Assistant, "Segoe UI", Arial, sans-serif; background: #fbf8f1; color: #1f1e1c; text-align: center; padding: 60px 16px; } a { color: #2f5f9e; font-weight: 600; }</style>
 </head>
 <body>
-  <h1>איריס לומדת קלוד קוד</h1>
-  <button onclick="changeBackground()">שנה צבע רקע</button>
-
-  <script>
-    function changeBackground() {
-      const r = Math.floor(Math.random() * 256);
-      const g = Math.floor(Math.random() * 256);
-      const b = Math.floor(Math.random() * 256);
-      document.body.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-    }
-  </script>
+  <p>עוברים לאתר… <a href="math.html">אם לא עברתם אוטומטית – לחצו כאן</a></p>
 </body>
 </html>
