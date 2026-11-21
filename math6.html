@@ -206,6 +206,10 @@ html.embed body { padding-top: 0; }
 
   .choices { display: grid; grid-template-columns: 1fr; gap: 8px; width: 100%; }
   .choices.pics { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .choices.pics:has(.lgopt) { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .choices.pics:has(.lgopt) button { padding: 6px 2px; gap: 2px; }
+  .fig.lgopt { width: 100%; max-width: 76px; margin: 2px auto; }
+  .fig.lgfig { max-width: 290px; }
   div.choices > button { display: flex; align-items: center; gap: 10px; justify-content: flex-start; text-align: right; }
   div.choices.pics > button { flex-direction: column; justify-content: center; text-align: center; }
   .chl { font-weight: 800; flex-shrink: 0; }
@@ -2272,7 +2276,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצח</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13368,6 +13372,7 @@ function home() {
   if ($('mkGo')) $('mkGo').onclick = mkHome;
   if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
+  ['pal', 'euler', 'cub', 'mag', 'grw'].forEach(k => { const b = $('x' + k + 'Go'); if (b) b.onclick = () => { excBack = 'practice'; $(k + 'Go').click(); }; });
   if ($('champGo')) $('champGo').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('tframeGo')) $('tframeGo').onclick = tenFrame;
@@ -13405,6 +13410,7 @@ document.addEventListener('click', e => {
 });
 // דף נושא: ① ללמוד ← ② לתרגל ← ③ בודקים את עצמי, ומתחת – כלי המחשה של הנושא
 let topicBack = null;
+let excBack = null; // חזרה מפעילות מצוינות: לאריחים (practice) אם נכנסו מהקטגוריה
 const topicLessons = id => LESSON_ORDER.filter(l => lessonTopic(LESSONS[l]) === id);
 const TOOL_CARDS = [
   { id: 'dfGo', cls: 'b10-card2', on: GRADE >= 3, topics: ['muldiv', 'mul22', 'times', 'dfacts'], go: () => dfTool(), chip: '🧩 עובדות נגזרות',
@@ -13434,7 +13440,8 @@ const TOPIC_CATS = [
   { id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55' },
   { id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b' },
   { id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1' },
-  { id: 'word', name: 'שאלות מילוליות', icon: '💬', color: '#3d7a6e' }
+  { id: 'word', name: 'שאלות מילוליות', icon: '💬', color: '#3d7a6e' },
+  { id: 'exc', name: 'מצוינות', icon: '🧠', color: '#6b3fa0' }
 ];
 // נושא שלא מופיע כאן – "מספרים טבעיים"
 const CAT_OF = {
@@ -13443,6 +13450,7 @@ const CAT_OF = {
   shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', solids: 'geo', solidsN: 'geo', solidsS: 'geo', solidsV: 'geo', drawGo: 'geo', quadGo: 'geo',
   pct: 'pct',
   data: 'data',
+  xpalGo: 'exc', xeulerGo: 'exc', xcubGo: 'exc', xmagGo: 'exc', xgrwGo: 'exc',
   wpm: 'word', wpGo: 'word'
 };
 const catOf = id => CAT_OF[id] || 'nat';
@@ -13461,9 +13469,15 @@ function topicCatsHTML() {
       { id: 'drawGo', h: () => extra('drawGo', '#2f8f55', 'שרטוט בגאומטריה', 'משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ולפי אלכסונים') },
       { id: 'quadGo', h: () => extra('quadGo', '#4c5fd5', 'מרובעים', `מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט`) }
     ] : []),
-    { id: 'wpGo', h: () => extra('wpGo', '#3d7a6e', 'שאלות מילוליות', 'בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים') }
+    { id: 'wpGo', h: () => extra('wpGo', '#3d7a6e', 'שאלות מילוליות', 'בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים') },
+    // מצוינות (21.11): פעילויות לשונית "מצוינות" גם כקטגוריה באריחים (הכפתורים מפעילים את המקוריים)
+    ...(GRADE >= 4 ? [['xpalGo', '🪞 פלינדרום', 'מספרים שנקראים אותו דבר משני הכיוונים: משחק, חידות ותבניות ב-5 רמות'],
+      ['xeulerGo', '✏️ משיכת קולמוס אחת', 'אפשר לצייר את הצורה בקו אחד בלי להרים את העיפרון?'],
+      ['xcubGo', '🧊 כמה קוביות?', 'סופרים קוביות במבנה משורטט – גם את המוסתרות'],
+      ['xmagGo', '🔢 ריבועי קסם', 'כל שורה, טור ואלכסון – לאותו סכום'],
+      ['xgrwGo', '📈 תבניות גדילה', 'מגלים את הכלל ויודעים מה יהיה בשלב 10 ואפילו בשלב 100']].map(([id, nm, ds]) => ({ id, h: () => extra(id, '#6b3fa0', nm, ds) })) : [])
   ];
-  const groups = TOPIC_CATS.map(c => ({ c, topics: TOPICS.filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
+  const groups = TOPIC_CATS.map(c => ({ c, topics: [...TOPICS, ...XTOPICS].filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
     extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
     .filter(g => g.topics.length || g.extra.length);
   const tools = g => g.tools.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${g.tools.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
@@ -13528,6 +13542,7 @@ function topicHome(id) {
     </section>
     <section class="card tp-step">${step('בודקים את עצמי')}
       <button type="button" class="tp-check" id="tpCheck">✅ סבב בדיקה קצר<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, בלי שינוי רמה – רואים כמה כבר יודעים</span></button>
+      ${id === 'logic' ? `<button type="button" class="tp-check" id="tpExam">⏱️ מבחן לדוגמה<span class="desc">15 חידות מהקל לקשה, 20 דקות, אפשר לדלג ולחזור – הציון וההסברים בסוף</span></button>` : ''}
     </section>
     ${tools.length ? `<section class="card tp-step"><h2 class="tp-h">🧰 כלי המחשה</h2>
       ${tools.map(c => `<button type="button" class="b10-card${c.cls ? ' ' + c.cls : ''}" data-tool="${c.id}">${c.html}</button>`).join('')}
@@ -13542,6 +13557,7 @@ function topicHome(id) {
     startPractice(id, { level, fixed: $('tpLock').checked });
   }));
   $('tpCheck').onclick = go(() => startPractice(id, { level: cur, count: 5, fixed: true }));
+  if ($('tpExam')) $('tpExam').onclick = go(logicExam);
   app.querySelectorAll('[data-tool]').forEach(b => b.onclick = go(TOOL_CARDS.find(c => c.id === b.dataset.tool).go));
 }
 let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
@@ -13597,6 +13613,174 @@ const LEVEL_DESC6 = {
 const LEVEL_DESC = GRADE === 1 ? LEVEL_DESC1 : GRADE === 2 ? LEVEL_DESC2 : GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
 // נושא בלי תיאורי רמות (למשל סדרות בכיתה ג') – תיאור כללי, כדי שבחירת הרמה לא תיכשל
 TOPICS.forEach(t => { if (!LEVEL_DESC[t.id]) LEVEL_DESC[t.id] = ['תרגילים קלים להתחלה', 'תרגילים בינוניים', 'תרגילים מאתגרים']; });
+
+/* =========================================================
+   מצוינות – חשיבה (כיתות ה'–ו', 21.11): חידות מטריצה בסגנון מבחני מחוננים
+   כל החידות מקוריות ונוצרות אוטומטית. בכל חידה: כלל אחד שאפשר להסיק משתי השורות הראשונות,
+   תשובה נכונה אחת בדיוק (נבדק אוטומטית), 5 אפשרויות (א–ה) והסבר צעד אחר צעד.
+   הנושא לא נכנס ל-TOPICS (לא במבחן הכיתתי, במשחקים או בדפי התרגול) – רק לקטגוריה "מצוינות – חשיבה".
+   ========================================================= */
+// מטריצה 3×3: העמודה הראשונה מימין (קוראים מימין לשמאל), התא החסר – למטה משמאל
+function lgGrid(cells, draw) {
+  const S = 86, P = 3, W = S * 3 + P * 2;
+  let s = `<rect x="${P}" y="${P}" width="${S * 3}" height="${S * 3}" fill="#fff" stroke="#23264a" stroke-width="3"/>`;
+  for (let k = 1; k < 3; k++) s += `<line x1="${P + k * S}" y1="${P}" x2="${P + k * S}" y2="${P + 3 * S}" stroke="#23264a" stroke-width="2"/><line x1="${P}" y1="${P + k * S}" x2="${P + 3 * S}" y2="${P + k * S}" stroke="#23264a" stroke-width="2"/>`;
+  cells.forEach((row, r) => row.forEach((v, c) => {
+    const x = P + (2 - c) * S, y = P + r * S;
+    s += v == null ? `<text x="${x + S / 2}" y="${y + S / 2 + 14}" text-anchor="middle" font-size="40" font-weight="bold" fill="#8a5cd1" font-family="Arial">?</text>`
+      : `<g transform="translate(${x + 6} ${y + 6}) scale(${(S - 12) / 100})">${draw(v)}</g>`;
+  }));
+  return `<svg class="fig lgfig" viewBox="0 0 ${W} ${W}" width="${W}" height="${W}" role="img" aria-label="מטריצה עם תא חסר">${s}</svg>`;
+}
+const lgOpt = inner => `<svg class="fig lgopt" viewBox="0 0 100 100" width="76" height="76" role="img">${inner}</svg>`;
+// עיגול מחולק ל-n גזרות (מלמעלה, עם כיוון השעון); m = מערך 0/1 (צבוע)
+function lgPie(m) {
+  const n = m.length, p = a => `${(50 + 42 * Math.cos(a)).toFixed(2)} ${(50 + 42 * Math.sin(a)).toFixed(2)}`;
+  let s = '';
+  for (let i = 0; i < n; i++) { const a0 = -Math.PI / 2 + i * 2 * Math.PI / n, a1 = a0 + 2 * Math.PI / n;
+    s += `<path d="M50 50 L${p(a0)} A42 42 0 0 1 ${p(a1)} Z" fill="${m[i] ? '#7a7f99' : '#fff'}" stroke="#23264a" stroke-width="2.5"/>`; }
+  return s;
+}
+const lgRot = (m, k) => { const n = m.length; k = ((k % n) + n) % n; return m.map((_, i) => m[(i - k + n) % n]); };
+const lgKey = m => m.join('');
+const lgSym = m => { for (let k = 1; k < m.length; k++) if (lgKey(lgRot(m, k)) === lgKey(m)) return true; return false; };
+function lgMask(n, lo = 1, hi = n - 1) {
+  for (;;) { const m = Array.from({ length: n }, () => R(0, 1)), s = m.reduce((a, b) => a + b, 0); if (s >= lo && s <= hi && !lgSym(m)) return m; }
+}
+const LG_DIR = { 1: 'מסתובב בחלק אחד <b>עם</b> כיוון השעון', '-1': 'מסתובב בחלק אחד <b>נגד</b> כיוון השעון', 2: 'מסתובב בשני חלקים' };
+// כללי "הרכבה" (רמה 3): התא השלישי נבנה מהשניים הראשונים
+const LG_OPS = {
+  or: { f: (a, b) => a | b, t: 'צובעים כל חלק שצבוע <b>לפחות באחד</b> משני התאים הראשונים' },
+  and: { f: (a, b) => a & b, t: 'צובעים רק חלק שצבוע <b>בשני</b> התאים הראשונים' },
+  xor: { f: (a, b) => a ^ b, t: 'צובעים חלק שצבוע <b>רק באחד</b> מהם – חלק שצבוע בשניהם נמחק' }
+};
+function lgPieOpts(ans, extra) {
+  const n = ans.length, cand = [];
+  const add = m => { if (m.some(x => x) && lgKey(m) !== lgKey(ans) && !cand.some(x => lgKey(x) === lgKey(m))) cand.push(m); };
+  (extra || []).forEach(add);
+  for (let k = 1; k < n; k++) add(lgRot(ans, k));
+  add(ans.slice().reverse());
+  for (let i = 0; i < n; i++) { const t = ans.slice(); t[i] = 1 - t[i]; add(t); }
+  return shuffle(cand).slice(0, 4);
+}
+function genLogicPie(lv) {
+  lv = lv || 1;
+  if (lv <= 2) {
+    const n = lv === 1 ? 3 : pick([3, 4]), steps = n === 3 ? [1, -1] : [1, -1, 2];
+    let rows;
+    do {
+      rows = [0, 1, 2].map(() => { const step = lv === 1 ? 1 : pick(steps), base = lgMask(n); return { step, cells: [0, 1, 2].map(c => lgRot(base, step * c)) }; });
+    } while (lv === 2 && rows.every(r => r.step === rows[0].step));
+    const ans = rows[2].cells[2], wr = lgPieOpts(ans, [rows[2].cells[1]]);
+    return choiceQ({ type: 'choice', text: 'איזה ציור חסר במקום <b>?</b> כדי שהכלל במטריצה יישמר?',
+      fig: lgGrid(rows.map((r, i) => i === 2 ? [r.cells[0], r.cells[1], null] : r.cells), lgPie),
+      hint: 'מסתכלים על כל שורה בנפרד, מימין לשמאל: כמה חלקים צבועים? לאן הם זזים מתא לתא?',
+      exp: ['בכל שורה מספר החלקים הצבועים לא משתנה – הציור רק מסתובב.', ...rows.map((r, i) => `שורה ${i + 1}: הציור ${LG_DIR[r.step]} מתא לתא.`),
+        'לכן בתא החסר מסובבים את התא האמצעי של השורה השלישית באותה מידה.'].join('<br>'),
+      lgKind: 'pie', lgRows: rows.map(r => r.cells) }, lgOpt(lgPie(ans)), wr.map(m => lgOpt(lgPie(m))));
+  }
+  // רמה 3: התא השלישי = הרכבה של שני הראשונים (או / וגם / רק באחד)
+  for (;;) {
+    const n = pick([4, 6]), op = pick(Object.keys(LG_OPS)), F = LG_OPS[op].f;
+    const rows = [0, 1, 2].map(() => { const a = lgMask(n, 1, n - 1), b = lgMask(n, 1, n - 1); return [a, b, a.map((x, i) => F(x, b[i]))]; });
+    if (rows.some(r => !r[2].some(x => x) || lgKey(r[0]) === lgKey(r[1]))) continue;
+    // חד-משמעיות: כל כלל שמתאים לשתי השורות הראשונות נותן את אותה תשובה
+    // נבדקים גם כללי "חיסור" (רק בראשון / רק בשני) – כדי שאף כלל אחר לא יתאים לשתי השורות
+    const CHK = [...Object.values(LG_OPS).map(O => O.f), (x, y) => x & (1 - y), (x, y) => y & (1 - x)];
+    const fits = CHK.filter(f => rows.slice(0, 2).every(r => lgKey(r[0].map((x, i) => f(x, r[1][i]))) === lgKey(r[2])));
+    if (fits.length !== 1 || new Set(rows.map(r => lgKey(r[0]) + lgKey(r[1]))).size < 3) continue;
+    const ans = rows[2][2], [a, b] = rows[2];
+    const others = Object.values(LG_OPS).map(O => a.map((x, i) => O.f(x, b[i])));
+    const wr = lgPieOpts(ans, others);
+    if (wr.length < 4) continue;
+    return choiceQ({ type: 'choice', text: 'איזה ציור חסר במקום <b>?</b> כדי שהכלל במטריצה יישמר?',
+      fig: lgGrid(rows.map((r, i) => i === 2 ? [r[0], r[1], null] : r), lgPie),
+      hint: 'השוו את התא השלישי בכל שורה לשני התאים שלפניו: אילו חלקים צבועים בו – ואילו נעלמו?',
+      exp: ['כאן אין סיבוב: התא השלישי בכל שורה <b>נבנה</b> משני התאים הראשונים.', `הכלל: ${LG_OPS[op].t}.`,
+        'בודקים את הכלל בשורה 1 ובשורה 2 – הוא מתאים לשתיהן.', 'מפעילים אותו על שני התאים הראשונים של השורה השלישית.'].join('<br>'),
+      lgKind: 'pie3', lgOp: op, lgRows: rows }, lgOpt(lgPie(ans)), wr.map(m => lgOpt(lgPie(m))));
+  }
+}
+// צורות: צורה, צבע וכמות – כל תכונה לפי כלל משלה
+const LG_SH = ['circle', 'square', 'triangle'], LG_FI = ['#fff', '#a3a8bf', '#23264a'];
+const LG_SHN = { circle: 'עיגול', square: 'ריבוע', triangle: 'משולש' }, LG_FIN = ['לבן', 'אפור', 'שחור'];
+function lgShapes(o) {
+  const pos = { 1: [[50, 50]], 2: [[30, 50], [70, 50]], 3: [[50, 28], [28, 70], [72, 70]] }[o.k], r = o.k === 1 ? 25 : 17;
+  return pos.map(([x, y]) => { const a = `fill="${LG_FI[o.f]}" stroke="#23264a" stroke-width="2.5"`;
+    return o.s === 'circle' ? `<circle cx="${x}" cy="${y}" r="${r}" ${a}/>` : o.s === 'square' ? `<rect x="${x - r * 0.88}" y="${y - r * 0.88}" width="${r * 1.76}" height="${r * 1.76}" ${a}/>`
+      : `<polygon points="${x},${y - r} ${x - r},${y + r * 0.8} ${x + r},${y + r * 0.8}" ${a}/>`; }).join('');
+}
+const lgLatin = () => { const p = shuffle([0, 1, 2]), d = pick([1, 2]); return [0, 1, 2].map(r => [0, 1, 2].map(c => p[(c + d * r) % 3])); };
+function genLogicShapes(lv) {
+  lv = lv || 1;
+  const LS = lgLatin(), LF = lgLatin(), cnt = lv === 1 ? [1, 2, 3] : shuffle([1, 2, 3]), rowFill = shuffle([0, 1, 2]);
+  const byRow = lv === 3, fillRow = lv === 1;
+  const grid = [0, 1, 2].map(r => [0, 1, 2].map(c => ({ s: LG_SH[LS[r][c]], f: fillRow ? rowFill[r] : LF[r][c], k: byRow ? cnt[r] : cnt[c] })));
+  const ans = grid[2][2], K = o => o.s + o.f + o.k, cand = [];
+  const add = o => { if (K(o) !== K(ans) && !cand.some(x => K(x) === K(o))) cand.push(o); };
+  [grid[2][1], grid[1][2]].forEach(add);
+  LG_SH.forEach(s => add({ ...ans, s })); [0, 1, 2].forEach(f => add({ ...ans, f })); [1, 2, 3].forEach(k => add({ ...ans, k }));
+  const wr = shuffle(cand).slice(0, 4);
+  return choiceQ({ type: 'choice', text: 'איזה ציור חסר במקום <b>?</b> כדי שהכלל במטריצה יישמר?',
+    fig: lgGrid(grid.map((r, i) => i === 2 ? [r[0], r[1], null] : r), lgShapes),
+    hint: 'בודקים כל תכונה לחוד: איזו צורה? איזה צבע? כמה פעמים? לכל תכונה יש כלל משלה.',
+    exp: ['בודקים כל תכונה בנפרד: צורה, צבע, כמות.',
+      `<b>צורה:</b> בכל שורה יש עיגול, ריבוע ומשולש – כל אחד פעם אחת. בשורה השלישית חסר ${LG_SHN[ans.s]}.`,
+      fillRow ? `<b>צבע:</b> בכל שורה הצבע קבוע. בשורה השלישית – ${LG_FIN[ans.f]}.` : `<b>צבע:</b> בכל שורה יש לבן, אפור ושחור – כל אחד פעם אחת. חסר ${LG_FIN[ans.f]}.`,
+      byRow ? `<b>כמות:</b> בכל שורה הכמות קבועה. בשורה השלישית – ${ans.k}.` : `<b>כמות:</b> בכל עמודה הכמות קבועה. בעמודה השלישית (השמאלית) – ${ans.k}.`,
+      `לכן התשובה: ${ans.k === 1 ? `${LG_SHN[ans.s]} אחד` : `${ans.k} ${{ circle: 'עיגולים', square: 'ריבועים', triangle: 'משולשים' }[ans.s]}`} ב${LG_FIN[ans.f]}.`].join('<br>'),
+    lgKind: 'shapes', lgGridData: grid }, lgOpt(lgShapes(ans)), wr.map(o => lgOpt(lgShapes(o))));
+}
+// מספרים: כלל קבוע בכל שורה (מימין לשמאל)
+const LG_NR = [
+  { lv: 1, f: (a, b) => a + b, t: 'המספר השלישי = הראשון + השני', sh: (a, b) => `${a} + ${b} = ${a + b}` },
+  { lv: 1, f: (a, b) => a - b, t: 'המספר השלישי = הראשון − השני', sh: (a, b) => `${a} - ${b} = ${a - b}` },
+  { lv: 2, f: (a, b) => a * b, t: 'המספר השלישי = הראשון × השני', sh: (a, b) => `${a} × ${b} = ${a * b}` },
+  { lv: 2, f: (a, b) => 2 * (a + b), t: 'המספר השלישי = פעמיים הסכום של שני הראשונים', sh: (a, b) => `2 × (${a} + ${b}) = ${2 * (a + b)}` },
+  { lv: 3, f: (a, b) => a * b - a, t: 'המספר השלישי = הראשון × השני, ואז פחות הראשון', sh: (a, b) => `${a} × ${b} - ${a} = ${a * b - a}` },
+  { lv: 3, f: (a, b) => a * a + b, t: 'המספר השלישי = הראשון בריבוע (כפול עצמו) + השני', sh: (a, b) => `${a} × ${a} + ${b} = ${a * a + b}` },
+  { lv: 3, f: (a, b) => a * b + b, t: 'המספר השלישי = הראשון × השני, ועוד השני', sh: (a, b) => `${a} × ${b} + ${b} = ${a * b + b}` }
+];
+// כללים "מתחרים" – אם אחד מהם מתאים גם לשתי השורות הראשונות ונותן תשובה אחרת, החידה נפסלת
+const LG_NCHK = LG_NR.map(r => r.f).concat([(a, b) => a + 2 * b, (a, b) => 2 * a + b, (a, b) => a * b + a, (a, b) => a * b - b, (a, b) => b - a,
+  (a, b) => a * b + 1, (a, b) => a + b + 1, (a, b) => b * b + a, (a, b) => 3 * (a + b), (a, b) => a * b - 1, (a, b) => a + b - 1, (a, b) => (a - b) * 2]);
+function genLogicNum(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const rule = pick(LG_NR.filter(r => r.lv === lv)), hi = lv === 1 ? 20 : 9;
+    const rows = [0, 1, 2].map(() => { let a = R(2, hi + 1), b = R(2, hi + 1); if (rule.f === LG_NR[1].f && b >= a) [a, b] = [b + 1, a]; return [a, b, rule.f(a, b)]; });
+    if (rows.some(r => r[2] < 1 || r[2] > 200) || new Set(rows.map(r => r[0] + ',' + r[1])).size < 3) continue;
+    const fits = LG_NCHK.filter(f => rows.slice(0, 2).every(r => f(r[0], r[1]) === r[2]));
+    if (new Set(fits.map(f => f(rows[2][0], rows[2][1]))).size !== 1) continue;
+    const ans = rows[2][2], cand = new Set();
+    LG_NCHK.forEach(f => { const v = f(rows[2][0], rows[2][1]); if (v > 0 && v !== ans) cand.add(v); });
+    if (cand.size < 4) [1, 2, 10].forEach(d => { cand.add(ans + d); if (ans - d > 0) cand.add(ans - d); });
+    const wr = shuffle([...cand]).slice(0, 4);
+    const cell = v => `<text x="50" y="66" text-anchor="middle" font-size="44" font-weight="bold" fill="#23264a" font-family="Arial">${v}</text>`;
+    return choiceQ({ type: 'choice', text: 'איזה מספר חסר במקום <b>?</b> כדי שהכלל יישמר בכל השורות?',
+      fig: lgGrid(rows.map((r, i) => i === 2 ? [r[0], r[1], null] : r), cell),
+      hint: 'קוראים כל שורה מימין לשמאל. איך מגיעים מהמספר הראשון והשני אל השלישי? בודקים את הניחוש גם בשורה השנייה.',
+      exp: ['מחפשים כלל שמתאים לכל שורה (מימין לשמאל).', `<b>הכלל:</b> ${rule.t}.`,
+        ...rows.slice(0, 2).map((r, i) => `בדיקה בשורה ${i + 1}: ${M(rule.sh(r[0], r[1]))} ✓`), `שורה 3: ${M(rule.sh(rows[2][0], rows[2][1]))}`].join('<br>'),
+      lgKind: 'num', lgRows: rows }, ans, wr);
+  }
+}
+const LG_LEVELS = { 1: [() => genLogicPie(1), () => genLogicShapes(1), () => genLogicNum(1)],
+  2: [() => genLogicPie(2), () => genLogicShapes(2), () => genLogicNum(2)],
+  3: [() => genLogicPie(3), () => genLogicShapes(3), () => genLogicNum(3)] };
+const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [{
+  id: 'logic', name: 'חידות מטריצה – חשיבה', icon: '🧠', color: '#6b3fa0',
+  desc: 'מוצאים את הכלל ומשלימים את התא החסר: עיגולים מסתובבים, צורות ומספרים – בסגנון מבחני מחוננים',
+  levels: LG_LEVELS,
+  tips: ['קוראים כל שורה מימין לשמאל.', 'בודקים כל תכונה לחוד: צורה, צבע, כמות, כיוון.', 'מצאתם כלל? בדקו אותו גם בשורה השנייה לפני שבוחרים.']
+}] : [];
+XTOPICS.forEach(t => { TOPIC[t.id] = t; CAT_OF[t.id] = 'exc'; LEVEL_DESC[t.id] = ['כלל אחד בכל שורה (סיבוב, צורה, חיבור וחיסור)', 'שני כללים יחד, כיוונים שונים, כפל', 'הרכבת ציורים, כלל לפי שורה, כללים בשני צעדים']; });
+// מבחן לדוגמה: 15 שאלות מהקל לקשה (5 בכל רמה, הסוגים מתחלפים), עם שעון
+function logicExam() {
+  const qs = [];
+  [1, 2, 3].forEach(lv => { const order = shuffle([0, 1, 2]); for (let i = 0; i < 5; i++) qs.push(mk('logic', LG_LEVELS[lv][order[i % 3]], lv)); });
+  startSim(20, qs);
+}
 if (TOPIC.solids) {
   LEVEL_DESC.solids = ['שמות הגופים, ספירת פאות/מקצועות/קדקודים בציור, ממה בנויות הפאות', 'כל המנסרות והפירמידות, זיהוי גוף לפי מספר הפאות, צורות לבנייה', 'בלי ציור, נכון/לא נכון, כלל אוילר וחתכים'];
   LEVEL_DESC.solidsN = ['לאיזה גוף שייכת הפריסה, ספירת צורות, פריסות של קובייה', 'בוחרים פריסה לגוף, פריסה נכונה או לא, פאות נגדיות', 'פריסות "מטעות", משבצת חסרה, קוביית משחק'];
@@ -13882,10 +14066,10 @@ function showSimPicker() {
   ov.querySelector('[data-min="45"]').focus();
 }
 
-function startSim(mins) {
+function startSim(mins, list) {
   navPush('view');
   stopSimTimer();
-  const qs = buildTest();
+  const qs = list || buildTest();
   state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0,
     sim: { mins, start: Date.now(), end: Date.now() + mins * 60000, answers: [], raw: [], hide: false } };
   const me = state;
@@ -21434,7 +21618,7 @@ function magDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · ריבועי קסם</span><button class="secondary" id="magBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${MAG_SECS.map(([id, t]) => `<button type="button" class="pl-pill${mag.sec === id ? ' on' : ''}" data-msec="${id}">${t}</button>`).join('')}</div>
     <div id="magBody"></div>`;
-  $('magBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('magBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
   app.querySelectorAll('[data-msec]').forEach(b => b.onclick = () => { mag.sec = b.dataset.msec; magDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: magLearn, play: magPlay, print: el => magPrint(el) })[mag.sec]($('magBody'));
   track('מצוינות: ריבועי קסם', MAG_SECS.find(s => s[0] === mag.sec)[1]);
@@ -21652,7 +21836,7 @@ function grwDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · תבניות גדילה</span><button class="secondary" id="grwBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${GRW_SECS.map(([id, t]) => `<button type="button" class="pl-pill${grw.sec === id ? ' on' : ''}" data-gsec="${id}">${t}</button>`).join('')}</div>
     <div id="grwBody"></div>`;
-  $('grwBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('grwBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
   app.querySelectorAll('[data-gsec]').forEach(b => b.onclick = () => { grw.sec = b.dataset.gsec; grwDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: grwLearn, play: grwPlay, print: el => grwPrint(el) })[grw.sec]($('grwBody'));
   track('מצוינות: תבניות גדילה', GRW_SECS.find(s => s[0] === grw.sec)[1]);
@@ -21903,7 +22087,7 @@ function cubDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · כמה קוביות?</span><button class="secondary" id="cubBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${CUB_SECS.map(([id, t]) => `<button type="button" class="pl-pill${cub.sec === id ? ' on' : ''}" data-csec="${id}">${t}</button>`).join('')}</div>
     <div id="cubBody"></div>`;
-  $('cubBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('cubBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
   app.querySelectorAll('[data-csec]').forEach(b => b.onclick = () => { cub.sec = b.dataset.csec; cubDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: cubLearn, quiz: el => cubQuiz(el, false), fill: el => cubQuiz(el, true), print: el => cubPrint(el) })[cub.sec]($('cubBody'));
   track('מצוינות: קוביות', CUB_SECS.find(s => s[0] === cub.sec)[1]);
@@ -22146,7 +22330,7 @@ function palDraw() {
     <div class="pl-nav">${PAL_SECS.map(([id, t]) => `<button type="button" class="pl-pill${pal.sec === id ? ' on' : ''}" data-psec="${id}">${t}</button>`).join('')}</div>
     <div id="plBody"></div>
     <p class="pl-credit">${PAL_CREDIT}</p>`;
-  $('palBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('palBack').onclick = () => { homeTab = excBack || 'excel'; excBack = null; home(); };
   app.querySelectorAll('[data-psec]').forEach(b => b.onclick = () => { pal.sec = b.dataset.psec; palDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: palLearn, quiz: palQuiz, rev: palRevAdd, grid: palGrid, riddle: palRiddle, print: palPrint })[pal.sec]($('plBody'));
   track('מצוינות: פלינדרום', PAL_SECS.find(s => s[0] === pal.sec)[1]);
