@@ -695,7 +695,7 @@
   ] };
 
   C.courses.fdiv = {
-    id: 'fdiv', title: 'חילוק שברים', grades: [6, 6], draft: true, noTime: true, sub: 'חילוק שבר במספר שלם, שלם בשבר, שבר בשבר (KFC) ומספרים מעורבים – מבינים, לומדים את הכלל ומתרגלים עד שליטה',
+    id: 'fdiv', title: 'חילוק שברים', grades: [6, 6], noTime: true, sub: 'חילוק שבר במספר שלם, שלם בשבר, שבר בשבר (KFC) ומספרים מעורבים – מבינים, לומדים את הכלל ומתרגלים עד שליטה',
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS, units, EXAMS,
     DIAG: { top: [4, 5], apply: 6, mid: [2, 3], base: [1], infer: { 1: [4], 2: [4], 3: [4], 4: [5] }, deps: {}, maxQ: 10 },
     MAIN_TAGS: ['none', 'divAsMul', 'divSmaller', 'flipFirst'], APPLY_UNIT: 'u6',

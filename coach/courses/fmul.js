@@ -653,7 +653,7 @@
   ] };
 
   C.courses.fmul = {
-    id: 'fmul', title: 'כפל שברים', grades: [5, 6], draft: true, noTime: true, sub: 'כפל שבר במספר שלם, בשבר ובמספר מעורב – מבינים, לומדים את הכלל ומתרגלים עד שליטה',
+    id: 'fmul', title: 'כפל שברים', grades: [5, 6], noTime: true, sub: 'כפל שבר במספר שלם, בשבר ובמספר מעורב – מבינים, לומדים את הכלל ומתרגלים עד שליטה',
     SKILLS, SKILL_SAY, TAGS, D, DIAG_ORDER, UNITS, units, EXAMS,
     DIAG: { top: [4, 6], apply: 7, mid: [2, 3, 5], base: [1], infer: { 2: [4], 3: [4], 1: [6], 5: [6] }, deps: {}, maxQ: 10 },
     MAIN_TAGS: ['none', 'mulDenom', 'addParts', 'mixedSplit'], APPLY_UNIT: 'u7',

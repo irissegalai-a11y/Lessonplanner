@@ -862,6 +862,22 @@ html.embed body { padding-top: 0; }
   .mcard.match .mc-face { background: rgba(157, 178, 122, 0.45); }
   .mcard.miss .mc-face { background: rgba(226, 179, 87, 0.35); }
   .mem-list { gap: 8px 10px; }
+  .mc-face .mc-x { font-size: 0.88em; white-space: nowrap; }
+  .race-ch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: 420px; margin: 14px auto 4px; }
+  .race-ch button { font-size: 1.5rem; min-height: 64px; font-family: 'Assistant', sans-serif; font-weight: 700; background: #fffdf8; color: #1f1e1c; }
+  .race-ch button.bad { background: rgba(217, 72, 43, 0.25); }
+  .race-opts { display: flex; flex-wrap: wrap; gap: 10px 18px; justify-content: center; margin: 12px 0 4px; }
+  .race-turn { text-align: center; }
+  .race-turn .rt-team { display: inline-block; font-size: 2rem; font-weight: 800; color: var(--tc); border: 3px solid var(--tc); border-radius: 14px; padding: 6px 22px; margin: 10px 0 14px; box-shadow: 3px 4px 0 var(--tc); }
+  .race-tb { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 8px 0 12px; }
+  .race-tb span { border: 2px solid var(--tc); color: var(--tc); border-radius: 10px; padding: 2px 12px; font-weight: 700; background: #fffdf8; }
+  .race-tb span.now { background: var(--tc); color: #fff; }
+  .tf-tv { display: grid; gap: 8px; max-width: 520px; margin: 12px auto 4px; }
+  .tf-tv .tvr { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; }
+  .tf-tv .tvr b { color: var(--tc); text-align: start; font-size: 1.1rem; }
+  .tf-tv button { min-height: 44px; padding: 4px 14px; font-size: 1.05rem; background: #fffdf8; color: #1f1e1c; border: 2px solid var(--tc); box-shadow: none; }
+  .tf-tv button.on { background: var(--tc); color: #fff; }
+  .tf-tv .tvr.ok b::after { content: ' ✓'; } .tf-tv .tvr.no b::after { content: ' ✗'; color: #8a8378; }
   .race-wrong.mem-list .m { border: none; padding: 0; }
   @media (max-width: 520px) { .mem-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; } }
   .mpair { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border: 1.5px dashed #1f1e1c; border-radius: 10px; }
@@ -2231,7 +2247,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רפו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רפז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -13059,7 +13075,7 @@ function home() {
           <button class="game-card" id="raceGo">
             <span class="gc-ic">${ic('flag')}</span>
             <span class="gc-nm">מרוץ נגד השעון</span>
-            <span class="gc-ds">כמה תרגילים תפתרו בדקה אחת? נסו לעבור את השיא שלכם.</span>
+            <span class="gc-ds">כמה תרגילים תפתרו בדקה אחת – או בחצי דקה? לבד או בקבוצות. נסו לעבור את השיא!</span>
             ${Object.keys(raceData().best).length ? `<span class="gc-st">${ic('star')} השיא שלי: ${Math.max(...Object.values(raceData().best))}</span>` : ''}
           </button>
           ${GRADE >= 3 ? `<button class="game-card" id="dfgGo">
@@ -14398,37 +14414,118 @@ let race = null;
 function stopRace() { if (race && race.timer) clearInterval(race.timer); if (race) race.timer = null; }
 
 
+// מסלול שברים – רק במרוץ (לא בבינגו/מלחמה, שמשתמשים ב-RACE_TRACKS): תשובה בבחירה מתוך 4
+const RACE_ALL = RACE_TRACKS.concat(GRADE >= 5 ? [{ id: 'frac', name: GRADE === 6 ? 'כפל וחילוק שברים' : 'כפל שבר ומספר שלם', ch: true }] : []);
+const raceTr = id => RACE_ALL.find(t => t.id === id) || RACE_ALL[0];
+function raceFracQ() {
+  const q = GRADE === 6 && Math.random() < 0.5 ? frDivQ() : frMulQ();
+  return { t: `${q.t} =`, ans: frKey(q.n, q.d), ansH: frRes(q.n, q.d), ch: frChoices(q) };
+}
+const raceGetQ = track => track === 'frac' ? raceFracQ() : raceQ(track);
+// הצגת תשובה (מספר או שבר)
+const raceAnsH = q => q.ansH != null ? q.ansH : fmt(q.ans);
+// שיא אישי: 60 שניות – המפתח הישן (המסלול); 30 שניות – מסלול@30
+const raceBestKey = (track, secs) => secs === 30 ? track + '@30' : track;
 function raceHome(trackId) {
   stopRace(); state = null; lessonView = null; navPush('race');
   const r = raceData();
-  const tr = RACE_TRACKS.find(t => t.id === trackId) || RACE_TRACKS.find(t => t.id === r.lastTrack) || RACE_TRACKS[0];
-  app.innerHTML = `
+  const tr = RACE_ALL.find(t => t.id === trackId) || RACE_ALL.find(t => t.id === r.lastTrack) || RACE_ALL[0];
+  let sel = tr.id, secs = r.lastSecs === 30 ? 30 : 60, mode = r.lastMode === 'teams' ? 'teams' : 'solo', nTeams = r.lastTeams || 2;
+  const names = JEO_TEAMS.map(t => t.name);
+  const keep = () => app.querySelectorAll('[data-rtn]').forEach(inp => { names[Number(inp.dataset.rtn)] = inp.value.trim() || JEO_TEAMS[Number(inp.dataset.rtn)].name; });
+  const draw = () => {
+    app.innerHTML = `
     <div class="topbar"><span class="title">${ic('flag')} מרוץ נגד השעון</span><button class="secondary" id="rHome">${ic('home')} לדף הבית</button></div>
     <div class="card race-intro">
       <svg class="race-art" viewBox="0 0 220 90" aria-hidden="true"><path d="M8 70 C 60 60, 120 78, 212 66" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"/><path d="M8 70 C 60 60, 120 78, 212 66" fill="none" stroke="#1f1e1c" stroke-width="1.2" stroke-dasharray="6 7" transform="translate(0,-14)"/><circle cx="58" cy="44" r="17" fill="rgba(217,72,43,0.45)" filter="url(#wcwash)"/><path d="M180 64V22" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"/><path d="M180 22h22l-5 7 5 7h-22" fill="rgba(239,201,106,0.8)" stroke="#1f1e1c" stroke-width="2"/><path d="M30 40h-14M34 50h-20" stroke="#1f1e1c" stroke-width="2" stroke-linecap="round"/></svg>
-      <p class="race-how">פותרים כמה שיותר תרגילים ב-<b>${RACE_SECS} שניות</b>. תשובה נכונה – הרץ מתקדם. מנסים לעבור את השיא שלכם!</p>
+      <p class="race-how">${mode === 'teams' ? `כל קבוצה בתורה פותרת כמה שיותר תרגילים ב-<b>${secs} שניות</b>. הקבוצה עם הכי הרבה תשובות נכונות – מנצחת!` : `פותרים כמה שיותר תרגילים ב-<b>${secs} שניות</b>. תשובה נכונה – הרץ מתקדם. מנסים לעבור את השיא שלכם!`}</p>
     </div>
     <h2>בחרו מסלול</h2>
     <div class="race-tracks">
-      ${RACE_TRACKS.map(t => `<button class="race-track${t.id === tr.id ? ' sel' : ''}" data-rt="${t.id}"><span class="nm">${t.name}</span><span class="best">${r.best[t.id] ? `השיא: <b>${r.best[t.id]}</b>` : 'עוד אין שיא'}</span></button>`).join('')}
+      ${RACE_ALL.map(t => { const b = r.best[raceBestKey(t.id, secs)]; return `<button class="race-track${t.id === sel ? ' sel' : ''}" data-rt="${t.id}"><span class="nm">${t.name}</span><span class="best">${mode === 'teams' ? '' : b ? `השיא: <b>${b}</b>` : 'עוד אין שיא'}</span></button>`; }).join('')}
     </div>
+    <div class="race-opts">
+      <div class="name-row"><span class="lbl2">כמה זמן?</span><span class="seg">${[30, 60].map(k => `<button data-rs="${k}" class="${k === secs ? 'sel' : ''}">${k} שניות</button>`).join('')}</span></div>
+      <div class="name-row"><span class="lbl2">איך משחקים?</span><span class="seg"><button data-rm="solo" class="${mode === 'solo' ? 'sel' : ''}">לבד</button><button data-rm="teams" class="${mode === 'teams' ? 'sel' : ''}">קבוצות</button></span></div>
+    </div>
+    ${mode === 'teams' ? `
+    <div class="name-row" style="justify-content:center"><span class="lbl2">כמה קבוצות?</span><span class="seg">${[2, 3, 4, 5, 6].map(k => `<button data-rn="${k}" class="${k === nTeams ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
+    <div class="jeo-teams">${JEO_TEAMS.slice(0, nTeams).map((t, i) => `<label class="jeo-tname" style="--tc:${t.color}"><span class="jdot"></span><input data-rtn="${i}" value="${esc(names[i])}" maxlength="16" aria-label="שם קבוצה ${i + 1}"></label>`).join('')}</div>` : ''}
     <div class="actions" style="justify-content:center">
       <button id="rGo" class="race-go">מתחילים! ←</button>
     </div>`;
-  let sel = tr.id;
-  app.querySelectorAll('[data-rt]').forEach(b => b.onclick = () => { sel = b.dataset.rt; app.querySelectorAll('[data-rt]').forEach(x => x.classList.toggle('sel', x === b)); });
-  $('rHome').onclick = home;
-  $('rGo').onclick = () => raceStart(sel);
+    app.querySelectorAll('[data-rt]').forEach(b => b.onclick = () => { sel = b.dataset.rt; app.querySelectorAll('[data-rt]').forEach(x => x.classList.toggle('sel', x === b)); });
+    app.querySelectorAll('[data-rs]').forEach(b => b.onclick = () => { keep(); secs = Number(b.dataset.rs); draw(); });
+    app.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => { keep(); mode = b.dataset.rm; draw(); });
+    app.querySelectorAll('[data-rn]').forEach(b => b.onclick = () => { keep(); nTeams = Number(b.dataset.rn); draw(); });
+    $('rHome').onclick = home;
+    $('rGo').onclick = () => {
+      keep();
+      r.lastSecs = secs; r.lastMode = mode; r.lastTeams = nTeams; saveStore(store);
+      if (mode === 'teams') raceTeamTurn({ track: sel, secs, teams: JEO_TEAMS.slice(0, nTeams).map((t, i) => ({ name: names[i], color: t.color, score: null, wrong: [] })), k: 0 });
+      else raceStart(sel, { secs });
+    };
+  };
+  draw();
   window.scrollTo(0, 0);
 }
 
-function raceStart(trackId) {
-  const r = raceData();
+// מצב קבוצות: לפני כל תור – מסך "תור הקבוצה", אחרי התור האחרון – טבלת ניקוד
+let raceTeams = null;
+function raceTeamBar(g, now) {
+  return `<div class="race-tb">${g.teams.map((t, i) => `<span class="${i === now ? 'now' : ''}" style="--tc:${t.color}">${esc(t.name)}${t.score != null ? ` · ${t.score}` : ''}</span>`).join('')}</div>`;
+}
+function raceTeamTurn(g) {
+  stopRace(); raceTeams = g; navPush('race');
+  const t = g.teams[g.k];
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('flag')} מרוץ קבוצות · ${raceTr(g.track).name}</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="rtQuit">${ic('close')} יציאה</button></span></div>
+    <div class="card race-turn">
+      ${raceTeamBar(g, g.k)}
+      <div class="muted">תור ${g.k + 1} מתוך ${g.teams.length}</div>
+      <div class="rt-team" style="--tc:${t.color}">${esc(t.name)}</div>
+      <p class="race-how">יש לכם <b>${g.secs} שניות</b>. כמה תרגילים תפתרו?</p>
+      <div class="actions" style="justify-content:center"><button id="rtGo" class="race-go">מוכנים – מתחילים! ←</button></div>
+    </div>`;
+  fsBind();
+  $('rtQuit').onclick = () => { if (confirm('לצאת מהמשחק?')) { raceTeams = null; raceHome(g.track); } };
+  $('rtGo').onclick = () => raceStart(g.track, { secs: g.secs, team: g.k });
+  window.scrollTo(0, 0);
+}
+function raceTeamEnd(g) {
+  stopRace(); raceTeams = null;
+  const ranked = g.teams.slice().sort((a, b) => b.score - a.score), top = ranked[0].score, winners = ranked.filter(t => t.score === top);
+  const wrong = []; const seen = new Set(); g.teams.forEach(t => t.wrong.forEach(w => { if (!seen.has(w.t)) { seen.add(w.t); wrong.push(w); } }));
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('flag')} מרוץ קבוצות</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="rHome">${ic('home')} לדף הבית</button></span></div>
+    <div class="card center race-end rec">
+      <div class="muted">${raceTr(g.track).name} · ${g.secs} שניות לכל קבוצה</div>
+      <h2>${winners.length > 1 ? 'תיקו!' : 'המנצחים:'}</h2>
+      <div class="jeo-win">${winners.map(w => `<span style="--tc:${w.color}">${esc(w.name)}</span>`).join(' ')}</div>
+      <ol class="jeo-rank">${ranked.map(t => `<li style="--tc:${t.color}"><span class="jdot"></span><span>${esc(t.name)}</span><b data-raw>${t.score} נכונות</b></li>`).join('')}</ol>
+      ${wrong.length ? `<div class="race-wrong"><div class="muted">כדאי לזכור:</div>${wrong.slice(0, 10).map(w => `<span class="m">${w.t} ${raceAnsH(w)}</span>`).join('')}</div>` : ''}
+      <div class="actions" style="justify-content:center">
+        ${wrong.length ? '<button class="secondary" id="rFix">🔁 סבב תיקון – בלי שעון</button>' : ''}
+        <button id="rAgain">עוד סבב לאותן קבוצות ←</button>
+        <button class="secondary" id="rTracks">בחירת מסלול</button>
+      </div>
+    </div>`;
+  fsBind();
+  $('rHome').onclick = home;
+  $('rTracks').onclick = () => raceHome(g.track);
+  $('rAgain').onclick = () => raceTeamTurn({ track: g.track, secs: g.secs, teams: g.teams.map(t => ({ name: t.name, color: t.color, score: null, wrong: [] })), k: 0 });
+  if ($('rFix')) $('rFix').onclick = () => raceFix(wrong, g.track);
+  window.scrollTo(0, 0);
+}
+
+function raceStart(trackId, o = {}) {
+  const r = raceData(), secs = o.secs === 30 ? 30 : 60, team = o.team != null && raceTeams ? raceTeams.teams[o.team] : null;
   r.plays = (r.plays || 0) + 1; r.lastTrack = trackId; saveStore(store);
-  race = { track: trackId, score: 0, streak: 0, wrong: [], q: null, left: RACE_SECS, best: r.best[trackId] || 0, timer: null, typed: '' };
+  const tr = raceTr(trackId), ch = !!tr.ch;
+  race = { track: trackId, secs, team: team ? o.team : null, score: 0, streak: 0, wrong: [], q: null, left: secs, best: team ? 0 : r.best[raceBestKey(trackId, secs)] || 0, timer: null, typed: '' };
   const touch = window.matchMedia && matchMedia('(pointer: coarse)').matches;
   app.innerHTML = `
-    <div class="topbar"><span class="title">${ic('flag')} ${RACE_TRACKS.find(t => t.id === trackId).name}</span><button class="secondary" id="rQuit">${ic('close')} יציאה</button></div>
+    <div class="topbar"><span class="title">${ic('flag')} ${tr.name}${team ? ` · <span style="color:${team.color}">${esc(team.name)}</span>` : ''}</span><button class="secondary" id="rQuit">${ic('close')} יציאה</button></div>
     <div class="card race-play">
       <div class="race-top">
         <div class="race-clock" id="rClock"></div>
@@ -14437,22 +14534,24 @@ function raceStart(trackId) {
       </div>
       <div id="rTrack"></div>
       <div class="race-q" id="rQ"></div>
-      <div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : `inputmode="${trackId === 'dec' ? 'decimal' : 'numeric'}"`} autocomplete="off" aria-label="תשובה" dir="ltr"></div>
-      <div class="race-pad${trackId === 'dec' ? ' dec' : ''}" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}${trackId === 'dec' ? '<button class="secondary" data-k="." aria-label="נקודה עשרונית">.</button><button class="secondary" data-k="0">0</button><button class="secondary" data-k="del" aria-label="מחיקה">⌫</button>' : '<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button>'}<button data-k="ok" aria-label="בדיקה">✓</button></div>
+      ${ch ? '<div class="race-ch" id="rCh" dir="ltr"></div>' : `<div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : `inputmode="${trackId === 'dec' ? 'decimal' : 'numeric'}"`} autocomplete="off" aria-label="תשובה" dir="ltr"></div>
+      <div class="race-pad${trackId === 'dec' ? ' dec' : ''}" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}${trackId === 'dec' ? '<button class="secondary" data-k="." aria-label="נקודה עשרונית">.</button><button class="secondary" data-k="0">0</button><button class="secondary" data-k="del" aria-label="מחיקה">⌫</button>' : '<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button>'}<button data-k="ok" aria-label="בדיקה">✓</button></div>`}
       <button class="ghost race-skip" id="rSkip">דילוג ←</button>
       <div class="race-count" id="rCount"></div>
     </div>`;
-  $('rQuit').onclick = () => { stopRace(); raceHome(trackId); };
-  const inp = $('rIn');
-  inp.addEventListener('input', () => raceTyped(inp.value));
-  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); raceSubmit(); } });
-  app.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
-    const k = b.dataset.k;
-    if (k === 'ok') return raceSubmit();
-    inp.value = k === 'del' ? inp.value.slice(0, -1) : (inp.value + k).slice(0, 6);
-    raceTyped(inp.value);
-  });
-  $('rSkip').onclick = () => { if (race && race.timer) { race.streak = 0; race.wrong.push({ t: race.q.t, ans: race.q.ans, a: '—' }); raceNext(); } };
+  $('rQuit').onclick = () => { stopRace(); if (team) { if (confirm('לצאת ממשחק הקבוצות?')) { raceTeams = null; raceHome(trackId); } else raceTeamTurn(raceTeams); } else raceHome(trackId); };
+  if (!ch) {
+    const inp = $('rIn');
+    inp.addEventListener('input', () => raceTyped(inp.value));
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); raceSubmit(); } });
+    app.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
+      const k = b.dataset.k;
+      if (k === 'ok') return raceSubmit();
+      inp.value = k === 'del' ? inp.value.slice(0, -1) : (inp.value + k).slice(0, 6);
+      raceTyped(inp.value);
+    });
+  }
+  $('rSkip').onclick = () => { if (race && race.timer && race.q) { race.streak = 0; race.wrong.push({ t: race.q.t, ans: race.q.ans, ansH: race.q.ansH, ch: race.q.ch, a: '—' }); raceNext(); } };
   raceDraw();
   // ספירה לאחור 3-2-1
   let c = 3;
@@ -14471,73 +14570,93 @@ function raceStart(trackId) {
 }
 
 function raceTyped(v) {
-  if (!race || !race.timer || !race.q) return;
+  if (!race || !race.timer || !race.q || race.q.ch) return;
   if (parseNum(v) === race.q.ans) raceSubmit();
 }
 function raceSubmit() {
-  if (!race || !race.timer || !race.q) return;
+  if (!race || !race.timer || !race.q || race.q.ch) return;
   const inp = $('rIn'), v = parseNum(inp.value);
   if (v == null || Number.isNaN(v)) { inp.focus(); return; }
-  if (v === race.q.ans) {
+  raceJudge(v === race.q.ans, inp.value);
+}
+function raceJudge(ok, typed) {
+  if (ok) {
     race.score++; race.streak++;
     raceFlash('ok');
     raceNext();
   } else {
     race.streak = 0;
-    race.wrong.push({ t: race.q.t, ans: race.q.ans, a: inp.value });
-    raceFlash('bad', race.q.ans);
+    race.wrong.push({ t: race.q.t, ans: race.q.ans, ansH: race.q.ansH, ch: race.q.ch, a: typed });
+    raceFlash('bad', race.q);
     raceNext(700);
   }
 }
-function raceFlash(kind, ans) {
+function raceFlash(kind, q) {
   const box = $('rQ'); if (!box) return;
   box.classList.remove('ok', 'bad'); void box.offsetWidth; box.classList.add(kind);
-  if (kind === 'bad') box.innerHTML = `<span class="m">${race.q.t} ${fmt(ans)}</span>`;
+  if (kind === 'bad') box.innerHTML = `<span class="m">${q.t} ${raceAnsH(q)}</span>`;
 }
 function raceNext(delay = 0) {
   const go = () => {
     if (!race || !race.timer) return;
-    let q; do { q = raceQ(race.track); } while (race.q && q.t === race.q.t);
-    race.q = q;
+    let q; do { q = raceGetQ(race.track); } while (race.q && q.t === race.q.t);
+    race.q = q; race.last = q.t;
     $('rQ').classList.remove('bad');
     $('rQ').innerHTML = M(`${q.t} ${BOX}`);
-    const inp = $('rIn'); inp.value = '';
-    if (!inp.readOnly) inp.focus();
+    if (q.ch) {
+      $('rCh').innerHTML = q.ch.map((c, i) => `<button class="secondary" data-rc="${i}">${M(c.html)}</button>`).join('');
+      $('rCh').querySelectorAll('[data-rc]').forEach(b => b.onclick = () => {
+        if (!race || !race.timer || race.q !== q) return;
+        const c = q.ch[Number(b.dataset.rc)];
+        if (!c.ok) b.classList.add('bad');
+        raceJudge(c.ok, c.html);
+      });
+    } else {
+      const inp = $('rIn'); inp.value = '';
+      if (!inp.readOnly) inp.focus();
+    }
     raceDraw();
   };
   if (delay) { race.q = null; setTimeout(go, delay); } else go();
 }
 function raceTick() {
   if (!race) return;
-  race.left = Math.max(0, RACE_SECS - (Date.now() - race.t0) / 1000);
+  race.left = Math.max(0, race.secs - (Date.now() - race.t0) / 1000);
   raceDraw();
   if (race.left <= 0) raceEnd();
 }
 function raceDraw() {
   if (!race || !$('rClock')) return;
-  const left = Math.ceil(race.left), frac = race.left / RACE_SECS, C = 2 * Math.PI * 30;
+  const left = Math.ceil(race.left), frac = race.left / race.secs, C = 2 * Math.PI * 30;
   $('rClock').innerHTML = `<svg viewBox="0 0 72 72" width="72" height="72" aria-label="נשארו ${left} שניות"><circle cx="36" cy="36" r="30" fill="#fffdf8" stroke="rgba(31,30,28,0.12)" stroke-width="7"/><circle cx="36" cy="36" r="30" fill="none" stroke="${left <= 10 ? '#d9482b' : '#2c7a5b'}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(C * frac).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 36 36)"/><text x="36" y="43" text-anchor="middle" font-size="21" font-weight="700" fill="#1f1e1c">${left}</text></svg>`;
   $('rScore').textContent = race.score;
   $('rStreak').innerHTML = race.streak >= 3 ? `${ic('star')} ${race.streak} ברצף!` : '';
-  // מסלול: הרץ מתקדם מימין לשמאל, הדגל מסמן את השיא
-  const goal = Math.max(race.best + 3, 15), x0 = 572, x1 = 28;
+  // מסלול: הרץ מתקדם מימין לשמאל, הדגל מסמן את השיא (במצב קבוצות – את התוצאה הגבוהה עד עכשיו)
+  const tb = race.team != null && raceTeams ? Math.max(0, ...raceTeams.teams.map(t => t.score || 0)) : race.best;
+  const goal = Math.max(tb + 3, race.secs === 30 ? 8 : 15), x0 = 572, x1 = 28;
   const X = n => x0 - (x0 - x1) * Math.min(n, goal) / goal;
-  const rx = X(race.score), fx = race.best ? X(race.best) : null;
+  const rx = X(race.score), fx = tb ? X(tb) : null;
   $('rTrack').innerHTML = `<svg class="race-svg" viewBox="0 0 600 84" aria-hidden="true">
     <path d="M20 62 C 150 56, 300 68, 450 60 S 560 58, 590 62" fill="none" stroke="#1f1e1c" stroke-width="2.2" stroke-linecap="round"/>
     <path d="M20 40 C 150 34, 300 46, 450 38 S 560 36, 590 40" fill="none" stroke="#1f1e1c" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="7 8" opacity="0.6"/>
     <path d="M${x0 + 6} 30v40" stroke="#1f1e1c" stroke-width="2" stroke-dasharray="3 3"/>
-    ${fx != null ? `<g><path d="M${fx} 64V14" stroke="#1f1e1c" stroke-width="2.2" stroke-linecap="round"/><path d="M${fx} 14h-20l4 6-4 6h20" fill="rgba(239,201,106,0.85)" stroke="#1f1e1c" stroke-width="1.8"/><text x="${fx - 4}" y="80" text-anchor="middle" font-size="12" fill="#5f5a50">השיא ${race.best}</text></g>` : ''}
-    <g class="race-runner" style="transform: translateX(${rx.toFixed(1)}px)"><circle cx="0" cy="44" r="21" fill="rgba(217,72,43,0.5)" filter="url(#wcwash)"/><circle cx="0" cy="44" r="17" fill="none" stroke="#1f1e1c" stroke-width="2.2"/><text x="0" y="50" text-anchor="middle" font-size="17" font-weight="700" fill="#1f1e1c">${race.score}</text><path d="M22 38h10M24 48h12" stroke="#1f1e1c" stroke-width="1.8" stroke-linecap="round" opacity="${race.score ? 0.8 : 0}"/></g>
+    ${fx != null ? `<g><path d="M${fx} 64V14" stroke="#1f1e1c" stroke-width="2.2" stroke-linecap="round"/><path d="M${fx} 14h-20l4 6-4 6h20" fill="rgba(239,201,106,0.85)" stroke="#1f1e1c" stroke-width="1.8"/><text x="${fx - 4}" y="80" text-anchor="middle" font-size="12" fill="#5f5a50">${race.team != null ? 'המובילים' : 'השיא'} ${tb}</text></g>` : ''}
+    <g class="race-runner" style="transform: translateX(${rx.toFixed(1)}px)"><circle cx="0" cy="44" r="21" fill="${race.team != null && raceTeams ? raceTeams.teams[race.team].color + '88' : 'rgba(217,72,43,0.5)'}" filter="url(#wcwash)"/><circle cx="0" cy="44" r="17" fill="none" stroke="#1f1e1c" stroke-width="2.2"/><text x="0" y="50" text-anchor="middle" font-size="17" font-weight="700" fill="#1f1e1c">${race.score}</text><path d="M22 38h10M24 48h12" stroke="#1f1e1c" stroke-width="1.8" stroke-linecap="round" opacity="${race.score ? 0.8 : 0}"/></g>
   </svg>`;
 }
 function raceEnd() {
   stopRace();
-  const r = raceData(), prev = r.best[race.track] || 0;
+  if (race.team != null && raceTeams) {
+    const g = raceTeams, t = g.teams[race.team];
+    t.score = race.score; t.wrong = race.wrong.slice();
+    if (race.team + 1 < g.teams.length) { g.k = race.team + 1; return raceTeamTurn(g); }
+    return raceTeamEnd(g);
+  }
+  const r = raceData(), bk = raceBestKey(race.track, race.secs), prev = r.best[bk] || 0;
   const rec = race.score > prev;
-  if (rec) r.best[race.track] = race.score;
+  if (rec) r.best[bk] = race.score;
   saveStore(store);
-  const tr = RACE_TRACKS.find(t => t.id === race.track);
+  const tr = raceTr(race.track), secs = race.secs;
   const msg = rec ? (prev ? `<b>שיא חדש!</b> השיא הקודם היה ${prev}.` : '<b>זה השיא הראשון שלכם!</b>') : race.score >= prev - 2 ? `כמעט! השיא שלכם: ${prev}.` : `השיא שלכם: ${prev}. בפעם הבאה – עוד קצת!`;
   const wrong = race.wrong.slice(0, 8);
   app.innerHTML = `
@@ -14545,9 +14664,9 @@ function raceEnd() {
     <div class="card center race-end${rec ? ' rec' : ''}">
       <div class="muted">${tr.name}</div>
       <h2>הזמן נגמר!</h2>
-      <div class="race-final"><b>${race.score}</b><span>תשובות נכונות ב-${RACE_SECS} שניות</span></div>
+      <div class="race-final"><b>${race.score}</b><span>תשובות נכונות ב-${secs} שניות</span></div>
       <p class="compare">${rec ? ic('star') + ' ' : ''}${msg}</p>
-      ${wrong.length ? `<div class="race-wrong"><div class="muted">כדאי לזכור:</div>${wrong.map(w => `<span class="m">${w.t} ${fmt(w.ans)}</span>`).join('')}</div>` : ''}
+      ${wrong.length ? `<div class="race-wrong"><div class="muted">כדאי לזכור:</div>${wrong.map(w => `<span class="m">${w.t} ${raceAnsH(w)}</span>`).join('')}</div>` : ''}
       <div class="actions" style="justify-content:center">
         ${race.wrong.length ? '<button id="rFix">🔁 סבב תיקון – בלי שעון</button>' : ''}
         <button ${race.wrong.length ? 'class="secondary" ' : ''}id="rAgain">עוד מרוץ ←</button>
@@ -14555,38 +14674,47 @@ function raceEnd() {
       </div>
     </div>`;
   const t = race.track;
-  if ($('rFix')) $('rFix').onclick = () => raceFix(race.wrong, t);
+  if ($('rFix')) $('rFix').onclick = () => raceFix(race.wrong, t, secs);
   $('rHome').onclick = home;
   $('rTracks').onclick = () => raceHome(t);
-  $('rAgain').onclick = () => raceStart(t);
+  $('rAgain').onclick = () => raceStart(t, { secs });
 }
 
 // סבב תיקון אחרי המרוץ: רק התרגילים שטעו בהם, בלי שעון. טעות – ניסיון נוסף; אחרי שתי טעויות – התשובה, והתרגיל חוזר פעם אחת בסוף
-function raceFix(wrong, track) {
-  const L = [], seen = new Set(); wrong.forEach(w => { if (!seen.has(w.t)) { seen.add(w.t); L.push({ t: w.t, ans: w.ans, tries: 0 }); } });
+function raceFix(wrong, track, secs = 60) {
+  const L = [], seen = new Set(); wrong.forEach(w => { if (!seen.has(w.t)) { seen.add(w.t); L.push({ t: w.t, ans: w.ans, ansH: w.ansH, ch: w.ch, tries: 0 }); } });
   const total = L.length, ok = new Set(); let k = 0;
   const draw = () => {
     if (k >= L.length) {
       app.innerHTML = `<div class="topbar"><span class="title">${ic('flag')} סבב תיקון</span><button class="secondary" id="fxHome">${ic('home')} לדף הבית</button></div>
         <div class="card center race-end"><h2>סבב התיקון הסתיים</h2><p>תיקנתם <b>${ok.size}</b> מתוך ${total} תרגילים. ${ok.size === total ? 'כל הכבוד! 🥇' : 'כדאי לחזור עליהם שוב בהזדמנות.'}</p>
         <div class="actions" style="justify-content:center"><button id="fxAgain">עוד מרוץ ←</button><button class="secondary" id="fxTracks">בחירת מסלול</button></div></div>`;
-      $('fxHome').onclick = home; $('fxAgain').onclick = () => raceStart(track); $('fxTracks').onclick = () => raceHome(track); return;
+      $('fxHome').onclick = home; $('fxAgain').onclick = () => raceStart(track, { secs }); $('fxTracks').onclick = () => raceHome(track); return;
     }
     const it = L[k];
     app.innerHTML = `<div class="topbar"><span class="title">${ic('flag')} סבב תיקון – בלי שעון</span><button class="secondary" id="fxEnd">${ic('close')} סיום</button></div>
       <div class="card center race-fix"><div class="muted">תרגיל ${k + 1} מתוך ${L.length}</div><div class="race-q"><span class="m">${it.t}</span></div>
-      <div class="actions" style="justify-content:center"><input id="fxIn" class="tinput" inputmode="decimal" autocomplete="off" style="max-width:8em;text-align:center" aria-label="תשובה"><button id="fxGo">בדיקה</button></div><div id="fxFb"></div></div>`;
+      ${it.ch ? `<div class="race-ch" dir="ltr">${it.ch.map((c, i) => `<button class="secondary" data-fc="${i}">${M(c.html)}</button>`).join('')}</div>` : '<div class="actions" style="justify-content:center"><input id="fxIn" class="tinput" inputmode="decimal" autocomplete="off" style="max-width:8em;text-align:center" aria-label="תשובה"><button id="fxGo">בדיקה</button></div>'}<div id="fxFb"></div></div>`;
     $('fxEnd').onclick = () => { k = L.length; draw(); };
-    const go = () => {
-      const v = parseNum($('fxIn').value); if (v == null || Number.isNaN(v)) { $('fxIn').focus(); return; }
-      if (Math.abs(v - it.ans) < 1e-9) { ok.add(it.t); $('fxFb').innerHTML = '<div class="fb show ok"><div class="head">נכון! ✓</div></div>'; $('fxGo').disabled = true; k++; setTimeout(draw, 700); return; }
+    let done = false;
+    const judge = (right, btn) => {
+      if (done) return;
+      if (right) { done = true; ok.add(it.t); $('fxFb').innerHTML = '<div class="fb show ok"><div class="head">נכון! ✓</div></div>'; if ($('fxGo')) $('fxGo').disabled = true; k++; setTimeout(draw, 700); return; }
       it.tries++;
-      if (it.tries < 2) { $('fxFb').innerHTML = '<div class="fb show bad"><div class="head">עוד לא… נסו שוב – בלי לחץ, יש זמן.</div></div>'; $('fxIn').select(); return; }
-      $('fxFb').innerHTML = `<div class="fb show info"><div class="head">התשובה: ${M(fmt(it.ans))}</div>${it.again ? '' : 'התרגיל יחזור פעם אחת בסוף הסבב.'}</div><div class="actions" style="justify-content:center"><button id="fxNext">הלאה ←</button></div>`;
-      if (!it.again) L.push({ t: it.t, ans: it.ans, tries: 0, again: true });
-      $('fxGo').disabled = true; $('fxNext').onclick = () => { k++; draw(); };
+      if (btn) { btn.disabled = true; btn.classList.add('bad'); }
+      if (it.tries < 2) { $('fxFb').innerHTML = '<div class="fb show bad"><div class="head">עוד לא… נסו שוב – בלי לחץ, יש זמן.</div></div>'; if ($('fxIn')) $('fxIn').select(); return; }
+      done = true;
+      $('fxFb').innerHTML = `<div class="fb show info"><div class="head">התשובה: ${M(it.ansH != null ? it.ansH : fmt(it.ans))}</div>${it.again ? '' : 'התרגיל יחזור פעם אחת בסוף הסבב.'}</div><div class="actions" style="justify-content:center"><button id="fxNext">הלאה ←</button></div>`;
+      if (!it.again) L.push({ t: it.t, ans: it.ans, ansH: it.ansH, ch: it.ch ? shuffle(it.ch.slice()) : null, tries: 0, again: true });
+      if ($('fxGo')) $('fxGo').disabled = true;
+      app.querySelectorAll('[data-fc]').forEach(b => b.disabled = true);
+      $('fxNext').onclick = () => { k++; draw(); };
     };
-    $('fxGo').onclick = go; $('fxIn').onkeydown = e => { if (e.key === 'Enter') go(); }; $('fxIn').focus();
+    if (it.ch) app.querySelectorAll('[data-fc]').forEach(b => b.onclick = () => judge(it.ch[Number(b.dataset.fc)].ok, b));
+    else {
+      const go = () => { const v = parseNum($('fxIn').value); if (v == null || Number.isNaN(v)) { $('fxIn').focus(); return; } judge(Math.abs(v - it.ans) < 1e-9); };
+      $('fxGo').onclick = go; $('fxIn').onkeydown = e => { if (e.key === 'Enter') go(); }; $('fxIn').focus();
+    }
   };
   draw();
 }
@@ -14604,13 +14732,67 @@ const MEM_DECKS = GRADE === 1 ? [
 ] : GRADE === 5 ? [
   { id: 'mul', name: 'לוח הכפל' },
   { id: 'fdec', name: 'שבר ומספר עשרוני' },
-  { id: 'feq', name: 'שברים שווים' }
+  { id: 'feq', name: 'שברים שווים' },
+  { id: 'fmul', name: 'כפל שבר ומספר שלם' }
 ] : [
   { id: 'mul', name: 'לוח הכפל' },
   { id: 'fdec', name: 'שבר ומספר עשרוני' },
   { id: 'pct', name: 'שבר ואחוזים' },
-  { id: 'dsum', name: 'חיבור וחיסור עשרוניים' }
+  { id: 'dsum', name: 'חיבור וחיסור עשרוניים' },
+  { id: 'fmul', name: 'כפל שברים' },
+  { id: 'fdiv', name: 'חילוק שברים' }
 ];
+// ---- כפל וחילוק שברים – משותף לזוגות ולמרוץ. כפל: כיתות ה'–ו'; חילוק: רק כיתה ו' ----
+// תוצאה מצומצמת (שלם / שבר / מספר מעורב) – HTML גולמי, בלי עטיפת M
+function frRes(n, d) {
+  const g = gcd(n, d); n /= g; d /= g;
+  if (d === 1) return String(n);
+  return n > d ? `${Math.floor(n / d)}${F(n % d, d)}` : F(n, d);
+}
+const frKey = (n, d) => { const g = gcd(n, d); return `${n / g}/${d / g}`; };
+// תרגיל כפל שברים: שלם × שבר (או שבר × שלם); בכיתה ו' גם שבר × שבר. מכנים עד 6 – לחישוב בראש
+// (כיתה ה' – רק כפל שבר במספר שלם, כמו הנושא mulfr באתר)
+function frMulQ() {
+  if (GRADE !== 6 || Math.random() < 0.45) {
+    const w = R(2, 5), [n, d] = properFrac(2, 6), first = Math.random() < 0.5;
+    return { t: first ? `${w} × ${F(n, d)}` : `${F(n, d)} × ${w}`, n: w * n, d, kind: 'wf',
+      wrongs: [[n, w * d], [w + n, d], [w * n, w * d]] };
+  }
+  const [a, b] = properFrac(2, 6), [c, d] = properFrac(2, 6);
+  return { t: `${F(a, b)} × ${F(c, d)}`, n: a * c, d: b * d, kind: 'ff',
+    wrongs: [[a + c, b + d], [a * c, b + d], [a * d, b * c], [a * c, Math.max(b, d)]] };
+}
+// תרגיל חילוק שברים (כיתה ו'): שבר : שבר, מכנה שווה, שלם : שבר, שבר : שלם
+function frDivQ() {
+  const k = R(0, 3);
+  if (k === 0) {
+    let a, b, c, d; do { [a, b] = properFrac(2, 6); [c, d] = properFrac(2, 6); } while (a * d === b * c);
+    return { t: `${F(a, b)} : ${F(c, d)}`, n: a * d, d: b * c, kind: 'ff',
+      wrongs: [[a * c, b * d], [b * c, a * d], [a, b * c]] };
+  }
+  if (k === 1) {
+    const d = R(3, 9); let a, c; do { a = R(1, d - 1); c = R(1, d - 1); } while (a === c);
+    return { t: `${F(a, d)} : ${F(c, d)}`, n: a, d: c, kind: 'same',
+      wrongs: [[c, a], [a * c, d * d], [a, d]] };
+  }
+  if (k === 2) {
+    const w = R(2, 6), [n, d] = Math.random() < 0.5 ? [1, R(2, 5)] : properFrac(2, 5);
+    return { t: `${w} : ${F(n, d)}`, n: w * d, d: n, kind: 'wf',
+      wrongs: [[w * n, d], [n, w * d], [w * d + 1, n]] };
+  }
+  let n, d, w; do { [n, d] = properFrac(2, 6); w = R(2, 5); } while (d * w > 24);
+  return { t: `${F(n, d)} : ${w}`, n, d: d * w, kind: 'fw',
+    wrongs: [[n * w, d], [w * d, n], [n, d + w]] };
+}
+// אפשרויות בחירה למרוץ: התשובה + 3 מסיחים בערכים שונים (מטעויות נפוצות, ואם חסר – שכנים)
+function frChoices(q) {
+  const right = frKey(q.n, q.d), seen = new Set([right]), out = [{ html: frRes(q.n, q.d), ok: true }];
+  const add = ([n, d]) => { if (out.length >= 4 || n <= 0 || d <= 0) return; const k = frKey(n, d); if (seen.has(k)) return; seen.add(k); out.push({ html: frRes(n, d), ok: false }); };
+  q.wrongs.forEach(add);
+  [[q.n + q.d, q.d], [q.n * 2, q.d], [q.n, q.d * 2], [q.n + 1, q.d], [q.n + 2, q.d]].forEach(add);
+  return shuffle(out);
+}
+
 const MEM_FD = [[1, 2, '0.5'], [1, 4, '0.25'], [3, 4, '0.75'], [1, 5, '0.2'], [2, 5, '0.4'], [3, 5, '0.6'], [4, 5, '0.8'], [1, 10, '0.1'], [3, 10, '0.3'], [7, 10, '0.7'], [9, 10, '0.9'], [1, 20, '0.05'], [1, 8, '0.125'], [3, 20, '0.15']];
 const MEM_PCT = [[1, 2, 50], [1, 4, 25], [3, 4, 75], [1, 5, 20], [2, 5, 40], [3, 5, 60], [1, 10, 10], [3, 10, 30], [7, 10, 70], [1, 20, 5], [1, 25, 4], [1, 100, 1], [9, 10, 90], [4, 5, 80]];
 // זוגות שונים זה מזה (אין שתי תשובות זהות בלוח)
@@ -14636,6 +14818,7 @@ function memPairs(deck, n) {
       }
       case 'fdec': { const f = pick(MEM_FD); key = f[2]; a = F(f[0], f[1]); b = M(f[2]); eq = `${F(f[0], f[1])} = ${f[2]}`; break; }
       case 'pct': { const f = pick(MEM_PCT); key = f[2]; a = F(f[0], f[1]); b = M(f[2] + '%'); eq = `${F(f[0], f[1])} = ${f[2]}%`; break; }
+      case 'fmul': case 'fdiv': { const q = deck === 'fmul' ? frMulQ() : frDivQ(); key = frKey(q.n, q.d); a = `<span class="mc-x">${M(q.t)}</span>`; b = M(frRes(q.n, q.d)); eq = `${q.t} = ${frRes(q.n, q.d)}`; break; }
       case 'feq': { const f = pick([[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 6], [5, 6], [3, 8]]), k = R(2, 4); key = f[0] / f[1]; a = F(f[0], f[1]); b = F(f[0] * k, f[1] * k); eq = `${F(f[0], f[1])} = ${F(f[0] * k, f[1] * k)}`; break; }
     }
     if (used.has(key)) continue;
@@ -15467,22 +15650,42 @@ function tfStatement() {
   return { s: `${M(p + '%')} מ-${M(N)} הם ${M(shown)}.`, t: tr, e: `${M(p + '%')} מ-${M(N)}: ${M(`${N} × ${p} : 100 = ${val}`)}.` };
 }
 let tf = null;
-function tfHome() {
+// mode: 'solo' (תלמיד – אישי) או 'teams' (מורה – משחק קבוצות מול הכיתה). תלמידים רואים רק את המשחק האישי
+function tfHome(mode) {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('tf');
-  let n = 10;
+  let n = 10, nTeams = 3;
+  const T = teacherOn();
+  mode = T ? (mode || 'teams') : 'solo';
+  const names = JEO_TEAMS.map(t => t.name);
+  const keep = () => app.querySelectorAll('[data-tftn]').forEach(inp => { names[Number(inp.dataset.tftn)] = inp.value.trim() || JEO_TEAMS[Number(inp.dataset.tftn)].name; });
   const draw = () => {
     app.innerHTML = `
-      <div class="topbar"><span class="title">${ic('check')} אמת או שקר?</span><button class="secondary" id="tfHome">${ic('home')} לדף הבית</button></div>
+      <div class="topbar"><span class="title">${ic('check')} אמת או שקר?${mode === 'teams' ? ' – קבוצות' : ''}</span><button class="secondary" id="tfHome">${ic('home')} לדף הבית</button></div>
       ${gamePreHTML(true)}
-      <div class="card race-intro"><p class="race-how">על המסך מופיעה <b>טענה</b>. קראו אותה היטב והחליטו: <b>אמת</b> או <b>שקר</b>? אחרי כל תשובה תראו אם צדקתם, עם הסבר.</p></div>
+      ${T ? `<div class="name-row" style="justify-content:center"><span class="lbl2">איך משחקים?</span><span class="seg"><button data-tfm="teams" class="${mode === 'teams' ? 'sel' : ''}">קבוצות (בכיתה)</button><button data-tfm="solo" class="${mode === 'solo' ? 'sel' : ''}">אישי</button></span></div>` : ''}
+      ${mode === 'teams' ? `<div class="card race-intro">
+        <h2 style="margin-top:0">איך משחקים?</h2>
+        <div class="cq-rules"><ol class="cq-steps">
+          <li>על המסך מופיעה <b>טענה</b>. כל קבוצה מתייעצת ומחליטה: <b>אמת</b> או <b>שקר</b>?</li>
+          <li>המורה מסמנת את ההחלטה של כל קבוצה (אפשר להפעיל שעון של 30 שניות).</li>
+          <li>חושפים את התשובה – כל קבוצה שצדקה מקבלת נקודה, ורואים הסבר.</li>
+          <li>בסוף – הקבוצה עם הכי הרבה נקודות מנצחת!</li>
+        </ol></div>
+      </div>
+      <div class="name-row" style="justify-content:center"><span class="lbl2">כמה קבוצות?</span><span class="seg">${[2, 3, 4, 5, 6].map(k => `<button data-tft="${k}" class="${k === nTeams ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
+      <div class="jeo-teams">${JEO_TEAMS.slice(0, nTeams).map((t, i) => `<label class="jeo-tname" style="--tc:${t.color}"><span class="jdot"></span><input data-tftn="${i}" value="${esc(names[i])}" maxlength="16" aria-label="שם קבוצה ${i + 1}"></label>`).join('')}</div>`
+      : `<div class="card race-intro"><p class="race-how">על המסך מופיעה <b>טענה</b>. קראו אותה היטב והחליטו: <b>אמת</b> או <b>שקר</b>? אחרי כל תשובה תראו אם צדקתם, עם הסבר.</p></div>`}
       <div class="name-row" style="justify-content:center"><span class="lbl2">כמה טענות?</span><span class="seg">${[5, 10, 15].map(k => `<button data-tn="${k}" class="${k === n ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
       <div class="actions" style="justify-content:center"><button id="tfGo" class="race-go">מתחילים! ←</button></div>`;
     $('tfHome').onclick = home;
-    app.querySelectorAll('[data-tn]').forEach(b => b.onclick = () => { n = Number(b.dataset.tn); draw(); });
+    app.querySelectorAll('[data-tn]').forEach(b => b.onclick = () => { keep(); n = Number(b.dataset.tn); draw(); });
+    app.querySelectorAll('[data-tfm]').forEach(b => b.onclick = () => { keep(); mode = b.dataset.tfm; draw(); });
+    app.querySelectorAll('[data-tft]').forEach(b => b.onclick = () => { keep(); nTeams = Number(b.dataset.tft); draw(); });
     $('tfGo').onclick = () => {
+      keep();
       const list = [], seen = new Set();
       for (let i = 0; list.length < n && i < 500; i++) { const st = GAME_PRE && TOPIC[GAME_PRE] ? tfTopicStatement(GAME_PRE) : tfStatement(); if (!seen.has(st.s)) { seen.add(st.s); list.push(st); } }
-      tf = { list, k: 0, shown: false, pick: null, right: 0, answered: 0 };
+      tf = { list, k: 0, shown: false, pick: null, right: 0, answered: 0, teams: mode === 'teams' ? JEO_TEAMS.slice(0, nTeams).map((t, i) => ({ name: names[i], color: t.color, score: 0 })) : null, votes: {} };
       tfDraw();
     };
   };
@@ -15491,6 +15694,7 @@ function tfHome() {
 }
 function tfDraw() {
   stopJeoTimer(); navPush('tf');
+  if (tf.teams) { tfTeamDraw(); return window.scrollTo(0, 0); }
   const st = tf.list[tf.k];
   app.innerHTML = `
     <div class="topbar"><span class="title">${ic('check')} אמת או שקר?</span><span class="toollinks"><button class="secondary" id="tfQuit">${ic('close')} יציאה</button></span></div>
@@ -15503,7 +15707,7 @@ function tfDraw() {
         ${tf.shown ? (tf.k + 1 < tf.list.length ? '<button id="tfNext" class="race-go">הטענה הבאה ←</button>' : '<button id="tfEnd" class="race-go">סיום ←</button>') : ''}
       </div>
     </div>`;
-  $('tfQuit').onclick = () => { stopJeoTimer(); tfHome(); };
+  $('tfQuit').onclick = () => { stopJeoTimer(); tfHome('solo'); };
   app.querySelectorAll('[data-tfv]').forEach(b => b.onclick = () => {
     if (tf.shown) return;
     tf.pick = b.dataset.tfv === '1'; tf.shown = true;
@@ -15515,9 +15719,68 @@ function tfDraw() {
   if ($('tfEnd')) $('tfEnd').onclick = () => {
     app.innerHTML = `<div class="topbar"><span class="title">${ic('check')} אמת או שקר?</span><button class="secondary" id="tfHome2">${ic('home')} לדף הבית</button></div>
       <div class="card center race-end rec"><h2>סיימנו ${tf.list.length} טענות!</h2>${tf.answered ? `<div class="race-final"><b>${tf.right}</b><span>תשובות נכונות מתוך ${tf.answered}</span></div>` : ''}<p class="compare">${tf.right === tf.answered ? 'הכול נכון – מצוין!' : 'כל הכבוד! בסבב הבא תצליחו עוד יותר.'}</p><div class="actions" style="justify-content:center"><button id="tfAgain">עוד סבב ←</button></div></div>`;
-    $('tfHome2').onclick = home; $('tfAgain').onclick = tfHome;
+    $('tfHome2').onclick = home; $('tfAgain').onclick = () => tfHome('solo');
   };
 
+  window.scrollTo(0, 0);
+}
+// אמת או שקר – קבוצות: המורה מסמנת את ההחלטה של כל קבוצה, חושפת, והקבוצות שצדקו מקבלות נקודה
+function tfTeamDraw() {
+  const st = tf.list[tf.k], last = tf.k + 1 >= tf.list.length, V = tf.votes;
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('check')} אמת או שקר? – קבוצות</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="tfQuit">${ic('close')} יציאה</button></span></div>
+    <div class="card center tf-card">
+      <div class="muted">טענה ${tf.k + 1} מתוך ${tf.list.length}</div>
+      <div class="tf-s">${st.s}</div>
+      ${tf.shown ? `<div id="tfAns"><div class="tf-verdict ${st.t ? 'yes' : 'no'}"><b>${st.t ? 'אמת!' : 'שקר!'}</b><div>${st.e}</div></div></div>`
+        : `<p class="muted">כל קבוצה מחליטה: אמת או שקר? סמנו את ההחלטה של כל קבוצה.</p>
+      <div class="jeo-tools" style="justify-content:center"><button class="secondary" id="tfT">${ic('clock')} 30 שניות</button><span class="jeo-clock" id="tfClock"></span></div>`}
+      <div class="tf-tv">${tf.teams.map((tm, i) => {
+        const v = V[i], cls = tf.shown ? (v === st.t ? ' ok' : ' no') : '';
+        return `<div class="tvr${cls}" style="--tc:${tm.color}"><b>${esc(tm.name)} · ${tm.score}</b><button data-tv="${i}:1" class="${v === true ? 'on' : ''}" ${tf.shown ? 'disabled' : ''}>${ic('check')} אמת</button><button data-tv="${i}:0" class="${v === false ? 'on' : ''}" ${tf.shown ? 'disabled' : ''}>${ic('close')} שקר</button></div>`;
+      }).join('')}</div>
+      <div class="actions" style="justify-content:center">
+        ${tf.shown ? `<button id="tfNext" class="race-go">${last ? 'לתוצאות ←' : 'הטענה הבאה ←'}</button>` : '<button id="tfShow" class="race-go">חשיפת התשובה</button>'}
+      </div>
+    </div>`;
+  fsBind();
+  $('tfQuit').onclick = () => { if (confirm('לצאת מהמשחק?')) { stopJeoTimer(); tfHome('teams'); } };
+  app.querySelectorAll('[data-tv]').forEach(b => b.onclick = () => {
+    if (tf.shown) return;
+    const [i, v] = b.dataset.tv.split(':'), val = v === '1';
+    if (V[i] === val) delete V[i]; else V[i] = val;
+    const y = window.scrollY; tfTeamDraw(); window.scrollTo(0, y);
+  });
+  if ($('tfT')) $('tfT').onclick = () => {
+    stopJeoTimer();
+    const end = Date.now() + 30000, el = $('tfClock');
+    const tick = () => { if (!el.isConnected) return stopJeoTimer(); const s2 = Math.max(0, Math.ceil((end - Date.now()) / 1000)); el.textContent = s2 || 'הזמן נגמר!'; el.classList.toggle('low', s2 <= 5); if (!s2) stopJeoTimer(); };
+    tick(); jeoTimer = setInterval(tick, 250);
+  };
+  if ($('tfShow')) $('tfShow').onclick = () => {
+    stopJeoTimer(); tf.shown = true;
+    tf.teams.forEach((tm, i) => { if (V[i] === st.t) tm.score++; });
+    tfTeamDraw();
+  };
+  if ($('tfNext')) $('tfNext').onclick = () => {
+    if (last) return tfTeamEnd();
+    tf.k++; tf.shown = false; tf.votes = {}; tfTeamDraw(); window.scrollTo(0, 0);
+  };
+}
+function tfTeamEnd() {
+  const ranked = tf.teams.slice().sort((a, b) => b.score - a.score), top = ranked[0].score, winners = ranked.filter(t => t.score === top);
+  app.innerHTML = `
+    <div class="topbar"><span class="title">${ic('check')} אמת או שקר? – קבוצות</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="tfHome2">${ic('home')} לדף הבית</button></span></div>
+    <div class="card center race-end rec">
+      <div class="muted">${tf.list.length} טענות</div>
+      <h2>${winners.length > 1 ? 'תיקו!' : 'המנצחים:'}</h2>
+      <div class="jeo-win">${winners.map(w => `<span style="--tc:${w.color}">${esc(w.name)}</span>`).join(' ')}</div>
+      <ol class="jeo-rank">${ranked.map(t => `<li style="--tc:${t.color}"><span class="jdot"></span><span>${esc(t.name)}</span><b data-raw>${t.score} נקודות</b></li>`).join('')}</ol>
+      <p class="compare">כל הכבוד לכל הקבוצות!</p>
+      <div class="actions" style="justify-content:center"><button id="tfAgain">משחק חדש ←</button></div>
+    </div>`;
+  fsBind();
+  $('tfHome2').onclick = home; $('tfAgain').onclick = () => tfHome('teams');
   window.scrollTo(0, 0);
 }
 
@@ -22643,6 +22906,11 @@ function classSub(kind) {
             <span class="gc-nm">מיליונר קבוצתי</span>
             <span class="gc-ds">2–6 קבוצות עונות על אותן שאלות – כל קבוצה מטפסת בסולם שלה עד מיליון!</span>
           </button>
+          <button class="game-card" id="tfTeamGo">
+            <span class="gc-ic" style="--gw:rgba(127,168,214,0.6)">${ic('check')}</span>
+            <span class="gc-nm">אמת או שקר – קבוצות</span>
+            <span class="gc-ds">2–6 קבוצות מחליטות על כל טענה: אמת או שקר? חושפים, מסבירים, וכל קבוצה שצדקה מקבלת נקודה.</span>
+          </button>
           <button class="game-card" id="bingoGo">
             <span class="gc-ic" style="--gw:rgba(157,178,122,0.7)">${ic('grid')}</span>
             <span class="gc-nm">בינגו כיתתי</span>
@@ -22664,7 +22932,7 @@ function classSub(kind) {
   app.innerHTML = `<div class="topbar"><span class="title">${ic(T[0])} ${T[1]}</span><button class="secondary" id="clsBack">${ic('home')} חזרה</button></div>${body}`;
   $('clsBack').onclick = () => { homeTab = 'class'; home(); };
   const on = (id, fn) => { if ($(id)) $(id).onclick = fn; };
-  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('cmpSheetGo', () => cmpSheetHome());
+  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('tfTeamGo', () => tfHome('teams')); on('cmpSheetGo', () => cmpSheetHome());
   app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { const n = opNPref(); op = { topic: b.dataset.org, n, slides: opBuild(b.dataset.org, null, n), k: 0, show: false }; opDraw(); });
   app.querySelectorAll('[data-opn]').forEach(b => b.onclick = () => { try { localStorage.setItem(OPN_KEY, b.dataset.opn); } catch (e) { /* לא חובה */ } const y = window.scrollY; classSub('open'); window.scrollTo(0, y); });
   window.scrollTo(0, 0);
