@@ -9797,7 +9797,7 @@ function g6Pools() {
     dec: [[genDecimalPlace, genFracToDec, genDecToFrac], [genDecCompare, genDecAddSub, genNumberLine, genSequence], [genDecEst, genFracPlusDec, genDecErr]],
     geo: [[genRect, () => genSquare(1), genShapeProps], [genRectReverse, () => genSquare(2), genTrianglePerim, genParallelogram, genTriangleArea], [genGeoCut, genGeoScale, genGeoArea, genLShape]],
     data: [[() => genBarRead(0), () => genBarRead(1)], [() => genBarRead(2), () => genBarRead(3), () => genMeanList(1), () => genBakery()], [() => genBarRead(4), () => genMeanList(2), () => genMeanChange(), genMeanAdd, genMeanTarget]],
-    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctSwap, genPctWhole, genPctTwice]],
+    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctDiscount, genPctWhole, genPctTwice]],
     mul22: [[() => genMul22('area'), () => genMul22('plain')], [() => genMul22('plain'), () => genMul22('word')], [genMul22Est, genMul22Cmp]],
     seq: [[() => genSeqAdd(1)], [() => genSeqAdd(2), () => genSeqMul(1), () => genSeqMul(2)], [genSeqTerm, genSeqMember]],
     mulfr: [[() => genMulWhFr(1), genFracTimesWhole], [() => genMulWhFr(2), genFracTimesWhole], [genMulFrReason, genMulWhFr3, genFracTimesWhole]],
