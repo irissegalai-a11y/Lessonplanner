@@ -5,10 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>מתרגלים מתמטיקה – איריס סגל</title>
 <script>
-  // דף הכניסה של הכתובת הראשית (mathinclass.com/) – מעבירים מיד לדף הבית math.html, עם כל הפרמטרים
-  location.replace('math.html' + location.search + location.hash);
+  // דף הכניסה של הכתובת הראשית (mathinclass.com/) – תמיד לבחירת כיתה (?choose), גם אם במכשיר כבר שמורה כיתה; שאר הפרמטרים נשמרים
+  (function () {
+    var p = new URLSearchParams(location.search); if (!p.has('choose')) p.set('choose', '');
+    location.replace('math.html?' + p.toString().replace(/=(&|$)/g, '$1') + location.hash);
+  })();
 </script>
-<noscript><meta http-equiv="refresh" content="0; url=math.html"></noscript>
+<noscript><meta http-equiv="refresh" content="0; url=math.html?choose"></noscript>
 <link rel="canonical" href="math.html">
 <meta name="description" content="אתר תרגול במתמטיקה לכיתות א'–ו': שיעורים, תרגול, משחקים ודפי עבודה">
 <meta property="og:title" content="מתרגלים מתמטיקה – איריס סגל">
@@ -28,6 +31,6 @@
 <style>body { font-family: Assistant, "Segoe UI", Arial, sans-serif; background: #fbf8f1; color: #1f1e1c; text-align: center; padding: 60px 16px; } a { color: #2f5f9e; font-weight: 600; }</style>
 </head>
 <body>
-  <p>עוברים לאתר… <a href="math.html">אם לא עברתם אוטומטית – לחצו כאן</a></p>
+  <p>עוברים לאתר… <a href="math.html?choose">אם לא עברתם אוטומטית – לחצו כאן</a></p>
 </body>
 </html>
