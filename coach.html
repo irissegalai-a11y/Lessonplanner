@@ -254,6 +254,8 @@
   .titem .tmsg { color: #5b6275; font-size: .92rem; }
   .titem ul.topts { margin: 6px 0; padding-inline-start: 20px; }
   .titem ul.topts li.ok { color: #1e6b3a; font-weight: 700; }
+  .solhide .tsol { display: none !important; }
+  .solhide .titem ul.topts li.ok { color: inherit; font-weight: inherit; }
   .site { width: 100%; min-height: 460px; border: 1px solid #dfe3ee; border-radius: 14px; background: #fff; display: block; margin: 10px 0; }
   .modal .site { min-height: 60vh; }
   .ccard.soon { opacity: 0.6; border-top-color: var(--line); }
@@ -462,7 +464,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.17</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.18</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -1100,10 +1102,17 @@
   function taskHtml(it, k) {
     if (!it) return '';
     const o = it.opts || [];
-    const opts = (it.type === 'choice' || it.type === 'multi') ? `<ul class="topts">${o.map((x, i) => { const ok = it.type === 'multi' ? it.ans.includes(i) : it.ans === i; return `<li class="${ok ? 'ok' : ''}">${ok ? '✓ ' : ''}${R(optT(x))}${x.fig && !x.t ? fig(x.fig) : ''}${!ok && x.msg ? `<span class="tmsg"> – משוב: ${R(x.msg)}</span>` : ''}</li>`; }).join('')}</ul>` : '';
-    const traps = it.traps && it.type !== 'choice' ? Object.keys(it.traps).map(v => `<div class="tmsg">אם עונים ${/^(\d+_)?\d+\/\d+$/.test(v) ? R(`⟦${v}⟧`) : esc(v)}: ${R(String(it.traps[v]))}</div>`).join('') : '';
+    const opts = (it.type === 'choice' || it.type === 'multi') ? `<ul class="topts">${o.map((x, i) => { const ok = it.type === 'multi' ? it.ans.includes(i) : it.ans === i; return `<li class="${ok ? 'ok' : ''}">${ok ? '<span class="tsol">✓ </span>' : ''}${R(optT(x))}${x.fig && !x.t ? fig(x.fig) : ''}${!ok && x.msg ? `<span class="tmsg tsol"> – משוב: ${R(x.msg)}</span>` : ''}</li>`; }).join('')}</ul>` : '';
+    const traps = it.traps && it.type !== 'choice' ? Object.keys(it.traps).map(v => `<div class="tmsg tsol">אם עונים ${/^(\d+_)?\d+\/\d+$/.test(v) ? R(`⟦${v}⟧`) : esc(v)}: ${R(String(it.traps[v]))}</div>`).join('') : '';
     return `<div class="titem"><div class="tq"><b>${k}</b> ${R(it.q)}</div>${it.fig && it.type !== 'shade' ? fig(it.fig) : ''}${opts}
-      <div class="tans">✔ תשובה: ${R(ansText(it))}</div>${traps}${it.hints && it.hints.length ? `<div class="tmsg">💡 רמז: ${R(it.hints[0])}</div>` : ''}</div>`;
+      <div class="tans tsol">✔ תשובה: ${R(ansText(it))}</div>${traps}${it.hints && it.hints.length ? `<div class="tmsg">💡 רמז: ${R(it.hints[0])}</div>` : ''}</div>`;
+  }
+  // כל המשימות / שאלות האבחון: התשובות מוסתרות כברירת מחדל (אפשר להקרין לכיתה), כפתור מציג/מסתיר
+  const SOLBTN = '<button class="ghost small nosay" id="mSol">👁️ הצגת התשובות</button>';
+  function solToggle(m) {
+    const b = m.el.querySelector('#mSol');
+    m.el.classList.add('solhide');
+    if (b) b.onclick = () => { const h = m.el.classList.toggle('solhide'); b.textContent = h ? '👁️ הצגת התשובות' : '🙈 הסתרת התשובות'; };
   }
   // תרגול מונחה של שיעור: בשיעור רגיל – מסכי practice; בשיעור v2 – הבדיקה הקצרה, שאלת הכלל והרמות
   const guidedOf = U => U.teach.flatMap(x => x.kind === 'practice' ? x.items || [] : x.kind === 'levels' ? x.levels.flatMap(l => l.items) : x.kind === 'rule' && x.item ? [x.item] : []);
@@ -1114,14 +1123,15 @@
     const sec = (t, items, pre) => items && items.length ? `<h3>${t}</h3>${items.map((it, i) => taskHtml(it, (pre || '') + (i + 1) + '.')).join('')}` : '';
     const scr = guidedOf(U);
     const nb = nbOf(U);
-    const html = `<h2>📋 ${u.title} – כל המשימות</h2><div class="row"><button class="sec small nosay" id="mPrint">🖨️ דף עבודה להדפסה</button></div><p class="muted">התשובות הנכונות מסומנות ב-✓. בגרסת לומדים: בדיקה א' ואם לא עבר – ב'. בגרסת תרגול נוסף: ב' ואם לא עבר – ג'.</p>
+    const html = `<h2>📋 ${u.title} – כל המשימות</h2><div class="row"><button class="sec small nosay" id="mPrint">🖨️ דף עבודה להדפסה</button>${SOLBTN}</div><p class="muted">התשובות מוסתרות – „הצגת התשובות” מראה אותן (התשובה הנכונה מסומנת ב-✓). בגרסת לומדים: בדיקה א' ואם לא עבר – ב'. בגרסת תרגול נוסף: ב' ואם לא עבר – ג'.</p>
       ${sec('תרגול מונחה', scr)}
-      ${nb ? `<h3>מחברת – משימת ציור</h3><div class="titem">${R(nb.html)}${nb.verify ? `<div class="tans">✔ שאלת אימות: ${R(nb.verify.q)} – ${nb.verify.ans ? nb.verify.ans.join(', ') : 'לפי התנאי'}</div>` : ''}${(nb.checks || []).map(it => `<div class="tans">✔ ${R(it.q)} – ${R(ansText(it))}</div>`).join('')}${nb.model ? fig(nb.model) : ''}</div>` : ''}
+      ${nb ? `<h3>מחברת – משימת ציור</h3><div class="titem">${R(nb.html)}${nb.verify ? `<div class="tans tsol">✔ שאלת אימות: ${R(nb.verify.q)} – ${nb.verify.ans ? nb.verify.ans.join(', ') : 'לפי התנאי'}</div>` : ''}${(nb.checks || []).map(it => `<div class="tans tsol">✔ ${R(it.q)} – ${R(ansText(it))}</div>`).join('')}${nb.model ? `<div class="tsol">${fig(nb.model)}</div>` : ''}</div>` : ''}
       ${sl.gens && !U.deep ? `<h3>תרגול נוסף ותרגול במחברת (מהאתר)</h3><p class="muted">שאלות משתנות בכל פעם, ממחוללי האתר: ${sl.gens.map(g => `<code>${g}</code>`).join(', ')}. תרגול נוסף – 8 שאלות (6 כדי להמשיך); מחברת – ${sl.nb || 6} תרגילים, ${sl.min || 10} דקות.</p>` : ''}
       ${['A', 'B', 'C'].map((k, i) => sec(`${U.deep ? 'משימות אתגר' : 'בדיקת הבנה'} – סט ${'אבג'[i]}`, U.sets[k], 'אבג'[i] + '')).join('')}
       ${U.alt ? `<h3>הסבר בדרך אחרת (סולם העזרה)</h3><div class="titem"><b>${R(U.alt.title)}</b>${R(U.alt.html)}${fig(U.alt.fig)}</div>` : ''}
       ${U.simpler ? `<h3>משימה פשוטה (סולם העזרה)</h3>${taskHtml(U.simpler, '•')}` : ''}`;
     const m = modal(html);
+    solToggle(m);
     m.el.querySelector('#mPrint').onclick = () => { m.close(); worksheet(id); };
   }
   /* ---------- דפים להדפסה: דף עבודה תומך לשיעור, ודף מבדק ---------- */
@@ -1380,9 +1390,9 @@
       hasNew(xBase(id)) ? { label: '🔄 גרסה חדשה', on: done => { done(); const ps = document.createElement('div'); ps.id = 'psheet'; ps.innerHTML = '<div class="ptools nosay"><b>מכין/ה גרסה חדשה… ⏳</b></div>'; document.body.appendChild(ps); buildNew(xBase(id), list => { ps.remove(); examSheet(xBase(id), onClose, list); }); } } : null);
   }
   function diagTasks() {
-    const html = `<h2>📋 שאלות האבחון</h2><p class="muted">המבדק מסתגל: כל ילד מקבל רק חלק מהשאלות (עד ${(K.DIAG && K.DIAG.maxQ) || 12}).</p>` +
+    const html = `<h2>📋 שאלות האבחון</h2><div class="row">${SOLBTN}</div><p class="muted">המבדק מסתגל: כל ילד מקבל רק חלק מהשאלות (עד ${(K.DIAG && K.DIAG.maxQ) || 12}).</p>` +
       Object.keys(K.DIAG_ORDER).map(sk => `<h3>${K.SKILLS[sk]}</h3>${K.DIAG_ORDER[sk].map(id => taskHtml(K.D[id], id)).join('')}`).join('');
-    modal(html);
+    solToggle(modal(html));
   }
   function lessonModal() {
     const o = siteOf((st.unit && st.unit.id) || '');
