@@ -1354,6 +1354,13 @@ html.embed body { padding-top: 0; }
   .tool-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 4px; }
   .tool-row .tool-chip { font: inherit; font-size: 0.95rem; padding: 5px 12px; border: 2px solid #1f1e1c; border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; }
   .tool-row .tool-chip:hover { background: #eef6f0; }
+  .tcat-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
+  .tcat-jump .tcat-chip { font: inherit; font-size: 1rem; padding: 5px 13px; border: 2px solid var(--c); border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; transform: none; }
+  .tcat-jump .tcat-chip:hover { background: color-mix(in srgb, var(--c) 14%, #fffdf8); }
+  .tcat { margin: 0 0 22px; scroll-margin-top: 12px; }
+  .tcat-h { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; padding: 4px 12px; font-size: 1.35rem; border-inline-start: 6px solid var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); border-radius: 6px; }
+  .tcat .tool-row { margin: 10px 0 0; }
+  @media print { .tcat-jump { display: none; } .tcat-h { break-after: avoid; } }
   .tp-head { border-top: 6px solid var(--c); display: flex; flex-direction: column; gap: 8px; }
   .tp-head .ds { color: var(--muted); }
   .tp-head .best { color: var(--c); font-weight: 600; font-size: 0.95rem; }
@@ -2247,7 +2254,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רפט</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצ</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -6045,12 +6052,12 @@ const LEVEL_DESC3 = {
    ========================================================= */
 const TOPICS6 = [
   {
-    id: 'place', name: 'מבנה עשרוני', icon: '🔢', color: '#4c5fd5',
-    desc: 'ערך הספרה, עיגול, השוואה, הרכבת מספרים',
+    id: 'place', name: 'מבנה עשרוני – עד מיליונים', icon: '🔢', color: '#4c5fd5',
+    desc: 'מספרים טבעיים עד מיליונים: ערך הספרה, עיגול, השוואה, הרכבת מספרים',
     levels: {
       1: [genDigitValue, genCompose],
       2: [genHowMany, genRound, genCompare],
-      3: [genDecimalPlace, genExpandedDecimal, genRound]
+      3: [genPlaceShift, genRoundRange, genRound]
     },
     tips: ['כל מקום שווה פי 10 מהמקום שמימינו: יחידות, עשרות, מאות, אלפים...', 'אחרי הנקודה: עשיריות, מאיות, אלפיות.', 'עיגול: מסתכלים על הספרה שמימין למקום העיגול – 5 ומעלה מעגלים למעלה.']
   },
@@ -9765,7 +9772,8 @@ function genDerivedLv(lv, labels) { for (let i = 0; i < 30; i++) { const q = gen
    בכל רמה המחוללים מסודרים מהקל לקשה (ordered) – לפי זה ג'פרדי ומיליונר עולים בהדרגה גם בתוך הרמה. */
 function g6Pools() {
   const P = {
-    place: [[genDigitValue, genCompose], [genCompare, genRound, genHowMany, genDecimalPlace, genExpandedDecimal], [genPlaceShift, genRoundRange]],
+    place: [[genDigitValue, genCompose], [genCompare, genRound, genHowMany], [genPlaceShift, genRoundRange]],
+    placeDec: [[genDecimalPlace, genDecimalPlace], [genExpandedDecimal, genDecimalPlace], [genExpandedDecimal, genDecCompare]],
     ops: [[() => genMul(1), () => genDiv(1), () => genOrderSame(1), () => genOrder(1)], [() => genMul(2), () => genDiv(2), () => genOrder(2), () => genMissing(2), genPrime, genEstimate], [genOpsShift, () => genMissing(3), genPrimeProduct, genWord, genBuildings]],
     frac: [[genReduce, genExpand, genAddSame], [genCompareFrac, genImproperToMixed, genMixedToImproper, genAddDiff, genSubDiff, genFromWhole, () => genFracOfQty(1), genMixedAddSub], [genFracShort, genFracReason, genFracWord, () => genFracOfQty(2)]],
     dec: [[genDecimalPlace, genFracToDec, genDecToFrac], [genDecCompare, genDecAddSub, genNumberLine, genSequence], [genDecEst, genFracPlusDec, genDecErr]],
@@ -9957,6 +9965,17 @@ if (GRADE === 6) TOPICS.push({
     3: [() => genVolMissing(3), genVolWater, genTriPrismV, genVolScale, genVolFit, () => genVolUnit(3)]
   },
   tips: ['נפח = כמה קוביות יחידה נכנסות (סמ"ק). תיבה: אורך × רוחב × גובה.', 'מנסרה: שטח הבסיס × גובה. גובה = נפח : שטח הבסיס.', '1 סמ"ק = 1 מ"ל · 1,000 סמ"ק = 1 ליטר · 1 מ"ק = 1,000 ליטר.', 'מקצוע פי 2 → נפח פי 8 (2 × 2 × 2).']
+});
+// מבנה עשרוני אחרי הנקודה (כיתה ו') – נפרד מ"מבנה עשרוני – עד מיליונים" (21.11). נוסף בסוף כדי לא לשבש קודי חוברות
+if (GRADE === 6) TOPICS.push({
+  id: 'placeDec', name: 'מבנה עשרוני – אחרי הנקודה', icon: '🔟', color: '#1e8a8a',
+  desc: 'עשיריות, מאיות ואלפיות: ערך הספרה, פירוק לפי המקומות, השוואה',
+  levels: {
+    1: [genDecimalPlace, genDecimalPlace],
+    2: [genExpandedDecimal, genDecimalPlace],
+    3: [genExpandedDecimal, genDecCompare]
+  },
+  tips: ['אחרי הנקודה: הספרה הראשונה – עשיריות, השנייה – מאיות, השלישית – אלפיות.', 'כל מקום שווה פי 10 מהמקום שמימינו – גם אחרי הנקודה: 10 מאיות = עשירית אחת.', 'משווים מספרים עשרוניים מקום אחר מקום משמאל: קודם השלמים, אחר כך העשיריות.']
 });
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
 if (GRADE === 6) g6Pools();
@@ -12979,35 +12998,7 @@ function home() {
             <button type="button" id="contGo">${cont.btn} ←</button>
           </div>` : ''}
           ${champCard()}
-          <div class="topics">
-            ${TOPICS.map((t, i) => {
-              const s = store.topics[t.id];
-              const m = s ? s.mastery : 0;
-              return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
-                <span class="ic">${i + 1}</span>
-                <span class="nm">${t.name}</span>
-                <span class="ds">${t.desc}</span>
-                <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
-                <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}${topicLessons(t.id).length ? ' · 📖 יש הסבר' : ''}</span>
-              </button>`;
-            }).join('')}
-            ${GRADE >= 4 ? `<button class="topic" style="--c:#2f8f55" id="drawGo">
-                <span class="ic">${TOPICS.length + 1}</span>
-                <span class="nm">שרטוט בגאומטריה</span>
-                <span class="ds">משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ולפי אלכסונים</span>
-              </button>
-              <button class="topic" style="--c:#4c5fd5" id="quadGo">
-                <span class="ic">${TOPICS.length + 2}</span>
-                <span class="nm">מרובעים</span>
-                <span class="ds">מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט</span>
-              </button>` : ''}
-            <button class="topic" style="--c:#3d7a6e" id="wpGo">
-              <span class="ic">${TOPICS.length + (GRADE >= 4 ? 3 : 1)}</span>
-              <span class="nm">שאלות מילוליות</span>
-              <span class="ds">בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים</span>
-            </button>
-          </div>
-          ${toolRow()}
+          ${topicCatsHTML()}
           <div class="practice-more">
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
@@ -13389,6 +13380,53 @@ const TOOL_CARDS = [
   { id: 'mulAreaGo', cls: 'b10-card3', on: GRADE >= 4, topics: ['mul22'], go: () => mulArea(), chip: '▦ שיטת המלבנים',
     html: `<span class="b10c-ic">▦</span><span class="b10c-t">שיטת המלבנים – כפל</span><span class="b10c-d">כפל דו-ספרתי בעזרת פירוק למלבנים: רואים כל מכפלה חלקית ומחברים הכול.</span>` }
 ].filter(c => c.on);
+// נושאים לפי קטגוריות (21.11): כל נושא, כרטיס נוסף וכלי המחשה – בקטגוריה אחת. קטגוריה ריקה בכיתה – לא מוצגת
+const TOPIC_CATS = [
+  { id: 'nat', name: 'מספרים טבעיים', icon: '🔢', color: '#4c5fd5' },
+  { id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a' },
+  { id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c' },
+  { id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55' },
+  { id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b' },
+  { id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1' },
+  { id: 'word', name: 'שאלות מילוליות', icon: '💬', color: '#3d7a6e' }
+];
+// נושא שלא מופיע כאן – "מספרים טבעיים"
+const CAT_OF = {
+  dec: 'dec', placeDec: 'dec',
+  frac: 'frac', mulfr: 'frac', divfr: 'frac',
+  shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', solids: 'geo', solidsN: 'geo', solidsS: 'geo', solidsV: 'geo', drawGo: 'geo', quadGo: 'geo',
+  pct: 'pct',
+  data: 'data',
+  wpm: 'word', wpGo: 'word'
+};
+const catOf = id => CAT_OF[id] || 'nat';
+function topicCatsHTML() {
+  let n = 0;
+  const topicBtn = t => { const s = store.topics[t.id], m = s ? s.mastery : 0; return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
+                <span class="ic">${++n}</span>
+                <span class="nm">${t.name}</span>
+                <span class="ds">${t.desc}</span>
+                <span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>
+                <span class="best">${masteryLabel(m)}${s ? ` · ${LEVEL_NAME[s.level || 1]}` : ''}${topicLessons(t.id).length ? ' · 📖 יש הסבר' : ''}</span>
+              </button>`; };
+  const extra = (id, c, nm, ds) => `<button class="topic" style="--c:${c}" id="${id}"><span class="ic">${++n}</span><span class="nm">${nm}</span><span class="ds">${ds}</span></button>`;
+  const EXTRA = [
+    ...(GRADE >= 4 ? [
+      { id: 'drawGo', h: () => extra('drawGo', '#2f8f55', 'שרטוט בגאומטריה', 'משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ולפי אלכסונים') },
+      { id: 'quadGo', h: () => extra('quadGo', '#4c5fd5', 'מרובעים', `מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט`) }
+    ] : []),
+    { id: 'wpGo', h: () => extra('wpGo', '#3d7a6e', 'שאלות מילוליות', 'בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים') }
+  ];
+  const groups = TOPIC_CATS.map(c => ({ c, topics: TOPICS.filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
+    extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
+    .filter(g => g.topics.length || g.extra.length);
+  const jump = groups.length > 1 ? `<nav class="tcat-jump" aria-label="קטגוריות">${groups.map(g => `<button type="button" class="tcat-chip" style="--c:${g.c.color}" onclick="document.getElementById('tcat-${g.c.id}').scrollIntoView({ behavior: 'smooth', block: 'start' })">${g.c.icon} ${g.c.name}</button>`).join('')}</nav>` : '';
+  return jump + groups.map(g => `<section class="tcat" id="tcat-${g.c.id}" style="--c:${g.c.color}">
+            <h3 class="tcat-h"><span class="tcat-i">${g.c.icon}</span>${g.c.name}</h3>
+            <div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>
+            ${g.tools.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${g.tools.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : ''}
+          </section>`).join('');
+}
 const toolRow = () => TOOL_CARDS.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${TOOL_CARDS.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
 function topicHome(id) {
   const t = TOPIC[id];
@@ -13484,7 +13522,8 @@ function todaySuggestion() {
 
 /* ---------- בחירת רמה ---------- */
 const LEVEL_DESC6 = {
-  place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'ספרות אחרי הנקודה העשרונית'],
+  place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'פי כמה גדל ערך הספרה, טווח עיגול'],
+  placeDec: ['ערך ספרה אחרי הנקודה: עשיריות, מאיות, אלפיות', 'פירוק מספר עשרוני לפי המקומות', 'פירוק והשוואה של מספרים עשרוניים'],
   ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן, ראשוניים ופריקים', 'בעיות מילוליות, ראשוניים ופריקים ותרגילים מאתגרים'],
   frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
   dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
