@@ -111,14 +111,22 @@
     return `<svg class="fig line" viewBox="0 0 ${w + 48} 84" width="${w + 48}" height="84" role="img" aria-label="ישר מספרים">${out}</svg>`;
   }
   // ריבוע של 100 משבצות; הצביעה לפי עמודות (כל עמודה = עשירית)
+  // cut – חלוקה לחלקים שווים בקווים עבים (2 חצאים, 4 רבעים, 5 פסים, 10 עמודות, 20, 25); kp – כמה חלקים צבועים
+  // on – קבוצת משבצות צבועות (למסך האינטראקטיבי), click – משבצות לחיצות (data-i)
+  const hundPart = (col, row, cut) => ({ 2: col < 5 ? 0 : 1, 4: (row < 5 ? 0 : 2) + (col < 5 ? 0 : 1), 5: Math.floor(col / 2), 10: col, 20: col * 2 + (row < 5 ? 0 : 1), 25: Math.floor(col / 2) * 5 + Math.floor(row / 2) })[cut];
   function hund(f) {
-    const c = f.c || 17, n = f.n || 0; let out = '';
+    const c = f.c || 17, n = f.n || 0, cut = f.cut; let out = '';
     for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
       const i = col * 10 + row;
-      const on = f.rc ? (col < f.rc[0] && row < f.rc[1]) : i < n;
-      out += `<rect x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
+      const on = f.on ? f.on.has(i) : (cut && f.kp != null) ? hundPart(col, row, cut) < f.kp : f.rc ? (col < f.rc[0] && row < f.rc[1]) : i < n;
+      out += `<rect${f.click ? ` class="hc" data-i="${i}"` : ''} x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
     }
-    out += `<rect x="2" y="2" width="${10 * c}" height="${10 * c}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    if (cut) for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
+      const p = hundPart(col, row, cut), x = 2 + col * c, y = 2 + row * c;
+      if (col < 9 && hundPart(col + 1, row, cut) !== p) out += `<line x1="${x + c}" x2="${x + c}" y1="${y}" y2="${y + c}" stroke="${INK}" stroke-width="2.4" pointer-events="none"/>`;
+      if (row < 9 && hundPart(col, row + 1, cut) !== p) out += `<line x1="${x}" x2="${x + c}" y1="${y + c}" y2="${y + c}" stroke="${INK}" stroke-width="2.4" pointer-events="none"/>`;
+    }
+    out += `<rect x="2" y="2" width="${10 * c}" height="${10 * c}" fill="none" stroke="${INK}" stroke-width="2.4" pointer-events="none"/>`;
     return `<svg class="fig hund" viewBox="0 0 ${10 * c + 4} ${10 * c + 4}" width="${10 * c + 4}" height="${10 * c + 4}" role="img" aria-label="ריבוע של 100 משבצות">${out}</svg>`;
   }
   // לוח ערך המקום: { k:'pv', n:'3.45' }
@@ -233,5 +241,5 @@
     return f.label ? `<figure class="figl">${svg}<figcaption>${R(f.label)}</figcaption></figure>` : svg;
   }
 
-  C.V = { M, R, fig, bar, pie, line, area, fracSay, FILL, FILL2, INK, jugSvg, cupSvg, JUICE, JUICE2 };
+  C.V = { M, R, fig, bar, pie, line, area, hund, hundPart, fracSay, FILL, FILL2, INK, jugSvg, cupSvg, JUICE, JUICE2 };
 })();

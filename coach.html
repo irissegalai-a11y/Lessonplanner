@@ -464,7 +464,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.18</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.19</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -477,6 +477,7 @@
 <script src="coach/courses/fracop.js"></script>
 <script src="coach/courses/fmul.js"></script>
 <script src="coach/courses/fdiv.js"></script>
+<script src="coach/courses/pct.js"></script>
 <script src="coach/courses/exams.js"></script>
 <script>
 (function () {
@@ -1489,6 +1490,7 @@
     } else if (sc.kind === 'intro') intro(sc);
     else if (sc.kind === 'cake') cake(sc);
     else if (sc.kind === 'measure') measure(sc);
+    else if (sc.kind === 'hundlab') hundlab(sc);
     else if (sc.kind === 'share') share(sc, 0);
     else if (sc.kind === 'rule') rule(sc);
     else if (sc.kind === 'levels') levels(sc);
@@ -1611,6 +1613,63 @@
       save();
       $('nx').onclick = next;
     }
+  }
+
+  // ---------- המחשה: ריבוע המאה – צובעים אחוז / שבר, ומקשרים ביניהם ----------
+  // sc.tasks: [{ cut, need, instr, ok, qs:[items], after }]. בלי cut – לחיצה על משבצת ממלאת עד אליה (עמודה אחרי עמודה);
+  // עם cut – הריבוע מחולק לחלקים שווים בקווים עבים, ולחיצה צובעת (או מוחקת) חלק שלם. need = מספר המשבצות הנדרש.
+  function hundlab(sc) {
+    const u = st.unit;
+    frame(1, `<h3>${R(sc.title)}</h3><p style="font-size:1.12rem">${R(sc.story)}</p><div id="htask"></div><div class="row">${unclearBtn()}</div>`);
+    bindUnclear(sc);
+    const run = ti => {
+      const t = sc.tasks[ti], on = new Set(), cut = t.cut, per = cut ? 100 / cut : 1;
+      let stage = 'paint';
+      $('htask').innerHTML = `<p class="muted small">${ti + 1} מתוך ${sc.tasks.length}</p><p><b>${R(t.instr)}</b></p><div id="hfig" style="text-align:center"></div><p class="muted small" id="hcnt"></p><div id="hfb"></div><div class="row" id="hrow"><button id="hgo">בדיקה</button><button class="ghost small" id="hclr">מחיקה</button></div><div id="ib"></div>`;
+      const parts = () => cut ? new Set([...on].map(i => V.hundPart(Math.floor(i / 10), i % 10, cut))).size : 0;
+      const draw = () => {
+        $('hfig').innerHTML = V.hund({ on, cut, click: stage === 'paint', c: window.innerWidth < 480 ? 28 : 34 });
+        $('hcnt').innerHTML = `צבועות: <b>${on.size}</b> משבצות${cut ? ` (${parts()} חלקים)` : ''}`;
+        $('hfig').querySelectorAll('.hc').forEach(r => r.onclick = () => tap(+r.dataset.i));
+      };
+      const fb = (cls, html) => { $('hfb').innerHTML = `<div class="fb ${cls}">${R(html)}</div>`; };
+      function tap(i) {
+        if (stage !== 'paint') return;
+        $('hfb').innerHTML = '';
+        if (!cut) { const n = on.has(i) && !on.has(i + 1) ? i : i + 1; on.clear(); for (let k = 0; k < n; k++) on.add(k); }
+        else {
+          const p = V.hundPart(Math.floor(i / 10), i % 10, cut), cells = [];
+          for (let k = 0; k < 100; k++) if (V.hundPart(Math.floor(k / 10), k % 10, cut) === p) cells.push(k);
+          const had = on.has(i); cells.forEach(k => had ? on.delete(k) : on.add(k));
+        }
+        draw();
+      }
+      $('hclr').onclick = () => { if (stage === 'paint') { on.clear(); $('hfb').innerHTML = ''; draw(); } };
+      $('hgo').onclick = () => {
+        if (stage !== 'paint') return;
+        if (on.size !== t.need) {
+          const has = cut ? `${parts()} חלקים` : `${on.size} משבצות`;
+          log('hundTry', { t: ti, n: on.size });
+          return fb('bad', on.size > t.need ? `צבעתם ${has} – יותר מדי. ${t.msg || ''}` : `צבעתם ${has} – עוד חסר. ${t.msg || ''}`);
+        }
+        stage = 'ask'; draw(); log('hundOk', { t: ti });
+        $('hrow').remove();
+        fb('ok', '✓ ' + t.ok);
+        ask(0);
+      };
+      const ask = j => {
+        if (j >= (t.qs || []).length) {
+          $('ib').innerHTML = `<div class="rulebox">${R(t.after)}</div><div class="row"><button id="nx">${ti + 1 < sc.tasks.length ? 'המשך' : 'לכלל'}</button></div>`;
+          save();
+          $('nx').onclick = () => ti + 1 < sc.tasks.length ? run(ti + 1) : next();
+          return;
+        }
+        const box = document.createElement('div'); $('ib').innerHTML = ''; $('ib').appendChild(box);
+        askItem(box, t.qs[j], 'learn', () => ask(j + 1));
+      };
+      draw();
+    };
+    run(0);
   }
 
   // ---------- המחשה "כמה פעמים נכנס" (שלם : שבר): חותכים כל שלם לחלקים שווים, ומסמנים קבוצות בגודל המחלק ----------
