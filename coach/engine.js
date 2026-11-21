@@ -4,7 +4,7 @@
    ========================================================= */
 (function () {
   const C = window.COACH = window.COACH || {};
-  const VER = '4.14';
+  const VER = '4.15';
   C.VER = VER;
   // סדר קבוע! המיקום ברשימה נכנס לקוד ההמשך. קורס חדש מוסיפים רק בסוף.
   C.COURSE_IDS = ['equiv', 'dec', 'pct', 'fracop', 'area', 'mult', 'frac', 'fmul', 'fdiv'];
