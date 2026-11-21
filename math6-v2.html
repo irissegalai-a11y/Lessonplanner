@@ -1363,6 +1363,38 @@ html.embed body { padding-top: 0; }
   .tcat-h { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; padding: 4px 12px; font-size: 1.35rem; border-inline-start: 6px solid var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); border-radius: 6px; }
   .tcat .tool-row { margin: 10px 0 0; }
   @media print { .tcat-jump { display: none; } .tcat-h { break-after: avoid; } }
+  .tcat-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin: 8px 0 16px; }
+  .tcat-tile { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "i nm" "i n" "bar bar"; align-items: center; column-gap: 10px; row-gap: 2px; text-align: start; padding: 12px 14px; border: 2px solid var(--c); border-radius: 14px; background: color-mix(in srgb, var(--c) 9%, #fffdf8); color: #1f1e1c; box-shadow: none; transform: none; font: inherit; cursor: pointer; }
+  .tcat-tile:hover { background: color-mix(in srgb, var(--c) 18%, #fffdf8); transform: none; }
+  .tcat-tile .tt-i { grid-area: i; font-size: 2rem; }
+  .tcat-tile .tt-nm { grid-area: nm; font-size: 1.25rem; font-weight: 700; }
+  .tcat-tile .tt-n { grid-area: n; font-size: 0.9rem; color: var(--muted); }
+  .tcat-tile .mbar { grid-area: bar; margin-top: 8px; }
+  .tcat-tile .mbar > span, .tcat-bar > span { background: var(--c); }
+  .tcat-tiles[hidden], .tcat-one[hidden] { display: none; }
+  .tcat-top { margin: 2px 0 8px; }
+  .tcat-back { font-size: 1rem; padding: 6px 14px; }
+  .tcat-acc { border: 2px solid var(--c); border-radius: 12px; margin: 0 0 10px; background: #fffdf8; overflow: hidden; }
+  .tcat-acc > summary { list-style: none; display: grid; grid-template-columns: auto auto 1fr minmax(60px, 120px) auto; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; background: color-mix(in srgb, var(--c) 10%, #fffdf8); font-size: 1.2rem; }
+  .tcat-acc > summary::-webkit-details-marker { display: none; }
+  .tcat-acc > summary::after { content: '▾'; font-size: 1.1rem; transition: transform .2s; }
+  .tcat-acc[open] > summary::after { transform: rotate(180deg); }
+  .tcat-acc .tcat-nm { font-weight: 700; }
+  .tcat-acc .tcat-n { font-size: 0.9rem; color: var(--muted); }
+  .tcat-acc .tcat-bar { margin: 0; }
+  .tcat-in { padding: 4px 10px 10px; }
+  .compact .topic { min-height: 0; padding: 6px 4px; grid-template-areas: "ic nm bar best"; }
+  .compact .topic .ds { display: none; }
+  .compact .topic .ic { width: 36px; height: 36px; font-size: 1.1rem; }
+  @media (max-width: 640px) {
+    .tcat-tiles { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .tcat-tile { grid-template-columns: 1fr; grid-template-areas: "i" "nm" "n" "bar"; text-align: center; padding: 10px 8px; }
+    .tcat-tile .tt-nm { font-size: 1.05rem; }
+    .tcat-acc > summary { grid-template-columns: auto 1fr auto auto; }
+    .tcat-acc .tcat-bar { display: none; }
+    .compact .topic { grid-template-columns: 40px 1fr; grid-template-areas: "ic nm" "ic best"; }
+    .compact .topic .mbar { display: none; }
+  }
   .tp-head { border-top: 6px solid var(--c); display: flex; flex-direction: column; gap: 8px; }
   .tp-head .ds { color: var(--muted); }
   .tp-head .best { color: var(--c); font-weight: 600; font-size: 0.95rem; }
@@ -13425,14 +13457,43 @@ function topicCatsHTML() {
   const groups = TOPIC_CATS.map(c => ({ c, topics: TOPICS.filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
     extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
     .filter(g => g.topics.length || g.extra.length);
-  const jump = groups.length > 1 ? `<nav class="tcat-jump" aria-label="קטגוריות">${groups.map(g => `<button type="button" class="tcat-chip" style="--c:${g.c.color}" onclick="document.getElementById('tcat-${g.c.id}').scrollIntoView({ behavior: 'smooth', block: 'start' })">${g.c.icon} ${g.c.name}</button>`).join('')}</nav>` : '';
-  return jump + groups.map(g => `<section class="tcat" id="tcat-${g.c.id}" style="--c:${g.c.color}">
+  const tools = g => g.tools.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${g.tools.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
+  const body = g => `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`;
+  const cnt = g => g.topics.length + g.extra.length;
+  const avg = g => g.topics.length ? Math.round(g.topics.reduce((a, t) => a + ((store.topics[t.id] || {}).mastery || 0), 0) / g.topics.length) : 0;
+  let open = ''; try { open = sessionStorage.getItem('math-cat') || ''; } catch (e) {}
+  if (!groups.some(g => g.c.id === open)) open = '';
+  if (CATVIEW === 'b') // קטגוריות מתקפלות – אחת פתוחה בכל פעם, נושאים בשורה קצרה
+    return `<div class="tcat-acc-list">${groups.map(g => `<details class="tcat-acc" data-cat="${g.c.id}" style="--c:${g.c.color}"${g.c.id === open ? ' open' : ''} ontoggle="catToggle(this)">
+            <summary><span class="tcat-i">${g.c.icon}</span><span class="tcat-nm">${g.c.name}</span><span class="tcat-n">${cnt(g)} נושאים</span><span class="mbar tcat-bar"><span style="width:${avg(g)}%"></span></span></summary>
+            <div class="tcat-in compact">${body(g)}</div>
+          </details>`).join('')}</div>`;
+  // אריחי קטגוריות → לחיצה פותחת רק את הקטגוריה
+  return `<div class="tcat-tiles"${open ? ' hidden' : ''}>${groups.map(g => `<button type="button" class="tcat-tile" style="--c:${g.c.color}" onclick="catShow('${g.c.id}')">
+            <span class="tt-i">${g.c.icon}</span><span class="tt-nm">${g.c.name}</span><span class="tt-n">${cnt(g)} נושאים${g.tools.length ? ` · ${g.tools.length} כלי המחשה` : ''}</span>
+            <span class="mbar"><span style="width:${avg(g)}%"></span></span></button>`).join('')}</div>
+          ${groups.map(g => `<section class="tcat tcat-one" data-cat="${g.c.id}" style="--c:${g.c.color}"${g.c.id === open ? '' : ' hidden'}>
+            <div class="tcat-top"><button type="button" class="secondary tcat-back" onclick="catShow('')">→ כל הקטגוריות</button></div>
             <h3 class="tcat-h"><span class="tcat-i">${g.c.icon}</span>${g.c.name}</h3>
-            <div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>
-            ${g.tools.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${g.tools.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : ''}
-          </section>`).join('');
+            ${body(g)}
+          </section>`).join('')}`;
 }
-const toolRow = () => TOOL_CARDS.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${TOOL_CARDS.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
+const CATVIEW = new URLSearchParams(location.search).get('catview') === 'b' ? 'b' : 'a';
+function catShow(id) {
+  try { id ? sessionStorage.setItem('math-cat', id) : sessionStorage.removeItem('math-cat'); } catch (e) {}
+  const tiles = document.querySelector('.tcat-tiles');
+  if (tiles) tiles.hidden = !!id;
+  document.querySelectorAll('.tcat-one').forEach(s => { s.hidden = s.dataset.cat !== id; });
+  const tgt = id ? document.querySelector(`.tcat-one[data-cat="${id}"]`) : tiles;
+  if (tgt) { const r = tgt.getBoundingClientRect(); if (r.top < 0 || r.top > innerHeight * 0.6) tgt.scrollIntoView({ block: 'start' }); }
+}
+function catToggle(d) {
+  if (d.open) {
+    document.querySelectorAll('.tcat-acc[open]').forEach(o => { if (o !== d) o.open = false; });
+    try { sessionStorage.setItem('math-cat', d.dataset.cat); } catch (e) {}
+    const r = d.getBoundingClientRect(); if (r.top < 0) d.scrollIntoView({ block: 'start' });
+  } else { try { if (sessionStorage.getItem('math-cat') === d.dataset.cat) sessionStorage.removeItem('math-cat'); } catch (e) {} }
+}const toolRow = () => TOOL_CARDS.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${TOOL_CARDS.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
 function topicHome(id) {
   const t = TOPIC[id];
   if (!t) return home();
