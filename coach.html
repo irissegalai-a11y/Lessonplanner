@@ -41,6 +41,7 @@
   button, .btn { font: inherit; font-weight: 700; font-size: 1rem; padding: 10px 20px; min-height: 46px; border: 1px solid transparent; border-radius: 12px; background: var(--brand); color: #fff; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.15s; }
   button:hover { background: var(--brand-dark); }
   button:disabled { opacity: 0.45; cursor: default; }
+  button.speaking { background: var(--hint-bg) !important; color: var(--ink) !important; font-weight: 700; }
   button.sec, .btn.sec { background: #fff; color: var(--ink); border-color: var(--line); }
   button.sec:hover, .btn.sec:hover { background: var(--info-bg); }
   button.ghost { background: transparent; color: var(--ink); border-color: transparent; }
@@ -449,7 +450,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.14</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.15</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="coach/visuals.js"></script>
@@ -511,7 +512,32 @@
     c.querySelectorAll('button, input, svg, .nosay, .pills, .tview').forEach(x => x.remove());
     return c.textContent.replace(/\s+/g, ' ').trim();
   }
-  function speak(el) {
+  // הקראה: לחיצה שנייה על אותו כפתור עוצרת. ההקראה נעצרת גם במעבר מסך/שאלה וביציאה מהדף.
+  let speakingBtn = null, speakTimer = 0;
+  const SPK_ON = '⏹ עצור הקראה';
+  function setSpeakBtn(btn) {
+    if (speakingBtn) { speakingBtn.textContent = speakingBtn.dataset.lbl; speakingBtn.classList.remove('speaking'); speakingBtn.setAttribute('aria-pressed', 'false'); }
+    speakingBtn = btn || null;
+    if (speakingBtn) { if (!speakingBtn.dataset.lbl) speakingBtn.dataset.lbl = speakingBtn.textContent; speakingBtn.textContent = SPK_ON; speakingBtn.classList.add('speaking'); speakingBtn.setAttribute('aria-pressed', 'true'); }
+  }
+  function stopSpeak() {
+    clearTimeout(speakTimer);
+    if (canSpeak && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel();
+    setSpeakBtn(null);
+  }
+  // כרום במחשב נוטה להיעצר באמצע טקסט ארוך – מקריאים במשפטים קצרים
+  function chunks(t) {
+    const out = []; let cur = '';
+    (t.match(/[^.!?:;\n]+[.!?:;]*/g) || [t]).forEach(p => {
+      p = p.trim(); if (!p) return;
+      if ((cur + ' ' + p).length > 180 && cur) { out.push(cur); cur = p; } else cur = cur ? cur + ' ' + p : p;
+    });
+    if (cur) out.push(cur);
+    return out;
+  }
+  function speak(el, btn) {
+    if (btn && speakingBtn === btn) { stopSpeak(); return; }
+    stopSpeak();
     loadVoices();
     if (!canSpeak || !heVoice) {
       document.body.classList.add('big');
@@ -519,10 +545,26 @@
       log('noVoice');
       return;
     }
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(textOf(el));
-    u.voice = heVoice; u.lang = heVoice.lang; u.rate = 0.9;
-    speechSynthesis.speak(u);
+    if (speechSynthesis.paused) speechSynthesis.resume();
+    const parts = chunks(textOf(el));
+    if (!parts.length) return;
+    setSpeakBtn(btn);
+    parts.forEach((txt, i) => {
+      const u = new SpeechSynthesisUtterance(txt);
+      u.voice = heVoice; u.lang = heVoice.lang; u.rate = 0.9;
+      if (i === parts.length - 1) u.onend = () => { if (speakingBtn === btn) setSpeakBtn(null); };
+      u.onerror = () => { if (speakingBtn === btn) setSpeakBtn(null); };
+      speechSynthesis.speak(u);
+    });
+    // גיבוי: אם הדפדפן לא דיווח על סיום – מחזירים את הכפתור כשההקראה כבר לא פעילה
+    const watch = () => { speakTimer = setTimeout(() => { if (speakingBtn !== btn) return; if (speechSynthesis.speaking || speechSynthesis.pending) watch(); else setSpeakBtn(null); }, 1000); };
+    watch();
+  }
+  if (canSpeak) {
+    speechSynthesis.cancel(); // הקראה שנשארה מטעינה קודמת של הדף
+    new MutationObserver(() => stopSpeak()).observe(main, { childList: true }); // מסך/שאלה חדשים
+    window.addEventListener('pagehide', stopSpeak);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopSpeak(); });
   }
 
   /* ---------- חלונות ---------- */
@@ -809,7 +851,7 @@
     if (!item) return diagDone();
     const n = st.diag.asked.length + 1;
     main.innerHTML = `<div class="card">${tview(`שאלה ${esc(item.id)} · מיומנות ${item.skill} · תשובה: ${R(ansText(item))} <span class="tnav"><button class="ghost small" id="tSkip">⏭ לדלג לתוכנית הקורס</button></span>`)}<div class="row" style="justify-content:space-between;margin-top:0"><span class="muted">שאלה ${n}</span><button class="ghost small" id="rd">🔊 הקרא לי</button></div><div id="qbox"></div></div>`;
-    $('rd').onclick = () => speak($('qbox'));
+    $('rd').onclick = e => speak($('qbox'), e.currentTarget);
     if (T) $('tSkip').onclick = tSkipDiag;
     askItem($('qbox'), item, 'diag', res => {
       E.diagAnswer(st.diag, item, res);
@@ -1254,7 +1296,7 @@
     layout(false);
     const item = items[j];
     main.innerHTML = `<div class="card">${tview(`תשובה: ${R(ansText(item))} · שיעור ${lessonNo(item.u)}`)}<div class="row" style="justify-content:space-between;margin-top:0"><span class="muted">${EXAM_IC[x.id]} ${EXAM_NAME[x.id]} · שאלה ${j + 1} מתוך ${items.length}</span><button class="ghost small" id="rd">🔊 הקרא לי</button></div><div id="qbox"></div></div>`;
-    $('rd').onclick = () => speak($('qbox'));
+    $('rd').onclick = e => speak($('qbox'), e.currentTarget);
     askItem($('qbox'), item, 'exam', rec => { x.res.push(!!rec.correct && !rec.skip); save(); setTimeout(examQ, 300); });
   }
   function examDone() {
@@ -2020,7 +2062,7 @@
     } else if (h === 'hint') {
       if (!(cur && cur.hint && cur.hint())) say('כרגע אין שאלה פתוחה. אם משהו לא ברור, לחצו "לא הבנתי".');
       else say('הוספתי רמז ליד השאלה. 💡');
-    } else if (h === 'read') speak($('ucard') || main);
+    } else if (h === 'read') speak($('ucard') || main, b);
     else if (h === 'teacher') teacherCard(false);
   });
   function lost(k) {
