@@ -356,6 +356,13 @@ html.embed body { padding-top: 0; }
   .fig .part2 { fill: rgba(224, 112, 58, 0.4); stroke: #e0703a; stroke-width: 2; }
   .fig .hidden { display: none; }
   .ftable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+  .tp-next { margin-top: 8px; font-size: .95em; }
+  .tp-next button { margin-inline-start: 6px; padding: 4px 10px; }
+  .pgrp { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin: 8px 0 4px; }
+  .pgrp span { min-width: 38px; padding: 6px 4px; border: 2px solid #c0392b; border-radius: 6px; text-align: center; font-weight: 700; background: #fff; color: #222; }
+  .pgrp span.on { background: #f5b7b1; }
+  .pgrp-cap { text-align: center; font-size: .9em; margin: 0 0 8px; }
+  .enr { display: inline-block; font-size: .8em; font-weight: 700; background: #fff3c4; color: #7a5b00; border: 1px solid #e0b100; border-radius: 10px; padding: 1px 8px; margin-inline-end: 6px; }
   .ftable th, .ftable td { border: 1px solid var(--line); padding: 8px; text-align: center; }
   .ftable th { background: #eef7f1; }
   ol.recap.order { list-style: decimal; padding-right: 26px; }
@@ -2272,7 +2279,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצו</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -4257,6 +4264,7 @@ const LEVEL_DESC5 = {
   dec: ['שבר ↔ עשרוני, ערך הספרה, כפל ב-10 ו-100', 'השוואה, ישר מספרים, חיבור וחיסור', 'סדרות, יחידות מידה, פירוק עשרוני'],
   geo: ['מלבן וריבוע, זוויות במשולש', 'מקבילית ומשולש, משולש ישר-זווית', 'מצולעים מורכבים, משולש שווה-שוקיים'],
   data: ['קריאת דיאגרמה', 'הפרשים וסכום', 'ממוצע ואיבר חסר'],
+  pct: ['מה זה אחוז – ריבוע 100 המשבצות', 'אחוז ↔ שבר עם מכנה 100 ↔ עשרוני', 'משמעות 50%, 25%, 10% – חצי, רבע, עשירית'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 
@@ -5497,6 +5505,10 @@ const LEVEL_DESC2 = {
    אחוזים (כיתה ו')
    ========================================================= */
 const P = x => M(`${fmt(x)}%`);
+// אחוז מכמות / מהחלק לשלם – השלם מחולק לקבוצות שוות (כל קבוצה = 100%/parts), mark קבוצות מסומנות
+function pctGroups(parts, val, mark, cap) {
+  return `<div class="pgrp" dir="rtl">${Array.from({ length: parts }, (_, i) => `<span class="${i < mark ? 'on' : ''}">${val == null ? '?' : fmt(val)}</span>`).join('')}</div>${cap ? `<p class="pgrp-cap">${cap}</p>` : ''}`;
+}
 function pctGridSVG(k, size = 150) {
   const c = size / 10;
   let g = '';
@@ -5511,7 +5523,7 @@ function genPctGrid() {
   const k = R(3, 97);
   return {
     type: 'num', unit: '%', text: 'הריבוע מחולק ל-100 משבצות שוות. איזה אחוז מהריבוע <b>צבוע</b>?', fig: `<div class="center">${pctGridSVG(k)}</div>`, ans: k,
-    traps: [{ v: 100 - k, m: 'ספרתם את המשבצות הלבנות. שואלים על החלק <b>הצבוע</b>.' }],
+    traps: [{ v: 100 - k, m: 'ספרתם את המשבצות הלבנות. שואלים על החלק <b>הצבוע</b>.' }].filter(t => t.v !== k),
     hint: 'אחוז = כמה מתוך 100. ספרו שורות שלמות (כל שורה = 10 משבצות) ועוד המשבצות הבודדות.',
     exp: `צבועות ${k} משבצות מתוך 100, כלומר ${P(k)}.`
   };
@@ -5593,7 +5605,7 @@ function genPctDiscount() {
   return {
     type: 'num', unit: '₪', text: `${item} עולה ${price} ₪. יש הנחה של ${P(p)}.<br>${askNew ? 'כמה צריך לשלם אחרי ההנחה?' : 'בכמה שקלים ההנחה?'}`, ans: askNew ? price - off : off,
     traps: askNew ? [{ v: off, m: `זה גובה ההנחה. כמה צריך <b>לשלם</b>? ${price} פחות ההנחה.` }, { v: price - p, m: `הורדתם ${p} שקלים. ההנחה היא ${p}% מהמחיר, לא ${p} ₪.` }].filter(t => t.v !== price - off)
-      : [{ v: price - off, m: 'זה המחיר אחרי ההנחה. שואלים מה גובה ההנחה עצמה.' }],
+      : [{ v: price - off, m: 'זה המחיר אחרי ההנחה. שואלים מה גובה ההנחה עצמה.' }].filter(t => t.v !== off),
     steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: off }].concat(askNew ? [{ p: M(`${price} - ${off} =`), a: price - off }] : []),
     hint: `קודם חשבו כמה שקלים הם ${p}% מ-${price}.`,
     exp: `ההנחה: ${M(`${price} × ${p} : 100 = ${off}`)} ₪.${askNew ? ` משלמים: ${M(`${price} - ${off} = ${price - off}`)} ₪.` : ''}`
@@ -5620,15 +5632,35 @@ const PCTW_CTX = [
   { all: 'כרטיסים להופעה', grp: 'להופעה', who: 'כרטיסים', a: 'כבר נמכרו', b: 'עוד לא נמכרו' },
   { all: 'שתילים בגינה', grp: 'בגינה', who: 'שתילים', a: 'פרחו', b: 'עוד לא פרחו' }
 ];
-const PCTW_ITEM = ['אופניים', 'מעיל', 'משחק קופסה', 'זוג נעליים', 'תיק גב', 'אוזניות'];
+const PCTW_ITEM = [['זוג אופניים', 'זוג האופניים'], ['מעיל', 'המעיל'], ['משחק קופסה', 'משחק הקופסה'], ['זוג נעליים', 'זוג הנעליים'], ['תיק גב', 'תיק הגב'], ['זוג אוזניות', 'זוג האוזניות']];
 function pctWQ(o) { return Object.assign({ type: 'num', word: true, learn: { lesson: 'pct', card: o.card != null ? o.card : 7 } }, o); }
-function genPctWord(lv = 1) {
+function genPctWord(lv = 1, only) {
   const c = pick(PCTW_CTX);
-  const kinds = lv === 1 ? ['of', 'what100', 'rest', 'fracTo'] : lv === 2 ? ['of2', 'what', 'disc', 'restN', 'decTo', 'cmp'] : ['whole', 'disc2', 'raise', 'cmp3', 'restWhole', 'whatBig'];
-  const k = pick(kinds);
+  const kinds = lv === 1 ? ['of', 'what100', 'rest', 'fracTo'] : lv === 2 ? ['of2', 'what', 'disc', 'restN', 'decTo', 'cmp'] : ['whole', 'disc2', 'raise', 'cmp3', 'restWhole', 'whatBig', 'ofDec', 'mix3'];
+  const k = only || pick(kinds);
+  if (k === 'ofDec') { // רמה 3: תשובה עשרונית – רק בכמות רציפה (ליטר / ק"ג / ק"מ)
+    const t = pick([['במיכל יש N ליטר מים. P% מהמים שימשו להשקיה.', 'כמה ליטר שימשו להשקיה?', 'ליטר'], ['בשק יש N ק"ג קמח. P% מהקמח נוצל לאפייה.', 'כמה ק"ג קמח נוצלו?', 'ק"ג'], ['אורך מסלול הטיול N ק"מ. עד ההפסקה עברנו P% מהמסלול.', 'כמה ק"מ עברנו עד ההפסקה?', 'ק"מ']]);
+    const p = pick([5, 15, 25, 35, 45]), N = R(2, 24) * 2, ans = N * p / 100;
+    if (ans % 1 === 0 || Math.round(ans * 10) !== ans * 10) return genPctWord(lv, only);
+    return pctWQ({ unit: t[2], text: `${t[0].replace('N', N).replace('P%', P(p))}<br>${t[1]}`, ans,
+      hint: `${p}% = ${M(F(p, 100))}: כופלים ב-${p} ומחלקים ב-100. התשובה יכולה להיות מספר עשרוני.`,
+      exp: `${M(`${N} × ${p} : 100 = ${fmt(N * p)} : 100 = ${fmt(ans)}`)} ${t[2]}.`,
+      steps: [{ p: `${M(`${N} × ${p} =`)}`, a: N * p }, { p: `${M(`${N * p} : 100 =`)}`, a: ans }],
+      traps: [{ v: N * p, m: 'שכחתם לחלק ב-100.' }, { v: N - ans, m: 'זה מה שנשאר. שואלים על החלק עצמו.' }, { v: Math.round(ans), m: `עיגלתם. כאן התשובה המדויקת היא מספר עשרוני: ${M(fmt(ans))}.` }].filter(q => q.v !== ans) });
+  }
+  if (k === 'mix3') { // רמה 3: שבר, עשרוני ואחוז באותו סיפור
+    const [fn, fd] = pick([[1, 4], [1, 5], [1, 2], [3, 10], [2, 5], [1, 10]]), pa = fn * 100 / fd, dv = pick([0.3, 0.2, 0.15, 0.35, 0.25, 0.4, 0.05]), pb = Math.round(dv * 100), ans = 100 - pa - pb;
+    if (ans < 5) return genPctWord(lv, only);
+    const t = pick([['מהתלמידים בשכבה', 'בחוג ספורט', 'בחוג מוזיקה', 'בחוג אומנות'], ['מהשטח בגינה', 'שתולים ירקות', 'שתולים פרחים', 'דשא'], ['מהספרים בספרייה', 'ספרי הרפתקאות', 'ספרי מדע', 'ספרי שירה']]);
+    return pctWQ({ unit: '%', card: 6, text: `${M(F(fn, fd))} ${t[0]} ${t[1]}, ${M(fmt(dv))} ${t[0]} ${t[2]}, והשאר ${t[3]}.<br>איזה אחוז ${t[0]} ${t[3]}?`, ans,
+      hint: 'מעבירים את השבר ואת העשרוני לאחוזים, ואז משלימים ל-100%.',
+      exp: `${M(`${F(fn, fd)} = ${F(pa, 100)}`)} = ${P(pa)} · ${M(fmt(dv))} = ${P(pb)} · ${M(`100 - ${pa} - ${pb} = ${ans}`)}, כלומר ${P(ans)}.`,
+      steps: [{ p: `${M(F(fn, fd))} = כמה אחוזים?`, a: pa }, { p: `${M(fmt(dv))} = כמה אחוזים?`, a: pb }, { p: 'השאר (עד 100%):', a: ans }],
+      traps: [{ v: pa + pb, m: `זה האחוז של ${t[1]} ושל ${t[2]} יחד. שואלים על השאר.` }, { v: 100 - pa, m: `הורדתם רק את ${t[1]}. גם ${t[2]} צריך להוריד.` }, { v: 100 - pa - Math.round(dv * 10), m: `${M(fmt(dv))} הם ${pb} מאיות = ${P(pb)}, לא ${P(Math.round(dv * 10))}.` }].filter(q => q.v !== ans && q.v > 0) });
+  }
   if (k === 'of') { // אחוז מוכר מכמות
     const [p, f] = pick([[50, 2], [25, 4], [10, 10]]), N = R(3, 30) * f * (p === 10 ? 1 : 1), ans = N * p / 100;
-    if (ans % 1) return genPctWord(lv);
+    if (ans % 1) return genPctWord(lv, only);
     return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.a}?`, ans,
       hint: p === 10 ? '10% = עשירית – מחלקים ב-10.' : `${p}% = ${p === 50 ? 'חצי' : 'רבע'}.`, exp: `${P(p)} = ${M(F(1, f))}, ולכן ${M(`${N} : ${f} = ${ans}`)}.`,
       steps: [{ p: `${P(p)} הם איזה חלק מהשלם? מחלקים את ${N} ב-`, a: f }, { p: M(`${N} : ${f} =`), a: ans }],
@@ -5637,7 +5669,7 @@ function genPctWord(lv = 1) {
   if (k === 'what100') { // מתוך 100 – ישר לאחוז
     const N = 100, X = R(11, 89);
     return pctWQ({ unit: '%', card: 0, text: `${c.grp} יש 100 ${c.who}, ו-${X} מהם ${c.a}.<br>איזה אחוז מה${c.who} ${c.a}?`, ans: X,
-      hint: 'אחוז = מתוך 100.', exp: `${X} מתוך 100 = ${M(F(X, 100))} = ${P(X)}.`, traps: [{ v: N - X, m: `זה האחוז של אלה ש${c.b}.` }] });
+      hint: 'אחוז = מתוך 100.', exp: `${X} מתוך 100 = ${M(F(X, 100))} = ${P(X)}.`, traps: [{ v: N - X, m: `זה האחוז של אלה ש${c.b}.` }].filter(t => t.v !== X) });
   }
   if (k === 'rest') { // משלים ל-100%
     const p = pick([10, 20, 25, 30, 40, 45, 60, 65, 75, 80, 90]);
@@ -5653,7 +5685,7 @@ function genPctWord(lv = 1) {
   }
   if (k === 'of2') { // אחוז כלשהו מכמות
     const [p, mul] = pick([[20, 10], [30, 10], [75, 4], [5, 20], [15, 20], [40, 10], [60, 10]]), N = R(2, 20) * mul, ans = N * p / 100;
-    if (ans % 1) return genPctWord(lv);
+    if (ans % 1 || N === 100) return genPctWord(lv, only);
     return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.a}?`, ans,
       hint: p % 10 ? `${p}% = ${M(F(p, 100))}: כופלים ב-${p} ומחלקים ב-100.` : `קודם 10% (מחלקים ב-10), ואז כופלים ב-${p / 10}.`,
       exp: `${M(`${N} × ${p} : 100 = ${ans}`)}.`, steps: p % 10 ? undefined : [{ p: `10% מ-${N}: ${M(`${N} : 10 =`)}`, a: N / 10 }, { p: `${P(p)}: ${M(`${fmt(N / 10)} × ${p / 10} =`)}`, a: ans }],
@@ -5661,7 +5693,7 @@ function genPctWord(lv = 1) {
   }
   if (k === 'what') { // איזה אחוז – שבר → מכנה 100
     const [Y, st] = pick([[20, 1], [25, 1], [50, 1], [10, 1]]), X = R(1, Y / st - 1) * st, ans = X / Y * 100;
-    if (ans % 1) return genPctWord(lv);
+    if (ans % 1) return genPctWord(lv, only);
     return pctWQ({ unit: '%', card: 8, text: `${c.grp} יש ${Y} ${c.who}, ו-${X} מהם ${c.a}.<br>איזה אחוז מה${c.who} ${c.a}?`, ans,
       hint: `כותבים שבר: ${X} מתוך ${Y}, ומרחיבים (או מצמצמים) למכנה 100.`, exp: `${M(`${F(X, Y)} = ${F(ans, 100)}`)} = ${P(ans)}.`,
       steps: [{ p: `כתבו כשבר ${M(F(X, Y))} והעבירו למכנה 100. מה המונה?`, a: ans }],
@@ -5677,15 +5709,15 @@ function genPctWord(lv = 1) {
   }
   if (k === 'disc') { // מחיר אחרי הנחה
     const p = pick([10, 20, 25, 30, 50]), price = pick([40, 60, 80, 120, 150, 200, 240, 300, 360]), off = price * p / 100, it = pick(PCTW_ITEM);
-    if (off % 1) return genPctWord(lv);
-    return pctWQ({ unit: '₪', card: 9, text: `${it} עולה ${price} ₪. בסוף העונה יש הנחה של ${P(p)}.<br>כמה ישלמו על ה${it} אחרי ההנחה?`, ans: price - off,
+    if (off % 1) return genPctWord(lv, only);
+    return pctWQ({ unit: '₪', card: 9, text: `${it[0]} עולה ${price} ₪. בסוף העונה יש הנחה של ${P(p)}.<br>כמה ישלמו על ${it[1]} אחרי ההנחה?`, ans: price - off,
       hint: `קודם גובה ההנחה: ${p}% מ-${price}. אחר כך מורידים מהמחיר.`, exp: `ההנחה: ${M(`${price} × ${p} : 100 = ${off}`)} ₪. משלמים ${M(`${price} - ${off} = ${price - off}`)} ₪.`,
       steps: [{ p: `כמה שקלים הם ${P(p)} מ-${price}?`, a: off }, { p: M(`${price} - ${off} =`), a: price - off }],
       traps: [{ v: off, m: 'זה גובה ההנחה. כמה <b>משלמים</b>?' }, { v: price - p, m: `הורדתם ${p} ₪. ההנחה היא ${p}% מהמחיר.` }].filter(t => t.v !== price - off) });
   }
   if (k === 'restN') { // כמה לא – דרך המשלים
     const p = pick([10, 20, 25, 40, 60, 75, 80]), N = R(2, 12) * 20, ans = N * (100 - p) / 100;
-    if (ans % 1) return genPctWord(lv);
+    if (ans % 1) return genPctWord(lv, only);
     return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.b}?`, ans,
       hint: `איזה אחוז ${c.b}? (100% פחות ${p}%)`, exp: `${M(`100 - ${p} = ${100 - p}`)}%, ו-${P(100 - p)} מ-${N} = ${M(`${N} × ${100 - p} : 100 = ${ans}`)}.`,
       steps: [{ p: `איזה אחוז ${c.b}?`, a: 100 - p }, { p: `כמה הם ${P(100 - p)} מ-${N}?`, a: ans }],
@@ -5701,15 +5733,15 @@ function genPctWord(lv = 1) {
   if (k === 'cmp') { // השוואה בין ייצוגים בסיפור
     const opts = shuffle([[F(3, 4), 75], [F(2, 5), 40], [F(7, 10), 70], [F(1, 4), 25], [F(4, 5), 80], [F(1, 2), 50]]);
     const [fa, va] = opts[0]; let vb; do { vb = pick([45, 55, 65, 72, 78, 35, 85]); } while (vb === va);
-    const vd = pick([0.6, 0.68, 0.42, 0.82, 0.3]); if (Math.round(vd * 100) === va || Math.round(vd * 100) === vb) return genPctWord(lv);
+    const vd = pick([0.6, 0.68, 0.42, 0.82, 0.3]); if (Math.round(vd * 100) === va || Math.round(vd * 100) === vb) return genPctWord(lv, only);
     const L = [['נועה', M(fa), va], ['איתי', P(vb), vb], ['שירה', M(fmt(vd)), Math.round(vd * 100)]], best = L.reduce((m, x) => x[2] > m[2] ? x : m);
     return Object.assign(choiceQ({ word: true, learn: { lesson: 'pct', card: 6 }, text: `במבחן ענתה נועה נכון על ${L[0][1]} מהשאלות, איתי על ${L[1][1]}, ושירה על ${L[2][1]}.<br>מי ענה נכון על <b>החלק הגדול ביותר</b> של השאלות?`,
       hint: 'מעבירים את שלושתם לאחוזים.', exp: L.map(x => `${x[0]}: ${x[1]} = ${P(x[2])}`).join(' · ') + `. הכי הרבה: ${best[0]}.` }, best[0], L.filter(x => x !== best).map(x => x[0])), {});
   }
   if (k === 'whole') { // מהחלק לשלם
     const p = pick([10, 20, 25, 50, 5, 40]), whole = R(3, 25) * (p === 40 ? 5 : 100 / p), part = whole * p / 100;
-    if (part % 1) return genPctWord(lv);
-    return pctWQ({ card: 8, text: `${part} ${c.who} ${c.a}. הם ${P(p)} מכל ה${c.who} ${c.grp}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
+    if (part % 1) return genPctWord(lv, only);
+    return pctWQ({ card: 10, text: `${part} ${c.who} ${c.a}. הם ${P(p)} מכל ה${c.who} ${c.grp}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
       hint: p === 40 ? '40% הם 4 פעמים 10%. כמה הם 10%? ומשם ל-100%.' : `כמה פעמים ${p}% נכנס ב-100%?`,
       exp: p === 40 ? `10% → ${M(`${part} : 4 = ${part / 4}`)}, ולכן 100% → ${M(`${part / 4} × 10 = ${whole}`)}.` : `${P(p)} → ${part}, ולכן 100% → ${M(`${part} × ${100 / p} = ${whole}`)}.`,
       steps: p === 40 ? [{ p: `כמה הם 10%? ${M(`${part} : 4 =`)}`, a: part / 4 }, { p: `ו-100%: ${M(`${part / 4} × 10 =`)}`, a: whole }] : [{ p: `כמה פעמים ${P(p)} נכנס ב-100%?`, a: 100 / p }, { p: M(`${part} × ${100 / p} =`), a: whole }],
@@ -5717,7 +5749,7 @@ function genPctWord(lv = 1) {
   }
   if (k === 'disc2') { // שני שלבים: הנחה ועודף
     const p = pick([10, 20, 25, 50]), price = pick([80, 120, 160, 180, 240]), pay = price - price * p / 100, bill = pay <= 100 ? 100 : pay <= 200 ? 200 : 500, it = pick(PCTW_ITEM);
-    return pctWQ({ unit: '₪', card: 9, text: `${it} עולה ${price} ₪, ויש הנחה של ${P(p)}. דנה שילמה בשטר של ${bill} ₪.<br>כמה עודף קיבלה?`, ans: bill - pay,
+    return pctWQ({ unit: '₪', card: 9, text: `${it[0]} עולה ${price} ₪, ויש הנחה של ${P(p)}. דנה שילמה בשטר של ${bill} ₪.<br>כמה עודף קיבלה?`, ans: bill - pay,
       hint: 'שלושה שלבים: גובה ההנחה → המחיר אחרי ההנחה → העודף.', exp: `ההנחה ${M(`${price} × ${p} : 100 = ${price - pay}`)} ₪, משלמים ${pay} ₪, עודף ${M(`${bill} - ${pay} = ${bill - pay}`)} ₪.`,
       steps: [{ p: `גובה ההנחה (${P(p)} מ-${price}):`, a: price - pay }, { p: 'המחיר אחרי ההנחה:', a: pay }, { p: `העודף מ-${bill}:`, a: bill - pay }],
       traps: [{ v: pay, m: 'זה המחיר אחרי ההנחה. כמה עודף?' }, { v: bill - price, m: 'שכחתם את ההנחה.' }].filter(t => t.v !== bill - pay && t.v >= 0) });
@@ -5732,20 +5764,22 @@ function genPctWord(lv = 1) {
   if (k === 'cmp3') { // השוואת הנחות בשתי חנויות
     const price = pick([200, 240, 300, 400]), p = pick([20, 25, 30]), f = pick([[1, 5], [1, 4], [3, 10]]);
     const offA = price * p / 100, offB = price * f[0] / f[1];
-    if (offA === offB) return genPctWord(lv);
+    if (offA === offB) return genPctWord(lv, only);
     const better = offA > offB ? 'בחנות א' : 'בחנות ב';
     return Object.assign(choiceQ({ word: true, learn: { lesson: 'pct', card: 6 }, text: `אותו מעיל עולה ${price} ₪ בשתי חנויות.<br>בחנות א: הנחה של ${P(p)}. בחנות ב: הנחה של ${M(F(f[0], f[1]))} מהמחיר.<br>איפה משלמים <b>פחות</b>?`,
       hint: 'מעבירים את שתי ההנחות לאותו ייצוג (אחוזים), או מחשבים את ההנחה בשקלים.', exp: `חנות א: ${P(p)} = ${offA} ₪ הנחה. חנות ב: ${M(F(f[0], f[1]))} = ${P(f[0] * 100 / f[1])} = ${offB} ₪ הנחה. משלמים פחות ${better}.` }, better, [offA > offB ? 'בחנות ב' : 'בחנות א', 'אותו מחיר בשתיהן']), {});
   }
   // restWhole: 3 שלבים – אחוז המשלים ומהחלק לשלם
   const p = pick([20, 25, 40, 60, 75, 80]), whole = R(2, 12) * 20, rest = whole * (100 - p) / 100;
-  if (rest % 1) return genPctWord(lv);
-  return pctWQ({ card: 8, text: `${P(p)} מה${c.who} ${c.grp} ${c.a}, ו-${rest} ${c.who} ${c.b}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
-    hint: `${rest} ה${c.who} ש${c.b} הם ${100 - p}%. מכאן ל-100%.`, exp: `${P(100 - p)} → ${rest}. 1% → ${M(`${rest} : ${100 - p}`)}, ולכן 100% → ${whole}.`,
-    steps: [{ p: `איזה אחוז ${c.b}?`, a: 100 - p }, { p: `${P(100 - p)} הם ${rest}. כמה הם 100%?`, a: whole }],
+  if (rest % 1) return genPctWord(lv, only);
+  const q = 100 - p, g = gcd(q, 100), kk = q / g, u = rest / kk; // q% = kk קבוצות של g%
+  return pctWQ({ card: 10, text: `${P(p)} מה${c.who} ${c.grp} ${c.a}, ו-${rest} ${c.who} ${c.b}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
+    hint: `${rest} ה${c.who} ש${c.b} הם ${q}%. מכאן ל-100%.`,
+    exp: `${P(q)} → ${rest}. ${P(q)} הם ${kk} קבוצות של ${P(g)}, ולכן ${P(g)} → ${M(`${rest} : ${kk} = ${u}`)}, ו-${P(100)} → ${M(`${u} × ${100 / g} = ${whole}`)}.`,
+    steps: [{ p: `איזה אחוז ${c.b}?`, a: q }, { p: `${P(q)} הם ${rest}. כמה הם ${P(g)}? ${M(`${rest} : ${kk} =`)}`, a: u }, { p: `ו-${P(100)}: ${M(`${u} × ${100 / g} =`)}`, a: whole }],
     traps: [{ v: rest * 100 / p, m: `${rest} הם אלה ש${c.b} – ${100 - p}%, לא ${p}%.` }, { v: rest + p, m: 'חיברתם את האחוז למספר. מחפשים את השלם (100%).' }].filter(t => t.v !== whole && t.v % 1 === 0) });
 }
-[[genPctGrid, 0], [genPctConvert, 5], [genPctOf, 7], [genPctDiscount, 9], [genPctWhat, 8], [genPctWhole, 8]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
+[[genPctGrid, 0], [genPctConvert, 5], [genPctOf, 7], [genPctDiscount, 9], [genPctWhat, 8], [genPctWhole, 10]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
 
 /* =========================================================
    כיתה א'
@@ -6265,7 +6299,7 @@ const TOPICS6 = [
   }
   ,{
     id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b',
-    desc: 'אחוז כחלק מ-100, אחוז ↔ שבר ועשרוני, אחוז מכמות, הנחה',
+    desc: 'אחוז כחלק מ-100, אחוז ↔ שבר ועשרוני, אחוז מכמות, איזה אחוז זה, הנחה, מהחלק לשלם',
     levels: {
       1: [genPctGrid, genPctConvert, () => genPctOf(1)],
       2: [() => genPctOf(2), genPctConvert, genPctWhat, genPctDiscount],
@@ -9862,7 +9896,7 @@ function genPctSwap() {
 // אחוזים – שתי הנחות ברצף
 function genPctTwice() {
   const [p, a] = pick([[200, 10], [400, 10], [500, 20], [100, 10], [800, 50], [400, 50], [250, 20], [1000, 10]]), one = p * (100 - a) / 100, two = one * (100 - a) / 100;
-  return { type: 'num', unit: '₪', text: `מחיר המשחק ${p} ₪. בשבוע הראשון יש הנחה של ${a}%, ובשבוע השני – עוד ${a}% הנחה <b>מהמחיר החדש</b>. כמה עולה המשחק בשבוע השני?`, ans: two, hint: 'ההנחה השנייה מחושבת מהמחיר אחרי ההנחה הראשונה.',
+  return { type: 'num', unit: '₪', enrich: true, text: `<span class="enr">⭐ העשרה</span>מחיר המשחק ${p} ₪. בשבוע הראשון יש הנחה של ${a}%, ובשבוע השני – עוד ${a}% הנחה <b>מהמחיר החדש</b>. כמה עולה המשחק בשבוע השני?`, ans: two, hint: 'ההנחה השנייה מחושבת מהמחיר אחרי ההנחה הראשונה.',
     traps: [{ v: p * (100 - 2 * a) / 100, m: `חיברתם את ההנחות ל-${2 * a}%. ההנחה השנייה היא מהמחיר החדש (${fmt(one)} ₪) – היא קטנה יותר.` }, { v: one, m: `זה המחיר אחרי הנחה אחת. יש עוד הנחה.` }, { v: p - 2 * a, m: `הורדתם ${a} ₪ פעמיים. ההנחה היא באחוזים.` }],
     exp: `${M(`${p} − ${a}% = ${fmt(one)}`)}, ואז ${M(`${fmt(one)} − ${a}% = ${fmt(two)}`)}.` };
 }
@@ -9931,7 +9965,7 @@ function g6Pools() {
     dec: [[genDecimalPlace, genFracToDec, genDecToFrac], [genDecCompare, genDecAddSub, genNumberLine, genSequence], [genDecEst, genFracPlusDec, genDecErr]],
     geo: [[genRect, () => genSquare(1), genShapeProps], [genRectReverse, () => genSquare(2), genTrianglePerim, genParallelogram, genTriangleArea], [genGeoCut, genGeoScale, genGeoArea, genLShape]],
     data: [[() => genBarRead(0), () => genBarRead(1)], [() => genBarRead(2), () => genBarRead(3), () => genMeanList(1), () => genBakery()], [() => genBarRead(4), () => genMeanList(2), () => genMeanChange(), genMeanAdd, genMeanTarget]],
-    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctSwap, genPctWhole, genPctTwice]],
+    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctWhole, () => genPctWord(3, 'whatBig'), () => genPctWord(3, 'restWhole'), genPctTwice]],
     mul22: [[() => genMul22('area'), () => genMul22('plain')], [() => genMul22('plain'), () => genMul22('word')], [genMul22Est, genMul22Cmp]],
     seq: [[() => genSeqAdd(1)], [() => genSeqAdd(2), () => genSeqMul(1), () => genSeqMul(2)], [genSeqTerm, genSeqMember]],
     mulfr: [[() => genMulWhFr(1), genFracTimesWhole], [() => genMulWhFr(2), genFracTimesWhole], [genMulFrReason, genMulWhFr3, genFracTimesWhole]],
@@ -10135,6 +10169,20 @@ if (GRADE === 6) TOPICS.push({
   desc: 'סיפורים עם אחוזים, שברים ועשרוניים: כמה זה, איזה אחוז זה, משלים ל-100%, הנחה והתייקרות, מהחלק לשלם, מי יותר',
   levels: { 1: [() => genPctWord(1)], 2: [() => genPctWord(2)], 3: [() => genPctWord(3)] },
   tips: ['קוראים את כל השאלה: מה השלם (100%)? מה החלק? מה שואלים?', 'שבר או עשרוני בסיפור? מעבירים לאחוזים: מרחיבים למכנה 100 / קוראים במאיות.', 'הנחה – מורידים מהמחיר. התייקרות – מוסיפים. בודקים: האם התשובה הגיונית?']
+});
+// כיתה ה' (21.11, לפי תכנית הלימודים עמ' 101): רק היכרות – אחוז = שם אחר למאית, ומשמעות 50%, 25%, 10%. בלי חישובי אחוזים של כיתה ו'
+function genPctMean5() {
+  const [p, w, f] = pick([[50, 'חצי', 2], [25, 'רבע', 4], [10, 'עשירית', 10]]), N = R(2, 12) * f * (f === 10 ? 1 : 2), ans = N / f;
+  const t = pick([['בשכבה', 'תלמידים', 'הם בנות'], ['בקופסה', 'עפרונות', 'הם אדומים'], ['בגינה', 'עצים', 'הם עצי פרי']]);
+  return { type: 'num', learn: { lesson: 'pct', card: 4 }, text: `${t[0]} ${N} ${t[1]}. ${P(p)} מהם ${t[2]}.<br>${P(p)} זה ${w}. כמה ${t[1]} ${t[2]}?`, ans,
+    hint: `${p}% = ${w}: מחלקים את ${N} ל-${f} חלקים שווים.`, exp: `${P(p)} = ${M(F(1, f))}, ולכן ${M(`${N} : ${f} = ${ans}`)}.`,
+    traps: [{ v: N - ans, m: 'זה מה שנשאר. שואלים על החלק עצמו.' }, { v: N * p, m: `${p}% הוא ${w}, לא כפל ב-${p}.` }, { v: p, m: `${p} הוא האחוז. כמה ${t[1]} זה?` }].filter(q => q.v !== ans) };
+}
+if (GRADE === 5) TOPICS.push({
+  id: 'pct', name: 'אחוזים – היכרות', icon: '💯', color: '#c0392b',
+  desc: 'אחוז = שם אחר למאית; אחוז, שבר עם מכנה 100 ועשרוני; 50%, 25%, 10%',
+  levels: { 1: [genPctGrid], 2: [genPctConvert], 3: [genPctMean5] },
+  tips: ['אחוז = מתוך 100: 35% = 35 מתוך 100 = 0.35.', '50% = חצי · 25% = רבע · 10% = עשירית.', '7% = 0.07 (7 מאיות), לא 0.7.']
 });
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
 if (GRADE === 6) g6Pools();
@@ -12179,7 +12227,7 @@ Object.assign(LESSONS, {
 Object.assign(LESSONS, {
   pct: {
     id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b', topic: 'pct',
-    desc: 'מה זה אחוז, אחוז = שבר עם מכנה 100 = מאיות, שלושה שמות לאותו חלק, אחוזים מוכרים, מעברים והשוואה, אחוז מכמות, איזה אחוז זה, הנחה',
+    desc: 'מה זה אחוז, אחוז = שבר עם מכנה 100 = מאיות, שלושה שמות לאותו חלק, אחוזים מוכרים, מעברים והשוואה, אחוז מכמות, איזה אחוז זה, הנחה, מהחלק לשלם',
     practice: [genPctGrid, genPctConvert, genPctConvert, () => genPctOf(1), () => genPctOf(2), genPctWhat, genPctDiscount, genPctWhole],
     cards: [
       {
@@ -12227,7 +12275,9 @@ Object.assign(LESSONS, {
       },
       {
         title: 'אחוזים מוכרים',
-        html: `<p>כמה אחוזים כדאי להכיר בעל-פה. למה ${M(F(1, 4))} = ${P(25)}? מרחיבים למכנה 100:</p>
+        html: `<p>כמה אחוזים כדאי להכיר בעל-פה. למה ${M(F(1, 4))} = ${P(25)}? ברבע מהריבוע יש 25 משבצות:</p>
+          <div class="center">${pctGridSVG(25)}</div>
+          <p>ובחשבון – מרחיבים למכנה 100:</p>
           <div class="explain center">${M(`${F(1, 4)} = ${F('1 × 25', '4 × 25')} = ${F(25, 100)}`)} = ${P(25)}</div>
           <table class="ftable">
             <tr><td><b>אחוז</b></td><td><b>שבר</b></td><td><b>עשרוני</b></td></tr>
@@ -12242,7 +12292,9 @@ Object.assign(LESSONS, {
       },
       {
         title: 'משבר ומעשרוני – לאחוז',
-        html: `<ol class="lsteps">
+        html: `<p>${M(F(3, 5))} מהריבוע: כל חמישית היא 20 משבצות, ושלוש חמישיות הן 60 משבצות = ${P(60)}.</p>
+          <div class="center">${pctGridSVG(60)}</div>
+          <ol class="lsteps">
             <li><b>משבר:</b> מרחיבים (או מצמצמים) למכנה 100. המונה הוא האחוז.<br>${M(`${F(3, 5)} = ${F(60, 100)}`)} = ${P(60)} · ${M(`${F(18, 200)} = ${F(9, 100)}`)} = ${P(9)}</li>
             <li><b>מעשרוני:</b> כותבים במאיות (שתי ספרות אחרי הנקודה). מספר המאיות הוא האחוז.<br>${M('0.4 = 0.40')} = 40 מאיות = ${P(40)} · ${M('0.06')} = 6 מאיות = ${P(6)}</li>
           </ol>
@@ -12250,7 +12302,7 @@ Object.assign(LESSONS, {
         try: { type: 'num', q: `${M('0.3')} = כמה אחוזים?`, ans: 30, hint: 'כתבו במאיות: 0.3 = 0.30. כמה מאיות?', exp: `${M('0.3 = 0.30')} = 30 מאיות = ${P(30)}`, traps: [{ v: 3, m: `${M('0.3')} הם 3 <b>עשיריות</b> = 30 מאיות. ${P(3)} = ${M('0.03')}.` }, { v: 0.3, m: 'זה המספר העשרוני. כמה אחוזים – כמה מאיות?' }] }
       },
       {
-        title: 'מה גדול יותר?',
+        title: 'מה גדול יותר?', grades: [6],
         html: `<p>איך משווים ${M('0.3')}, ${P(25)} ו-${M(F(1, 5))}? <b>מעבירים את כולם לאותו שם</b> – הכי נוח: אחוזים.</p>
           <ol class="lsteps"><li>${M('0.3 = 0.30')} = ${P(30)}</li><li>${P(25)}</li><li>${M(`${F(1, 5)} = ${F(20, 100)}`)} = ${P(20)}</li></ol>
           <div class="explain center">${P(30)} > ${P(25)} > ${P(20)} ← ${M('0.3')} הכי גדול</div>
@@ -12258,19 +12310,21 @@ Object.assign(LESSONS, {
         try: { type: 'choice', q: 'איזה מספר הוא <b>הגדול ביותר</b>?', choices: [M(F(3, 4)), M('0.7'), P(72), M('0.07')], ans: 0, hint: 'העבירו את כולם לאחוזים.', exp: `${M(F(3, 4))} = ${P(75)} · ${M('0.7')} = ${P(70)} · ${P(72)} · ${M('0.07')} = ${P(7)}. הגדול: ${M(F(3, 4))}.`, traps: [{ c: P(72), m: `72 נראה גדול, אבל ${M(F(3, 4))} = ${P(75)}.` }, { c: M('0.7'), m: `${M('0.7')} = ${P(70)} – פחות מ-${P(72)} ומ-${P(75)}.` }] }
       },
       {
-        title: 'אחוז מכמות',
-        html: `<p>מתחילים מאחוזים מוכרים, וממשיכים מהם:</p>
+        title: 'אחוז מכמות', grades: [6],
+        html: `<p>בבית הספר 240 תלמידים. מחלקים אותם ל-<b>10 קבוצות שוות</b>. כל קבוצה היא ${P(10)}, כלומר ${M('240 : 10 = 24')} תלמידים:</p>
+          ${pctGroups(10, 24, 3, `3 קבוצות צבועות הן ${P(30)}: ${M('24 × 3 = 72')} תלמידים`)}
+          <p>מתחילים מאחוזים מוכרים, וממשיכים מהם:</p>
           <ol class="lsteps">
-            <li>${P(50)} = חצי: ${P(50)} מ-${M('240')} = ${M('240 : 2 = 120')}</li>
-            <li>${P(10)} = עשירית – מחלקים ב-10: ${M('240 : 10 = 24')}</li>
-            <li>${P(30)} = שלוש פעמים ${P(10)}: ${M('24 × 3 = 72')}</li>
-            <li>${P(5)} = חצי מ-${P(10)}: ${M('24 : 2 = 12')}</li>
+            <li>${P(50)} הם חצי. חצי מ-240: ${M('240 : 2 = 120')}</li>
+            <li>${P(10)} הם עשירית – מחלקים ב-10: ${M('240 : 10 = 24')}</li>
+            <li>${P(30)} הם שלוש פעמים ${P(10)}: ${M('24 × 3 = 72')}</li>
+            <li>${P(5)} הם חצי מ-${P(10)}: ${M('24 : 2 = 12')}</li>
           </ol>
-          <div class="rule">💡 ובאופן כללי (כל אחוז): ${P(30)} = ${M(F(30, 100))}, ולכן ${M('240 × 30 : 100 = 72')}.</div>`,
+          <div class="rule">💡 ובאופן כללי, לכל אחוז: ${P(30)} הם ${M(F(30, 100))}. כופלים ב-30 ומחלקים ב-100: ${M('240 × 30 : 100 = 72')}</div>`,
         try: { type: 'num', q: `כמה הם ${P(20)} מ-${M('150')}?`, ans: 30, hint: '10% = 15. 20% = פעמיים.', exp: `${M('150 : 10 = 15')}, ${M('15 × 2 = 30')}`, traps: [{ v: 3000, m: 'שכחתם לחלק ב-100.' }, { v: 120, m: 'זה מה שנשאר אחרי שמורידים 20%.' }] }
       },
       {
-        title: 'איזה אחוז זה?',
+        title: 'איזה אחוז זה?', grades: [6],
         html: `<p>בכיתה 25 תלמידים, ו-15 מהם בנות. איזה אחוז הן הבנות?</p>
           <ol class="lsteps"><li>כותבים שבר – החלק מתוך השלם: ${M(F(15, 25))}</li><li>מרחיבים למכנה 100 (כפול 4): ${M(`${F(15, 25)} = ${F(60, 100)}`)}</li><li>${P(60)}</li></ol>
           <p>ומה אם השלם גדול מ-100? בשכבה 400 תלמידים, ו-36 מהם בנות. כאן <b>מצמצמים</b> למכנה 100:</p>
@@ -12279,14 +12333,27 @@ Object.assign(LESSONS, {
         try: { type: 'num', q: 'במבחן היו 20 שאלות, ונועה ענתה נכון על 17. איזה אחוז מהשאלות היא ענתה נכון?', ans: 85, hint: '17/20 – הרחיבו למכנה 100 (כפול 5).', exp: `${M(`${F(17, 20)} = ${F(85, 100)}`)} = ${P(85)}`, traps: [{ v: 17, m: '17 זה מספר השאלות. כמה זה מתוך 100?' }] }
       },
       {
-        title: 'הנחה',
+        title: 'הנחה', grades: [6],
         html: `<p>מחיר משחק <b>80 ₪</b>, והנחה של <b>${P(25)}</b>. כמה משלמים?</p>
           <ol class="lsteps"><li>גובה ההנחה: ${P(25)} = רבע: ${M('80 : 4 = 20')} ₪</li><li>המחיר אחרי ההנחה: ${M('80 - 20 = 60')} ₪</li></ol>
           <div class="warn">⚠️ הנחה של 25% היא לא 25 ₪! מחשבים 25% <b>מהמחיר</b>.</div>`,
         try: { type: 'num', q: `חולצה עולה 120 ₪, והנחה של ${P(10)}. כמה משלמים אחרי ההנחה?`, ans: 108, hint: '10% מ-120 = 12.', exp: `${M('120 - 12 = 108')} ₪`, traps: [{ v: 12, m: 'זו ההנחה. כמה <b>משלמים</b>?' }, { v: 110, m: 'הורדתם 10 ₪. ההנחה היא 10% מהמחיר = 12 ₪.' }] }
       },
       {
-        title: 'כללים לזכור 📌',
+        title: 'מהחלק לשלם', grades: [6],
+        html: `<p>12 תלמידים יצאו לטיול, והם ${P(25)} מהשכבה. כמה תלמידים בשכבה?</p>
+          <p>${P(25)} הם רבע. אם רבע אחד הוא 12, השלם הוא <b>4 רבעים</b>:</p>
+          ${pctGroups(4, 12, 1, `רבע אחד הוא 12. כל השכבה היא 4 רבעים: ${M('12 × 4 = 48')}`)}
+          <p>ואם ${P(10)} הם 7? ב-${P(100)} יש 10 קבוצות של ${P(10)}:</p>
+          ${pctGroups(10, 7, 1, `השלם הוא 10 קבוצות: ${M('7 × 10 = 70')}`)}
+          <p>ואם ${P(40)} הם 28? ${P(40)} הם 4 קבוצות של ${P(10)}. בקבוצה אחת: ${M('28 : 4 = 7')}. בשלם 10 קבוצות: ${M('7 × 10 = 70')}</p>
+          <div class="warn">⚠️ לא מחשבים ${P(25)} <b>מ</b>-12! 12 הוא החלק. מחפשים את השלם – והוא <b>גדול</b> מהחלק.</div>
+          <div class="rule">💡 מהחלק לשלם: כמה פעמים האחוז נכנס ב-${P(100)}? כופלים את החלק באותו מספר. לא נכנס בדיוק? עוברים קודם ל-${P(10)}.</div>`,
+        try: { type: 'num', q: `${P(20)} מהעצים בחורשה הם 9 עצים. כמה עצים יש בחורשה?`, ans: 45, hint: `כמה פעמים ${P(20)} נכנס ב-${P(100)}?`, exp: `${P(20)} נכנס ב-${P(100)} חמש פעמים: ${M('9 × 5 = 45')} עצים.`,
+          traps: [{ v: 1.8, m: `חישבתם ${P(20)} מ-9. אבל 9 הם החלק – מחפשים את כל העצים.` }, { v: 29, m: 'חיברתם 9 ו-20. ציירו 5 קבוצות של 20%: בכל אחת 9 עצים.' }, { v: 180, m: `כפלתם ב-20. ${P(20)} נכנס ב-${P(100)} רק 5 פעמים.` }, { v: 4.5, m: 'חילקתם. השלם גדול מהחלק – כופלים.' }] }
+      },
+      {
+        title: 'כללים לזכור 📌', grades: [6],
         html: `<ul class="recap">
           <li>💯 <b>אחוז</b> = מתוך 100. ${P(100)} = השלם.</li>
           <li>➗ <b>אחוז = שבר עם מכנה 100:</b> ${P(37)} = ${M(F(37, 100))}.</li>
@@ -12297,7 +12364,17 @@ Object.assign(LESSONS, {
           <li>🧮 <b>אחוז מכמות:</b> מתחילים מ-${P(50)} או ${P(10)}, וממשיכים מהם.</li>
           <li>❓ <b>איזה אחוז זה?</b> כותבים שבר (חלק מתוך שלם) ומרחיבים או מצמצמים למכנה 100.</li>
           <li>🏷️ <b>הנחה:</b> מחשבים את גובה ההנחה ומורידים מהמחיר.</li>
+          <li>🔁 <b>מהחלק לשלם:</b> כמה פעמים האחוז נכנס ב-${P(100)}? כופלים את החלק.</li>
         </ul><p class="center"><b>כל הכבוד! סיימתם את כרטיסיות האחוזים 🎉</b></p>`
+      },
+      {
+        title: 'כללים לזכור 📌', grades: [5],
+        html: `<ul class="recap">
+          <li>💯 <b>אחוז</b> = מתוך 100 = <b>שם אחר למאית</b>. ${P(100)} = השלם.</li>
+          <li>➗ ${P(37)} = ${M(F(37, 100))} = ${M('0.37')} · ${P(7)} = ${M('0.07')} (לא ${M('0.7')}).</li>
+          <li>⭐ ${P(50)} = חצי · ${P(25)} = רבע · ${P(10)} = עשירית.</li>
+          <li>🔄 משבר לאחוז: מרחיבים למכנה 100. מעשרוני לאחוז: כמה מאיות?</li>
+        </ul><p class="center"><b>כל הכבוד! בכיתה ו' נמשיך: אחוז מכמות, איזה אחוז זה והנחה 🎉</b></p>`
       }
     ]
   }
@@ -13688,6 +13765,11 @@ function topicHome(id) {
   const ls = topicLessons(id), tools = TOOL_CARDS.filter(c => c.topics.includes(id));
   let n = 0;
   const step = h => `<h2 class="tp-h"><span class="tp-n">${++n}</span>${h}</h2>`;
+  // רצף למידה (21.11): מה השלב הבא – הכרטיסייה הראשונה שלא הושלמה, אחר כך תרגול, ובסוף בדיקת שליטה
+  let nextL = null;
+  for (const l of ls) { const done = learnedSet(l), cs = cardsOf(l), k = cs.findIndex((_, i) => !done.has(i)); if (k >= 0) { nextL = { l, k, t: cs[k].title, all: cs.length }; break; } }
+  const nextHTML = nextL ? `📍 <b>השלב הבא:</b> כרטיסייה ${nextL.k + 1} מתוך ${nextL.all} – ${nextL.t} <button type="button" class="secondary" id="tpNext">להמשיך ←</button>`
+    : !s ? `📍 <b>השלב הבא:</b> תרגול ב${LEVEL_NAME[cur]}` : m < 80 ? `📍 <b>השלב הבא:</b> להמשיך לתרגל (${LEVEL_NAME[cur]})` : `📍 <b>השלב הבא:</b> בדיקת שליטה עצמאית`;
   app.innerHTML = `
     ${crumbs(id)}
     <div class="topbar">
@@ -13698,6 +13780,7 @@ function topicHome(id) {
       <div class="ds">${t.desc}</div>
       ${masteryMeter(m)}
       <div class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></div>
+      <div class="tp-next">${nextHTML}</div>
     </div>
     ${ls.length ? `<section class="card tp-step">${step('ללמוד – כרטיסיות הסבר')}
       <div class="tp-lessons">${ls.map(l => { const L = LESSONS[l], k = learnedSet(l).size, all = cardsOf(l).length; return `<button type="button" class="tp-lesson" data-tl="${l}"><b>📖 ${L.name}</b><span class="muted">${k ? `✔ ${k} מתוך ${all}` : `${all} כרטיסיות`}</span></button>`; }).join('')}</div>
@@ -13714,7 +13797,7 @@ function topicHome(id) {
       <label class="lockrow"><input type="checkbox" id="tpLock"> 🔒 להישאר ברמה שבחרתי לאורך כל הסבב (בלי עלייה או ירידה אוטומטית)</label>
     </section>
     <section class="card tp-step">${step('בודקים את עצמי')}
-      <button type="button" class="tp-check" id="tpCheck">✅ סבב בדיקה קצר<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, בלי שינוי רמה – רואים כמה כבר יודעים</span></button>
+      <button type="button" class="tp-check" id="tpCheck">✅ בדיקת שליטה עצמאית<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, לבד: בלי רמזים ובלי משוב בדרך. בסוף – התוצאה, הפתרונות וההסברים</span></button>
     </section>
     ${tools.length ? `<section class="card tp-step"><h2 class="tp-h">🧰 כלי המחשה</h2>
       ${tools.map(c => `<button type="button" class="b10-card${c.cls ? ' ' + c.cls : ''}" data-tool="${c.id}">${c.html}</button>`).join('')}
@@ -13728,7 +13811,8 @@ function topicHome(id) {
     tstat(id).level = level; saveStore(store);
     startPractice(id, { level, fixed: $('tpLock').checked });
   }));
-  $('tpCheck').onclick = go(() => startPractice(id, { level: cur, count: 5, fixed: true }));
+  $('tpCheck').onclick = go(() => startCheck(id, cur));
+  if ($('tpNext')) $('tpNext').onclick = go(() => startLesson(nextL.l, nextL.k));
   app.querySelectorAll('[data-tool]').forEach(b => b.onclick = go(TOOL_CARDS.find(c => c.id === b.dataset.tool).go));
 }
 let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
@@ -13772,14 +13856,14 @@ function todaySuggestion() {
 /* ---------- בחירת רמה ---------- */
 const LEVEL_DESC6 = {
   place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'פי כמה גדל ערך הספרה, טווח עיגול'],
-  pctWord: ['אחוז מוכר מכמות, איזה אחוז (מתוך 100), משלים ל-100%, שבר מוכר → אחוז', 'אחוז כלשהו מכמות, איזה אחוז זה, הנחה, עשרוני → אחוז, מי יותר (שבר/אחוז/עשרוני)', 'מהחלק לשלם, הנחה ועודף, התייקרות, השוואת הנחות, שאלות בכמה שלבים'],
+  pctWord: ['אחוז מוכר מכמות, איזה אחוז (מתוך 100), משלים ל-100%, שבר מוכר → אחוז', 'אחוז כלשהו מכמות, איזה אחוז זה, הנחה, עשרוני → אחוז, מי יותר (שבר/אחוז/עשרוני)', 'מהחלק לשלם, הנחה ועודף, התייקרות, השוואת הנחות, שבר + עשרוני + אחוז בסיפור, תשובה עשרונית בכמות רציפה'],
   placeDec: ['ערך ספרה אחרי הנקודה: עשיריות, מאיות, אלפיות', 'פירוק מספר עשרוני לפי המקומות', 'פירוק והשוואה של מספרים עשרוניים'],
   ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן, ראשוניים ופריקים', 'בעיות מילוליות, ראשוניים ופריקים ותרגילים מאתגרים'],
   frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
   dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
   geo: ['מלבן וריבוע, תכונות של צורות', 'מקבילית, משולש, מציאת צלע חסרה', 'מצולעים מורכבים והשוואות'],
   data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
-  pct: ['מה זה אחוז, אחוז ↔ שבר ועשרוני, 50%, 25% ו-10% מכמות', 'אחוז מכמות, איזה אחוז זה, הנחה', 'הנחה, מציאת השלם לפי אחוז'],
+  pct: ['מה זה אחוז, אחוז ↔ שבר ועשרוני, 50%, 25% ו-10% מכמות', 'אחוז כלשהו מכמות, איזה אחוז זה (הרחבה ל-100), הנחה', 'מהחלק לשלם, איזה אחוז כשהשלם גדול מ-100 · ⭐ העשרה: שתי הנחות ברצף'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 const LEVEL_DESC = GRADE === 1 ? LEVEL_DESC1 : GRADE === 2 ? LEVEL_DESC2 : GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
@@ -13866,6 +13950,17 @@ function startPreset() {
 
 function masterySnapshot() {
   return Object.fromEntries(TOPICS.map(t => [t.id, (store.topics[t.id] || {}).mastery || 0]));
+}
+
+// בדיקת שליטה עצמאית (21.11): אותן שאלות של הרמה, אבל במצב מבדק – ניסיון אחד, בלי רמז/דוגמה/משוב עד הסוף
+function startCheck(id, lv) {
+  state = { mode: 'practice', topicId: id, level: lv, count: 5, fixed: true, qs: [], i: 0, results: [], prevGen: null, mixOrder: [] };
+  const qs = [];
+  for (let i = 0; i < 5; i++) { state.i = i; const q = makeQuestion(); qs.push(q); state.qs[i] = q; }
+  navPush('view');
+  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0, chk: { id, lv }, label: `בדיקת שליטה – ${TOPIC[id].name}` };
+  track('בדיקת שליטה', `${TOPIC[id].name} · ${LEVEL_NAME[lv]}`);
+  renderQ();
 }
 
 function startPractice(topicId, opt = {}) {
@@ -14507,7 +14602,7 @@ function nextQ() {
 function summary() {
   const s = state, n = s.results.length;
   if (s.tpKind) tpClear(s.tpKind, s.tpPart);
-  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
+  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : s.chk ? 'בדיקת שליטה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
   const label = titleText();
@@ -14528,7 +14623,7 @@ function summary() {
     }
     ts.last = { correct, n };
   }
-  if (s.mode === 'test' && !s.exit) store.tests = (store.tests || []).concat({ date, score: correct, total: n }).slice(-10);
+  if (s.mode === 'test' && !s.exit && !s.chk) store.tests = (store.tests || []).concat({ date, score: correct, total: n }).slice(-10);
   // אתגר אלופים: נפתח אחרי תרגול/מבחן עם 80% ומעלה; ניצחון באתגר עצמו נספר
   const isChamp = s.topicId === 'champ', earned = !isChamp && !s.exit && !s.sim && n >= 5 && ratio >= 0.8;
   const champNew = earned && !store.champ;
@@ -14582,7 +14677,7 @@ function summary() {
 
   const buildResult = () => `${(store.name || '').trim() ? (store.name || '').trim() + ' | ' : ''}${label} | נכון: ${correct} מתוך ${n}${s.mode === 'practice' ? ` (${first} בניסיון ראשון, ${guided} בעזרת פתרון מודרך)` : ''} | ${date}`;
   const resultText = buildResult();
-  const askTestName = s.mode === 'test' && !s.exit && !teacherOn() && !(store.name || '').trim();
+  const askTestName = s.mode === 'test' && !s.exit && !s.chk && !teacherOn() && !(store.name || '').trim();
 
   app.innerHTML = `
     <div class="card center">
@@ -14613,10 +14708,11 @@ function summary() {
     </div>
     ${review}`;
 
-  if ($('retryBtn')) $('retryBtn').onclick = () => startPractice(s.topicId === 'test' ? 'mix' : s.topicId, { retry: shuffle(missed) });
+  if ($('retryBtn')) $('retryBtn').onclick = () => startPractice(s.chk ? s.chk.id : s.topicId === 'test' ? 'mix' : s.topicId, { retry: shuffle(missed) });
   $('again').onclick = () => {
     if (s.exit) return exitHome();
     if (s.sim) return startSim(s.sim.mins);
+    if (s.chk) return startCheck(s.chk.id, s.chk.lv);
     if (s.mode === 'test') return startTest(false);
     if (s.list) return startTest(true);
     if (s.lessonId) return startLessonPractice(s.lessonId);
