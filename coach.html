@@ -452,21 +452,25 @@
   <div class="layout" id="layout">
     <main id="main"></main>
     <aside class="coach" id="coach" hidden>
-      <button class="coachtoggle" id="coachToggle" aria-expanded="false"><span class="avatar sm">מ</span>&nbsp; המאמן שלך – עזרה</button>
+      <button class="coachtoggle" id="coachToggle" aria-expanded="false"><span class="avatar sm">מ</span>&nbsp; צריכים הסבר נוסף?</button>
       <div class="chead"><span class="avatar">מ</span><span>המאמן שלך</span></div>
       <div class="bubble" id="bubble">אני כאן אם צריך עזרה.</div>
       <div class="hb">
         <button class="sec" data-h="lost">לא הבנתי</button>
         <button class="sec" data-h="alt">תסביר בדרך אחרת</button>
         <button class="sec" data-h="hint">תן לי רמז</button>
+        <button class="sec" data-h="similar" hidden>דוגמה דומה</button>
+        <button class="sec" data-h="walk" hidden>פותרים יחד, צעד אחר צעד</button>
+        <button class="sec" data-h="anim" hidden>🎬 המחשה מונפשת</button>
         <button class="sec" data-h="read">🔊 הקרא לי</button>
         <button class="teacher" data-h="teacher">אני צריך את המורה</button>
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.19</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.20</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
+<script src="anim/mathanim.js"></script>
 <script src="coach/visuals.js"></script>
 <script src="coach/engine.js"></script>
 <script src="coach/kit.js"></script>
@@ -510,6 +514,20 @@
 
   let st = E.store.load() || null;
   let cur = null; // השאלה הפתוחה כרגע (לכפתורי המאמן)
+  // "דוגמה דומה" ו"פותרים יחד" מופיעים רק כשלשאלה הפתוחה יש item.similar / item.walk
+  function coachBtns() {
+    const it = cur && cur.item;
+    coachEl.querySelector('[data-h="similar"]').hidden = !(it && it.similar);
+    coachEl.querySelector('[data-h="walk"]').hidden = !(it && it.walk);
+    coachEl.querySelector('[data-h="anim"]').hidden = !animOf(it);
+  }
+  // ההמחשה המתאימה לשאלה (item.anim) או לשיעור (U.anim): { id, params }
+  function animOf(it) {
+    if (!window.MathAnim) return null;
+    if (it && it.anim) return it.anim;
+    const U = K && st && st.unit && K.units[st.unit.id];
+    return U && U.anim ? U.anim : null;
+  }
   const save = () => { if (st) E.store.save(st); };
   const log = (type, data) => { if (!st) return; st.log = st.log || []; st.log.push(Object.assign({ type, t: Date.now() }, data || {})); if (st.log.length > 200) st.log.shift(); save(); };
   const say = html => { $('bubble').innerHTML = R(html); };
@@ -608,6 +626,7 @@
     if (item.fig && item.type !== 'shade' && item.type !== 'line') body += fig(item.fig);
     if (item.type === 'frac' || item.type === 'open') body += `<div class="bigmx"><span class="fracin" dir="ltr"><input class="nin" data-p="n" inputmode="numeric" maxlength="3" aria-label="מונה"><span class="bar"></span><input class="nin" data-p="d" inputmode="numeric" maxlength="3" aria-label="מכנה"></span></div>`;
     if (item.type === 'mixed') body += `<div class="bigmx"><span class="mixin" dir="ltr"><input class="nin" data-p="w" inputmode="numeric" maxlength="3" aria-label="שלמים"><span class="fracin"><input class="nin" data-p="n" inputmode="numeric" maxlength="3" aria-label="מונה"><span class="bar"></span><input class="nin" data-p="d" inputmode="numeric" maxlength="3" aria-label="מכנה"></span></span></div><p class="muted small" style="text-align:center">שלמים משמאל, השבר מימין. אין שלמים – משאירים ריק. יצא מספר שלם – כותבים רק אותו.</p>`;
+    if (item.type === 'hund') body += `<div class="hshade" style="text-align:center"></div><p class="muted small" style="text-align:center">צבועות: <b class="cnt">${item.pre || 0}</b> משבצות</p>`;
     if (item.type === 'shade') body += `<div class="shade">${V.bar({ n: 0, d: item.d, w: 320 })}</div><p class="muted small">צבועים: <b class="cnt">0</b></p>`;
     if (item.type === 'line') body += `<div class="clickline">${V.line({ d: item.d, click: true })}</div>`;
     if (item.type === 'choice' || item.type === 'multi') {
@@ -632,6 +651,21 @@
       };
       box.querySelectorAll('.shade rect[data-i]').forEach(r => r.onclick = () => { if (finished) return; const i = +r.dataset.i; shaded.has(i) ? shaded.delete(i) : shaded.add(i); redraw(); });
     }
+    if (item.type === 'hund') {
+      const pre = item.pre || 0;
+      for (let k = 0; k < pre; k++) shaded.add(k);
+      const draw = () => {
+        const g = box.querySelector('.hshade');
+        g.innerHTML = V.hund({ on: shaded, pre: pre || null, click: !finished, c: window.innerWidth < 480 ? 26 : 30 });
+        box.querySelector('.cnt').textContent = shaded.size;
+        g.querySelectorAll('.hc').forEach(r => r.onclick = () => {
+          if (finished) return;
+          const i = +r.dataset.i, n = Math.max(pre, shaded.has(i) && !shaded.has(i + 1) ? i : i + 1);
+          shaded.clear(); for (let k = 0; k < n; k++) shaded.add(k); draw();
+        });
+      };
+      draw();
+    }
     if (item.type === 'line') {
       const bind = () => box.querySelectorAll('.clickline .hit').forEach(h => h.onclick = () => { if (finished) return; lineK = +h.dataset.k; box.querySelector('.clickline').innerHTML = V.line({ d: item.d, click: true, sel: lineK }); bind(); });
       bind();
@@ -654,7 +688,7 @@
         }
         case 'choice': return box.dataset.sel == null ? null : { i: +box.dataset.sel, key: String(box.dataset.sel) };
         case 'multi': return sel.size ? { s: [...sel].sort(), key: [...sel].sort().join(',') } : null;
-        case 'shade': return { v: shaded.size, key: String(shaded.size) };
+        case 'shade': case 'hund': return { v: shaded.size, key: String(shaded.size) };
         case 'line': return lineK == null ? null : { v: lineK, key: String(lineK) };
         case 'nums': { const vs = [...box.querySelectorAll('input.nin')].map(x => num(x.value.trim())); return vs.some(v => v == null) ? null : { vs, key: vs.join(',') }; }
       }
@@ -670,7 +704,7 @@
       };
       if (t === 'num' && item.check) return Object.assign({ ok: !!item.check(a.v) }, trapOf(a.key));
       if (t === 'num') return Object.assign({ ok: Math.abs(a.v - item.ans) < 1e-9 }, trapOf(a.key));
-      if (t === 'shade' || t === 'line') return Object.assign({ ok: a.v === item.ans }, trapOf(a.v));
+      if (t === 'shade' || t === 'line' || t === 'hund') return Object.assign({ ok: a.v === item.ans }, trapOf(a.v));
       if (t === 'frac') {
         const ok = (a.n === item.ans[0] && a.d === item.ans[1]) || (!!item.anyForm && a.n * item.ans[1] === a.d * item.ans[0]);
         let { tag, msg } = trapOf(a.key);
@@ -707,12 +741,12 @@
     }
     function finish(rec) {
       finished = true;
-      cur = null;
+      cur = null; coachBtns();
       box.querySelectorAll('input').forEach(i => i.disabled = true);
       done(rec);
     }
 
-    if (learn) cur = { item, hint };
+    if (learn) { cur = { item, hint, helped: () => { hinted = true; } }; coachBtns(); }
     const hb = box.querySelector('.hintb'); if (hb) hb.onclick = hint;
     const sf = box.querySelector('.showfig');
     if (sf) sf.onclick = () => { sf.remove(); box.querySelector('.q').insertAdjacentHTML('afterend', fig(item.showFig)); log('drawing', { item: item.id }); if (st.unit) st.unit.ev.drawing = true; };
@@ -1094,6 +1128,7 @@
       case 'choice': return optT(o[it.ans]) || (o[it.ans] && o[it.ans].fig ? 'הציור המסומן ✓' : '');
       case 'multi': return it.ans.map(i => optT(o[i])).join(' · ');
       case 'shade': return `לצבוע ${it.ans} חלקים`;
+      case 'hund': return `לצבוע ${it.ans} משבצות (⟦${it.ans}%⟧)`;
       case 'line': return `נקודה ${it.ans} (מתוך ${it.d} קפיצות)`;
       case 'nums': return (it.labels || []).map((l, i) => `${l}: ${it.ans[i]}`).join(' · ');
       case 'open': { for (let d = 2; d < 60; d++) for (let n = 1; n < 60; n++) if (it.check(n, d)) return `כל שבר שעונה על התנאי, למשל ⟦${n}/${d}⟧`; return 'לפי התנאי'; }
@@ -1145,6 +1180,7 @@
       case 'mixed': return `<div class="pans">תשובה: <span dir="ltr" style="display:inline-flex;gap:6px;align-items:center"><span class="abox"></span>${psFr}</span></div>`;
       case 'choice': case 'multi': return `<ul class="popts">${it.opts.map((o, i) => `<li>${it.type === 'multi' ? '☐' : '◯'} ${LET[i]}. ${o.t ? R(o.t) : ''}${o.fig && !o.t ? fig(o.fig) : ''}</li>`).join('')}</ul>`;
       case 'shade': return `<div class="pans">${V.bar({ n: 0, d: it.d, w: 320 })}</div>`;
+      case 'hund': return `<div class="pans">${V.hund({ n: it.pre || 0, c: 14 })}</div>`;
       case 'line': return `<div class="pans">${V.line({ d: it.d })}</div>`;
       case 'nums': return `<div class="pans">${it.labels.map(l => `${esc(l)}: <span class="abox"></span>`).join(' &nbsp; ')}</div>`;
     }
@@ -1462,6 +1498,7 @@
     return pre + 'בואו נתחיל. אני כאן אם צריך עזרה.';
   }
   function screen() {
+    setTimeout(coachBtns, 0);
     const list = screens();
     const sc = list[st.unit.i];
     if (!sc) return course();
@@ -1491,6 +1528,7 @@
     else if (sc.kind === 'cake') cake(sc);
     else if (sc.kind === 'measure') measure(sc);
     else if (sc.kind === 'hundlab') hundlab(sc);
+    else if (sc.kind === 'anim') animScreen(sc);
     else if (sc.kind === 'share') share(sc, 0);
     else if (sc.kind === 'rule') rule(sc);
     else if (sc.kind === 'levels') levels(sc);
@@ -1615,20 +1653,30 @@
     }
   }
 
+  // ---------- המחשה מונפשת בשלבים (MathAnim) בתוך השיעור ----------
+  function animScreen(sc) {
+    frame(1, `<h3>${R(sc.title)}</h3>${sc.html ? R(sc.html) : ''}<div id="anim"></div><div class="row"><button id="nx">${sc.next || 'המשך'}</button>${unclearBtn()}</div>`);
+    bindUnclear(sc);
+    const pl = MathAnim.mount($('anim'), sc.anim.id, sc.anim.params, { onPred: (id, k, p, ok) => log('animPred', { id, k, ok }) });
+    $('nx').onclick = () => { if (pl) pl.stop(); next(); };
+  }
   // ---------- המחשה: ריבוע המאה – צובעים אחוז / שבר, ומקשרים ביניהם ----------
   // sc.tasks: [{ cut, need, instr, ok, qs:[items], after }]. בלי cut – לחיצה על משבצת ממלאת עד אליה (עמודה אחרי עמודה);
   // עם cut – הריבוע מחולק לחלקים שווים בקווים עבים, ולחיצה צובעת (או מוחקת) חלק שלם. need = מספר המשבצות הנדרש.
   function hundlab(sc) {
     const u = st.unit;
-    frame(1, `<h3>${R(sc.title)}</h3><p style="font-size:1.12rem">${R(sc.story)}</p><div id="htask"></div><div class="row">${unclearBtn()}</div>`);
+    frame(1, `<h3>${R(sc.title)}</h3><p style="font-size:1.12rem">${R(sc.story)}</p><div id="hpred"></div><div id="htask"></div><div class="row">${unclearBtn()}</div>`);
     bindUnclear(sc);
+    let predI = null;
+    const predBack = () => !sc.pred || predI == null ? '' : `<p>${R(predI === sc.pred.ans ? sc.pred.right : sc.pred.miss)}</p>`;
     const run = ti => {
-      const t = sc.tasks[ti], on = new Set(), cut = t.cut, per = cut ? 100 / cut : 1;
+      const t = sc.tasks[ti], on = new Set(), cut = t.cut, pre = t.pre || 0;
+      for (let k = 0; k < pre; k++) on.add(k);
       let stage = 'paint';
       $('htask').innerHTML = `<p class="muted small">${ti + 1} מתוך ${sc.tasks.length}</p><p><b>${R(t.instr)}</b></p><div id="hfig" style="text-align:center"></div><p class="muted small" id="hcnt"></p><div id="hfb"></div><div class="row" id="hrow"><button id="hgo">בדיקה</button><button class="ghost small" id="hclr">מחיקה</button></div><div id="ib"></div>`;
       const parts = () => cut ? new Set([...on].map(i => V.hundPart(Math.floor(i / 10), i % 10, cut))).size : 0;
       const draw = () => {
-        $('hfig').innerHTML = V.hund({ on, cut, click: stage === 'paint', c: window.innerWidth < 480 ? 28 : 34 });
+        $('hfig').innerHTML = V.hund({ on, cut, pre: pre || null, click: stage === 'paint', c: window.innerWidth < 480 ? 28 : 34 });
         $('hcnt').innerHTML = `צבועות: <b>${on.size}</b> משבצות${cut ? ` (${parts()} חלקים)` : ''}`;
         $('hfig').querySelectorAll('.hc').forEach(r => r.onclick = () => tap(+r.dataset.i));
       };
@@ -1636,7 +1684,7 @@
       function tap(i) {
         if (stage !== 'paint') return;
         $('hfb').innerHTML = '';
-        if (!cut) { const n = on.has(i) && !on.has(i + 1) ? i : i + 1; on.clear(); for (let k = 0; k < n; k++) on.add(k); }
+        if (!cut) { const n = Math.max(pre, on.has(i) && !on.has(i + 1) ? i : i + 1); on.clear(); for (let k = 0; k < n; k++) on.add(k); }
         else {
           const p = V.hundPart(Math.floor(i / 10), i % 10, cut), cells = [];
           for (let k = 0; k < 100; k++) if (V.hundPart(Math.floor(k / 10), k % 10, cut) === p) cells.push(k);
@@ -1644,7 +1692,7 @@
         }
         draw();
       }
-      $('hclr').onclick = () => { if (stage === 'paint') { on.clear(); $('hfb').innerHTML = ''; draw(); } };
+      $('hclr').onclick = () => { if (stage === 'paint') { on.clear(); for (let k = 0; k < pre; k++) on.add(k); $('hfb').innerHTML = ''; draw(); } };
       $('hgo').onclick = () => {
         if (stage !== 'paint') return;
         if (on.size !== t.need) {
@@ -1659,7 +1707,7 @@
       };
       const ask = j => {
         if (j >= (t.qs || []).length) {
-          $('ib').innerHTML = `<div class="rulebox">${R(t.after)}</div><div class="row"><button id="nx">${ti + 1 < sc.tasks.length ? 'המשך' : 'לכלל'}</button></div>`;
+          $('ib').innerHTML = `${ti + 1 < sc.tasks.length ? '' : predBack()}<div class="rulebox">${R(t.after)}</div><div class="row"><button id="nx">${ti + 1 < sc.tasks.length ? 'המשך' : 'לכלל'}</button></div>`;
           save();
           $('nx').onclick = () => ti + 1 < sc.tasks.length ? run(ti + 1) : next();
           return;
@@ -1669,7 +1717,15 @@
       };
       draw();
     };
-    run(0);
+    if (!sc.pred) return run(0);
+    $('hpred').innerHTML = `<p><b>${R(sc.pred.q)}</b></p><div class="opts">${sc.pred.opts.map((t, i) => `<button class="opt" data-p="${i}">${R(t)}</button>`).join('')}</div>`;
+    $('hpred').querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+      if (predI != null) return;
+      predI = +b.dataset.p; u.ev.pred = predI; log('predict', { p: predI });
+      b.classList.add('sel');
+      $('hpred').insertAdjacentHTML('beforeend', '<p class="muted">נבדוק בריבוע – ונחזור לזה בסוף.</p>');
+      run(0);
+    });
   }
 
   // ---------- המחשה "כמה פעמים נכנס" (שלם : שבר): חותכים כל שלם לחלקים שווים, ומסמנים קבוצות בגודל המחלק ----------
@@ -2195,9 +2251,51 @@
     } else if (h === 'hint') {
       if (!(cur && cur.hint && cur.hint())) say('כרגע אין שאלה פתוחה. אם משהו לא ברור, לחצו "לא הבנתי".');
       else say('הוספתי רמז ליד השאלה. 💡');
+    } else if (h === 'similar') {
+      const it = cur && cur.item;
+      if (!it || !it.similar) return say('כרגע אין שאלה פתוחה.');
+      cur.helped(); if (st.unit) st.unit.ev.similar = (st.unit.ev.similar || 0) + 1;
+      const x = it.similar;
+      modal(`<h2>דוגמה דומה, פתורה</h2><div class="q">${R(x.q)}</div>${fig(x.fig)}<ol class="steps">${x.steps.map(t => `<li>${R(t)}</li>`).join('')}</ol><p>עכשיו נסו את השאלה שלכם באותה דרך.</p>`);
+      say('פתחתי דוגמה דומה. אחרי שתקראו – נסו את השאלה שלכם.');
+    } else if (h === 'walk') {
+      const it = cur && cur.item;
+      if (!it || !it.walk) return say('כרגע אין שאלה פתוחה.');
+      cur.helped(); if (st.unit) st.unit.ev.walk = (st.unit.ev.walk || 0) + 1;
+      walkTogether(it);
+    } else if (h === 'anim') {
+      const a = animOf(cur && cur.item);
+      if (!a) return say('לשיעור הזה עוד אין המחשה מונפשת.');
+      if (st.unit) st.unit.ev.anim = (st.unit.ev.anim || 0) + 1;
+      log('anim', { id: a.id });
+      MathAnim.open(a.id, a.params);
     } else if (h === 'read') speak($('ucard') || main, b);
     else if (h === 'teacher') teacherCard(false);
   });
+  // פותרים יחד: כל צעד – שאלה קטנה עם תשובה מספרית; טעות → רמז הצעד; טעות שנייה → מראים את הצעד וממשיכים
+  function walkTogether(it) {
+    const W = it.walk, m = modal(`<h2>פותרים יחד, צעד אחר צעד</h2><div class="q">${R(it.q.replace(/<div class="bigmx">⟦\?⟧<\/div>$/, ''))}</div><ol class="steps" id="wk"></ol><div id="wkend"></div>`);
+    const ol = m.el.querySelector('#wk');
+    const step = j => {
+      if (j >= W.length) { m.el.querySelector('#wkend').innerHTML = `<div class="fb ok">${R(it.walkEnd || 'פתרנו יחד! עכשיו סגרו את החלון, וכתבו את התשובה בשאלה.')}</div>`; return; }
+      const w = W[j], li = document.createElement('li'); let miss = 0;
+      li.innerHTML = `${R(w.p)} <input class="nin" inputmode="decimal" maxlength="7" aria-label="תשובה לצעד"> <button class="small">בדיקה</button><div class="wfb"></div>`;
+      ol.appendChild(li);
+      const inp = li.querySelector('input'), btn = li.querySelector('button'), fb = li.querySelector('.wfb');
+      const done = ok => { inp.disabled = true; btn.remove(); fb.innerHTML = `<div class="fb ${ok ? 'ok' : 'info'}">${ok ? '✓ ' : 'הצעד הזה: '}${R(w.show || '⟦' + w.a + '⟧')}${w.t ? ' – ' + R(w.t) : ''}</div>`; step(j + 1); };
+      btn.onclick = () => {
+        const v = +String(inp.value).replace(',', '.').trim();
+        if (inp.value.trim() === '' || isNaN(v)) return;
+        if (Math.abs(v - w.a) < 1e-9) return done(true);
+        miss++; log('walkMiss', { item: it.id, j, a: inp.value });
+        if (miss >= 2) return done(false);
+        fb.innerHTML = `<div class="fb hint">💡 ${R(w.h || 'נסו שוב, לאט.')}</div>`;
+      };
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+      if (window.innerWidth > 700) setTimeout(() => inp.focus(), 50);
+    };
+    step(0);
+  }
   function lost(k) {
     const it = cur && cur.item;
     log('lost', { k });
