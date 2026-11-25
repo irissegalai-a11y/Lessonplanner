@@ -69,13 +69,14 @@
     out += `<rect x="2" y="2" width="${w}" height="${h}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
     return `<svg class="fig bar" viewBox="0 0 ${w + 4} ${h + 4}" width="${w + 4}" height="${h + 4}" role="img" aria-label="פס שבר">${out}</svg>`;
   }
+  // take – כמה חלקים (מההתחלה) צבועים בכתום: "החלק שלקחנו" מתוך הצבוע
   function pie(f) {
     const r = f.r || 40, d = f.d, n = f.n || 0, g = f.g || 1, c = r + 3;
     let out = '';
     for (let i = 0; i < d; i++) {
       const a0 = -Math.PI / 2 + i * 2 * Math.PI / d, a1 = a0 + 2 * Math.PI / d;
       const p = (a) => `${(c + r * Math.cos(a)).toFixed(2)} ${(c + r * Math.sin(a)).toFixed(2)}`;
-      out += `<path d="M${c} ${c} L${p(a0)} A${r} ${r} 0 ${d === 1 ? 1 : 0} 1 ${p(a1)} Z" fill="${i < n ? FILL : '#fff'}" stroke="${INK}" stroke-width="1.2"/>`;
+      out += `<path d="M${c} ${c} L${p(a0)} A${r} ${r} 0 ${d === 1 ? 1 : 0} 1 ${p(a1)} Z" fill="${i < (f.take || 0) ? ADD : i < n ? FILL : '#fff'}" stroke="${INK}" stroke-width="1.2"/>`;
     }
     if (g > 1) for (let i = 0; i < d; i += g) { const a = -Math.PI / 2 + i * 2 * Math.PI / d; out += `<line x1="${c}" y1="${c}" x2="${(c + r * Math.cos(a)).toFixed(2)}" y2="${(c + r * Math.sin(a)).toFixed(2)}" stroke="${INK}" stroke-width="3"/>`; }
     out += `<circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
@@ -111,14 +112,24 @@
     return `<svg class="fig line" viewBox="0 0 ${w + 48} 84" width="${w + 48}" height="84" role="img" aria-label="ישר מספרים">${out}</svg>`;
   }
   // ריבוע של 100 משבצות; הצביעה לפי עמודות (כל עמודה = עשירית)
+  // pre – משבצות שהיו צבועות מראש (ורוד); מה שנוסף אחריהן – בכתום
+  const ADD = '#f2a65a';
+  // cut – חלוקה לחלקים שווים בקווים עבים (2 חצאים, 4 רבעים, 5 פסים, 10 עמודות, 20, 25); kp – כמה חלקים צבועים
+  // on – קבוצת משבצות צבועות (למסך האינטראקטיבי), click – משבצות לחיצות (data-i)
+  const hundPart = (col, row, cut) => ({ 2: col < 5 ? 0 : 1, 4: (row < 5 ? 0 : 2) + (col < 5 ? 0 : 1), 5: Math.floor(col / 2), 10: col, 20: col * 2 + (row < 5 ? 0 : 1), 25: Math.floor(col / 2) * 5 + Math.floor(row / 2) })[cut];
   function hund(f) {
-    const c = f.c || 17, n = f.n || 0; let out = '';
+    const c = f.c || 17, n = f.n || 0, cut = f.cut; let out = '';
     for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
       const i = col * 10 + row;
-      const on = f.rc ? (col < f.rc[0] && row < f.rc[1]) : i < n;
-      out += `<rect x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? FILL : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
+      const on = f.on ? f.on.has(i) : (cut && f.kp != null) ? hundPart(col, row, cut) < f.kp : f.rc ? (col < f.rc[0] && row < f.rc[1]) : i < n;
+      out += `<rect${f.click ? ` class="hc" data-i="${i}"` : ''} x="${2 + col * c}" y="${2 + row * c}" width="${c}" height="${c}" fill="${on ? (f.pre != null && i >= f.pre ? ADD : FILL) : '#fff'}" stroke="#9aa3b5" stroke-width="0.8"/>`;
     }
-    out += `<rect x="2" y="2" width="${10 * c}" height="${10 * c}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    if (cut) for (let col = 0; col < 10; col++) for (let row = 0; row < 10; row++) {
+      const p = hundPart(col, row, cut), x = 2 + col * c, y = 2 + row * c;
+      if (col < 9 && hundPart(col + 1, row, cut) !== p) out += `<line x1="${x + c}" x2="${x + c}" y1="${y}" y2="${y + c}" stroke="${INK}" stroke-width="2.4" pointer-events="none"/>`;
+      if (row < 9 && hundPart(col, row + 1, cut) !== p) out += `<line x1="${x}" x2="${x + c}" y1="${y + c}" y2="${y + c}" stroke="${INK}" stroke-width="2.4" pointer-events="none"/>`;
+    }
+    out += `<rect x="2" y="2" width="${10 * c}" height="${10 * c}" fill="none" stroke="${INK}" stroke-width="2.4" pointer-events="none"/>`;
     return `<svg class="fig hund" viewBox="0 0 ${10 * c + 4} ${10 * c + 4}" width="${10 * c + 4}" height="${10 * c + 4}" role="img" aria-label="ריבוע של 100 משבצות">${out}</svg>`;
   }
   // לוח ערך המקום: { k:'pv', n:'3.45' }
@@ -179,6 +190,26 @@
     out += `<rect x="2" y="2" width="${W}" height="${H}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
     return `<svg class="fig area" viewBox="0 0 ${W + 4} ${H + 4}" width="${W + 4}" height="${H + 4}" role="img" aria-label="מלבן מחולק">${out}</svg>`;
   }
+  // שטח של מכפלת מספרים מעורבים: { k:'marea', a:[2,1,2], b:[2,1,2] } – שלם + n/d בכל צלע.
+  // ורוד – מה שהטעות "שלמים לחוד ושברים לחוד" סופרת (שלם×שלם, שבר×שבר); כתום – מה שהיא שוכחת.
+  // lab = { blk, bot, side, cor } – כיתוב בתוך כל חלק; sa/sb – כיתוב הצלעות
+  function marea(f) {
+    const U = f.u || 64, [wa, na, da] = f.a, [wb, nb, db] = f.b, fa = na / da * U, fb = nb / db * U;
+    const L = 34, T = 30, W = wa * U + fa, H = wb * U + fb, lab = f.lab || {};
+    const rc = (x, y, w, h, c) => `<rect x="${L + x}" y="${T + y}" width="${w}" height="${h}" fill="${c}" stroke="${INK}" stroke-width="1.2"/>`;
+    const tx = (x, y, t, sz) => t ? `<text x="${L + x}" y="${T + y}" text-anchor="middle" dominant-baseline="central" font-size="${sz || 17}" font-weight="700" fill="${INK}" direction="ltr">${t}</text>` : '';
+    let out = '';
+    // כל חלק מקבל כיתוב משלו: שלם (blk), פס תחתון (bot), פס צדדי (side), פינה (cor)
+    for (let i = 0; i < wa; i++) for (let j = 0; j < wb; j++) out += rc(i * U, j * U, U, U, FILL) + tx(i * U + U / 2, j * U + U / 2, lab.blk, 19);
+    for (let j = 0; j < wb; j++) out += rc(wa * U, j * U, fa, U, ADD) + tx(wa * U + fa / 2, j * U + U / 2, lab.side, 15);
+    for (let i = 0; i < wa; i++) out += rc(i * U, wb * U, U, fb, ADD) + tx(i * U + U / 2, wb * U + fb / 2, lab.bot, 15);
+    out += rc(wa * U, wb * U, fa, fb, FILL) + tx(wa * U + fa / 2, wb * U + fb / 2, lab.cor, 14);
+    out += `<rect x="${L}" y="${T}" width="${wa * U}" height="${wb * U}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    out += `<rect x="${L}" y="${T}" width="${W}" height="${H}" fill="none" stroke="${INK}" stroke-width="2.4"/>`;
+    out += `<text x="${L + W / 2}" y="${T - 12}" text-anchor="middle" font-size="18" fill="${INK}" direction="ltr">${f.sa || ''}</text>`;
+    out += `<text x="${L - 10}" y="${T + H / 2}" text-anchor="end" dominant-baseline="central" font-size="18" fill="${INK}" direction="ltr">${f.sb || ''}</text>`;
+    return `<svg class="fig marea" viewBox="0 0 ${L + W + 4} ${T + H + 4}" width="${L + W + 4}" height="${T + H + 4}" role="img" aria-label="מלבן: ${f.aria || 'כפל מספרים מעורבים'}">${out}</svg>`;
+  }
   // פירוק לשני גורמים: { k:'tree', n:32, a:4, b:8, hl:'b' } – המספר למעלה, שני הגורמים למטה
   function tree(f) {
     const W = 170, H = 112, cx = W / 2;
@@ -223,15 +254,17 @@
     const tones = [JUICE, JUICE2];
     return jugSvg({ L: f.L, cut: Array(f.L).fill(f.d), parts: true, fill: k => k < f.n ? (f.g ? tones[Math.floor(k / f.g) % 2] : JUICE) : null, g: f.g, lh: f.lh });
   }
-  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups, area, tree, jug };
+  const KINDS = { bar, pie, grid, cup, line, hund, pv, vert, arr, groups, area, tree, jug, marea };
   function fig(f) {
     if (!f) return '';
     if (Array.isArray(f)) return `<div class="figs">${f.map(fig).join('')}</div>`;
+    // row – כמה ציורים זה לצד זה (למשל פיצות של מספר מעורב), עם כיתוב משותף מתחת
+    if (f.row) return `<div class="figs figrow">${f.row.map(fig).join('')}</div>${f.label ? `<p class="figcap">${R(f.label)}</p>` : ''}`;
     const svg = (KINDS[f.k] || bar)(f);
     // whole – כיתוב מעל הציור ("שלם", "עוגה שלמה"): השלם תמיד מוגדר
     if (f.whole) return `<figure class="figl figw"><figcaption class="wlab">${R(f.whole)}</figcaption>${svg}${f.label ? `<figcaption>${R(f.label)}</figcaption>` : ''}</figure>`;
     return f.label ? `<figure class="figl">${svg}<figcaption>${R(f.label)}</figcaption></figure>` : svg;
   }
 
-  C.V = { M, R, fig, bar, pie, line, area, fracSay, FILL, FILL2, INK, jugSvg, cupSvg, JUICE, JUICE2 };
+  C.V = { M, R, fig, bar, pie, line, area, hund, hundPart, fracSay, FILL, FILL2, INK, jugSvg, cupSvg, JUICE, JUICE2 };
 })();

@@ -15,16 +15,16 @@
 html.embed footer.credit, html.embed .crumbs, html.embed .pwm { display: none !important; }
 html.embed body { padding-top: 0; }
 </style>
-<title>מתרגלים מתמטיקה – איריס סגל</title>
+<title>mathinclass – איריס סגל</title>
 <meta name="description" content="אתר תרגול במתמטיקה לכיתות א'–ו': שיעורים, תרגול, משחקים ודפי עבודה">
-<meta property="og:title" content="מתרגלים מתמטיקה – איריס סגל">
+<meta property="og:title" content="mathinclass – איריס סגל">
 <meta property="og:description" content="אתר תרגול במתמטיקה לכיתות א'–ו': שיעורים, תרגול, משחקים ודפי עבודה">
-<meta property="og:site_name" content="מתרגלים מתמטיקה – איריס סגל">
+<meta property="og:site_name" content="mathinclass – איריס סגל">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://irissegalai-a11y.github.io/Lessonplanner/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="מתרגלים מתמטיקה – איריס סגל">
+<meta property="og:image:alt" content="mathinclass – איריס סגל">
 <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
@@ -206,6 +206,12 @@ html.embed body { padding-top: 0; }
 
   .choices { display: grid; grid-template-columns: 1fr; gap: 8px; width: 100%; }
   .choices.pics { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .choices.pics:has(.lgopt) { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .choices.pics:has(.lgopt) button { padding: 6px 2px; gap: 2px; }
+  .fig.lgopt { width: 100%; max-width: 76px; margin: 2px auto; }
+  .fig.lgfig { max-width: 320px; }
+  .fig.lgfig.lgwide { max-width: 440px; }
+  .lgletter { font-size: 1.7rem; font-weight: 800; }
   div.choices > button { display: flex; align-items: center; gap: 10px; justify-content: flex-start; text-align: right; }
   div.choices.pics > button { flex-direction: column; justify-content: center; text-align: center; }
   .chl { font-weight: 800; flex-shrink: 0; }
@@ -356,6 +362,13 @@ html.embed body { padding-top: 0; }
   .fig .part2 { fill: rgba(224, 112, 58, 0.4); stroke: #e0703a; stroke-width: 2; }
   .fig .hidden { display: none; }
   .ftable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+  .tp-next { margin-top: 8px; font-size: .95em; }
+  .tp-next button { margin-inline-start: 6px; padding: 4px 10px; }
+  .pgrp { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin: 8px 0 4px; }
+  .pgrp span { min-width: 38px; padding: 6px 4px; border: 2px solid #c0392b; border-radius: 6px; text-align: center; font-weight: 700; background: #fff; color: #222; }
+  .pgrp span.on { background: #f5b7b1; }
+  .pgrp-cap { text-align: center; font-size: .9em; margin: 0 0 8px; }
+  .enr { display: inline-block; font-size: .8em; font-weight: 700; background: #fff3c4; color: #7a5b00; border: 1px solid #e0b100; border-radius: 10px; padding: 1px 8px; margin-inline-end: 6px; }
   .ftable th, .ftable td { border: 1px solid var(--line); padding: 8px; text-align: center; }
   .ftable th { background: #eef7f1; }
   ol.recap.order { list-style: decimal; padding-right: 26px; }
@@ -2271,8 +2284,8 @@ html.embed body { padding-top: 0; }
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
-<div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>מתרגלים מתמטיקה</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 רצה</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>mathinclass</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 שז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -2361,7 +2374,7 @@ if (GRADE === 1) document.documentElement.classList.add('g1');
 const GRADE_NAME = { 1: "כיתה א'", 2: "כיתה ב'", 3: "כיתה ג'", 4: "כיתה ד'", 5: "כיתה ה'", 6: "כיתה ו'" };
 const TEST_NAME = GRADE === 6 ? 'מבדק לדוגמה' : 'מבחן תרגול';
 const SUBTITLE = NEUTRAL ? 'תרגול יסודות במתמטיקה' : `${GRADE_NAME[GRADE]} · תרגול`;
-document.title = NEUTRAL ? 'מתרגלים מתמטיקה – איריס סגל' : `מתרגלים מתמטיקה – איריס סגל · ${GRADE_NAME[GRADE]}`;
+document.title = NEUTRAL ? 'mathinclass – איריס סגל' : `mathinclass – איריס סגל · ${GRADE_NAME[GRADE]}`;
 
 /* ---------- איורים בקו יד (במקום אימוג'ים) ---------- */
 const ICONS = {
@@ -4257,6 +4270,7 @@ const LEVEL_DESC5 = {
   dec: ['שבר ↔ עשרוני, ערך הספרה, כפל ב-10 ו-100', 'השוואה, ישר מספרים, חיבור וחיסור', 'סדרות, יחידות מידה, פירוק עשרוני'],
   geo: ['מלבן וריבוע, זוויות במשולש', 'מקבילית ומשולש, משולש ישר-זווית', 'מצולעים מורכבים, משולש שווה-שוקיים'],
   data: ['קריאת דיאגרמה', 'הפרשים וסכום', 'ממוצע ואיבר חסר'],
+  pct: ['מה זה אחוז – ריבוע 100 המשבצות', 'אחוז ↔ שבר עם מכנה 100 ↔ עשרוני', 'משמעות 50%, 25%, 10% – חצי, רבע, עשירית'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 
@@ -5497,6 +5511,10 @@ const LEVEL_DESC2 = {
    אחוזים (כיתה ו')
    ========================================================= */
 const P = x => M(`${fmt(x)}%`);
+// אחוז מכמות / מהחלק לשלם – השלם מחולק לקבוצות שוות (כל קבוצה = 100%/parts), mark קבוצות מסומנות
+function pctGroups(parts, val, mark, cap) {
+  return `<div class="pgrp" dir="rtl">${Array.from({ length: parts }, (_, i) => `<span class="${i < mark ? 'on' : ''}">${val == null ? '?' : fmt(val)}</span>`).join('')}</div>${cap ? `<p class="pgrp-cap">${cap}</p>` : ''}`;
+}
 function pctGridSVG(k, size = 150) {
   const c = size / 10;
   let g = '';
@@ -5511,7 +5529,7 @@ function genPctGrid() {
   const k = R(3, 97);
   return {
     type: 'num', unit: '%', text: 'הריבוע מחולק ל-100 משבצות שוות. איזה אחוז מהריבוע <b>צבוע</b>?', fig: `<div class="center">${pctGridSVG(k)}</div>`, ans: k,
-    traps: [{ v: 100 - k, m: 'ספרתם את המשבצות הלבנות. שואלים על החלק <b>הצבוע</b>.' }],
+    traps: [{ v: 100 - k, m: 'ספרתם את המשבצות הלבנות. שואלים על החלק <b>הצבוע</b>.' }].filter(t => t.v !== k),
     hint: 'אחוז = כמה מתוך 100. ספרו שורות שלמות (כל שורה = 10 משבצות) ועוד המשבצות הבודדות.',
     exp: `צבועות ${k} משבצות מתוך 100, כלומר ${P(k)}.`
   };
@@ -5560,7 +5578,7 @@ function genPctOf(lv = 1) {
     : p % 10 ? [{ p: `${P(p)} מ-${N}: ${M(`${N} × ${p} : 100 =`)}`, a: ans }]
     : [{ p: `קודם 10%: ${M(`${N} : 10 =`)}`, a: ten }].concat(p === 10 ? [] : p % 10 === 0 ? [{ p: `${P(p)} = ${p / 10} פעמים 10%: ${M(`${fmt(ten)} × ${p / 10} =`)}`, a: ans }] : [{ p: `ועכשיו ${P(p)}: ${M(`${N} × ${p} : 100 =`)}`, a: ans }]);
   return {
-    type: 'num', text: `כמה הם ${P(p)} מ-${M(fmt(N))}?`, ans, learn: { lesson: 'pct', card: 2 },
+    type: 'num', text: `כמה הם ${P(p)} מ-${M(fmt(N))}?`, ans, learn: { lesson: 'pct', card: 7 },
     traps: [{ v: N * p, m: 'שכחתם לחלק ב-100. אחוז = חלק מתוך 100.' }, { v: N - ans, m: `זה מה שנשאר אחרי שמורידים ${p}%. שואלים כמה הם ${p}% עצמם.` }].filter(t => t.v !== ans),
     steps,
     hint: p === 50 ? '50% = חצי.' : p === 25 ? '25% = רבע.' : '10% = מחלקים ב-10. משם אפשר לחשב אחוזים אחרים.',
@@ -5569,15 +5587,16 @@ function genPctOf(lv = 1) {
 }
 
 function genPctWhat() {
-  const [Y, step] = pick([[20, 1], [25, 1], [50, 1], [200, 2], [400, 4], [10, 1], [40, 2], [80, 4]]);
+  // רק מכנים שמרחיבים ל-100 (מכנה גדול מ-100 שדורש צמצום – בשאלות המילוליות ברמה 3, עם הסבר בכרטיסייה)
+  const [Y, step] = pick([[20, 1], [25, 1], [50, 1], [10, 1], [4, 1], [5, 1]]);
   const X = R(1, Y / step - 1) * step;
   const ans = rnd(X / Y * 100);
   if (ans % 1) return genPctWhat();
-  const thing = pick([{ a: 'בכיתה', b: 'תלמידים', c: 'מהם בנות' }, { a: 'בסל', b: 'פירות', c: 'מהם תפוחים' }, { a: 'במבחן', b: 'שאלות', c: 'מהן ענה נכון דני' }]);
+  const thing = pick(Y <= 5 ? [{ a: 'בסל', b: 'פירות', c: 'מהם תפוחים' }, { a: 'בקופסה', b: 'עפרונות', c: 'מהם אדומים' }] : [{ a: 'בכיתה', b: 'תלמידים', c: 'מהם בנות' }, { a: 'בסל', b: 'פירות', c: 'מהם תפוחים' }, { a: 'במבחן', b: 'שאלות', c: 'מהן ענה נכון דני' }]);
   return {
     type: 'num', unit: '%', text: `${thing.a} יש ${Y} ${thing.b}, ו-${X} ${thing.c}.<br>איזה אחוז זה?`, ans,
     traps: [{ v: X, m: `${X} זה המספר, לא האחוז. כמה זה מתוך 100?` }, { v: rnd(Y / X * 100), m: 'חילקתם הפוך. החלק חלקי השלם: ' + X + ' : ' + Y + '.' }].filter(t => t.v !== ans),
-    steps: [{ p: `כתבו כשבר: ${M(F(X, Y))}. הרחיבו למכנה 100 – מה המונה?`, a: ans }],
+    steps: [{ p: `כתבו כשבר ${M(F(X, Y))}. כדי להגיע למכנה 100 – ${Y} כפול כמה?`, a: 100 / Y }, { p: `מרחיבים גם את המונה: ${M(`${X} × ${100 / Y} =`)}`, a: ans }],
     hint: `כתבו שבר (${X} מתוך ${Y}) והרחיבו אותו למכנה 100.`,
     exp: `${M(`${F(X, Y)} = ${F(ans, 100)}`)} = ${P(ans)}`
   };
@@ -5592,7 +5611,7 @@ function genPctDiscount() {
   return {
     type: 'num', unit: '₪', text: `${item} עולה ${price} ₪. יש הנחה של ${P(p)}.<br>${askNew ? 'כמה צריך לשלם אחרי ההנחה?' : 'בכמה שקלים ההנחה?'}`, ans: askNew ? price - off : off,
     traps: askNew ? [{ v: off, m: `זה גובה ההנחה. כמה צריך <b>לשלם</b>? ${price} פחות ההנחה.` }, { v: price - p, m: `הורדתם ${p} שקלים. ההנחה היא ${p}% מהמחיר, לא ${p} ₪.` }].filter(t => t.v !== price - off)
-      : [{ v: price - off, m: 'זה המחיר אחרי ההנחה. שואלים מה גובה ההנחה עצמה.' }],
+      : [{ v: price - off, m: 'זה המחיר אחרי ההנחה. שואלים מה גובה ההנחה עצמה.' }].filter(t => t.v !== off),
     steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: off }].concat(askNew ? [{ p: M(`${price} - ${off} =`), a: price - off }] : []),
     hint: `קודם חשבו כמה שקלים הם ${p}% מ-${price}.`,
     exp: `ההנחה: ${M(`${price} × ${p} : 100 = ${off}`)} ₪.${askNew ? ` משלמים: ${M(`${price} - ${off} = ${price - off}`)} ₪.` : ''}`
@@ -5611,7 +5630,180 @@ function genPctWhole() {
   };
 }
 
-[[genPctGrid, 0], [genPctConvert, 1], [genPctOf, 2], [genPctDiscount, 3], [genPctWhat, 4], [genPctWhole, 4]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
+// 💬 שאלות מילוליות באחוזים (כיתה ו', נושא pctWord, 21.11) – דגש על מעבר בין ייצוגים (אחוז / שבר / עשרוני) בתוך סיפור
+const PCTW_CTX = [
+  { all: 'תלמידים בשכבה', grp: 'בשכבה', who: 'תלמידים', a: 'הגיעו לטיול', b: 'לא הגיעו לטיול' },
+  { all: 'עצים בחורשה', grp: 'בחורשה', who: 'עצים', a: 'הם אורנים', b: 'אינם אורנים' },
+  { all: 'ספרים בספרייה הכיתתית', grp: 'בספרייה הכיתתית', who: 'ספרים', a: 'הם ספרי הרפתקאות', b: 'אינם ספרי הרפתקאות' },
+  { all: 'כרטיסים להופעה', grp: 'להופעה', who: 'כרטיסים', a: 'כבר נמכרו', b: 'עוד לא נמכרו' },
+  { all: 'שתילים בגינה', grp: 'בגינה', who: 'שתילים', a: 'פרחו', b: 'עוד לא פרחו' }
+];
+const PCTW_ITEM = [['זוג אופניים', 'זוג האופניים'], ['מעיל', 'המעיל'], ['משחק קופסה', 'משחק הקופסה'], ['זוג נעליים', 'זוג הנעליים'], ['תיק גב', 'תיק הגב'], ['זוג אוזניות', 'זוג האוזניות']];
+function pctWQ(o) { return Object.assign({ type: 'num', word: true, learn: { lesson: 'pct', card: o.card != null ? o.card : 7 } }, o); }
+function genPctWord(lv = 1, only) {
+  const c = pick(PCTW_CTX);
+  const kinds = lv === 1 ? ['of', 'what100', 'rest', 'fracTo'] : lv === 2 ? ['of2', 'what', 'disc', 'restN', 'decTo', 'cmp'] : ['whole', 'disc2', 'raise', 'cmp3', 'restWhole', 'whatBig', 'ofDec', 'mix3'];
+  const k = only || pick(kinds);
+  if (k === 'ofDec') { // רמה 3: תשובה עשרונית – רק בכמות רציפה (ליטר / ק"ג / ק"מ)
+    const t = pick([['במיכל יש N ליטר מים. P% מהמים שימשו להשקיה.', 'כמה ליטר שימשו להשקיה?', 'ליטר'], ['בשק יש N ק"ג קמח. P% מהקמח נוצל לאפייה.', 'כמה ק"ג קמח נוצלו?', 'ק"ג'], ['אורך מסלול הטיול N ק"מ. עד ההפסקה עברנו P% מהמסלול.', 'כמה ק"מ עברנו עד ההפסקה?', 'ק"מ']]);
+    const p = pick([5, 15, 25, 35, 45]), N = R(2, 24) * 2, ans = N * p / 100;
+    if (ans % 1 === 0 || Math.round(ans * 10) !== ans * 10) return genPctWord(lv, only);
+    return pctWQ({ unit: t[2], text: `${t[0].replace('N', N).replace('P%', P(p))}<br>${t[1]}`, ans,
+      hint: `${p}% = ${M(F(p, 100))}: כופלים ב-${p} ומחלקים ב-100. התשובה יכולה להיות מספר עשרוני.`,
+      exp: `${M(`${N} × ${p} : 100 = ${fmt(N * p)} : 100 = ${fmt(ans)}`)} ${t[2]}.`,
+      steps: [{ p: `${M(`${N} × ${p} =`)}`, a: N * p }, { p: `${M(`${N * p} : 100 =`)}`, a: ans }],
+      traps: [{ v: N * p, m: 'שכחתם לחלק ב-100.' }, { v: N - ans, m: 'זה מה שנשאר. שואלים על החלק עצמו.' }, { v: Math.round(ans), m: `עיגלתם. כאן התשובה המדויקת היא מספר עשרוני: ${M(fmt(ans))}.` }].filter(q => q.v !== ans) });
+  }
+  if (k === 'mix3') { // רמה 3: שבר, עשרוני ואחוז באותו סיפור
+    const [fn, fd] = pick([[1, 4], [1, 5], [1, 2], [3, 10], [2, 5], [1, 10]]), pa = fn * 100 / fd, dv = pick([0.3, 0.2, 0.15, 0.35, 0.25, 0.4, 0.05]), pb = Math.round(dv * 100), ans = 100 - pa - pb;
+    if (ans < 5) return genPctWord(lv, only);
+    const t = pick([['מהתלמידים בשכבה', 'בחוג ספורט', 'בחוג מוזיקה', 'בחוג אומנות'], ['מהשטח בגינה', 'שתולים ירקות', 'שתולים פרחים', 'דשא'], ['מהספרים בספרייה', 'ספרי הרפתקאות', 'ספרי מדע', 'ספרי שירה']]);
+    return pctWQ({ unit: '%', card: 6, text: `${M(F(fn, fd))} ${t[0]} ${t[1]}, ${M(fmt(dv))} ${t[0]} ${t[2]}, והשאר ${t[3]}.<br>איזה אחוז ${t[0]} ${t[3]}?`, ans,
+      hint: 'מעבירים את השבר ואת העשרוני לאחוזים, ואז משלימים ל-100%.',
+      exp: `${M(`${F(fn, fd)} = ${F(pa, 100)}`)} = ${P(pa)} · ${M(fmt(dv))} = ${P(pb)} · ${M(`100 - ${pa} - ${pb} = ${ans}`)}, כלומר ${P(ans)}.`,
+      steps: [{ p: `${M(F(fn, fd))} = כמה אחוזים?`, a: pa }, { p: `${M(fmt(dv))} = כמה אחוזים?`, a: pb }, { p: 'השאר (עד 100%):', a: ans }],
+      traps: [{ v: pa + pb, m: `זה האחוז של ${t[1]} ושל ${t[2]} יחד. שואלים על השאר.` }, { v: 100 - pa, m: `הורדתם רק את ${t[1]}. גם ${t[2]} צריך להוריד.` }, { v: 100 - pa - Math.round(dv * 10), m: `${M(fmt(dv))} הם ${pb} מאיות = ${P(pb)}, לא ${P(Math.round(dv * 10))}.` }].filter(q => q.v !== ans && q.v > 0) });
+  }
+  if (k === 'of') { // אחוז מוכר מכמות
+    const [p, f] = pick([[50, 2], [25, 4], [10, 10]]), N = R(3, 30) * f * (p === 10 ? 1 : 1), ans = N * p / 100;
+    if (ans % 1) return genPctWord(lv, only);
+    return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.a}?`, ans,
+      hint: p === 10 ? '10% = עשירית – מחלקים ב-10.' : `${p}% = ${p === 50 ? 'חצי' : 'רבע'}.`, exp: `${P(p)} = ${M(F(1, f))}, ולכן ${M(`${N} : ${f} = ${ans}`)}.`,
+      steps: [{ p: `${P(p)} הם איזה חלק מהשלם? מחלקים את ${N} ב-`, a: f }, { p: M(`${N} : ${f} =`), a: ans }],
+      traps: [{ v: N - ans, m: `זה מספר ה${c.who} ש${c.b}. שואלים על אלה ש${c.a}.` }, { v: N * p, m: 'שכחתם לחלק ב-100.' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'what100') { // מתוך 100 – ישר לאחוז
+    const N = 100, X = R(11, 89);
+    return pctWQ({ unit: '%', card: 0, text: `${c.grp} יש 100 ${c.who}, ו-${X} מהם ${c.a}.<br>איזה אחוז מה${c.who} ${c.a}?`, ans: X,
+      hint: 'אחוז = מתוך 100.', exp: `${X} מתוך 100 = ${M(F(X, 100))} = ${P(X)}.`, traps: [{ v: N - X, m: `זה האחוז של אלה ש${c.b}.` }].filter(t => t.v !== X) });
+  }
+  if (k === 'rest') { // משלים ל-100%
+    const p = pick([10, 20, 25, 30, 40, 45, 60, 65, 75, 80, 90]);
+    return pctWQ({ unit: '%', card: 0, text: `${P(p)} מה${c.who} ${c.grp} ${c.a}.<br>איזה אחוז מה${c.who} ${c.b}?`, ans: 100 - p,
+      hint: 'כל ה' + c.who + ' יחד = 100%.', exp: `${M(`100 - ${p} = ${100 - p}`)}, כלומר ${P(100 - p)}.`, traps: [{ v: p, m: `זה האחוז של אלה ש${c.a}. מה נשאר עד 100%?` }] });
+  }
+  if (k === 'fracTo') { // שבר מוכר בסיפור → אחוז
+    const [n, d] = pick([[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 10], [7, 10], [1, 10]]), ans = n * 100 / d;
+    return pctWQ({ unit: '%', card: 4, text: `${M(F(n, d))} מה${c.who} ${c.grp} ${c.a}.<br>איזה אחוז מה${c.who} זה?`, ans,
+      hint: `מרחיבים את ${n}/${d} למכנה 100.`, exp: `${M(`${F(n, d)} = ${F(ans, 100)}`)} = ${P(ans)}.`,
+      steps: [{ p: `${d} כפול כמה = 100?`, a: 100 / d }, { p: `ולכן גם המונה: ${M(`${n} × ${100 / d} =`)}`, a: ans }],
+      traps: [{ v: n, m: 'זה המונה. מרחיבים למכנה 100 – מה המונה החדש?' }, { v: d, m: 'זה המכנה. מרחיבים למכנה 100.' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'of2') { // אחוז כלשהו מכמות
+    const [p, mul] = pick([[20, 10], [30, 10], [75, 4], [5, 20], [15, 20], [40, 10], [60, 10]]), N = R(2, 20) * mul, ans = N * p / 100;
+    if (ans % 1 || N === 100) return genPctWord(lv, only);
+    return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.a}?`, ans,
+      hint: p % 10 ? `${p}% = ${M(F(p, 100))}: כופלים ב-${p} ומחלקים ב-100.` : `קודם 10% (מחלקים ב-10), ואז כופלים ב-${p / 10}.`,
+      exp: `${M(`${N} × ${p} : 100 = ${ans}`)}.`, steps: p % 10 ? undefined : [{ p: `10% מ-${N}: ${M(`${N} : 10 =`)}`, a: N / 10 }, { p: `${P(p)}: ${M(`${fmt(N / 10)} × ${p / 10} =`)}`, a: ans }],
+      traps: [{ v: N - ans, m: `זה מספר ה${c.who} ש${c.b}.` }, { v: N * p, m: 'שכחתם לחלק ב-100.' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'what') { // איזה אחוז – שבר → מכנה 100
+    const [Y, st] = pick([[20, 1], [25, 1], [50, 1], [10, 1]]), X = R(1, Y / st - 1) * st, ans = X / Y * 100;
+    if (ans % 1) return genPctWord(lv, only);
+    return pctWQ({ unit: '%', card: 8, text: `${c.grp} יש ${Y} ${c.who}, ו-${X} מהם ${c.a}.<br>איזה אחוז מה${c.who} ${c.a}?`, ans,
+      hint: `כותבים שבר: ${X} מתוך ${Y}, ומרחיבים (או מצמצמים) למכנה 100.`, exp: `${M(`${F(X, Y)} = ${F(ans, 100)}`)} = ${P(ans)}.`,
+      steps: [{ p: `כתבו כשבר ${M(F(X, Y))} והעבירו למכנה 100. מה המונה?`, a: ans }],
+      traps: [{ v: X, m: `${X} זה מספר ה${c.who}, לא האחוז. כמה זה מתוך 100?` }, { v: 100 - ans, m: `זה האחוז של אלה ש${c.b}.` }].filter(t => t.v !== ans) });
+  }
+  if (k === 'whatBig') { // מכנה גדול מ-100 – מצמצמים למכנה 100
+    const Y = pick([200, 300, 400, 500]), d = Y / 100, ans = R(3, 45), X = ans * d;
+    const t = pick([['בשכבה', 'תלמידים', 'השתתפו בתחרות'], ['בבית הספר', 'תלמידים', 'מגיעים באופניים'], ['בחווה', 'עצים', 'הם עצי תפוח']]);
+    return pctWQ({ unit: '%', card: 8, text: `${t[0]} יש ${Y} ${t[1]}, ו-${X} מהם ${t[2]}.<br>איזה אחוז זה?`, ans,
+      hint: `המכנה ${Y} גדול מ-100 – <b>מצמצמים</b>: מחלקים את המונה ואת המכנה ב-${d}.`, exp: `${M(`${F(X, Y)} = ${F(`${X} : ${d}`, `${Y} : ${d}`)} = ${F(ans, 100)}`)} = ${P(ans)}.`,
+      steps: [{ p: `${Y} : כמה = 100?`, a: d }, { p: `מצמצמים גם את המונה: ${M(`${X} : ${d} =`)}`, a: ans }],
+      traps: [{ v: X, m: `${X} זה מספר ה${t[1]}. כמה זה מתוך 100?` }, { v: X * d, m: `כאן לא מרחיבים – ${Y} כבר גדול מ-100. מחלקים ב-${d}.` }].filter(q => q.v !== ans) });
+  }
+  if (k === 'disc') { // מחיר אחרי הנחה
+    const p = pick([10, 20, 25, 30, 50]), price = pick([40, 60, 80, 120, 150, 200, 240, 300, 360]), off = price * p / 100, it = pick(PCTW_ITEM);
+    if (off % 1) return genPctWord(lv, only);
+    return pctWQ({ unit: '₪', card: 9, text: `${it[0]} עולה ${price} ₪. בסוף העונה יש הנחה של ${P(p)}.<br>כמה ישלמו על ${it[1]} אחרי ההנחה?`, ans: price - off,
+      hint: `קודם גובה ההנחה: ${p}% מ-${price}. אחר כך מורידים מהמחיר.`, exp: `ההנחה: ${M(`${price} × ${p} : 100 = ${off}`)} ₪. משלמים ${M(`${price} - ${off} = ${price - off}`)} ₪.`,
+      steps: [{ p: `כמה שקלים הם ${P(p)} מ-${price}?`, a: off }, { p: M(`${price} - ${off} =`), a: price - off }],
+      traps: [{ v: off, m: 'זה גובה ההנחה. כמה <b>משלמים</b>?' }, { v: price - p, m: `הורדתם ${p} ₪. ההנחה היא ${p}% מהמחיר.` }].filter(t => t.v !== price - off) });
+  }
+  if (k === 'restN') { // כמה לא – דרך המשלים
+    const p = pick([10, 20, 25, 40, 60, 75, 80]), N = R(2, 12) * 20, ans = N * (100 - p) / 100;
+    if (ans % 1) return genPctWord(lv, only);
+    return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.b}?`, ans,
+      hint: `איזה אחוז ${c.b}? (100% פחות ${p}%)`, exp: `${M(`100 - ${p} = ${100 - p}`)}%, ו-${P(100 - p)} מ-${N} = ${M(`${N} × ${100 - p} : 100 = ${ans}`)}.`,
+      steps: [{ p: `איזה אחוז ${c.b}?`, a: 100 - p }, { p: `כמה הם ${P(100 - p)} מ-${N}?`, a: ans }],
+      traps: [{ v: N * p / 100, m: `זה מספר ה${c.who} ש${c.a}. שואלים על אלה ש${c.b}.` }, { v: 100 - p, m: 'זה האחוז. כמה ' + c.who + ' זה?' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'decTo') { // עשרוני בסיפור → אחוז
+    const v = pick([0.3, 0.4, 0.6, 0.35, 0.45, 0.08, 0.05, 0.72, 0.9]), ans = Math.round(v * 100);
+    const t = pick([`מיכל המים מלא ב-${M(fmt(v))} מהנפח שלו.`, `סוללת הטלפון טעונה ב-${M(fmt(v))} מהקיבולת.`, `במשחק המחשב השלמתי ${M(fmt(v))} מהשלבים.`]);
+    return pctWQ({ unit: '%', card: 5, text: `${t}<br>כמה אחוזים זה?`, ans,
+      hint: 'כותבים במאיות (שתי ספרות אחרי הנקודה). כמה מאיות?', exp: `${M(`${fmt(v)} = ${F(ans, 100)}`)} = ${ans} מאיות = ${P(ans)}.`,
+      traps: [{ v: Math.round(v * 10), m: `${M(fmt(v))} – קראו במאיות: ${M(fmt(v) + (String(v).length === 3 ? '0' : ''))} = ${ans} מאיות.` }, { v: v, m: 'זה המספר העשרוני. כמה אחוזים – כמה מאיות?' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'cmp') { // השוואה בין ייצוגים בסיפור
+    const opts = shuffle([[F(3, 4), 75], [F(2, 5), 40], [F(7, 10), 70], [F(1, 4), 25], [F(4, 5), 80], [F(1, 2), 50]]);
+    const [fa, va] = opts[0]; let vb; do { vb = pick([45, 55, 65, 72, 78, 35, 85]); } while (vb === va);
+    const vd = pick([0.6, 0.68, 0.42, 0.82, 0.3]); if (Math.round(vd * 100) === va || Math.round(vd * 100) === vb) return genPctWord(lv, only);
+    const L = [['נועה', M(fa), va], ['איתי', P(vb), vb], ['שירה', M(fmt(vd)), Math.round(vd * 100)]], best = L.reduce((m, x) => x[2] > m[2] ? x : m);
+    return Object.assign(choiceQ({ word: true, learn: { lesson: 'pct', card: 6 }, text: `במבחן ענתה נועה נכון על ${L[0][1]} מהשאלות, איתי על ${L[1][1]}, ושירה על ${L[2][1]}.<br>מי ענה נכון על <b>החלק הגדול ביותר</b> של השאלות?`,
+      hint: 'מעבירים את שלושתם לאחוזים.', exp: L.map(x => `${x[0]}: ${x[1]} = ${P(x[2])}`).join(' · ') + `. הכי הרבה: ${best[0]}.` }, best[0], L.filter(x => x !== best).map(x => x[0])), {});
+  }
+  if (k === 'whole') { // מהחלק לשלם
+    const p = pick([10, 20, 25, 50, 5, 40]), whole = R(3, 25) * (p === 40 ? 5 : 100 / p), part = whole * p / 100;
+    if (part % 1) return genPctWord(lv, only);
+    return pctWQ({ card: 10, text: `${part} ${c.who} ${c.a}. הם ${P(p)} מכל ה${c.who} ${c.grp}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
+      hint: p === 40 ? '40% הם 4 פעמים 10%. כמה הם 10%? ומשם ל-100%.' : `כמה פעמים ${p}% נכנס ב-100%?`,
+      exp: p === 40 ? `10% → ${M(`${part} : 4 = ${part / 4}`)}, ולכן 100% → ${M(`${part / 4} × 10 = ${whole}`)}.` : `${P(p)} → ${part}, ולכן 100% → ${M(`${part} × ${100 / p} = ${whole}`)}.`,
+      steps: p === 40 ? [{ p: `כמה הם 10%? ${M(`${part} : 4 =`)}`, a: part / 4 }, { p: `ו-100%: ${M(`${part / 4} × 10 =`)}`, a: whole }] : [{ p: `כמה פעמים ${P(p)} נכנס ב-100%?`, a: 100 / p }, { p: M(`${part} × ${100 / p} =`), a: whole }],
+      traps: [{ v: part * p / 100, m: `חישבתם ${p}% מ-${part}. אבל ${part} הם החלק – מחפשים את השלם.` }, { v: part + p, m: 'חיברתם את האחוז. חשבו מה הם 100%.' }].filter(t => t.v !== whole) });
+  }
+  if (k === 'disc2') { // שני שלבים: הנחה ועודף
+    const p = pick([10, 20, 25, 50]), price = pick([80, 120, 160, 180, 240]), pay = price - price * p / 100, bill = pay <= 100 ? 100 : pay <= 200 ? 200 : 500, it = pick(PCTW_ITEM);
+    return pctWQ({ unit: '₪', card: 9, text: `${it[0]} עולה ${price} ₪, ויש הנחה של ${P(p)}. דנה שילמה בשטר של ${bill} ₪.<br>כמה עודף קיבלה?`, ans: bill - pay,
+      hint: 'שלושה שלבים: גובה ההנחה → המחיר אחרי ההנחה → העודף.', exp: `ההנחה ${M(`${price} × ${p} : 100 = ${price - pay}`)} ₪, משלמים ${pay} ₪, עודף ${M(`${bill} - ${pay} = ${bill - pay}`)} ₪.`,
+      steps: [{ p: `גובה ההנחה (${P(p)} מ-${price}):`, a: price - pay }, { p: 'המחיר אחרי ההנחה:', a: pay }, { p: `העודף מ-${bill}:`, a: bill - pay }],
+      traps: [{ v: pay, m: 'זה המחיר אחרי ההנחה. כמה עודף?' }, { v: bill - price, m: 'שכחתם את ההנחה.' }].filter(t => t.v !== bill - pay && t.v >= 0) });
+  }
+  if (k === 'raise') { // התייקרות
+    const p = pick([10, 20, 25, 50]), price = pick([40, 60, 80, 120, 200]), up = price * p / 100, it = pick(['כרטיס לקולנוע', 'מנוי לבריכה', 'ארגז ירקות', 'כרטיס לפארק']);
+    return pctWQ({ unit: '₪', card: 7, text: `${it} עלה ${price} ₪. המחיר עלה ב-${P(p)}.<br>כמה עולה ה${it} עכשיו?`, ans: price + up,
+      hint: `כמה שקלים הם ${p}% מ-${price}? מוסיפים למחיר.`, exp: `${M(`${price} × ${p} : 100 = ${up}`)}, ולכן ${M(`${price} + ${up} = ${price + up}`)} ₪.`,
+      steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: up }, { p: M(`${price} + ${up} =`), a: price + up }],
+      traps: [{ v: price - up, m: 'הורדתם. המחיר <b>עלה</b> – מוסיפים.' }, { v: price + p, m: `הוספתם ${p} ₪. מוסיפים ${p}% מהמחיר.` }, { v: up, m: 'זו רק התוספת. כמה עולה עכשיו?' }].filter(t => t.v !== price + up) });
+  }
+  if (k === 'cmp3') { // השוואת הנחות בשתי חנויות
+    const price = pick([200, 240, 300, 400]), p = pick([20, 25, 30]), f = pick([[1, 5], [1, 4], [3, 10]]);
+    const offA = price * p / 100, offB = price * f[0] / f[1];
+    if (offA === offB) return genPctWord(lv, only);
+    const better = offA > offB ? 'בחנות א' : 'בחנות ב';
+    return Object.assign(choiceQ({ word: true, learn: { lesson: 'pct', card: 6 }, text: `אותו מעיל עולה ${price} ₪ בשתי חנויות.<br>בחנות א: הנחה של ${P(p)}. בחנות ב: הנחה של ${M(F(f[0], f[1]))} מהמחיר.<br>איפה משלמים <b>פחות</b>?`,
+      hint: 'מעבירים את שתי ההנחות לאותו ייצוג (אחוזים), או מחשבים את ההנחה בשקלים.', exp: `חנות א: ${P(p)} = ${offA} ₪ הנחה. חנות ב: ${M(F(f[0], f[1]))} = ${P(f[0] * 100 / f[1])} = ${offB} ₪ הנחה. משלמים פחות ${better}.` }, better, [offA > offB ? 'בחנות ב' : 'בחנות א', 'אותו מחיר בשתיהן']), {});
+  }
+  // restWhole: 3 שלבים – אחוז המשלים ומהחלק לשלם
+  const p = pick([20, 25, 40, 60, 75, 80]), whole = R(2, 12) * 20, rest = whole * (100 - p) / 100;
+  if (rest % 1) return genPctWord(lv, only);
+  const q = 100 - p, g = gcd(q, 100), kk = q / g, u = rest / kk; // q% = kk קבוצות של g%
+  return pctWQ({ card: 10, text: `${P(p)} מה${c.who} ${c.grp} ${c.a}, ו-${rest} ${c.who} ${c.b}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
+    hint: `${rest} ה${c.who} ש${c.b} הם ${q}%. מכאן ל-100%.`,
+    exp: `${P(q)} → ${rest}. ${P(q)} הם ${kk} קבוצות של ${P(g)}, ולכן ${P(g)} → ${M(`${rest} : ${kk} = ${u}`)}, ו-${P(100)} → ${M(`${u} × ${100 / g} = ${whole}`)}.`,
+    steps: [{ p: `איזה אחוז ${c.b}?`, a: q }, { p: `${P(q)} הם ${rest}. כמה הם ${P(g)}? ${M(`${rest} : ${kk} =`)}`, a: u }, { p: `ו-${P(100)}: ${M(`${u} × ${100 / g} =`)}`, a: whole }],
+    traps: [{ v: rest * 100 / p, m: `${rest} הם אלה ש${c.b} – ${100 - p}%, לא ${p}%.` }, { v: rest + p, m: 'חיברתם את האחוז למספר. מחפשים את השלם (100%).' }].filter(t => t.v !== whole && t.v % 1 === 0) });
+}
+// לקורס "אחוזים" במאמן (לא משויכים לנושא): אחוז מכמות – כל אחוז, והתייקרות
+function genPctOfAny() { return genPctOf(2); }
+function genPctRaise() {
+  const p = pick([10, 20, 25, 50, 5]), price = pick([20, 40, 60, 80, 100, 120, 200, 240]);
+  const up = price * p / 100;
+  if (up % 1) return genPctRaise();
+  const askNew = Math.random() < 0.7;
+  const item = pick(['כרטיס להופעה', 'משחק', 'ספר', 'תיק']);
+  const ans = askNew ? price + up : up;
+  return {
+    type: 'num', unit: '₪', text: `${item} עלה ${price} ₪, והמחיר התייקר ב-${P(p)}.<br>${askNew ? 'מה המחיר החדש?' : 'בכמה שקלים התייקר?'}`, ans,
+    traps: (askNew ? [{ v: price - up, m: 'הורדתם – אבל המחיר <b>התייקר</b>. מוסיפים למחיר.' }, { v: price + p, m: `הוספתם ${p} שקלים. ההתייקרות היא ${p}% מהמחיר.` }, { v: up, m: 'זו ההתייקרות. מה המחיר <b>החדש</b>?' }]
+      : [{ v: price + up, m: 'זה המחיר החדש. שואלים בכמה שקלים התייקר.' }]).filter(t => t.v !== ans),
+    steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: up }].concat(askNew ? [{ p: M(`${price} + ${up} =`), a: ans }] : []),
+    hint: `קודם חשבו כמה שקלים הם ${p}% מ-${price}. בהתייקרות – מוסיפים.`,
+    exp: `ההתייקרות: ${M(`${price} × ${p} : 100 = ${up}`)} ₪.${askNew ? ` המחיר החדש: ${M(`${price} + ${up} = ${ans}`)} ₪.` : ''}`
+  };
+}
+[[genPctGrid, 0], [genPctConvert, 5], [genPctOf, 7], [genPctDiscount, 9], [genPctWhat, 8], [genPctWhole, 10], [genPctOfAny, 7], [genPctRaise, 9]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
 
 /* =========================================================
    כיתה א'
@@ -6131,7 +6323,7 @@ const TOPICS6 = [
   }
   ,{
     id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b',
-    desc: 'אחוז כחלק מ-100, אחוז ↔ שבר ועשרוני, אחוז מכמות, הנחה',
+    desc: 'אחוז כחלק מ-100, אחוז ↔ שבר ועשרוני, אחוז מכמות, איזה אחוז זה, הנחה, מהחלק לשלם',
     levels: {
       1: [genPctGrid, genPctConvert, () => genPctOf(1)],
       2: [() => genPctOf(2), genPctConvert, genPctWhat, genPctDiscount],
@@ -9728,7 +9920,7 @@ function genPctSwap() {
 // אחוזים – שתי הנחות ברצף
 function genPctTwice() {
   const [p, a] = pick([[200, 10], [400, 10], [500, 20], [100, 10], [800, 50], [400, 50], [250, 20], [1000, 10]]), one = p * (100 - a) / 100, two = one * (100 - a) / 100;
-  return { type: 'num', unit: '₪', text: `מחיר המשחק ${p} ₪. בשבוע הראשון יש הנחה של ${a}%, ובשבוע השני – עוד ${a}% הנחה <b>מהמחיר החדש</b>. כמה עולה המשחק בשבוע השני?`, ans: two, hint: 'ההנחה השנייה מחושבת מהמחיר אחרי ההנחה הראשונה.',
+  return { type: 'num', unit: '₪', enrich: true, text: `<span class="enr">⭐ העשרה</span>מחיר המשחק ${p} ₪. בשבוע הראשון יש הנחה של ${a}%, ובשבוע השני – עוד ${a}% הנחה <b>מהמחיר החדש</b>. כמה עולה המשחק בשבוע השני?`, ans: two, hint: 'ההנחה השנייה מחושבת מהמחיר אחרי ההנחה הראשונה.',
     traps: [{ v: p * (100 - 2 * a) / 100, m: `חיברתם את ההנחות ל-${2 * a}%. ההנחה השנייה היא מהמחיר החדש (${fmt(one)} ₪) – היא קטנה יותר.` }, { v: one, m: `זה המחיר אחרי הנחה אחת. יש עוד הנחה.` }, { v: p - 2 * a, m: `הורדתם ${a} ₪ פעמיים. ההנחה היא באחוזים.` }],
     exp: `${M(`${p} − ${a}% = ${fmt(one)}`)}, ואז ${M(`${fmt(one)} − ${a}% = ${fmt(two)}`)}.` };
 }
@@ -9797,7 +9989,7 @@ function g6Pools() {
     dec: [[genDecimalPlace, genFracToDec, genDecToFrac], [genDecCompare, genDecAddSub, genNumberLine, genSequence], [genDecEst, genFracPlusDec, genDecErr]],
     geo: [[genRect, () => genSquare(1), genShapeProps], [genRectReverse, () => genSquare(2), genTrianglePerim, genParallelogram, genTriangleArea], [genGeoCut, genGeoScale, genGeoArea, genLShape]],
     data: [[() => genBarRead(0), () => genBarRead(1)], [() => genBarRead(2), () => genBarRead(3), () => genMeanList(1), () => genBakery()], [() => genBarRead(4), () => genMeanList(2), () => genMeanChange(), genMeanAdd, genMeanTarget]],
-    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctDiscount, genPctWhole, genPctTwice]],
+    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctWhole, () => genPctWord(3, 'whatBig'), () => genPctWord(3, 'restWhole'), genPctTwice]],
     mul22: [[() => genMul22('area'), () => genMul22('plain')], [() => genMul22('plain'), () => genMul22('word')], [genMul22Est, genMul22Cmp]],
     seq: [[() => genSeqAdd(1)], [() => genSeqAdd(2), () => genSeqMul(1), () => genSeqMul(2)], [genSeqTerm, genSeqMember]],
     mulfr: [[() => genMulWhFr(1), genFracTimesWhole], [() => genMulWhFr(2), genFracTimesWhole], [genMulFrReason, genMulWhFr3, genFracTimesWhole]],
@@ -9994,6 +10186,27 @@ if (GRADE === 6) TOPICS.push({
     3: [genExpandedDecimal, genDecCompare]
   },
   tips: ['אחרי הנקודה: הספרה הראשונה – עשיריות, השנייה – מאיות, השלישית – אלפיות.', 'כל מקום שווה פי 10 מהמקום שמימינו – גם אחרי הנקודה: 10 מאיות = עשירית אחת.', 'משווים מספרים עשרוניים מקום אחר מקום משמאל: קודם השלמים, אחר כך העשיריות.']
+});
+// 💬 שאלות מילוליות באחוזים (כיתה ו') – נושא נפרד בקטגוריית האחוזים (21.11). נוסף בסוף כדי לא לשבש קודי חוברות
+if (GRADE === 6) TOPICS.push({
+  id: 'pctWord', name: 'שאלות מילוליות באחוזים', icon: '💬', color: '#c0392b',
+  desc: 'סיפורים עם אחוזים, שברים ועשרוניים: כמה זה, איזה אחוז זה, משלים ל-100%, הנחה והתייקרות, מהחלק לשלם, מי יותר',
+  levels: { 1: [() => genPctWord(1)], 2: [() => genPctWord(2)], 3: [() => genPctWord(3)] },
+  tips: ['קוראים את כל השאלה: מה השלם (100%)? מה החלק? מה שואלים?', 'שבר או עשרוני בסיפור? מעבירים לאחוזים: מרחיבים למכנה 100 / קוראים במאיות.', 'הנחה – מורידים מהמחיר. התייקרות – מוסיפים. בודקים: האם התשובה הגיונית?']
+});
+// כיתה ה' (21.11, לפי תכנית הלימודים עמ' 101): רק היכרות – אחוז = שם אחר למאית, ומשמעות 50%, 25%, 10%. בלי חישובי אחוזים של כיתה ו'
+function genPctMean5() {
+  const [p, w, f] = pick([[50, 'חצי', 2], [25, 'רבע', 4], [10, 'עשירית', 10]]), N = R(2, 12) * f * (f === 10 ? 1 : 2), ans = N / f;
+  const t = pick([['בשכבה', 'תלמידים', 'הם בנות'], ['בקופסה', 'עפרונות', 'הם אדומים'], ['בגינה', 'עצים', 'הם עצי פרי']]);
+  return { type: 'num', learn: { lesson: 'pct', card: 4 }, text: `${t[0]} ${N} ${t[1]}. ${P(p)} מהם ${t[2]}.<br>${P(p)} זה ${w}. כמה ${t[1]} ${t[2]}?`, ans,
+    hint: `${p}% = ${w}: מחלקים את ${N} ל-${f} חלקים שווים.`, exp: `${P(p)} = ${M(F(1, f))}, ולכן ${M(`${N} : ${f} = ${ans}`)}.`,
+    traps: [{ v: N - ans, m: 'זה מה שנשאר. שואלים על החלק עצמו.' }, { v: N * p, m: `${p}% הוא ${w}, לא כפל ב-${p}.` }, { v: p, m: `${p} הוא האחוז. כמה ${t[1]} זה?` }].filter(q => q.v !== ans) };
+}
+if (GRADE === 5) TOPICS.push({
+  id: 'pct', name: 'אחוזים – היכרות', icon: '💯', color: '#c0392b',
+  desc: 'אחוז = שם אחר למאית; אחוז, שבר עם מכנה 100 ועשרוני; 50%, 25%, 10%',
+  levels: { 1: [genPctGrid], 2: [genPctConvert], 3: [genPctMean5] },
+  tips: ['אחוז = מתוך 100: 35% = 35 מתוך 100 = 0.35.', '50% = חצי · 25% = רבע · 10% = עשירית.', '7% = 0.07 (7 מאיות), לא 0.7.']
 });
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
 if (GRADE === 6) g6Pools();
@@ -12038,8 +12251,8 @@ Object.assign(LESSONS, {
 Object.assign(LESSONS, {
   pct: {
     id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b', topic: 'pct',
-    desc: 'מה זה אחוז, אחוז ↔ שבר ועשרוני, אחוז מכמות, הנחה, איזה אחוז זה',
-    practice: [genPctGrid, genPctConvert, () => genPctOf(1), () => genPctOf(2), genPctWhat, genPctDiscount, genPctWhole, () => genPctOf(2)],
+    desc: 'מה זה אחוז, אחוז = שבר עם מכנה 100 = מאיות, שלושה שמות לאותו חלק, אחוזים מוכרים, מעברים והשוואה, אחוז מכמות, איזה אחוז זה, הנחה, מהחלק לשלם',
+    practice: [genPctGrid, genPctConvert, genPctConvert, () => genPctOf(1), () => genPctOf(2), genPctWhat, genPctDiscount, genPctWhole],
     cards: [
       {
         title: 'מה זה אחוז?',
@@ -12050,8 +12263,47 @@ Object.assign(LESSONS, {
         try: { type: 'num', q: `ריבוע מחולק ל-100 משבצות, ו-62 מהן צבועות. איזה אחוז מהריבוע צבוע?`, ans: 62, hint: 'כמה מתוך 100?', exp: `62 מתוך 100 = ${P(62)}`, traps: [{ v: 38, m: 'זה החלק שלא צבוע.' }] }
       },
       {
-        title: 'אחוזים, שברים ועשרוניים',
-        html: `<table class="ftable">
+        title: 'אחוז הוא שבר עם מכנה 100',
+        html: `<p>"37 <b>מתוך 100</b>" – כך כותבים גם כשבר:</p>
+          <div class="center">${pctGridSVG(37)}</div>
+          <div class="explain center">${P(37)} = ${M(F(37, 100))}</div>
+          <p>המונה – כמה משבצות צבועות. המכנה – תמיד <b>100</b>, כי השלם מחולק ל-100 חלקים שווים.</p>
+          <div class="rule">💡 כל אחוז אפשר לכתוב כשבר שהמכנה שלו 100: ${P(9)} = ${M(F(9, 100))} · ${P(80)} = ${M(F(80, 100))}.</div>`,
+        try: { type: 'frac', q: `כתבו את ${P(9)} כשבר.`, ans: { n: 9, d: 100 }, form: 'any', hint: '9 מתוך כמה?', exp: `${P(9)} = 9 מתוך 100 = ${M(F(9, 100))}` }
+      },
+      {
+        title: 'אחוז הוא מאיות – ומכאן עשרוני',
+        html: `<p>שבר עם מכנה 100 הוא <b>מאיות</b>. ומאיות כותבים במספר עשרוני – שתי ספרות אחרי הנקודה:</p>
+          <div class="explain center">${P(37)} = ${M(F(37, 100))} = 37 מאיות = ${M('0.37')}</div>
+          <div class="explain center">${P(7)} = ${M(F(7, 100))} = 7 מאיות = ${M('0.07')}</div>
+          <div class="warn">⚠️ ${P(7)} הוא ${M('0.07')}, לא ${M('0.7')}! ${M('0.7')} = 7 עשיריות = 70 מאיות = ${P(70)}.</div>
+          <div class="rule">💡 מאחוז לעשרוני: הספרות של האחוז הן המאיות. אחוז חד-ספרתי – כותבים 0 במקום העשיריות.</div>`,
+        try: { type: 'num', q: `כתבו את ${P(7)} כמספר עשרוני.`, ans: 0.07, hint: '7 מאיות – הספרה 7 במקום המאיות (השני אחרי הנקודה).', exp: `${P(7)} = ${M(`${F(7, 100)} = 0.07`)}`, traps: [{ v: 0.7, m: '0.7 = 7 עשיריות = 70%. ‏7% הם 7 <b>מאיות</b>: 0.07.' }, { v: 7, m: '7 הוא שבעה שלמים. 7% הם 7 מאיות – פחות מ-1.' }] }
+      },
+      {
+        title: 'שלושה שמות לאותו חלק',
+        html: `<p>צבעו משבצות, וראו את אותו חלק בשלוש דרכים:</p>
+          <div class="frow"><div data-pgrid></div><div class="dval" data-pval></div></div>
+          <div class="lbtns"><button class="secondary" data-pk="10">+ 10</button><button class="secondary" data-pk="1">+ 1</button><button class="secondary" data-pk="-1">− 1</button><button class="secondary" data-pk="-10">− 10</button></div>
+          <div class="rule">💡 אחוז, שבר ועשרוני – <b>שלושה שמות לאותו מספר</b>. לא משנה איך כותבים, החלק הצבוע אותו חלק.</div>`,
+        setup(root) {
+          let k = 45;
+          const show = () => {
+            root.querySelector('[data-pgrid]').innerHTML = pctGridSVG(k);
+            root.querySelector('[data-pval]').innerHTML = `<div class="fbig">${P(k)}</div><div>${M(F(k, 100))}</div><div class="fbig">${M(k === 100 ? '1' : fmt(k / 100))}</div>`;
+          };
+          root.querySelectorAll('[data-pk]').forEach(b => b.onclick = () => { k = Math.max(0, Math.min(100, k + Number(b.dataset.pk))); show(); });
+          show();
+        },
+        try: { type: 'choice', q: `איזה מהם <b>לא</b> שווה ל-${P(40)}?`, choices: [M('0.04'), M('0.4'), M(F(40, 100)), M('0.40')], ans: 0, hint: 'כמה מאיות הם 40%?', exp: `${P(40)} = ${M(F(40, 100))} = ${M('0.40')} = ${M('0.4')}. אבל ${M('0.04')} = ${P(4)}.`, traps: [{ c: M('0.4'), m: `${M('0.4')} = ${M('0.40')} – אפס בסוף לא משנה. זה כן שווה ל-40%.` }] }
+      },
+      {
+        title: 'אחוזים מוכרים',
+        html: `<p>כמה אחוזים כדאי להכיר בעל-פה. למה ${M(F(1, 4))} = ${P(25)}? ברבע מהריבוע יש 25 משבצות:</p>
+          <div class="center">${pctGridSVG(25)}</div>
+          <p>ובחשבון – מרחיבים למכנה 100:</p>
+          <div class="explain center">${M(`${F(1, 4)} = ${F('1 × 25', '4 × 25')} = ${F(25, 100)}`)} = ${P(25)}</div>
+          <table class="ftable">
             <tr><td><b>אחוז</b></td><td><b>שבר</b></td><td><b>עשרוני</b></td></tr>
             <tr><td>${P(50)}</td><td>${M(F(1, 2))}</td><td>${M('0.5')}</td></tr>
             <tr><td>${P(25)}</td><td>${M(F(1, 4))}</td><td>${M('0.25')}</td></tr>
@@ -12059,39 +12311,94 @@ Object.assign(LESSONS, {
             <tr><td>${P(10)}</td><td>${M(F(1, 10))}</td><td>${M('0.1')}</td></tr>
             <tr><td>${P(20)}</td><td>${M(F(1, 5))}</td><td>${M('0.2')}</td></tr>
             <tr><td>${P(1)}</td><td>${M(F(1, 100))}</td><td>${M('0.01')}</td></tr></table>
-          <div class="rule">💡 אחוז → עשרוני: מחלקים ב-100. עשרוני → אחוז: כופלים ב-100.</div>`,
-        try: { type: 'num', q: `כתבו את ${P(7)} כמספר עשרוני.`, ans: 0.07, hint: '7 מתוך 100 – שתי ספרות אחרי הנקודה.', exp: `${P(7)} = ${M(`${F(7, 100)} = 0.07`)}`, traps: [{ v: 0.7, m: '0.7 = 70%. אחוז אחד = 0.01, לכן 7% = 0.07.' }] }
+          <div class="rule">💡 ${P(50)} = חצי · ${P(25)} = רבע · ${P(10)} = עשירית. אם שוכחים – מרחיבים או מצמצמים את השבר למכנה 100.</div>`,
+        try: { type: 'num', q: `${M(F(1, 5))} = כמה אחוזים?`, ans: 20, hint: 'מרחיבים למכנה 100: 5 כפול כמה = 100?', exp: `${M(`${F(1, 5)} = ${F('1 × 20', '5 × 20')} = ${F(20, 100)}`)} = ${P(20)}`, traps: [{ v: 5, m: 'זה המכנה. מרחיבים את השבר למכנה 100 – מה המונה?' }, { v: 15, m: 'לא מחסרים. מרחיבים: כופלים מונה ומכנה ב-20.' }] }
       },
       {
-        title: 'אחוז מכמות',
-        html: `<p>כמה הם ${P(30)} מ-${M('240')}?</p>
-          <ol class="lsteps"><li>${P(10)} = מחלקים ב-10: ${M('240 : 10 = 24')}</li><li>${P(30)} = שלוש פעמים ${P(10)}: ${M('24 × 3 = 72')}</li></ol>
-          <div class="rule">💡 קיצורי דרך: ${P(50)} – חצי · ${P(25)} – רבע · ${P(10)} – מחלקים ב-10 · ${P(1)} – מחלקים ב-100.</div>
-          <p class="small">ובאופן כללי: ${M('240 × 30 : 100 = 72')}</p>`,
+        title: 'משבר ומעשרוני – לאחוז',
+        html: `<p>${M(F(3, 5))} מהריבוע: כל חמישית היא 20 משבצות, ושלוש חמישיות הן 60 משבצות = ${P(60)}.</p>
+          <div class="center">${pctGridSVG(60)}</div>
+          <ol class="lsteps">
+            <li><b>משבר:</b> מרחיבים (או מצמצמים) למכנה 100. המונה הוא האחוז.<br>${M(`${F(3, 5)} = ${F(60, 100)}`)} = ${P(60)} · ${M(`${F(18, 200)} = ${F(9, 100)}`)} = ${P(9)}</li>
+            <li><b>מעשרוני:</b> כותבים במאיות (שתי ספרות אחרי הנקודה). מספר המאיות הוא האחוז.<br>${M('0.4 = 0.40')} = 40 מאיות = ${P(40)} · ${M('0.06')} = 6 מאיות = ${P(6)}</li>
+          </ol>
+          <div class="warn">⚠️ ${M('0.4')} הוא <b>${P(40)}</b>, לא ${P(4)}! קודם משלימים ל-${M('0.40')}.</div>`,
+        try: { type: 'num', q: `${M('0.3')} = כמה אחוזים?`, ans: 30, hint: 'כתבו במאיות: 0.3 = 0.30. כמה מאיות?', exp: `${M('0.3 = 0.30')} = 30 מאיות = ${P(30)}`, traps: [{ v: 3, m: `${M('0.3')} הם 3 <b>עשיריות</b> = 30 מאיות. ${P(3)} = ${M('0.03')}.` }, { v: 0.3, m: 'זה המספר העשרוני. כמה אחוזים – כמה מאיות?' }] }
+      },
+      {
+        title: 'מה גדול יותר?', grades: [6],
+        html: `<p>איך משווים ${M('0.3')}, ${P(25)} ו-${M(F(1, 5))}? <b>מעבירים את כולם לאותו שם</b> – הכי נוח: אחוזים.</p>
+          <ol class="lsteps"><li>${M('0.3 = 0.30')} = ${P(30)}</li><li>${P(25)}</li><li>${M(`${F(1, 5)} = ${F(20, 100)}`)} = ${P(20)}</li></ol>
+          <div class="explain center">${P(30)} > ${P(25)} > ${P(20)} ← ${M('0.3')} הכי גדול</div>
+          <div class="rule">💡 קשה להשוות שבר לעשרוני? מעבירים הכול לאחוזים (או הכול לעשרוני) – ואז משווים מספרים רגילים.</div>`,
+        try: { type: 'choice', q: 'איזה מספר הוא <b>הגדול ביותר</b>?', choices: [M(F(3, 4)), M('0.7'), P(72), M('0.07')], ans: 0, hint: 'העבירו את כולם לאחוזים.', exp: `${M(F(3, 4))} = ${P(75)} · ${M('0.7')} = ${P(70)} · ${P(72)} · ${M('0.07')} = ${P(7)}. הגדול: ${M(F(3, 4))}.`, traps: [{ c: P(72), m: `72 נראה גדול, אבל ${M(F(3, 4))} = ${P(75)}.` }, { c: M('0.7'), m: `${M('0.7')} = ${P(70)} – פחות מ-${P(72)} ומ-${P(75)}.` }] }
+      },
+      {
+        title: 'אחוז מכמות', grades: [6],
+        html: `<p>בבית הספר 240 תלמידים. מחלקים אותם ל-<b>10 קבוצות שוות</b>. כל קבוצה היא ${P(10)}, כלומר ${M('240 : 10 = 24')} תלמידים:</p>
+          ${pctGroups(10, 24, 3, `3 קבוצות צבועות הן ${P(30)}: ${M('24 × 3 = 72')} תלמידים`)}
+          <p>מתחילים מאחוזים מוכרים, וממשיכים מהם:</p>
+          <ol class="lsteps">
+            <li>${P(50)} הם חצי. חצי מ-240: ${M('240 : 2 = 120')}</li>
+            <li>${P(10)} הם עשירית – מחלקים ב-10: ${M('240 : 10 = 24')}</li>
+            <li>${P(30)} הם שלוש פעמים ${P(10)}: ${M('24 × 3 = 72')}</li>
+            <li>${P(5)} הם חצי מ-${P(10)}: ${M('24 : 2 = 12')}</li>
+          </ol>
+          <div class="rule">💡 ובאופן כללי, לכל אחוז: ${P(30)} הם ${M(F(30, 100))}. כופלים ב-30 ומחלקים ב-100: ${M('240 × 30 : 100 = 72')}</div>`,
         try: { type: 'num', q: `כמה הם ${P(20)} מ-${M('150')}?`, ans: 30, hint: '10% = 15. 20% = פעמיים.', exp: `${M('150 : 10 = 15')}, ${M('15 × 2 = 30')}`, traps: [{ v: 3000, m: 'שכחתם לחלק ב-100.' }, { v: 120, m: 'זה מה שנשאר אחרי שמורידים 20%.' }] }
       },
       {
-        title: 'הנחה',
+        title: 'איזה אחוז זה?', grades: [6],
+        html: `<p>בכיתה 25 תלמידים, ו-15 מהם בנות. איזה אחוז הן הבנות?</p>
+          <ol class="lsteps"><li>כותבים שבר – החלק מתוך השלם: ${M(F(15, 25))}</li><li>מרחיבים למכנה 100 (כפול 4): ${M(`${F(15, 25)} = ${F(60, 100)}`)}</li><li>${P(60)}</li></ol>
+          <p>ומה אם השלם גדול מ-100? בשכבה 400 תלמידים, ו-36 מהם בנות. כאן <b>מצמצמים</b> למכנה 100:</p>
+          <ol class="lsteps"><li>${M(F(36, 400))}</li><li>${M('400 : 4 = 100')}, ולכן מחלקים גם את המונה ב-4: ${M(`${F(36, 400)} = ${F(9, 100)}`)}</li><li>${P(9)}</li></ol>
+          <div class="rule">💡 השלם קטן מ-100 – <b>מרחיבים</b> למכנה 100. השלם גדול מ-100 – <b>מצמצמים</b> למכנה 100. זה בדיוק המעבר משבר לאחוז שלמדנו.</div>`,
+        try: { type: 'num', q: 'במבחן היו 20 שאלות, ונועה ענתה נכון על 17. איזה אחוז מהשאלות היא ענתה נכון?', ans: 85, hint: '17/20 – הרחיבו למכנה 100 (כפול 5).', exp: `${M(`${F(17, 20)} = ${F(85, 100)}`)} = ${P(85)}`, traps: [{ v: 17, m: '17 זה מספר השאלות. כמה זה מתוך 100?' }] }
+      },
+      {
+        title: 'הנחה', grades: [6],
         html: `<p>מחיר משחק <b>80 ₪</b>, והנחה של <b>${P(25)}</b>. כמה משלמים?</p>
           <ol class="lsteps"><li>גובה ההנחה: ${P(25)} = רבע: ${M('80 : 4 = 20')} ₪</li><li>המחיר אחרי ההנחה: ${M('80 - 20 = 60')} ₪</li></ol>
           <div class="warn">⚠️ הנחה של 25% היא לא 25 ₪! מחשבים 25% <b>מהמחיר</b>.</div>`,
         try: { type: 'num', q: `חולצה עולה 120 ₪, והנחה של ${P(10)}. כמה משלמים אחרי ההנחה?`, ans: 108, hint: '10% מ-120 = 12.', exp: `${M('120 - 12 = 108')} ₪`, traps: [{ v: 12, m: 'זו ההנחה. כמה <b>משלמים</b>?' }, { v: 110, m: 'הורדתם 10 ₪. ההנחה היא 10% מהמחיר = 12 ₪.' }] }
       },
       {
-        title: 'איזה אחוז זה?',
-        html: `<p>בכיתה 25 תלמידים, ו-15 מהם בנות. איזה אחוז הן הבנות?</p>
-          <ol class="lsteps"><li>כותבים שבר – החלק מתוך השלם: ${M(F(15, 25))}</li><li>מרחיבים למכנה 100 (כפול 4): ${M(`${F(15, 25)} = ${F(60, 100)}`)}</li><li>${P(60)}</li></ol>`,
-        try: { type: 'num', q: 'במבחן היו 20 שאלות, ונועה ענתה נכון על 17. איזה אחוז מהשאלות היא ענתה נכון?', ans: 85, hint: '17/20 – הרחיבו למכנה 100 (כפול 5).', exp: `${M(`${F(17, 20)} = ${F(85, 100)}`)} = ${P(85)}`, traps: [{ v: 17, m: '17 זה מספר השאלות. כמה זה מתוך 100?' }] }
+        title: 'מהחלק לשלם', grades: [6],
+        html: `<p>12 תלמידים יצאו לטיול, והם ${P(25)} מהשכבה. כמה תלמידים בשכבה?</p>
+          <p>${P(25)} הם רבע. אם רבע אחד הוא 12, השלם הוא <b>4 רבעים</b>:</p>
+          ${pctGroups(4, 12, 1, `רבע אחד הוא 12. כל השכבה היא 4 רבעים: ${M('12 × 4 = 48')}`)}
+          <p>ואם ${P(10)} הם 7? ב-${P(100)} יש 10 קבוצות של ${P(10)}:</p>
+          ${pctGroups(10, 7, 1, `השלם הוא 10 קבוצות: ${M('7 × 10 = 70')}`)}
+          <p>ואם ${P(40)} הם 28? ${P(40)} הם 4 קבוצות של ${P(10)}. בקבוצה אחת: ${M('28 : 4 = 7')}. בשלם 10 קבוצות: ${M('7 × 10 = 70')}</p>
+          <div class="warn">⚠️ לא מחשבים ${P(25)} <b>מ</b>-12! 12 הוא החלק. מחפשים את השלם – והוא <b>גדול</b> מהחלק.</div>
+          <div class="rule">💡 מהחלק לשלם: כמה פעמים האחוז נכנס ב-${P(100)}? כופלים את החלק באותו מספר. לא נכנס בדיוק? עוברים קודם ל-${P(10)}.</div>`,
+        try: { type: 'num', q: `${P(20)} מהעצים בחורשה הם 9 עצים. כמה עצים יש בחורשה?`, ans: 45, hint: `כמה פעמים ${P(20)} נכנס ב-${P(100)}?`, exp: `${P(20)} נכנס ב-${P(100)} חמש פעמים: ${M('9 × 5 = 45')} עצים.`,
+          traps: [{ v: 1.8, m: `חישבתם ${P(20)} מ-9. אבל 9 הם החלק – מחפשים את כל העצים.` }, { v: 29, m: 'חיברתם 9 ו-20. ציירו 5 קבוצות של 20%: בכל אחת 9 עצים.' }, { v: 180, m: `כפלתם ב-20. ${P(20)} נכנס ב-${P(100)} רק 5 פעמים.` }, { v: 4.5, m: 'חילקתם. השלם גדול מהחלק – כופלים.' }] }
       },
       {
-        title: 'כללים לזכור 📌',
+        title: 'כללים לזכור 📌', grades: [6],
         html: `<ul class="recap">
           <li>💯 <b>אחוז</b> = מתוך 100. ${P(100)} = השלם.</li>
-          <li>🔄 אחוז ↔ עשרוני: מחלקים או כופלים ב-100. ${P(50)} = ${M(F(1, 2))} · ${P(25)} = ${M(F(1, 4))} · ${P(10)} = ${M(F(1, 10))}.</li>
-          <li>🧮 <b>אחוז מכמות:</b> מתחילים מ-${P(10)} (מחלקים ב-10) או משתמשים בחצי ורבע.</li>
+          <li>➗ <b>אחוז = שבר עם מכנה 100:</b> ${P(37)} = ${M(F(37, 100))}.</li>
+          <li>🔢 <b>אחוז = מאיות:</b> ${P(37)} = ${M('0.37')}, ${P(7)} = ${M('0.07')}.</li>
+          <li>🔄 <b>משבר לאחוז:</b> מרחיבים למכנה 100. <b>מעשרוני לאחוז:</b> כותבים במאיות (${M('0.4 = 0.40')} = ${P(40)}).</li>
+          <li>⭐ ${P(50)} = ${M(F(1, 2))} · ${P(25)} = ${M(F(1, 4))} · ${P(10)} = ${M(F(1, 10))} · ${P(20)} = ${M(F(1, 5))}.</li>
+          <li>⚖️ <b>השוואה:</b> מעבירים הכול לאותו שם (אחוזים).</li>
+          <li>🧮 <b>אחוז מכמות:</b> מתחילים מ-${P(50)} או ${P(10)}, וממשיכים מהם.</li>
+          <li>❓ <b>איזה אחוז זה?</b> כותבים שבר (חלק מתוך שלם) ומרחיבים או מצמצמים למכנה 100.</li>
           <li>🏷️ <b>הנחה:</b> מחשבים את גובה ההנחה ומורידים מהמחיר.</li>
-          <li>❓ <b>איזה אחוז זה?</b> כותבים שבר (חלק מתוך שלם) ומרחיבים למכנה 100.</li>
+          <li>🔁 <b>מהחלק לשלם:</b> כמה פעמים האחוז נכנס ב-${P(100)}? כופלים את החלק.</li>
         </ul><p class="center"><b>כל הכבוד! סיימתם את כרטיסיות האחוזים 🎉</b></p>`
+      },
+      {
+        title: 'כללים לזכור 📌', grades: [5],
+        html: `<ul class="recap">
+          <li>💯 <b>אחוז</b> = מתוך 100 = <b>שם אחר למאית</b>. ${P(100)} = השלם.</li>
+          <li>➗ ${P(37)} = ${M(F(37, 100))} = ${M('0.37')} · ${P(7)} = ${M('0.07')} (לא ${M('0.7')}).</li>
+          <li>⭐ ${P(50)} = חצי · ${P(25)} = רבע · ${P(10)} = עשירית.</li>
+          <li>🔄 משבר לאחוז: מרחיבים למכנה 100. מעשרוני לאחוז: כמה מאיות?</li>
+        </ul><p class="center"><b>כל הכבוד! בכיתה ו' נמשיך: אחוז מכמות, איזה אחוז זה והנחה 🎉</b></p>`
       }
     ]
   }
@@ -12969,7 +13276,7 @@ function home() {
     { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', ...(GRADE >= 2 ? {} : { grp: 'לומדים ומתרגלים' }) },
     ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }, { id: 'hiluk', label: 'אימון חילוק', icon: 'divide', wash: 'rgba(122,79,181,0.22)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
-    ...(GRADE >= 4 ? [{ id: 'excel', label: 'מצוינות', icon: 'star', wash: 'rgba(242,201,76,0.34)' }] : []),
+    // מצוינות (21.11): עברה לקטגוריה באריחים – הלשונית הוסרה. הפאנל נשאר מוסתר (הכפתורים שלו מופעלים מהקטגוריה)
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
     ...(T ? [] : [{ id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' }]),
@@ -12989,7 +13296,7 @@ function home() {
   app.innerHTML = `
     <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
     <div class="hero-wrap">
-      <h1 class="hero">מתרגלים מתמטיקה</h1>
+      <h1 class="hero">mathinclass</h1>
       <svg class="doodle-line" aria-hidden="true" width="300" height="14" viewBox="0 0 300 14"><path d="M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"></path></svg>
       <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
@@ -13040,7 +13347,7 @@ function home() {
           <p class="muted">חילוק הוא "כפל הפוך": ${M('56 : 8 = ?')} שואלים – <b>8 כפול מה זה 56?</b> באימון: מפה אישית של עובדות החילוק, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
         </section>` : ''}
         ${wpPanelHTML()}
-        ${GRADE >= 4 ? `<section class="panel" data-panel="excel" ${homeTab === 'excel' ? '' : 'hidden'}>
+        ${GRADE >= 4 ? `<section class="panel" data-panel="excel" hidden>
           <h2>מצוינות</h2>
           <p class="muted">אתגרים למי שאוהב לחשוב: חידות, תבניות וגילויים מתמטיים.</p>
           <button class="game-card" id="palGo">
@@ -13349,6 +13656,7 @@ function home() {
   if ($('mkGo')) $('mkGo').onclick = mkHome;
   if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
+  ['pal', 'euler', 'cub', 'mag', 'grw'].forEach(k => { const b = $('x' + k + 'Go'); if (b) b.onclick = () => $(k + 'Go').click(); });
   if ($('champGo')) $('champGo').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('tframeGo')) $('tframeGo').onclick = tenFrame;
@@ -13415,15 +13723,17 @@ const TOPIC_CATS = [
   { id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55' },
   { id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b' },
   { id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1' },
-  { id: 'word', name: 'שאלות מילוליות', icon: '💬', color: '#3d7a6e' }
+  { id: 'word', name: 'שאלות מילוליות', icon: '💬', color: '#3d7a6e' },
+  { id: 'exc', name: 'מצוינות', icon: '🧠', color: '#6b3fa0' }
 ];
 // נושא שלא מופיע כאן – "מספרים טבעיים"
 const CAT_OF = {
   dec: 'dec', placeDec: 'dec',
   frac: 'frac', mulfr: 'frac', divfr: 'frac',
   shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', solids: 'geo', solidsN: 'geo', solidsS: 'geo', solidsV: 'geo', drawGo: 'geo', quadGo: 'geo',
-  pct: 'pct',
+  pct: 'pct', pctWord: 'pct',
   data: 'data',
+  xpalGo: 'exc', xeulerGo: 'exc', xcubGo: 'exc', xmagGo: 'exc', xgrwGo: 'exc',
   wpm: 'word', wpGo: 'word'
 };
 const catOf = id => CAT_OF[id] || 'nat';
@@ -13442,9 +13752,15 @@ function topicCatsHTML() {
       { id: 'drawGo', h: () => extra('drawGo', '#2f8f55', 'שרטוט בגאומטריה', 'משרטטים על לוח נקודות: מקביל, מאונך, גובה, משולש ישר-זווית, מלבן, מקבילית, טרפז ולפי אלכסונים') },
       { id: 'quadGo', h: () => extra('quadGo', '#4c5fd5', 'מרובעים', `מקבילית, מעוין, טרפז ודלתון – זיהוי, תכונות, ${GRADE >= 5 ? 'זוויות, ' : ''}היקף ושרטוט`) }
     ] : []),
-    { id: 'wpGo', h: () => extra('wpGo', '#3d7a6e', 'שאלות מילוליות', 'בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים') }
+    { id: 'wpGo', h: () => extra('wpGo', '#3d7a6e', 'שאלות מילוליות', 'בוחרים פעולות וסוג מספרים – לומדים איך פותרים, מתרגלים ומדפיסים') },
+    // מצוינות (21.11): פעילויות לשונית "מצוינות" גם כקטגוריה באריחים (הכפתורים מפעילים את המקוריים)
+    ...(GRADE >= 4 ? [['xpalGo', '🪞 פלינדרום', 'מספרים שנקראים אותו דבר משני הכיוונים: משחק, חידות ותבניות ב-5 רמות'],
+      ['xeulerGo', '✏️ משיכת קולמוס אחת', 'אפשר לצייר את הצורה בקו אחד בלי להרים את העיפרון?'],
+      ['xcubGo', '🧊 כמה קוביות?', 'סופרים קוביות במבנה משורטט – גם את המוסתרות'],
+      ['xmagGo', '🔢 ריבועי קסם', 'כל שורה, טור ואלכסון – לאותו סכום'],
+      ['xgrwGo', '📈 תבניות גדילה', 'מגלים את הכלל ויודעים מה יהיה בשלב 10 ואפילו בשלב 100']].map(([id, nm, ds]) => ({ id, h: () => extra(id, '#6b3fa0', nm, ds) })) : [])
   ];
-  const groups = TOPIC_CATS.map(c => ({ c, topics: TOPICS.filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
+  const groups = TOPIC_CATS.map(c => ({ c, topics: [...TOPICS, ...XTOPICS].filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
     extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
     .filter(g => g.topics.length || g.extra.length);
   const tools = g => g.tools.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${g.tools.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
@@ -13482,6 +13798,11 @@ function topicHome(id) {
   const ls = topicLessons(id), tools = TOOL_CARDS.filter(c => c.topics.includes(id));
   let n = 0;
   const step = h => `<h2 class="tp-h"><span class="tp-n">${++n}</span>${h}</h2>`;
+  // רצף למידה (21.11): מה השלב הבא – הכרטיסייה הראשונה שלא הושלמה, אחר כך תרגול, ובסוף בדיקת שליטה
+  let nextL = null;
+  for (const l of ls) { const done = learnedSet(l), cs = cardsOf(l), k = cs.findIndex((_, i) => !done.has(i)); if (k >= 0) { nextL = { l, k, t: cs[k].title, all: cs.length }; break; } }
+  const nextHTML = nextL ? `📍 <b>השלב הבא:</b> כרטיסייה ${nextL.k + 1} מתוך ${nextL.all} – ${nextL.t} <button type="button" class="secondary" id="tpNext">להמשיך ←</button>`
+    : !s ? `📍 <b>השלב הבא:</b> תרגול ב${LEVEL_NAME[cur]}` : m < 80 ? `📍 <b>השלב הבא:</b> להמשיך לתרגל (${LEVEL_NAME[cur]})` : `📍 <b>השלב הבא:</b> בדיקת שליטה עצמאית`;
   app.innerHTML = `
     ${crumbs(id)}
     <div class="topbar">
@@ -13492,6 +13813,7 @@ function topicHome(id) {
       <div class="ds">${t.desc}</div>
       ${masteryMeter(m)}
       <div class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></div>
+      <div class="tp-next">${nextHTML}</div>
     </div>
     ${ls.length ? `<section class="card tp-step">${step('ללמוד – כרטיסיות הסבר')}
       <div class="tp-lessons">${ls.map(l => { const L = LESSONS[l], k = learnedSet(l).size, all = cardsOf(l).length; return `<button type="button" class="tp-lesson" data-tl="${l}"><b>📖 ${L.name}</b><span class="muted">${k ? `✔ ${k} מתוך ${all}` : `${all} כרטיסיות`}</span></button>`; }).join('')}</div>
@@ -13508,7 +13830,8 @@ function topicHome(id) {
       <label class="lockrow"><input type="checkbox" id="tpLock"> 🔒 להישאר ברמה שבחרתי לאורך כל הסבב (בלי עלייה או ירידה אוטומטית)</label>
     </section>
     <section class="card tp-step">${step('בודקים את עצמי')}
-      <button type="button" class="tp-check" id="tpCheck">✅ סבב בדיקה קצר<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, בלי שינוי רמה – רואים כמה כבר יודעים</span></button>
+      <button type="button" class="tp-check" id="tpCheck">✅ בדיקת שליטה עצמאית<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, לבד: בלי רמזים ובלי משוב בדרך. בסוף – התוצאה, הפתרונות וההסברים</span></button>
+      ${catOf(id) === 'exc' ? `<button type="button" class="tp-check" id="tpExam">⏱️ מבחן לדוגמה<span class="desc">15 חידות מכל הסוגים, מהקל לקשה, 20 דקות, אפשר לדלג ולחזור – הציון וההסברים בסוף</span></button>` : ''}
     </section>
     ${tools.length ? `<section class="card tp-step"><h2 class="tp-h">🧰 כלי המחשה</h2>
       ${tools.map(c => `<button type="button" class="b10-card${c.cls ? ' ' + c.cls : ''}" data-tool="${c.id}">${c.html}</button>`).join('')}
@@ -13522,10 +13845,12 @@ function topicHome(id) {
     tstat(id).level = level; saveStore(store);
     startPractice(id, { level, fixed: $('tpLock').checked });
   }));
-  $('tpCheck').onclick = go(() => startPractice(id, { level: cur, count: 5, fixed: true }));
+  $('tpCheck').onclick = go(() => startCheck(id, cur));
+  if ($('tpNext')) $('tpNext').onclick = go(() => startLesson(nextL.l, nextL.k));
+  if ($('tpExam')) $('tpExam').onclick = go(logicExam);
   app.querySelectorAll('[data-tool]').forEach(b => b.onclick = go(TOOL_CARDS.find(c => c.id === b.dataset.tool).go));
 }
-let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
+let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t === 'excel' ? 'practice' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
 
 // "מה עושים היום?" – הצעה אחת ברורה לצעד הבא
 // "ממשיכים מאיפה שהפסקתי": הפעילות האחרונה (כרטיסיות או תרגול בנושא), ואם אין – הצעה להיום
@@ -13566,18 +13891,759 @@ function todaySuggestion() {
 /* ---------- בחירת רמה ---------- */
 const LEVEL_DESC6 = {
   place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'פי כמה גדל ערך הספרה, טווח עיגול'],
+  pctWord: ['אחוז מוכר מכמות, איזה אחוז (מתוך 100), משלים ל-100%, שבר מוכר → אחוז', 'אחוז כלשהו מכמות, איזה אחוז זה, הנחה, עשרוני → אחוז, מי יותר (שבר/אחוז/עשרוני)', 'מהחלק לשלם, הנחה ועודף, התייקרות, השוואת הנחות, שבר + עשרוני + אחוז בסיפור, תשובה עשרונית בכמות רציפה'],
   placeDec: ['ערך ספרה אחרי הנקודה: עשיריות, מאיות, אלפיות', 'פירוק מספר עשרוני לפי המקומות', 'פירוק והשוואה של מספרים עשרוניים'],
   ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן, ראשוניים ופריקים', 'בעיות מילוליות, ראשוניים ופריקים ותרגילים מאתגרים'],
   frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
   dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
   geo: ['מלבן וריבוע, תכונות של צורות', 'מקבילית, משולש, מציאת צלע חסרה', 'מצולעים מורכבים והשוואות'],
   data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
-  pct: ['מה זה אחוז, אחוז ↔ שבר ועשרוני, 50%, 25% ו-10% מכמות', 'אחוז מכמות, איזה אחוז זה, הנחה', 'הנחה, מציאת השלם לפי אחוז'],
+  pct: ['מה זה אחוז, אחוז ↔ שבר ועשרוני, 50%, 25% ו-10% מכמות', 'אחוז כלשהו מכמות, איזה אחוז זה (הרחבה ל-100), הנחה', 'מהחלק לשלם, איזה אחוז כשהשלם גדול מ-100 · ⭐ העשרה: שתי הנחות ברצף'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 const LEVEL_DESC = GRADE === 1 ? LEVEL_DESC1 : GRADE === 2 ? LEVEL_DESC2 : GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
 // נושא בלי תיאורי רמות (למשל סדרות בכיתה ג') – תיאור כללי, כדי שבחירת הרמה לא תיכשל
 TOPICS.forEach(t => { if (!LEVEL_DESC[t.id]) LEVEL_DESC[t.id] = ['תרגילים קלים להתחלה', 'תרגילים בינוניים', 'תרגילים מאתגרים']; });
+
+/* =========================================================
+   מצוינות – חשיבה (כיתות ה'–ו', 21.11): חידות מטריצה בסגנון מבחני מחוננים
+   כל החידות מקוריות ונוצרות אוטומטית. בכל חידה: כלל אחד שאפשר להסיק משתי השורות הראשונות,
+   תשובה נכונה אחת בדיוק (נבדק אוטומטית), 5 אפשרויות (א–ה) והסבר צעד אחר צעד.
+   הנושא לא נכנס ל-TOPICS (לא במבחן הכיתתי, במשחקים או בדפי התרגול) – רק לקטגוריה "מצוינות – חשיבה".
+   ========================================================= */
+// מטריצה 3×3: העמודה הראשונה מימין (קוראים מימין לשמאל), התא החסר – למטה משמאל
+function lgGrid(cells, draw) {
+  const S = 86, P = 3, W = S * 3 + P * 2;
+  let s = `<rect x="${P}" y="${P}" width="${S * 3}" height="${S * 3}" fill="#fff" stroke="#23264a" stroke-width="3"/>`;
+  for (let k = 1; k < 3; k++) s += `<line x1="${P + k * S}" y1="${P}" x2="${P + k * S}" y2="${P + 3 * S}" stroke="#23264a" stroke-width="2"/><line x1="${P}" y1="${P + k * S}" x2="${P + 3 * S}" y2="${P + k * S}" stroke="#23264a" stroke-width="2"/>`;
+  cells.forEach((row, r) => row.forEach((v, c) => {
+    const x = P + (2 - c) * S, y = P + r * S;
+    s += v == null ? `<text x="${x + S / 2}" y="${y + S / 2 + 14}" text-anchor="middle" font-size="40" font-weight="bold" fill="#8a5cd1" font-family="Arial">?</text>`
+      : `<g transform="translate(${x + 6} ${y + 6}) scale(${(S - 12) / 100})">${draw(v)}</g>`;
+  }));
+  return `<svg class="fig lgfig" viewBox="0 0 ${W} ${W}" width="${W}" height="${W}" role="img" aria-label="מטריצה עם תא חסר">${s}</svg>`;
+}
+const lgOpt = inner => `<svg class="fig lgopt" viewBox="0 0 100 100" width="76" height="76" role="img">${inner}</svg>`;
+// עיגול מחולק ל-n גזרות (מלמעלה, עם כיוון השעון); m = מערך 0/1 (צבוע)
+function lgPie(m) {
+  const n = m.length, p = a => `${(50 + 42 * Math.cos(a)).toFixed(2)} ${(50 + 42 * Math.sin(a)).toFixed(2)}`;
+  let s = '';
+  for (let i = 0; i < n; i++) { const a0 = -Math.PI / 2 + i * 2 * Math.PI / n, a1 = a0 + 2 * Math.PI / n;
+    s += `<path d="M50 50 L${p(a0)} A42 42 0 0 1 ${p(a1)} Z" fill="${m[i] ? '#7a7f99' : '#fff'}" stroke="#23264a" stroke-width="2.5"/>`; }
+  return s;
+}
+const lgRot = (m, k) => { const n = m.length; k = ((k % n) + n) % n; return m.map((_, i) => m[(i - k + n) % n]); };
+const lgKey = m => m.join('');
+const lgSym = m => { for (let k = 1; k < m.length; k++) if (lgKey(lgRot(m, k)) === lgKey(m)) return true; return false; };
+function lgMask(n, lo = 1, hi = n - 1) {
+  for (;;) { const m = Array.from({ length: n }, () => R(0, 1)), s = m.reduce((a, b) => a + b, 0); if (s >= lo && s <= hi && !lgSym(m)) return m; }
+}
+const LG_DIR = { 1: 'מסתובב בחלק אחד <b>עם</b> כיוון השעון', '-1': 'מסתובב בחלק אחד <b>נגד</b> כיוון השעון', 2: 'מסתובב בשני חלקים' };
+// כללי "הרכבה" (רמה 3): התא השלישי נבנה מהשניים הראשונים
+const LG_OPS = {
+  or: { f: (a, b) => a | b, t: 'צובעים כל חלק שצבוע <b>לפחות באחד</b> משני התאים הראשונים' },
+  and: { f: (a, b) => a & b, t: 'צובעים רק חלק שצבוע <b>בשני</b> התאים הראשונים' },
+  xor: { f: (a, b) => a ^ b, t: 'צובעים חלק שצבוע <b>רק באחד</b> מהם – חלק שצבוע בשניהם נמחק' }
+};
+function lgPieOpts(ans, extra) {
+  const n = ans.length, cand = [];
+  const add = m => { if (m.some(x => x) && lgKey(m) !== lgKey(ans) && !cand.some(x => lgKey(x) === lgKey(m))) cand.push(m); };
+  (extra || []).forEach(add);
+  for (let k = 1; k < n; k++) add(lgRot(ans, k));
+  add(ans.slice().reverse());
+  for (let i = 0; i < n; i++) { const t = ans.slice(); t[i] = 1 - t[i]; add(t); }
+  return shuffle(cand).slice(0, 4);
+}
+function genLogicPie(lv) {
+  lv = lv || 1;
+  if (lv <= 2) {
+    const n = lv === 1 ? 3 : pick([3, 4]), steps = n === 3 ? [1, -1] : [1, -1, 2];
+    let rows;
+    do {
+      rows = [0, 1, 2].map(() => { const step = lv === 1 ? 1 : pick(steps), base = lgMask(n); return { step, cells: [0, 1, 2].map(c => lgRot(base, step * c)) }; });
+    } while (lv === 2 && rows.every(r => r.step === rows[0].step));
+    const ans = rows[2].cells[2], wr = lgPieOpts(ans, [rows[2].cells[1]]);
+    return choiceQ({ type: 'choice', text: 'איזה ציור חסר במקום <b>?</b> כדי שהכלל במטריצה יישמר?',
+      fig: lgGrid(rows.map((r, i) => i === 2 ? [r.cells[0], r.cells[1], null] : r.cells), lgPie),
+      hint: 'מסתכלים על כל שורה בנפרד, מימין לשמאל: כמה חלקים צבועים? לאן הם זזים מתא לתא?',
+      exp: ['בכל שורה מספר החלקים הצבועים לא משתנה – הציור רק מסתובב.', ...rows.map((r, i) => `שורה ${i + 1}: הציור ${LG_DIR[r.step]} מתא לתא.`),
+        'לכן בתא החסר מסובבים את התא האמצעי של השורה השלישית באותה מידה.'].join('<br>'),
+      lgKind: 'pie', lgRows: rows.map(r => r.cells) }, lgOpt(lgPie(ans)), wr.map(m => lgOpt(lgPie(m))));
+  }
+  // רמה 3: התא השלישי = הרכבה של שני הראשונים (או / וגם / רק באחד)
+  for (;;) {
+    const n = pick([4, 6]), op = pick(Object.keys(LG_OPS)), F = LG_OPS[op].f;
+    const rows = [0, 1, 2].map(() => { const a = lgMask(n, 1, n - 1), b = lgMask(n, 1, n - 1); return [a, b, a.map((x, i) => F(x, b[i]))]; });
+    if (rows.some(r => !r[2].some(x => x) || lgKey(r[0]) === lgKey(r[1]))) continue;
+    // חד-משמעיות: כל כלל שמתאים לשתי השורות הראשונות נותן את אותה תשובה
+    // נבדקים גם כללי "חיסור" (רק בראשון / רק בשני) – כדי שאף כלל אחר לא יתאים לשתי השורות
+    const CHK = [...Object.values(LG_OPS).map(O => O.f), (x, y) => x & (1 - y), (x, y) => y & (1 - x)];
+    const fits = CHK.filter(f => rows.slice(0, 2).every(r => lgKey(r[0].map((x, i) => f(x, r[1][i]))) === lgKey(r[2])));
+    if (fits.length !== 1 || new Set(rows.map(r => lgKey(r[0]) + lgKey(r[1]))).size < 3) continue;
+    const ans = rows[2][2], [a, b] = rows[2];
+    const others = Object.values(LG_OPS).map(O => a.map((x, i) => O.f(x, b[i])));
+    const wr = lgPieOpts(ans, others);
+    if (wr.length < 4) continue;
+    return choiceQ({ type: 'choice', text: 'איזה ציור חסר במקום <b>?</b> כדי שהכלל במטריצה יישמר?',
+      fig: lgGrid(rows.map((r, i) => i === 2 ? [r[0], r[1], null] : r), lgPie),
+      hint: 'השוו את התא השלישי בכל שורה לשני התאים שלפניו: אילו חלקים צבועים בו – ואילו נעלמו?',
+      exp: ['כאן אין סיבוב: התא השלישי בכל שורה <b>נבנה</b> משני התאים הראשונים.', `הכלל: ${LG_OPS[op].t}.`,
+        'בודקים את הכלל בשורה 1 ובשורה 2 – הוא מתאים לשתיהן.', 'מפעילים אותו על שני התאים הראשונים של השורה השלישית.'].join('<br>'),
+      lgKind: 'pie3', lgOp: op, lgRows: rows }, lgOpt(lgPie(ans)), wr.map(m => lgOpt(lgPie(m))));
+  }
+}
+// צורות: צורה, צבע וכמות – כל תכונה לפי כלל משלה
+const LG_SH = ['circle', 'square', 'triangle', 'diamond', 'hex', 'star'], LG_FI = ['#fff', '#a3a8bf', '#23264a'];
+const LG_SHN = { circle: 'עיגול', square: 'ריבוע', triangle: 'משולש', diamond: 'מעוין', hex: 'משושה', star: 'כוכב' },
+  LG_SHPL = { circle: 'עיגולים', square: 'ריבועים', triangle: 'משולשים', diamond: 'מעוינים', hex: 'משושים', star: 'כוכבים' }, LG_FIN = ['לבן', 'אפור', 'שחור'];
+function lgShapes(o) {
+  const pos = { 1: [[50, 50]], 2: [[30, 50], [70, 50]], 3: [[50, 28], [28, 70], [72, 70]] }[o.k], r = o.k === 1 ? 25 : 17;
+  return pos.map(([x, y]) => { const a = `fill="${LG_FI[o.f]}" stroke="#23264a" stroke-width="2.5"`;
+    return o.s === 'circle' ? `<circle cx="${x}" cy="${y}" r="${r}" ${a}/>` : o.s === 'square' ? `<rect x="${x - r * 0.88}" y="${y - r * 0.88}" width="${r * 1.76}" height="${r * 1.76}" ${a}/>`
+      : o.s === 'triangle' ? `<polygon points="${x},${y - r} ${x - r},${y + r * 0.8} ${x + r},${y + r * 0.8}" ${a}/>`
+      : `<polygon points="${lgPoly(o.s, x, y, r)}" ${a}/>`; }).join('');
+}
+function lgPoly(s, x, y, r) {
+  const n = s === 'diamond' ? 4 : s === 'hex' ? 6 : 10, pts = [];
+  for (let i = 0; i < n; i++) { const a = -Math.PI / 2 + i * 2 * Math.PI / n, rr = s === 'star' && i % 2 ? r * 0.45 : s === 'diamond' && i % 2 ? r * 0.7 : r; pts.push(`${(x + rr * Math.cos(a)).toFixed(1)},${(y + rr * Math.sin(a)).toFixed(1)}`); }
+  return pts.join(' ');
+}
+const lgLatin = () => { const p = shuffle([0, 1, 2]), d = pick([1, 2]); return [0, 1, 2].map(r => [0, 1, 2].map(c => p[(c + d * r) % 3])); };
+function genLogicShapes(lv) {
+  lv = lv || 1;
+  const SET = shuffle(LG_SH).slice(0, 3), LS = lgLatin(), LF = lgLatin(), cnt = lv === 1 ? [1, 2, 3] : shuffle([1, 2, 3]), rowFill = shuffle([0, 1, 2]);
+  const byRow = lv === 3, fillRow = lv === 1;
+  const grid = [0, 1, 2].map(r => [0, 1, 2].map(c => ({ s: SET[LS[r][c]], f: fillRow ? rowFill[r] : LF[r][c], k: byRow ? cnt[r] : cnt[c] })));
+  const ans = grid[2][2], K = o => o.s + o.f + o.k, cand = [];
+  const add = o => { if (K(o) !== K(ans) && !cand.some(x => K(x) === K(o))) cand.push(o); };
+  [grid[2][1], grid[1][2]].forEach(add);
+  SET.forEach(s => add({ ...ans, s })); [0, 1, 2].forEach(f => add({ ...ans, f })); [1, 2, 3].forEach(k => add({ ...ans, k }));
+  const wr = shuffle(cand).slice(0, 4);
+  return choiceQ({ type: 'choice', text: 'איזה ציור חסר במקום <b>?</b> כדי שהכלל במטריצה יישמר?',
+    fig: lgGrid(grid.map((r, i) => i === 2 ? [r[0], r[1], null] : r), lgShapes),
+    hint: 'בודקים כל תכונה לחוד: איזו צורה? איזה צבע? כמה פעמים? לכל תכונה יש כלל משלה.',
+    exp: ['בודקים כל תכונה בנפרד: צורה, צבע, כמות.',
+      `<b>צורה:</b> בכל שורה יש ${SET.map(x => LG_SHN[x]).join(', ')} – כל אחד פעם אחת. בשורה השלישית חסר ${LG_SHN[ans.s]}.`,
+      fillRow ? `<b>צבע:</b> בכל שורה הצבע קבוע. בשורה השלישית – ${LG_FIN[ans.f]}.` : `<b>צבע:</b> בכל שורה יש לבן, אפור ושחור – כל אחד פעם אחת. חסר ${LG_FIN[ans.f]}.`,
+      byRow ? `<b>כמות:</b> בכל שורה הכמות קבועה. בשורה השלישית – ${ans.k}.` : `<b>כמות:</b> בכל עמודה הכמות קבועה. בעמודה השלישית (השמאלית) – ${ans.k}.`,
+      `לכן התשובה: ${ans.k === 1 ? `${LG_SHN[ans.s]} אחד` : `${ans.k} ${LG_SHPL[ans.s]}`} ב${LG_FIN[ans.f]}.`].join('<br>'),
+    lgKind: 'shapes', lgGridData: grid, lgSet: SET }, lgOpt(lgShapes(ans)), wr.map(o => lgOpt(lgShapes(o))));
+}
+// מספרים: כלל קבוע בכל שורה (מימין לשמאל)
+const LG_NR = [ // קשרים ברורים בלבד (22.11, איריס): ר1 חיבור/חיסור · ר2 כפל/חילוק · ר3 פעולה + צעד קטן ושקוף. בלי ריבועים
+  { lv: 1, f: (a, b) => a + b, t: 'המספר השלישי = הראשון + השני', sh: (a, b) => `${a} + ${b} = ${a + b}` },
+  { lv: 1, f: (a, b) => a - b, t: 'המספר השלישי = הראשון − השני', sh: (a, b) => `${a} - ${b} = ${a - b}` },
+  { lv: 2, f: (a, b) => a * b, t: 'המספר השלישי = הראשון × השני', sh: (a, b) => `${a} × ${b} = ${a * b}` },
+  { lv: 2, f: (a, b) => a % b ? NaN : a / b, div: true, t: 'המספר השלישי = הראשון : השני', sh: (a, b) => `${a} : ${b} = ${a / b}` },
+  { lv: 3, f: (a, b) => 2 * (a + b), t: 'המספר השלישי = הסכום של שני הראשונים, פעמיים', sh: (a, b) => `(${a} + ${b}) × 2 = ${2 * (a + b)}` },
+  { lv: 3, f: (a, b) => a * b + 1, t: 'המספר השלישי = הראשון × השני, ועוד 1', sh: (a, b) => `${a} × ${b} + 1 = ${a * b + 1}` },
+  { lv: 3, f: (a, b) => a + b + 10, t: 'המספר השלישי = הראשון + השני, ועוד 10', sh: (a, b) => `${a} + ${b} + 10 = ${a + b + 10}` }
+];
+// כללים "מתחרים" – אם אחד מהם מתאים גם לשתי השורות הראשונות ונותן תשובה אחרת, החידה נפסלת
+const LG_NCHK = LG_NR.map(r => r.f).concat([(a, b) => a + 2 * b, (a, b) => 2 * a + b, (a, b) => a * b + a, (a, b) => a * b - b, (a, b) => b - a,
+  (a, b) => a + b + 1, (a, b) => b * b + a, (a, b) => a * a + b, (a, b) => a * b - a, (a, b) => a * b + b, (a, b) => a + b + 2, (a, b) => a * b + 2, (a, b) => 2 * a + 2 * b + 1, (a, b) => 3 * (a + b), (a, b) => a * b - 1, (a, b) => a + b - 1, (a, b) => (a - b) * 2]);
+function genLogicNum(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const rule = pick(LG_NR.filter(r => r.lv === lv)), hi = lv === 1 ? (GRADE >= 6 ? 30 : 20) : (GRADE >= 6 ? 9 : 7);
+    const rows = [0, 1, 2].map(() => { let a = R(2, hi + 1), b = R(2, hi + 1); if (rule.f === LG_NR[1].f && b >= a) [a, b] = [b + 1, a]; if (rule.div) a = a * b; return [a, b, rule.f(a, b)]; });
+    if (rows.some(r => !Number.isInteger(r[2]) || r[2] < 1 || r[2] > (GRADE >= 6 ? 200 : 100)) || new Set(rows.map(r => r[0] + ',' + r[1])).size < 3) continue;
+    const fits = LG_NCHK.filter(f => rows.slice(0, 2).every(r => f(r[0], r[1]) === r[2]));
+    if (new Set(fits.map(f => f(rows[2][0], rows[2][1]))).size !== 1) continue;
+    const ans = rows[2][2], cand = new Set();
+    LG_NCHK.forEach(f => { const v = f(rows[2][0], rows[2][1]); if (Number.isInteger(v) && v > 0 && v !== ans) cand.add(v); });
+    if (cand.size < 4) [1, 2, 10].forEach(d => { cand.add(ans + d); if (ans - d > 0) cand.add(ans - d); });
+    const wr = shuffle([...cand]).slice(0, 4);
+    const cell = v => `<text x="50" y="66" text-anchor="middle" font-size="44" font-weight="bold" fill="#23264a" font-family="Arial">${v}</text>`;
+    return choiceQ({ type: 'choice', text: 'איזה מספר חסר במקום <b>?</b> כדי שהכלל יישמר בכל השורות?',
+      fig: lgGrid(rows.map((r, i) => i === 2 ? [r[0], r[1], null] : r), cell),
+      hint: 'קוראים כל שורה מימין לשמאל. איך מגיעים מהמספר הראשון והשני אל השלישי? בודקים את הניחוש גם בשורה השנייה.',
+      exp: ['מחפשים כלל שמתאים לכל שורה (מימין לשמאל).', `<b>הכלל:</b> ${rule.t}.`,
+        ...rows.slice(0, 2).map((r, i) => `בדיקה בשורה ${i + 1}: ${M(rule.sh(r[0], r[1]))} ✓`), `שורה 3: ${M(rule.sh(rows[2][0], rows[2][1]))}`].join('<br>'),
+      lgKind: 'num', lgRows: rows }, ans, wr);
+  }
+}
+// ---------- מצוינות: סוגי חידות נוספים (21.11) ----------
+// בכל מחולל: "כללים מתחרים" – אם כלל אחר מתאים לנתונים ונותן תשובה אחרת, החידה נפסלת ונוצרת חדשה
+function lgNumOpts(ans, cand) {
+  const out = [], add = v => { if (Number.isInteger(v) && v > 0 && v !== ans && !out.includes(v)) out.push(v); };
+  shuffle(cand).forEach(add);
+  [1, -1, 2, -2, 10, -10, 3].forEach(d => out.length < 8 && add(ans + d));
+  return shuffle(out).slice(0, 4);
+}
+const lgBox = (x, y, w, h, inner, q) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${q ? '#f4effc' : '#fff'}" stroke="#23264a" stroke-width="2.5"/>${inner}`;
+const lgTxt = (x, y, t, sz = 30, col = '#23264a') => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz}" font-weight="bold" fill="${col}" font-family="Arial">${t}</text>`;
+const LG_Q = (x, y) => lgTxt(x, y, '?', 36, '#8a5cd1');
+
+// 1. סדרות מספרים
+const LG_SER = {
+  arith: t => { const d = t[1] - t[0]; return t.every((v, i) => !i || v - t[i - 1] === d) ? t[t.length - 1] + d : null; },
+  geom: t => { if (!t[0] || t[1] % t[0]) return null; const r = t[1] / t[0]; return r > 1 && t.every((v, i) => !i || v === t[i - 1] * r) ? t[t.length - 1] * r : null; },
+  half: t => t.every((v, i) => !i || v * 2 === t[i - 1]) ? t[t.length - 1] / 2 : null,
+  quad: t => { const d = t.slice(1).map((v, i) => v - t[i]), e = d.slice(1).map((v, i) => v - d[i]); return e.every(x => x === e[0]) ? t[t.length - 1] + d[d.length - 1] + e[0] : null; },
+  fib: t => t.every((v, i) => i < 2 || v === t[i - 1] + t[i - 2]) ? t[t.length - 1] + t[t.length - 2] : null,
+  lin2: t => { const c = t[1] - 2 * t[0]; return t.every((v, i) => !i || v === 2 * t[i - 1] + c) ? 2 * t[t.length - 1] + c : null; },
+  lin3: t => { const c = t[1] - 3 * t[0]; return t.every((v, i) => !i || v === 3 * t[i - 1] + c) ? 3 * t[t.length - 1] + c : null; },
+  dgeom: t => { const d = t.slice(1).map((v, i) => v - t[i]); if (!d[0] || d[1] % d[0]) return null; const r = d[1] / d[0]; return r > 1 && d.every((v, i) => !i || v === d[i - 1] * r) ? t[t.length - 1] + d[d.length - 1] * r : null; },
+  alt: t => { // שתי פעולות לסירוגין: חיבור קבוע וכפל קבוע (בשני הסדרים)
+    const n = t.length;
+    for (const ph of [0, 1]) {
+      let a = null, r = null, ok = true;
+      for (let i = 1; i < n && ok; i++) {
+        if ((i + ph) % 2) { const v = t[i] - t[i - 1]; if (a === null) a = v; else if (v !== a) ok = false; }
+        else { if (!t[i - 1] || t[i] % t[i - 1]) ok = false; else { const v = t[i] / t[i - 1]; if (r === null) r = v; else if (v !== r) ok = false; } }
+      }
+      if (ok && a && r > 1) return (n + ph) % 2 ? t[n - 1] + a : t[n - 1] * r;
+    }
+    return null;
+  }
+};
+// alt2 – שתי קפיצות חיבור לסירוגין
+LG_SER.alt2 = t => { const d = t.slice(1).map((v, i) => v - t[i]); if (d.length < 3 || d[0] === d[1]) return null; return d.every((v, i) => v === d[i % 2]) ? t[t.length - 1] + d[d.length % 2] : null; };
+// inter – שתי סדרות חשבוניות שזורות: האיבר הבא ממשיך את הסדרה של האיבר שלפני האחרון
+LG_SER.inter = t => { const n = t.length; if (n < 5) return null; const a = t[2] - t[0], b = t[3] - t[1];
+  for (let i = 2; i < n; i++) if (t[i] - t[i - 2] !== (i % 2 ? b : a)) return null; return t[n - 2] + (n % 2 ? b : a); };
+function genLgSeries(lv) {
+  lv = lv || 1;
+  for (;;) {
+    let t = [], kind, ex;
+    const N = lv === 1 ? 5 : 6;
+    if (lv === 1) {
+      kind = pick(['arith', 'arith', 'down', 'geom']);
+      if (kind === 'arith') { const s = R(1, 30), d = R(2, 12); t = [...Array(N)].map((_, i) => s + d * i); ex = `בכל צעד מוסיפים ${d}.`; }
+      else if (kind === 'down') { const d = R(2, 9), s = d * N + R(3, 40); t = [...Array(N)].map((_, i) => s - d * i); ex = `בכל צעד מחסירים ${d}.`; }
+      else { const r = pick([2, 3]), s = R(1, r === 2 ? 6 : 3); t = [...Array(N)].map((_, i) => s * r ** i); ex = `בכל צעד כופלים ב-${r}.`; }
+    } else if (lv === 2) {
+      kind = pick(['quad', 'alt2', 'alt', 'dgeom']);
+      if (kind === 'quad') { const s = R(1, 20), d = R(1, 5), e = R(1, 3); let v = s; t = [v]; for (let i = 0; i < N - 1; i++) { v += d + e * i; t.push(v); } ex = `ההפרשים גדלים כל פעם ב-${e}: ${t.slice(1).map((v, i) => '+' + (v - t[i])).join(', ')} – ולכן הבא +${d + e * (N - 1)}.`; }
+      else if (kind === 'alt2') { const a = R(1, 5), b = R(6, 12); let v = R(1, 20); t = [v]; for (let i = 1; i < N; i++) { v += i % 2 ? a : b; t.push(v); } ex = `שתי קפיצות לסירוגין: +${a}, +${b}, +${a}, +${b}…`; }
+      else if (kind === 'alt') { const a = R(1, 6), r = 2; let v = R(1, 5); t = [v]; for (let i = 1; i < N; i++) { v = i % 2 ? v + a : v * r; t.push(v); } ex = `שתי פעולות לסירוגין: +${a}, ואז ×${r}, ושוב +${a}, ×${r}…`; }
+      else { const s = R(1, 10), d = R(1, 3); let v = s, dd = d; t = [v]; for (let i = 1; i < N; i++) { v += dd; t.push(v); dd *= 2; } ex = `ההפרשים מוכפלים כל פעם: ${t.slice(1).map((v, i) => '+' + (v - t[i])).join(', ')} – והבא +${dd}.`; }
+    } else {
+      kind = pick(['inter', 'fib', 'lin']);
+      if (kind === 'inter') { const a = R(1, 20), b = R(30, 60), da = R(2, 6), db = -R(2, 6); t = [...Array(N)].map((_, i) => i % 2 ? b + db * ((i - 1) / 2) : a + da * (i / 2)); ex = `שתי סדרות שזורות זו בזו: במקומות האי-זוגיים ${t.filter((_, i) => !(i % 2)).join(', ')} (+${da} כל פעם), ובזוגיים ${t.filter((_, i) => i % 2).join(', ')} (${db} כל פעם). האיבר הבא שייך לסדרה הראשונה.`; }
+      else if (kind === 'fib') { let a = R(1, 5), b = R(a, a + 5); t = [a, b]; while (t.length < N) t.push(t[t.length - 1] + t[t.length - 2]); ex = 'כל מספר הוא סכום שני המספרים שלפניו.'; }
+      else { const r = pick([2, 3]), c = pick([1, -1, 2]); let v = R(2, 5); t = [v]; for (let i = 1; i < N; i++) { v = r * v + c; t.push(v); } ex = `בכל צעד כופלים ב-${r} ואז ${c > 0 ? 'מוסיפים ' + c : 'מחסירים ' + -c}.`; }
+    }
+    if (t.some(v => v < 0 || v > 999)) continue;
+    const outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
+    if (outs.size !== 1) continue;
+    const ans = [...outs][0];
+    if (ans <= 0 || ans > 999 || !Number.isInteger(ans)) continue;
+    const L = t[N - 1], D = L - t[N - 2];
+    const wr = lgNumOpts(ans, [L + D, L + 2 * D, L * 2, L + t[N - 2], ans + 1, ans - 1, L - D].filter(v => v !== ans));
+    // ציור: הסדרה בתיבות, מימין לשמאל
+    const W = 62, gap = 6, tot = (N + 1) * (W + gap);
+    let s = '';
+    [...t, null].forEach((v, i) => { const x = tot - (i + 1) * (W + gap) + gap / 2; s += lgBox(x, 4, W, 52, v == null ? LG_Q(x + W / 2, 43) : lgTxt(x + W / 2, 40, v, v > 99 ? 22 : 26), v == null); });
+    return choiceQ({ type: 'choice', text: 'איזה מספר בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} 60" width="${tot}" height="60" role="img">${s}</svg>`,
+      hint: 'קוראים מימין לשמאל ובודקים: כמה מוסיפים או כופלים בכל צעד? אם ההפרש משתנה – בודקים איך הוא משתנה.',
+      exp: `${ex}<br>לכן המספר החסר: <b>${ans}</b>.`, lgKind: 'series', lgT: t }, ans, wr);
+  }
+}
+
+// 2. סדרת צורות: חץ שמסתובב, נקודה שזזה סביב המסגרת, צבע שמתחלף
+const LG_DOT = [[14, 14], [50, 10], [86, 14], [90, 50], [86, 86], [50, 90], [14, 86], [10, 50]];
+function lgFig(o) {
+  let s = `<rect x="4" y="4" width="92" height="92" rx="6" fill="none" stroke="#c9cfdf" stroke-width="2"/>`;
+  s += `<g transform="rotate(${o.a * 45} 50 50)"><polygon points="50,18 66,40 56,40 56,76 44,76 44,40 34,40" fill="${o.f ? '#23264a' : '#fff'}" stroke="#23264a" stroke-width="3" stroke-linejoin="round"/></g>`;
+  if (o.p != null) s += `<circle cx="${LG_DOT[o.p][0]}" cy="${LG_DOT[o.p][1]}" r="7" fill="#d94a8c" stroke="#23264a" stroke-width="1.5"/>`;
+  return s;
+}
+const lgFK = o => `${o.a}|${o.p}|${o.f}`;
+// כללים אפשריים לתכונה מחזורית (מודולו 8): צעד קבוע, צעד שגדל ב-1, צעד שקטן ב-1
+function lgCyc(v) {
+  const d = v.slice(1).map((x, i) => ((x - v[i]) % 8 + 8) % 8), out = new Set();
+  if (d.every(x => x === d[0])) out.add((v[v.length - 1] + d[0]) % 8);
+  if (d.every((x, i) => !i || x === (d[i - 1] + 1) % 8)) out.add((v[v.length - 1] + d[d.length - 1] + 1) % 8);
+  if (d.every((x, i) => !i || x === (d[i - 1] + 7) % 8)) out.add((v[v.length - 1] + d[d.length - 1] + 7) % 8);
+  if (v.length >= 4 && v.every((x, i) => i < 2 || x === v[i - 2])) out.add(v[v.length - 2]);
+  return out;
+}
+const LG_STEP = { 1: '45° (שמינית סיבוב)', 2: '90° (רבע סיבוב)', 3: '135°', 4: '180° (חצי סיבוב)' };
+function genLgFigSeq(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const N = 4, frames = [];
+    const sa = lv === 3 && Math.random() < 0.5 ? 'grow' : 'const';
+    const da = pick([1, 2, 6, 7]), a0 = R(0, 7), p0 = R(0, 7), dp = pick([1, 2, 7, 6]), useDot = lv >= 2 || Math.random() < 0.4, useA = lv >= 2 || !useDot;
+    const fAlt = lv === 3 && sa === 'const';
+    for (let i = 0; i <= N; i++) {
+      const a = useA ? (sa === 'grow' ? (a0 + i * (i + 1) / 2) % 8 : (a0 + da * i) % 8) : a0;
+      frames.push({ a, p: useDot ? (p0 + dp * i) % 8 : null, f: fAlt ? i % 2 : 1 });
+    }
+    const shown = frames.slice(0, N), ans = frames[N];
+    // חד-משמעיות: כל תכונה בנפרד – כל הכללים שמתאימים נותנים את אותו המשך
+    const oa = lgCyc(shown.map(o => o.a)), op = useDot ? lgCyc(shown.map(o => o.p)) : new Set([null]);
+    const fv = shown.map(o => o.f), of = new Set([fv.every(x => x === fv[0]) ? fv[0] : null, fv.every((x, i) => i < 2 || x === fv[i - 2]) ? fv[N - 2] : null].filter(x => x !== null));
+    if (oa.size !== 1 || op.size !== 1 || of.size !== 1) continue;
+    if (useA && sa === 'const' && da === 4) continue;
+    const K = lgFK, cand = [], add = o => { if (K(o) !== K(ans) && !cand.some(x => K(x) === K(o))) cand.push(o); };
+    [1, 2, 4, 6, 7].forEach(k => add({ ...ans, a: (ans.a + k) % 8 }));
+    if (useDot) [1, 2, 4, 7].forEach(k => add({ ...ans, p: (ans.p + k) % 8 }));
+    if (fAlt) add({ ...ans, f: 1 - ans.f });
+    add(shown[N - 1]);
+    const wr = shuffle(cand);
+    // בחירת מסיחים: לפחות אחד שמשנה כל תכונה
+    const pickW = [];
+    [o => o.a !== ans.a && o.p === ans.p && o.f === ans.f, o => o.p !== ans.p && o.a === ans.a, o => o.f !== ans.f].forEach(t => { const w = wr.find(o => t(o) && !pickW.includes(o)); if (w) pickW.push(w); });
+    wr.forEach(o => pickW.length < 4 && !pickW.includes(o) && pickW.push(o));
+    const C = 76, gap = 8, tot = (N + 1) * (C + gap);
+    let s = '';
+    [...shown, null].forEach((o, i) => { const x = tot - (i + 1) * (C + gap) + gap / 2; s += o ? `<g transform="translate(${x} 4) scale(${C / 100})">${lgFig(o)}</g>` : lgBox(x, 4, C, C, LG_Q(x + C / 2, 4 + C / 2 + 12), true); });
+    const dirA = da <= 4 ? 'עם כיוון השעון' : 'נגד כיוון השעון', stA = LG_STEP[da <= 4 ? da : 8 - da];
+    const ex = [];
+    if (useA) ex.push(sa === 'grow' ? '<b>החץ:</b> מסתובב עם כיוון השעון, ובכל צעד בזווית גדולה יותר: 45°, 90°, 135°… – הצעד הבא 180°.' : `<b>החץ:</b> מסתובב ${stA} ${dirA} בכל צעד.`);
+    if (useDot) ex.push(`<b>הנקודה:</b> זזה ${dp <= 4 ? dp : 8 - dp} ${dp === 1 || dp === 7 ? 'מקום' : 'מקומות'} ${dp <= 4 ? 'עם' : 'נגד'} כיוון השעון סביב המסגרת.`);
+    if (fAlt) ex.push('<b>הצבע:</b> מתחלף – מלא, ריק, מלא, ריק…');
+    ex.push('מפעילים כל כלל צעד אחד נוסף, ומקבלים את הציור החסר.');
+    return choiceQ({ type: 'choice', text: 'איזה ציור בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} ${C + 8}" width="${tot}" height="${C + 8}" role="img">${s}</svg>`,
+      hint: 'בודקים כל חלק בציור לחוד: לאן החץ מצביע בכל פעם? איפה הנקודה? האם הצבע משתנה?',
+      exp: ex.join('<br>'), lgKind: 'figseq', lgShown: shown, lgDot: useDot }, lgOpt(lgFig(ans)), pickW.slice(0, 4).map(o => lgOpt(lgFig(o))));
+  }
+}
+
+// 3. אנלוגיות: מכונת מספרים (נכנס ← יוצא) ואנלוגיה של ציורים
+const LG_FN = [ // ר1 – צעד אחד במספרים קטנים · ר2 – שני צעדים קלים (×2/×3 ועוד/פחות) או כפל גדול · ר3 – שני צעדים (בלי ריבועים)
+  { lv: 1, mk: () => { const k = R(2, 10); return { f: x => x + k, t: `מוסיפים ${k}`, w: x => M(`${x} + ${k} = ${x + k}`) }; } },
+  { lv: 1, mk: () => { const k = R(2, 5); return { f: x => x * k, t: `כופלים ב-${k}`, w: x => M(`${x} × ${k} = ${x * k}`) }; } },
+  { lv: 2, mk: () => { const k = R(2, 3), m = R(1, 5); return { f: x => x * k + m, t: `כופלים ב-${k} ואז מוסיפים ${m}`, w: x => M(`${x} × ${k} + ${m} = ${x * k + m}`) }; } },
+  { lv: 2, mk: () => { const k = R(2, 3), m = R(1, 2); return { f: x => x * k - m, t: `כופלים ב-${k} ואז מחסירים ${m}`, w: x => M(`${x} × ${k} − ${m} = ${x * k - m}`) }; } },
+  { lv: 2, mk: () => { const k = R(6, 10); return { f: x => x * k, t: `כופלים ב-${k}`, w: x => M(`${x} × ${k} = ${x * k}`) }; } },
+  { lv: 3, mk: () => { const k = R(4, 6), m = R(1, 9); return { f: x => x * k + m, t: `כופלים ב-${k} ואז מוסיפים ${m}`, w: x => M(`${x} × ${k} + ${m} = ${x * k + m}`) }; } },
+  { lv: 3, mk: () => { const k = R(4, 6), m = R(1, 5); return { f: x => x * k - m, t: `כופלים ב-${k} ואז מחסירים ${m}`, w: x => M(`${x} × ${k} − ${m} = ${x * k - m}`) }; } },
+  { lv: 3, mk: () => { const k = R(2, 4); return { f: x => (x + k) * 2, t: `מוסיפים ${k} ואז כופלים ב-2`, w: x => M(`(${x} + ${k}) × 2 = ${(x + k) * 2}`) }; } },
+  { lv: 3, mk: () => { const k = R(7, 9), m = R(1, 9); return { f: x => x * k + m, t: `כופלים ב-${k} ואז מוסיפים ${m}`, w: x => M(`${x} × ${k} + ${m} = ${x * k + m}`) }; } }
+];
+// כללים מתחרים: חיבור קבוע, כפל קבוע, קו ישר (שני פרמטרים שלמים), ריבוע ועוד, חזקה של 2
+function lgFnFits(pairs) {
+  const P = pairs, fs = [];
+  const k1 = P[0][1] - P[0][0]; fs.push(x => x + k1);
+  if (P[0][0] && P[0][1] % P[0][0] === 0) { const k = P[0][1] / P[0][0]; fs.push(x => x * k); }
+  if (P[1] && P[1][0] !== P[0][0]) { const k = (P[1][1] - P[0][1]) / (P[1][0] - P[0][0]); if (Number.isInteger(k)) { const m = P[0][1] - k * P[0][0]; fs.push(x => k * x + m); } }
+  const m2 = P[0][1] - P[0][0] ** 2; fs.push(x => x * x + m2);
+  const m3 = P[0][1] - P[0][0] * (P[0][0] + 1); fs.push(x => x * (x + 1) + m3);
+  const m4 = P[0][1] - 2 * P[0][0] ** 2; fs.push(x => 2 * x * x + m4);
+  const m5 = P[0][1] - P[0][0] * (P[0][0] - 1); fs.push(x => x * (x - 1) + m5);
+  fs.push(x => 2 ** x);
+  return fs.filter(f => P.every(([a, b]) => f(a) === b));
+}
+const LG_TF = {
+  rot: (m, k) => lgRot(m, k), mir: m => m.slice().reverse(), inv: m => m.map(x => 1 - x)
+};
+function lgTfAll(n) { // כל ההפיכות: סיבוב (כולל 0), שיקוף, היפוך צבעים – וצירופים שלהם
+  const out = [];
+  for (let k = 0; k < n; k++) for (const mi of [0, 1]) for (const iv of [0, 1]) out.push({ k, mi, iv, f: m => { let r = lgRot(m, k); if (mi) r = r.slice().reverse(); if (iv) r = r.map(x => 1 - x); return r; } });
+  return out;
+}
+function genLgAnalogy(lv) {
+  lv = lv || 1;
+  if (lv === 3 || Math.random() < 0.5) { // מכונת מספרים
+    for (;;) {
+      const R0 = pick(LG_FN.filter(r => r.lv === lv)).mk(), nP = 3;
+      // ר1–2: מספרים קטנים, בסדר עולה, ושתי שורות ראשונות עוקבות (הנכנס גדל ב-1 – רואים בכמה גדל היוצא)
+      let xs;
+      if (lv < 3) { const x0 = R(1, lv === 1 ? 8 : 6); xs = shuffle([...Array(12)].map((_, i) => i + 1).filter(x => x > x0 + 1)).slice(0, 2); xs = [x0, x0 + 1, ...xs.sort((a, b) => a - b)]; xs = [...xs.slice(0, 2), ...shuffle(xs.slice(2))]; }
+      else xs = shuffle([...Array(9)].map((_, i) => i + 2)).slice(0, nP + 1);
+      const pairs = xs.slice(0, nP).map(x => [x, R0.f(x)]), q = xs[nP], ans = R0.f(q);
+      if (lv < 3 && pairs.some(p => p[1] <= 0)) continue;
+      if (ans > 999 || pairs.some(p => p[1] > 999)) continue;
+      const fits = lgFnFits(pairs), outs = new Set(fits.map(f => f(q)));
+      if (outs.size !== 1 || !outs.has(ans)) continue;
+      const cand = []; [x => x + (pairs[0][1] - pairs[0][0]), x => x * 2, x => x * x, x => R0.f(x) + 1, x => R0.f(x - 1), x => R0.f(x + 1)].forEach(f => cand.push(f(q)));
+      const wr = lgNumOpts(ans, cand);
+      const rows = [...pairs, [q, null]];
+      const W = 300, H = 36 * (rows.length + 1) + 8;
+      let s = `<rect x="2" y="2" width="${W - 4}" height="${H - 4}" rx="10" fill="#fff" stroke="#23264a" stroke-width="2.5"/>`;
+      s += `<rect x="2" y="2" width="${W - 4}" height="36" rx="10" fill="#efe8fa"/>` + lgTxt(225, 28, 'נכנס', 20) + lgTxt(75, 28, 'יוצא', 20) + `<line x1="150" y1="2" x2="150" y2="${H - 2}" stroke="#23264a" stroke-width="2"/>`;
+      rows.forEach(([a, b], i) => { const y = 36 * (i + 1) + 28; s += `<line x1="2" y1="${36 * (i + 1) + 2}" x2="${W - 2}" y2="${36 * (i + 1) + 2}" stroke="#c9cfdf"/>` + lgTxt(225, y, a, 24) + (b == null ? LG_Q(75, y + 2) : lgTxt(75, y, b, 24)); });
+      return choiceQ({ type: 'choice', text: 'מכונת מספרים: כל מספר שנכנס יוצא לפי <b>אותו כלל</b>. מה יֵצא במקום <b>?</b>',
+        fig: `<svg class="fig lgfig" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img">${s}</svg>`,
+        hint: lv === 1 ? 'האם מוסיפים מספר קבוע? או כופלים במספר קבוע? בודקים את הכלל בכל השורות.'
+          : lv === 2 ? `בשתי השורות הראשונות הנכנס גדל ב-1 (${pairs[0][0]} ← ${pairs[1][0]}). בכמה גדל היוצא? זה המספר שכופלים בו. אחר כך בודקים: צריך עוד להוסיף או להחסיר משהו?`
+          : 'בכמה גדל היוצא כשהנכנס גדל ב-1? זה המספר שכופלים בו. אחר כך בודקים: צריך עוד להוסיף או להחסיר משהו?',
+        exp: `<b>הכלל:</b> ${R0.t}.<br>${pairs.map(([a]) => `${R0.w(a)} ✓`).join('<br>')}<br>ולכן: ${R0.w(q)}. התשובה: <b>${ans}</b>.`, lgKind: 'fn', lgPairs: pairs, lgQ: q }, ans, wr);
+    }
+  }
+  // אנלוגיה של ציורים: א : ב = ג : ?
+  for (;;) {
+    const n = pick([4, 6, 8]), A = lgMask(n, 2, n - 2), C = lgMask(n, 2, n - 2);
+    if (lgKey(A) === lgKey(C)) continue;
+    const opts1 = [{ k: 1, mi: 0, iv: 0 }, { k: n - 1, mi: 0, iv: 0 }, { k: 0, mi: 0, iv: 1 }, { k: 0, mi: 1, iv: 0 }];
+    const tf = lv === 1 ? pick(opts1) : pick([{ k: 1, mi: 0, iv: 1 }, { k: n - 1, mi: 0, iv: 1 }, { k: 2, mi: 0, iv: 0 }, { k: 0, mi: 1, iv: 1 }, { k: 1, mi: 1, iv: 0 }]);
+    const T = lgTfAll(n).find(t => t.k === tf.k && t.mi === tf.mi && t.iv === tf.iv);
+    const B = T.f(A), ans = T.f(C);
+    if (lgKey(A) === lgKey(B)) continue;
+    const fits = lgTfAll(n).filter(t => lgKey(t.f(A)) === lgKey(B)), outs = new Set(fits.map(t => lgKey(t.f(C))));
+    if (outs.size !== 1) continue;
+    const wr = lgPieOpts(ans, lgTfAll(n).map(t => t.f(C)));
+    if (wr.length < 4) continue;
+    const parts = [];
+    if (tf.k) parts.push(tf.k === 1 ? 'מסתובב בחלק אחד עם כיוון השעון' : tf.k === n - 1 ? 'מסתובב בחלק אחד נגד כיוון השעון' : `מסתובב ב-${tf.k} חלקים עם כיוון השעון`);
+    if (tf.mi) parts.push('מתהפך כמו בתמונת מראה (שיקוף ימין-שמאל)');
+    if (tf.iv) parts.push('הצבעים מתהפכים: מה שהיה צבוע – לבן, ומה שהיה לבן – צבוע');
+    // ציור: א ← ב   |   ג ← ?   (מימין לשמאל)
+    const C0 = 70, arr = x => `<path d="M${x + 22} 41 L${x} 41 M${x + 8} 33 L${x} 41 L${x + 8} 49" stroke="#23264a" stroke-width="3" fill="none"/>`;
+    const at = (x, m) => `<g transform="translate(${x} 6) scale(${C0 / 100})">${lgPie(m)}</g>`;
+    let s = at(380 - C0, A) + arr(380 - C0 - 30) + at(380 - 2 * C0 - 38, B);
+    s += `<line x1="190" y1="8" x2="190" y2="76" stroke="#c9cfdf" stroke-width="2" stroke-dasharray="5 4"/>`;
+    s += at(180 - C0, C) + arr(180 - C0 - 30) + lgBox(180 - 2 * C0 - 38, 6, C0, C0, LG_Q(180 - 2 * C0 - 38 + C0 / 2, 6 + C0 / 2 + 12), true);
+    return choiceQ({ type: 'choice', text: 'הציור הראשון השתנה לשני. מה יקרה לציור השלישי <b>באותו אופן</b>?',
+      fig: `<svg class="fig lgfig lgwide" viewBox="0 0 384 84" width="384" height="84" role="img">${s}</svg>`,
+      hint: 'מה קרה לציור הראשון? סיבוב? שיקוף? הצבעים התהפכו? בדקו מה השתנה – ועשו בדיוק אותו דבר לציור השלישי.',
+      exp: `מהציור הראשון לשני הציור ${parts.join(', וגם ')}.<br>עושים את אותו הדבר לציור השלישי.`, lgKind: 'figana', lgA: A, lgB: B, lgC: C }, lgOpt(lgPie(ans)), wr.map(m => lgOpt(lgPie(m))));
+  }
+}
+
+// 4. יוצא דופן
+const lgPrime = n => { if (n < 2) return false; for (let d = 2; d * d <= n; d++) if (n % d === 0) return false; return true; };
+const lgDS = n => String(n).split('').reduce((a, b) => a + +b, 0);
+const LG_PROPS = [
+  ['זוגיים', n => n % 2 === 0], ['מתחלקים ב-3', n => n % 3 === 0], ['מתחלקים ב-4', n => n % 4 === 0], ['מתחלקים ב-5', n => n % 5 === 0],
+  ['מתחלקים ב-6', n => n % 6 === 0], ['מתחלקים ב-7', n => n % 7 === 0], ['מתחלקים ב-8', n => n % 8 === 0], ['מתחלקים ב-9', n => n % 9 === 0], ['מתחלקים ב-10', n => n % 10 === 0],
+  ['ראשוניים', lgPrime], ['שסכום הספרות שלהם זוגי', n => lgDS(n) % 2 === 0],
+  ['דו-ספרתיים', n => n >= 10 && n < 100], ['שספרת האחדות שלהם 5', n => n % 10 === 5], ['שהספרות שלהם שוות', n => n > 10 && new Set(String(n)).size === 1],
+  ['שסכום הספרות שלהם 10', n => lgDS(n) === 10], ['שמתחלקים ב-11', n => n % 11 === 0], ['שמתחלקים ב-12', n => n % 12 === 0]
+];
+function genLgOdd(lv) {
+  lv = lv || 1;
+  if (Math.random() < 0.55) {
+    const pool = lv === 1 ? [0, 3, 8] : lv === 2 ? [1, 2, 4, 5, 7] : [9, 14, 15]; // ר3: ראשוניים, סכום ספרות 10, מתחלקים ב-11
+    for (;;) {
+      const pi = pick(pool), [nm, P] = LG_PROPS[pi], lo = 10, hi = lv === 1 ? 99 : 120;
+      const yes = shuffle([...Array(hi - lo)].map((_, i) => i + lo).filter(P)).slice(0, 4), noL = [...Array(hi - lo)].map((_, i) => i + lo).filter(n => !P(n) && (lv === 1 || n % 2 === yes[0] % 2));
+      if (yes.length < 4 || !noL.length) continue;
+      const odd = pick(noL), items = shuffle([...yes, odd]);
+      const singled = new Set();
+      LG_PROPS.forEach(([, Q]) => { const t = items.filter(Q); if (t.length === 1) singled.add(t[0]); if (t.length === 4) singled.add(items.find(x => !Q(x))); });
+      if (singled.size !== 1 || !singled.has(odd)) continue;
+      return choiceQ({ type: 'choice', text: 'ארבעה מספרים שייכים לאותה קבוצה, ואחד <b>יוצא דופן</b>. איזה?', hint: 'מחפשים תכונה משותפת: זוגי? מתחלק במשהו? ראשוני? סכום הספרות?',
+        exp: `כל המספרים חוץ מ-${odd} הם ${nm}: ${yes.join(', ')}.<br>${odd} – לא.`, lgKind: 'oddnum', lgItems: items }, odd, items.filter(x => x !== odd), true);
+    }
+  }
+  for (;;) { // ציורים: ארבעה הם אותו ציור מסובב, אחד שונה
+    const n = pick([6, 8]), base = lgMask(n, 2, n - 2), mir = base.slice().reverse();
+    const rotClass = m => { for (let k = 0; k < n; k++) if (lgKey(lgRot(m, k)) === lgKey(base)) return true; return false; };
+    if (lv === 3 && rotClass(mir)) continue; // צריך ציור "ימני" ששיקופו שונה
+    const ks = shuffle([...Array(n)].map((_, i) => i)).slice(0, 5), same = ks.slice(0, 4).map(k => lgRot(base, k));
+    let odd;
+    if (lv === 1) { odd = lgRot(base, ks[4]).slice(); const i = odd.indexOf(0); odd[i] = 1; }
+    else if (lv === 2) { odd = lgMask(n, 2, n - 2); const cnt = m => m.reduce((a, b) => a + b, 0); if (cnt(odd) !== cnt(base) || rotClass(odd) || rotClass(odd.slice().reverse())) continue; }
+    else odd = lgRot(mir, ks[4]);
+    const items = shuffle([...same, odd]), K = lgKey;
+    if (new Set(items.map(K)).size !== 5) continue;
+    // בדיקה: לפי מספר החלקים הצבועים / לפי "אותו ציור מסובב" – רק האחד הזה יוצא דופן
+    const cnt = m => m.reduce((a, b) => a + b, 0), single = new Set();
+    const byCnt = items.filter(m => cnt(m) !== cnt(same[0])); if (byCnt.length === 1) single.add(K(byCnt[0]));
+    const byRot = items.filter(m => !rotClass(m)); if (byRot.length === 1) single.add(K(byRot[0]));
+    if (single.size !== 1 || !single.has(K(odd))) continue;
+    const opt = m => lgOpt(lgPie(m));
+    const why = lv === 1 ? `בכל הציורים צבועים ${cnt(base)} חלקים – ורק בציור הזה ${cnt(odd)}.` : lv === 2 ? 'ארבעה ציורים הם אותו ציור בדיוק, רק מסובב. הציור הזה בנוי אחרת – אי אפשר לקבל אותו בסיבוב.'
+      : 'ארבעה ציורים הם אותו ציור מסובב. הציור הזה הוא <b>תמונת המראה</b> שלו – אי אפשר לקבל אותו בסיבוב, רק בשיקוף.';
+    return choiceQ({ type: 'choice', text: 'ארבעה ציורים שייכים לאותה קבוצה, ואחד <b>יוצא דופן</b>. איזה?', hint: 'ספרו חלקים צבועים. אם המספר זהה – נסו "לסובב בראש" את הציורים: האם כולם אותו ציור?',
+      exp: why, lgKind: 'oddfig', lgItems: items }, opt(odd), items.filter(m => K(m) !== K(odd)).map(opt), true);
+  }
+}
+
+// 5. מאזניים
+const LG_SHP = {
+  c: (x, y) => `<circle cx="${x}" cy="${y - 10}" r="10" fill="#4c8fd5" stroke="#23264a" stroke-width="2"/>`,
+  s: (x, y) => `<rect x="${x - 10}" y="${y - 20}" width="20" height="20" fill="#e0703a" stroke="#23264a" stroke-width="2"/>`,
+  t: (x, y) => `<polygon points="${x},${y - 20} ${x - 11},${y} ${x + 11},${y}" fill="#2f8f55" stroke="#23264a" stroke-width="2"/>`
+};
+const LG_SHN2 = { c: ['עיגול', 'עיגולים'], s: ['ריבוע', 'ריבועים'], t: ['משולש', 'משולשים'] };
+function lgScale(left, right, y0) { // left/right = רשימת צורות ומשקולות ('w7' = משקולת של 7 ק"ג). הכף הימנית מצוירת מימין
+  const item = (k, x, y) => k[0] === 'w'
+    ? `<path d="M${x - 9} ${y - 18} L${x + 9} ${y - 18} L${x + 11} ${y} L${x - 11} ${y} Z" fill="#555b70" stroke="#23264a" stroke-width="1.5"/><rect x="${x - 4}" y="${y - 22}" width="8" height="5" rx="2" fill="#555b70"/>` + lgTxt(x, y - 4, k.slice(1), 12, '#fff')
+    : LG_SHP[k](x, y);
+  const pan = (cx, list) => { let s = `<path d="M${cx - 62} ${y0 + 34} L${cx + 62} ${y0 + 34}" stroke="#23264a" stroke-width="4" stroke-linecap="round"/>`;
+    const rows = Math.ceil(list.length / 5);
+    list.forEach((k, i) => { const r = Math.floor(i / 5), c = i % 5, inRow = r === rows - 1 ? list.length - 5 * r : 5; s += item(k, cx + (c - (inRow - 1) / 2) * 24, y0 + 32 - r * 23); });
+    return s; };
+  return `<line x1="160" y1="${y0 + 34}" x2="160" y2="${y0 + 62}" stroke="#23264a" stroke-width="4"/><polygon points="160,${y0 + 56} 146,${y0 + 70} 174,${y0 + 70}" fill="#23264a"/>`
+    + `<line x1="18" y1="${y0 + 34}" x2="302" y2="${y0 + 34}" stroke="#23264a" stroke-width="3"/>` + pan(240, right) + pan(80, left);
+}
+// פתרון בלתי תלוי של מערכת המאזניים: אלימינציה (מספרים ממשיים) – חייב להיות פתרון יחיד
+function lgBalSolve(eqs, unk, fixed) {
+  const rows = eqs.map(e => { const r = unk.map(() => 0); let k = 0;
+    [[e[0], 1], [e[1], -1]].forEach(([l, sg]) => l.forEach(x => { if (x[0] === 'w') k -= sg * Number(x.slice(1)); else if (fixed[x] != null) k -= sg * fixed[x]; else r[unk.indexOf(x)] += sg; }));
+    return [...r, k]; });
+  const n = unk.length; let row = 0;
+  for (let col = 0; col < n; col++) {
+    const p = rows.findIndex((r, i) => i >= row && Math.abs(r[col]) > 1e-9); if (p < 0) return null;
+    [rows[row], rows[p]] = [rows[p], rows[row]];
+    for (let i = 0; i < rows.length; i++) if (i !== row) { const f = rows[i][col] / rows[row][col]; rows[i] = rows[i].map((v, j) => v - f * rows[row][j]); }
+    row++;
+  }
+  if (rows.slice(n).some(r => Math.abs(r[n]) > 1e-9)) return null; // סתירה
+  const out = {}; unk.forEach((u, i) => out[u] = rows[i][n] / rows[i][i]); return out;
+}
+const LG_BAL = (() => {
+  const rep = (k, n) => Array(n).fill(k), N = LG_SHN2, w = v => 'w' + v;
+  const G = (g5, g6) => GRADE >= 6 ? g6 : g5; // כיתה ה' – מספרים קטנים יותר
+  const tr = n => n === 1 ? 'משולש אחד' : `${n} משולשים`;
+  return [
+    // ---- רמה 1 ----
+    { lv: 1, u: 't', mk: () => { const c = R(2, 4), m = R(2, 3); return { W: { c, s: c * m }, eqs: [[['c'], rep('t', c)], [['s'], rep('c', m)]], ask: 's',
+      how: `עיגול אחד שוקל כמו ${tr(c)}. ריבוע שוקל כמו ${m} עיגולים, כלומר ${M(`${m} × ${c} = ${m * c}`)} משולשים.`, hint: 'מתחילים מהמאזניים שבהם יש עיגול אחד מול משולשים: כמה שוקל עיגול?', wr: [m + c, c, m] }; } },
+    { lv: 1, u: 't', mk: () => { const a = R(2, 3), k = R(2, 3), sh = pick(['c', 's']); return { W: { [sh]: k }, eqs: [[rep(sh, a), rep('t', a * k)]], ask: sh,
+      how: `${a} ${N[sh][1]} שוקלים כמו ${a * k} משולשים. מחלקים לקבוצות שוות: לכל ${N[sh][0]} – ${M(`${a * k} : ${a} = ${k}`)} משולשים.`, hint: `נסו לחלק את המשולשים לקבוצות שוות – קבוצה לכל ${N[sh][0]}.`, wr: [a * k, a, a * k - a] }; } },
+    { lv: 1, u: 'kg', mk: () => { const s = R(2, G(9, 15)), a = R(1, G(9, 15)), sh = pick(['s', 'c', 't']); return { W: { [sh]: s }, eqs: [[[sh, w(a)], [w(s + a)]]], ask: sh,
+      how: `מורידים משקולת של ${a} ק"ג משני הצדדים – המאזניים נשארים מאוזנים: ${M(`${s + a} − ${a} = ${s}`)}.`, hint: 'אם מורידים את אותו משקל משני הצדדים – המאזניים נשארים מאוזנים.', wr: [s + a, s + 2 * a, a] }; } },
+    { lv: 1, u: 'kg', mk: () => { const n = R(2, 4), s = R(2, G(5, 9)), sh = pick(['s', 'c', 't']); return { W: { [sh]: s }, eqs: [[rep(sh, n), [w(n * s)]]], ask: sh,
+      how: `${n} ${N[sh][1]} שוקלים ${n * s} ק"ג, וכולם שוקלים אותו דבר: ${M(`${n * s} : ${n} = ${s}`)}.`, hint: `כל ה${N[sh][1]} שוקלים אותו דבר. מחלקים את המשקל ביניהם.`, wr: [n * s, n * s - n, n] }; } },
+    // ---- רמה 2 ----
+    { lv: 2, u: 't', mk: () => { const c = R(2, 4), a = R(2, 3), b = R(1, 3); return { W: { c, s: c + b }, eqs: [[rep('c', a), rep('t', a * c)], [['s'], ['c', ...rep('t', b)]]], ask: 's',
+      how: `${a} עיגולים = ${a * c} משולשים, ולכן עיגול אחד = ${c} משולשים.<br>ריבוע = עיגול + ${tr(b)} = ${M(`${c} + ${b} = ${c + b}`)} משולשים.`, hint: 'קודם מוצאים כמה שוקל עיגול אחד, ואז מחליפים אותו במאזניים השניים.', wr: [a * c, c, c * b, a + b] }; } },
+    { lv: 2, u: 't', mk: () => { const k = R(2, 4), y = R(1, 2), d = R(1, 2), p = R(0, 3), sh = pick(['c', 's']); const x = y + d, q = p + d * k;
+      if (x + p > 10 || y + q > 10) return null;
+      return { W: { [sh]: k }, eqs: [[[...rep(sh, x), ...rep('t', p)], [...rep(sh, y), ...rep('t', q)]]], ask: sh,
+      how: `מורידים משני הצדדים ${y === 1 ? N[sh][0] + ' אחד' : y + ' ' + N[sh][1]}${p ? ` ו${p === 1 ? 'משולש אחד' : '-' + p + ' משולשים'}` : ''} – המאזניים נשארים מאוזנים.<br>נשאר: ${d === 1 ? N[sh][0] + ' אחד' : d + ' ' + N[sh][1]} = ${tr(d * k)}${d > 1 ? `, ולכן ${N[sh][0]} אחד = ${M(`${d * k} : ${d} = ${k}`)}` : ''}.`,
+      hint: 'מה יש בשני הצדדים? מורידים אותו משני הצדדים – והמאזניים נשארים מאוזנים.', wr: [q, q - p, d * k + 1, x] }; } },
+    { lv: 2, u: 'kg', mk: () => { const s = R(2, G(6, 12)), d = R(1, 2), y = 1, a = R(1, G(8, 12)), sh = pick(['s', 'c', 't']); const b = a + d * s; if (b > G(20, 40)) return null;
+      return { W: { [sh]: s }, eqs: [[[...rep(sh, y + d), w(a)], [...rep(sh, y), w(b)]]], ask: sh,
+      how: `מורידים ${N[sh][0]} אחד ומשקולת של ${a} ק"ג משני הצדדים.<br>נשאר: ${d === 1 ? N[sh][0] + ' אחד' : d + ' ' + N[sh][1]} = ${M(`${b} − ${a} = ${d * s}`)} ק"ג${d > 1 ? `, ולכן ${N[sh][0]} אחד = ${M(`${d * s} : ${d} = ${s}`)}` : ''}.`,
+      hint: 'מורידים את אותם דברים משני הצדדים, עד שנשארות רק צורות בצד אחד ומשקולת בצד השני.', wr: [b - a + 1, b, b + a, d * s + s] }; } },
+    { lv: 2, u: 'kg', mk: () => { const c = R(2, G(5, 10)), d = R(1, G(5, 9)), sh = pick([['c', 's'], ['t', 'c'], ['s', 't']]); const [A, B] = sh;
+      return { W: { [A]: c, [B]: c + d }, eqs: [[[A, A], [w(2 * c)]], [[B], [A, w(d)]]], ask: B,
+      how: `שני ${N[A][1]} = ${2 * c} ק"ג, ולכן ${N[A][0]} אחד = ${c} ק"ג.<br>${N[B][0]} = ${N[A][0]} + ${d} ק"ג = ${M(`${c} + ${d} = ${c + d}`)} ק"ג.`, hint: `קודם מוצאים כמה שוקל ${N[A][0]} אחד.`, wr: [2 * c + d, c, d, 2 * c] }; } },
+    { lv: 2, u: 't', mk: () => { const c = R(2, 4); return { W: { c, s: 2 * c }, eqs: [[['s'], rep('t', 2 * c)], [['c', 'c'], ['s']]], ask: 'c',
+      how: `ריבוע = ${2 * c} משולשים, ושני עיגולים שוקלים כמו ריבוע.<br>אז שני עיגולים = ${2 * c} משולשים, ועיגול אחד = ${M(`${2 * c} : 2 = ${c}`)}.`, hint: 'מה שוקל כמו הריבוע? אפשר להחליף אותו.', wr: [2 * c, 4 * c, c + 2] }; } },
+    // ---- רמה 3 ----
+    { lv: 3, u: 't', mk: () => { const c = R(1, 4), s = c + R(1, 4), ask = pick(['s', 'c']); return { W: { c, s }, eqs: [[['c', 's'], rep('t', c + s)], [['s'], ['c', ...rep('t', s - c)]]], ask,
+      how: `במאזניים התחתונים: ריבוע = עיגול + ${tr(s - c)}. מחליפים את הריבוע במאזניים העליונים: עיגול + עיגול + ${tr(s - c)} = ${c + s} משולשים.<br>אז שני עיגולים = ${2 * c} משולשים, עיגול = ${c}, וריבוע = ${M(`${c} + ${s - c} = ${s}`)}.`,
+      hint: 'נסו להחליף: במקום הריבוע במאזניים העליונים – שימו את מה שהוא שוקל לפי המאזניים התחתונים.', wr: [c + s, s - c, c * s, ask === 's' ? c : s] }; } },
+    { lv: 3, u: 't', mk: () => { const c = R(2, 3), ask = pick(['s', 'c']); return { W: { c, s: 2 * c }, eqs: [[['c', 's'], rep('t', 3 * c)], [['s'], ['c', 'c']]], ask,
+      how: `ריבוע שוקל כמו שני עיגולים. מחליפים במאזניים העליונים: שלושה עיגולים = ${3 * c} משולשים.<br>עיגול = ${M(`${3 * c} : 3 = ${c}`)}, וריבוע = ${M(`2 × ${c} = ${2 * c}`)}.`,
+      hint: 'במקום הריבוע אפשר לשים שני עיגולים. כמה עיגולים יש אז בכף אחת?', wr: [3 * c, 3 * c / 2 | 0, ask === 's' ? c : 2 * c, 4 * c] }; } },
+    { lv: 3, u: 'kg', mk: () => { const c = R(2, G(6, 12)), d = R(1, G(5, 9)), [A, B] = pick([['c', 's'], ['t', 'c'], ['s', 't']]), ask = pick([A, B]); const s = c + d;
+      return { W: { [A]: c, [B]: s }, eqs: [[[A, B], [w(c + s)]], [[B], [A, w(d)]]], ask,
+      how: `${N[B][0]} = ${N[A][0]} + ${d} ק"ג. מחליפים במאזניים העליונים: שני ${N[A][1]} + ${d} ק"ג = ${c + s} ק"ג.<br>שני ${N[A][1]} = ${M(`${c + s} − ${d} = ${2 * c}`)}, ${N[A][0]} = ${c}, ו${N[B][0]} = ${M(`${c} + ${d} = ${s}`)}.`,
+      hint: `במקום ה${N[B][0]} במאזניים העליונים – שימו ${N[A][0]} ועוד משקולת.`, wr: [c + s, (c + s) / 2 | 0, d, c + s - d, ask === A ? s : c] }; } },
+    { lv: 3, u: 'kg', mk: () => { const s = R(2, G(7, 12)), c = R(2, G(7, 12)), [A, B] = pick([['s', 'c'], ['c', 't'], ['t', 's']]), ask = pick([A, B]); if (s === c) return null;
+      return { W: { [A]: s, [B]: c }, eqs: [[[A, A, B], [w(2 * s + c)]], [[A, B], [w(s + c)]]], ask,
+      how: `משווים בין המאזניים: בעליונים יש ${N[A][0]} אחד יותר, והמשקל גדול ב-${M(`${2 * s + c} − ${s + c} = ${s}`)} ק"ג. לכן ${N[A][0]} = ${s} ק"ג.<br>${N[B][0]} = ${M(`${s + c} − ${s} = ${c}`)} ק"ג.`,
+      hint: 'מה ההבדל בין שתי המאזניים? ההבדל במשקל שווה בדיוק להבדל בצורות.', wr: [s + c, 2 * s + c, ask === A ? c : s, (2 * s + c) / 3 | 0] }; } },
+    { lv: 3, u: 'kg', mk: () => { const t = R(2, G(5, 9)), [A, B] = pick([['c', 't'], ['s', 'c'], ['t', 's']]), ask = pick([A, B]);
+      return { W: { [A]: 2 * t, [B]: t }, eqs: [[[A, B], [w(3 * t)]], [[A], [B, B]]], ask,
+      how: `${N[A][0]} שוקל כמו שני ${N[B][1]}. מחליפים במאזניים העליונים: שלושה ${N[B][1]} = ${3 * t} ק"ג.<br>${N[B][0]} = ${M(`${3 * t} : 3 = ${t}`)} ק"ג, ו${N[A][0]} = ${M(`2 × ${t} = ${2 * t}`)} ק"ג.`,
+      hint: `במקום ה${N[A][0]} – שימו שני ${N[B][1]}. כמה ${N[B][1]} יש אז?`, wr: [3 * t, (3 * t) / 2 | 0, ask === A ? t : 2 * t, 4 * t] }; } }
+  ];
+})();
+function genLgBalance(lv) {
+  lv = lv || 1;
+  for (let tries = 0; ; tries++) {
+    const T = pick(LG_BAL.filter(b => b.lv === lv)), P = T.mk();
+    if (!P) continue;
+    const { W, eqs, ask } = P;
+    if (eqs.some(e => e[0].length > 10 || e[1].length > 10)) continue;
+    // פתרון בלתי תלוי – פתרון יחיד שמתאים למשקלים שבחרנו
+    const unk = [...new Set(eqs.flat(2).filter(x => x[0] !== 'w' && !(T.u === 't' && x === 't')))];
+    const sol = lgBalSolve(eqs, unk, T.u === 't' ? { t: 1 } : {});
+    if (!sol || unk.some(u => Math.abs(sol[u] - W[u]) > 1e-9)) continue;
+    const ans = W[ask];
+    const wr = lgNumOpts(ans, P.wr.filter(v => v !== ans));
+    const H = 86 * eqs.length;
+    const fig = `<svg class="fig lgfig" viewBox="0 0 320 ${H}" width="320" height="${H}" role="img">${eqs.map((e, i) => lgScale(e[1], e[0], 6 + 86 * i)).join('')}</svg>`;
+    const kg = T.u === 'kg';
+    const text = kg ? `המאזניים מאוזנים. על כל משקולת כתוב כמה ק"ג היא שוקלת. כמה ק"ג שוקל <b>${LG_SHN2[ask][0]}</b>?`
+      : `המאזניים מאוזנים. כמה <b>משולשים</b> שוקלים כמו <b>${LG_SHN2[ask][0]} אחד</b>?`;
+    return choiceQ({ type: 'choice', text, fig, hint: P.hint,
+      exp: P.how + `<br>לכן ${LG_SHN2[ask][0]} אחד = <b>${ans}</b> ${kg ? 'ק"ג' : 'משולשים'}.`, lgKind: 'bal', lgEqs: eqs, lgAsk: ask, lgUnit: T.u }, ans, wr);
+  }
+}
+
+// 6. מספר במרכז המשולש
+const LG_CR = [
+  { lv: 1, f: (a, b, c) => a + b + c, t: 'המספר במרכז = סכום שלושת המספרים בפינות', sh: (a, b, c) => `${a} + ${b} + ${c} = ${a + b + c}` },
+  { lv: 1, f: (a, b, c) => a + b + c + 1, t: 'המספר במרכז = סכום המספרים בפינות, ועוד 1', sh: (a, b, c) => `${a} + ${b} + ${c} + 1 = ${a + b + c + 1}` },
+  { lv: 2, f: (a, b, c) => a * b + c, t: 'המספר במרכז = המספר העליון × המספר הימני, ועוד המספר השמאלי', sh: (a, b, c) => `${a} × ${b} + ${c} = ${a * b + c}` },
+  { lv: 2, f: (a, b, c) => (a + b) * c, t: 'המספר במרכז = (העליון + הימני) × השמאלי', sh: (a, b, c) => `(${a} + ${b}) × ${c} = ${(a + b) * c}` },
+  { lv: 2, f: (a, b, c) => a * b - c, t: 'המספר במרכז = העליון × הימני, פחות השמאלי', sh: (a, b, c) => `${a} × ${b} - ${c} = ${a * b - c}` },
+  { lv: 3, f: (a, b, c) => a * b * c, t: 'המספר במרכז = מכפלת שלושת המספרים', sh: (a, b, c) => `${a} × ${b} × ${c} = ${a * b * c}` },
+  { lv: 3, f: (a, b, c) => 2 * (a + b + c), t: 'המספר במרכז = פעמיים הסכום של המספרים בפינות', sh: (a, b, c) => `2 × (${a} + ${b} + ${c}) = ${2 * (a + b + c)}` },
+  { lv: 3, f: (a, b, c) => a * (b + c), t: 'המספר במרכז = העליון × (סכום שני המספרים התחתונים)', sh: (a, b, c) => `${a} × (${b} + ${c}) = ${a * (b + c)}` },
+  { lv: 3, f: (a, b, c) => (a + b + c) * a, t: 'המספר במרכז = סכום הפינות × המספר העליון', sh: (a, b, c) => `(${a} + ${b} + ${c}) × ${a} = ${(a + b + c) * a}` }
+];
+const LG_CCHK = (() => { // כל הכללים בכל סידור של הפינות, ועוד כללים קרובים
+  const base = LG_CR.map(r => r.f).concat([(a, b, c) => a + b - c, (a, b, c) => a * b + c + 1, (a, b, c) => a + b * c, (a, b, c) => (a + b) * c - 1, (a, b, c) => a * b + b * c, (a, b, c) => a + b + c - 1, (a, b, c) => 3 * (a + b + c)]);
+  const perms = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]], out = [];
+  base.forEach(f => perms.forEach(p => out.push(v => f(v[p[0]], v[p[1]], v[p[2]]))));
+  return out;
+})();
+function genLgCenter(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const rule = pick(LG_CR.filter(r => r.lv === lv)), hi = lv === 1 ? 12 : 7;
+    const tri = [...Array(4)].map(() => [R(1, hi), R(1, hi), R(1, hi)]);
+    if (new Set(tri.map(String)).size < 4) continue;
+    const vals = tri.map(v => rule.f(...v));
+    if (vals.some(v => v < 1 || v > 400)) continue;
+    const fits = LG_CCHK.filter(f => tri.slice(0, 3).every((v, i) => f(v) === vals[i]));
+    if (new Set(fits.map(f => f(tri[3]))).size !== 1) continue;
+    const ans = vals[3];
+    const q = tri[3], wr = lgNumOpts(ans, [q[0] + q[1] + q[2], q[0] * q[1] + q[2], q[0] * q[1] * q[2], (q[0] + q[1]) * q[2], ans + 1, ans - 1]);
+    const one = (x, y, v, m) => `<polygon points="${x},${y} ${x + 66},${y + 112} ${x - 66},${y + 112}" fill="${m == null ? '#f4effc' : '#fff'}" stroke="#23264a" stroke-width="2.5" stroke-linejoin="round"/>`
+      + lgTxt(x, y + 32, v[0], 20) + lgTxt(x + 40, y + 104, v[1], 20) + lgTxt(x - 40, y + 104, v[2], 20) + (m == null ? LG_Q(x, y + 84) : lgTxt(x, y + 80, m, m > 99 ? 22 : 26, '#6b3fa0'));
+    const s = one(240, 6, tri[0], vals[0]) + one(80, 6, tri[1], vals[1]) + one(240, 130, tri[2], vals[2]) + one(80, 130, tri[3], null);
+    return choiceQ({ type: 'choice', text: 'בכל משולש המספר שבמרכז נבנה מהמספרים שבפינות <b>לפי אותו כלל</b>. מה המספר במקום <b>?</b>',
+      fig: `<svg class="fig lgfig" viewBox="0 0 320 250" width="320" height="250" role="img">${s}</svg>`,
+      hint: 'נסו קודם לחבר את הפינות. לא מתאים? נסו כפל – אולי של שתי פינות, ואז משהו עם השלישית. בדקו את הכלל בכל שלושת המשולשים.',
+      exp: `<b>הכלל:</b> ${rule.t}.<br>${tri.slice(0, 3).map(v => `${M(rule.sh(...v))} ✓`).join('<br>')}<br>במשולש האחרון: ${M(rule.sh(...q))}`, lgKind: 'center', lgTri: tri, lgVals: vals }, ans, wr);
+  }
+}
+// ---------- מצוינות: עוד סוגים (22.11) ----------
+// 7. סדרות אותיות (א–ת, בלי סופיות)
+const LG_ABC = 'אבגדהוזחטיכלמנסעפצקרשת'.split('');
+function genLgLetters(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const N = lv === 1 ? 4 : 5; let pos = [], ex;
+    if (lv === 1) { const d = pick([1, 2, 3, -1, -2]), s0 = d > 0 ? R(0, 21 - d * N) : R(-d * N, 21); pos = [...Array(N)].map((_, i) => s0 + d * i); ex = d > 0 ? `כל פעם מדלגים ${d === 1 ? 'לאות הבאה' : `${d} אותיות קדימה`}.` : `כל פעם חוזרים ${-d === 1 ? 'אות אחת' : `${-d} אותיות`} אחורה.`; }
+    else if (lv === 2) { const s0 = R(0, 4), k = pick([0, 1]); let v = s0; pos = [v]; for (let i = 1; i < N; i++) { v += i + k; pos.push(v); } ex = `הקפיצות גדלות: ${pos.slice(1).map((v, i) => '+' + (v - pos[i])).join(', ')} – והבאה +${N + k}.`; }
+    else { const a = R(0, 6), b = R(14, 21), da = pick([1, 2]), db = -pick([1, 2]); pos = [...Array(N)].map((_, i) => i % 2 ? b + db * ((i - 1) / 2) : a + da * (i / 2)); ex = `שתי סדרות שזורות: אחת מתקדמת מתחילת האלף-בית (${pos.filter((_, i) => !(i % 2)).map(p => LG_ABC[p]).join(', ')}) ואחת חוזרת מהסוף (${pos.filter((_, i) => i % 2).map(p => LG_ABC[p]).join(', ')}). עכשיו תור הסדרה ${N % 2 ? 'השנייה' : 'הראשונה'}.`; }
+    const t = pos.map(p => p + 1);
+    if (pos.some(p => p < 0 || p > 21)) continue;
+    const outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
+    if (outs.size !== 1) continue;
+    const ap = [...outs][0] - 1;
+    if (ap < 0 || ap > 21) continue;
+    const near = [ap - 1, ap + 1, ap - 2, ap + 2, pos[N - 1], ap + 3, ap - 3].filter(p => p >= 0 && p <= 21 && p !== ap);
+    const wr = shuffle([...new Set(near)]).slice(0, 4);
+    if (wr.length < 4) continue;
+    const W = 54, gap = 6, tot = (N + 1) * (W + gap);
+    let sv = '';
+    [...pos, null].forEach((p, i) => { const x = tot - (i + 1) * (W + gap) + gap / 2; sv += lgBox(x, 4, W, 52, p == null ? LG_Q(x + W / 2, 43) : lgTxt(x + W / 2, 42, LG_ABC[p], 30), p == null); });
+    const big = c => `<span class="lgletter" data-raw>${c}</span>`;
+    return choiceQ({ type: 'choice', text: 'איזו אות באה במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} 60" width="${tot}" height="60" role="img" data-raw>${sv}</svg>`,
+      hint: 'כתבו ליד כל אות את המקום שלה באלף-בית (א = 1, ב = 2, ג = 3…). עכשיו זו סדרת מספרים!',
+      exp: `המקומות באלף-בית: ${pos.map(p => `${LG_ABC[p]} = ${p + 1}`).join(', ')}.<br>${ex}<br>המקום הבא: ${ap + 1} – האות <b>${LG_ABC[ap]}</b>.`, lgKind: 'letters', lgPos: pos }, big(LG_ABC[ap]), wr.map(p => big(LG_ABC[p])));
+  }
+}
+
+// 8. תמונת מראה: קו מראה אנכי (ר1–2) או השתקפות במים – קו אופקי (ר3)
+const LG_PV = [6, 5, 4, 3, 2, 1, 0, 7], LG_PH = [2, 1, 0, 7, 6, 5, 4, 3]; // מיפוי מקומות הנקודה: שיקוף למעלה-למטה / ימין-שמאל
+function genLgMirror(lv) {
+  lv = lv || 1;
+  const water = lv === 3;
+  for (;;) {
+    let src, mir, wrongs, draw;
+    if (lv === 1 || (lv === 3 && Math.random() < 0.5)) {
+      const n = pick([6, 8]); src = lgMask(n, 2, n - 2);
+      const mv = m => m.slice().reverse(), mw = m => m.map((_, i) => m[((n / 2 - 1 - i) % n + n) % n]);
+      mir = water ? mw(src) : mv(src);
+      wrongs = [src, water ? mv(src) : mw(src), lgRot(src, n / 2), lgRot(mir, 1), lgRot(mir, n - 1), lgRot(src, 1)];
+      draw = lgPie;
+    } else {
+      src = { a: R(0, 7), p: R(0, 7), f: 1 };
+      const mv = o => ({ a: (8 - o.a) % 8, p: LG_PH[o.p], f: o.f }), mw = o => ({ a: (12 - o.a) % 8, p: LG_PV[o.p], f: o.f });
+      mir = water ? mw(src) : mv(src);
+      wrongs = [src, water ? mv(src) : mw(src), { ...src, a: (src.a + 4) % 8, p: (src.p + 4) % 8 }, { ...mir, a: (mir.a + 2) % 8 }, { ...mir, p: (mir.p + 4) % 8 }, { ...mir, a: (mir.a + 4) % 8 }];
+      draw = lgFig;
+    }
+    const K = x => draw(x), uniq = [];
+    wrongs.forEach(w => { if (K(w) !== K(mir) && !uniq.some(u => K(u) === K(w))) uniq.push(w); });
+    if (K(src) === K(mir) || uniq.length < 4) continue;
+    const wr = [uniq[0], ...shuffle(uniq.slice(1)).slice(0, 3)];
+    const C = 84;
+    const fig = water
+      ? `<svg class="fig lgfig" viewBox="0 0 120 200" width="120" height="200" role="img"><g transform="translate(18 6) scale(${C / 100})">${draw(src)}</g><line x1="4" y1="100" x2="116" y2="100" stroke="#1e8a8a" stroke-width="4" stroke-dasharray="10 5"/><text x="60" y="122" text-anchor="middle" font-size="13" fill="#1e8a8a" font-family="Arial">~ מים ~</text>${LG_Q(60, 170)}</svg>`
+      : `<svg class="fig lgfig" viewBox="0 0 220 100" width="220" height="100" role="img"><g transform="translate(124 8) scale(${C / 100})">${draw(src)}</g><line x1="110" y1="2" x2="110" y2="98" stroke="#1e8a8a" stroke-width="4" stroke-dasharray="10 5"/>${LG_Q(55, 62)}</svg>`;
+    return choiceQ({ type: 'choice', text: water ? 'מה רואים <b>בהשתקפות במים</b> (מתחת לקו)?' : 'מה רואים <b>במראה</b> (משמאל לקו המקווקו)?', fig,
+      hint: water ? 'במים מה שלמעלה נראה למטה, וימין נשאר ימין. בדקו כל חלק לחוד.' : 'במראה ימין ושמאל מתחלפים, אבל למעלה נשאר למעלה. מה שקרוב למראה – נשאר קרוב אליה.',
+      exp: water ? 'בהשתקפות במים כל נקודה עוברת לצד השני של הקו באותו מרחק: מה שהיה למעלה נמצא למטה, וימין ושמאל לא מתחלפים.' + (draw === lgFig ? ' לכן החץ שמצביע למעלה מצביע למטה, והנקודה עוברת מהשורה העליונה לתחתונה.' : '')
+        : 'במראה ימין ושמאל מתחלפים, ולמעלה ולמטה לא משתנים.' + (draw === lgFig ? ' לכן החץ שמצביע ימינה מצביע שמאלה, והנקודה עוברת מצד ימין לצד שמאל באותו גובה.' : ' החלקים הצבועים מימין עוברים לשמאל.')
+        + '<br>שימו לב: סיבוב של הציור הוא <b>לא</b> תמונת מראה.', lgKind: 'mirror', lgSrc: src, lgWater: water, lgPie: draw === lgPie }, lgOpt(draw(mir)), wr.map(w => lgOpt(draw(w))));
+  }
+}
+
+// 9. פירמידת מספרים: כל לבנה = סכום שתי הלבנים שמתחתיה
+function genLgPyramid(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const rowsN = lv === 3 ? 4 : 3, base = [...Array(rowsN)].map(() => R(1, lv === 1 ? 15 : 9));
+    const rows = [base]; while (rows[rows.length - 1].length > 1) { const r = rows[rows.length - 1]; rows.push(r.slice(1).map((v, i) => v + r[i])); }
+    const top = rows[rowsN - 1][0];
+    // מה מוסתר: ר1 – השורה האמצעית והקודקוד (שואלים על הקודקוד); ר2–3 – לבנה בשורה התחתונה, כשהקודקוד ידוע
+    const qi = lv === 1 ? null : R(1, rowsN - 2), ans = lv === 1 ? top : base[qi];
+    if (top > 300) continue;
+    // בדיקה: עוברים על כל הערכים האפשריים ללבנה החסרה – רק אחד נותן את הקודקוד
+    if (lv > 1) { let c = 0; for (let v = 0; v <= 300; v++) { const b = base.slice(); b[qi] = v; let r = b; while (r.length > 1) r = r.slice(1).map((x, i) => x + r[i]); if (r[0] === top) c++; } if (c !== 1) continue; }
+    const coef = [...Array(rowsN)].map((_, i) => { let c = 1; for (let k = 0; k < i; k++) c = c * (rowsN - 1 - k) / (k + 1); return c; });
+    const wr = lgNumOpts(ans, lv === 1 ? [base.reduce((a, b) => a + b, 0), top + 1, top - 1, rows[1].reduce((a, b) => a + b, 0) + 1, 2 * top] : [ans + 1, ans - 1, top - base.filter((_, i) => i !== qi).reduce((a, b) => a + b, 0), Math.round((top - base.reduce((a, b, i) => i === qi ? a : a + b * coef[i], 0)) / 2) + 1]);
+    const BW = 64, BH = 40, W = BW * rowsN + 8;
+    let sv = '';
+    rows.forEach((r, ri) => r.forEach((v, ci) => {
+      const x = 4 + ri * BW / 2 + ci * BW, y = 4 + (rowsN - 1 - ri) * BH;
+      const isQ = lv === 1 ? ri === rowsN - 1 : ri === 0 && ci === qi, hid = lv === 1 ? ri > 0 && ri < rowsN - 1 : ri > 0 && ri < rowsN - 1;
+      sv += `<rect x="${x}" y="${y}" width="${BW}" height="${BH}" fill="${isQ ? '#f4effc' : hid ? '#f3f1f6' : '#fff'}" stroke="#23264a" stroke-width="2.5"/>` + (isQ ? LG_Q(x + BW / 2, y + 30) : hid ? '' : lgTxt(x + BW / 2, y + 28, v, 22));
+    }));
+    const H = BH * rowsN + 8;
+    const how = lv === 1 ? `השורה האמצעית: ${rows[1].map((v, i) => `${base[i]} + ${base[i + 1]} = ${v}`).join(' , ')}.<br>הקודקוד: ${rows[1][0]} + ${rows[1][1]} = <b>${top}</b>.`
+      : `נסמן את הלבנה החסרה ב-?. כל לבנה למעלה היא סכום – כך הקודקוד שווה ${M(`${coef.map((c, i) => `${c > 1 ? c + ' × ' : ''}${i === qi ? '?' : base[i]}`).join(' + ')} = ${top}`)}.<br>${M(`${coef[qi]} × ? = ${top - base.reduce((a, b, i) => i === qi ? a : a + b * coef[i], 0)}`)}, ולכן ? = <b>${ans}</b>.<br>בדיקה: בונים את הפירמידה מלמטה ומגיעים ל-${top} ✓`;
+    return choiceQ({ type: 'choice', text: `פירמידת מספרים: כל לבנה שווה <b>לסכום שתי הלבנים שמתחתיה</b>. איזה מספר במקום <b>?</b>`,
+      fig: `<svg class="fig lgfig" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img">${sv}</svg>`,
+      hint: lv === 1 ? 'מתחילים מלמטה: מחברים כל שתי לבנים סמוכות ורושמים את הסכום מעליהן.' : 'נסו לנחש מספר במקום ?, בנו את הפירמידה עד הקודקוד ובדקו. גדול מדי? קטן מדי? תקנו.',
+      exp: how, lgKind: 'pyr', lgRows: rows, lgQi: qi }, ans, wr);
+  }
+}
+
+// 10. סימנים חסרים: איזה תרגיל נכון? (סדר פעולות!)
+function lgEval(nums, ops) { // ops: '+', '-', '×', ':' – לפי סדר פעולות; null אם החילוק לא שלם
+  const v = nums.slice(), o = ops.slice();
+  for (let i = 0; i < o.length;) {
+    if (o[i] === '×' || o[i] === ':') { if (o[i] === ':' && (v[i + 1] === 0 || v[i] % v[i + 1])) return null; v.splice(i, 2, o[i] === '×' ? v[i] * v[i + 1] : v[i] / v[i + 1]); o.splice(i, 1); }
+    else i++;
+  }
+  return v.reduce((a, x, i) => i ? (o[i - 1] === '+' ? a + x : a - x) : x, 0);
+}
+function genLgOps(lv) {
+  lv = lv || 1;
+  const OPS = lv === 1 ? ['+', '-'] : lv === 2 ? ['+', '-', '×'] : ['+', '-', '×', ':'], k = lv === 2 ? 2 : 3;
+  for (;;) {
+    const nums = [...Array(k + 1)].map(() => R(lv === 1 ? 2 : 2, lv === 1 ? 20 : 9));
+    const all = []; const rec = a => { if (a.length === k) { all.push(a); return; } OPS.forEach(o => rec([...a, o])); }; rec([]);
+    const ops = pick(all), r = lgEval(nums, ops);
+    if (r === null || r < 0 || (lv > 1 && !ops.some(o => o === '×' || o === ':'))) continue;
+    if (lv === 3 && new Set(ops).size < 2) continue;
+    const hits = all.filter(o => lgEval(nums, o) === r);
+    if (hits.length !== 1) continue;
+    const raw = o => nums.map((n, i) => i ? `${o[i - 1]} ${n}` : n).join(' '), ex = o => M(raw(o));
+    const others = shuffle(all.filter(o => o.join() !== ops.join() && lgEval(nums, o) !== null)).slice(0, 4);
+    if (others.length < 4) continue;
+    const blank = M(nums.map((n, i) => i ? `◯ ${n}` : n).join(' ') + ` = ${r}`);
+    const val = o => lgEval(nums, o);
+    return choiceQ({ type: 'choice', text: `אילו סימנים חסרים בעיגולים? ${blank}<br><span class="muted">זכרו: כפל וחילוק לפני חיבור וחיסור.</span>`,
+      hint: lv === 1 ? 'נסו כל אפשרות: חשבו ובדקו אם יוצא ' + r + '.' : `אומדן: התוצאה ${r} – גדולה או קטנה ביחס למספרים? אם היא גדולה – כנראה יש כפל.`,
+      exp: `${M(`${raw(ops)} = ${r}`)} ✓<br>בודקים אפשרות אחרת: ${M(`${raw(others[0])} = ${val(others[0])}`)} – לא ${r}.<br>זכרו: קודם כפל וחילוק, ואחר כך חיבור וחיסור משמאל לימין.`, lgKind: 'ops', lgNums: nums, lgR: r },
+      ex(ops), others.map(ex));
+  }
+}
+const LG_TIPS = ['קוראים מימין לשמאל.', 'בודקים כל תכונה לחוד: צורה, צבע, כמות, כיוון.', 'מצאתם כלל? בדקו אותו בכל הדוגמאות לפני שבוחרים.'];
+const LG_T = (id, name, icon, desc, gens, ld) => ({ id, name, icon, color: '#6b3fa0', desc, tips: LG_TIPS, lgLD: ld,
+  levels: { 1: gens.map(g => () => g(1)), 2: gens.map(g => () => g(2)), 3: gens.map(g => () => g(3)) } });
+const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [
+  LG_T('logic', 'חידות מטריצה', '🧠', 'משלימים את התא החסר: עיגולים מסתובבים, צורות ומספרים', [genLogicPie, genLogicShapes, genLogicNum],
+    ['כלל אחד בכל שורה (סיבוב, צורה, חיבור וחיסור)', 'שני כללים יחד, כיוונים שונים, כפל וחילוק', 'הרכבת ציורים, כלל לפי שורה, פעולה ועוד צעד קטן']),
+  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות של מספרים, ציורים ואותיות: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq, genLgLetters],
+    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב, דילוג באלף-בית', 'הפרשים שגדלים, שתי קפיצות או שתי פעולות לסירוגין, חץ ונקודה יחד', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד']),
+  LG_T('lgAna', 'אנלוגיות, מראה ויוצא דופן', '🔀', 'מכונת מספרים, "א ל-ב כמו ג ל-?", תמונת מראה ומי לא שייך לקבוצה', [genLgAnalogy, genLgOdd, genLgMirror],
+    ['כלל של צעד אחד, הפיכה אחת, תכונה פשוטה, מראה של עיגול', 'כלל של שני צעדים, שתי הפיכות, מתחלקים ב..., מראה של חץ ונקודה', 'שני צעדים, ראשוניים, תמונת מראה, השתקפות במים']),
+  LG_T('lgNum', 'חידות מספרים: מאזניים, פירמידות וסימנים', '⚖️', 'כמה שוקלת כל צורה? מה המספר במרכז? מה חסר בפירמידה? אילו סימנים חסרים?', [genLgBalance, genLgCenter, genLgPyramid, genLgOps],
+    ['החלפה פשוטה, סכום הפינות, פירמידה מלמטה למעלה, + ו-−', 'שני שלבים, כפל וחיבור בפינות, לבנה חסרה, גם ×', 'הצבה במאזניים, כללים מורכבים, פירמידה של 4 שורות, כל ארבע הפעולות'])
+] : [];
+// כל סוגי החידות – מעורב (13 סוגים)
+if (XTOPICS.length) XTOPICS.push({ id: 'lgAll', name: 'כל סוגי החידות – מעורב', icon: '🔀', color: '#6b3fa0', desc: 'כל 13 סוגי החידות לסירוגין – תרגול ארוך בלי חזרות', tips: LG_TIPS, lgLD: ['רמה קלה מכל הסוגים', 'רמה בינונית מכל הסוגים', 'רמה מאתגרת מכל הסוגים'], mixAll: true,
+  levels: Object.fromEntries([1, 2, 3].map(lv => [lv, XTOPICS.flatMap(t => t.levels[lv])])) });
+const LG_LEVELS = XTOPICS.length ? XTOPICS[0].levels : {};
+XTOPICS.forEach(t => { TOPIC[t.id] = t; CAT_OF[t.id] = 'exc'; LEVEL_DESC[t.id] = t.lgLD; });
+// מבחן לדוגמה: 15 שאלות מהקל לקשה (5 בכל רמה, הסוגים מתחלפים), עם שעון
+function logicExam() {
+  const qs = [];
+  const all = XTOPICS.filter(t => !t.mixAll).flatMap(t => [0, 1, 2].map(k => t.levels[1][k] ? k : -1).filter(k => k >= 0).map(k => ({ t: t.id, k })));
+  [1, 2, 3].forEach(lv => shuffle(all).slice(0, 5).forEach(g => qs.push(mk(g.t, TOPIC[g.t].levels[lv][g.k], lv))));
+  startSim(20, qs);
+}
 if (TOPIC.solids) {
   LEVEL_DESC.solids = ['שמות הגופים, ספירת פאות/מקצועות/קדקודים בציור, ממה בנויות הפאות', 'כל המנסרות והפירמידות, זיהוי גוף לפי מספר הפאות, צורות לבנייה', 'בלי ציור, נכון/לא נכון, כלל אוילר וחתכים'];
   LEVEL_DESC.solidsN = ['לאיזה גוף שייכת הפריסה, ספירת צורות, פריסות של קובייה', 'בוחרים פריסה לגוף, פריסה נכונה או לא, פאות נגדיות', 'פריסות "מטעות", משבצת חסרה, קוביית משחק'];
@@ -13661,6 +14727,17 @@ function masterySnapshot() {
   return Object.fromEntries(TOPICS.map(t => [t.id, (store.topics[t.id] || {}).mastery || 0]));
 }
 
+// בדיקת שליטה עצמאית (21.11): אותן שאלות של הרמה, אבל במצב מבדק – ניסיון אחד, בלי רמז/דוגמה/משוב עד הסוף
+function startCheck(id, lv) {
+  state = { mode: 'practice', topicId: id, level: lv, count: 5, fixed: true, qs: [], i: 0, results: [], prevGen: null, mixOrder: [] };
+  const qs = [];
+  for (let i = 0; i < 5; i++) { state.i = i; const q = makeQuestion(); qs.push(q); state.qs[i] = q; }
+  navPush('view');
+  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0, chk: { id, lv }, label: `בדיקת שליטה – ${TOPIC[id].name}` };
+  track('בדיקת שליטה', `${TOPIC[id].name} · ${LEVEL_NAME[lv]}`);
+  renderQ();
+}
+
 function startPractice(topicId, opt = {}) {
   navPush('view');
   if (TOPIC[topicId]) { store.last = { k: 't', id: topicId, at: Date.now() }; saveStore(store); }
@@ -13673,7 +14750,7 @@ function startPractice(topicId, opt = {}) {
   }
   state = {
     mode: 'practice', topicId, level,
-    count: opt.list ? opt.list.length : opt.retry ? opt.retry.length : (opt.count || store.roundLen || 10),
+    count: opt.list ? opt.list.length : opt.retry ? opt.retry.length : (opt.count || (catOf(topicId) === 'exc' ? 15 : store.roundLen || 10)),
     fixed: !!(opt.fixed || opt.list || opt.retry), hideLevel: !!opt.hideLevel,
     retry: opt.retry || null, list: opt.list || null, label: opt.label || null, lessonId: opt.lessonId || null,
     mixOrder: shuffle(TOPICS.map(t => t.id)),
@@ -13863,10 +14940,10 @@ function showSimPicker() {
   ov.querySelector('[data-min="45"]').focus();
 }
 
-function startSim(mins) {
+function startSim(mins, list) {
   navPush('view');
   stopSimTimer();
-  const qs = buildTest();
+  const qs = list || buildTest();
   state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0,
     sim: { mins, start: Date.now(), end: Date.now() + mins * 60000, answers: [], raw: [], hide: false } };
   const me = state;
@@ -13951,10 +15028,20 @@ function makeQuestion() {
   if (s.retry) { const r = s.retry[s.i]; return mk(r.topic, r.gen, r.lv); }
   const topic = s.topicId === 'mix' ? s.mixOrder[s.i % s.mixOrder.length] : s.topicId;
   const pool = TOPIC[topic].levels[s.level];
+  if (catOf(topic) === 'exc') return lgNext(s, topic, pool);
   let g = pick(pool);
   if (pool.length > 1) while (g === s.prevGen) g = pick(pool);
   s.prevGen = g;
   return mk(topic, g, s.level);
+}
+// מצוינות: "שקית" של כל הסוגים (כל סוג פעם אחת לפני שחוזרים), ובלי חידה שכבר הופיעה במפגש
+const LG_SEEN = new Set();
+function lgNext(s, topic, pool) {
+  if (!s.lgBag || !s.lgBag.length || s.lgBagLv !== s.level) { s.lgBag = shuffle(pool.slice()); s.lgBagLv = s.level; if (s.lgBag[0] === s.prevGen && s.lgBag.length > 1) s.lgBag.push(s.lgBag.shift()); }
+  const g = s.lgBag.shift(); s.prevGen = g;
+  let q;
+  for (let t = 0; t < 40; t++) { q = mk(topic, g, s.level); const k = q.text + (q.fig || '') + q.choices.join('|'); if (!LG_SEEN.has(k)) { LG_SEEN.add(k); break; } }
+  return q;
 }
 
 function inputHTML(q) {
@@ -14043,6 +15130,7 @@ function renderQ() {
         ${!practice && !state.sim ? '<button class="secondary" id="skipQ">🤷 לא יודע/ת – ממשיכים</button>' : ''}
         ${practice ? `<button class="secondary" id="hintBtn">${ic('bulb')} רמז</button>` : ''}
         ${practice && q.gen ? `<button class="secondary" id="exBtn">${ic('example')} דוגמה פתורה</button>` : ''}
+        ${practice && catOf(state.topicId) === 'exc' ? '<button class="secondary" id="dkBtn">🤷 לא יודע/ת</button>' : ''}
         <button class="hidden" id="next">${state.i + 1 === total ? 'לסיכום 🏁' : 'לשאלה הבאה ←'}</button>
       </div>
       ${teacherOn() && !state.sim ? `<div class="actions noprint tskip">${state.i > 0 ? '<button type="button" class="secondary" id="tPrevQ">→ שאלה קודמת (מורה)</button>' : ''}<button type="button" class="secondary" id="tSolQ">👁️ הצגת הפתרון (מורה)</button><button type="button" class="secondary" id="tSkipQ">${state.i + 1 === total ? 'לסיכום ← (מורה)' : 'דילוג לשאלה הבאה ← (מורה)'}</button></div>` : ''}
@@ -14081,6 +15169,7 @@ function renderQ() {
   if ($('skipQ')) $('skipQ').onclick = () => { if (state.done) return; state.results.push({ q, a: readAnswer(q), ok: false, outcome: 'shown', skipped: true }); nextQ(); };
   if ($('hintBtn')) $('hintBtn').onclick = showHint;
   if ($('exBtn')) $('exBtn').onclick = showExample;
+  if ($('dkBtn')) $('dkBtn').onclick = dontKnow;
   $('next').onclick = nextQ;
 
   if (q.type === 'choice') {
@@ -14115,7 +15204,7 @@ function lockMain() {
 
 function lockInputs() {
   lockMain();
-  if ($('exBtn')) $('exBtn').classList.add('hidden');
+  ['exBtn', 'dkBtn'].forEach(id => { if ($(id)) $(id).classList.add('hidden'); });
   const nx = $('next');
   nx.classList.remove('hidden');
   nx.focus();
@@ -14126,6 +15215,27 @@ function showHint() {
   const q = state.qs[state.i];
   $('mhint').innerHTML = `<div class="mnote"><div class="mtitle">${ic('bulb')} רמז</div><div>${q.hint}</div>${learnLink(q)}</div>`;
   updMargin();
+  marginInView($('mhint'));
+}
+// בטלפון השוליים מתחת לשאלה – גוללים אליהם כדי שיראו שמשהו קרה
+function marginInView(el) { if (el && el.scrollIntoView && window.innerWidth < 900) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 30); }
+// מצוינות: "לא יודע/ת" – פעם ראשונה רמז, פעם שנייה הפתרון המלא (לא נספר כנכון)
+function dontKnow() {
+  const q = state.qs[state.i];
+  if (state.done || state.guide) return;
+  if (!q._dk) {
+    q._dk = 1; showHint();
+    $('dkBtn').textContent = '🤷 עדיין לא יודע/ת – הראו לי את הפתרון';
+    showFb('hint', 'נסו עוד רגע עם הרמז 💡 ואם עדיין לא – לחצו שוב ונראה יחד את הפתרון.');
+    return;
+  }
+  state.done = true;
+  state.results.push({ q, a: null, ok: false, outcome: 'shown', skipped: true });
+  adapt('shown');
+  if (q.type === 'choice') markChoices(q, -1);
+  showFb('info', `<div class="head">בואו נראה איך פותרים 💙</div>התשובה הנכונה: <b>${correctHTML(q)}</b><br><span class="muted">הסבר:</span> ${q.exp}<br><span class="muted">בחידה הבאה מאותו סוג – נסו להשתמש באותו כלל.</span>`);
+  lockInputs();
+  marginInView($('fb'));
 }
 function updMargin() {
   const m = $('qmargin');
@@ -14136,7 +15246,9 @@ function showExample() {
   const q = state.qs[state.i];
   const box = $('example');
   if (!box.classList.contains('hidden')) { box.classList.add('hidden'); updMargin(); return; }
-  const ex = q.gen();
+  let ex = q.gen();
+  // מצוינות: אותו סוג חידה בדיוק (מחולל אחד נותן כמה סוגים), ולא אותה חידה
+  if (q.topic && catOf(state.topicId) === 'exc') { const sig = x => (x.lgKind || '') + String(x.text).replace(/<[^>]*>|\d+/g, ''); for (let t = 0; t < 120 && (sig(ex) !== sig(q) || ex.text + ex.fig === q.text + q.fig); t++) ex = q.gen(); }
   box.innerHTML = `
     <div class="exhead">${ic('example')} דוגמה פתורה – שאלה דומה עם מספרים אחרים</div>
     <div class="qtext">${ex.text}</div>
@@ -14147,6 +15259,7 @@ function showExample() {
     <div class="muted" style="margin-top:6px">עכשיו נסו לפתור את השאלה שלכם באותה דרך.</div>`;
   box.classList.remove('hidden');
   updMargin();
+  marginInView(box);
 }
 
 const CHEERS = ['כל הכבוד! 🎉', 'מצוין! 🌟', 'נכון מאוד! 👏', 'יפה מאוד! 💪', 'בדיוק! ✅'];
@@ -14305,7 +15418,7 @@ function nextQ() {
 function summary() {
   const s = state, n = s.results.length;
   if (s.tpKind) tpClear(s.tpKind, s.tpPart);
-  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
+  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : s.chk ? 'בדיקת שליטה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
   const label = titleText();
@@ -14326,7 +15439,7 @@ function summary() {
     }
     ts.last = { correct, n };
   }
-  if (s.mode === 'test' && !s.exit) store.tests = (store.tests || []).concat({ date, score: correct, total: n }).slice(-10);
+  if (s.mode === 'test' && !s.exit && !s.chk) store.tests = (store.tests || []).concat({ date, score: correct, total: n }).slice(-10);
   // אתגר אלופים: נפתח אחרי תרגול/מבחן עם 80% ומעלה; ניצחון באתגר עצמו נספר
   const isChamp = s.topicId === 'champ', earned = !isChamp && !s.exit && !s.sim && n >= 5 && ratio >= 0.8;
   const champNew = earned && !store.champ;
@@ -14380,7 +15493,7 @@ function summary() {
 
   const buildResult = () => `${(store.name || '').trim() ? (store.name || '').trim() + ' | ' : ''}${label} | נכון: ${correct} מתוך ${n}${s.mode === 'practice' ? ` (${first} בניסיון ראשון, ${guided} בעזרת פתרון מודרך)` : ''} | ${date}`;
   const resultText = buildResult();
-  const askTestName = s.mode === 'test' && !s.exit && !teacherOn() && !(store.name || '').trim();
+  const askTestName = s.mode === 'test' && !s.exit && !s.chk && !teacherOn() && !(store.name || '').trim();
 
   app.innerHTML = `
     <div class="card center">
@@ -14411,10 +15524,11 @@ function summary() {
     </div>
     ${review}`;
 
-  if ($('retryBtn')) $('retryBtn').onclick = () => startPractice(s.topicId === 'test' ? 'mix' : s.topicId, { retry: shuffle(missed) });
+  if ($('retryBtn')) $('retryBtn').onclick = () => startPractice(s.chk ? s.chk.id : s.topicId === 'test' ? 'mix' : s.topicId, { retry: shuffle(missed) });
   $('again').onclick = () => {
     if (s.exit) return exitHome();
     if (s.sim) return startSim(s.sim.mins);
+    if (s.chk) return startCheck(s.chk.id, s.chk.lv);
     if (s.mode === 'test') return startTest(false);
     if (s.list) return startTest(true);
     if (s.lessonId) return startLessonPractice(s.lessonId);
@@ -14504,13 +15618,34 @@ function stopRace() { if (race && race.timer) clearInterval(race.timer); if (rac
 
 
 // מסלול שברים – רק במרוץ (לא בבינגו/מלחמה, שמשתמשים ב-RACE_TRACKS): תשובה בבחירה מתוך 4
-const RACE_ALL = RACE_TRACKS.concat(GRADE >= 5 ? [{ id: 'frac', name: GRADE === 6 ? 'כפל וחילוק שברים' : 'כפל שבר ומספר שלם', ch: true }] : []);
+const RACE_ALL = RACE_TRACKS.concat(GRADE >= 5 ? [{ id: 'frac', name: GRADE === 6 ? 'כפל וחילוק שברים' : 'כפל שבר ומספר שלם', ch: true }, { id: 'dlab', name: '🧪 מעבדת העשרוניים' }] : []);
+// מסלול מעבדת העשרוניים: כיתה ה' – רק מהות (פירוק לשלמים/עשיריות/מאיות, קיבוץ, החלק החסר); כיתה ו' – גם חיבור עם המרה וחיסור עם פריטה
+function raceDlQ() {
+  const k = R(0, GRADE >= 6 ? 5 : 2);
+  if (k === 0) { const p = [R(1, 9), Math.random() < 0.3 ? 0 : R(1, 9), R(1, 9)], parts = [p[0], p[1] ? `0.${p[1]}` : null, `0.0${p[2]}`].filter(Boolean); return { t: `${parts.join(' + ')} =`, ans: dlV(p) }; }
+  if (k === 1) { const w = R(1, 5), t = R(1, 8), h = R(11, 19); return { t: `${w} + 0.${t} + ${fmt(h / 100)} =`, ans: rnd(w + t / 10 + h / 100) }; }
+  if (k === 2) { const p = [R(1, 9), R(1, 9), R(1, 9)], v = dlV(p); return Math.random() < 0.5 ? { t: `${fmt(v)} = ${p[0]} + 0.${p[1]} +`, ans: rnd(p[2] / 100) } : { t: `${fmt(v)} = ${p[0]} + 0.0${p[2]} +`, ans: rnd(p[1] / 10) }; }
+  // כיתה ו': חיבור וחיסור בראש – צעד אחד של המרה או פריטה (לא תרגיל מאונך מלא, כדי שיתאים למרוץ)
+  if (k === 3) {
+    if (Math.random() < 0.6) { const a = rnd(R(0, 4) + R(3, 9) / 10), t = R(10 - Math.round(a * 10) % 10, 9) / 10; return { t: `${fmt(a)} + ${fmt(t)} =`, ans: rnd(a + t) }; } // 2.6 + 0.8
+    const a = rnd(R(0, 3) + R(1, 8) / 10 + R(1, 9) / 100), h = R(10 - Math.round(a * 100) % 10, 9) / 100; return { t: `${fmt(a)} + ${fmt(h)} =`, ans: rnd(a + h) }; // 1.37 + 0.05
+  }
+  if (k === 4) {
+    const z = R(0, 2);
+    if (z === 0) { const w = R(1, 5), t = R(1, 9) / 10; return { t: `${w} - ${fmt(t)} =`, ans: rnd(w - t) }; } // 3 - 0.4
+    if (z === 1) { const a = rnd(R(1, 5) + R(1, 6) / 10), t = R(Math.round(a * 10) % 10 + 1, 9) / 10; return { t: `${fmt(a)} - ${fmt(t)} =`, ans: rnd(a - t) }; } // 2.3 - 0.5
+    const x = pick([0.25, 0.75, 0.5, 0.05, 0.95, 0.15, 0.45]); return { t: `1 - ${fmt(x)} =`, ans: rnd(1 - x) }; // 1 - 0.25
+  }
+  const up = Math.random() < 0.5, step = pick([0.1, 0.01]);
+  const base = step === 0.1 ? (up ? rnd(R(1, 8) + 0.9 + R(1, 9) / 100) : rnd(R(1, 8) + R(1, 9) / 100)) : (up ? rnd(R(1, 8) + R(0, 8) / 10 + 0.09) : rnd(R(1, 8) + R(1, 9) / 10));
+  return { t: `${fmt(base)} ${up ? '+' : '-'} ${fmt(step)} =`, ans: rnd(base + (up ? step : -step)) };
+}
 const raceTr = id => RACE_ALL.find(t => t.id === id) || RACE_ALL[0];
 function raceFracQ() {
   const q = GRADE === 6 && Math.random() < 0.5 ? frDivQ() : frMulQ();
   return { t: `${q.t} =`, ans: frKey(q.n, q.d), ansH: frRes(q.n, q.d), ch: frChoices(q) };
 }
-const raceGetQ = track => track === 'frac' ? raceFracQ() : raceQ(track);
+const raceGetQ = track => track === 'frac' ? raceFracQ() : track === 'dlab' ? raceDlQ() : raceQ(track);
 // הצגת תשובה (מספר או שבר)
 const raceAnsH = q => q.ansH != null ? q.ansH : fmt(q.ans);
 // שיא אישי: 60 שניות – המפתח הישן (המסלול); 30 שניות – מסלול@30
@@ -14610,7 +15745,7 @@ function raceTeamEnd(g) {
 function raceStart(trackId, o = {}) {
   const r = raceData(), secs = o.secs === 30 ? 30 : 60, team = o.team != null && raceTeams ? raceTeams.teams[o.team] : null;
   r.plays = (r.plays || 0) + 1; r.lastTrack = trackId; saveStore(store);
-  const tr = raceTr(trackId), ch = !!tr.ch;
+  const tr = raceTr(trackId), ch = !!tr.ch, decPad = trackId === 'dec' || trackId === 'dlab';
   race = { track: trackId, secs, team: team ? o.team : null, score: 0, streak: 0, wrong: [], q: null, left: secs, best: team ? 0 : r.best[raceBestKey(trackId, secs)] || 0, timer: null, typed: '' };
   const touch = window.matchMedia && matchMedia('(pointer: coarse)').matches;
   app.innerHTML = `
@@ -14623,8 +15758,8 @@ function raceStart(trackId, o = {}) {
       </div>
       <div id="rTrack"></div>
       <div class="race-q" id="rQ"></div>
-      ${ch ? '<div class="race-ch" id="rCh" dir="ltr"></div>' : `<div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : `inputmode="${trackId === 'dec' ? 'decimal' : 'numeric'}"`} autocomplete="off" aria-label="תשובה" dir="ltr"></div>
-      <div class="race-pad${trackId === 'dec' ? ' dec' : ''}" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}${trackId === 'dec' ? '<button class="secondary" data-k="." aria-label="נקודה עשרונית">.</button><button class="secondary" data-k="0">0</button><button class="secondary" data-k="del" aria-label="מחיקה">⌫</button>' : '<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button>'}<button data-k="ok" aria-label="בדיקה">✓</button></div>`}
+      ${ch ? '<div class="race-ch" id="rCh" dir="ltr"></div>' : `<div class="race-in"><input id="rIn" class="ans" ${touch ? 'inputmode="none" readonly' : `inputmode="${decPad ? 'decimal' : 'numeric'}"`} autocomplete="off" aria-label="תשובה" dir="ltr"></div>
+      <div class="race-pad${decPad ? ' dec' : ''}" dir="ltr">${[7, 8, 9, 4, 5, 6, 1, 2, 3].map(d => `<button class="secondary" data-k="${d}">${d}</button>`).join('')}${decPad ? '<button class="secondary" data-k="." aria-label="נקודה עשרונית">.</button><button class="secondary" data-k="0">0</button><button class="secondary" data-k="del" aria-label="מחיקה">⌫</button>' : '<button class="secondary" data-k="del" aria-label="מחיקה">⌫</button><button class="secondary" data-k="0">0</button>'}<button data-k="ok" aria-label="בדיקה">✓</button></div>`}
       <button class="ghost race-skip" id="rSkip">דילוג ←</button>
       <div class="race-count" id="rCount"></div>
     </div>`;
@@ -16428,10 +17563,9 @@ function dlValQ(d, t) {
     return { kind: 'val', text: 'איזה מספר מוצג בקוביות?', fig: dlBlocks(p), ans: v, hint: 'סופרים: כמה שלמים (ריבועים גדולים), כמה עשיריות (מוטות) וכמה מאיות (קוביות קטנות). אם אין עשיריות – כותבים 0 במקומן.', exp: `${p[0]} שלמים, ${p[1]} עשיריות ו-${p[2]} מאיות = ${M(fmt(v))}` }; }
   if (T === 1) { const c = Math.random() < 0.5 ? 1 : 2, p = [R(0, 3), R(0, 9), R(0, 9)]; p[c] = R(11, 19); if (c === 1) p[2] = R(0, 9); const v = dlV(p);
     return { kind: 'val', text: `${p[0]} שלמים, ${p[1]} עשיריות ו-${p[2]} מאיות.<br>איזה מספר זה?`, fig: dlBlocks(p), ans: v, hint: `10 ${DL_PL[c]} = ${DL_ONE[c - 1]}. קודם מקבצים!`, exp: `${M(p[c])} ${DL_PL[c]} = ${DL_ONE[c - 1]} ועוד ${M(p[c] - 10)} ${DL_PL[c]}. לכן המספר הוא ${M(fmt(v))}.` }; }
-  if (T === 2) { if (Math.random() < 0.5) { const w = R(1, 9), t = R(1, 9), v = rnd(w + t / 10);
-      return { kind: 'val', text: `כמה <b>עשיריות</b> יש בסך הכול במספר ${M(fmt(v))}?`, ans: w * 10 + t, hint: 'בכל שלם יש 10 עשיריות.', exp: `${M(w)} שלמים = ${M(w * 10)} עשיריות, ועוד ${M(t)}: ${M(w * 10 + t)} עשיריות.` }; }
-    const t = R(1, 9);
-    return { kind: 'val', text: `${M(`0.${t}`)} = ? <b>מאיות</b>`, ans: t * 10, hint: 'בכל עשירית יש 10 מאיות.', exp: `${M(t)} עשיריות = ${M(t * 10)} מאיות, כי ${M(`0.${t} = 0.${t}0`)}.` }; }
+  // איריס 21.11: בלי שאלות "0.5 = ? מאיות" – רק "כמה עשיריות בסך הכול"
+  if (T === 2) { const w = R(1, 9), t = R(1, 9), v = rnd(w + t / 10);
+    return { kind: 'val', text: `כמה <b>עשיריות</b> יש בסך הכול במספר ${M(fmt(v))}?`, ans: w * 10 + t, hint: 'בכל שלם יש 10 עשיריות.', exp: `${M(w)} שלמים = ${M(w * 10)} עשיריות, ועוד ${M(t)}: ${M(w * 10 + t)} עשיריות.` }; }
   if (T === 3) { const p = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3), c = R(1, 2), v = dlV(p), val = rnd(p[c] / 10 ** c);
     return { kind: 'val', text: `מה <b>הערך</b> של הספרה ${M(p[c])} במספר ${M(fmt(v))}?<br><span class="small muted">כתבו כמספר, למשל 0.3</span>`, ans: val, hint: 'באיזה טור הספרה – עשיריות או מאיות?', exp: `הספרה ${M(p[c])} בטור ה${DL_PL[c]}, ולכן הערך שלה ${M(fmt(val))}.` }; }
   if (T === 4) { const p = [R(1, 9), Math.random() < 0.35 ? 0 : R(1, 9), R(1, 9)], v = dlV(p), parts = [p[0], p[1] ? `0.${p[1]}` : null, `0.0${p[2]}`].filter(Boolean);
@@ -16451,25 +17585,56 @@ function dlPlan(mode) {
 }
 // ---- מסכים ----
 const dlCoins = c => `<div class="dl-coins">${c.map(x => `<span class="dl-coin${x === 2 ? ' g' : x === 1 ? ' s' : x === 0 ? ' x' : ''}">${x === 2 ? '🥇' : x === 1 ? '🥈' : ''}</span>`).join('')}</div>`;
-function dlHome() {
+function dlHome(mode) {
   stopRace(); stopMemory(); stopJeoTimer(); state = null; lessonView = null; navPush('dlab');
-  const d = (store.dlab = store.dlab || {});
-  app.innerHTML = `
-    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים</span><button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></div>
+  const d = (store.dlab = store.dlab || {}), T = teacherOn();
+  mode = T ? (mode || 'teams') : 'solo';
+  let nTeams = 3, nQ = 10;
+  const names = JEO_TEAMS.map(t => t.name);
+  const keep = () => app.querySelectorAll('[data-dltn]').forEach(inp => { names[Number(inp.dataset.dltn)] = inp.value.trim() || JEO_TEAMS[Number(inp.dataset.dltn)].name; });
+  const draw = () => {
+    const tm = mode === 'teams';
+    app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים${tm ? ' – קבוצות' : ''}</span><button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></div>
+    ${T ? `<div class="name-row" style="justify-content:center"><span class="lbl2">איך משחקים?</span><span class="seg"><button data-dlpm="teams" class="${tm ? 'sel' : ''}">קבוצות (בכיתה)</button><button data-dlpm="solo" class="${tm ? '' : 'sel'}">אישי</button></span></div>` : ''}
     <div class="card race-intro">
       ${dlBlocks([1, 3, 5])}
-      <p class="race-how">10 אתגרים בשברים עשרוניים, מהקל אל הקשה. נכון בניסיון ראשון – <b>מדליית זהב</b>, בניסיון שני – מדליית כסף.${GRADE >= 6 ? '<br>יש <b>קוביות עזר</b>: פורטים שלם ל-10 עשיריות, עשירית ל-10 מאיות – ומקבצים בחזרה.' : '<br>שלם = ריבוע גדול, עשירית = מוט, מאית = קובייה קטנה.'}</p>
+      ${tm ? `<div class="cq-rules"><ol class="cq-steps">
+        <li>על המסך מופיע <b>אתגר</b>. כל קבוצה פותרת יחד – במחברת או על לוח קטן (אפשר להפעיל שעון).</li>
+        <li>כשהזמן נגמר – כל הקבוצות מרימות את התשובה, והמורה חושפת את הפתרון${GRADE >= 6 ? ' ומדגימה בקוביות העזר' : ''}.</li>
+        <li>כל קבוצה שצדקה מקבלת <b>נקודה</b>. קבוצה שנציג/ה שלה מסביר/ה נכון <b>למה</b> – עוד <b>נקודת בונוס</b>.</li>
+        <li>בסוף – הקבוצה עם הכי הרבה נקודות מנצחת!</li>
+      </ol></div>`
+      : `<p class="race-how">10 אתגרים בשברים עשרוניים, מהקל אל הקשה. נכון בניסיון ראשון – <b>מדליית זהב</b>, בניסיון שני – מדליית כסף.${GRADE >= 6 ? '<br>יש <b>קוביות עזר</b>: פורטים שלם ל-10 עשיריות, עשירית ל-10 מאיות – ומקבצים בחזרה.' : '<br>שלם = ריבוע גדול, עשירית = מוט, מאית = קובייה קטנה.'}</p>`}
     </div>
-    <div class="dl-modes">${DL_MODES.map(([id, icn, nm, ds]) => `<button class="game-card dl-mode" data-dlm="${id}"><span class="gc-ic">${icn}</span><span class="gc-nm">${nm}</span><span class="gc-ds">${ds}</span>${d[id] ? `<span class="gc-st">${ic('star')} השיא: ${d[id]} מדליות זהב</span>` : ''}</button>`).join('')}</div>`;
-  $('dlHomeB').onclick = home;
-  app.querySelectorAll('[data-dlm]').forEach(b => b.onclick = () => dlStart(b.dataset.dlm));
+    ${tm ? `<div class="name-row" style="justify-content:center"><span class="lbl2">כמה קבוצות?</span><span class="seg">${[2, 3, 4, 5, 6].map(k => `<button data-dlt="${k}" class="${k === nTeams ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
+    <div class="jeo-teams">${JEO_TEAMS.slice(0, nTeams).map((t, i) => `<label class="jeo-tname" style="--tc:${t.color}"><span class="jdot"></span><input data-dltn="${i}" value="${esc(names[i])}" maxlength="16" aria-label="שם קבוצה ${i + 1}"></label>`).join('')}</div>
+    <div class="name-row" style="justify-content:center"><span class="lbl2">כמה אתגרים?</span><span class="seg">${[5, 10].map(k => `<button data-dlq="${k}" class="${k === nQ ? 'sel' : ''}">${k}</button>`).join('')}</span></div>
+    <h2 style="text-align:center">בחרו סוג – ומתחילים</h2>` : ''}
+    <div class="dl-modes">${DL_MODES.map(([id, icn, nm, ds]) => `<button class="game-card dl-mode" data-dlm="${id}"><span class="gc-ic">${icn}</span><span class="gc-nm">${nm}</span><span class="gc-ds">${ds}</span>${!tm && d[id] ? `<span class="gc-st">${ic('star')} השיא: ${d[id]} מדליות זהב</span>` : ''}</button>`).join('')}</div>`;
+    $('dlHomeB').onclick = home;
+    app.querySelectorAll('[data-dlpm]').forEach(b => b.onclick = () => { keep(); mode = b.dataset.dlpm; draw(); });
+    app.querySelectorAll('[data-dlt]').forEach(b => b.onclick = () => { keep(); nTeams = Number(b.dataset.dlt); draw(); });
+    app.querySelectorAll('[data-dlq]').forEach(b => b.onclick = () => { keep(); nQ = Number(b.dataset.dlq); draw(); });
+    app.querySelectorAll('[data-dlm]').forEach(b => b.onclick = () => {
+      keep();
+      if (mode === 'teams') dlStart(b.dataset.dlm, { n: nQ, teams: JEO_TEAMS.slice(0, nTeams).map((t, i) => ({ name: names[i], color: t.color, score: 0 })) });
+      else dlStart(b.dataset.dlm);
+    });
+  };
+  draw();
   window.scrollTo(0, 0);
 }
-function dlStart(mode) {
+function dlStart(mode, o = {}) {
   if (!DL_MODES.some(m => m[0] === mode)) mode = DL_MODES[0][0];
-  dlab = { mode, qs: dlPlan(mode), i: 0, tries: 0, coins: Array(10).fill(-1), kit: null };
+  let qs = dlPlan(mode);
+  if (o.teams && o.n === 5) qs = qs.filter((q, i) => i % 2 === 0); // 5 אתגרים: עדיין מהקל אל הקשה
+  dlab = { mode, qs, i: 0, tries: 0, coins: Array(qs.length).fill(-1), kit: null };
+  if (o.teams) { Object.assign(dlab, { teams: o.teams, marks: {}, shown: false, hist: [] }); return dlTeamDraw(); }
   dlDraw();
 }
+// פתיחת קוביות העזר לאתגר הנוכחי (במשחק האישי ובהדגמה של המורה)
+const dlKitOpen = q => { dlab.kit = { p: q.kit.start.slice(), rem: q.kit.remove ? q.kit.remove.slice() : null, fresh: [0, 0, 0] }; dlKitDraw(); };
 function dlDraw() {
   navPush('dlab');
   const q = dlab.qs[dlab.i];
@@ -16491,7 +17656,7 @@ function dlDraw() {
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); dlCheck(); } });
   $('dlCheck').onclick = dlCheck;
   $('dlHint').onclick = () => { $('dlFb').innerHTML = `<div class="fb show hint">${ic('bulb')} ${q.hint}</div>`; };
-  if ($('dlKitB')) $('dlKitB').onclick = () => { if (dlab.kit) return; dlab.kit = { p: q.kit.start.slice(), rem: q.kit.remove ? q.kit.remove.slice() : null, fresh: [0, 0, 0] }; dlKitDraw(); $('dlKitB').disabled = true; };
+  if ($('dlKitB')) $('dlKitB').onclick = () => { if (dlab.kit) return; dlKitOpen(q); $('dlKitB').disabled = true; };
   window.scrollTo(0, 0);
 }
 // קוביות עזר: פריטה, קיבוץ, ובחיסור – הורדה של מה שמחסרים
@@ -16539,6 +17704,78 @@ function dlCheck() {
   document.querySelector('.dl-top').innerHTML = dlCoins(dlab.coins);
   $('dlNext').onclick = () => { if (last) return dlEnd(); dlab.i++; dlab.tries = 0; dlDraw(); };
   $('dlNext').focus();
+}
+// ---- מעבדה קבוצתית (מורה, בהקרנה): כל הקבוצות פותרות את אותו אתגר, חשיפה + הדגמה בקוביות, נקודה + בונוס הסבר ----
+function dlTeamDraw() {
+  stopJeoTimer(); navPush('dlab');
+  const g = dlab, q = g.qs[g.i], last = g.i + 1 >= g.qs.length, Mk = g.marks;
+  const pts = i => g.teams[i].score + (g.shown && Mk[i] ? (Mk[i].ok ? 1 : 0) + (Mk[i].bonus ? 1 : 0) : 0);
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים – קבוצות</span><span class="toollinks"><span class="muted">אתגר ${g.i + 1} מתוך ${g.qs.length}</span>${fsBtnHTML()}<button class="secondary" id="dlQuit">${ic('close')} יציאה</button></span></div>
+    <div class="card dl-top">${raceTeamBar({ teams: g.teams.map((t, i) => ({ name: t.name, color: t.color, score: pts(i) })) }, -1)}</div>
+    <div class="card city-q dl-q">
+      <div class="qtext">${q.text}</div>
+      ${q.fig || ''}
+      <div id="dlVert">${g.shown ? q.vertA || '' : q.vert || ''}</div>
+      ${g.shown ? `<div class="fb show ok"><div class="head">התשובה: ${M(fmt(q.ans))}</div>${q.exp}</div>
+      ${q.kit ? `<div class="actions" style="justify-content:center"><button class="secondary" id="dlKitB" ${g.kit ? 'disabled' : ''}>🧱 הדגמה בקוביות</button></div>` : ''}
+      <div id="dlKit"></div>
+      <p class="muted">סמנו כל קבוצה שצדקה, ובונוס לקבוצה שהסבירה נכון <b>למה</b>.</p>
+      <div class="tf-tv dl-tv">${g.teams.map((tm, i) => `<div class="tvr" style="--tc:${tm.color}"><b>${esc(tm.name)} · ${pts(i)}</b><button data-dlk="${i}:ok" class="${Mk[i] && Mk[i].ok ? 'on' : ''}">${ic('check')} צדקו</button><button data-dlk="${i}:bonus" class="${Mk[i] && Mk[i].bonus ? 'on' : ''}">⭐ בונוס הסבר</button></div>`).join('')}</div>
+      <div class="actions" style="justify-content:center"><button id="dlTNext" class="race-go">${last ? 'לתוצאות ←' : 'לאתגר הבא ←'}</button></div>`
+      : `<p class="muted">כל קבוצה פותרת יחד במחברת או על לוח קטן. כשהזמן נגמר – מרימים את התשובה!</p>
+      <div class="jeo-tools" style="justify-content:center"><button class="secondary" data-dlclk="30">${ic('clock')} 30 שניות</button><button class="secondary" data-dlclk="60">${ic('clock')} 60 שניות</button><span class="jeo-clock" id="dlClock"></span></div>
+      <div class="actions" style="justify-content:center"><button class="secondary" id="dlHint">${ic('bulb')} רמז</button><button id="dlShow" class="race-go">חשיפת התשובה</button></div>
+      <div id="dlFb"></div>`}
+    </div>`;
+  fsBind();
+  $('dlQuit').onclick = () => { if (confirm('לצאת מהמשחק?')) { stopJeoTimer(); dlHome('teams'); } };
+  if (g.kit) dlKitDraw();
+  app.querySelectorAll('[data-dlclk]').forEach(b => b.onclick = () => {
+    stopJeoTimer();
+    const end = Date.now() + Number(b.dataset.dlclk) * 1000, el = $('dlClock');
+    const tick = () => { if (!el.isConnected) return stopJeoTimer(); const s2 = Math.max(0, Math.ceil((end - Date.now()) / 1000)); el.textContent = s2 || 'הזמן נגמר!'; el.classList.toggle('low', s2 <= 5); if (!s2) stopJeoTimer(); };
+    tick(); jeoTimer = setInterval(tick, 250);
+  });
+  if ($('dlHint')) $('dlHint').onclick = () => { $('dlFb').innerHTML = `<div class="fb show hint">${ic('bulb')} ${q.hint}</div>`; };
+  if ($('dlShow')) $('dlShow').onclick = () => { g.shown = true; dlTeamDraw(); };
+  if ($('dlKitB')) $('dlKitB').onclick = () => { if (g.kit) return; dlKitOpen(q); $('dlKitB').disabled = true; };
+  app.querySelectorAll('[data-dlk]').forEach(b => b.onclick = () => {
+    const [i, k] = b.dataset.dlk.split(':'), m = (Mk[i] = Mk[i] || {});
+    m[k] = !m[k];
+    if (k === 'bonus' && m.bonus) m.ok = true; // הסבר נכון = גם תשובה נכונה
+    if (k === 'ok' && !m.ok) m.bonus = false;
+    const y = window.scrollY; dlTeamDraw(); window.scrollTo(0, y);
+  });
+  if ($('dlTNext')) $('dlTNext').onclick = () => {
+    g.teams.forEach((t, i) => { t.score = pts(i); });
+    g.hist.push({ kind: q.kind, ok: g.teams.filter((t, i) => Mk[i] && Mk[i].ok).length });
+    if (last) return dlTeamEnd();
+    g.i++; g.shown = false; g.marks = {}; g.kit = null; dlTeamDraw(); window.scrollTo(0, 0);
+  };
+  if (!g.shown) window.scrollTo(0, 0);
+}
+function dlTeamEnd() {
+  stopJeoTimer();
+  const g = dlab, ranked = g.teams.slice().sort((a, b) => b.score - a.score), top = ranked[0].score, winners = ranked.filter(t => t.score === top);
+  const kinds = { val: 'מהות', add: 'חיבור עם המרה', sub: 'חיסור עם פריטה' }, miss = {};
+  g.hist.forEach(h => { if (h.ok * 2 < g.teams.length) miss[h.kind] = (miss[h.kind] || 0) + 1; });
+  const tip = Object.keys(miss).sort((a, b) => miss[b] - miss[a])[0];
+  app.innerHTML = `
+    <div class="topbar"><span class="title">🧪 מעבדת העשרוניים – קבוצות</span><span class="toollinks">${fsBtnHTML()}<button class="secondary" id="dlHomeB">${ic('home')} לדף הבית</button></span></div>
+    <div class="card center race-end rec">
+      <div class="muted">${g.qs.length} אתגרים</div>
+      <h2>${winners.length > 1 ? 'תיקו!' : 'המנצחים:'}</h2>
+      <div class="jeo-win">${winners.map(w => `<span style="--tc:${w.color}">${esc(w.name)}</span>`).join(' ')}</div>
+      <ol class="jeo-rank">${ranked.map(t => `<li style="--tc:${t.color}"><span class="jdot"></span><span>${esc(t.name)}</span><b data-raw>${t.score} נקודות</b></li>`).join('')}</ol>
+      ${tip ? `<p class="muted">רוב הקבוצות התקשו ב: <b>${kinds[tip]}</b> – כדאי לחזור על זה.</p>` : '<p class="compare">כל הכבוד לכל הקבוצות!</p>'}
+      <div class="actions" style="justify-content:center"><button id="dlAgain">${ic('retry')} עוד סבב לאותן קבוצות</button><button class="secondary" id="dlModes">משחק חדש</button></div>
+    </div>`;
+  fsBind();
+  $('dlHomeB').onclick = home;
+  $('dlAgain').onclick = () => dlStart(g.mode, { n: g.qs.length, teams: g.teams.map(t => ({ name: t.name, color: t.color, score: 0 })) });
+  $('dlModes').onclick = () => dlHome('teams');
+  window.scrollTo(0, 0);
 }
 function dlEnd() {
   const gold = dlab.coins.filter(x => x === 2).length, silver = dlab.coins.filter(x => x === 1).length;
@@ -21297,7 +22534,7 @@ function magDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · ריבועי קסם</span><button class="secondary" id="magBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${MAG_SECS.map(([id, t]) => `<button type="button" class="pl-pill${mag.sec === id ? ' on' : ''}" data-msec="${id}">${t}</button>`).join('')}</div>
     <div id="magBody"></div>`;
-  $('magBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('magBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-msec]').forEach(b => b.onclick = () => { mag.sec = b.dataset.msec; magDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: magLearn, play: magPlay, print: el => magPrint(el) })[mag.sec]($('magBody'));
   track('מצוינות: ריבועי קסם', MAG_SECS.find(s => s[0] === mag.sec)[1]);
@@ -21515,7 +22752,7 @@ function grwDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · תבניות גדילה</span><button class="secondary" id="grwBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${GRW_SECS.map(([id, t]) => `<button type="button" class="pl-pill${grw.sec === id ? ' on' : ''}" data-gsec="${id}">${t}</button>`).join('')}</div>
     <div id="grwBody"></div>`;
-  $('grwBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('grwBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-gsec]').forEach(b => b.onclick = () => { grw.sec = b.dataset.gsec; grwDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: grwLearn, play: grwPlay, print: el => grwPrint(el) })[grw.sec]($('grwBody'));
   track('מצוינות: תבניות גדילה', GRW_SECS.find(s => s[0] === grw.sec)[1]);
@@ -21766,7 +23003,7 @@ function cubDraw() {
     <div class="topbar"><span class="title">${ic('star')} מצוינות · כמה קוביות?</span><button class="secondary" id="cubBack">${ic('home')} חזרה</button></div>
     <div class="pl-nav">${CUB_SECS.map(([id, t]) => `<button type="button" class="pl-pill${cub.sec === id ? ' on' : ''}" data-csec="${id}">${t}</button>`).join('')}</div>
     <div id="cubBody"></div>`;
-  $('cubBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('cubBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-csec]').forEach(b => b.onclick = () => { cub.sec = b.dataset.csec; cubDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: cubLearn, quiz: el => cubQuiz(el, false), fill: el => cubQuiz(el, true), print: el => cubPrint(el) })[cub.sec]($('cubBody'));
   track('מצוינות: קוביות', CUB_SECS.find(s => s[0] === cub.sec)[1]);
@@ -22009,7 +23246,7 @@ function palDraw() {
     <div class="pl-nav">${PAL_SECS.map(([id, t]) => `<button type="button" class="pl-pill${pal.sec === id ? ' on' : ''}" data-psec="${id}">${t}</button>`).join('')}</div>
     <div id="plBody"></div>
     <p class="pl-credit">${PAL_CREDIT}</p>`;
-  $('palBack').onclick = () => { homeTab = 'excel'; home(); };
+  $('palBack').onclick = () => { homeTab = 'practice'; try { sessionStorage.setItem('math-cat', 'exc'); } catch (e) {} home(); };
   app.querySelectorAll('[data-psec]').forEach(b => b.onclick = () => { pal.sec = b.dataset.psec; palDraw(); window.scrollTo({ top: 0 }); });
   ({ learn: palLearn, quiz: palQuiz, rev: palRevAdd, grid: palGrid, riddle: palRiddle, print: palPrint })[pal.sec]($('plBody'));
   track('מצוינות: פלינדרום', PAL_SECS.find(s => s[0] === pal.sec)[1]);
@@ -23143,6 +24380,11 @@ function classSub(kind) {
             <span class="gc-nm">מיליונר קבוצתי</span>
             <span class="gc-ds">2–6 קבוצות עונות על אותן שאלות – כל קבוצה מטפסת בסולם שלה עד מיליון!</span>
           </button>
+          ${GRADE >= 5 ? `<button class="game-card" id="dlTeamGo">
+            <span class="gc-ic" style="--gw:rgba(44,122,91,0.5)">🧪</span>
+            <span class="gc-nm">מעבדת העשרוניים – קבוצות</span>
+            <span class="gc-ds">${GRADE >= 6 ? 'מהות, חיבור עם המרה וחיסור עם פריטה' : 'מהות המספר העשרוני: שלמים, עשיריות ומאיות'}. כל הקבוצות פותרות יחד, חושפים ומדגימים בקוביות – נקודה לכל קבוצה שצדקה ובונוס על הסבר.</span>
+          </button>` : ''}
           <button class="game-card" id="tfTeamGo">
             <span class="gc-ic" style="--gw:rgba(127,168,214,0.6)">${ic('check')}</span>
             <span class="gc-nm">אמת או שקר – קבוצות</span>
@@ -23169,7 +24411,7 @@ function classSub(kind) {
   app.innerHTML = `<div class="topbar"><span class="title">${ic(T[0])} ${T[1]}</span><button class="secondary" id="clsBack">${ic('home')} חזרה</button></div>${body}`;
   $('clsBack').onclick = () => { homeTab = 'class'; home(); };
   const on = (id, fn) => { if ($(id)) $(id).onclick = fn; };
-  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('tfTeamGo', () => tfHome('teams')); on('cmpSheetGo', () => cmpSheetHome());
+  on('opGo', opHome); on('jeoGo', () => jeoHome()); on('mtGo0', () => milTeamHome()); on('cqGo0', () => cqHome()); on('warGo2', () => warHome('teams')); on('bingoGo', () => bingoHome()); on('tfTeamGo', () => tfHome('teams')); on('dlTeamGo', () => dlHome('teams')); on('cmpSheetGo', () => cmpSheetHome());
   app.querySelectorAll('[data-org]').forEach(b => b.onclick = () => { const n = opNPref(); op = { topic: b.dataset.org, n, slides: opBuild(b.dataset.org, null, n), k: 0, show: false }; opDraw(); });
   app.querySelectorAll('[data-opn]').forEach(b => b.onclick = () => { try { localStorage.setItem(OPN_KEY, b.dataset.opn); } catch (e) { /* לא חובה */ } const y = window.scrollY; classSub('open'); window.scrollTo(0, y); });
   window.scrollTo(0, 0);
@@ -23645,7 +24887,7 @@ function pkSetup() {
   $('pkEdit').onclick = () => { const c = cards.find(x => !x.hidden); window.scrollTo({ top: Math.max(0, (c ? c.getBoundingClientRect().top + window.scrollY : 0) - 10), behavior: 'smooth' }); };
 }
 function printBuilder() {
-  document.title = 'דפי עבודה – מתרגלים מתמטיקה';
+  document.title = 'דפי עבודה – mathinclass';
   app.innerHTML = `
     <div class="noprint">
       <div class="tools"><a class="btnlink navhome" href="${location.pathname}${gq()}">${ic('home')} לדף הבית</a><span></span></div>
@@ -26848,7 +28090,7 @@ function lpSetKind(p, k) {
 const LP_SUMS = [['board', '3 שאלות בדיקה על הלוח (קלה, בינונית, מאתגרת)'], ['talk', 'סבב שיחה: "היום למדתי... / היה לי קשה... "'], ['thumbs', 'הערכה עצמית: 👍 👌 👎 – כמה הבנתי?'], ['paper', 'מבדק הצלחה מודפס (מדפיסים מראש)']];
 const lpBookPref = () => { try { return localStorage.getItem('math-lp-book') || LP_BOOKS[0]; } catch (e) { return LP_BOOKS[0]; } };
 const LP_GAMES = [['jeo', "ג'פרדי בקבוצות – לפי נושא השיעור"], ['mil', 'מיליונר בקבוצות – לפי נושא השיעור'], ['cq', 'כיבוש שטחים – לפי נושא השיעור'], ['war', 'מלחמת תרגילים – לפי נושא השיעור'], ['bingo', 'בינגו – לפי נושא השיעור'], ['tf', 'אמת או שקר – לפי נושא השיעור'], ['wheel', 'גלגל המזל – נושא לבחירה'],
-  ...(GRADE >= 5 ? [['fj', '🐸 קפיצות שברים – כפל שלם בשבר (כל תלמיד/ה במכשיר)'], ['dlab', '🧪 מעבדת העשרוניים (כל תלמיד/ה במכשיר)']] : []),
+  ...(GRADE >= 5 ? [['fj', '🐸 קפיצות שברים – כפל שלם בשבר (כל תלמיד/ה במכשיר)'], ['dlab', '🧪 מעבדת העשרוניים (קבוצות בהקרנה, או כל תלמיד/ה במכשיר)']] : []),
   ...(GRADE === 6 ? [['fd', '🐸 קפיצות חילוק – ⁦שלם ‎:‎ שבר⁩ (במכשיר או בהקרנה)']] : [])];
 // משחקים אישיים (כל תלמיד/ה במכשיר) – לא "לפי נושא השיעור" אלא מסבירים נושא מסוים
 const LP_SOLO = ['fj', 'dlab', 'fd'];
@@ -27493,8 +28735,8 @@ function askTeacher(done) {
   const showMail = note => { const m = ov.querySelector('#tchMail'); m.textContent = MAIL; m.hidden = false; ov.querySelector('#tchNote').textContent = note; };
   ov.querySelector('#tchReq').onclick = () => {
     const nm = ov.querySelector('#tchNm').value.trim();
-    const body = `שלום איריס,\n\nשמי ${nm || '_____'}, אני מורה ב_____ (בית ספר), ומלמד/ת כיתות _____.\nכתובת המייל שלי: _____\nאשמח לקבל את קוד המורים לאתר "מתרגלים מתמטיקה".\n\nתודה!`;
-    location.href = `mailto:${MAIL}?subject=${encodeURIComponent('בקשת קוד מורים – מתרגלים מתמטיקה')}&body=${encodeURIComponent(body)}`;
+    const body = `שלום איריס,\n\nשמי ${nm || '_____'}, אני מורה ב_____ (בית ספר), ומלמד/ת כיתות _____.\nכתובת המייל שלי: _____\nאשמח לקבל את קוד המורים לאתר "mathinclass".\n\nתודה!`;
+    location.href = `mailto:${MAIL}?subject=${encodeURIComponent('בקשת קוד מורים – mathinclass')}&body=${encodeURIComponent(body)}`;
     showMail('אם לא נפתח מייל – אפשר לכתוב לכתובת הזו.');
   };
   ov.querySelector('#tchCopy').onclick = () => {
