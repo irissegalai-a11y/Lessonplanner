@@ -2426,6 +2426,21 @@ html.embed body { padding-top: 0; }
     .tcat-tile { grid-template-areas: "i" "nm" "n" "bar" "pt"; }
     .tcat-tile .tt-pt { grid-area: pt; font-size: 0.85rem; line-height: 1.3; color: var(--muted); margin-top: 4px; }
     .tp-lesson .tl-bar { width: 100%; height: 8px; margin-top: 6px; }
+    /* ליטושי דף הבית (איריס 27.11): בכותרות האלה מ' בכתב יד נראתה כמו א' – גופן נקי. הלוגו נשאר בכתב יד */
+    .panel > h2, .today-t, .hdr .sig { font-family: var(--ui); font-weight: 800; }
+    .hdr .sig { font-weight: 700; }
+    /* "מה עושים היום?" – שורה אחת קומפקטית */
+    .card.today.cont { flex-wrap: nowrap; gap: 12px; padding: 10px 16px; margin: 0 0 14px; }
+    .cont > div:first-child { display: flex; align-items: baseline; gap: 4px 10px; flex-wrap: wrap; min-width: 0; }
+    .cont .today-k { font-size: 0.95rem; white-space: nowrap; }
+    .cont .today-k::after { content: ':'; }
+    .cont .today-t { font-size: 1.15rem; margin: 0; }
+    .cont .today-d { font-size: 0.95rem; }
+    .cont .today-d:not(:empty)::before { content: '· '; }
+    @media (max-width: 640px) { .cont .today-d:not(:empty)::before { content: none; } .cont .today-d { flex-basis: 100%; } }
+    .cont button { font-size: 1rem; padding: 7px 16px; flex: 0 0 auto; white-space: nowrap; }
+    /* שדה השם – הדגשה עדינה כל עוד הוא ריק */
+    .name-mini input:placeholder-shown { background: #fff4d1; border-color: #d9a520; box-shadow: 0 0 0 3px rgba(217, 165, 32, 0.22); }
   }
   @media print { .tt-pt, .tl-bar { display: none !important; } }
   /* בהדפסה של דף הבית – אותו סדר כמו קודם (כלי התצוגה מעל הלוגו) */
