@@ -14496,31 +14496,55 @@ function genLgCenter(lv) {
   }
 }
 // ---------- מצוינות: עוד סוגים (22.11) ----------
-// 7. סדרות אותיות (א–ת, בלי סופיות)
-const LG_ABC = 'אבגדהוזחטיכלמנסעפצקרשת'.split('');
-function genLgLetters(lv) {
+// 7. סדרות שעונים (27.11 – במקום סדרות האותיות, לבקשת איריס): השעה מתקדמת (או חוזרת) לפי כלל
+function lgClock(m) {
+  m = ((m % 720) + 720) % 720;
+  const mm = m % 60, ha = (m / 720) * 360, ma = mm * 6;
+  let s = '<circle cx="50" cy="50" r="45" fill="#fff" stroke="#23264a" stroke-width="3"/>';
+  for (let i = 0; i < 12; i++) { const a = i * 30 * Math.PI / 180, r1 = i % 3 ? 39 : 35; s += `<line x1="${50 + r1 * Math.sin(a)}" y1="${50 - r1 * Math.cos(a)}" x2="${50 + 43 * Math.sin(a)}" y2="${50 - 43 * Math.cos(a)}" stroke="#23264a" stroke-width="${i % 3 ? 1.5 : 3}"/>`; }
+  [[12, 50, 28], [3, 75, 55], [6, 50, 80], [9, 25, 55]].forEach(([n, x, y]) => { s += `<text x="${x}" y="${y}" text-anchor="middle" font-size="13" font-weight="bold" fill="#5a6080" font-family="Arial">${n}</text>`; });
+  s += `<line x1="50" y1="50" x2="50" y2="24" stroke="#23264a" stroke-width="6" stroke-linecap="round" transform="rotate(${ha} 50 50)"/>`;
+  s += `<line x1="50" y1="50" x2="50" y2="12" stroke="#d94a8c" stroke-width="3" stroke-linecap="round" transform="rotate(${ma} 50 50)"/>`;
+  return s + '<circle cx="50" cy="50" r="3.5" fill="#23264a"/>';
+}
+const lgHM = m => { m = ((m % 720) + 720) % 720; const h = Math.floor(m / 60) || 12; return `${h}:${String(m % 60).padStart(2, '0')}`; };
+const lgDur = d => { const a = Math.abs(d), h = Math.floor(a / 60), m = a % 60; return (h ? (h === 1 ? 'שעה' : h === 2 ? 'שעתיים' : `${h} שעות`) : '') + (h && m ? ' ו-' : '') + (m ? `${m} דקות` : ''); };
+function genLgClock(lv) {
   lv = lv || 1;
   for (;;) {
-    const N = lv === 1 ? 4 : 5; let pos = [], ex;
-    if (lv === 1) { const d = pick([1, 2, 3, -1, -2]), s0 = d > 0 ? R(0, 21 - d * N) : R(-d * N, 21); pos = [...Array(N)].map((_, i) => s0 + d * i); ex = d > 0 ? `כל פעם מדלגים ${d === 1 ? 'לאות הבאה' : `${d} אותיות קדימה`}.` : `כל פעם חוזרים ${-d === 1 ? 'אות אחת' : `${-d} אותיות`} אחורה.`; }
-    else if (lv === 2) { const s0 = R(0, 4), k = pick([0, 1]); let v = s0; pos = [v]; for (let i = 1; i < N; i++) { v += i + k; pos.push(v); } ex = `הקפיצות גדלות: ${pos.slice(1).map((v, i) => '+' + (v - pos[i])).join(', ')} – והבאה +${N + k}.`; }
-    else { const a = R(0, 6), b = R(14, 21), da = pick([1, 2]), db = -pick([1, 2]); pos = [...Array(N)].map((_, i) => i % 2 ? b + db * ((i - 1) / 2) : a + da * (i / 2)); ex = `שתי סדרות שזורות: אחת מתקדמת מתחילת האלף-בית (${pos.filter((_, i) => !(i % 2)).map(p => LG_ABC[p]).join(', ')}) ואחת חוזרת מהסוף (${pos.filter((_, i) => i % 2).map(p => LG_ABC[p]).join(', ')}). עכשיו תור הסדרה ${N % 2 ? 'השנייה' : 'הראשונה'}.`; }
-    const t = pos.map(p => p + 1);
-    if (pos.some(p => p < 0 || p > 21)) continue;
-    const outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
-    if (outs.size !== 1) continue;
-    const ap = [...outs][0] - 1;
-    if (ap < 0 || ap > 21) continue;
-    const near = [ap - 1, ap + 1, ap - 2, ap + 2, pos[N - 1], ap + 3, ap - 3].filter(p => p >= 0 && p <= 21 && p !== ap);
-    const wr = shuffle([...new Set(near)]).slice(0, 4);
+    const N = lv === 1 ? 4 : 5, m0 = R(0, 143) * 5; let st = [], ex;
+    if (lv === 1) { const d = pick([10, 15, 20, 30, 45, 60]); st = Array(N).fill(d); ex = `בכל פעם השעון מתקדם ב-${lgDur(d)}.`; }
+    else if (lv === 2) {
+      const kind = pick(['grow', 'alt', 'back']);
+      if (kind === 'grow') { const d = pick([5, 10, 15]), k = pick([5, 10]); st = [...Array(N)].map((_, i) => d + k * i); ex = `הזמן שעובר בין השעונים גדל ב-${k} דקות בכל פעם: ${st.slice(0, N - 1).map(lgDur).join(', ')} – ועכשיו ${lgDur(st[N - 1])}.`; }
+      else if (kind === 'alt') { const [a, b] = shuffle([10, 15, 20, 30, 45, 60]).slice(0, 2); st = [...Array(N)].map((_, i) => i % 2 ? b : a); ex = `שתי קפיצות לסירוגין: ${lgDur(a)} קדימה, ואז ${lgDur(b)} קדימה, וחוזר חלילה. עכשיו תור הקפיצה של ${lgDur(st[N - 1])}.`; }
+      else { const d = pick([10, 15, 20, 30, 45]); st = Array(N).fill(-d); ex = `השעון חוזר אחורה: בכל פעם ${lgDur(d)} פחות.`; }
+    } else {
+      const kind = pick(['dbl', 'growBack', 'mix']);
+      if (kind === 'dbl') { const d = pick([5, 10]); st = [...Array(N)].map((_, i) => d * 2 ** i); ex = `הזמן שעובר מוכפל בכל פעם: ${st.slice(0, N - 1).map(lgDur).join(', ')} – ועכשיו ${lgDur(st[N - 1])}.`; }
+      else if (kind === 'growBack') { const d = pick([5, 10]), k = pick([5, 10]); st = [...Array(N)].map((_, i) => -(d + k * i)); ex = `השעון חוזר אחורה, וכל פעם יותר: ${st.slice(0, N - 1).map(lgDur).join(', ')} אחורה – ועכשיו ${lgDur(st[N - 1])} אחורה.`; }
+      else { const a = pick([30, 40, 45, 60]), b = pick([10, 15, 20]); st = [...Array(N)].map((_, i) => i % 2 ? -b : a); ex = `לסירוגין: ${lgDur(a)} קדימה, ואז ${lgDur(b)} אחורה. עכשיו תור ${st[N - 1] > 0 ? `${lgDur(a)} קדימה` : `${lgDur(b)} אחורה`}.`; }
+    }
+    const ms = [m0]; st.forEach(d => ms.push(ms[ms.length - 1] + d));
+    const shown = ms.slice(0, N), ans = ms[N];
+    // חד-משמעיות: כל משפחות הכללים (על הזמן "הפרוש", בלי לחזור ל-12) נותנות אותו המשך
+    const t = shown.map(v => v + 3000), outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
+    if (outs.size !== 1 || [...outs][0] !== ans + 3000) continue;
+    // כל השעונים שמוצגים שונים זה מזה
+    const K = v => ((v % 720) + 720) % 720;
+    if (new Set(ms.map(K)).size !== ms.length) continue;
+    const A = K(ans), far = v => { const d = Math.abs(K(v) - A); return Math.min(d, 720 - d) >= 10; };
+    const hh = Math.floor(A / 60) % 12, mi = A % 60, swap = (Math.round(mi / 5) % 12) * 60 + hh * 5; // מחוגים הפוכים
+    const cand = [shown[N - 1] + st[N - 2], ans + 60, ans - 60, ans + (st[N - 1] > 0 ? 15 : -15), ans - (st[N - 1] > 0 ? 10 : -10), swap, ans + 30, shown[N - 1] - st[N - 1]];
+    const wr = [];
+    cand.forEach(v => { if (wr.length < 4 && far(v) && !wr.some(w => K(w) === K(v))) wr.push(v); });
     if (wr.length < 4) continue;
-    const W = 54, gap = 6, tot = (N + 1) * (W + gap);
-    let sv = '';
-    [...pos, null].forEach((p, i) => { const x = tot - (i + 1) * (W + gap) + gap / 2; sv += lgBox(x, 4, W, 52, p == null ? LG_Q(x + W / 2, 43) : lgTxt(x + W / 2, 42, LG_ABC[p], 30), p == null); });
-    const big = c => `<span class="lgletter" data-raw>${c}</span>`;
-    return choiceQ({ type: 'choice', text: 'איזו אות באה במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} 60" width="${tot}" height="60" role="img" data-raw>${sv}</svg>`,
-      hint: 'כתבו ליד כל אות את המקום שלה באלף-בית (א = 1, ב = 2, ג = 3…). עכשיו זו סדרת מספרים!',
-      exp: `המקומות באלף-בית: ${pos.map(p => `${LG_ABC[p]} = ${p + 1}`).join(', ')}.<br>${ex}<br>המקום הבא: ${ap + 1} – האות <b>${LG_ABC[ap]}</b>.`, lgKind: 'letters', lgPos: pos }, big(LG_ABC[ap]), wr.map(p => big(LG_ABC[p])));
+    const C = 76, gap = 8, tot = (N + 1) * (C + gap);
+    let s = '';
+    [...shown, null].forEach((v, i) => { const x = tot - (i + 1) * (C + gap) + gap / 2; s += v == null ? lgBox(x, 4, C, C, LG_Q(x + C / 2, 4 + C / 2 + 12), true) : `<g transform="translate(${x} 4) scale(${C / 100})">${lgClock(v)}</g>`; });
+    return choiceQ({ type: 'choice', text: 'איזה שעון בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} ${C + 8}" width="${tot}" height="${C + 8}" role="img" data-raw>${s}</svg>`,
+      hint: 'קראו כל שעון וכתבו את השעה. כמה זמן עבר משעון לשעון? האם זה תמיד אותו זמן? קדימה או אחורה?',
+      exp: `השעונים מראים: ${shown.map(v => M(lgHM(v))).join(' ← ')}.<br>${ex}<br>לכן השעון הבא מראה <b>${M(lgHM(ans))}</b>.`, lgKind: 'clock', lgT: shown }, lgOpt(lgClock(ans)), wr.map(v => lgOpt(lgClock(v))));
   }
 }
 
@@ -14628,8 +14652,8 @@ const LG_T = (id, name, icon, desc, gens, ld) => ({ id, name, icon, color: '#6b3
 const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [
   LG_T('logic', 'חידות מטריצה', '🧠', 'משלימים את התא החסר: עיגולים מסתובבים, צורות ומספרים', [genLogicPie, genLogicShapes, genLogicNum],
     ['כלל אחד בכל שורה (סיבוב, צורה, חיבור וחיסור)', 'שני כללים יחד, כיוונים שונים, כפל וחילוק', 'הרכבת ציורים, כלל לפי שורה, פעולה ועוד צעד קטן']),
-  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות של מספרים, ציורים ואותיות: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq, genLgLetters],
-    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב, דילוג באלף-בית', 'הפרשים שגדלים, שתי קפיצות או שתי פעולות לסירוגין, חץ ונקודה יחד', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד']),
+  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות של מספרים, ציורים ושעונים: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq, genLgClock],
+    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב, שעון שמתקדם בקפיצות שוות', 'הפרשים שגדלים, שתי קפיצות או שתי פעולות לסירוגין, חץ ונקודה יחד, שעון בקפיצות שגדלות או אחורה', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד, שעון בקפיצות שמוכפלות או קדימה ואחורה']),
   LG_T('lgAna', 'אנלוגיות, מראה ויוצא דופן', '🔀', 'מכונת מספרים, "א ל-ב כמו ג ל-?", תמונת מראה ומי לא שייך לקבוצה', [genLgAnalogy, genLgOdd, genLgMirror],
     ['כלל של צעד אחד, הפיכה אחת, תכונה פשוטה, מראה של עיגול', 'כלל של שני צעדים, שתי הפיכות, מתחלקים ב..., מראה של חץ ונקודה', 'שני צעדים, ראשוניים, תמונת מראה, השתקפות במים']),
   LG_T('lgNum', 'חידות מספרים: מאזניים, פירמידות וסימנים', '⚖️', 'כמה שוקלת כל צורה? מה המספר במרכז? מה חסר בפירמידה? אילו סימנים חסרים?', [genLgBalance, genLgCenter, genLgPyramid, genLgOps],
