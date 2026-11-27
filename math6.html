@@ -211,6 +211,10 @@ html.embed body { padding-top: 0; }
   .fig.lgopt { width: 100%; max-width: 76px; margin: 2px auto; }
   .fig.lgfig { max-width: 320px; }
   .fig.lgfig.lgwide { max-width: 440px; }
+  .lgfold { margin: 10px auto 2px; max-width: 220px; text-align: center; }
+  .lgfold svg { width: 100%; height: auto; display: block; background: #fff; border-radius: 12px; border: 1px solid #e3e6ef; }
+  .lgfcap { min-height: 1.5em; margin: 4px 0; }
+  @media print { .lgfold button, .lgfcap { display: none; } .lgfold { max-width: 120px; } }
   .lgletter { font-size: 1.7rem; font-weight: 800; }
   div.choices > button { display: flex; align-items: center; gap: 10px; justify-content: flex-start; text-align: right; }
   div.choices.pics > button { flex-direction: column; justify-content: center; text-align: center; }
@@ -2297,7 +2301,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>mathinclass</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 שיב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 שיג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -14680,6 +14684,189 @@ function genLgOps(lv) {
       ex(ops), others.map(ex));
   }
 }
+// 11. קיפולי נייר (אוריגמי): מקפלים, מנקבים/גוזרים, ופותחים. דף 8×8 יחידות; כל קיפול לחצי.
+const FD = { S: 8, R: 0.42, P: '#ff8a6b', PB: '#ffd9cc', E: '#c2492b', H: '#7a3320', A: '#2f5bd3' };
+const FD_NAME = { L: 'שמאל על ימין', R: 'ימין על שמאל', T: 'למעלה על למטה', B: 'למטה על למעלה', D: 'באלכסון', A: 'באלכסון' };
+const fdPoly = r => r.k === 'r' ? [[r.x0, r.y0], [r.x1, r.y0], [r.x1, r.y1], [r.x0, r.y1]] : r.pts;
+const fdCen = p => [p.reduce((s, q) => s + q[0], 0) / p.length, p.reduce((s, q) => s + q[1], 0) / p.length];
+function fdFold(r, c) {
+  const { x0, y0, x1, y1 } = r, xm = (x0 + x1) / 2, ym = (y0 + y1) / 2, Q = (a, b, c, d) => ({ k: 'r', x0: a, y0: b, x1: c, y1: d });
+  if (c === 'L') return { ln: { t: 'x', a: xm }, keep: Q(xm, y0, x1, y1), flap: Q(x0, y0, xm, y1) };
+  if (c === 'R') return { ln: { t: 'x', a: xm }, keep: Q(x0, y0, xm, y1), flap: Q(xm, y0, x1, y1) };
+  if (c === 'T') return { ln: { t: 'y', a: ym }, keep: Q(x0, ym, x1, y1), flap: Q(x0, y0, x1, ym) };
+  if (c === 'B') return { ln: { t: 'y', a: ym }, keep: Q(x0, y0, x1, ym), flap: Q(x0, ym, x1, y1) };
+  if (c === 'D') return { ln: { t: 'd', x0, y0 }, keep: { k: 't', pts: [[x0, y0], [x1, y1], [x0, y1]] }, flap: { k: 't', pts: [[x0, y0], [x1, y0], [x1, y1]] } };
+  return { ln: { t: 'a', c: x1 + y0 }, keep: { k: 't', pts: [[x1, y0], [x1, y1], [x0, y1]] }, flap: { k: 't', pts: [[x0, y0], [x1, y0], [x0, y1]] } };
+}
+function fdRefl(p, ln) { const [x, y] = p; return ln.t === 'x' ? [2 * ln.a - x, y] : ln.t === 'y' ? [x, 2 * ln.a - y] : ln.t === 'd' ? [ln.x0 + y - ln.y0, ln.y0 + x - ln.x0] : [ln.c - y, ln.c - x]; }
+function fdFlip(p, ln, t) { const q = fdRefl(p, ln), k = (1 - Math.cos(Math.PI * t)) / 2; return [p[0] + (q[0] - p[0]) * k, p[1] + (q[1] - p[1]) * k]; }
+const fdMap = (s, f) => s.t === 'c' ? { t: 'c', p: f(s.p) } : { t: 'p', pts: s.pts.map(f) };
+function fdBuild(seq) { const regs = [{ k: 'r', x0: 0, y0: 0, x1: FD.S, y1: FD.S }], infos = []; for (const c of seq) { const f = fdFold(regs[regs.length - 1], c); infos.push(f); regs.push(f.keep); } return { seq, regs, infos }; }
+// פתיחה: מהקיפול האחרון לראשון. modes[i]: 'm' מראה (נכון) · 's' שוכחים לפתוח · 't' הזזה במקום מראה · 'w' מראה על הציר הלא נכון
+function fdUnfold(P, holes, modes) {
+  let H = holes.slice();
+  for (let i = P.infos.length - 1; i >= 0; i--) {
+    const f = P.infos[i], m = (modes && modes[i]) || 'm'; let g;
+    if (m === 's') continue;
+    if (m === 'm') g = p => fdRefl(p, f.ln);
+    if (m === 't') { const a = fdCen(fdPoly(f.keep)), b = fdCen(fdPoly(f.flap)); g = p => [p[0] + b[0] - a[0], p[1] + b[1] - a[1]]; }
+    if (m === 'w') { const r = P.regs[i]; if (f.ln.t === 'x') g = p => [p[0], r.y0 + r.y1 - p[1]]; else if (f.ln.t === 'y') g = p => [r.x0 + r.x1 - p[0], p[1]]; else return null; }
+    H = H.concat(H.map(s => fdMap(s, g)));
+  }
+  return H;
+}
+const fdKp = p => Math.round(p[0] * 4) + ',' + Math.round(p[1] * 4);
+const fdShK = s => s.t === 'c' ? 'c' + fdKp(s.p) : 'p' + s.pts.map(fdKp).sort().join(';');
+const fdKey = H => H ? [...new Set(H.map(fdShK))].sort().join('|') : '';
+const fdIn = H => H && H.every(s => (s.t === 'c' ? [s.p] : s.pts).every(([x, y]) => x > -1e-6 && y > -1e-6 && x < FD.S + 1e-6 && y < FD.S + 1e-6));
+const fdUniq = H => { const m = new Map(); H.forEach(s => m.set(fdShK(s), s)); return [...m.values()]; };
+function fdInTri(p, [a, b, c], m) { const s = (p1, p2) => ((p2[0] - p1[0]) * (p[1] - p1[1]) - (p2[1] - p1[1]) * (p[0] - p1[0])) / Math.hypot(p2[0] - p1[0], p2[1] - p1[1]); const d = [s(a, b), s(b, c), s(c, a)]; return d.every(v => v > m) || d.every(v => v < -m); }
+function fdSpots(r, all) { // מרכזי משבצות בתוך האזור המקופל; עדיפות למשבצות שלא צמודות לקו קיפול (שהחורים לא יידבקו)
+  const S = FD.S, out = [];
+  for (let x = 0; x < S; x++) for (let y = 0; y < S; y++) { const c = [x + .5, y + .5]; if (r.k === 'r' ? c[0] > r.x0 && c[0] < r.x1 && c[1] > r.y0 && c[1] < r.y1 : fdInTri(c, r.pts, .6)) out.push(c); }
+  if (!all && r.k === 'r') { const far = out.filter(([x, y]) => (r.x0 === 0 || x - r.x0 > 1) && (r.x1 === S || r.x1 - x > 1) && (r.y0 === 0 || y - r.y0 > 1) && (r.y1 === S || r.y1 - y > 1)); if (far.length) return far; }
+  return out;
+}
+function fdCutTri(r) { // משולש ישר-זווית (לא סימטרי) בתא שנוגע בקו קיפול
+  const S = FD.S, g = Math.min(2, (r.x1 - r.x0) / 2, (r.y1 - r.y0) / 2), cells = [];
+  for (let x = r.x0; x < r.x1 - 1e-6; x += g) for (let y = r.y0; y < r.y1 - 1e-6; y += g)
+    if ((x === r.x0 && r.x0 > 0) || (x + g === r.x1 && r.x1 < S) || (y === r.y0 && r.y0 > 0) || (y + g === r.y1 && r.y1 < S)) cells.push([x, y]);
+  const [x, y] = pick(cells), C = [[x, y], [x + g, y], [x + g, y + g], [x, y + g]], k = R(0, 3);
+  return { t: 'p', pts: [C[(k + 3) % 4], C[k], C[(k + 1) % 4]] };
+}
+const fdV = () => pick(['L', 'R']), fdH = () => pick(['T', 'B']), fdD = () => pick(['D', 'A']), fd1 = () => pick(['L', 'R', 'T', 'B']);
+// ציור
+const fdPts = a => a.map(p => (+p[0].toFixed(3)) + ',' + (+p[1].toFixed(3))).join(' ');
+const fdSh = (s, ex) => s.t === 'c' ? `<circle cx="${s.p[0]}" cy="${s.p[1]}" r="${FD.R}" fill="#fff" stroke="${FD.H}" stroke-width=".12" ${ex || ''}/>` : `<polygon points="${fdPts(s.pts)}" fill="#fff" stroke="${FD.H}" stroke-width=".1" stroke-linejoin="round" ${ex || ''}/>`;
+const fdSheet = (r, fill) => `<polygon points="${fdPts(fdPoly(r))}" fill="${fill || FD.P}" stroke="${FD.E}" stroke-width=".12" stroke-linejoin="round"/>`;
+const fdGhost = `<rect x="0" y="0" width="8" height="8" fill="none" stroke="#c9cede" stroke-width=".1" stroke-dasharray=".3 .25"/>`;
+const fdG = (x, inner) => `<g transform="translate(${x + 10} 10) scale(10)">${inner}</g>`; // לוח 100×100, הדף 80×80
+const FD_FULL = { k: 'r', x0: 0, y0: 0, x1: 8, y1: 8 };
+function fdStep(P, i) { // לפני קיפול i: קו מקווקו, הצד שמתקפל מוצלל, חץ
+  const f = P.infos[i], a = fdPoly(f.flap), b = fdPoly(f.keep), seg = a.filter(p => b.some(q => Math.abs(p[0] - q[0]) < 1e-6 && Math.abs(p[1] - q[1]) < 1e-6));
+  const c0 = fdCen(a), c1 = fdRefl(c0, f.ln), dx = c1[0] - c0[0], dy = c1[1] - c0[1], L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+  const ctl = [(c0[0] + c1[0]) / 2 - uy * 1.3, (c0[1] + c1[1]) / 2 + ux * 1.3], e = [c1[0] - ux * .2, c1[1] - uy * .2];
+  const tx = c1[0] - ctl[0], ty = c1[1] - ctl[1], tl = Math.hypot(tx, ty), hx = tx / tl, hy = ty / tl;
+  const head = [[c1[0], c1[1]], [c1[0] - hx * .8 - hy * .45, c1[1] - hy * .8 + hx * .45], [c1[0] - hx * .8 + hy * .45, c1[1] - hy * .8 - hx * .45]];
+  return fdGhost + fdSheet(P.regs[i]) + `<polygon points="${fdPts(a)}" fill="${FD.H}" opacity=".28"/>`
+    + `<line x1="${seg[0][0]}" y1="${seg[0][1]}" x2="${seg[1][0]}" y2="${seg[1][1]}" stroke="#23264a" stroke-width=".18" stroke-dasharray=".45 .3"/>`
+    + `<path d="M${fdPts([c0])} Q${fdPts([ctl])} ${fdPts([e])}" fill="none" stroke="${FD.A}" stroke-width=".26"/><polygon points="${fdPts(head)}" fill="${FD.A}"/>`;
+}
+const fdFinal = (P, holes) => fdGhost + fdSheet(P.regs[P.regs.length - 1]) + holes.map(s => fdSh(s)).join('');
+const fdOpen = H => fdSheet(FD_FULL) + H.map(s => fdSh(s)).join('');
+// רצועת השלבים (השלב הראשון מימין). last: 'hole' | 'cut' | null | {open: H}
+function fdStrip(P, holes, last) {
+  const n = P.seq.length, panels = P.seq.map((c, i) => [fdStep(P, i), `${i + 1}. ${FD_NAME[c]}`]);
+  if (last === 'hole' || last === 'cut') panels.push([fdFinal(P, holes), `${n + 1}. ${last === 'cut' ? 'גזירה' : 'ניקוב'}`]);
+  if (last && last.open) panels.push([fdOpen(last.open), 'הדף הפתוח']);
+  const N = panels.length, W = N * 112 - 12;
+  return `<svg class="fig lgfig lgwide" viewBox="0 0 ${W} 122" width="${W}" height="122" role="img" data-raw>${panels.map(([g, lab], i) => { const x = (N - 1 - i) * 112; return `<rect x="${x}" y="0" width="100" height="100" rx="8" fill="#fff" stroke="#dfe3ec" stroke-width="1.5"/>${fdG(x, g)}<text x="${x + 50}" y="117" text-anchor="middle" font-size="12.5" fill="#4a5068" font-family="Arial">${lab}</text>`; }).join('')}</svg>`;
+}
+const fdOpt = inner => lgOpt(`<g transform="translate(8 8) scale(10.5)">${inner}</g>`);
+// הסבר עם המחשה: הדף הפתוח + כפתור אנימציה (מופעלת לבד אחרי תשובה – showFb)
+const fdAnimBox = (P, holes, H) => `<div class="lgfold" data-raw data-fd='${JSON.stringify({ s: P.seq.join(''), h: holes })}'><svg viewBox="-0.8 -0.8 9.6 9.6" width="200" height="200">${fdOpen(H)}</svg><div class="lgfcap muted small"></div><button type="button" class="btn ghost small" onclick="fdPlay(this.parentNode)">▶ לראות את הקיפול והפתיחה</button></div>`;
+function fdPlay(box) {
+  if (!box || !box.dataset.fd) return;
+  const d = JSON.parse(box.dataset.fd), P = fdBuild(d.s.split('')), holes = d.h, n = P.seq.length, svg = box.querySelector('svg'), cap = box.querySelector('.lgfcap');
+  const tok = box._tok = (box._tok || 0) + 1, live = () => box._tok === tok && box.isConnected;
+  const set = h => { if (live()) svg.innerHTML = h; }, say = s => { if (live()) cap.textContent = s; };
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const tween = (ms, fn) => new Promise(res => { if (RM) { fn(1); return setTimeout(res, 300); } const t0 = performance.now(); const tick = now => { if (!live()) return res(); const t = Math.min(1, (now - t0) / ms); fn(t); t < 1 ? requestAnimationFrame(tick) : res(); }; requestAnimationFrame(tick); });
+  const flap = (f, t, hs) => { const back = Math.cos(Math.PI * t) < 0; return `<polygon points="${fdPts(fdPoly(f.flap).map(p => fdFlip(p, f.ln, t)))}" fill="${back ? FD.PB : FD.P}" stroke="${FD.E}" stroke-width=".12" stroke-linejoin="round"/>` + (hs || []).map(s => fdSh(fdMap(s, p => fdFlip(p, f.ln, t)))).join(''); };
+  const cut = holes[0] && holes[0].t === 'p';
+  (async () => {
+    set(fdGhost + fdSheet(FD_FULL)); say('דף מרובע'); await wait(600);
+    for (let i = 0; i < n && live(); i++) { const f = P.infos[i]; say(`קיפול ${i + 1}: ${FD_NAME[P.seq[i]]}`); await tween(900, t => set(fdGhost + fdSheet(f.keep) + flap(f, t))); await wait(300); }
+    if (!live()) return;
+    if (holes.length) { say(cut ? 'גוזרים דרך כל השכבות' : 'מנקבים דרך כל השכבות'); await tween(500, t => set(fdGhost + fdSheet(P.regs[n]) + holes.map(s => fdSh(s, `opacity="${t.toFixed(2)}"`)).join(''))); await wait(700); }
+    let H = holes.slice();
+    for (let i = n - 1; i >= 0 && live(); i--) {
+      const f = P.infos[i], FH = H.map(s => fdMap(s, p => fdRefl(p, f.ln))); say(`פותחים את קיפול ${i + 1}`);
+      await tween(900, t => set(fdGhost + fdSheet(f.keep) + H.map(s => fdSh(s)).join('') + flap(f, 1 - t, FH)));
+      H = fdUniq(H.concat(FH)); await wait(250);
+    }
+    set(fdOpen(H)); say(holes.length ? `הדף הפתוח: ${cut ? 'הגזירה הופיעה' : 'החור הופיע'} ${H.length === 1 ? 'פעם אחת' : H.length + ' פעמים'}` : 'הדף הפתוח');
+  })();
+}
+window.fdPlay = fdPlay;
+function fdPickOpts(ans, cands) {
+  const seen = new Set([fdKey(ans)]), out = [];
+  for (const c of shuffle(cands)) { if (!c || !fdIn(c)) continue; const k = fdKey(c); if (!k || seen.has(k)) continue; seen.add(k); out.push(fdUniq(c)); if (out.length === 4) break; }
+  return out.length === 4 ? out : null;
+}
+function fdVariants(P, holes) {
+  const n = P.seq.length, c = [holes.slice()];
+  for (let i = 0; i < n; i++) for (const m of ['s', 't', 'w']) { const md = Array(n).fill('m'); md[i] = m; c.push(fdUnfold(P, holes, md)); }
+  return c;
+}
+const fdNudge = H => H.flatMap((s, i) => s.t !== 'c' ? [] : [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dy]) => H.map((t, j) => j === i ? { t: 'c', p: [t.p[0] + dx, t.p[1] + dy] } : t)));
+const fdTimes = n => n === 1 ? 'פעם אחת' : `${n} פעמים`;
+const FD_HINT = 'פותחים בדמיון מהקיפול האחרון אל הראשון. בכל פתיחה כל חור מקבל "בן זוג" בתמונת מראה, מעבר לקו הקיפול.';
+// א. קיפול וחור
+function genLgFoldHole(lv) {
+  lv = lv || 1;
+  for (;;) {
+    let seq, nh = 1;
+    if (lv === 1) seq = [fd1()];
+    else if (lv === 2) seq = Math.random() < .65 ? shuffle([fdV(), fdH()]) : [fdD()];
+    else { const r = Math.random(); seq = r < .4 ? [fdV(), fdH(), fdD()] : r < .7 ? shuffle([fdV(), fdH(), pick([fdV(), fdH()])]) : shuffle([fdV(), fdH()]); if (seq.length === 2) nh = 2; }
+    const P = fdBuild(seq), sp = shuffle(fdSpots(P.regs[seq.length])); if (sp.length < nh) continue;
+    const holes = sp.slice(0, nh).map(p => ({ t: 'c', p })), ans = fdUniq(fdUnfold(P, holes));
+    const wr = fdPickOpts(ans, fdVariants(P, holes).concat(fdNudge(ans))); if (!wr) continue;
+    return choiceQ({ type: 'choice', text: `מקפלים דף מרובע ${fdTimes(seq.length)} ו${nh > 1 ? 'מנקבים <b>שני חורים</b>' : 'מנקבים <b>חור אחד</b>'} דרך כל השכבות. איך ייראה הדף <b>כשפותחים אותו</b>?`,
+      fig: fdStrip(P, holes, 'hole'), hint: FD_HINT,
+      exp: `פותחים מהקיפול האחרון אל הראשון: בכל פתיחה כל חור מקבל בן זוג בתמונת מראה מעבר לקו הקיפול, ולכן מספר החורים מוכפל. ${seq.length === 1 ? 'קיפול אחד' : seq.length + ' קיפולים'} ו${nh > 1 ? 'שני חורים' : 'חור אחד'} → <b>${ans.length} חורים</b>, במקומות שבציור.${fdAnimBox(P, holes, ans)}`,
+      lgKind: 'foldHole', lgFd: fdKey(ans) }, fdOpt(fdOpen(ans)), wr.map(H => fdOpt(fdOpen(H))));
+  }
+}
+// ב. קיפול וגזירה – המשולש לא סימטרי, אז שמים לב גם לכיוון
+function genLgFoldCut(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const seq = lv === 1 ? [fd1()] : lv === 2 ? shuffle([fdV(), fdH()]) : shuffle([fdV(), fdH(), pick([fdV(), fdH()])]);
+    const P = fdBuild(seq), h = fdCutTri(P.regs[seq.length]), holes = [h], ans = fdUniq(fdUnfold(P, holes));
+    const [a, b, c] = h.pts, rot = { t: 'p', pts: [b, c, [a[0] + c[0] - b[0], a[1] + c[1] - b[1]]] };
+    const wr = fdPickOpts(ans, fdVariants(P, holes).concat([fdUnfold(P, [rot])])); if (!wr) continue;
+    return choiceQ({ type: 'choice', text: `מקפלים דף מרובע ${fdTimes(seq.length)} וגוזרים <b>משולש</b> (האזור הלבן). איך ייראה הדף <b>כשפותחים אותו</b>?`,
+      fig: fdStrip(P, holes, 'cut'), hint: FD_HINT + ' שימו לב לכיוון המשולש: במראה הוא מתהפך.',
+      exp: `בכל פתיחה הגזירה מופיעה שוב כתמונת מראה מעבר לקו הקיפול – המשולש <b>מתהפך</b>, הוא לא רק זז. גזירה שנוגעת בקו הקיפול נפתחת לצורה אחת גדולה (משולש + תמונת המראה שלו).${fdAnimBox(P, holes, ans)}`,
+      lgKind: 'foldCut', lgFd: fdKey(ans) }, fdOpt(fdOpen(ans)), wr.map(H => fdOpt(fdOpen(H))));
+  }
+}
+// ג. איפה לנקב? – רואים את הקיפולים ואת הדף הפתוח, ובוחרים את מקום החור בדף המקופל
+function genLgFoldWhere(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const seq = lv === 1 ? [fd1()] : lv === 2 ? (Math.random() < .7 ? shuffle([fdV(), fdH()]) : [fdD()]) : (Math.random() < .5 ? [fdV(), fdH(), fdD()] : shuffle([fdV(), fdH(), pick([fdV(), fdH()])]));
+    const P = fdBuild(seq), last = P.regs[seq.length], all = fdSpots(last, true); if (all.length < 5) continue;
+    const p = pick(fdSpots(last)), holes = [{ t: 'c', p }], ans = fdUniq(fdUnfold(P, holes));
+    // מסיחים: המקום המשתקף בתוך הדף המקופל (טעות ימין/שמאל), שכנים, ואחרים
+    const lr = P.regs[seq.length], near = all.filter(q => (q[0] !== p[0] || q[1] !== p[1]));
+    const mir = last.k === 'r' ? [[lr.x0 + lr.x1 - p[0], p[1]], [p[0], lr.y0 + lr.y1 - p[1]], [lr.x0 + lr.x1 - p[0], lr.y0 + lr.y1 - p[1]]] : [];
+    const cands = [...mir.filter(q => near.some(z => z[0] === q[0] && z[1] === q[1])), ...shuffle(near)], wr = [];
+    cands.forEach(q => { if (wr.length < 4 && !wr.some(z => z[0] === q[0] && z[1] === q[1]) && (q[0] !== p[0] || q[1] !== p[1])) wr.push(q); });
+    if (wr.length < 4) continue;
+    const bx = fdPoly(last), mnx = Math.min(...bx.map(q => q[0])), mny = Math.min(...bx.map(q => q[1])), w = Math.max(...bx.map(q => q[0])) - mnx, h = Math.max(...bx.map(q => q[1])) - mny, sc = Math.min(84 / w, 84 / h, 21);
+    const opt = q => lgOpt(`<g transform="translate(${50 - w * sc / 2 - mnx * sc} ${50 - h * sc / 2 - mny * sc}) scale(${sc})">${fdSheet(last)}<circle cx="${q[0]}" cy="${q[1]}" r=".3" fill="#fff" stroke="${FD.H}" stroke-width=".08"/></g>`); // הדף המקופל מוגדל לכל המשבצת
+    return choiceQ({ type: 'choice', text: `קיפלו דף מרובע כמו בציור, ניקבו <b>חור אחד</b> ופתחו – וקיבלו את הדף משמאל. <b>איפה ניקבו</b> בדף המקופל?`,
+      fig: fdStrip(P, holes, { open: ans }), hint: 'נסו כל אפשרות: פתחו בדמיון קיפול אחרי קיפול (מהאחרון לראשון) ובדקו אם יוצאים בדיוק החורים שבדף הפתוח.',
+      exp: `בדף המקופל רק החור שבאפשרות הנכונה נפתח בדיוק לחורים שבדף. אפשר גם לחשוב הפוך: כל החורים בדף הפתוח נערמים זה על זה כשמקפלים – ומגיעים למקום אחד בדף המקופל.${fdAnimBox(P, holes, ans)}`,
+      lgKind: 'foldWhere', lgFd: fdKey(ans) }, opt(p), wr.map(opt));
+  }
+}
+// ד. כמה חורים? – חשיבה בלי ציור התוצאה: כל קיפול לחצי מכפיל את השכבות
+function genLgFoldCount(lv) {
+  lv = lv || 1;
+  const n = lv === 1 ? 2 : lv === 2 ? 3 : pick([3, 4]), nh = lv === 3 ? 2 : 1, seq = [];
+  for (let i = 0; i < n; i++) seq.push(i % 2 ? fdH() : fdV());
+  const P = fdBuild(seq), holes = shuffle(fdSpots(P.regs[n], nh > 1)).slice(0, nh).map(p => ({ t: 'c', p })), ans = nh * 2 ** n, H = fdUniq(fdUnfold(P, holes));
+  const wr = lgNumOpts(ans, [nh * 2 * n, nh * n + 1, nh * 2 ** (n - 1), ans + nh * 2, ans * 2, nh * (n + 1)]);
+  return choiceQ({ type: 'choice', text: `מקפלים דף מרובע ${n} פעמים, בכל פעם לחצי, ו${nh > 1 ? 'מנקבים <b>שני חורים</b>' : 'מנקבים <b>חור אחד</b>'} דרך כל השכבות. <b>כמה חורים</b> יהיו בדף הפתוח?`,
+    fig: fdStrip(P, holes, null), hint: 'כמה שכבות נייר יש אחרי קיפול אחד? ואחרי שניים? כל חור עובר דרך כל השכבות.',
+    exp: `כל קיפול לחצי מכפיל את מספר השכבות: ${[...Array(n)].map((_, i) => 2 ** (i + 1)).join(' ← ')}. ${nh > 1 ? `שני חורים עוברים דרך ${2 ** n} שכבות: ${M(`2 × ${2 ** n} = ${ans}`)}` : `חור אחד עובר דרך ${ans} שכבות`} → <b>${ans} חורים</b>.${fdAnimBox(P, holes, H)}`,
+    lgKind: 'foldCount', lgFd: n + '/' + nh }, ans, wr);
+}
 const LG_TIPS = ['קוראים מימין לשמאל.', 'בודקים כל תכונה לחוד: צורה, צבע, כמות, כיוון.', 'מצאתם כלל? בדקו אותו בכל הדוגמאות לפני שבוחרים.'];
 const LG_T = (id, name, icon, desc, gens, ld) => ({ id, name, icon, color: '#6b3fa0', desc, tips: LG_TIPS, lgLD: ld,
   levels: { 1: gens.map(g => () => g(1)), 2: gens.map(g => () => g(2)), 3: gens.map(g => () => g(3)) } });
@@ -14692,9 +14879,12 @@ const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [
     ['כלל של צעד אחד, הפיכה אחת, תכונה פשוטה, מראה של עיגול', 'כלל של שני צעדים, שתי הפיכות, מתחלקים ב..., מראה של חץ ונקודה', 'שני צעדים, ראשוניים, תמונת מראה, השתקפות במים']),
   LG_T('lgNum', 'חידות מספרים: מאזניים, פירמידות וסימנים', '⚖️', 'כמה שוקלת כל צורה? מה המספר במרכז? מה חסר בפירמידה? אילו סימנים חסרים?', [genLgBalance, genLgCenter, genLgPyramid, genLgOps],
     ['החלפה פשוטה, סכום הפינות, פירמידה מלמטה למעלה, + ו-−', 'שני שלבים, כפל וחיבור בפינות, לבנה חסרה, גם ×', 'הצבה במאזניים, כללים מורכבים, פירמידה של 4 שורות, כל ארבע הפעולות'])
+,
+  LG_T('lgFold', 'קיפולי נייר', '🧻', 'מקפלים דף, מנקבים או גוזרים – ומדמיינים איך הוא נראה כשפותחים אותו', [genLgFoldHole, genLgFoldCut, genLgFoldWhere, genLgFoldCount],
+    ['קיפול אחד וחור אחד, קיפול אחד וגזירה, כמה חורים אחרי 2 קיפולים', 'שני קיפולים או קיפול באלכסון, 3 קיפולים', 'שלושה קיפולים, אלכסון אחרי שני קיפולים, שני חורים, עד 4 קיפולים'])
 ] : [];
-// כל סוגי החידות – מעורב (13 סוגים)
-if (XTOPICS.length) XTOPICS.push({ id: 'lgAll', name: 'כל סוגי החידות – מעורב', icon: '🎲', color: '#6b3fa0', desc: 'כל 13 סוגי החידות לסירוגין – תרגול ארוך בלי חזרות', tips: LG_TIPS, lgLD: ['רמה קלה מכל הסוגים', 'רמה בינונית מכל הסוגים', 'רמה מאתגרת מכל הסוגים'], mixAll: true,
+// כל סוגי החידות – מעורב (17 סוגים)
+if (XTOPICS.length) XTOPICS.push({ id: 'lgAll', name: 'כל סוגי החידות – מעורב', icon: '🎲', color: '#6b3fa0', desc: 'כל 17 סוגי החידות לסירוגין – תרגול ארוך בלי חזרות', tips: LG_TIPS, lgLD: ['רמה קלה מכל הסוגים', 'רמה בינונית מכל הסוגים', 'רמה מאתגרת מכל הסוגים'], mixAll: true,
   levels: Object.fromEntries([1, 2, 3].map(lv => [lv, XTOPICS.flatMap(t => t.levels[lv])])) });
 const LG_LEVELS = XTOPICS.length ? XTOPICS[0].levels : {};
 XTOPICS.forEach(t => { TOPIC[t.id] = t; CAT_OF[t.id] = 'exc'; LEVEL_DESC[t.id] = t.lgLD; });
@@ -15256,6 +15446,7 @@ function showFb(kind, html) {
   if (state && state.mode === 'practice' && ['bad', 'info', 'hint'].includes(kind)) html += learnLink(state.qs[state.i]);
   fb.className = `fb show ${kind}`;
   fb.innerHTML = html;
+  fb.querySelectorAll('.lgfold').forEach(fdPlay);
 }
 
 function lockMain() {
