@@ -1384,7 +1384,7 @@ html.embed body { padding-top: 0; }
   .tcat-tile .tt-n { grid-area: n; font-size: 0.9rem; color: var(--muted); }
   .tcat-tile .mbar { grid-area: bar; margin-top: 8px; }
   .tcat-tile .mbar > span { background: var(--c); }
-  .tcat-tiles[hidden], .tcat-one[hidden] { display: none; }
+  .tcat-tiles[hidden], .tcat-one[hidden], .practice-more[hidden] { display: none; }
   .xt-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 8px 0 16px; }
   .xt-tile { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 14px 12px 12px; border: 2px solid var(--c); border-radius: 16px; background: color-mix(in srgb, var(--c) 8%, #fffdf8); color: #1f1e1c; box-shadow: none; transform: none; font: inherit; cursor: pointer; min-height: 150px; }
   .xt-tile:hover { background: color-mix(in srgb, var(--c) 17%, #fffdf8); transform: none; }
@@ -13336,7 +13336,7 @@ function home() {
           </div>` : ''}
           ${champCard()}
           ${topicCatsHTML()}
-          <div class="practice-more">
+          <div class="practice-more"${catOpenNow ? ' hidden' : ''}>
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
             ${store.solved ? `<div class="muted">${ic('star')} עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
@@ -13750,6 +13750,7 @@ const CAT_OF = {
   wpm: 'word', wpGo: 'word'
 };
 const catOf = id => CAT_OF[id] || 'nat';
+let catOpenNow = ''; // הקטגוריה הפתוחה ברגע זה ('' = מסך כל הקטגוריות)
 function topicCatsHTML() {
   let n = 0;
   const topicBtn = t => { const s = store.topics[t.id], m = s ? s.mastery : 0; return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
@@ -13773,7 +13774,7 @@ function topicCatsHTML() {
       ['xmagGo', '🔢 ריבועי קסם', 'כל שורה, טור ואלכסון – לאותו סכום'],
       ['xgrwGo', '📈 תבניות גדילה', 'מגלים את הכלל ויודעים מה יהיה בשלב 10 ואפילו בשלב 100']].map(([id, nm, ds]) => ({ id, nm, ds, h: () => extra(id, '#6b3fa0', nm, ds) })) : []),
     // מרכז הסודוקו – בכל הכיתות (לפי יכולת ולא לפי שכבה), דף נפרד sudoku.html
-    { id: 'xsdkGo', nm: '🧩 מרכז הסודוקו', ds: 'משחקים סודוקו 4×4, 6×6 או 9×9 וגם סודוקו סכומים – עם רמזים חכמים, אתגר יומי וחוברות להדפסה', h: () => extra('xsdkGo', '#6b3fa0', '🧩 מרכז הסודוקו', 'משחקים סודוקו 4×4, 6×6 או 9×9 וגם סודוקו סכומים – עם רמזים חכמים, אתגר יומי וחוברות להדפסה') }
+    { id: 'xsdkGo', nm: '🧩 מרכז הסודוקו', ds: 'סודוקו בשלושה גדלים וגם סודוקו סכומים – עם רמזים חכמים, אתגר יומי וחוברות להדפסה', h: () => extra('xsdkGo', '#6b3fa0', '🧩 מרכז הסודוקו', 'סודוקו בשלושה גדלים וגם סודוקו סכומים – עם רמזים חכמים, אתגר יומי וחוברות להדפסה') }
   ];
   const groups = TOPIC_CATS.map(c => ({ c, topics: [...TOPICS, ...XTOPICS].filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
     extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
@@ -13789,6 +13790,7 @@ function topicCatsHTML() {
   const avg = g => g.topics.length ? Math.round(g.topics.reduce((a, t) => a + ((store.topics[t.id] || {}).mastery || 0), 0) / g.topics.length) : 0;
   let open = ''; try { open = sessionStorage.getItem('math-cat') || ''; } catch (e) {}
   if (!groups.some(g => g.c.id === open)) open = '';
+  catOpenNow = open;
   // אריחי קטגוריות → לחיצה פותחת רק את הקטגוריה
   return `<div class="tcat-tiles"${open ? ' hidden' : ''}>${groups.map(g => `<button type="button" class="tcat-tile" style="--c:${g.c.color}" onclick="catShow('${g.c.id}')">
             <span class="tt-i">${g.c.icon}</span><span class="tt-nm">${g.c.name}</span><span class="tt-n">${cnt(g)} נושאים${g.tools.length ? ` · ${g.tools.length} כלי המחשה` : ''}</span>
@@ -13804,6 +13806,8 @@ function catShow(id) {
   const tiles = document.querySelector('.tcat-tiles');
   if (tiles) tiles.hidden = !!id;
   document.querySelectorAll('.tcat-one').forEach(s => { s.hidden = s.dataset.cat !== id; });
+  // תרגול מעורב = שאלות מכל הנושאים – רק במסך כל הקטגוריות, לא בתוך קטגוריה אחת (27.11, איריס)
+  document.querySelectorAll('.practice-more').forEach(e => { e.hidden = !!id; });
   const tgt = id ? document.querySelector(`.tcat-one[data-cat="${id}"]`) : tiles;
   if (tgt) { const r = tgt.getBoundingClientRect(); if (r.top < 0 || r.top > innerHeight * 0.6) tgt.scrollIntoView({ block: 'start' }); }
 }
