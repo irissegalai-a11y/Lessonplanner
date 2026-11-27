@@ -13482,6 +13482,17 @@ function home() {
             <span class="gc-nm">לוח מסמרים</span>
             <span class="gc-ds">משרטטים צורות על רשת נקודות – והאתר מחשב שטח והיקף. יש גם משימות!</span>
           </button>
+          ${T ? `<h3 class="games-sub">בכיתה – בקבוצות (מורה)</h3>
+          <button class="game-card" id="jeoGoG">
+            <span class="gc-ic" style="--gw:rgba(217,138,154,0.6)">${ic('grid')}</span>
+            <span class="gc-nm">ג'פרדי כיתתי</span>
+            <span class="gc-ds">משחק קבוצות לכל הכיתה, על כל הנושאים. מקרינים על הלוח.</span>
+          </button>
+          <button class="game-card" id="clsGamesG">
+            <span class="gc-ic" style="--gw:rgba(217,138,154,0.6)">${ic('grid')}</span>
+            <span class="gc-nm">עוד משחקים לכל הכיתה</span>
+            <span class="gc-ds">כיבוש שטחים, מיליונר קבוצתי, מלחמה, אמת או שקר ובינגו – בקבוצות.</span>
+          </button>` : ''}
         </section>
         ${T ? `<section class="panel" data-panel="teach" ${homeTab === 'teach' ? '' : 'hidden'}>
           <h2>אזור המורה</h2>
@@ -13610,6 +13621,8 @@ function home() {
     $('clsOpen').onclick = () => classSub('open');
     $('clsGames').onclick = () => classSub('games');
   }
+  if ($('jeoGoG')) $('jeoGoG').onclick = () => jeoHome();
+  if ($('clsGamesG')) $('clsGamesG').onclick = () => classSub('games');
   $('warGo1').onclick = () => warHome('solo');
   $('tfGo0').onclick = () => tfHome();
   $('calmBtn').onclick = () => {
