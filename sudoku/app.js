@@ -237,13 +237,13 @@
 
   /* תצוגת לוח (גם למשחק וגם להדגמות במרכז ההדרכה) */
   function boardView(host, P, opt) {
-    const n = P.n, g = E.geo(n), N = n * n;
+    const n = P.n, g = E.geo(n), N = n * n, tint = P.cages ? B.cellFills(n, P.cages).f : null;
     host.innerHTML = `<div class="bd n${n}${P.cages ? ' kl' : ''}" style="--n:${n}" role="grid" aria-label="לוח סודוקו ${n} על ${n}">${Array.from({ length: N }, (_, i) => {
       const r = i / n | 0, c = i % n, cls = ['cl'];
       if (c === n - 1) cls.push('ce'); else if ((c + 1) % g.bc === 0) cls.push('tbx');
       if (r === n - 1) cls.push('re'); else if ((r + 1) % g.br === 0) cls.push('tby');
-      return `<button class="${cls.join(' ')}" data-i="${i}" tabindex="-1" role="gridcell"></button>`;
-    }).join('')}</div>${P.cages ? B.cageLayer(n, P.cages, { fs: n === 9 ? 0.27 : 0.25 }) : ''}`;
+      return `<button class="${cls.join(' ')}" data-i="${i}" tabindex="-1" role="gridcell"${tint ? ` style="--ct:${tint[i]}"` : ''}></button>`;
+    }).join('')}</div>${P.cages ? B.cageLayer(n, P.cages, { fs: n === 9 ? 0.27 : 0.25, fills: B.CAGE_FILL }) : ''}`;
     const cells = [...host.querySelectorAll('.cl')];
     if (opt.interactive) {
       host.querySelector('.bd').addEventListener('click', e => { const b = e.target.closest('.cl'); if (b) opt.onCell(+b.dataset.i); });

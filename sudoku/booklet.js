@@ -174,7 +174,7 @@
     const mark = [...(tk && tk.mark || []), ...(sol && tk && tk.ans || [])];
     const shade = [...(hn ? hn.shade : []), ...(tk && tk.shade && sol ? tk.shade : [])].filter(i => !mark.includes(i));
     // צבעי סימון: בהיר לרמז (יחידה), כהה יותר למשבצת המשימה
-    let svg = B.boardSVG(p, { values: vals, size, boxFill: st.boxFill, mark: [...shade, ...mark], markFills: [...shade.map(() => st.shade), ...mark.map(() => st.mark)], thick: cfg.style === 'clean' ? st.accent : '#1d2433' });
+    let svg = B.boardSVG(p, { values: vals, size, boxFill: p.cages ? null : st.boxFill, cageFills: cfg.style === 'bw' ? B.CAGE_FILL_BW : B.CAGE_FILL, mark: [...shade, ...mark], markFills: [...shade.map(() => st.shade), ...mark.map(() => st.mark)], thick: cfg.style === 'clean' ? st.accent : '#1d2433' });
     // כוכבית במשבצת (רמז) + מסגרת כפולה למשבצת המשימה
     const n = p.n;
     const extra = [...(hn && !sol ? hn.star : []), ...mark].map(i => { const x = n - i % n - 1, y = i / n | 0; return `<rect x="${x + 0.06}" y="${y + 0.06}" width="0.88" height="0.88" fill="none" stroke="#333" stroke-width="0.05"/>${hn && hn.star.includes(i) && !sol ? `<text x="${x + 0.18}" y="${y + 0.3}" font-size="0.26" text-anchor="middle">★</text>` : ''}`; }).join('');

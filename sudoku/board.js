@@ -15,6 +15,7 @@
     const segs = [];
     for (let i = 0; i < n * n; i++) {
       const r = i / n | 0, c = i % n, k = own[i];
+      if (k < 0) continue;
       const same = (rr, cc) => at(rr, cc) === k;
       // צד עליון/תחתון (קו אופקי), שמאל/ימין במודל (c-1 / c+1)
       [[-1, 0], [1, 0]].forEach(([dr]) => {
@@ -35,19 +36,32 @@
     return segs.map(([x0, y0, x1, y1]) => [n - x0, y0, n - x1, y1]); // היפוך לתצוגה מימין לשמאל
   }
 
+  /* צבע רקע לכל כלוב: כלובים שכנים תמיד בצבעים שונים (צביעה חמדנית של גרף השכנות) – כך רואים מיד איזו משבצת שייכת לאיזה כלוב */
+  const CAGE_FILL = ['#fff4dc', '#e3f1ff', '#e7f7ea', '#f3eaff', '#ffe9ee', '#eef3f4'];
+  const CAGE_FILL_BW = ['#ffffff', '#ececec', '#f7f7f7', '#dfdfdf', '#f2f2f2', '#e6e6e6'];
+  function cageColors(n, cages) {
+    const own = new Array(n * n).fill(-1); cages.forEach((c, k) => c.cells.forEach(i => { own[i] = k; }));
+    const adj = cages.map(() => new Set());
+    for (let i = 0; i < n * n; i++) { const r = i / n | 0, c = i % n; [[r + 1, c], [r, c + 1]].forEach(([a, b]) => { if (a < n && b < n) { const j = a * n + b; if (own[j] !== own[i]) { adj[own[i]].add(own[j]); adj[own[j]].add(own[i]); } } }); }
+    const col = new Array(cages.length).fill(-1);
+    cages.map((_, k) => k).sort((a, b) => adj[b].size - adj[a].size).forEach(k => { const used = new Set([...adj[k]].map(j => col[j])); let c = 0; while (used.has(c)) c++; col[k] = c; });
+    return col;
+  }
+  const cellFills = (n, cages, pal) => { const col = cageColors(n, cages), f = new Array(n * n); cages.forEach((c, k) => c.cells.forEach(i => { f[i] = (pal || CAGE_FILL)[col[k] % (pal || CAGE_FILL).length]; })); return { f, col }; };
+
   /* שכבת SVG של כלובים (למשחק – מעל רשת DOM). viewBox ביחידות משבצת */
   function cageLayer(n, cages, opt) {
     opt = opt || {};
-    const segs = cageSegs(n, cages, opt.inset);
-    const sw = opt.sw || 0.035, fs = opt.fs || 0.27;
+    const segs = cageSegs(n, cages, opt.inset == null ? 0.1 : opt.inset);
+    const sw = opt.sw || 0.045, fs = opt.fs || 0.27, cc = opt.fills ? cageColors(n, cages) : null;
     let s = `<svg class="${opt.cls || 'cages'}" viewBox="0 0 ${n} ${n}" aria-hidden="true" preserveAspectRatio="none">`;
-    s += `<g stroke="${opt.color || '#5b5f7a'}" stroke-width="${sw}" stroke-dasharray="${opt.dash || '0.09 0.06'}" fill="none" stroke-linecap="butt">`;
+    s += `<g stroke="${opt.color || '#3a3f5c'}" stroke-width="${sw}" stroke-dasharray="${opt.dash || '0.12 0.07'}" fill="none" stroke-linecap="butt">`;
     segs.forEach(([a, b, c, d]) => { s += `<line x1="${a.toFixed(3)}" y1="${b.toFixed(3)}" x2="${c.toFixed(3)}" y2="${d.toFixed(3)}"/>`; });
     s += '</g>';
-    cages.forEach(cg => {
+    cages.forEach((cg, k) => {
       const i = anchor(n, cg.cells), r = i / n | 0, c = i % n, xr = n - c - 0.06, y = r + 0.06;
       const w = (String(cg.sum).length * 0.55 + 0.25) * fs;
-      s += `<rect x="${(xr - w).toFixed(3)}" y="${(y - 0.02).toFixed(3)}" width="${w.toFixed(3)}" height="${(fs * 1.05).toFixed(3)}" fill="${opt.bg || '#fff'}"/>`;
+      s += `<rect x="${(xr - w).toFixed(3)}" y="${(y - 0.02).toFixed(3)}" width="${w.toFixed(3)}" height="${(fs * 1.05).toFixed(3)}" fill="${cc ? opt.fills[cc[k] % opt.fills.length] : opt.bg || '#fff'}"/>`;
       s += `<text x="${(xr - w / 2).toFixed(3)}" y="${(y + fs * 0.85).toFixed(3)}" font-size="${fs}" text-anchor="middle" font-weight="700" fill="${opt.ink || '#2d3250'}" font-family="Assistant, Arial, sans-serif">${cg.sum}</text>`;
     });
     return s + '</svg>';
@@ -65,13 +79,14 @@
       const br = Math.floor(b / (n / g.bc)), bcI = b % (n / g.bc);
       if ((br + bcI) % 2) s += `<rect x="${n - (bcI + 1) * g.bc}" y="${br * g.br}" width="${g.bc}" height="${g.br}" fill="${boxFill}"/>`;
     }
+    if (puz.cages) { const { f } = cellFills(n, puz.cages, opt.cageFills || CAGE_FILL_BW); f.forEach((c, i) => { if (c !== '#ffffff') s += `<rect x="${n - i % n - 1}" y="${i / n | 0}" width="1" height="1" fill="${c}"/>`; }); }
     if (opt.mark) opt.mark.forEach((i, k) => { s += `<rect x="${n - i % n - 1}" y="${i / n | 0}" width="1" height="1" fill="${(opt.markFills && opt.markFills[k]) || opt.markFill || '#ffe9a8'}"/>`; });
     for (let k = 1; k < n; k++) {
       const vt = k % g.bc === 0, ht = k % g.br === 0;
       if (!vt) s += `<line x1="${k}" y1="0" x2="${k}" y2="${n}" stroke="${line}" stroke-width="0.025"/>`;
       if (!ht) s += `<line x1="0" y1="${k}" x2="${n}" y2="${k}" stroke="${line}" stroke-width="0.025"/>`;
     }
-    if (puz.cages) s += cageLayer(n, puz.cages, { fs: n === 9 ? 0.26 : 0.24, bg: fill, sw: 0.03, color: '#555', ink: '#222' }).replace(/^<svg[^>]*>|<\/svg>$/g, '');
+    if (puz.cages) s += cageLayer(n, puz.cages, { fs: n === 9 ? 0.26 : 0.24, fills: opt.cageFills || CAGE_FILL_BW, sw: 0.04, color: '#333', ink: '#111' }).replace(/^<svg[^>]*>|<\/svg>$/g, '');
     for (let k = 1; k < n; k++) {
       if (k % g.bc === 0) s += `<line x1="${k}" y1="0" x2="${k}" y2="${n}" stroke="${thick}" stroke-width="0.07"/>`;
       if (k % g.br === 0) s += `<line x1="0" y1="${k}" x2="${n}" y2="${k}" stroke="${thick}" stroke-width="0.07"/>`;
@@ -88,5 +103,5 @@
 
   // תרגיל בתוך משפט בעברית: עוטפים ברצף משמאל לימין כדי שלא יתהפך (7 − 3 = 4 ולא 4 = 3 − 7). מקבל HTML מוגן
   const eqWrap = html => String(html).replace(/\d+(?:\s*[−+×:=]\s*\d+)+/g, m => `<span dir="ltr" class="eq">${m}</span>`);
-  root.SBD = { anchor, cageSegs, cageLayer, boardSVG, eqWrap };
+  root.SBD = { anchor, cageSegs, cageLayer, boardSVG, eqWrap, cageColors, cellFills, CAGE_FILL, CAGE_FILL_BW };
 })(typeof self !== 'undefined' ? self : this);

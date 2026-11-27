@@ -75,7 +75,7 @@
   .icob[aria-pressed="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
   .bdw { position: relative; width: var(--bw); }
   .bd { --n: 9; display: grid; grid-template-columns: repeat(var(--n), 1fr); width: var(--bw); aspect-ratio: 1; border: 3px solid var(--box-line); border-radius: 6px; background: #fff; direction: rtl; user-select: none; -webkit-user-select: none; touch-action: manipulation; overflow: hidden; }
-  .cl { position: relative; border: 0; border-inline-end: 1px solid var(--cell-line); border-block-end: 1px solid var(--cell-line); background: #fff; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; font-size: calc(var(--bw) / var(--n) * .56); font-weight: 400; color: var(--user); line-height: 1; min-width: 0; }
+  .cl { position: relative; border: 0; border-inline-end: 1px solid var(--cell-line); border-block-end: 1px solid var(--cell-line); background: var(--ct, #fff); padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; font-size: calc(var(--bw) / var(--n) * .56); font-weight: 400; color: var(--user); line-height: 1; min-width: 0; }
   .bd.kl .cl { font-size: calc(var(--bw) / var(--n) * .5); }
   .cl.ce { border-inline-end-width: 0; } .cl.re { border-block-end-width: 0; }
   .cl.tbx { border-inline-end: 3px solid var(--box-line); } .cl.tby { border-block-end: 3px solid var(--box-line); }
@@ -88,6 +88,12 @@
   .cl.hu { background: var(--hint); }
   .cl.hk { background: #e6f1ff; }
   .cl.hc { box-shadow: inset 0 0 0 3px var(--hint-line); z-index: 1; }
+  /* סודוקו סכומים: ההדגשות שקופות מעל צבע הכלוב, כדי שהכלוב יישאר מזוהה תמיד */
+  .bd.kl .cl.peer { background: linear-gradient(rgba(107, 63, 160, .09), rgba(107, 63, 160, .09)), var(--ct, #fff); }
+  .bd.kl .cl.same { background: linear-gradient(rgba(107, 63, 160, .26), rgba(107, 63, 160, .26)), var(--ct, #fff); }
+  .bd.kl .cl.hu { background: linear-gradient(rgba(240, 190, 40, .32), rgba(240, 190, 40, .32)), var(--ct, #fff); }
+  .bd.kl .cl.hk { background: linear-gradient(rgba(60, 130, 220, .22), rgba(60, 130, 220, .22)), var(--ct, #fff); }
+  .bd.kl .cl.sel { background: linear-gradient(rgba(107, 63, 160, .30), rgba(107, 63, 160, .30)), var(--ct, #fff); }
   .cl.hs { font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
   .cl .hx { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #a33; font-size: calc(var(--bw) / var(--n) * .5); font-weight: 400; opacity: .75; pointer-events: none; }
   .cl .tg { position: absolute; bottom: 1px; left: 2px; font-size: calc(var(--bw) / var(--n) * .3); color: #8a5a00; font-weight: 800; pointer-events: none; }
