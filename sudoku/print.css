@@ -1,5 +1,6 @@
 /* הדפסת חוברות סודוקו – A4, RTL. עמוד = section.pg בגודל קבוע, כך שלוח לא נחתך בין עמודים */
 @page { size: A4; margin: 0; }
+.eq { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
 .pg { width: 210mm; height: 297mm; padding: 13mm; box-sizing: border-box; background: #fff; color: #111; position: relative; overflow: hidden; display: flex; flex-direction: column; direction: rtl; text-align: right; font-family: 'Assistant', 'Arial Hebrew', Arial, sans-serif; font-size: 11pt; line-height: 1.45; page-break-after: always; break-after: page; }
 .pg:last-child { page-break-after: auto; break-after: auto; }
 .pg-h { height: 9mm; display: flex; justify-content: space-between; align-items: flex-start; font-size: 9pt; color: #555; border-bottom: .3mm solid #ccc; }

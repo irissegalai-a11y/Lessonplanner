@@ -174,7 +174,7 @@
     const mark = [...(tk && tk.mark || []), ...(sol && tk && tk.ans || [])];
     const shade = [...(hn ? hn.shade : []), ...(tk && tk.shade && sol ? tk.shade : [])].filter(i => !mark.includes(i));
     // צבעי סימון: בהיר לרמז (יחידה), כהה יותר למשבצת המשימה
-    let svg = B.boardSVG(p, { values: vals, size, boxFill: st.boxFill, mark: [...shade, ...mark], markFills: [...shade.map(() => st.shade), ...mark.map(() => st.mark)], thick: cfg.style === 'clean' ? st.accent : '#1d2433' });
+    let svg = B.boardSVG(p, { values: vals, size, boxFill: p.cages ? null : st.boxFill, cageFills: cfg.style === 'bw' ? B.CAGE_FILL_BW : B.CAGE_FILL, mark: [...shade, ...mark], markFills: [...shade.map(() => st.shade), ...mark.map(() => st.mark)], thick: cfg.style === 'clean' ? st.accent : '#1d2433' });
     // כוכבית במשבצת (רמז) + מסגרת כפולה למשבצת המשימה
     const n = p.n;
     const extra = [...(hn && !sol ? hn.star : []), ...mark].map(i => { const x = n - i % n - 1, y = i / n | 0; return `<rect x="${x + 0.06}" y="${y + 0.06}" width="0.88" height="0.88" fill="none" stroke="#333" stroke-width="0.05"/>${hn && hn.star.includes(i) && !sol ? `<text x="${x + 0.18}" y="${y + 0.3}" font-size="0.26" text-anchor="middle">★</text>` : ''}`; }).join('');
@@ -192,8 +192,8 @@
     return `<div class="slot" style="width:${s.w}mm;height:${s.h}mm">
       <div class="sl-h"><b>חידה ${n}</b> · ${esc(TN(it.type))} · <span aria-label="רמה ${it.level}">${STARS(it.level)}</span> ${LV[it.level]}<span class="sl-id">${esc(it.puz.id)}</span></div>
       <div class="sl-b">${boardOf(it, size)}</div>
-      ${it.hint ? `<div class="sl-hint">💡 ${esc(it.hint.t)}</div>` : ''}
-      ${it.task ? `<div class="sl-task">🤔 ${esc(it.task.q)}</div>` : ''}
+      ${it.hint ? `<div class="sl-hint">💡 ${B.eqWrap(esc(it.hint.t))}</div>` : ''}
+      ${it.task ? `<div class="sl-task">🤔 ${B.eqWrap(esc(it.task.q))}</div>` : ''}
       ${cfg.content.space ? '<div class="sl-space"><span>דרך החשיבה שלי:</span><i></i><i></i><i></i></div>' : ''}
     </div>`;
   }
@@ -230,7 +230,7 @@
     return `<h2>דוגמה פתורה – צעד אחר צעד</h2>
       <p>כך פותרים בלי לנחש: בכל צעד מוצאים משבצת שאפשר להיות בטוחים בה. המספר הקטן בפינה מראה את סדר הצעדים.</p>
       <div class="ex-figs"><figure>${B.boardSVG(p, { size: 62 })}<figcaption>החידה</figcaption></figure><figure>${tagged}<figcaption>הפתרון וסדר הצעדים</figcaption></figure></div>
-      <div class="ex-steps"><ol>${steps.slice(0, half).map(x => `<li><b>${posText(p.n, x.st.place[0])}:</b> ${esc(reason(x))}</li>`).join('')}</ol><ol start="${half + 1}">${steps.slice(half).map(x => `<li><b>${posText(p.n, x.st.place[0])}:</b> ${esc(reason(x))}</li>`).join('')}</ol></div>`;
+      <div class="ex-steps"><ol>${steps.slice(0, half).map(x => `<li><b>${posText(p.n, x.st.place[0])}:</b> ${B.eqWrap(esc(reason(x)))}</li>`).join('')}</ol><ol start="${half + 1}">${steps.slice(half).map(x => `<li><b>${posText(p.n, x.st.place[0])}:</b> ${B.eqWrap(esc(reason(x)))}</li>`).join('')}</ol></div>`;
   }
   const EXKEY = { lockedPointing: 'locked', lockedClaiming: 'locked', cageSingle: 'krules', multiSum: 'unitSum' };
   function strategiesPage() {
@@ -238,7 +238,7 @@
     if (!used.size) ['fullHouse', 'nakedSingle', 'hiddenSingle'].forEach(s => used.add(s));
     const seen = new Set(), list = E.ORDER.filter(s => used.has(s)).filter(s => { const k = C.NAME[s]; if (seen.has(k)) return false; seen.add(k); return true; });
     return `<h2>אסטרטגיות פתרון</h2><p>אלה הדרכים שבהן תשתמשו בחידות שבחוברת – מהקלה אל המתקדמת.</p>
-      <div class="strats">${list.map(s => { const ex = C.EXPLAIN[EXKEY[s] || s]; return `<div class="strat"><h3>${C.ICON[s]} ${esc(C.NAME[s])}</h3>${ex ? ex.map(l => `<p>${esc(l)}</p>`).join('') : `<p>${esc(C.SHORT[s])}</p>`}</div>`; }).join('')}</div>`;
+      <div class="strats">${list.map(s => { const ex = C.EXPLAIN[EXKEY[s] || s]; return `<div class="strat"><h3>${C.ICON[s]} ${esc(C.NAME[s])}</h3>${ex ? ex.map(l => `<p>${B.eqWrap(esc(l))}</p>`).join('') : `<p>${esc(C.SHORT[s])}</p>`}</div>`; }).join('')}</div>`;
   }
   function trackPage() {
     return `<h2>טבלת המעקב שלי</h2><table class="trk"><thead><tr><th>חידה</th><th>סוג</th><th>רמה</th><th>פתרתי ✓</th><th>לבד / עם עזרה</th><th>איך הרגשתי</th></tr></thead><tbody>${items.map((it, k) => `<tr><td>${k + 1}</td><td>${esc(TN(it.type))}</td><td>${LV[it.level]}</td><td></td><td></td><td>😊 😐 😕</td></tr>`).join('')}</tbody></table>`;
@@ -252,7 +252,7 @@
         const size = it.puz.n === 9 ? 60 : it.puz.n === 6 ? 52 : 42;
         return `<div class="sol"><div class="sol-h"><b>חידה ${k + j + 1}</b> · ${esc(TN(it.type))} · ${LV[it.level]}</div>${boardOf(it, size, true)}
           ${cfg.content.solExp ? `<div class="sol-t">אסטרטגיות: ${esc(strat.join(' · '))} · ${it.puz.grade.steps} צעדים</div>` : ''}
-          ${it.task ? `<div class="sol-t"><b>תשובה למשימה:</b> ${esc(it.task.a)}</div>` : ''}${it.hint && cfg.content.solExp ? '' : ''}</div>`;
+          ${it.task ? `<div class="sol-t"><b>תשובה למשימה:</b> ${B.eqWrap(esc(it.task.a))}</div>` : ''}${it.hint && cfg.content.solExp ? '' : ''}</div>`;
       }).join('')}</div>`);
     }
     return pages;

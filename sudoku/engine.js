@@ -565,7 +565,8 @@
 
   /* חידה ממזהה עם ניסיונות חוזרים (זרעים נגזרים) – אם זרע מסוים לא נתן חידה מתאימה */
   function generateSafe(type, level, seed, tries) {
-    for (let t = 0; t < (tries || 6); t++) { const s = t ? seed + 'r' + t : seed; const p = generate(type, level, s); if (p) return p; }
+    // זרעים 0–5 זהים לקודם; עוד ניסיונות רק אם לא נמצא לוח
+    for (let t = 0; t < (tries || 12); t++) { const s = t ? seed + 'r' + t : seed; const p = generate(type, level, s); if (p) return p; }
     return null;
   }
 

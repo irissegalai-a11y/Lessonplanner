@@ -132,17 +132,42 @@
     if (E.TYPES[t].killer) s += `<rect x=".15" y=".15" width="${n / 2 - .3}" height="${1 - .3}" fill="none" stroke="#1e8a8a" stroke-width=".08" stroke-dasharray=".2 .12"/>`;
     return s + '</svg>';
   }
+  /* ---------- הסבר מאויר: איך משחקים סודוקו סכומים ---------- */
+  // כלוב קטן לאיור: משבצות בשורה, קו מקווקו וסכום בפינה הימנית. cells = ספרות ('' ריק, '?' לשאלה)
+  function cageFig(cells, sum, opt) {
+    opt = opt || {};
+    const k = cells.length, W = k * 46 + 8;
+    let s = `<svg class="kfig" viewBox="0 0 ${W} 54" width="${W}" height="54" aria-hidden="true">`;
+    cells.forEach((d, i) => { const x = W - 4 - (i + 1) * 46; s += `<rect x="${x}" y="4" width="46" height="46" fill="${d === '?' ? '#fff3c4' : '#fff'}" stroke="#aab0c8" stroke-width="1"/>`;
+      if (d) s += `<text x="${x + 21}" y="${d === '?' ? 38 : 39}" font-size="${d === '?' ? 22 : 21}" text-anchor="middle" font-weight="${d === '?' ? 800 : 700}" fill="${opt.bad ? '#b3261e' : d === '?' ? '#8a5a00' : '#1d2433'}" font-family="Assistant, Arial, sans-serif">${d}</text>`; });
+    s += `<rect x="7" y="7" width="${W - 14}" height="40" fill="none" stroke="#1e8a8a" stroke-width="2" stroke-dasharray="5 3" rx="2"/>`;
+    s += `<rect x="${W - 28}" y="4" width="22" height="15" fill="#fff"/><text x="${W - 17}" y="17" font-size="14" text-anchor="middle" font-weight="800" fill="#1e8a8a" font-family="Assistant, Arial, sans-serif">${sum}</text>`;
+    return s + '</svg>';
+  }
+  function killerHowHTML() {
+    const row = (fig, t) => `<div class="kh-row"><div class="kh-fig">${fig}</div><div class="kh-t">${t}</div></div>`;
+    return `<div class="kh">
+      ${row('<span class="kh-big" aria-hidden="true">🧩</span>', '<b>1. כמו סודוקו רגיל.</b> בכל שורה, בכל עמודה ובכל אזור – כל מספר פעם אחת.')}
+      ${row(cageFig(['1', '2'], 3), '<b>2. כלוב = מסגרת מקווקווה.</b> המספר הקטן בפינה הוא <b>הסכום</b> של כל המספרים בכלוב. כאן: <span dir="ltr" class="eq">1 + 2 = 3</span>.')}
+      ${row(cageFig(['2', '2'], 4, { bad: 1 }) + ' <span class="kh-x" aria-label="לא נכון">✗</span> ' + cageFig(['1', '3'], 4) + ' <span class="kh-v" aria-label="נכון">✓</span>', '<b>3. בתוך כלוב מספר לא חוזר.</b> סכום 4 בשתי משבצות הוא <span dir="ltr" class="eq">1 + 3</span>, ולא <span dir="ltr" class="eq">2 + 2</span>.')}
+      ${row(cageFig(['3', '?'], 7), '<b>4. נשארה משבצת אחת בכלוב? מחסרים.</b> <span dir="ltr" class="eq">7 − 3 = 4</span>, אז במשבצת הצהובה יש 4.')}
+      ${row(cageFig(['', ''], 3) + ' ' + cageFig(['', ''], 17), '<b>5. סכומים "מיוחדים" – רק דרך אחת.</b> שתי משבצות עם סכום 3: רק <span dir="ltr" class="eq">1 + 2</span>. עם סכום 17 (בלוח 9×9): רק <span dir="ltr" class="eq">8 + 9</span>. מתחילים מהכלובים האלה!')}
+      ${row('<span class="kh-big" aria-hidden="true">∑</span>', '<b>6. טיפ לרמות הגבוהות:</b> סכום כל שורה, עמודה ואזור ידוע – ב-4×4 הוא 10, ב-6×6 הוא 21, וב-9×9 הוא 45.')}
+      <p class="small muted" style="margin:8px 0 0">תקועים? לחצו 💡 רמז בתוך המשחק – המאמן יראה לכם מאיפה להתחיל.</p></div>`;
+  }
   function playMenu(killer) {
     const types = killer ? ['k4', 'k6', 'k9'] : ['4', '6', '9'];
     app.innerHTML = `<button class="back" id="bk">→ למרכז הסודוקו</button>
       <h1>${killer ? '➕ סודוקו סכומים' : '🎮 בוחרים לוח'}</h1>
-      ${killer ? `<p class="muted">כמו סודוקו רגיל – ועוד כלל: בכל כלוב מקווקו המספרים שונים זה מזה, והסכום שלהם כתוב בפינה. <button class="btn ghost" id="kHow">איך משחקים?</button></p>` : `<p class="muted">לוחצים על רמה – והמשחק מתחיל. אפשר לעבור בין סוגים ורמות מתי שרוצים.</p>`}
+      ${killer ? `<details class="card khd" id="kHowBox"${ST.seen.krules ? '' : ' open'}><summary><b>❓ איך משחקים סודוקו סכומים?</b> <span class="small muted">(הסבר קצר עם דוגמאות)</span></summary>${killerHowHTML()}<p style="margin:10px 0 0"><button class="btn" id="kTry">▶ לנסות לוח ראשון (4×4 קל)</button> <button class="btn sec" id="kHow">הדגמה צעד-אחר-צעד</button></p></details><p class="muted">מתחילים בלוח 4×4 קל, ומשם ממשיכים.</p>` : `<p class="muted">לוחצים על רמה – והמשחק מתחיל. אפשר לעבור בין סוגים ורמות מתי שרוצים.</p>`}
       <div class="pick">${types.map(t => `<div class="pcard"><h2>${miniIcon(t)} ${TNAME(t)}</h2>
         <div class="lvls">${levelsOf(t).map(l => `<button class="lv" data-t="${t}" data-l="${l}"><span class="ln">${LV[l]}</span><span class="ls" aria-label="רמה ${l} מתוך 4">${STARS(l)}</span><span class="small muted">${TDESC[t][l]}</span>${ST.solved[t + '-' + l] ? `<span class="lc">✓ ${ST.solved[t + '-' + l]}</span>` : ''}</button>`).join('')}</div></div>`).join('')}</div>
       <div class="codebox"><label for="pcode" class="small muted">יש לכם קוד חידה (מחוברת או מחבר/ה)?</label><input id="pcode" placeholder="9-2-abc12" autocomplete="off"><button class="btn sec" id="pgo">פתיחה</button></div>`;
     $('bk').onclick = () => route('home');
     app.querySelectorAll('.lv').forEach(b => { b.onclick = () => newGame(b.dataset.t, +b.dataset.l); });
     const k = $('kHow'); if (k) k.onclick = () => guideCard('krules');
+    const kt = $('kTry'); if (kt) kt.onclick = () => newGame('k4', 1);
+    if (killer && !ST.seen.krules) { ST.seen.krules = 1; saveST(); } // בפעם הבאה ההסבר מקופל
     $('pgo').onclick = () => { const id = $('pcode').value.trim(); const p = E.parseId(id); if (!p || !E.supported(p.type, p.level)) return toast('הקוד לא מוכר'); openById(id); };
   }
 
@@ -194,7 +219,8 @@
         <button id="tCheck"><span class="i" aria-hidden="true">✔</span>בדיקה</button>
         <button id="tHint"><span class="i" aria-hidden="true">💡</span>רמז</button>
       </div>
-      <div class="small muted" style="text-align:center">${P.cages ? 'בכל כלוב מקווקו: מספרים שונים, והסכום כתוב בפינה. ' : ''}קוד החידה: <span dir="ltr">${esc(P.id)}</span></div>
+      ${P.cages ? `<details class="card khd" style="width:var(--bw);margin:0"><summary><b>❓ איך משחקים סודוקו סכומים?</b></summary>${killerHowHTML()}</details>` : ''}
+      <div class="small muted" style="text-align:center">קוד החידה: <span dir="ltr">${esc(P.id)}</span></div>
     </div>`;
     BV = boardView($('bdw'), P, { interactive: true, onCell: i => { G.sel = i; G.checked = false; draw(); } });
     $('gBack').onclick = () => { save(); history.length > 1 && history.state ? history.back() : route('home'); };
@@ -211,13 +237,13 @@
 
   /* תצוגת לוח (גם למשחק וגם להדגמות במרכז ההדרכה) */
   function boardView(host, P, opt) {
-    const n = P.n, g = E.geo(n), N = n * n;
+    const n = P.n, g = E.geo(n), N = n * n, tint = P.cages ? B.cellFills(n, P.cages).f : null;
     host.innerHTML = `<div class="bd n${n}${P.cages ? ' kl' : ''}" style="--n:${n}" role="grid" aria-label="לוח סודוקו ${n} על ${n}">${Array.from({ length: N }, (_, i) => {
       const r = i / n | 0, c = i % n, cls = ['cl'];
       if (c === n - 1) cls.push('ce'); else if ((c + 1) % g.bc === 0) cls.push('tbx');
       if (r === n - 1) cls.push('re'); else if ((r + 1) % g.br === 0) cls.push('tby');
-      return `<button class="${cls.join(' ')}" data-i="${i}" tabindex="-1" role="gridcell"></button>`;
-    }).join('')}</div>${P.cages ? B.cageLayer(n, P.cages, { fs: n === 9 ? 0.27 : 0.25 }) : ''}`;
+      return `<button class="${cls.join(' ')}" data-i="${i}" tabindex="-1" role="gridcell"${tint ? ` style="--ct:${tint[i]}"` : ''}></button>`;
+    }).join('')}</div>${P.cages ? B.cageLayer(n, P.cages, { fs: n === 9 ? 0.27 : 0.25, fills: B.CAGE_FILL }) : ''}`;
     const cells = [...host.querySelectorAll('.cl')];
     if (opt.interactive) {
       host.querySelector('.bd').addEventListener('click', e => { const b = e.target.closest('.cl'); if (b) opt.onCell(+b.dataset.i); });
@@ -333,7 +359,7 @@
     if (last && h.then) acts += `<button class="btn sec" id="hThen">ומה עכשיו? ›</button>`;
     if (l.erase != null) acts += `<button class="btn" id="hErase">🗑️ מחקו</button>`;
     acts += `<button class="btn ghost" id="hClose">סגירה</button>`;
-    box.innerHTML = `<div class="hintp" role="status"><div class="hh"><span>${head}</span><span class="dots" aria-hidden="true">${L.length > 1 ? L.map((_, k) => k <= co.lv ? '●' : '○').join('') : ''}</span></div><div class="ht">${esc(co.then ? co.then.t : l.t)}</div><div class="ha">${co.then ? '<button class="btn ghost" id="hClose2">סגירה</button>' : acts}</div></div>`;
+    box.innerHTML = `<div class="hintp" role="status"><div class="hh"><span>${head}</span><span class="dots" aria-hidden="true">${L.length > 1 ? L.map((_, k) => k <= co.lv ? '●' : '○').join('') : ''}</span></div><div class="ht">${B.eqWrap(esc(co.then ? co.then.t : l.t))}</div><div class="ha">${co.then ? '<button class="btn ghost" id="hClose2">סגירה</button>' : acts}</div></div>`;
     const on = (id, f) => { const b = $(id); if (b) b.onclick = f; };
     on('hMore', moreHint);
     on('hClose', () => { G.coach = null; draw(); });
@@ -461,15 +487,17 @@
     $('bk').onclick = () => route('home');
     app.querySelectorAll('.gcard').forEach(b => { b.onclick = () => guideCard(b.dataset.g); });
   }
-  const EXCACHE = {};
-  function findExample(g) {
-    if (EXCACHE[g.id] !== undefined) return EXCACHE[g.id];
+  // דוגמאות לכל טיפ: הראשונה מודרכת, הבאות – לבד. k = מספר הדוגמה
+  const EXS = {};
+  function findExample(g, k) {
+    k = k || 0;
+    const c = EXS[g.id] || (EXS[g.id] = { list: [], s: 0 });
     const st = g.id === 'locked' ? 'locked' : g.st || g.id;
-    for (let s = 0; s < 40; s++) {
-      const p = E.generateSafe(g.ex[0], g.ex[1], 'ex' + g.id + s, 2); if (!p) continue;
-      const x = C.exampleState(p, st) || C.exampleState(p, st, E.ORDER); if (x) return (EXCACHE[g.id] = { p, x });
+    while (c.list.length <= k && c.s < 40 + k * 25) {
+      const s = c.s++, p = E.generateSafe(g.ex[0], g.ex[1], 'ex' + g.id + s, 2); if (!p) continue;
+      const x = C.exampleState(p, st) || C.exampleState(p, st, E.ORDER); if (x) c.list.push({ p, x });
     }
-    return (EXCACHE[g.id] = null);
+    return c.list[k] || null;
   }
   function guideCard(id) {
     const g = GUIDE.find(x => x.id === id); if (!g) return;
@@ -477,7 +505,7 @@
     ST.seen[id] = 1; saveST();
     const x = gInfo(g), lines = EXPLAIN[id] || [];
     app.innerHTML = `<button class="back" id="bk">→ לכל הטיפים</button>
-      <div class="exp"><h1>${x.i} ${esc(x.n)}</h1>${lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
+      <div class="exp"><h1>${x.i} ${esc(x.n)}</h1>${id === 'krules' ? killerHowHTML() + '<h2 style="margin-top:14px">הדגמה על לוח אמיתי</h2>' : lines.map(l => `<p>${B.eqWrap(esc(l))}</p>`).join('')}</div>
       <div class="demo" id="demo"><div class="loading" style="--bw:${Math.min(bwFor(9), 420)}px;width:${Math.min(bwFor(9), 420)}px">מכינים דוגמה…</div></div>
       <div class="stepper" style="margin-top:12px">${g.play ? `<button class="btn" id="gPlay">▶ לשחק לוח ${esc(TNAME(g.play[0]))} ${LV[g.play[1]]}</button>` : ''}<button class="btn sec" id="gAll">לכל הטיפים</button></div>`;
     $('bk').onclick = () => route('guide'); $('gAll').onclick = () => route('guide');
@@ -485,17 +513,124 @@
     setTimeout(() => { if (id === 'rules') rulesDemo(); else if (id === 'notes') notesDemo(); else stepDemo(g); }, 20);
   }
   function demoShell(n) { const bw = Math.min(bwFor(n), n === 9 ? 440 : 380); const d = $('demo'); if (!d) return null; d.style.setProperty('--bw', bw + 'px'); return d; }
-  function stepDemo(g) {
-    const ex = findExample(g), d = $('demo'); if (!d) return;
-    if (!ex) { d.innerHTML = '<p class="muted">לא נמצאה דוגמה כרגע. נסו לשחק לוח – ולבקש רמז כשתגיעו למצב כזה.</p>'; return; }
-    const { p, x } = ex, ctx = E.ctxOf(p.n, p.cages), S = E.newState(ctx, x.grid, x.known), L = C.ladder(ctx, S, x.step, p);
-    demoShell(p.n);
-    d.innerHTML = `<div class="bdw" id="dbd"></div><div class="hintp" style="width:var(--bw)"><div class="hh"><span id="dstep"></span></div><div class="ht" id="dtxt"></div><div class="stepper"><button class="btn sec" id="dPrev">‹ הקודם</button><button class="btn" id="dNext">הבא ›</button></div></div>`;
-    const bv = boardView($('dbd'), p, { interactive: false });
-    let k = 0;
-    const show = () => { bv.update({ grid: x.grid, notes: null, auto: false, sel: -1, hl: L[k].hl, same: false }); $('dstep').textContent = `שלב ${k + 1} מתוך ${L.length}`; $('dtxt').textContent = L[k].t; $('dPrev').disabled = k === 0; $('dNext').textContent = k === L.length - 1 ? 'מההתחלה ⟲' : 'הבא ›'; };
-    $('dPrev').onclick = () => { if (k > 0) { k--; show(); } };
-    $('dNext').onclick = () => { k = k === L.length - 1 ? 0 : k + 1; show(); };
+  /* הדגמה מודרכת עם התנסות פעילה:
+     דוגמה 1 – צופים בשלבי ההסבר (1–3), ואז התלמיד מבצע בעצמו את המהלך; דוגמאות נוספות – לבד, עם רמז לפי בקשה.
+     משוב מיידי על כל לחיצה, והסבר מדויק במקרה של טעות */
+  const UNIT_W = { r: 'שורה', c: 'עמודה', b: 'אזור' };
+  function stepDemo(g, k) {
+    k = k || 0;
+    const d = $('demo'); if (!d) return;
+    const ex = findExample(g, k);
+    if (!ex) { d.innerHTML = k ? '<p class="muted">אין כרגע דוגמה נוספת. אפשר לשחק לוח – ולתרגל שם.</p>' : '<p class="muted">לא נמצאה דוגמה כרגע. נסו לשחק לוח – ולבקש רמז כשתגיעו למצב כזה.</p>'; return; }
+    const { p, x } = ex, st = x.step, ctx = E.ctxOf(p.n, p.cages), S = E.newState(ctx, x.grid, x.known), L = C.ladder(ctx, S, st, p), n = p.n;
+    const place = !!st.place, target = place ? [st.place[0]] : [...new Set(st.elim.map(e => e[0]))];
+    const elimOf = {}; if (!place) st.elim.forEach(([i, m]) => { elimOf[i] = (elimOf[i] || 0) | m; });
+    const pattern = new Set(st.cells || []);
+    const guided = k === 0;
+    let phase = guided ? 'watch' : 'try', lv = guided ? 0 : -1, sel = -1, tries = 0;
+    const found = new Set(); let put = null;
+    demoShell(n);
+    const task = place ? 'עכשיו תורכם: לחצו על המשבצת שאפשר למלא בוודאות, ובחרו את המספר שחייב להיות בה.'
+      : `עכשיו תורכם: לחצו על כל המשבצות שמהן אפשר למחוק מועמדים (${target.length === 1 ? 'משבצת אחת' : target.length + ' משבצות'}).`;
+    d.innerHTML = `${guided ? '' : `<p style="text-align:center;margin:0"><b>דוגמה ${k + 1} – לבד.</b> <span class="muted">אותה דרך, בלוח אחר. אפשר לבקש רמז.</span></p>`}
+      <div class="bdw" id="dbd"></div>
+      <div class="hintp" style="width:var(--bw)"><div class="hh"><span id="dstep"></span></div><div class="ht" id="dtxt"></div><div id="dmsg" role="status" aria-live="polite"></div>
+        <div class="pad" id="dpad" style="--pn:${n};width:100%;margin:8px 0" hidden role="group" aria-label="בחירת מספר">${Array.from({ length: n }, (_, j) => `<button data-d="${j + 1}">${j + 1}</button>`).join('')}</div>
+        <div class="stepper" id="dbtns"></div></div>`;
+    const bv = boardView($('dbd'), p, { interactive: true, onCell: tap });
+    window.SDKAPP.demo = { place, target, step: st, grid: x.grid, n, elim: elimOf }; // לבדיקות אוטומטיות
+    const msg = (t, kind) => { $('dmsg').innerHTML = t ? `<div class="msg ${kind}" style="width:100%;margin-top:6px;text-align:right">${B.eqWrap(esc(t))}</div>` : ''; };
+    // מדוע ספרה e לא יכולה להיות במשבצת i (שכן עם אותה ספרה / הסקה קודמת)
+    function why(i, e) {
+      const j = ctx.peers[i].find(q => x.grid[q] === e);
+      if (j !== undefined) { const gg = ctx.g; const w = gg.R[j] === gg.R[i] ? 'שורה' : gg.C[j] === gg.C[i] ? 'עמודה' : gg.B[j] === gg.B[i] ? 'אזור' : 'כלוב'; return `כבר יש ${e} באות${w === 'אזור' || w === 'כלוב' ? 'ו' : 'ה'} ${w} (מסומן בקו).`; }
+      if (x.known[i] >> e & 1) return `${e} כבר נפסל במשבצת הזאת בהסקה קודמת.`;
+      return null;
+    }
+    function hl() {
+      let h;
+      if (phase === 'watch') h = Object.assign({}, L[lv].hl);
+      else if (lv >= 0) h = Object.assign({}, L[lv].hl);
+      else h = place ? {} : { units: L[0].hl.units, cage: L[0].hl.cage, cand: L[1].hl.cand || L[2].hl.cand, on: L[1].hl.on, cells: L[1].hl.cells };
+      delete h.put; delete h.elim;
+      if (!place) { // משבצות שנמצאו – מחיקה מסומנת בקו
+        if (!h.cand) h.cand = L[2].hl.cand || L[1].hl.cand;
+        if (phase !== 'watch') { h.off = {}; found.forEach(i => { h.off[i] = elimOf[i]; }); if (phase === 'done') target.forEach(i => { h.off[i] = elimOf[i]; }); }
+      }
+      if (put) h.put = put;
+      if (sel >= 0 && phase === 'try') h.cells = [...(h.cells || []), sel];
+      return h;
+    }
+    function show() {
+      bv.update({ grid: x.grid, notes: null, auto: false, sel: -1, hl: hl(), same: false });
+      $('dpad').hidden = !(phase === 'try' && place && sel === target[0]);
+      let btn = '';
+      if (phase === 'watch') {
+        $('dstep').textContent = `צופים: שלב ${lv + 1} מתוך 3`; $('dtxt').innerHTML = B.eqWrap(esc(L[lv].t));
+        btn = `<button class="btn sec" id="dPrev" ${lv ? '' : 'disabled'}>‹ הקודם</button><button class="btn" id="dNext">${lv < 2 ? 'הבא ›' : 'עכשיו אני ›'}</button>`;
+      } else if (phase === 'try') {
+        $('dstep').textContent = guided ? '✋ תורכם' : `✋ דוגמה ${k + 1} – לבד`;
+        $('dtxt').innerHTML = B.eqWrap(esc(lv >= 0 && !guided ? `רמז: ${L[lv].t}` : task));
+        btn = `${lv < 2 ? `<button class="btn sec" id="dHint">💡 ${guided ? 'עוד הסבר' : 'רמז'}</button>` : ''}${tries >= 3 ? '<button class="btn ghost" id="dShow">הצגת הפתרון</button>' : ''}`;
+      } else {
+        $('dstep').textContent = '✓ הצלחתם!'; $('dtxt').innerHTML = B.eqWrap(esc(L[3].t));
+        btn = `<button class="btn" id="dMore">▶ דוגמה נוספת – לבד</button>${k ? '<button class="btn sec" id="dAgain">⟲ מההתחלה</button>' : ''}`;
+      }
+      $('dbtns').innerHTML = btn;
+      const on = (id, f) => { const b = $(id); if (b) b.onclick = f; };
+      on('dPrev', () => { lv--; show(); });
+      on('dNext', () => { if (lv < 2) lv++; else { phase = 'try'; msg(''); } show(); });
+      on('dHint', () => { lv = Math.min(2, lv + 1); if (guided) msg(L[lv].t, 'info'); show(); });
+      on('dShow', () => finish(false));
+      on('dMore', () => stepDemo(g, k + 1));
+      on('dAgain', () => stepDemo(g, 0));
+    }
+    function wrong(t) { tries++; if (tries === 2 && lv < 2) lv++; msg('✗ ' + t, 'info bad-msg'); show(); }
+    function finish(byKid) {
+      phase = 'done'; sel = -1; if (place) put = st.place;
+      msg(byKid ? `✓ נכון! ${tries ? '' : 'בניסיון הראשון – מצוין!'}` : 'הנה הפתרון – נסו את הדוגמה הבאה לבד.', byKid ? 'ok' : 'info');
+      show();
+    }
+    function tap(i) {
+      if (phase !== 'try') return;
+      if (x.grid[i]) return wrong('במשבצת הזאת כבר כתוב מספר. בחרו משבצת ריקה.');
+      if (place) {
+        const [ti, td] = st.place;
+        if (i === ti) { sel = i; msg('איזה מספר חייב להיות כאן? בחרו מהמספרים למטה.', 'info'); show(); const b = $('dpad').querySelector('button'); if (b) b.focus(); return; }
+        sel = -1;
+        // הסבר מותאם לאסטרטגיה: למה דווקא לא המשבצת הזאת
+        if (st.s === 'hiddenSingle') {
+          const inUnit = ctx.units[st.unit].cells.includes(i), U2 = UNIT_W[ctx.units[st.unit].t];
+          return wrong(inUnit ? `${td} לא יכול להיות במשבצת הזאת: ${why(i, td) || 'בדקו את השורה, העמודה והאזור שלה.'}` : `חפשו בתוך ה${U2} המודגש${U2 === 'אזור' ? '' : 'ת'}: איפה יכול להיות בה ${td}?`);
+        }
+        if (st.s === 'nakedSingle') { const m = S.c[i]; return wrong(`במשבצת הזאת עדיין אפשריים ${E.digs(m).join(', ')} – יותר מאפשרות אחת. חפשו משבצת שנשארה בה אפשרות אחת בלבד.`); }
+        if (st.s === 'fullHouse') return wrong('חפשו שורה, עמודה או אזור שנשארה בהם רק משבצת ריקה אחת.');
+        if (st.s === 'cageSingle') return wrong('חפשו כלוב שנשארה בו רק משבצת ריקה אחת – או כלוב של משבצת אחת.');
+        return wrong('זו לא המשבצת. היעזרו בהסבר או ברמז.');
+      }
+      // הדגמה של מחיקת מועמדים
+      if (found.has(i)) { msg('את המשבצת הזאת כבר מצאתם. חפשו עוד.', 'info'); return; }
+      if (elimOf[i]) {
+        found.add(i);
+        if (found.size === target.length) return finish(true);
+        msg(`✓ נכון! מכאן נמחק ${E.digs(elimOf[i]).join(', ')}. ${target.length - found.size === 1 ? 'נשארה עוד משבצת אחת.' : `נשארו עוד ${target.length - found.size}.`}`, 'ok'); show(); return;
+      }
+      if (pattern.has(i)) return wrong('זו אחת המשבצות של הדפוס עצמו – ממנה לא מוחקים. מוחקים ממשבצות אחרות שהדפוס "רואה".');
+      const ds = st.digit ? [st.digit] : st.digits || [];
+      if (st.cage != null && st.s === 'cageCombo') return wrong(ctx.cages[st.cage].cells.includes(i) ? 'כל המועמדים במשבצת הזאת מתאימים לאחד הצירופים – אין מה למחוק.' : 'המשבצת הזאת לא בכלוב המודגש.');
+      if (ds.length && !ds.some(e => S.c[i] >> e & 1)) return wrong(`אין במשבצת הזאת את ${ds.join(' או ')} בכלל – אין מה למחוק.`);
+      return wrong('מהמשבצת הזאת אי אפשר למחוק לפי הדפוס הזה: היא לא באותה שורה, עמודה או אזור שהדפוס "תופס".');
+    }
+    $('dpad').onclick = e => {
+      const b = e.target.closest('button'); if (!b || phase !== 'try') return;
+      const e2 = +b.dataset.d, [ti, td] = st.place;
+      if (e2 === td) return finish(true);
+      if (st.s === 'cageSingle') { const cg = ctx.cages[st.cage], have = cg.cells.filter(q => x.grid[q]).map(q => x.grid[q]), s2 = have.reduce((a, c) => a + c, 0); return wrong(have.length ? `בדקו את החשבון: הסכום ${cg.sum}, וכבר כתוב ${have.join(' + ')}. כמה חסר עד ${cg.sum}?` : `בכלוב של משבצת אחת המספר הוא הסכום עצמו: ${cg.sum}.`); }
+      const r = why(ti, e2);
+      if (r) return wrong(`${e2} לא יכול להיות כאן: ${r}`);
+      if (st.s === 'hiddenSingle') return wrong(`${e2} לא שובר כלל כאן – אבל לא בטוח שהוא שם. שאלנו: איפה ב${UNIT_W[ctx.units[st.unit].t]} יכול להיות ${td}?`);
+      return wrong(`${e2} לא מתאים כאן. בדקו שוב את השורה, העמודה והאזור.`);
+    };
     show();
   }
   function rulesDemo() {
@@ -519,9 +654,17 @@
     const d = $('demo'); if (!d) return;
     const p = E.generateSafe('6', 2, 'notes-demo'); if (!p) return;
     demoShell(6);
-    d.innerHTML = `<div class="bdw" id="dbd"></div><div class="msg info" style="width:var(--bw)">כך נראים סימונים: בכל משבצת ריקה – המספרים שעוד אפשריים בה. איפה יש רק מספר אחד?</div>`;
-    const bv = boardView($('dbd'), p, { interactive: false });
-    bv.update({ grid: p.givens, auto: true, sel: -1, hl: {}, same: false });
+    d.innerHTML = `<p style="text-align:center"><b>נסו:</b> כך נראים סימונים – בכל משבצת ריקה, המספרים שעוד אפשריים בה. לחצו על משבצת שנשאר בה רק מספר אחד.</p><div class="bdw" id="dbd"></div><div id="nmsg" class="msg info" role="status" style="width:var(--bw)">איפה יש רק מספר אחד קטן?</div>`;
+    const grid = p.givens.slice(), cx6 = E.ctxOf(6); let S = E.newState(cx6, grid);
+    const singles = () => S.c.filter(m => m && E.pc(m) === 1).length;
+    const bv = boardView($('dbd'), p, { interactive: true, onCell: i => {
+      const m = $('nmsg');
+      if (grid[i]) { m.className = 'msg info'; m.textContent = 'במשבצת הזאת כבר כתוב מספר. בחרו משבצת עם מספרים קטנים.'; return; }
+      if (E.pc(S.c[i]) === 1) { const d2 = E.low(S.c[i]); grid[i] = d2; S = E.newState(cx6, grid); m.className = 'msg ok'; m.textContent = `✓ נכון! נשאר רק ${d2} – אז כותבים אותו. ${grid.every(v => v) ? 'פתרתם את כל הלוח!' : singles() ? 'שימו לב: אחרי שכתבתם, נמחק ' + d2 + ' מהשכנות. מצאו עוד משבצת עם מספר אחד.' : ''}`; }
+      else { m.className = 'msg info'; m.textContent = `✗ כאן עדיין אפשריים ${E.digs(S.c[i]).join(', ')} – יותר ממספר אחד, ולכן עוד אי אפשר להחליט.`; }
+      bv.update({ grid, auto: true, sel: -1, hl: { cells: [i] }, same: false });
+    } });
+    bv.update({ grid, auto: true, sel: -1, hl: {}, same: false });
   }
 
   /* ---------- ההתקדמות שלי ---------- */

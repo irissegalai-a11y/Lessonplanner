@@ -75,7 +75,7 @@
   .icob[aria-pressed="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
   .bdw { position: relative; width: var(--bw); }
   .bd { --n: 9; display: grid; grid-template-columns: repeat(var(--n), 1fr); width: var(--bw); aspect-ratio: 1; border: 3px solid var(--box-line); border-radius: 6px; background: #fff; direction: rtl; user-select: none; -webkit-user-select: none; touch-action: manipulation; overflow: hidden; }
-  .cl { position: relative; border: 0; border-inline-end: 1px solid var(--cell-line); border-block-end: 1px solid var(--cell-line); background: #fff; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; font-size: calc(var(--bw) / var(--n) * .56); font-weight: 400; color: var(--user); line-height: 1; min-width: 0; }
+  .cl { position: relative; border: 0; border-inline-end: 1px solid var(--cell-line); border-block-end: 1px solid var(--cell-line); background: var(--ct, #fff); padding: 0; margin: 0; display: flex; align-items: center; justify-content: center; font-size: calc(var(--bw) / var(--n) * .56); font-weight: 400; color: var(--user); line-height: 1; min-width: 0; }
   .bd.kl .cl { font-size: calc(var(--bw) / var(--n) * .5); }
   .cl.ce { border-inline-end-width: 0; } .cl.re { border-block-end-width: 0; }
   .cl.tbx { border-inline-end: 3px solid var(--box-line); } .cl.tby { border-block-end: 3px solid var(--box-line); }
@@ -88,6 +88,12 @@
   .cl.hu { background: var(--hint); }
   .cl.hk { background: #e6f1ff; }
   .cl.hc { box-shadow: inset 0 0 0 3px var(--hint-line); z-index: 1; }
+  /* סודוקו סכומים: ההדגשות שקופות מעל צבע הכלוב, כדי שהכלוב יישאר מזוהה תמיד */
+  .bd.kl .cl.peer { background: linear-gradient(rgba(107, 63, 160, .09), rgba(107, 63, 160, .09)), var(--ct, #fff); }
+  .bd.kl .cl.same { background: linear-gradient(rgba(107, 63, 160, .26), rgba(107, 63, 160, .26)), var(--ct, #fff); }
+  .bd.kl .cl.hu { background: linear-gradient(rgba(240, 190, 40, .32), rgba(240, 190, 40, .32)), var(--ct, #fff); }
+  .bd.kl .cl.hk { background: linear-gradient(rgba(60, 130, 220, .22), rgba(60, 130, 220, .22)), var(--ct, #fff); }
+  .bd.kl .cl.sel { background: linear-gradient(rgba(107, 63, 160, .30), rgba(107, 63, 160, .30)), var(--ct, #fff); }
   .cl.hs { font-weight: 900; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
   .cl .hx { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #a33; font-size: calc(var(--bw) / var(--n) * .5); font-weight: 400; opacity: .75; pointer-events: none; }
   .cl .tg { position: absolute; bottom: 1px; left: 2px; font-size: calc(var(--bw) / var(--n) * .3); color: #8a5a00; font-weight: 800; pointer-events: none; }
@@ -120,6 +126,9 @@
   .hintp .dots { letter-spacing: 3px; font-size: .8rem; }
   .msg { width: var(--bw); border-radius: 12px; padding: 8px 12px; font-weight: 700; text-align: center; }
   .msg.ok { background: var(--ok-bg); color: var(--ok); } .msg.info { background: var(--brand-soft); color: var(--brand-dark); }
+  .msg.bad-msg { background: #fdecea; color: #8c1d18; }
+  .pad[hidden] { display: none; }
+  .eq { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
   .win { position: absolute; inset: 0; z-index: 4; background: rgba(255, 255, 255, .93); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; padding: 16px; border-radius: 6px; }
   .win .wi { font-size: 2.6rem; }
   .win .acts { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -189,6 +198,16 @@
   .warn { background: #fff4e0; border: 1px solid #f0c27a; color: #7a4a00; border-radius: 12px; padding: 8px 12px; margin: 8px 0; }
   .bk-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   #print { display: none; }
+  /* הסבר סודוקו סכומים */
+  .khd summary { cursor: pointer; padding: 4px 0; list-style-position: inside; }
+  .kh { display: grid; gap: 10px; margin-top: 10px; }
+  .kh-row { display: flex; gap: 14px; align-items: center; background: #f7fbfb; border: 1px solid #d6ecec; border-radius: 14px; padding: 10px 12px; }
+  .kh-fig { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; direction: rtl; min-width: 96px; justify-content: center; }
+  .kh-t { flex: 1; }
+  .kh-t .eq { direction: ltr; unicode-bidi: isolate; white-space: nowrap; font-weight: 700; }
+  .kh-big { font-size: 2rem; color: #1e8a8a; }
+  .kh-x { color: #b3261e; font-weight: 900; font-size: 1.3rem; } .kh-v { color: #2b7a3e; font-weight: 900; font-size: 1.3rem; }
+  @media (max-width: 520px) { .kh-row { flex-direction: column; align-items: stretch; text-align: right; } .kh-fig { justify-content: flex-start; } }
 </style>
 <link rel="stylesheet" href="sudoku/print.css">
 </head>
