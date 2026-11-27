@@ -2376,6 +2376,9 @@ html.embed body { padding-top: 0; }
     /* עמודת התוכן – דף חלק; המשבצות נשארות בשוליים */
     @media (min-width: 701px) {
       .wrap { background: var(--bg); border-radius: 22px; box-shadow: 0 0 0 18px var(--bg); }
+      /* דף שאלה רחב – המשבצות נשארות סביב הכרטיסים (איריס: "תוסיף קצת משבצות") */
+      .wrap:has(.qlayout), .wrap:has(.op-slide) { background: transparent; box-shadow: none; }
+      body:has(.qlayout)::before, body:has(.op-slide)::before { display: none; } /* קו השוליים לא חוצה את כרטיס השאלה */
     }
     /* ניווט צדדי – קו דק, בלי צל; רק הלשונית הפעילה בולטת */
     .tab { border: 1.5px solid var(--edge); }
