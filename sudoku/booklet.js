@@ -344,7 +344,8 @@
         <button class="btn" id="bkPrint" ${warn.length ? 'disabled title="יש לתקן את הפריסה"' : ''}>🖨️ הדפסה / שמירה כ-PDF</button>
         <button class="btn sec" id="bkSol">🖨️ פתרונות בלבד</button>
         <button class="btn sec" id="bkPages">👁️ בדיקת הפריסה</button></div>
-      <p class="small muted">לשמירה כ-PDF: בחלון ההדפסה בוחרים "שמירה כ-PDF" (Save as PDF), גודל A4, שוליים: ללא.</p>
+      <p class="small muted">לשמירה כ-PDF: בחלון ההדפסה בוחרים "שמירה כ-PDF" (Save as PDF), גודל A4, שוליים: ללא. בטלפון: הדפסה ← שמירה כ-PDF (באייפון: שיתוף ← שמירה בקבצים).</p>
+      <p class="small muted">חלון ההדפסה לא נפתח? אם הדף נפתח מתוך וואטסאפ, מייל או פייסבוק – פותחים אותו בדפדפן (⋮ או ⋯ ← "פתיחה בדפדפן") ולוחצים שוב.</p>
       <div class="bk-prev">${items.map((it, k) => `<div class="bk-item"><div><b>${k + 1}</b> · ${esc(TN(it.type))} · ${LV[it.level]}</div>${boardOf(it, 40)}${it.task ? `<div class="small muted">🤔 ${esc(it.task.q.slice(0, 40))}…</div>` : ''}
         <div class="bi-acts"><button data-a="up" data-k="${k}" aria-label="להזיז קדימה" ${k ? '' : 'disabled'}>▲</button><button data-a="dn" data-k="${k}" aria-label="להזיז אחורה" ${k < items.length - 1 ? '' : 'disabled'}>▼</button><button data-a="re" data-k="${k}" aria-label="להחליף חידה" title="חידה אחרת באותו סוג ורמה">🔄</button><button data-a="rm" data-k="${k}" aria-label="להסיר">✕</button></div></div>`).join('')}
         <div class="bk-item" style="display:flex;flex-direction:column;gap:6px;justify-content:center"><b>הוספת חידה</b>
@@ -365,15 +366,22 @@
     }; });
     $('bkAdd').onclick = () => { const t = $('bkAddT').value, l = +$('bkAddL').value; if (!E.supported(t, l)) { $('bkProg').textContent = 'השילוב הזה לא קיים – בחרו רמה אחרת.'; return; } const nw = genItem(t, l, E.randSeed(), new Set(items.map(x => x.puz.key))); if (nw) { nw.idx = items.length; items.push(decorate(nw)); } render(); };
   }
+  /* הדפסה: window.print() נקרא ישר מתוך הלחיצה (בלי השהיה) – ספארי/אייפד ודפדפנים בטלפון חוסמים הדפסה שלא נפתחה מלחיצה.
+     העמודים נשארים ב-#print עד הפעולה הבאה בדף (בטלפון afterprint מגיע מיד, לפני שההדפסה מצוירת). */
+  function clearPrint() { const pr = $('print'); if (pr) pr.innerHTML = ''; document.documentElement.classList.remove('printing'); }
   function doPrint(onlySol) {
     const pr = $('print');
     pr.innerHTML = buildPages(onlySol).join('');
     document.documentElement.classList.add('printing');
-    const done = () => { document.documentElement.classList.remove('printing'); window.removeEventListener('afterprint', done); };
-    window.addEventListener('afterprint', done);
-    setTimeout(() => window.print(), 60);
+    const after = () => {
+      window.removeEventListener('afterprint', after);
+      const clr = () => { ['pointerdown', 'keydown'].forEach(ev => document.removeEventListener(ev, clr, true)); clearPrint(); };
+      ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, clr, true));
+    };
+    window.addEventListener('afterprint', after);
+    try { window.print(); } catch (e) { /* דפדפן בתוך אפליקציה */ }
   }
 
   /* גישה ישירה (בדיקות והפקת חוברת לדוגמה) */
-  root.SBK = { open, get cfg() { return cfg; }, set cfg(v) { cfg = Object.assign(DEF(), v); }, build: buildAll, pages: buildPages, get items() { return items; }, makeTask, printHint, layoutWarnings, PRESETS };
+  root.SBK = { open, clearPrint, get cfg() { return cfg; }, set cfg(v) { cfg = Object.assign(DEF(), v); }, build: buildAll, pages: buildPages, get items() { return items; }, makeTask, printHint, layoutWarnings, PRESETS };
 })(typeof self !== 'undefined' ? self : this);

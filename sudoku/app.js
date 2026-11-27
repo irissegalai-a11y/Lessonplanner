@@ -68,7 +68,7 @@
 
   /* ---------- ניווט ---------- */
   let screen = 'home';
-  function nav(name, fn) { screen = name; closeMenu(); if (G && name !== 'game') save(); fn(); window.scrollTo(0, 0); }
+  function nav(name, fn) { if (window.SBK && SBK.clearPrint) SBK.clearPrint(); screen = name; closeMenu(); if (G && name !== 'game') save(); fn(); window.scrollTo(0, 0); }
   window.addEventListener('popstate', () => { const h = (history.state && history.state.s) || 'home'; route(h, true); });
   function push(s, arg) { try { history.pushState({ s, arg }, '', '#' + s); } catch (e) { /* קובץ מקומי */ } }
   function route(s, fromPop) {
