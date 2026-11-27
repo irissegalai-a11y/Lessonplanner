@@ -1,0 +1,18 @@
+4 רמה 1: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 8–10, צעדים 6–8, ממוצע 0ms | fullHouse:100
+4 רמה 2: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 4–6, צעדים 10–12, ממוצע 0ms | fullHouse:100 nakedSingle:100
+6 רמה 1: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 18–20, צעדים 16–18, ממוצע 0ms | fullHouse:100 nakedSingle:100
+6 רמה 2: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 12–14, צעדים 22–24, ממוצע 2ms | fullHouse:100 nakedSingle:100 hiddenSingle:100
+6 רמה 3: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 9–13, צעדים 25–31, ממוצע 214ms | fullHouse:100 nakedSingle:100 hiddenSingle:96 lockedPointing:91 nakedPair:12 hiddenPair:1 lockedClaiming:2
+6 רמה 4: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 9–12, צעדים 26–33, ממוצע 73ms | fullHouse:100 nakedSingle:100 hiddenSingle:97 lockedPointing:51 nakedPair:12 lockedClaiming:13 hiddenPair:5 xWing:32 xyWing:100
+9 רמה 1: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 38–41, צעדים 40–43, ממוצע 1ms | fullHouse:100 nakedSingle:100
+9 רמה 2: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 28–32, צעדים 49–53, ממוצע 6ms | fullHouse:100 nakedSingle:100 hiddenSingle:100
+9 רמה 3: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 24–32, צעדים 50–66, ממוצע 54ms | fullHouse:100 nakedSingle:100 hiddenSingle:100 lockedPointing:94 lockedClaiming:32 hiddenPair:10 nakedPair:34
+9 רמה 4: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 23–33, צעדים 50–67, ממוצע 108ms | fullHouse:100 nakedSingle:100 hiddenSingle:99 lockedPointing:71 hiddenPair:21 lockedClaiming:34 nakedPair:34 xyWing:92 xWing:28 nakedTriple:6 hiddenTriple:1
+k4 רמה 1: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 4–4, צעדים 12–12, ממוצע 0ms | cageSingle:100 fullHouse:100 nakedSingle:63
+k4 רמה 2: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 1–2, צעדים 14–20, ממוצע 0ms | cageSingle:99 fullHouse:100 nakedSingle:98 cageCombo:91 hiddenSingle:87
+k6 רמה 1: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 8–9, צעדים 27–28, ממוצע 1ms | cageSingle:100 fullHouse:100 nakedSingle:100
+k6 רמה 2: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 3–5, צעדים 33–47, ממוצע 3ms | cageSingle:100 fullHouse:100 nakedSingle:100 cageCombo:100 hiddenSingle:99
+k6 רמה 3: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 0–3, צעדים 45–69, ממוצע 16ms | cageSingle:100 fullHouse:100 nakedSingle:100 cageCombo:100 hiddenSingle:100 lockedPointing:89 unitSum:28 nakedPair:44 lockedClaiming:34 hiddenPair:14
+k6 רמה 4: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 0–3, צעדים 41–67, ממוצע 630ms | cageSingle:100 fullHouse:100 nakedSingle:100 cageCombo:100 hiddenSingle:100 lockedPointing:78 unitSum:71 nakedPair:51 lockedClaiming:50 hiddenPair:23 multiSum:44 xWing:5 xyWing:39 nakedTriple:15
+k9 רמה 2: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 10–10, צעדים 76–104, ממוצע 90ms | cageSingle:100 fullHouse:100 nakedSingle:100 cageCombo:100 hiddenSingle:100
+k9 רמה 3: 100/100 נוצרו, כפולות 0, תקלות 0, נתונים 4–7, צעדים 111–171, ממוצע 3576ms | cageSingle:100 fullHouse:100 nakedSingle:100 cageCombo:100 hiddenSingle:100 nakedPair:86 lockedClaiming:86 hiddenPair:25 lockedPointing:99 unitSum:68
