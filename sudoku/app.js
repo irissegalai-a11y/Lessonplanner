@@ -132,17 +132,42 @@
     if (E.TYPES[t].killer) s += `<rect x=".15" y=".15" width="${n / 2 - .3}" height="${1 - .3}" fill="none" stroke="#1e8a8a" stroke-width=".08" stroke-dasharray=".2 .12"/>`;
     return s + '</svg>';
   }
+  /* ---------- הסבר מאויר: איך משחקים סודוקו סכומים ---------- */
+  // כלוב קטן לאיור: משבצות בשורה, קו מקווקו וסכום בפינה הימנית. cells = ספרות ('' ריק, '?' לשאלה)
+  function cageFig(cells, sum, opt) {
+    opt = opt || {};
+    const k = cells.length, W = k * 46 + 8;
+    let s = `<svg class="kfig" viewBox="0 0 ${W} 54" width="${W}" height="54" aria-hidden="true">`;
+    cells.forEach((d, i) => { const x = W - 4 - (i + 1) * 46; s += `<rect x="${x}" y="4" width="46" height="46" fill="${d === '?' ? '#fff3c4' : '#fff'}" stroke="#aab0c8" stroke-width="1"/>`;
+      if (d) s += `<text x="${x + 21}" y="${d === '?' ? 38 : 39}" font-size="${d === '?' ? 22 : 21}" text-anchor="middle" font-weight="${d === '?' ? 800 : 700}" fill="${opt.bad ? '#b3261e' : d === '?' ? '#8a5a00' : '#1d2433'}" font-family="Assistant, Arial, sans-serif">${d}</text>`; });
+    s += `<rect x="7" y="7" width="${W - 14}" height="40" fill="none" stroke="#1e8a8a" stroke-width="2" stroke-dasharray="5 3" rx="2"/>`;
+    s += `<rect x="${W - 28}" y="4" width="22" height="15" fill="#fff"/><text x="${W - 17}" y="17" font-size="14" text-anchor="middle" font-weight="800" fill="#1e8a8a" font-family="Assistant, Arial, sans-serif">${sum}</text>`;
+    return s + '</svg>';
+  }
+  function killerHowHTML() {
+    const row = (fig, t) => `<div class="kh-row"><div class="kh-fig">${fig}</div><div class="kh-t">${t}</div></div>`;
+    return `<div class="kh">
+      ${row('<span class="kh-big" aria-hidden="true">🧩</span>', '<b>1. כמו סודוקו רגיל.</b> בכל שורה, בכל עמודה ובכל אזור – כל מספר פעם אחת.')}
+      ${row(cageFig(['1', '2'], 3), '<b>2. כלוב = מסגרת מקווקווה.</b> המספר הקטן בפינה הוא <b>הסכום</b> של כל המספרים בכלוב. כאן: <span dir="ltr" class="eq">1 + 2 = 3</span>.')}
+      ${row(cageFig(['2', '2'], 4, { bad: 1 }) + ' <span class="kh-x" aria-label="לא נכון">✗</span> ' + cageFig(['1', '3'], 4) + ' <span class="kh-v" aria-label="נכון">✓</span>', '<b>3. בתוך כלוב מספר לא חוזר.</b> סכום 4 בשתי משבצות הוא <span dir="ltr" class="eq">1 + 3</span>, ולא <span dir="ltr" class="eq">2 + 2</span>.')}
+      ${row(cageFig(['3', '?'], 7), '<b>4. נשארה משבצת אחת בכלוב? מחסרים.</b> <span dir="ltr" class="eq">7 − 3 = 4</span>, אז במשבצת הצהובה יש 4.')}
+      ${row(cageFig(['', ''], 3) + ' ' + cageFig(['', ''], 17), '<b>5. סכומים "מיוחדים" – רק דרך אחת.</b> שתי משבצות עם סכום 3: רק <span dir="ltr" class="eq">1 + 2</span>. עם סכום 17 (בלוח 9×9): רק <span dir="ltr" class="eq">8 + 9</span>. מתחילים מהכלובים האלה!')}
+      ${row('<span class="kh-big" aria-hidden="true">∑</span>', '<b>6. טיפ לרמות הגבוהות:</b> סכום כל שורה, עמודה ואזור ידוע – ב-4×4 הוא 10, ב-6×6 הוא 21, וב-9×9 הוא 45.')}
+      <p class="small muted" style="margin:8px 0 0">תקועים? לחצו 💡 רמז בתוך המשחק – המאמן יראה לכם מאיפה להתחיל.</p></div>`;
+  }
   function playMenu(killer) {
     const types = killer ? ['k4', 'k6', 'k9'] : ['4', '6', '9'];
     app.innerHTML = `<button class="back" id="bk">→ למרכז הסודוקו</button>
       <h1>${killer ? '➕ סודוקו סכומים' : '🎮 בוחרים לוח'}</h1>
-      ${killer ? `<p class="muted">כמו סודוקו רגיל – ועוד כלל: בכל כלוב מקווקו המספרים שונים זה מזה, והסכום שלהם כתוב בפינה. <button class="btn ghost" id="kHow">איך משחקים?</button></p>` : `<p class="muted">לוחצים על רמה – והמשחק מתחיל. אפשר לעבור בין סוגים ורמות מתי שרוצים.</p>`}
+      ${killer ? `<details class="card khd" id="kHowBox"${ST.seen.krules ? '' : ' open'}><summary><b>❓ איך משחקים סודוקו סכומים?</b> <span class="small muted">(הסבר קצר עם דוגמאות)</span></summary>${killerHowHTML()}<p style="margin:10px 0 0"><button class="btn" id="kTry">▶ לנסות לוח ראשון (4×4 קל)</button> <button class="btn sec" id="kHow">הדגמה צעד-אחר-צעד</button></p></details><p class="muted">מתחילים בלוח 4×4 קל, ומשם ממשיכים.</p>` : `<p class="muted">לוחצים על רמה – והמשחק מתחיל. אפשר לעבור בין סוגים ורמות מתי שרוצים.</p>`}
       <div class="pick">${types.map(t => `<div class="pcard"><h2>${miniIcon(t)} ${TNAME(t)}</h2>
         <div class="lvls">${levelsOf(t).map(l => `<button class="lv" data-t="${t}" data-l="${l}"><span class="ln">${LV[l]}</span><span class="ls" aria-label="רמה ${l} מתוך 4">${STARS(l)}</span><span class="small muted">${TDESC[t][l]}</span>${ST.solved[t + '-' + l] ? `<span class="lc">✓ ${ST.solved[t + '-' + l]}</span>` : ''}</button>`).join('')}</div></div>`).join('')}</div>
       <div class="codebox"><label for="pcode" class="small muted">יש לכם קוד חידה (מחוברת או מחבר/ה)?</label><input id="pcode" placeholder="9-2-abc12" autocomplete="off"><button class="btn sec" id="pgo">פתיחה</button></div>`;
     $('bk').onclick = () => route('home');
     app.querySelectorAll('.lv').forEach(b => { b.onclick = () => newGame(b.dataset.t, +b.dataset.l); });
     const k = $('kHow'); if (k) k.onclick = () => guideCard('krules');
+    const kt = $('kTry'); if (kt) kt.onclick = () => newGame('k4', 1);
+    if (killer && !ST.seen.krules) { ST.seen.krules = 1; saveST(); } // בפעם הבאה ההסבר מקופל
     $('pgo').onclick = () => { const id = $('pcode').value.trim(); const p = E.parseId(id); if (!p || !E.supported(p.type, p.level)) return toast('הקוד לא מוכר'); openById(id); };
   }
 
@@ -194,7 +219,8 @@
         <button id="tCheck"><span class="i" aria-hidden="true">✔</span>בדיקה</button>
         <button id="tHint"><span class="i" aria-hidden="true">💡</span>רמז</button>
       </div>
-      <div class="small muted" style="text-align:center">${P.cages ? 'בכל כלוב מקווקו: מספרים שונים, והסכום כתוב בפינה. ' : ''}קוד החידה: <span dir="ltr">${esc(P.id)}</span></div>
+      ${P.cages ? `<details class="card khd" style="width:var(--bw);margin:0"><summary><b>❓ איך משחקים סודוקו סכומים?</b></summary>${killerHowHTML()}</details>` : ''}
+      <div class="small muted" style="text-align:center">קוד החידה: <span dir="ltr">${esc(P.id)}</span></div>
     </div>`;
     BV = boardView($('bdw'), P, { interactive: true, onCell: i => { G.sel = i; G.checked = false; draw(); } });
     $('gBack').onclick = () => { save(); history.length > 1 && history.state ? history.back() : route('home'); };
@@ -477,7 +503,7 @@
     ST.seen[id] = 1; saveST();
     const x = gInfo(g), lines = EXPLAIN[id] || [];
     app.innerHTML = `<button class="back" id="bk">→ לכל הטיפים</button>
-      <div class="exp"><h1>${x.i} ${esc(x.n)}</h1>${lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
+      <div class="exp"><h1>${x.i} ${esc(x.n)}</h1>${id === 'krules' ? killerHowHTML() + '<h2 style="margin-top:14px">הדגמה על לוח אמיתי</h2>' : lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
       <div class="demo" id="demo"><div class="loading" style="--bw:${Math.min(bwFor(9), 420)}px;width:${Math.min(bwFor(9), 420)}px">מכינים דוגמה…</div></div>
       <div class="stepper" style="margin-top:12px">${g.play ? `<button class="btn" id="gPlay">▶ לשחק לוח ${esc(TNAME(g.play[0]))} ${LV[g.play[1]]}</button>` : ''}<button class="btn sec" id="gAll">לכל הטיפים</button></div>`;
     $('bk').onclick = () => route('guide'); $('gAll').onclick = () => route('guide');

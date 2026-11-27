@@ -189,6 +189,16 @@
   .warn { background: #fff4e0; border: 1px solid #f0c27a; color: #7a4a00; border-radius: 12px; padding: 8px 12px; margin: 8px 0; }
   .bk-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   #print { display: none; }
+  /* הסבר סודוקו סכומים */
+  .khd summary { cursor: pointer; padding: 4px 0; list-style-position: inside; }
+  .kh { display: grid; gap: 10px; margin-top: 10px; }
+  .kh-row { display: flex; gap: 14px; align-items: center; background: #f7fbfb; border: 1px solid #d6ecec; border-radius: 14px; padding: 10px 12px; }
+  .kh-fig { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; direction: rtl; min-width: 96px; justify-content: center; }
+  .kh-t { flex: 1; }
+  .kh-t .eq { direction: ltr; unicode-bidi: isolate; white-space: nowrap; font-weight: 700; }
+  .kh-big { font-size: 2rem; color: #1e8a8a; }
+  .kh-x { color: #b3261e; font-weight: 900; font-size: 1.3rem; } .kh-v { color: #2b7a3e; font-weight: 900; font-size: 1.3rem; }
+  @media (max-width: 520px) { .kh-row { flex-direction: column; align-items: stretch; text-align: right; } .kh-fig { justify-content: flex-start; } }
 </style>
 <link rel="stylesheet" href="sudoku/print.css">
 </head>
