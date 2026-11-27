@@ -1377,6 +1377,9 @@ html.embed body { padding-top: 0; }
   .tcat-jump .tcat-chip { font: inherit; font-size: 1rem; padding: 5px 13px; border: 2px solid var(--c); border-radius: 999px; background: #fffdf8; color: #1f1e1c; box-shadow: none; cursor: pointer; transform: none; }
   .tcat-jump .tcat-chip:hover { background: color-mix(in srgb, var(--c) 14%, #fffdf8); }
   .tcat { margin: 0 0 22px; scroll-margin-top: 12px; }
+  .geo-sub { margin: 14px 0 8px; font-size: 1.12rem; padding: 2px 10px; border-inline-start: 4px solid var(--c); }
+  .geo-sub2 { margin: 12px 0 6px; color: var(--muted); font-weight: 700; }
+  a.topic.geo6-card { text-decoration: none; color: inherit; border-color: #2f6fb0; }
   .tcat-h { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; padding: 4px 12px; font-size: 1.35rem; border-inline-start: 6px solid var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); border-radius: 6px; }
   .tcat .tool-row { margin: 10px 0 0; }
   @media print { .tcat-jump { display: none; } .tcat-h { break-after: avoid; } }
@@ -13958,7 +13961,20 @@ function topicCatsHTML() {
   const splitIc = nm => { const m = /^(\S+)\s+(.*)$/.exec(nm); return m && !/[א-ת]/.test(m[1]) ? [m[1], m[2]] : ['🧠', nm]; };
   const excBody = g => `<div class="xt-tiles">${g.topics.map(t => { const st = store.topics[t.id]; return xTile(t.id, `data-t="${t.id}"`, t.icon || '🧠', t.name, t.desc, st ? st.mastery : 0); }).join('')}${g.extra.map(e => { const [ic, nm] = splitIc(e.nm || ''); return xTile(e.id, `id="${e.id}"`, ic, nm, e.ds || '', null); }).join('')}</div>${tools(g)}`;
   // המספור מתחיל מ-1 בכל קטגוריה (27.11, איריס) – כל קטגוריה מוצגת לבד
-  const body = g => { n = 0; return g.c.id === 'exc' ? excBody(g) : `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`; };
+  // כיתה ו' (27.11, איריס): גאומטריה בשני אזורים – "גאומטריה במישור" ו"גופים ומעגל" (7 פרקים לפי סדר שבילים פלוס, דף נפרד geo6.html).
+  // מזהי הנושאים הישנים (solids*) נשארים כמו שהם – קודי החוברות תלויים בסדר TOPICS.
+  const SOLID_IDS = ['solids', 'solidsN', 'solidsS', 'solidsV'];
+  const geoBody6 = g => {
+    const plane = g.topics.filter(t => !SOLID_IDS.includes(t.id)), sol = g.topics.filter(t => SOLID_IDS.includes(t.id));
+    const chap = (href, ic, nm, ds) => `<a class="topic geo6-card" style="--c:#2f6fb0" href="${href}"><span class="ic" aria-hidden="true">${ic}</span><span class="nm">${nm}</span><span class="ds">${ds}</span></a>`;
+    const h1 = `<h4 class="geo-sub">📐 גאומטריה במישור</h4><div class="topics">${plane.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>`;
+    n = 0;
+    const h2 = `<h4 class="geo-sub">🧊 גופים ומעגל</h4><div class="topics">${chap('geo6.html?grade=6&ch=prism', '🏛️', 'פרק 1 – מנסרה (כולל קובייה ותיבה)', '5 שיעורים: מהי מנסרה, פאות ומקצועות, פריסות, נפח ויחידות נפח, שטח פנים – עם גופים שמסובבים ומקפלים, תרגול ב-3 רמות וכרטיס יציאה')}${chap('geo6.html?grade=6', '📚', 'כל פרקי הגופים והמעגל', '7 פרקים לפי סדר הספר: מנסרה, פירמידה, מעגל ועיגול, גליל, חרוט, כדור, גופים משוכללים')}</div>
+      ${sol.length ? `<p class="geo-sub2">תרגול נוסף בגופים:</p><div class="topics">${sol.map(topicBtn).join('')}</div>` : ''}`;
+    n = 0;
+    return h1 + h2 + tools(g);
+  };
+  const body = g => { n = 0; return g.c.id === 'exc' ? excBody(g) : g.c.id === 'geo' && GRADE === 6 ? geoBody6(g) : `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`; };
   const cnt = g => g.topics.length + g.extra.length;
   const avg = g => g.topics.length ? Math.round(g.topics.reduce((a, t) => a + ((store.topics[t.id] || {}).mastery || 0), 0) / g.topics.length) : 0;
   // שדרוג עיצוב שלב 3 (27.11): משפט קצר מתחת לפס – רק ממה שכבר שמור (נושא שתורגל / שליטה 80+ = אלופים)
@@ -29260,7 +29276,7 @@ function askName(done, tch) {
 })();
 if (teacherCred()) document.documentElement.classList.add('tch');
 if (URLP.has('lp') && lpDec(URLP.get('lp') || '')) { try { sessionStorage.setItem(LP_PEND, URLP.get('lp')); } catch (e) { const x = lpDec(URLP.get('lp')); if (x && teacherOn()) lp = x; } }
-if (EMBED && URLP.get('bank')) embedBank(); else if (EMBED && URLP.get('sheet') && URLP.get('gens')) embedSheet(); else if (EMBED && URLP.get('gens')) embedGens(); else if (EMBED && PRESET) startPreset(); else if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome('mul'); else if (URLP.has('hiluk') && GRADE >= 3) kfHome('div'); else if (URLP.has('dlab') && GRADE >= 5) dlHome(); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('lp') && lpPending()) teacherGate(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
+if (EMBED && URLP.get('bank')) embedBank(); else if (EMBED && URLP.get('sheet') && URLP.get('gens')) embedSheet(); else if (EMBED && URLP.get('gens')) embedGens(); else if (EMBED && PRESET) startPreset(); else if (URLP.has('print')) printBuilder(); else if (URLP.has('teacher')) teacherGate(); else if (URLP.has('kefel') && GRADE >= 3) kfHome('mul'); else if (URLP.has('hiluk') && GRADE >= 3) kfHome('div'); else if (URLP.has('dlab') && GRADE >= 5) dlHome(); else if (URLP.get('go') === 'cub' && GRADE >= 4) cubHome('learn'); else if (URLP.has('path') && MK_HAS()) pathHome(); else if (URLP.has('exit')) exitHome(); else if (URLP.has('fc')) fcHome(); else if (URLP.has('lp') && teacherOn()) lpHome(); else if (URLP.has('lp') && lpPending()) teacherGate(); else if (URLP.has('succ')) { const c = scDec(URLP.get('succ') || ''); if (c) succRun(c); else succHome(); } else home();
 </script>
 </body>
 </html>
