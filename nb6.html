@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex, nofollow">
+<title>MathInClass – ספריית מחברות (גרסת ניסיון, כיתה ו')</title>
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nb/design.css">
+<link rel="stylesheet" href="nb/shell.css">
+<script>try { if (localStorage.getItem('math-calm') === '1') document.documentElement.classList.add('calm'); } catch (e) {}</script>
+</head>
+<body>
+<a class="sr-only" href="#view">דילוג לתוכן</a>
+<div class="app">
+  <header class="top" id="top">
+    <a class="brand" href="#" id="brand" aria-label="MathInClass – לדף הבית"><span class="lg">Math<i>In</i>Class</span><span class="by">מאת איריס סגל · <b>גרסת ניסיון</b></span></a>
+    <div class="search" role="search">
+      <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="q" type="search" placeholder="חיפוש נושא, שיעור, משחק או קורס" autocomplete="off" aria-label="חיפוש נושא" aria-controls="qres">
+      <div class="sres" id="qres" hidden></div>
+    </div>
+    <div class="acts" id="acts"></div>
+  </header>
+  <nav class="rail" id="rail" aria-label="ניווט ראשי"></nav>
+  <main class="main">
+    <div class="view" id="view" tabindex="-1"></div>
+    <section class="stage off" id="stage" aria-label="מחברת פתוחה">
+      <div class="shead" id="shead"></div>
+      <aside class="side-toc" id="toc" aria-label="שלבי הנושא"></aside>
+      <div class="fpage"><div class="loading" id="loading">טוענים את המחברת…</div><iframe id="site" title="דף הלימוד והתרגול"></iframe></div>
+    </section>
+  </main>
+  <nav class="tabbar" id="tabbar" aria-label="ניווט ראשי"></nav>
+</div>
+<!-- נתוני הקורסים (קריאה בלבד) – אותם קבצים שהמאמן טוען -->
+<script src="anim/mathanim.js"></script>
+<script src="coach/visuals.js"></script>
+<script src="coach/engine.js"></script>
+<script src="coach/kit.js"></script>
+<script src="coach/courses/equiv.js"></script>
+<script src="coach/courses/equiv-units.js"></script>
+<script src="coach/courses/dec.js"></script>
+<script src="coach/courses/mult.js"></script>
+<script src="coach/courses/fracop.js"></script>
+<script src="coach/courses/fmul.js"></script>
+<script src="coach/courses/fdiv.js"></script>
+<script src="coach/courses/pct.js"></script>
+<script src="nb/art.js"></script>
+<script src="nb/shell.js"></script>
+</body>
+</html>

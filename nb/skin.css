@@ -1,0 +1,97 @@
+/* =========================================================
+   עור "מחברת דיגיטלית" לדפים הקיימים של האתר – נטען רק בתוך
+   גרסת הניסיון (nb6.html), מוזרק למסגרת. האתר הפעיל לא משתנה.
+   רק מראה: צבעים, גופן, מסגרות וריווח. בלי לגעת בלוגיקה.
+   רק במסך – ההדפסה לא משתנה. לא משנים font-size של body.
+   ========================================================= */
+@media screen {
+  html.nbskin {
+    --bg: #FFFFFF; --card: #FFFFFF; --ink: #253B49; --muted: #4A5D6A; --soft: #6B7C88;
+    --accent: #2F5670; --accent-dark: #24465C; --hot: #2F5670; --hot-dark: #24465C;
+    --ok: #3F7A5C; --ok-bg: #E7F0EA; --bad: #9A4B2C; --bad-bg: #F6E8E1; --warn-bg: #F6EFD9;
+    --line: #DCE2E6; --edge: #DCE2E6; --edge-soft: #E8ECEF; --grid: #EDF0F2;
+    --hand: 'Heebo', 'Segoe UI', Arial, sans-serif; --ui: 'Heebo', 'Segoe UI', Arial, sans-serif;
+    --sk1: 14px; --sk2: 999px;
+  }
+  html.nbskin, html.nbskin body {
+    font-family: 'Heebo', 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+    background-color: #FFFFFF;
+    background-image: linear-gradient(#EDF0F2 1px, transparent 1px), linear-gradient(90deg, #EDF0F2 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  html.nbskin.calm, html.nbskin.calm body { background-image: none; }
+  html.nbskin body::before { display: none !important; }
+  html.nbskin .wrap { background: transparent !important; box-shadow: none !important; padding-top: 14px; }
+  /* הניווט והכותרת של האתר מוצגים במעטפת – כאן מסתירים כדי שלא יהיו שני תפריטים */
+  html.nbskin .crumbs, html.nbskin footer.credit, html.nbskin .bnav, html.nbskin .pwm,
+  html.nbskin .hdr, html.nbskin .gbar, html.nbskin .topic-search, html.nbskin .subtitle,
+  html.nbskin .nb > .tabs { display: none !important; }
+  html.nbskin body:has(.bnav) { padding-bottom: 0; }
+  html.nbskin .nb { display: block; }
+
+  /* טיפוגרפיה – גופן אחד נקי, היררכיה לפי משקל וגודל */
+  html.nbskin h1, html.nbskin h2, html.nbskin h3, html.nbskin .topbar .title, html.nbskin .ltitle, html.nbskin .topic .nm,
+  html.nbskin .score-big, html.nbskin .exhead, html.nbskin .ltryhead, html.nbskin .lvl, html.nbskin .streak, html.nbskin .qnum, html.nbskin .qtag,
+  html.nbskin .today-t, html.nbskin .gc-nm, html.nbskin button, html.nbskin .tab { font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; letter-spacing: 0; }
+  html.nbskin h1, html.nbskin h2 { font-weight: 700; color: var(--ink); }
+  html.nbskin .topbar .title { font-weight: 700; }
+
+  /* כרטיסים – דף לבן, קו עדין, צל רך */
+  html.nbskin .card, html.nbskin .modal { border: 1px solid var(--line) !important; border-radius: 16px !important; box-shadow: 0 1px 2px rgba(37,59,73,.06), 0 4px 14px rgba(37,59,73,.06) !important; background-color: #fff; }
+  html.nbskin .modal { background-image: none; }
+  html.nbskin .overlay { background: rgba(37, 59, 73, 0.45); }
+  html.nbskin .card.today, html.nbskin .banner { border: 1px solid #C9D6E0 !important; background: #F3F7FA; }
+
+  /* כפתורים: ראשי כחול כהה, משני לבן עם קו דק */
+  html.nbskin button { border-radius: 999px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; box-shadow: none; font-weight: 600; }
+  html.nbskin button:hover { background: var(--accent-dark); transform: none; box-shadow: none; }
+  html.nbskin button:active { transform: none; box-shadow: none; }
+  html.nbskin button.secondary, html.nbskin .choices button, html.nbskin button.lvlchoice, html.nbskin button.tp-lesson, html.nbskin button.tp-check,
+  html.nbskin button.game-card, html.nbskin button.b10-card, html.nbskin button.topic, html.nbskin .xt-tile, html.nbskin .tool-chip {
+    background: #fff; color: var(--ink); border: 1.5px solid var(--line); border-radius: 14px; box-shadow: none; }
+  html.nbskin button.secondary:hover, html.nbskin .choices button:hover, html.nbskin button.lvlchoice:hover, html.nbskin button.tp-lesson:hover, html.nbskin button.tp-check:hover,
+  html.nbskin button.game-card:hover, html.nbskin button.b10-card:hover, html.nbskin button.topic:hover, html.nbskin .xt-tile:hover, html.nbskin .tool-chip:hover {
+    background: #F7F9FA; border-color: #9FB0BC; box-shadow: 0 2px 8px rgba(37,59,73,.08); }
+  html.nbskin button.ghost, html.nbskin button.linkish { background: transparent; color: var(--ink); border-color: transparent; }
+  html.nbskin button.ghost:hover { background: rgba(37,59,73,.06); }
+  html.nbskin button.linkish { border: 1.5px dashed #B9C6CF; border-radius: 12px; }
+  html.nbskin .topbar .navhome { border: 1.5px solid var(--line) !important; border-radius: 999px; }
+  html.nbskin .choices button.sel { background: #E4EDF4; border-color: #7F9DB6; }
+  html.nbskin .choices button.right { background: var(--ok-bg); border-color: var(--ok); }
+  html.nbskin .choices button.wrong { background: var(--bad-bg); border-color: var(--bad); }
+  html.nbskin .lvlchoice.cur { border-color: var(--accent) !important; box-shadow: inset 0 0 0 1px var(--accent) !important; }
+
+  /* שדות תשובה – גדולים וברורים */
+  html.nbskin input.ans, html.nbskin .fracin input, html.nbskin .name-row input, html.nbskin .tinput, html.nbskin .tform select {
+    background: #fff; border: 1.5px solid #9FB0BC; border-radius: 12px; color: var(--ink); }
+  html.nbskin input.ans:focus, html.nbskin .fracin input:focus { outline: 3px solid rgba(47,111,176,.25); border-color: #2F6FB0; }
+
+  /* התקדמות, מספר שאלה, תגיות */
+  html.nbskin .progress { border: 0; background: rgba(37,59,73,.10); height: 8px; border-radius: 99px; }
+  html.nbskin .progress > div { background: var(--ok); border-radius: 99px; }
+  html.nbskin .mbar { background: rgba(37,59,73,.10); border: 0; }
+  html.nbskin .mbar > span { background: var(--ok); }
+  html.nbskin .qnum { background: #9DB3CC !important; color: var(--ink) !important; border-radius: 10px; }
+  html.nbskin .lvl, html.nbskin .timer, html.nbskin .seg button, html.nbskin .dot { border: 1.5px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink); }
+  html.nbskin .seg button.sel { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* תזכורות, רמזים ומשוב – תיבות רכות בצבע התפקיד */
+  html.nbskin details.tips { background: #F4F7F9; border: 1px solid var(--line); border-radius: 14px; }
+  html.nbskin .example, html.nbskin .rule, html.nbskin .warn, html.nbskin .stepper, html.nbskin .kid { border: 1px solid var(--line); border-radius: 14px; }
+  html.nbskin .fb { border: 1px solid var(--line); border-radius: 14px; }
+  html.nbskin .fb.ok { background: var(--ok-bg); border-color: #A9C8B5; }
+  html.nbskin .fb.bad { background: var(--bad-bg); border-color: #DDBBA8; }
+  html.nbskin .fb.hint { background: #EEF4EC; border-color: #BCD0B8; }
+  html.nbskin .fb.info { background: #EEF3F8; border-color: #BDCEDE; }
+
+  /* דף נושא – שלבים */
+  html.nbskin .tp-h .tp-n { background: #9DB3CC; color: var(--ink); }
+  html.nbskin .tcat-tile, html.nbskin .tcat { border-color: var(--line); }
+  html.nbskin .champ-card { background: linear-gradient(160deg, #E3CB8C, #C9A658); color: var(--ink); border: 0; }
+  html.nbskin .champ-lock { background: #F6EFD9; border: 1px solid #E2D3A6; border-radius: 14px; }
+  /* צבעי האתר הישנים (אדום, סגול) – מעומעמים לפלטה המעושנת */
+  html.nbskin .game-card .gc-ic { background: #EEF3F6 !important; }
+}
+/* חלון קופץ של האתר (למשל "מי נכנס/ת?") כשהמסגרת מוסתרת – רק החלון מוצג מעל הספרייה */
+html.nb-modal-only, html.nb-modal-only body { background: transparent !important; }
+html.nb-modal-only #app, html.nb-modal-only footer { visibility: hidden; }

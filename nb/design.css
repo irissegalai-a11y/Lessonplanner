@@ -1,0 +1,117 @@
+/* =========================================================
+   MathInClass – שפה עיצובית "ספריית מחברות" (גרסת ניסיון)
+   תשתית משותפת: משתנים, טיפוגרפיה, מרווחים ורכיבים חוזרים.
+   הקובץ לא נטען באתר הפעיל – רק בדף התצוגה nb6.html.
+   ========================================================= */
+:root {
+  /* פלטה */
+  --c-blue: #9DB3CC;      /* כחול מעושן */
+  --c-sage: #A9BFB1;      /* ירוק מרווה */
+  --c-sand: #D9C8A4;      /* חול */
+  --c-teal: #9DBDC2;      /* טורקיז מעושן */
+  --c-clay: #D9B6A0;      /* טרקוטה עדינה */
+  --c-stone: #BCC4CC;     /* אבן (משלים, לחקר נתונים) */
+  --c-wheat: #CFC5B0;     /* חיטה (משלים, לשאלות מילוליות) */
+  --c-gold: #CDAE62;      /* זהב מעודן – אתגר אלופים */
+  --c-gold-soft: #EADDB4;
+  --paper: #F5F5F3;       /* לבן חלבי */
+  --page: #FFFFFF;
+  --ink: #253B49;         /* כחול כהה לטקסטים */
+  --ink-2: #4A5D6A;       /* טקסט משני */
+  --ink-3: #6B7C88;       /* טקסט שלישוני (עומד בניגודיות על לבן) */
+  --rule: #DCE2E6;        /* קווים */
+  --grid: #EDF0F2;        /* משבצות מחברת */
+  --accent: #2F5670;      /* כפתור ראשי */
+  --accent-2: #24465C;
+  --ok: #3F7A5C; --ok-bg: #E7F0EA;
+  --warn: #8A6A1F; --warn-bg: #F6EFD9;
+  --bad: #9A4B2C; --bad-bg: #F6E8E1;
+  --focus: #2F6FB0;
+
+  /* טיפוגרפיה */
+  --font: 'Heebo', 'Rubik', 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+  --fs-xs: 0.8125rem; --fs-s: 0.9375rem; --fs-m: 1rem; --fs-l: 1.1875rem; --fs-xl: 1.5rem; --fs-xxl: 1.875rem;
+
+  /* מרווחים, פינות וצללים */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+  --r-s: 8px; --r-m: 12px; --r-l: 18px;
+  --sh-1: 0 1px 2px rgba(37, 59, 73, 0.08), 0 2px 6px rgba(37, 59, 73, 0.06);
+  --sh-2: 0 2px 4px rgba(37, 59, 73, 0.08), 0 8px 22px rgba(37, 59, 73, 0.10);
+  --tap: 44px;
+  --grid-bg: linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 22px 22px, linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 22px 22px;
+}
+/* תצוגה נגישה (אותו מפתח כמו באתר): בלי מרקמים, ניגודיות גבוהה יותר */
+html.calm { --grid: transparent; --ink-2: #33495A; --ink-3: #4A5D6A; --rule: #B9C3CA; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--font); color: var(--ink); background: var(--paper); line-height: 1.5; direction: rtl; text-align: right; -webkit-text-size-adjust: 100%; }
+h1, h2, h3, h4 { margin: 0; line-height: 1.25; font-weight: 700; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- אייקונים קוויים ---------- */
+.ico { width: 22px; height: 22px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+.ico.s { width: 18px; height: 18px; }
+
+/* ---------- כפתורים ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--tap); padding: 8px 18px; border-radius: 999px; border: 1.5px solid transparent; font-weight: 600; font-size: var(--fs-m); background: var(--accent); color: #fff; text-decoration: none; transition: background .15s, box-shadow .15s; }
+.btn:hover { background: var(--accent-2); }
+.btn.sec { background: var(--page); color: var(--ink); border-color: var(--rule); }
+.btn.sec:hover { border-color: var(--ink-3); background: #fff; }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: rgba(37, 59, 73, 0.06); }
+.btn.s { min-height: 38px; padding: 4px 14px; font-size: var(--fs-s); }
+
+/* ---------- מד התקדמות ---------- */
+.meter { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: var(--ink-2); }
+.meter .bar { flex: 1; height: 7px; border-radius: 99px; background: rgba(37, 59, 73, 0.12); overflow: hidden; }
+.meter .bar > i { display: block; height: 100%; border-radius: inherit; background: var(--ok); }
+.meter b { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ---------- שבב / תגית ---------- */
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 4px 14px; border-radius: 999px; border: 1.5px solid var(--rule); background: var(--page); font-size: var(--fs-s); font-weight: 500; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tag { display: inline-flex; align-items: center; gap: 4px; padding: 1px 10px; border-radius: 99px; font-size: var(--fs-xs); font-weight: 600; background: rgba(37, 59, 73, 0.07); color: var(--ink-2); }
+
+/* ---------- דף מחברת ---------- */
+.paper { background: var(--page); border: 1px solid var(--rule); border-radius: var(--r-l); box-shadow: var(--sh-1); }
+.paper.grid { background: var(--grid-bg), var(--page); }
+
+/* ---------- כריכת מחברת (רכיב חוזר) ----------
+   --cv: צבע הכריכה. שדרה בצד ימין (כריכה עברית), ספירלה עדינה, מרקם קל */
+.cover { --cv: var(--c-blue); position: relative; display: flex; flex-direction: column; text-align: right; color: var(--ink); border: 0; border-radius: 6px 14px 14px 6px; padding: 16px 30px 14px 16px; background:
+    radial-gradient(120% 80% at 80% 0%, rgba(255,255,255,.28), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 2px, transparent 2px 5px),
+    var(--cv);
+  box-shadow: inset -12px 0 0 rgba(37, 59, 73, 0.10), inset -13px 0 0 rgba(255,255,255,.25), var(--sh-1);
+  transition: transform .18s ease, box-shadow .18s ease; }
+.cover::after { /* ספירלה עדינה לאורך השדרה */
+  content: ''; position: absolute; top: 12px; bottom: 12px; right: 4px; width: 4px;
+  background: radial-gradient(circle, rgba(37,59,73,.35) 1.6px, transparent 2px) 0 0 / 4px 14px repeat-y; opacity: .8; }
+.cover:hover { transform: translateY(-2px); box-shadow: inset -12px 0 0 rgba(37, 59, 73, 0.10), inset -13px 0 0 rgba(255,255,255,.25), var(--sh-2); }
+.cover .cv-title { font-size: var(--fs-l); font-weight: 700; line-height: 1.2; }
+.cover .cv-label { position: relative; background: rgba(255,255,255,.82); border-radius: 10px; padding: 8px 12px; margin-top: auto; }
+.cover .cv-art { display: flex; align-items: center; justify-content: center; flex: 1; min-height: 84px; padding: 6px 0; color: var(--ink); }
+.cover .cv-art svg { width: 100%; max-width: 170px; height: auto; max-height: 104px; }
+.cover .cv-meta { display: flex; align-items: center; gap: 4px; font-size: var(--fs-xs); color: var(--ink-2); margin-bottom: 4px; }
+.cover .champ-note { display: block; }
+.cover.dark, .cover.dark .cv-title { color: #fff; }
+.cover.dark .cv-label { color: var(--ink); }
+.cover.dark .cv-art { color: #fff; }
+.cover.gold { --cv: var(--c-gold); background:
+    radial-gradient(120% 90% at 75% 0%, rgba(255,255,255,.45), transparent 60%),
+    linear-gradient(160deg, #E3CB8C, #C9A658);
+}
+.cover.locked .cv-art { opacity: .75; }
+html.calm .cover { background: var(--cv); }
+html.calm .cover.gold { background: #DCC283; }
+
+/* ---------- סימנייה ---------- */
+.bookmark { position: absolute; top: -3px; left: 18px; width: 16px; height: 28px; background: var(--accent); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 76%, 0 100%); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
