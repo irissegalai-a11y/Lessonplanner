@@ -14493,67 +14493,55 @@ function genLgCenter(lv) {
   }
 }
 // ---------- מצוינות: עוד סוגים (22.11) ----------
-// 7. סדרות של צורות גדלות (22.11 → 27.11: במקום סדרות אותיות, לבקשת איריס)
-// כל תבנית: cells(n) – משבצות השלב (x, y), c(n) – מספר המשבצות, how(n) – איך סופרים לפי המבנה
-const LG_GROW = [
-  { id: 'L', d: 2, cells: n => [...Array(n + 1)].map((_, y) => [0, y]).concat([...Array(n)].map((_, x) => [x + 1, n])), c: n => 2 * n + 1, how: n => `${n} למעלה, ${n} לצד ועוד משבצת בפינה: ${M(`2 × ${n} + 1 = ${2 * n + 1}`)}` },
-  { id: 'rect', d: 2, cells: n => [...Array(2 * (n + 1))].map((_, i) => [i % (n + 1), i < n + 1 ? 0 : 1]), c: n => 2 * n + 2, how: n => `שתי שורות של ${n + 1}: ${M(`2 × ${n + 1} = ${2 * n + 2}`)}` },
-  { id: 'T', d: 3, cells: n => [...Array(2 * n + 1)].map((_, x) => [x, 0]).concat([...Array(n)].map((_, y) => [n, y + 1])), c: n => 3 * n + 1, how: n => `שתי זרועות של ${n} למעלה, רגל של ${n} ומשבצת באמצע: ${M(`3 × ${n} + 1 = ${3 * n + 1}`)}` },
-  { id: 'frame', d: 4, cells: n => { const s = n + 1, o = []; for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) if (!x || !y || x === s - 1 || y === s - 1) o.push([x, y]); return o; }, c: n => 4 * n, how: n => `מסגרת בצלע ${n + 1}: ארבע צלעות של ${n} (בלי לספור פינה פעמיים): ${M(`4 × ${n} = ${4 * n}`)}` },
-  { id: 'plus', d: 4, cells: n => { const o = [[n, n]]; for (let k = 1; k <= n; k++) o.push([n - k, n], [n + k, n], [n, n - k], [n, n + k]); return o; }, c: n => 4 * n + 1, how: n => `ארבע זרועות של ${n} ומשבצת באמצע: ${M(`4 × ${n} + 1 = ${4 * n + 1}`)}` },
-  { id: 'H', d: 2, cells: n => { const o = []; for (let y = 0; y <= n; y++) o.push([0, y], [2, y]); o.push([1, Math.floor(n / 2)]); return o; }, c: n => 2 * n + 3, how: n => `שני עמודים של ${n + 1} ומשבצת אחת ביניהם: ${M(`2 × ${n + 1} + 1 = ${2 * n + 3}`)}` }
-];
-const LG_STAIRS = { id: 'stairs', cells: n => { const o = []; for (let x = 0; x < n; x++) for (let y = 0; y <= x; y++) o.push([x, n - 1 - y]); return o; }, c: n => n * (n + 1) / 2 };
-function lgGrowSvg(p, steps, ask) {
-  const B = 104, gap = 14, all = [...steps, ...(ask ? [null] : [])], tot = all.length * (B + gap);
-  const mx = Math.max(...steps.map(n => { const c = p.cells(n); return Math.max(...c.map(v => v[0]), ...c.map(v => v[1])) + 1; }));
-  const S = Math.min(18, Math.floor((B - 8) / mx));
-  let s = '';
-  all.forEach((n, i) => {
-    const x0 = tot - (i + 1) * (B + gap) + gap / 2;
-    if (n == null) { s += lgBox(x0, 4, B, B, LG_Q(x0 + B / 2, 4 + B / 2 + 12), true); s += lgTxt(x0 + B / 2, B + 30, 'שלב ' + ask, 17, '#5a6080'); return; }
-    const c = p.cells(n), w = Math.max(...c.map(v => v[0])) + 1, h = Math.max(...c.map(v => v[1])) + 1;
-    const ox = x0 + (B - w * S) / 2, oy = 4 + (B - h * S) / 2;
-    c.forEach(([cx, cy]) => { s += `<rect x="${ox + cx * S}" y="${oy + cy * S}" width="${S}" height="${S}" fill="#8fd3c7" stroke="#23264a" stroke-width="1.5"/>`; });
-    s += lgTxt(x0 + B / 2, B + 30, 'שלב ' + n, 17, '#5a6080');
-  });
-  return `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} ${B + 38}" width="${tot}" height="${B + 38}" role="img">${s}</svg>`;
+// 7. סדרות שעונים (27.11 – במקום סדרות האותיות, לבקשת איריס): השעה מתקדמת (או חוזרת) לפי כלל
+function lgClock(m) {
+  m = ((m % 720) + 720) % 720;
+  const mm = m % 60, ha = (m / 720) * 360, ma = mm * 6;
+  let s = '<circle cx="50" cy="50" r="45" fill="#fff" stroke="#23264a" stroke-width="3"/>';
+  for (let i = 0; i < 12; i++) { const a = i * 30 * Math.PI / 180, r1 = i % 3 ? 39 : 35; s += `<line x1="${50 + r1 * Math.sin(a)}" y1="${50 - r1 * Math.cos(a)}" x2="${50 + 43 * Math.sin(a)}" y2="${50 - 43 * Math.cos(a)}" stroke="#23264a" stroke-width="${i % 3 ? 1.5 : 3}"/>`; }
+  [[12, 50, 28], [3, 75, 55], [6, 50, 80], [9, 25, 55]].forEach(([n, x, y]) => { s += `<text x="${x}" y="${y}" text-anchor="middle" font-size="13" font-weight="bold" fill="#5a6080" font-family="Arial">${n}</text>`; });
+  s += `<line x1="50" y1="50" x2="50" y2="24" stroke="#23264a" stroke-width="6" stroke-linecap="round" transform="rotate(${ha} 50 50)"/>`;
+  s += `<line x1="50" y1="50" x2="50" y2="12" stroke="#d94a8c" stroke-width="3" stroke-linecap="round" transform="rotate(${ma} 50 50)"/>`;
+  return s + '<circle cx="50" cy="50" r="3.5" fill="#23264a"/>';
 }
-function genLgGrow(lv) {
+const lgHM = m => { m = ((m % 720) + 720) % 720; const h = Math.floor(m / 60) || 12; return `${h}:${String(m % 60).padStart(2, '0')}`; };
+const lgDur = d => { const a = Math.abs(d), h = Math.floor(a / 60), m = a % 60; return (h ? (h === 1 ? 'שעה' : h === 2 ? 'שעתיים' : `${h} שעות`) : '') + (h && m ? ' ו-' : '') + (m ? `${m} דקות` : ''); };
+function genLgClock(lv) {
   lv = lv || 1;
   for (;;) {
-    const stairs = lv === 3 && Math.random() < 0.35, p = stairs ? LG_STAIRS : pick(LG_GROW);
-    const shown = [1, 2, 3], cs = shown.map(p.c), a = cs[0], d = stairs ? 0 : p.d;
-    let text, ans, cand, exp, hint;
-    if (stairs) {
-      const k = pick([5, 6]); ans = p.c(k);
-      text = `כמה משבצות יהיו בשלב <b>${k}</b>?`;
-      cand = [p.c(k - 1), p.c(k + 1), 3 * k, cs[2] + 3 * (k - 3), ans + 1, k * k];
-      hint = 'כמה משבצות נוספות בכל שלב? האם זה תמיד אותו מספר?';
-      exp = `משלב לשלב נוסף עמוד חדש, גבוה באחת מהקודם: ${cs.join(', ')} (+2, +3).<br>ממשיכים: ${[...Array(k - 3)].map((_, i) => `+${i + 4}`).join(', ')}.<br>בשלב ${k}: ${M([...Array(k)].map((_, i) => i + 1).join(' + ') + ' = ' + ans)}.`;
-    } else if (lv === 1) {
-      ans = p.c(4);
-      text = 'כמה משבצות יהיו בשלב <b>4</b>?';
-      cand = [ans + 1, ans - 1, ans + d, cs[2] + 1, cs[2] + 2 * d, ans - d];
-      hint = 'ספרו את המשבצות בכל שלב. כמה נוספות כל פעם?';
-      exp = `ספרנו: ${cs.join(', ')} – בכל שלב נוספות ${d} משבצות.<br>לכן בשלב 4: ${M(`${cs[2]} + ${d} = ${ans}`)}.<br>אפשר גם לפי המבנה: ${p.how(4)}.`;
-    } else if (lv === 2) {
-      const k = pick([10, 10, 12, 20]); ans = p.c(k);
-      text = `כמה משבצות יהיו בשלב <b>${k}</b>? (בלי לצייר את כל השלבים!)`;
-      cand = [a * k, d * k, a + d * k, ans + d, ans - d, cs[2] + (k - 3)];
-      hint = `בכל שלב נוספות אותו מספר משבצות. כמה צעדים יש משלב 1 עד שלב ${k}? או: איך בנוי כל שלב?`;
-      exp = `בכל שלב נוספות ${d} משבצות. משלב 1 (${a} משבצות) עד שלב ${k} יש ${k - 1} צעדים:<br>${M(`${a} + ${k - 1} × ${d} = ${ans}`)}.<br>או לפי המבנה: ${p.how(k)}.<br>⚠️ טעות נפוצה: ${M(`${a} × ${k} = ${a * k}`)} – אבל שלב ${k} אינו ${k} פעמים שלב 1.`;
+    const N = lv === 1 ? 4 : 5, m0 = R(0, 143) * 5; let st = [], ex;
+    if (lv === 1) { const d = pick([10, 15, 20, 30, 45, 60]); st = Array(N).fill(d); ex = `בכל פעם השעון מתקדם ב-${lgDur(d)}.`; }
+    else if (lv === 2) {
+      const kind = pick(['grow', 'alt', 'back']);
+      if (kind === 'grow') { const d = pick([5, 10, 15]), k = pick([5, 10]); st = [...Array(N)].map((_, i) => d + k * i); ex = `הזמן שעובר בין השעונים גדל ב-${k} דקות בכל פעם: ${st.slice(0, N - 1).map(lgDur).join(', ')} – ועכשיו ${lgDur(st[N - 1])}.`; }
+      else if (kind === 'alt') { const [a, b] = shuffle([10, 15, 20, 30, 45, 60]).slice(0, 2); st = [...Array(N)].map((_, i) => i % 2 ? b : a); ex = `שתי קפיצות לסירוגין: ${lgDur(a)} קדימה, ואז ${lgDur(b)} קדימה, וחוזר חלילה. עכשיו תור הקפיצה של ${lgDur(st[N - 1])}.`; }
+      else { const d = pick([10, 15, 20, 30, 45]); st = Array(N).fill(-d); ex = `השעון חוזר אחורה: בכל פעם ${lgDur(d)} פחות.`; }
     } else {
-      const k = R(8, 16), N = p.c(k); ans = k;
-      text = `באיזה שלב יהיו בדיוק <b>${N}</b> משבצות?`;
-      cand = [k - 1, k + 1, Math.round(N / d), Math.round(N / a), k + 2, k - 2];
-      hint = `כמה משבצות נוספות בכל שלב? כמה חסר מ-${a} (שלב 1) עד ${N}?`;
-      exp = `בכל שלב נוספות ${d} משבצות. מ-${a} (שלב 1) עד ${N} חסרות ${M(`${N} − ${a} = ${N - a}`)}.<br>${M(`${N - a} : ${d} = ${k - 1}`)} צעדים אחרי שלב 1 – כלומר שלב ${M(`1 + ${k - 1} = ${k}`)}.<br>בדיקה לפי המבנה: ${p.how(k)} ✓`;
+      const kind = pick(['dbl', 'growBack', 'mix']);
+      if (kind === 'dbl') { const d = pick([5, 10]); st = [...Array(N)].map((_, i) => d * 2 ** i); ex = `הזמן שעובר מוכפל בכל פעם: ${st.slice(0, N - 1).map(lgDur).join(', ')} – ועכשיו ${lgDur(st[N - 1])}.`; }
+      else if (kind === 'growBack') { const d = pick([5, 10]), k = pick([5, 10]); st = [...Array(N)].map((_, i) => -(d + k * i)); ex = `השעון חוזר אחורה, וכל פעם יותר: ${st.slice(0, N - 1).map(lgDur).join(', ')} אחורה – ועכשיו ${lgDur(st[N - 1])} אחורה.`; }
+      else { const a = pick([30, 40, 45, 60]), b = pick([10, 15, 20]); st = [...Array(N)].map((_, i) => i % 2 ? -b : a); ex = `לסירוגין: ${lgDur(a)} קדימה, ואז ${lgDur(b)} אחורה. עכשיו תור ${st[N - 1] > 0 ? `${lgDur(a)} קדימה` : `${lgDur(b)} אחורה`}.`; }
     }
-    if (!Number.isInteger(ans) || ans <= 0) continue;
-    const wr = lgNumOpts(ans, cand.filter(v => v !== ans));
+    const ms = [m0]; st.forEach(d => ms.push(ms[ms.length - 1] + d));
+    const shown = ms.slice(0, N), ans = ms[N];
+    // חד-משמעיות: כל משפחות הכללים (על הזמן "הפרוש", בלי לחזור ל-12) נותנות אותו המשך
+    const t = shown.map(v => v + 3000), outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
+    if (outs.size !== 1 || [...outs][0] !== ans + 3000) continue;
+    // כל השעונים שמוצגים שונים זה מזה
+    const K = v => ((v % 720) + 720) % 720;
+    if (new Set(ms.map(K)).size !== ms.length) continue;
+    const A = K(ans), far = v => { const d = Math.abs(K(v) - A); return Math.min(d, 720 - d) >= 10; };
+    const hh = Math.floor(A / 60) % 12, mi = A % 60, swap = (Math.round(mi / 5) % 12) * 60 + hh * 5; // מחוגים הפוכים
+    const cand = [shown[N - 1] + st[N - 2], ans + 60, ans - 60, ans + (st[N - 1] > 0 ? 15 : -15), ans - (st[N - 1] > 0 ? 10 : -10), swap, ans + 30, shown[N - 1] - st[N - 1]];
+    const wr = [];
+    cand.forEach(v => { if (wr.length < 4 && far(v) && !wr.some(w => K(w) === K(v))) wr.push(v); });
     if (wr.length < 4) continue;
-    return choiceQ({ type: 'choice', text, fig: lgGrowSvg(p, shown, lv === 1 && !stairs ? 4 : null), hint, exp, lgKind: 'grow', lgPat: p.id }, ans, wr);
+    const C = 76, gap = 8, tot = (N + 1) * (C + gap);
+    let s = '';
+    [...shown, null].forEach((v, i) => { const x = tot - (i + 1) * (C + gap) + gap / 2; s += v == null ? lgBox(x, 4, C, C, LG_Q(x + C / 2, 4 + C / 2 + 12), true) : `<g transform="translate(${x} 4) scale(${C / 100})">${lgClock(v)}</g>`; });
+    return choiceQ({ type: 'choice', text: 'איזה שעון בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} ${C + 8}" width="${tot}" height="${C + 8}" role="img" data-raw>${s}</svg>`,
+      hint: 'קראו כל שעון וכתבו את השעה. כמה זמן עבר משעון לשעון? האם זה תמיד אותו זמן? קדימה או אחורה?',
+      exp: `השעונים מראים: ${shown.map(v => M(lgHM(v))).join(' ← ')}.<br>${ex}<br>לכן השעון הבא מראה <b>${M(lgHM(ans))}</b>.`, lgKind: 'clock', lgT: shown }, lgOpt(lgClock(ans)), wr.map(v => lgOpt(lgClock(v))));
   }
 }
 
@@ -14661,8 +14649,8 @@ const LG_T = (id, name, icon, desc, gens, ld) => ({ id, name, icon, color: '#6b3
 const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [
   LG_T('logic', 'חידות מטריצה', '🧠', 'משלימים את התא החסר: עיגולים מסתובבים, צורות ומספרים', [genLogicPie, genLogicShapes, genLogicNum],
     ['כלל אחד בכל שורה (סיבוב, צורה, חיבור וחיסור)', 'שני כללים יחד, כיוונים שונים, כפל וחילוק', 'הרכבת ציורים, כלל לפי שורה, פעולה ועוד צעד קטן']),
-  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות של מספרים, ציורים וצורות שגדלות: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq, genLgGrow],
-    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב, צורה שגדלה – השלב הבא', 'הפרשים שגדלים, שתי קפיצות או שתי פעולות לסירוגין, חץ ונקודה יחד, צורה שגדלה – שלב רחוק', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד, באיזה שלב? מדרגות']),
+  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות של מספרים, ציורים ושעונים: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq, genLgClock],
+    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב, שעון שמתקדם בקפיצות שוות', 'הפרשים שגדלים, שתי קפיצות או שתי פעולות לסירוגין, חץ ונקודה יחד, שעון בקפיצות שגדלות או אחורה', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד, שעון בקפיצות שמוכפלות או קדימה ואחורה']),
   LG_T('lgAna', 'אנלוגיות, מראה ויוצא דופן', '🔀', 'מכונת מספרים, "א ל-ב כמו ג ל-?", תמונת מראה ומי לא שייך לקבוצה', [genLgAnalogy, genLgOdd, genLgMirror],
     ['כלל של צעד אחד, הפיכה אחת, תכונה פשוטה, מראה של עיגול', 'כלל של שני צעדים, שתי הפיכות, מתחלקים ב..., מראה של חץ ונקודה', 'שני צעדים, ראשוניים, תמונת מראה, השתקפות במים']),
   LG_T('lgNum', 'חידות מספרים: מאזניים, פירמידות וסימנים', '⚖️', 'כמה שוקלת כל צורה? מה המספר במרכז? מה חסר בפירמידה? אילו סימנים חסרים?', [genLgBalance, genLgCenter, genLgPyramid, genLgOps],
