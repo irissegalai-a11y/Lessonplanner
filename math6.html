@@ -2282,6 +2282,18 @@ html.embed body { padding-top: 0; }
   .pp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px 18px; }
   .pp-item { break-inside: avoid; text-align: center; border: 1px solid #ddd; border-radius: 10px; padding: 6px; }
   .pp-h { text-align: right; }
+  .lgp-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .lgp-item { text-align: right; padding: 8px; }
+  .lgp-q { margin: 2px 0 4px; line-height: 1.5; }
+  .lgp-item .fig.lgfig { display: block; margin: 4px auto; max-width: 300px; height: auto; }
+  .lgp-ch { display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: center; margin-top: 6px; font-size: 1.05rem; }
+  .lgp-ch.lgp-pics { flex-wrap: nowrap; gap: 4px; }
+  .lgp-pics .lgp-c { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .lgp-pics .fig.lgopt { width: 100%; max-width: 54px; height: auto; margin: 0; }
+  .lgp-key { columns: 2; column-gap: 28px; padding-inline-start: 22px; }
+  .lgp-key li { break-inside: avoid; margin-bottom: 8px; }
+  .lgp-exp { font-size: 0.85rem; color: #333; line-height: 1.45; }
+  .lgp-exp .fig { max-width: 160px; height: auto; }
   .pp-st { color: #b8860b; } .pp-ty { font-size: 0.85rem; color: #555; }
   .pp-tot { font-size: 0.95rem; }
   .pp-page .pl-cell { color: #000; font-size: 16px; }
@@ -13936,6 +13948,7 @@ function topicHome(id) {
     <section class="card tp-step">${step('בודקים את עצמי')}
       <button type="button" class="tp-check" id="tpCheck">✅ בדיקת שליטה עצמאית<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, לבד: בלי רמזים ובלי משוב בדרך. בסוף – התוצאה, הפתרונות וההסברים</span></button>
       ${catOf(id) === 'exc' ? `<button type="button" class="tp-check" id="tpExam">⏱️ מבחן לדוגמה<span class="desc">15 חידות מכל הסוגים, מהקל לקשה, 20 דקות, אפשר לדלג ולחזור – הציון וההסברים בסוף</span></button>` : ''}
+      ${XTOPICS.some(t => t.id === id) && !EMBED ? `<button type="button" class="tp-check" id="tpLgPr">🖨️ דף חידות להדפסה<span class="desc">בוחרים רמה וכמות – דף חידות חדש בכל פעם, עם דף תשובות והסברים</span></button>` : ''}
     </section>
     ${tools.length ? `<section class="card tp-step"><h2 class="tp-h">🧰 כלי המחשה</h2>
       ${tools.map(c => `<button type="button" class="b10-card${c.cls ? ' ' + c.cls : ''}" data-tool="${c.id}">${c.html}</button>`).join('')}
@@ -13952,6 +13965,7 @@ function topicHome(id) {
   $('tpCheck').onclick = go(() => startCheck(id, cur));
   if ($('tpNext')) $('tpNext').onclick = go(() => startLesson(nextL.l, nextL.k));
   if ($('tpExam')) $('tpExam').onclick = go(logicExam);
+  if ($('tpLgPr')) $('tpLgPr').onclick = () => { try { sessionStorage.setItem('math-lgpr', id); sessionStorage.setItem('math-pk', 'lgcard'); } catch (e) { /* לא חובה */ } location.href = location.pathname + '?print&grade=' + GRADE + '#lg'; };
   app.querySelectorAll('[data-tool]').forEach(b => b.onclick = go(TOOL_CARDS.find(c => c.id === b.dataset.tool).go));
 }
 let homeTab = (() => { const fix = t => t === 'org' ? 'class' : t === 'excel' ? 'practice' : t; const t = URLP.get('tab'); if (t) return fix(t); try { return fix(sessionStorage.getItem('math-tab') || 'practice'); } catch (e) { return 'practice'; } })();
@@ -14547,8 +14561,9 @@ function genLgBalance(lv) {
     if (!sol || unk.some(u => Math.abs(sol[u] - W[u]) > 1e-9)) continue;
     const ans = W[ask];
     const wr = lgNumOpts(ans, P.wr.filter(v => v !== ans));
-    const H = 86 * eqs.length;
-    const fig = `<svg class="fig lgfig" viewBox="0 0 320 ${H}" width="320" height="${H}" role="img">${eqs.map((e, i) => lgScale(e[1], e[0], 6 + 86 * i)).join('')}</svg>`;
+    // כף עם יותר מ-5 פריטים – שורה שנייה מעל: מוסיפים גובה כדי שלא תיחתך
+    let H = 0; const ys = eqs.map(e => { const ex = Math.max(e[0].length, e[1].length) > 5 ? 24 : 0, y = H + 6 + ex; H += 86 + ex; return y; });
+    const fig = `<svg class="fig lgfig" viewBox="0 0 320 ${H}" width="320" height="${H}" role="img">${eqs.map((e, i) => lgScale(e[1], e[0], ys[i])).join('')}</svg>`;
     const kg = T.u === 'kg';
     const text = kg ? `המאזניים מאוזנים. על כל משקולת כתוב כמה ק"ג היא שוקלת. כמה ק"ג שוקל <b>${LG_SHN2[ask][0]}</b>?`
       : `המאזניים מאוזנים. כמה <b>משולשים</b> שוקלים כמו <b>${LG_SHN2[ask][0]} אחד</b>?`;
@@ -22993,6 +23008,58 @@ function magPrint(el, outEl) {
   $('mpPrint').onclick = () => window.print();
 }
 
+// ===== מצוינות: דף חידות להדפסה (כל סוגי החידות, לפי נושא ורמה, עם דף תשובות) =====
+function lgPrint(el, outEl) {
+  const T = XTOPICS.filter(t => !t.mixAll);
+  let pre = null; try { pre = sessionStorage.getItem('math-lgpr'); } catch (e) { /* לא חובה */ }
+  const o = lgPrint.o || (lgPrint.o = { tp: XTOPICS.some(t => t.id === pre) ? pre : 'lgAll', lv: 'up', n: 12, key: true, exp: true });
+  const name = id => (XTOPICS.find(t => t.id === id) || {}).name || 'חידות';
+  el.innerHTML = `
+    <div class="card pl-card noprint">
+      <h3>${ic('printer')} דף חידות חשיבה להדפסה</h3>
+      <div class="pl-form">
+        <label>סוג החידות <select id="lpT" class="tinput">${XTOPICS.map(t => `<option value="${t.id}"${o.tp === t.id ? ' selected' : ''}>${esc(t.name)}</option>`).join('')}</select></label>
+        <label>רמת קושי <select id="lpL" class="tinput">${[1, 2, 3].map(v => `<option value="${v}"${o.lv === String(v) ? ' selected' : ''}>${'★'.repeat(v)} ${LEVEL_NAME[v]}</option>`).join('')}<option value="up"${o.lv === 'up' ? ' selected' : ''}>מדורג – מהקל אל הקשה</option></select></label>
+        <label>כמה חידות? <input id="lpN" class="tinput" type="number" min="1" max="30" value="${o.n}" inputmode="numeric" style="width:90px"></label>
+        <label class="pl-chk"><input type="checkbox" id="lpKey"${o.key ? ' checked' : ''}> דף תשובות</label>
+        <label class="pl-chk"><input type="checkbox" id="lpExp"${o.exp ? ' checked' : ''}> עם הסבר בדף התשובות</label>
+      </div>
+      <div class="actions"><button type="button" id="lpGo">יצירת הדף</button><button type="button" class="secondary hidden" id="lpPrint">${ic('printer')} הדפסה</button></div>
+      <div class="muted" id="lpMsg"></div>
+    </div>`;
+  const read = () => { o.tp = $('lpT').value; o.lv = $('lpL').value; o.n = Math.max(1, Math.min(30, Math.floor(Number($('lpN').value) || 1))); o.key = $('lpKey').checked; o.exp = $('lpExp').checked; $('lpN').value = o.n; };
+  $('lpGo').onclick = () => {
+    read();
+    const tps = o.tp === 'lgAll' ? T : T.filter(t => t.id === o.tp), seen = new Set(), list = [];
+    let bag = [];
+    for (let i = 0; i < o.n; i++) {
+      const lv = o.lv === 'up' ? 1 + Math.floor(i * 3 / o.n) : Number(o.lv);
+      if (!bag.length || bag.lv !== lv) { bag = shuffle(tps.flatMap(t => t.levels[lv].map(g => ({ t: t.id, g })))); bag.lv = lv; }
+      const { t, g } = bag.shift(); if (!bag.length) bag.lv = 0;
+      let q; for (let k = 0; k < 40; k++) { q = mk(t, g, lv); const key = q.text + (q.fig || '') + q.choices.join('|'); if (!seen.has(key)) { seen.add(key); break; } }
+      list.push(Object.assign(q, { lv }));
+    }
+    const pics = q => q.choices.some(c => /<svg/.test(String(c)));
+    const it = (q, i) => `<div class="pp-item lgp-item"><div class="pp-h"><b>${i + 1}.</b> <span class="pp-st">${'★'.repeat(q.lv)}</span></div>
+      <div class="lgp-q">${q.text}</div>${q.fig || ''}
+      <div class="lgp-ch${pics(q) ? ' lgp-pics' : ''}">${q.choices.map((c, k) => `<span class="lgp-c"><b>${CH_L[k]}.</b> ${c}</span>`).join('')}</div></div>`;
+    const title = 'חידות חשיבה – ' + name(o.tp);
+    let out = `<section class="ws-page pp-page lgp-page">
+      <div class="wshead"><h1>${esc(title)}</h1>
+        <div class="wsmeta"><span>שם: <span class="wsline long"></span></span><span>כיתה: <span class="wsline"></span></span><span>תאריך: <span class="wsline"></span></span></div></div>
+      <div class="wstips">בכל חידה יש תשובה נכונה אחת. מחפשים את הכלל, בודקים אותו בכל הדוגמאות – ומקיפים את האות של התשובה.</div>
+      <div class="pp-grid lgp-grid">${list.map(it).join('')}</div>
+    </section>`;
+    if (o.key) out += `<section class="ws-page pp-page wskey"><h2>🔑 תשובות – ${esc(title)}</h2><ol class="lgp-key">${list.map(q => `<li><b>${CH_L[q.ans]}</b>${pics(q) ? '' : ` (${q.choices[q.ans]})`}${o.exp ? `<div class="lgp-exp">${q.exp}</div>` : ''}</li>`).join('')}</ol></section>`;
+    (outEl || $('lpOut')).innerHTML = out;
+    $('lpPrint').classList.remove('hidden');
+    $('lpGo').textContent = '🔄 יצירה מחדש (חידות חדשות)';
+    $('lpMsg').textContent = `הדף מוכן – ${o.n} חידות. גללו למטה לתצוגה מקדימה, או לחצו "הדפסה".`;
+    track('מצוינות: חידות', `הדפסה: ${name(o.tp)}, ${o.n} חידות`);
+  };
+  $('lpPrint').onclick = () => window.print();
+}
+
 // ===== מצוינות: תבניות גדילה – מה יהיה בשלב ה-10? =====
 const GRW_SECS = [['learn', 'איך מגלים את הכלל?'], ['play', 'מה יהיה בשלב...?'], ['print', '🖨️ הדפסה']];
 const GRW_LV = [[1, 'רמה 1 – השלב הבא'], [2, 'רמה 2 – שלב רחוק'], [3, 'רמה 3 – שלב 100 ואתגרים']];
@@ -25186,11 +25253,12 @@ function pkSetup() {
     if (id === 'cubcard' && !$('cpGo')) cubPrint($('cubPForm'), out);
     if (id === 'magcard' && !$('mpGo')) magPrint($('magPForm'), out);
     if (id === 'grwcard' && !$('gpGo')) grwPrint($('grwPForm'), out);
+    if (id === 'lgcard' && !$('lpGo')) lgPrint($('lgPForm'), out);
     if (scroll) { const c = cards.find(x => x.dataset.pk === id); window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - 10, behavior: 'smooth' }); }
   };
   menu.querySelectorAll('[data-pkgo]').forEach(b => b.onclick = () => show(b.dataset.pkgo, true));
   let pre = null; try { pre = sessionStorage.getItem('math-pk'); } catch (e) { /* לא חובה */ }
-  const h = location.hash, hashId = h === '#book' ? 'bkcard' : h === '#wp' ? 'wpcard' : h === '#pal' ? 'palcard' : h === '#cub' ? 'cubcard' : h === '#mag' ? 'magcard' : h === '#grw' ? 'grwcard' : null;
+  const h = location.hash, hashId = h === '#book' ? 'bkcard' : h === '#wp' ? 'wpcard' : h === '#pal' ? 'palcard' : h === '#cub' ? 'cubcard' : h === '#mag' ? 'magcard' : h === '#grw' ? 'grwcard' : h === '#lg' ? 'lgcard' : null;
   show(hashId || pre || cards[0].dataset.pk, !!hashId);
   // כשנוצר דף – קופצים לתצוגה המקדימה, וסרגל קבוע למטה עם "הדפסה" ו"חזרה להגדרות"
   new MutationObserver(() => {
@@ -25356,6 +25424,10 @@ function printBuilder() {
       ${GRADE >= 4 ? `<div class="card tform" id="magcard">
         <h2>🔢 ריבועי קסם (מצוינות)</h2>
         <div id="magPForm"></div>
+      </div>` : ''}
+      ${XTOPICS.length ? `<div class="card tform" id="lgcard">
+        <h2>🧠 חידות חשיבה (מצוינות)</h2>
+        <div id="lgPForm"></div>
       </div>` : ''}
       ${GRADE >= 4 ? `<div class="card tform" id="grwcard">
         <h2>📈 תבניות גדילה (מצוינות)</h2>
