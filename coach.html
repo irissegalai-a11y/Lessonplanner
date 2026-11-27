@@ -445,6 +445,15 @@
     button, .btn { font-weight: 700; }
     button.ghost { font-weight: 600; }
   }
+  /* שדרוג עיצוב – שלב 3 (27.11): פס התקדמות לכל פרק בתוכנית הקורס (מאותם נתונים שכבר מוצגים כמספר). רק במסך */
+  .modbar { display: none; }
+  @media screen {
+    .modbar { display: block; height: 8px; background: color-mix(in srgb, var(--ok) 14%, #fff); box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--ok) 35%, transparent); }
+    .modbar > span { display: block; height: 100%; background: var(--ok); }
+    .mod > h3 { border-bottom: 0; gap: 10px; }
+    .mod > h3 .muted { font-family: var(--ui); white-space: nowrap; flex: 0 0 auto; }
+    .ring { background: conic-gradient(var(--ok) calc(var(--p) * 1%), color-mix(in srgb, var(--ok) 16%, #fff) 0); }
+  }
 </style>
 </head>
 <body>
@@ -476,7 +485,7 @@
       </div>
     </aside>
   </div>
-  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.22</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
+  <footer>קורסים ללמידה עצמית · מאת איריס סגל · <span class="ver">גרסה 4.23</span> · <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">פרטיות ותנאי שימוש</a></footer>
 </div>
 
 <script src="anim/mathanim.js"></script>
@@ -1012,7 +1021,7 @@
       if (i === midMods() - 1) rows.push(examRow('mid'));
       if (i === lastCoreMod()) rows.push(examRow('final'));
       rows.push(...us.filter(u => u.deep).map(row));
-      return `<div class="mod"><h3><span>פרק ${i + 1}: ${m.t}</span><span class="muted">${dn}/${us.length}</span></h3><ul class="ulist">${rows.join('')}</ul></div>`;
+      return `<div class="mod"><h3><span>פרק ${i + 1}: ${m.t}</span><span class="muted">${dn >= us.length ? '✔ הושלם' : dn ? `${dn} מתוך ${us.length}` : `${us.length} ${us.length === 1 ? 'שיעור' : 'שיעורים'}`}</span></h3><div class="modbar" aria-hidden="true"><span style="width:${us.length ? Math.round(dn / us.length * 100) : 0}%"></span></div><ul class="ulist">${rows.join('')}</ul></div>`;
     }).join('');
     const knows = Object.keys(K.SKILL_SAY).map(Number).filter(s => st.skills[s] === 'mastered').map(s => `<li>${K.SKILL_SAY[s]}</li>`).join('');
     const badges = (deepDone() ? `<span class="badge">🏆 מומחה/ית: ${K.title}</span>` : '') + E.BADGES.filter(b => st.badges[b]).map(b => `<span class="badge">${BADGE_NAME[b]}</span>`).join('');
