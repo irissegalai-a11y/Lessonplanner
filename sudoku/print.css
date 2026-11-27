@@ -1,0 +1,58 @@
+/* הדפסת חוברות סודוקו – A4, RTL. עמוד = section.pg בגודל קבוע, כך שלוח לא נחתך בין עמודים */
+@page { size: A4; margin: 0; }
+.eq { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+.pg { width: 210mm; height: 297mm; padding: 13mm; box-sizing: border-box; background: #fff; color: #111; position: relative; overflow: hidden; display: flex; flex-direction: column; direction: rtl; text-align: right; font-family: 'Assistant', 'Arial Hebrew', Arial, sans-serif; font-size: 11pt; line-height: 1.45; page-break-after: always; break-after: page; }
+.pg:last-child { page-break-after: auto; break-after: auto; }
+.pg-h { height: 9mm; display: flex; justify-content: space-between; align-items: flex-start; font-size: 9pt; color: #555; border-bottom: .3mm solid #ccc; }
+.pg-h span:first-child { font-weight: 700; color: var(--acc, #222); }
+.pg-b { flex: 1; overflow: hidden; padding-top: 3mm; }
+.pg-f { height: 8mm; display: flex; justify-content: space-between; align-items: flex-end; font-size: 8pt; color: #888; }
+.pg-f span:first-child { font-family: 'Playpen Sans Hebrew', 'Assistant', sans-serif; letter-spacing: .3px; }
+.pg h2 { font-family: 'Playpen Sans Hebrew', 'Assistant', sans-serif; font-size: 16pt; margin: 0 0 3mm; color: var(--acc, #111); }
+.pg h3 { font-size: 12pt; margin: 4mm 0 1.5mm; color: var(--acc, #111); }
+.pg p { margin: 0 0 2mm; }
+.pg ul.tips { margin: 0; padding-inline-start: 6mm; }
+.slots { display: flex; flex-wrap: wrap; gap: 4mm; align-content: flex-start; }
+.slot { box-sizing: border-box; display: flex; flex-direction: column; align-items: center; border: .3mm solid #ddd; border-radius: 2mm; padding: 2mm; }
+.sty-bw .slot { border-color: #ccc; }
+.sty-pastel .slot { background: #fcfaff; border-color: #e3d8f5; }
+.sty-clean .slot { border: 0; border-top: .6mm solid var(--acc); border-radius: 0; }
+.sl-h { width: 100%; font-size: 9.5pt; height: 6mm; display: flex; gap: 1.5mm; align-items: center; white-space: nowrap; overflow: hidden; }
+.sl-h .sl-id { margin-inline-start: auto; font-size: 7pt; color: #999; direction: ltr; }
+.sl-b { flex: 0 0 auto; display: flex; justify-content: center; }
+.sl-b svg, .sol svg { display: block; }
+.sl-hint { width: 100%; font-size: 9pt; margin-top: 1.5mm; min-height: 6mm; color: #333; }
+.sl-task { width: 100%; font-size: 9.5pt; margin-top: 1.5mm; min-height: 12mm; font-weight: 600; }
+.sl-space { width: 100%; margin-top: 1mm; font-size: 8.5pt; color: #555; }
+.sl-space i { display: block; height: 6mm; border-bottom: .3mm solid #bbb; }
+.cover .pg-b { display: flex; align-items: center; justify-content: center; }
+.cv { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 7mm; }
+.cv-t { font-family: 'Playpen Sans Hebrew', 'Assistant', sans-serif; font-size: 28pt; font-weight: 700; color: var(--acc, #111); line-height: 1.25; max-width: 160mm; }
+.cv-s { font-size: 13pt; color: #555; }
+.cv-nm { font-size: 13pt; display: flex; flex-direction: column; gap: 6mm; margin-top: 4mm; }
+.cv-c { font-size: 10.5pt; color: #444; max-width: 150mm; }
+.sty-pastel .cv-t { background: var(--soft); padding: 4mm 10mm; border-radius: 6mm; }
+.sty-clean .cv-t { border-bottom: 1mm solid var(--acc); padding-bottom: 3mm; }
+.rl-figs, .ex-figs { display: flex; gap: 8mm; justify-content: center; margin: 3mm 0 4mm; }
+.rl-figs figure, .ex-figs figure { margin: 0; text-align: center; font-size: 10pt; }
+.ex-steps { display: flex; gap: 6mm; font-size: 9.5pt; }
+.ex-steps ol { flex: 1; margin: 0; padding-inline-start: 6mm; }
+.strats { columns: 2; column-gap: 8mm; }
+.strat { break-inside: avoid; margin-bottom: 3mm; font-size: 10pt; }
+.strat h3 { margin-top: 0; }
+table.trk { width: 100%; border-collapse: collapse; direction: rtl; font-size: 10pt; }
+table.trk th, table.trk td { border: .3mm solid #999; padding: 2mm; text-align: center; height: 8mm; }
+table.trk th { background: var(--soft, #eee); }
+.sol-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.sol { border: .3mm solid #ddd; border-radius: 2mm; padding: 2mm; display: flex; flex-direction: column; align-items: center; height: 76mm; overflow: hidden; }
+.sol-h { width: 100%; font-size: 9pt; margin-bottom: 1mm; }
+.sol-t { width: 100%; font-size: 8pt; margin-top: 1mm; line-height: 1.35; }
+/* תצוגת עמודים בתוך המסך */
+.pv-wrap { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+.pv-wrap .pg { zoom: .42; box-shadow: 0 2px 12px rgba(0, 0, 0, .18); border: 1px solid #ccc; }
+@media print {
+  html.printing body > *:not(#print) { display: none !important; }
+  html.printing #print { display: block !important; }
+  html.printing body { background: #fff; margin: 0; }
+  .pg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

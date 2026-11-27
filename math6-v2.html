@@ -211,6 +211,10 @@ html.embed body { padding-top: 0; }
   .fig.lgopt { width: 100%; max-width: 76px; margin: 2px auto; }
   .fig.lgfig { max-width: 320px; }
   .fig.lgfig.lgwide { max-width: 440px; }
+  .lgfold { margin: 10px auto 2px; max-width: 220px; text-align: center; }
+  .lgfold svg { width: 100%; height: auto; display: block; background: #fff; border-radius: 12px; border: 1px solid #e3e6ef; }
+  .lgfcap { min-height: 1.5em; margin: 4px 0; }
+  @media print { .lgfold button, .lgfcap { display: none; } .lgfold { max-width: 120px; } }
   .lgletter { font-size: 1.7rem; font-weight: 800; }
   div.choices > button { display: flex; align-items: center; gap: 10px; justify-content: flex-start; text-align: right; }
   div.choices.pics > button { flex-direction: column; justify-content: center; text-align: center; }
@@ -362,6 +366,13 @@ html.embed body { padding-top: 0; }
   .fig .part2 { fill: rgba(224, 112, 58, 0.4); stroke: #e0703a; stroke-width: 2; }
   .fig .hidden { display: none; }
   .ftable { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+  .tp-next { margin-top: 8px; font-size: .95em; }
+  .tp-next button { margin-inline-start: 6px; padding: 4px 10px; }
+  .pgrp { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin: 8px 0 4px; }
+  .pgrp span { min-width: 38px; padding: 6px 4px; border: 2px solid #c0392b; border-radius: 6px; text-align: center; font-weight: 700; background: #fff; color: #222; }
+  .pgrp span.on { background: #f5b7b1; }
+  .pgrp-cap { text-align: center; font-size: .9em; margin: 0 0 8px; }
+  .enr { display: inline-block; font-size: .8em; font-weight: 700; background: #fff3c4; color: #7a5b00; border: 1px solid #e0b100; border-radius: 10px; padding: 1px 8px; margin-inline-end: 6px; }
   .ftable th, .ftable td { border: 1px solid var(--line); padding: 8px; text-align: center; }
   .ftable th { background: #eef7f1; }
   ol.recap.order { list-style: decimal; padding-right: 26px; }
@@ -1377,13 +1388,25 @@ html.embed body { padding-top: 0; }
   .tcat-tile .tt-n { grid-area: n; font-size: 0.9rem; color: var(--muted); }
   .tcat-tile .mbar { grid-area: bar; margin-top: 8px; }
   .tcat-tile .mbar > span { background: var(--c); }
-  .tcat-tiles[hidden], .tcat-one[hidden] { display: none; }
+  .tcat-tiles[hidden], .tcat-one[hidden], .practice-more[hidden] { display: none; }
+  .xt-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 8px 0 16px; }
+  .xt-tile { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 14px 12px 12px; border: 2px solid var(--c); border-radius: 16px; background: color-mix(in srgb, var(--c) 8%, #fffdf8); color: #1f1e1c; box-shadow: none; transform: none; font: inherit; cursor: pointer; min-height: 150px; }
+  .xt-tile:hover { background: color-mix(in srgb, var(--c) 17%, #fffdf8); transform: none; }
+  .xt-tile .xt-i { font-size: 2.2rem; line-height: 1.1; }
+  .xt-tile .xt-nm { font-size: 1.12rem; font-weight: 700; line-height: 1.25; }
+  .xt-tile .xt-ds { font-size: 0.86rem; color: var(--muted); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .xt-tile .mbar { width: 100%; margin-top: auto; }
+  .xt-tile .mbar > span { background: var(--c); }
   .tcat-top { margin: 2px 0 8px; }
   .tcat-back { font-size: 1rem; padding: 6px 14px; }
   @media (max-width: 640px) {
     .tcat-tiles { grid-template-columns: 1fr 1fr; gap: 8px; }
     .tcat-tile { grid-template-columns: 1fr; grid-template-areas: "i" "nm" "n" "bar"; text-align: center; padding: 10px 8px; }
     .tcat-tile .tt-nm { font-size: 1.05rem; }
+    .xt-tiles { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .xt-tile { padding: 10px 8px; min-height: 140px; }
+    .xt-tile .xt-nm { font-size: 1rem; }
+    .xt-tile .xt-ds { font-size: 0.8rem; }
   }
   .tp-head { border-top: 6px solid var(--c); display: flex; flex-direction: column; gap: 8px; }
   .tp-head .ds { color: var(--muted); }
@@ -2290,7 +2313,7 @@ html.embed body { padding-top: 0; }
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>mathinclass</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 שז</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 שיד</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -4275,6 +4298,7 @@ const LEVEL_DESC5 = {
   dec: ['שבר ↔ עשרוני, ערך הספרה, כפל ב-10 ו-100', 'השוואה, ישר מספרים, חיבור וחיסור', 'סדרות, יחידות מידה, פירוק עשרוני'],
   geo: ['מלבן וריבוע, זוויות במשולש', 'מקבילית ומשולש, משולש ישר-זווית', 'מצולעים מורכבים, משולש שווה-שוקיים'],
   data: ['קריאת דיאגרמה', 'הפרשים וסכום', 'ממוצע ואיבר חסר'],
+  pct: ['מה זה אחוז – ריבוע 100 המשבצות', 'אחוז ↔ שבר עם מכנה 100 ↔ עשרוני', 'משמעות 50%, 25%, 10% – חצי, רבע, עשירית'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 
@@ -5515,6 +5539,10 @@ const LEVEL_DESC2 = {
    אחוזים (כיתה ו')
    ========================================================= */
 const P = x => M(`${fmt(x)}%`);
+// אחוז מכמות / מהחלק לשלם – השלם מחולק לקבוצות שוות (כל קבוצה = 100%/parts), mark קבוצות מסומנות
+function pctGroups(parts, val, mark, cap) {
+  return `<div class="pgrp" dir="rtl">${Array.from({ length: parts }, (_, i) => `<span class="${i < mark ? 'on' : ''}">${val == null ? '?' : fmt(val)}</span>`).join('')}</div>${cap ? `<p class="pgrp-cap">${cap}</p>` : ''}`;
+}
 function pctGridSVG(k, size = 150) {
   const c = size / 10;
   let g = '';
@@ -5529,7 +5557,7 @@ function genPctGrid() {
   const k = R(3, 97);
   return {
     type: 'num', unit: '%', text: 'הריבוע מחולק ל-100 משבצות שוות. איזה אחוז מהריבוע <b>צבוע</b>?', fig: `<div class="center">${pctGridSVG(k)}</div>`, ans: k,
-    traps: [{ v: 100 - k, m: 'ספרתם את המשבצות הלבנות. שואלים על החלק <b>הצבוע</b>.' }],
+    traps: [{ v: 100 - k, m: 'ספרתם את המשבצות הלבנות. שואלים על החלק <b>הצבוע</b>.' }].filter(t => t.v !== k),
     hint: 'אחוז = כמה מתוך 100. ספרו שורות שלמות (כל שורה = 10 משבצות) ועוד המשבצות הבודדות.',
     exp: `צבועות ${k} משבצות מתוך 100, כלומר ${P(k)}.`
   };
@@ -5578,7 +5606,7 @@ function genPctOf(lv = 1) {
     : p % 10 ? [{ p: `${P(p)} מ-${N}: ${M(`${N} × ${p} : 100 =`)}`, a: ans }]
     : [{ p: `קודם 10%: ${M(`${N} : 10 =`)}`, a: ten }].concat(p === 10 ? [] : p % 10 === 0 ? [{ p: `${P(p)} = ${p / 10} פעמים 10%: ${M(`${fmt(ten)} × ${p / 10} =`)}`, a: ans }] : [{ p: `ועכשיו ${P(p)}: ${M(`${N} × ${p} : 100 =`)}`, a: ans }]);
   return {
-    type: 'num', text: `כמה הם ${P(p)} מ-${M(fmt(N))}?`, ans, learn: { lesson: 'pct', card: 2 },
+    type: 'num', text: `כמה הם ${P(p)} מ-${M(fmt(N))}?`, ans, learn: { lesson: 'pct', card: 7 },
     traps: [{ v: N * p, m: 'שכחתם לחלק ב-100. אחוז = חלק מתוך 100.' }, { v: N - ans, m: `זה מה שנשאר אחרי שמורידים ${p}%. שואלים כמה הם ${p}% עצמם.` }].filter(t => t.v !== ans),
     steps,
     hint: p === 50 ? '50% = חצי.' : p === 25 ? '25% = רבע.' : '10% = מחלקים ב-10. משם אפשר לחשב אחוזים אחרים.',
@@ -5587,15 +5615,16 @@ function genPctOf(lv = 1) {
 }
 
 function genPctWhat() {
-  const [Y, step] = pick([[20, 1], [25, 1], [50, 1], [200, 2], [400, 4], [10, 1], [40, 2], [80, 4]]);
+  // רק מכנים שמרחיבים ל-100 (מכנה גדול מ-100 שדורש צמצום – בשאלות המילוליות ברמה 3, עם הסבר בכרטיסייה)
+  const [Y, step] = pick([[20, 1], [25, 1], [50, 1], [10, 1], [4, 1], [5, 1]]);
   const X = R(1, Y / step - 1) * step;
   const ans = rnd(X / Y * 100);
   if (ans % 1) return genPctWhat();
-  const thing = pick([{ a: 'בכיתה', b: 'תלמידים', c: 'מהם בנות' }, { a: 'בסל', b: 'פירות', c: 'מהם תפוחים' }, { a: 'במבחן', b: 'שאלות', c: 'מהן ענה נכון דני' }]);
+  const thing = pick(Y <= 5 ? [{ a: 'בסל', b: 'פירות', c: 'מהם תפוחים' }, { a: 'בקופסה', b: 'עפרונות', c: 'מהם אדומים' }] : [{ a: 'בכיתה', b: 'תלמידים', c: 'מהם בנות' }, { a: 'בסל', b: 'פירות', c: 'מהם תפוחים' }, { a: 'במבחן', b: 'שאלות', c: 'מהן ענה נכון דני' }]);
   return {
     type: 'num', unit: '%', text: `${thing.a} יש ${Y} ${thing.b}, ו-${X} ${thing.c}.<br>איזה אחוז זה?`, ans,
     traps: [{ v: X, m: `${X} זה המספר, לא האחוז. כמה זה מתוך 100?` }, { v: rnd(Y / X * 100), m: 'חילקתם הפוך. החלק חלקי השלם: ' + X + ' : ' + Y + '.' }].filter(t => t.v !== ans),
-    steps: [{ p: `כתבו כשבר: ${M(F(X, Y))}. הרחיבו למכנה 100 – מה המונה?`, a: ans }],
+    steps: [{ p: `כתבו כשבר ${M(F(X, Y))}. כדי להגיע למכנה 100 – ${Y} כפול כמה?`, a: 100 / Y }, { p: `מרחיבים גם את המונה: ${M(`${X} × ${100 / Y} =`)}`, a: ans }],
     hint: `כתבו שבר (${X} מתוך ${Y}) והרחיבו אותו למכנה 100.`,
     exp: `${M(`${F(X, Y)} = ${F(ans, 100)}`)} = ${P(ans)}`
   };
@@ -5610,7 +5639,7 @@ function genPctDiscount() {
   return {
     type: 'num', unit: '₪', text: `${item} עולה ${price} ₪. יש הנחה של ${P(p)}.<br>${askNew ? 'כמה צריך לשלם אחרי ההנחה?' : 'בכמה שקלים ההנחה?'}`, ans: askNew ? price - off : off,
     traps: askNew ? [{ v: off, m: `זה גובה ההנחה. כמה צריך <b>לשלם</b>? ${price} פחות ההנחה.` }, { v: price - p, m: `הורדתם ${p} שקלים. ההנחה היא ${p}% מהמחיר, לא ${p} ₪.` }].filter(t => t.v !== price - off)
-      : [{ v: price - off, m: 'זה המחיר אחרי ההנחה. שואלים מה גובה ההנחה עצמה.' }],
+      : [{ v: price - off, m: 'זה המחיר אחרי ההנחה. שואלים מה גובה ההנחה עצמה.' }].filter(t => t.v !== off),
     steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: off }].concat(askNew ? [{ p: M(`${price} - ${off} =`), a: price - off }] : []),
     hint: `קודם חשבו כמה שקלים הם ${p}% מ-${price}.`,
     exp: `ההנחה: ${M(`${price} × ${p} : 100 = ${off}`)} ₪.${askNew ? ` משלמים: ${M(`${price} - ${off} = ${price - off}`)} ₪.` : ''}`
@@ -5629,6 +5658,161 @@ function genPctWhole() {
   };
 }
 
+// 💬 שאלות מילוליות באחוזים (כיתה ו', נושא pctWord, 21.11) – דגש על מעבר בין ייצוגים (אחוז / שבר / עשרוני) בתוך סיפור
+const PCTW_CTX = [
+  { all: 'תלמידים בשכבה', grp: 'בשכבה', who: 'תלמידים', a: 'הגיעו לטיול', b: 'לא הגיעו לטיול' },
+  { all: 'עצים בחורשה', grp: 'בחורשה', who: 'עצים', a: 'הם אורנים', b: 'אינם אורנים' },
+  { all: 'ספרים בספרייה הכיתתית', grp: 'בספרייה הכיתתית', who: 'ספרים', a: 'הם ספרי הרפתקאות', b: 'אינם ספרי הרפתקאות' },
+  { all: 'כרטיסים להופעה', grp: 'להופעה', who: 'כרטיסים', a: 'כבר נמכרו', b: 'עוד לא נמכרו' },
+  { all: 'שתילים בגינה', grp: 'בגינה', who: 'שתילים', a: 'פרחו', b: 'עוד לא פרחו' }
+];
+const PCTW_ITEM = [['זוג אופניים', 'זוג האופניים'], ['מעיל', 'המעיל'], ['משחק קופסה', 'משחק הקופסה'], ['זוג נעליים', 'זוג הנעליים'], ['תיק גב', 'תיק הגב'], ['זוג אוזניות', 'זוג האוזניות']];
+function pctWQ(o) { return Object.assign({ type: 'num', word: true, learn: { lesson: 'pct', card: o.card != null ? o.card : 7 } }, o); }
+function genPctWord(lv = 1, only) {
+  const c = pick(PCTW_CTX);
+  const kinds = lv === 1 ? ['of', 'what100', 'rest', 'fracTo'] : lv === 2 ? ['of2', 'what', 'disc', 'restN', 'decTo', 'cmp'] : ['whole', 'disc2', 'raise', 'cmp3', 'restWhole', 'whatBig', 'ofDec', 'mix3'];
+  const k = only || pick(kinds);
+  if (k === 'ofDec') { // רמה 3: תשובה עשרונית – רק בכמות רציפה (ליטר / ק"ג / ק"מ)
+    const t = pick([['במיכל יש N ליטר מים. P% מהמים שימשו להשקיה.', 'כמה ליטר שימשו להשקיה?', 'ליטר'], ['בשק יש N ק"ג קמח. P% מהקמח נוצל לאפייה.', 'כמה ק"ג קמח נוצלו?', 'ק"ג'], ['אורך מסלול הטיול N ק"מ. עד ההפסקה עברנו P% מהמסלול.', 'כמה ק"מ עברנו עד ההפסקה?', 'ק"מ']]);
+    const p = pick([5, 15, 25, 35, 45]), N = R(2, 24) * 2, ans = N * p / 100;
+    if (ans % 1 === 0 || Math.round(ans * 10) !== ans * 10) return genPctWord(lv, only);
+    return pctWQ({ unit: t[2], text: `${t[0].replace('N', N).replace('P%', P(p))}<br>${t[1]}`, ans,
+      hint: `${p}% = ${M(F(p, 100))}: כופלים ב-${p} ומחלקים ב-100. התשובה יכולה להיות מספר עשרוני.`,
+      exp: `${M(`${N} × ${p} : 100 = ${fmt(N * p)} : 100 = ${fmt(ans)}`)} ${t[2]}.`,
+      steps: [{ p: `${M(`${N} × ${p} =`)}`, a: N * p }, { p: `${M(`${N * p} : 100 =`)}`, a: ans }],
+      traps: [{ v: N * p, m: 'שכחתם לחלק ב-100.' }, { v: N - ans, m: 'זה מה שנשאר. שואלים על החלק עצמו.' }, { v: Math.round(ans), m: `עיגלתם. כאן התשובה המדויקת היא מספר עשרוני: ${M(fmt(ans))}.` }].filter(q => q.v !== ans) });
+  }
+  if (k === 'mix3') { // רמה 3: שבר, עשרוני ואחוז באותו סיפור
+    const [fn, fd] = pick([[1, 4], [1, 5], [1, 2], [3, 10], [2, 5], [1, 10]]), pa = fn * 100 / fd, dv = pick([0.3, 0.2, 0.15, 0.35, 0.25, 0.4, 0.05]), pb = Math.round(dv * 100), ans = 100 - pa - pb;
+    if (ans < 5) return genPctWord(lv, only);
+    const t = pick([['מהתלמידים בשכבה', 'בחוג ספורט', 'בחוג מוזיקה', 'בחוג אומנות'], ['מהשטח בגינה', 'שתולים ירקות', 'שתולים פרחים', 'דשא'], ['מהספרים בספרייה', 'ספרי הרפתקאות', 'ספרי מדע', 'ספרי שירה']]);
+    return pctWQ({ unit: '%', card: 6, text: `${M(F(fn, fd))} ${t[0]} ${t[1]}, ${M(fmt(dv))} ${t[0]} ${t[2]}, והשאר ${t[3]}.<br>איזה אחוז ${t[0]} ${t[3]}?`, ans,
+      hint: 'מעבירים את השבר ואת העשרוני לאחוזים, ואז משלימים ל-100%.',
+      exp: `${M(`${F(fn, fd)} = ${F(pa, 100)}`)} = ${P(pa)} · ${M(fmt(dv))} = ${P(pb)} · ${M(`100 - ${pa} - ${pb} = ${ans}`)}, כלומר ${P(ans)}.`,
+      steps: [{ p: `${M(F(fn, fd))} = כמה אחוזים?`, a: pa }, { p: `${M(fmt(dv))} = כמה אחוזים?`, a: pb }, { p: 'השאר (עד 100%):', a: ans }],
+      traps: [{ v: pa + pb, m: `זה האחוז של ${t[1]} ושל ${t[2]} יחד. שואלים על השאר.` }, { v: 100 - pa, m: `הורדתם רק את ${t[1]}. גם ${t[2]} צריך להוריד.` }, { v: 100 - pa - Math.round(dv * 10), m: `${M(fmt(dv))} הם ${pb} מאיות = ${P(pb)}, לא ${P(Math.round(dv * 10))}.` }].filter(q => q.v !== ans && q.v > 0) });
+  }
+  if (k === 'of') { // אחוז מוכר מכמות
+    const [p, f] = pick([[50, 2], [25, 4], [10, 10]]), N = R(3, 30) * f * (p === 10 ? 1 : 1), ans = N * p / 100;
+    if (ans % 1) return genPctWord(lv, only);
+    return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.a}?`, ans,
+      hint: p === 10 ? '10% = עשירית – מחלקים ב-10.' : `${p}% = ${p === 50 ? 'חצי' : 'רבע'}.`, exp: `${P(p)} = ${M(F(1, f))}, ולכן ${M(`${N} : ${f} = ${ans}`)}.`,
+      steps: [{ p: `${P(p)} הם איזה חלק מהשלם? מחלקים את ${N} ב-`, a: f }, { p: M(`${N} : ${f} =`), a: ans }],
+      traps: [{ v: N - ans, m: `זה מספר ה${c.who} ש${c.b}. שואלים על אלה ש${c.a}.` }, { v: N * p, m: 'שכחתם לחלק ב-100.' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'what100') { // מתוך 100 – ישר לאחוז
+    const N = 100, X = R(11, 89);
+    return pctWQ({ unit: '%', card: 0, text: `${c.grp} יש 100 ${c.who}, ו-${X} מהם ${c.a}.<br>איזה אחוז מה${c.who} ${c.a}?`, ans: X,
+      hint: 'אחוז = מתוך 100.', exp: `${X} מתוך 100 = ${M(F(X, 100))} = ${P(X)}.`, traps: [{ v: N - X, m: `זה האחוז של אלה ש${c.b}.` }].filter(t => t.v !== X) });
+  }
+  if (k === 'rest') { // משלים ל-100%
+    const p = pick([10, 20, 25, 30, 40, 45, 60, 65, 75, 80, 90]);
+    return pctWQ({ unit: '%', card: 0, text: `${P(p)} מה${c.who} ${c.grp} ${c.a}.<br>איזה אחוז מה${c.who} ${c.b}?`, ans: 100 - p,
+      hint: 'כל ה' + c.who + ' יחד = 100%.', exp: `${M(`100 - ${p} = ${100 - p}`)}, כלומר ${P(100 - p)}.`, traps: [{ v: p, m: `זה האחוז של אלה ש${c.a}. מה נשאר עד 100%?` }] });
+  }
+  if (k === 'fracTo') { // שבר מוכר בסיפור → אחוז
+    const [n, d] = pick([[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 10], [7, 10], [1, 10]]), ans = n * 100 / d;
+    return pctWQ({ unit: '%', card: 4, text: `${M(F(n, d))} מה${c.who} ${c.grp} ${c.a}.<br>איזה אחוז מה${c.who} זה?`, ans,
+      hint: `מרחיבים את ${n}/${d} למכנה 100.`, exp: `${M(`${F(n, d)} = ${F(ans, 100)}`)} = ${P(ans)}.`,
+      steps: [{ p: `${d} כפול כמה = 100?`, a: 100 / d }, { p: `ולכן גם המונה: ${M(`${n} × ${100 / d} =`)}`, a: ans }],
+      traps: [{ v: n, m: 'זה המונה. מרחיבים למכנה 100 – מה המונה החדש?' }, { v: d, m: 'זה המכנה. מרחיבים למכנה 100.' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'of2') { // אחוז כלשהו מכמות
+    const [p, mul] = pick([[20, 10], [30, 10], [75, 4], [5, 20], [15, 20], [40, 10], [60, 10]]), N = R(2, 20) * mul, ans = N * p / 100;
+    if (ans % 1 || N === 100) return genPctWord(lv, only);
+    return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.a}?`, ans,
+      hint: p % 10 ? `${p}% = ${M(F(p, 100))}: כופלים ב-${p} ומחלקים ב-100.` : `קודם 10% (מחלקים ב-10), ואז כופלים ב-${p / 10}.`,
+      exp: `${M(`${N} × ${p} : 100 = ${ans}`)}.`, steps: p % 10 ? undefined : [{ p: `10% מ-${N}: ${M(`${N} : 10 =`)}`, a: N / 10 }, { p: `${P(p)}: ${M(`${fmt(N / 10)} × ${p / 10} =`)}`, a: ans }],
+      traps: [{ v: N - ans, m: `זה מספר ה${c.who} ש${c.b}.` }, { v: N * p, m: 'שכחתם לחלק ב-100.' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'what') { // איזה אחוז – שבר → מכנה 100
+    const [Y, st] = pick([[20, 1], [25, 1], [50, 1], [10, 1]]), X = R(1, Y / st - 1) * st, ans = X / Y * 100;
+    if (ans % 1) return genPctWord(lv, only);
+    return pctWQ({ unit: '%', card: 8, text: `${c.grp} יש ${Y} ${c.who}, ו-${X} מהם ${c.a}.<br>איזה אחוז מה${c.who} ${c.a}?`, ans,
+      hint: `כותבים שבר: ${X} מתוך ${Y}, ומרחיבים (או מצמצמים) למכנה 100.`, exp: `${M(`${F(X, Y)} = ${F(ans, 100)}`)} = ${P(ans)}.`,
+      steps: [{ p: `כתבו כשבר ${M(F(X, Y))} והעבירו למכנה 100. מה המונה?`, a: ans }],
+      traps: [{ v: X, m: `${X} זה מספר ה${c.who}, לא האחוז. כמה זה מתוך 100?` }, { v: 100 - ans, m: `זה האחוז של אלה ש${c.b}.` }].filter(t => t.v !== ans) });
+  }
+  if (k === 'whatBig') { // מכנה גדול מ-100 – מצמצמים למכנה 100
+    const Y = pick([200, 300, 400, 500]), d = Y / 100, ans = R(3, 45), X = ans * d;
+    const t = pick([['בשכבה', 'תלמידים', 'השתתפו בתחרות'], ['בבית הספר', 'תלמידים', 'מגיעים באופניים'], ['בחווה', 'עצים', 'הם עצי תפוח']]);
+    return pctWQ({ unit: '%', card: 8, text: `${t[0]} יש ${Y} ${t[1]}, ו-${X} מהם ${t[2]}.<br>איזה אחוז זה?`, ans,
+      hint: `המכנה ${Y} גדול מ-100 – <b>מצמצמים</b>: מחלקים את המונה ואת המכנה ב-${d}.`, exp: `${M(`${F(X, Y)} = ${F(`${X} : ${d}`, `${Y} : ${d}`)} = ${F(ans, 100)}`)} = ${P(ans)}.`,
+      steps: [{ p: `${Y} : כמה = 100?`, a: d }, { p: `מצמצמים גם את המונה: ${M(`${X} : ${d} =`)}`, a: ans }],
+      traps: [{ v: X, m: `${X} זה מספר ה${t[1]}. כמה זה מתוך 100?` }, { v: X * d, m: `כאן לא מרחיבים – ${Y} כבר גדול מ-100. מחלקים ב-${d}.` }].filter(q => q.v !== ans) });
+  }
+  if (k === 'disc') { // מחיר אחרי הנחה
+    const p = pick([10, 20, 25, 30, 50]), price = pick([40, 60, 80, 120, 150, 200, 240, 300, 360]), off = price * p / 100, it = pick(PCTW_ITEM);
+    if (off % 1) return genPctWord(lv, only);
+    return pctWQ({ unit: '₪', card: 9, text: `${it[0]} עולה ${price} ₪. בסוף העונה יש הנחה של ${P(p)}.<br>כמה ישלמו על ${it[1]} אחרי ההנחה?`, ans: price - off,
+      hint: `קודם גובה ההנחה: ${p}% מ-${price}. אחר כך מורידים מהמחיר.`, exp: `ההנחה: ${M(`${price} × ${p} : 100 = ${off}`)} ₪. משלמים ${M(`${price} - ${off} = ${price - off}`)} ₪.`,
+      steps: [{ p: `כמה שקלים הם ${P(p)} מ-${price}?`, a: off }, { p: M(`${price} - ${off} =`), a: price - off }],
+      traps: [{ v: off, m: 'זה גובה ההנחה. כמה <b>משלמים</b>?' }, { v: price - p, m: `הורדתם ${p} ₪. ההנחה היא ${p}% מהמחיר.` }].filter(t => t.v !== price - off) });
+  }
+  if (k === 'restN') { // כמה לא – דרך המשלים
+    const p = pick([10, 20, 25, 40, 60, 75, 80]), N = R(2, 12) * 20, ans = N * (100 - p) / 100;
+    if (ans % 1) return genPctWord(lv, only);
+    return pctWQ({ text: `${c.grp} יש ${N} ${c.who}. ${P(p)} מהם ${c.a}.<br>כמה ${c.who} ${c.b}?`, ans,
+      hint: `איזה אחוז ${c.b}? (100% פחות ${p}%)`, exp: `${M(`100 - ${p} = ${100 - p}`)}%, ו-${P(100 - p)} מ-${N} = ${M(`${N} × ${100 - p} : 100 = ${ans}`)}.`,
+      steps: [{ p: `איזה אחוז ${c.b}?`, a: 100 - p }, { p: `כמה הם ${P(100 - p)} מ-${N}?`, a: ans }],
+      traps: [{ v: N * p / 100, m: `זה מספר ה${c.who} ש${c.a}. שואלים על אלה ש${c.b}.` }, { v: 100 - p, m: 'זה האחוז. כמה ' + c.who + ' זה?' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'decTo') { // עשרוני בסיפור → אחוז
+    const v = pick([0.3, 0.4, 0.6, 0.35, 0.45, 0.08, 0.05, 0.72, 0.9]), ans = Math.round(v * 100);
+    const t = pick([`מיכל המים מלא ב-${M(fmt(v))} מהנפח שלו.`, `סוללת הטלפון טעונה ב-${M(fmt(v))} מהקיבולת.`, `במשחק המחשב השלמתי ${M(fmt(v))} מהשלבים.`]);
+    return pctWQ({ unit: '%', card: 5, text: `${t}<br>כמה אחוזים זה?`, ans,
+      hint: 'כותבים במאיות (שתי ספרות אחרי הנקודה). כמה מאיות?', exp: `${M(`${fmt(v)} = ${F(ans, 100)}`)} = ${ans} מאיות = ${P(ans)}.`,
+      traps: [{ v: Math.round(v * 10), m: `${M(fmt(v))} – קראו במאיות: ${M(fmt(v) + (String(v).length === 3 ? '0' : ''))} = ${ans} מאיות.` }, { v: v, m: 'זה המספר העשרוני. כמה אחוזים – כמה מאיות?' }].filter(t => t.v !== ans) });
+  }
+  if (k === 'cmp') { // השוואה בין ייצוגים בסיפור
+    const opts = shuffle([[F(3, 4), 75], [F(2, 5), 40], [F(7, 10), 70], [F(1, 4), 25], [F(4, 5), 80], [F(1, 2), 50]]);
+    const [fa, va] = opts[0]; let vb; do { vb = pick([45, 55, 65, 72, 78, 35, 85]); } while (vb === va);
+    const vd = pick([0.6, 0.68, 0.42, 0.82, 0.3]); if (Math.round(vd * 100) === va || Math.round(vd * 100) === vb) return genPctWord(lv, only);
+    const L = [['נועה', M(fa), va], ['איתי', P(vb), vb], ['שירה', M(fmt(vd)), Math.round(vd * 100)]], best = L.reduce((m, x) => x[2] > m[2] ? x : m);
+    return Object.assign(choiceQ({ word: true, learn: { lesson: 'pct', card: 6 }, text: `במבחן ענתה נועה נכון על ${L[0][1]} מהשאלות, איתי על ${L[1][1]}, ושירה על ${L[2][1]}.<br>מי ענה נכון על <b>החלק הגדול ביותר</b> של השאלות?`,
+      hint: 'מעבירים את שלושתם לאחוזים.', exp: L.map(x => `${x[0]}: ${x[1]} = ${P(x[2])}`).join(' · ') + `. הכי הרבה: ${best[0]}.` }, best[0], L.filter(x => x !== best).map(x => x[0])), {});
+  }
+  if (k === 'whole') { // מהחלק לשלם
+    const p = pick([10, 20, 25, 50, 5, 40]), whole = R(3, 25) * (p === 40 ? 5 : 100 / p), part = whole * p / 100;
+    if (part % 1) return genPctWord(lv, only);
+    return pctWQ({ card: 10, text: `${part} ${c.who} ${c.a}. הם ${P(p)} מכל ה${c.who} ${c.grp}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
+      hint: p === 40 ? '40% הם 4 פעמים 10%. כמה הם 10%? ומשם ל-100%.' : `כמה פעמים ${p}% נכנס ב-100%?`,
+      exp: p === 40 ? `10% → ${M(`${part} : 4 = ${part / 4}`)}, ולכן 100% → ${M(`${part / 4} × 10 = ${whole}`)}.` : `${P(p)} → ${part}, ולכן 100% → ${M(`${part} × ${100 / p} = ${whole}`)}.`,
+      steps: p === 40 ? [{ p: `כמה הם 10%? ${M(`${part} : 4 =`)}`, a: part / 4 }, { p: `ו-100%: ${M(`${part / 4} × 10 =`)}`, a: whole }] : [{ p: `כמה פעמים ${P(p)} נכנס ב-100%?`, a: 100 / p }, { p: M(`${part} × ${100 / p} =`), a: whole }],
+      traps: [{ v: part * p / 100, m: `חישבתם ${p}% מ-${part}. אבל ${part} הם החלק – מחפשים את השלם.` }, { v: part + p, m: 'חיברתם את האחוז. חשבו מה הם 100%.' }].filter(t => t.v !== whole) });
+  }
+  if (k === 'disc2') { // שני שלבים: הנחה ועודף
+    const p = pick([10, 20, 25, 50]), price = pick([80, 120, 160, 180, 240]), pay = price - price * p / 100, bill = pay <= 100 ? 100 : pay <= 200 ? 200 : 500, it = pick(PCTW_ITEM);
+    return pctWQ({ unit: '₪', card: 9, text: `${it[0]} עולה ${price} ₪, ויש הנחה של ${P(p)}. דנה שילמה בשטר של ${bill} ₪.<br>כמה עודף קיבלה?`, ans: bill - pay,
+      hint: 'שלושה שלבים: גובה ההנחה → המחיר אחרי ההנחה → העודף.', exp: `ההנחה ${M(`${price} × ${p} : 100 = ${price - pay}`)} ₪, משלמים ${pay} ₪, עודף ${M(`${bill} - ${pay} = ${bill - pay}`)} ₪.`,
+      steps: [{ p: `גובה ההנחה (${P(p)} מ-${price}):`, a: price - pay }, { p: 'המחיר אחרי ההנחה:', a: pay }, { p: `העודף מ-${bill}:`, a: bill - pay }],
+      traps: [{ v: pay, m: 'זה המחיר אחרי ההנחה. כמה עודף?' }, { v: bill - price, m: 'שכחתם את ההנחה.' }].filter(t => t.v !== bill - pay && t.v >= 0) });
+  }
+  if (k === 'raise') { // התייקרות
+    const p = pick([10, 20, 25, 50]), price = pick([40, 60, 80, 120, 200]), up = price * p / 100, it = pick(['כרטיס לקולנוע', 'מנוי לבריכה', 'ארגז ירקות', 'כרטיס לפארק']);
+    return pctWQ({ unit: '₪', card: 7, text: `${it} עלה ${price} ₪. המחיר עלה ב-${P(p)}.<br>כמה עולה ה${it} עכשיו?`, ans: price + up,
+      hint: `כמה שקלים הם ${p}% מ-${price}? מוסיפים למחיר.`, exp: `${M(`${price} × ${p} : 100 = ${up}`)}, ולכן ${M(`${price} + ${up} = ${price + up}`)} ₪.`,
+      steps: [{ p: `כמה הם ${P(p)} מ-${price}?`, a: up }, { p: M(`${price} + ${up} =`), a: price + up }],
+      traps: [{ v: price - up, m: 'הורדתם. המחיר <b>עלה</b> – מוסיפים.' }, { v: price + p, m: `הוספתם ${p} ₪. מוסיפים ${p}% מהמחיר.` }, { v: up, m: 'זו רק התוספת. כמה עולה עכשיו?' }].filter(t => t.v !== price + up) });
+  }
+  if (k === 'cmp3') { // השוואת הנחות בשתי חנויות
+    const price = pick([200, 240, 300, 400]), p = pick([20, 25, 30]), f = pick([[1, 5], [1, 4], [3, 10]]);
+    const offA = price * p / 100, offB = price * f[0] / f[1];
+    if (offA === offB) return genPctWord(lv, only);
+    const better = offA > offB ? 'בחנות א' : 'בחנות ב';
+    return Object.assign(choiceQ({ word: true, learn: { lesson: 'pct', card: 6 }, text: `אותו מעיל עולה ${price} ₪ בשתי חנויות.<br>בחנות א: הנחה של ${P(p)}. בחנות ב: הנחה של ${M(F(f[0], f[1]))} מהמחיר.<br>איפה משלמים <b>פחות</b>?`,
+      hint: 'מעבירים את שתי ההנחות לאותו ייצוג (אחוזים), או מחשבים את ההנחה בשקלים.', exp: `חנות א: ${P(p)} = ${offA} ₪ הנחה. חנות ב: ${M(F(f[0], f[1]))} = ${P(f[0] * 100 / f[1])} = ${offB} ₪ הנחה. משלמים פחות ${better}.` }, better, [offA > offB ? 'בחנות ב' : 'בחנות א', 'אותו מחיר בשתיהן']), {});
+  }
+  // restWhole: 3 שלבים – אחוז המשלים ומהחלק לשלם
+  const p = pick([20, 25, 40, 60, 75, 80]), whole = R(2, 12) * 20, rest = whole * (100 - p) / 100;
+  if (rest % 1) return genPctWord(lv, only);
+  const q = 100 - p, g = gcd(q, 100), kk = q / g, u = rest / kk; // q% = kk קבוצות של g%
+  return pctWQ({ card: 10, text: `${P(p)} מה${c.who} ${c.grp} ${c.a}, ו-${rest} ${c.who} ${c.b}.<br>כמה ${c.who} יש ${c.grp} בסך הכול?`, ans: whole,
+    hint: `${rest} ה${c.who} ש${c.b} הם ${q}%. מכאן ל-100%.`,
+    exp: `${P(q)} → ${rest}. ${P(q)} הם ${kk} קבוצות של ${P(g)}, ולכן ${P(g)} → ${M(`${rest} : ${kk} = ${u}`)}, ו-${P(100)} → ${M(`${u} × ${100 / g} = ${whole}`)}.`,
+    steps: [{ p: `איזה אחוז ${c.b}?`, a: q }, { p: `${P(q)} הם ${rest}. כמה הם ${P(g)}? ${M(`${rest} : ${kk} =`)}`, a: u }, { p: `ו-${P(100)}: ${M(`${u} × ${100 / g} =`)}`, a: whole }],
+    traps: [{ v: rest * 100 / p, m: `${rest} הם אלה ש${c.b} – ${100 - p}%, לא ${p}%.` }, { v: rest + p, m: 'חיברתם את האחוז למספר. מחפשים את השלם (100%).' }].filter(t => t.v !== whole && t.v % 1 === 0) });
+}
 // לקורס "אחוזים" במאמן (לא משויכים לנושא): אחוז מכמות – כל אחוז, והתייקרות
 function genPctOfAny() { return genPctOf(2); }
 function genPctRaise() {
@@ -5647,8 +5831,7 @@ function genPctRaise() {
     exp: `ההתייקרות: ${M(`${price} × ${p} : 100 = ${up}`)} ₪.${askNew ? ` המחיר החדש: ${M(`${price} + ${up} = ${ans}`)} ₪.` : ''}`
   };
 }
-
-[[genPctGrid, 0], [genPctConvert, 1], [genPctOf, 2], [genPctOfAny, 2], [genPctDiscount, 3], [genPctRaise, 3], [genPctWhat, 4], [genPctWhole, 4]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
+[[genPctGrid, 0], [genPctConvert, 5], [genPctOf, 7], [genPctDiscount, 9], [genPctWhat, 8], [genPctWhole, 10], [genPctOfAny, 7], [genPctRaise, 9]].forEach(([g, c]) => { g.__learn = { lesson: 'pct', card: c }; });
 
 /* =========================================================
    כיתה א'
@@ -6168,7 +6351,7 @@ const TOPICS6 = [
   }
   ,{
     id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b',
-    desc: 'אחוז כחלק מ-100, אחוז ↔ שבר ועשרוני, אחוז מכמות, הנחה',
+    desc: 'אחוז כחלק מ-100, אחוז ↔ שבר ועשרוני, אחוז מכמות, איזה אחוז זה, הנחה, מהחלק לשלם',
     levels: {
       1: [genPctGrid, genPctConvert, () => genPctOf(1)],
       2: [() => genPctOf(2), genPctConvert, genPctWhat, genPctDiscount],
@@ -9765,7 +9948,7 @@ function genPctSwap() {
 // אחוזים – שתי הנחות ברצף
 function genPctTwice() {
   const [p, a] = pick([[200, 10], [400, 10], [500, 20], [100, 10], [800, 50], [400, 50], [250, 20], [1000, 10]]), one = p * (100 - a) / 100, two = one * (100 - a) / 100;
-  return { type: 'num', unit: '₪', text: `מחיר המשחק ${p} ₪. בשבוע הראשון יש הנחה של ${a}%, ובשבוע השני – עוד ${a}% הנחה <b>מהמחיר החדש</b>. כמה עולה המשחק בשבוע השני?`, ans: two, hint: 'ההנחה השנייה מחושבת מהמחיר אחרי ההנחה הראשונה.',
+  return { type: 'num', unit: '₪', enrich: true, text: `<span class="enr">⭐ העשרה</span>מחיר המשחק ${p} ₪. בשבוע הראשון יש הנחה של ${a}%, ובשבוע השני – עוד ${a}% הנחה <b>מהמחיר החדש</b>. כמה עולה המשחק בשבוע השני?`, ans: two, hint: 'ההנחה השנייה מחושבת מהמחיר אחרי ההנחה הראשונה.',
     traps: [{ v: p * (100 - 2 * a) / 100, m: `חיברתם את ההנחות ל-${2 * a}%. ההנחה השנייה היא מהמחיר החדש (${fmt(one)} ₪) – היא קטנה יותר.` }, { v: one, m: `זה המחיר אחרי הנחה אחת. יש עוד הנחה.` }, { v: p - 2 * a, m: `הורדתם ${a} ₪ פעמיים. ההנחה היא באחוזים.` }],
     exp: `${M(`${p} − ${a}% = ${fmt(one)}`)}, ואז ${M(`${fmt(one)} − ${a}% = ${fmt(two)}`)}.` };
 }
@@ -9834,7 +10017,7 @@ function g6Pools() {
     dec: [[genDecimalPlace, genFracToDec, genDecToFrac], [genDecCompare, genDecAddSub, genNumberLine, genSequence], [genDecEst, genFracPlusDec, genDecErr]],
     geo: [[genRect, () => genSquare(1), genShapeProps], [genRectReverse, () => genSquare(2), genTrianglePerim, genParallelogram, genTriangleArea], [genGeoCut, genGeoScale, genGeoArea, genLShape]],
     data: [[() => genBarRead(0), () => genBarRead(1)], [() => genBarRead(2), () => genBarRead(3), () => genMeanList(1), () => genBakery()], [() => genBarRead(4), () => genMeanList(2), () => genMeanChange(), genMeanAdd, genMeanTarget]],
-    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctSwap, genPctWhole, genPctTwice]],
+    pct: [[genPctGrid, genPctConvert, () => genPctOf(1)], [() => genPctOf(2), genPctDiscount, genPctWhat], [genPctWhole, () => genPctWord(3, 'whatBig'), () => genPctWord(3, 'restWhole'), genPctTwice]],
     mul22: [[() => genMul22('area'), () => genMul22('plain')], [() => genMul22('plain'), () => genMul22('word')], [genMul22Est, genMul22Cmp]],
     seq: [[() => genSeqAdd(1)], [() => genSeqAdd(2), () => genSeqMul(1), () => genSeqMul(2)], [genSeqTerm, genSeqMember]],
     mulfr: [[() => genMulWhFr(1), genFracTimesWhole], [() => genMulWhFr(2), genFracTimesWhole], [genMulFrReason, genMulWhFr3, genFracTimesWhole]],
@@ -10031,6 +10214,27 @@ if (GRADE === 6) TOPICS.push({
     3: [genExpandedDecimal, genDecCompare]
   },
   tips: ['אחרי הנקודה: הספרה הראשונה – עשיריות, השנייה – מאיות, השלישית – אלפיות.', 'כל מקום שווה פי 10 מהמקום שמימינו – גם אחרי הנקודה: 10 מאיות = עשירית אחת.', 'משווים מספרים עשרוניים מקום אחר מקום משמאל: קודם השלמים, אחר כך העשיריות.']
+});
+// 💬 שאלות מילוליות באחוזים (כיתה ו') – נושא נפרד בקטגוריית האחוזים (21.11). נוסף בסוף כדי לא לשבש קודי חוברות
+if (GRADE === 6) TOPICS.push({
+  id: 'pctWord', name: 'שאלות מילוליות באחוזים', icon: '💬', color: '#c0392b',
+  desc: 'סיפורים עם אחוזים, שברים ועשרוניים: כמה זה, איזה אחוז זה, משלים ל-100%, הנחה והתייקרות, מהחלק לשלם, מי יותר',
+  levels: { 1: [() => genPctWord(1)], 2: [() => genPctWord(2)], 3: [() => genPctWord(3)] },
+  tips: ['קוראים את כל השאלה: מה השלם (100%)? מה החלק? מה שואלים?', 'שבר או עשרוני בסיפור? מעבירים לאחוזים: מרחיבים למכנה 100 / קוראים במאיות.', 'הנחה – מורידים מהמחיר. התייקרות – מוסיפים. בודקים: האם התשובה הגיונית?']
+});
+// כיתה ה' (21.11, לפי תכנית הלימודים עמ' 101): רק היכרות – אחוז = שם אחר למאית, ומשמעות 50%, 25%, 10%. בלי חישובי אחוזים של כיתה ו'
+function genPctMean5() {
+  const [p, w, f] = pick([[50, 'חצי', 2], [25, 'רבע', 4], [10, 'עשירית', 10]]), N = R(2, 12) * f * (f === 10 ? 1 : 2), ans = N / f;
+  const t = pick([['בשכבה', 'תלמידים', 'הם בנות'], ['בקופסה', 'עפרונות', 'הם אדומים'], ['בגינה', 'עצים', 'הם עצי פרי']]);
+  return { type: 'num', learn: { lesson: 'pct', card: 4 }, text: `${t[0]} ${N} ${t[1]}. ${P(p)} מהם ${t[2]}.<br>${P(p)} זה ${w}. כמה ${t[1]} ${t[2]}?`, ans,
+    hint: `${p}% = ${w}: מחלקים את ${N} ל-${f} חלקים שווים.`, exp: `${P(p)} = ${M(F(1, f))}, ולכן ${M(`${N} : ${f} = ${ans}`)}.`,
+    traps: [{ v: N - ans, m: 'זה מה שנשאר. שואלים על החלק עצמו.' }, { v: N * p, m: `${p}% הוא ${w}, לא כפל ב-${p}.` }, { v: p, m: `${p} הוא האחוז. כמה ${t[1]} זה?` }].filter(q => q.v !== ans) };
+}
+if (GRADE === 5) TOPICS.push({
+  id: 'pct', name: 'אחוזים – היכרות', icon: '💯', color: '#c0392b',
+  desc: 'אחוז = שם אחר למאית; אחוז, שבר עם מכנה 100 ועשרוני; 50%, 25%, 10%',
+  levels: { 1: [genPctGrid], 2: [genPctConvert], 3: [genPctMean5] },
+  tips: ['אחוז = מתוך 100: 35% = 35 מתוך 100 = 0.35.', '50% = חצי · 25% = רבע · 10% = עשירית.', '7% = 0.07 (7 מאיות), לא 0.7.']
 });
 const TOPIC = Object.fromEntries(TOPICS.map(t => [t.id, t]));
 if (GRADE === 6) g6Pools();
@@ -12075,8 +12279,8 @@ Object.assign(LESSONS, {
 Object.assign(LESSONS, {
   pct: {
     id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b', topic: 'pct',
-    desc: 'מה זה אחוז, אחוז ↔ שבר ועשרוני, אחוז מכמות, הנחה, איזה אחוז זה',
-    practice: [genPctGrid, genPctConvert, () => genPctOf(1), () => genPctOf(2), genPctWhat, genPctDiscount, genPctWhole, () => genPctOf(2)],
+    desc: 'מה זה אחוז, אחוז = שבר עם מכנה 100 = מאיות, שלושה שמות לאותו חלק, אחוזים מוכרים, מעברים והשוואה, אחוז מכמות, איזה אחוז זה, הנחה, מהחלק לשלם',
+    practice: [genPctGrid, genPctConvert, genPctConvert, () => genPctOf(1), () => genPctOf(2), genPctWhat, genPctDiscount, genPctWhole],
     cards: [
       {
         title: 'מה זה אחוז?',
@@ -12087,8 +12291,47 @@ Object.assign(LESSONS, {
         try: { type: 'num', q: `ריבוע מחולק ל-100 משבצות, ו-62 מהן צבועות. איזה אחוז מהריבוע צבוע?`, ans: 62, hint: 'כמה מתוך 100?', exp: `62 מתוך 100 = ${P(62)}`, traps: [{ v: 38, m: 'זה החלק שלא צבוע.' }] }
       },
       {
-        title: 'אחוזים, שברים ועשרוניים',
-        html: `<table class="ftable">
+        title: 'אחוז הוא שבר עם מכנה 100',
+        html: `<p>"37 <b>מתוך 100</b>" – כך כותבים גם כשבר:</p>
+          <div class="center">${pctGridSVG(37)}</div>
+          <div class="explain center">${P(37)} = ${M(F(37, 100))}</div>
+          <p>המונה – כמה משבצות צבועות. המכנה – תמיד <b>100</b>, כי השלם מחולק ל-100 חלקים שווים.</p>
+          <div class="rule">💡 כל אחוז אפשר לכתוב כשבר שהמכנה שלו 100: ${P(9)} = ${M(F(9, 100))} · ${P(80)} = ${M(F(80, 100))}.</div>`,
+        try: { type: 'frac', q: `כתבו את ${P(9)} כשבר.`, ans: { n: 9, d: 100 }, form: 'any', hint: '9 מתוך כמה?', exp: `${P(9)} = 9 מתוך 100 = ${M(F(9, 100))}` }
+      },
+      {
+        title: 'אחוז הוא מאיות – ומכאן עשרוני',
+        html: `<p>שבר עם מכנה 100 הוא <b>מאיות</b>. ומאיות כותבים במספר עשרוני – שתי ספרות אחרי הנקודה:</p>
+          <div class="explain center">${P(37)} = ${M(F(37, 100))} = 37 מאיות = ${M('0.37')}</div>
+          <div class="explain center">${P(7)} = ${M(F(7, 100))} = 7 מאיות = ${M('0.07')}</div>
+          <div class="warn">⚠️ ${P(7)} הוא ${M('0.07')}, לא ${M('0.7')}! ${M('0.7')} = 7 עשיריות = 70 מאיות = ${P(70)}.</div>
+          <div class="rule">💡 מאחוז לעשרוני: הספרות של האחוז הן המאיות. אחוז חד-ספרתי – כותבים 0 במקום העשיריות.</div>`,
+        try: { type: 'num', q: `כתבו את ${P(7)} כמספר עשרוני.`, ans: 0.07, hint: '7 מאיות – הספרה 7 במקום המאיות (השני אחרי הנקודה).', exp: `${P(7)} = ${M(`${F(7, 100)} = 0.07`)}`, traps: [{ v: 0.7, m: '0.7 = 7 עשיריות = 70%. ‏7% הם 7 <b>מאיות</b>: 0.07.' }, { v: 7, m: '7 הוא שבעה שלמים. 7% הם 7 מאיות – פחות מ-1.' }] }
+      },
+      {
+        title: 'שלושה שמות לאותו חלק',
+        html: `<p>צבעו משבצות, וראו את אותו חלק בשלוש דרכים:</p>
+          <div class="frow"><div data-pgrid></div><div class="dval" data-pval></div></div>
+          <div class="lbtns"><button class="secondary" data-pk="10">+ 10</button><button class="secondary" data-pk="1">+ 1</button><button class="secondary" data-pk="-1">− 1</button><button class="secondary" data-pk="-10">− 10</button></div>
+          <div class="rule">💡 אחוז, שבר ועשרוני – <b>שלושה שמות לאותו מספר</b>. לא משנה איך כותבים, החלק הצבוע אותו חלק.</div>`,
+        setup(root) {
+          let k = 45;
+          const show = () => {
+            root.querySelector('[data-pgrid]').innerHTML = pctGridSVG(k);
+            root.querySelector('[data-pval]').innerHTML = `<div class="fbig">${P(k)}</div><div>${M(F(k, 100))}</div><div class="fbig">${M(k === 100 ? '1' : fmt(k / 100))}</div>`;
+          };
+          root.querySelectorAll('[data-pk]').forEach(b => b.onclick = () => { k = Math.max(0, Math.min(100, k + Number(b.dataset.pk))); show(); });
+          show();
+        },
+        try: { type: 'choice', q: `איזה מהם <b>לא</b> שווה ל-${P(40)}?`, choices: [M('0.04'), M('0.4'), M(F(40, 100)), M('0.40')], ans: 0, hint: 'כמה מאיות הם 40%?', exp: `${P(40)} = ${M(F(40, 100))} = ${M('0.40')} = ${M('0.4')}. אבל ${M('0.04')} = ${P(4)}.`, traps: [{ c: M('0.4'), m: `${M('0.4')} = ${M('0.40')} – אפס בסוף לא משנה. זה כן שווה ל-40%.` }] }
+      },
+      {
+        title: 'אחוזים מוכרים',
+        html: `<p>כמה אחוזים כדאי להכיר בעל-פה. למה ${M(F(1, 4))} = ${P(25)}? ברבע מהריבוע יש 25 משבצות:</p>
+          <div class="center">${pctGridSVG(25)}</div>
+          <p>ובחשבון – מרחיבים למכנה 100:</p>
+          <div class="explain center">${M(`${F(1, 4)} = ${F('1 × 25', '4 × 25')} = ${F(25, 100)}`)} = ${P(25)}</div>
+          <table class="ftable">
             <tr><td><b>אחוז</b></td><td><b>שבר</b></td><td><b>עשרוני</b></td></tr>
             <tr><td>${P(50)}</td><td>${M(F(1, 2))}</td><td>${M('0.5')}</td></tr>
             <tr><td>${P(25)}</td><td>${M(F(1, 4))}</td><td>${M('0.25')}</td></tr>
@@ -12096,39 +12339,94 @@ Object.assign(LESSONS, {
             <tr><td>${P(10)}</td><td>${M(F(1, 10))}</td><td>${M('0.1')}</td></tr>
             <tr><td>${P(20)}</td><td>${M(F(1, 5))}</td><td>${M('0.2')}</td></tr>
             <tr><td>${P(1)}</td><td>${M(F(1, 100))}</td><td>${M('0.01')}</td></tr></table>
-          <div class="rule">💡 אחוז → עשרוני: מחלקים ב-100. עשרוני → אחוז: כופלים ב-100.</div>`,
-        try: { type: 'num', q: `כתבו את ${P(7)} כמספר עשרוני.`, ans: 0.07, hint: '7 מתוך 100 – שתי ספרות אחרי הנקודה.', exp: `${P(7)} = ${M(`${F(7, 100)} = 0.07`)}`, traps: [{ v: 0.7, m: '0.7 = 70%. אחוז אחד = 0.01, לכן 7% = 0.07.' }] }
+          <div class="rule">💡 ${P(50)} = חצי · ${P(25)} = רבע · ${P(10)} = עשירית. אם שוכחים – מרחיבים או מצמצמים את השבר למכנה 100.</div>`,
+        try: { type: 'num', q: `${M(F(1, 5))} = כמה אחוזים?`, ans: 20, hint: 'מרחיבים למכנה 100: 5 כפול כמה = 100?', exp: `${M(`${F(1, 5)} = ${F('1 × 20', '5 × 20')} = ${F(20, 100)}`)} = ${P(20)}`, traps: [{ v: 5, m: 'זה המכנה. מרחיבים את השבר למכנה 100 – מה המונה?' }, { v: 15, m: 'לא מחסרים. מרחיבים: כופלים מונה ומכנה ב-20.' }] }
       },
       {
-        title: 'אחוז מכמות',
-        html: `<p>כמה הם ${P(30)} מ-${M('240')}?</p>
-          <ol class="lsteps"><li>${P(10)} = מחלקים ב-10: ${M('240 : 10 = 24')}</li><li>${P(30)} = שלוש פעמים ${P(10)}: ${M('24 × 3 = 72')}</li></ol>
-          <div class="rule">💡 קיצורי דרך: ${P(50)} – חצי · ${P(25)} – רבע · ${P(10)} – מחלקים ב-10 · ${P(1)} – מחלקים ב-100.</div>
-          <p class="small">ובאופן כללי: ${M('240 × 30 : 100 = 72')}</p>`,
+        title: 'משבר ומעשרוני – לאחוז',
+        html: `<p>${M(F(3, 5))} מהריבוע: כל חמישית היא 20 משבצות, ושלוש חמישיות הן 60 משבצות = ${P(60)}.</p>
+          <div class="center">${pctGridSVG(60)}</div>
+          <ol class="lsteps">
+            <li><b>משבר:</b> מרחיבים (או מצמצמים) למכנה 100. המונה הוא האחוז.<br>${M(`${F(3, 5)} = ${F(60, 100)}`)} = ${P(60)} · ${M(`${F(18, 200)} = ${F(9, 100)}`)} = ${P(9)}</li>
+            <li><b>מעשרוני:</b> כותבים במאיות (שתי ספרות אחרי הנקודה). מספר המאיות הוא האחוז.<br>${M('0.4 = 0.40')} = 40 מאיות = ${P(40)} · ${M('0.06')} = 6 מאיות = ${P(6)}</li>
+          </ol>
+          <div class="warn">⚠️ ${M('0.4')} הוא <b>${P(40)}</b>, לא ${P(4)}! קודם משלימים ל-${M('0.40')}.</div>`,
+        try: { type: 'num', q: `${M('0.3')} = כמה אחוזים?`, ans: 30, hint: 'כתבו במאיות: 0.3 = 0.30. כמה מאיות?', exp: `${M('0.3 = 0.30')} = 30 מאיות = ${P(30)}`, traps: [{ v: 3, m: `${M('0.3')} הם 3 <b>עשיריות</b> = 30 מאיות. ${P(3)} = ${M('0.03')}.` }, { v: 0.3, m: 'זה המספר העשרוני. כמה אחוזים – כמה מאיות?' }] }
+      },
+      {
+        title: 'מה גדול יותר?', grades: [6],
+        html: `<p>איך משווים ${M('0.3')}, ${P(25)} ו-${M(F(1, 5))}? <b>מעבירים את כולם לאותו שם</b> – הכי נוח: אחוזים.</p>
+          <ol class="lsteps"><li>${M('0.3 = 0.30')} = ${P(30)}</li><li>${P(25)}</li><li>${M(`${F(1, 5)} = ${F(20, 100)}`)} = ${P(20)}</li></ol>
+          <div class="explain center">${P(30)} > ${P(25)} > ${P(20)} ← ${M('0.3')} הכי גדול</div>
+          <div class="rule">💡 קשה להשוות שבר לעשרוני? מעבירים הכול לאחוזים (או הכול לעשרוני) – ואז משווים מספרים רגילים.</div>`,
+        try: { type: 'choice', q: 'איזה מספר הוא <b>הגדול ביותר</b>?', choices: [M(F(3, 4)), M('0.7'), P(72), M('0.07')], ans: 0, hint: 'העבירו את כולם לאחוזים.', exp: `${M(F(3, 4))} = ${P(75)} · ${M('0.7')} = ${P(70)} · ${P(72)} · ${M('0.07')} = ${P(7)}. הגדול: ${M(F(3, 4))}.`, traps: [{ c: P(72), m: `72 נראה גדול, אבל ${M(F(3, 4))} = ${P(75)}.` }, { c: M('0.7'), m: `${M('0.7')} = ${P(70)} – פחות מ-${P(72)} ומ-${P(75)}.` }] }
+      },
+      {
+        title: 'אחוז מכמות', grades: [6],
+        html: `<p>בבית הספר 240 תלמידים. מחלקים אותם ל-<b>10 קבוצות שוות</b>. כל קבוצה היא ${P(10)}, כלומר ${M('240 : 10 = 24')} תלמידים:</p>
+          ${pctGroups(10, 24, 3, `3 קבוצות צבועות הן ${P(30)}: ${M('24 × 3 = 72')} תלמידים`)}
+          <p>מתחילים מאחוזים מוכרים, וממשיכים מהם:</p>
+          <ol class="lsteps">
+            <li>${P(50)} הם חצי. חצי מ-240: ${M('240 : 2 = 120')}</li>
+            <li>${P(10)} הם עשירית – מחלקים ב-10: ${M('240 : 10 = 24')}</li>
+            <li>${P(30)} הם שלוש פעמים ${P(10)}: ${M('24 × 3 = 72')}</li>
+            <li>${P(5)} הם חצי מ-${P(10)}: ${M('24 : 2 = 12')}</li>
+          </ol>
+          <div class="rule">💡 ובאופן כללי, לכל אחוז: ${P(30)} הם ${M(F(30, 100))}. כופלים ב-30 ומחלקים ב-100: ${M('240 × 30 : 100 = 72')}</div>`,
         try: { type: 'num', q: `כמה הם ${P(20)} מ-${M('150')}?`, ans: 30, hint: '10% = 15. 20% = פעמיים.', exp: `${M('150 : 10 = 15')}, ${M('15 × 2 = 30')}`, traps: [{ v: 3000, m: 'שכחתם לחלק ב-100.' }, { v: 120, m: 'זה מה שנשאר אחרי שמורידים 20%.' }] }
       },
       {
-        title: 'הנחה',
+        title: 'איזה אחוז זה?', grades: [6],
+        html: `<p>בכיתה 25 תלמידים, ו-15 מהם בנות. איזה אחוז הן הבנות?</p>
+          <ol class="lsteps"><li>כותבים שבר – החלק מתוך השלם: ${M(F(15, 25))}</li><li>מרחיבים למכנה 100 (כפול 4): ${M(`${F(15, 25)} = ${F(60, 100)}`)}</li><li>${P(60)}</li></ol>
+          <p>ומה אם השלם גדול מ-100? בשכבה 400 תלמידים, ו-36 מהם בנות. כאן <b>מצמצמים</b> למכנה 100:</p>
+          <ol class="lsteps"><li>${M(F(36, 400))}</li><li>${M('400 : 4 = 100')}, ולכן מחלקים גם את המונה ב-4: ${M(`${F(36, 400)} = ${F(9, 100)}`)}</li><li>${P(9)}</li></ol>
+          <div class="rule">💡 השלם קטן מ-100 – <b>מרחיבים</b> למכנה 100. השלם גדול מ-100 – <b>מצמצמים</b> למכנה 100. זה בדיוק המעבר משבר לאחוז שלמדנו.</div>`,
+        try: { type: 'num', q: 'במבחן היו 20 שאלות, ונועה ענתה נכון על 17. איזה אחוז מהשאלות היא ענתה נכון?', ans: 85, hint: '17/20 – הרחיבו למכנה 100 (כפול 5).', exp: `${M(`${F(17, 20)} = ${F(85, 100)}`)} = ${P(85)}`, traps: [{ v: 17, m: '17 זה מספר השאלות. כמה זה מתוך 100?' }] }
+      },
+      {
+        title: 'הנחה', grades: [6],
         html: `<p>מחיר משחק <b>80 ₪</b>, והנחה של <b>${P(25)}</b>. כמה משלמים?</p>
           <ol class="lsteps"><li>גובה ההנחה: ${P(25)} = רבע: ${M('80 : 4 = 20')} ₪</li><li>המחיר אחרי ההנחה: ${M('80 - 20 = 60')} ₪</li></ol>
           <div class="warn">⚠️ הנחה של 25% היא לא 25 ₪! מחשבים 25% <b>מהמחיר</b>.</div>`,
         try: { type: 'num', q: `חולצה עולה 120 ₪, והנחה של ${P(10)}. כמה משלמים אחרי ההנחה?`, ans: 108, hint: '10% מ-120 = 12.', exp: `${M('120 - 12 = 108')} ₪`, traps: [{ v: 12, m: 'זו ההנחה. כמה <b>משלמים</b>?' }, { v: 110, m: 'הורדתם 10 ₪. ההנחה היא 10% מהמחיר = 12 ₪.' }] }
       },
       {
-        title: 'איזה אחוז זה?',
-        html: `<p>בכיתה 25 תלמידים, ו-15 מהם בנות. איזה אחוז הן הבנות?</p>
-          <ol class="lsteps"><li>כותבים שבר – החלק מתוך השלם: ${M(F(15, 25))}</li><li>מרחיבים למכנה 100 (כפול 4): ${M(`${F(15, 25)} = ${F(60, 100)}`)}</li><li>${P(60)}</li></ol>`,
-        try: { type: 'num', q: 'במבחן היו 20 שאלות, ונועה ענתה נכון על 17. איזה אחוז מהשאלות היא ענתה נכון?', ans: 85, hint: '17/20 – הרחיבו למכנה 100 (כפול 5).', exp: `${M(`${F(17, 20)} = ${F(85, 100)}`)} = ${P(85)}`, traps: [{ v: 17, m: '17 זה מספר השאלות. כמה זה מתוך 100?' }] }
+        title: 'מהחלק לשלם', grades: [6],
+        html: `<p>12 תלמידים יצאו לטיול, והם ${P(25)} מהשכבה. כמה תלמידים בשכבה?</p>
+          <p>${P(25)} הם רבע. אם רבע אחד הוא 12, השלם הוא <b>4 רבעים</b>:</p>
+          ${pctGroups(4, 12, 1, `רבע אחד הוא 12. כל השכבה היא 4 רבעים: ${M('12 × 4 = 48')}`)}
+          <p>ואם ${P(10)} הם 7? ב-${P(100)} יש 10 קבוצות של ${P(10)}:</p>
+          ${pctGroups(10, 7, 1, `השלם הוא 10 קבוצות: ${M('7 × 10 = 70')}`)}
+          <p>ואם ${P(40)} הם 28? ${P(40)} הם 4 קבוצות של ${P(10)}. בקבוצה אחת: ${M('28 : 4 = 7')}. בשלם 10 קבוצות: ${M('7 × 10 = 70')}</p>
+          <div class="warn">⚠️ לא מחשבים ${P(25)} <b>מ</b>-12! 12 הוא החלק. מחפשים את השלם – והוא <b>גדול</b> מהחלק.</div>
+          <div class="rule">💡 מהחלק לשלם: כמה פעמים האחוז נכנס ב-${P(100)}? כופלים את החלק באותו מספר. לא נכנס בדיוק? עוברים קודם ל-${P(10)}.</div>`,
+        try: { type: 'num', q: `${P(20)} מהעצים בחורשה הם 9 עצים. כמה עצים יש בחורשה?`, ans: 45, hint: `כמה פעמים ${P(20)} נכנס ב-${P(100)}?`, exp: `${P(20)} נכנס ב-${P(100)} חמש פעמים: ${M('9 × 5 = 45')} עצים.`,
+          traps: [{ v: 1.8, m: `חישבתם ${P(20)} מ-9. אבל 9 הם החלק – מחפשים את כל העצים.` }, { v: 29, m: 'חיברתם 9 ו-20. ציירו 5 קבוצות של 20%: בכל אחת 9 עצים.' }, { v: 180, m: `כפלתם ב-20. ${P(20)} נכנס ב-${P(100)} רק 5 פעמים.` }, { v: 4.5, m: 'חילקתם. השלם גדול מהחלק – כופלים.' }] }
       },
       {
-        title: 'כללים לזכור 📌',
+        title: 'כללים לזכור 📌', grades: [6],
         html: `<ul class="recap">
           <li>💯 <b>אחוז</b> = מתוך 100. ${P(100)} = השלם.</li>
-          <li>🔄 אחוז ↔ עשרוני: מחלקים או כופלים ב-100. ${P(50)} = ${M(F(1, 2))} · ${P(25)} = ${M(F(1, 4))} · ${P(10)} = ${M(F(1, 10))}.</li>
-          <li>🧮 <b>אחוז מכמות:</b> מתחילים מ-${P(10)} (מחלקים ב-10) או משתמשים בחצי ורבע.</li>
+          <li>➗ <b>אחוז = שבר עם מכנה 100:</b> ${P(37)} = ${M(F(37, 100))}.</li>
+          <li>🔢 <b>אחוז = מאיות:</b> ${P(37)} = ${M('0.37')}, ${P(7)} = ${M('0.07')}.</li>
+          <li>🔄 <b>משבר לאחוז:</b> מרחיבים למכנה 100. <b>מעשרוני לאחוז:</b> כותבים במאיות (${M('0.4 = 0.40')} = ${P(40)}).</li>
+          <li>⭐ ${P(50)} = ${M(F(1, 2))} · ${P(25)} = ${M(F(1, 4))} · ${P(10)} = ${M(F(1, 10))} · ${P(20)} = ${M(F(1, 5))}.</li>
+          <li>⚖️ <b>השוואה:</b> מעבירים הכול לאותו שם (אחוזים).</li>
+          <li>🧮 <b>אחוז מכמות:</b> מתחילים מ-${P(50)} או ${P(10)}, וממשיכים מהם.</li>
+          <li>❓ <b>איזה אחוז זה?</b> כותבים שבר (חלק מתוך שלם) ומרחיבים או מצמצמים למכנה 100.</li>
           <li>🏷️ <b>הנחה:</b> מחשבים את גובה ההנחה ומורידים מהמחיר.</li>
-          <li>❓ <b>איזה אחוז זה?</b> כותבים שבר (חלק מתוך שלם) ומרחיבים למכנה 100.</li>
+          <li>🔁 <b>מהחלק לשלם:</b> כמה פעמים האחוז נכנס ב-${P(100)}? כופלים את החלק.</li>
         </ul><p class="center"><b>כל הכבוד! סיימתם את כרטיסיות האחוזים 🎉</b></p>`
+      },
+      {
+        title: 'כללים לזכור 📌', grades: [5],
+        html: `<ul class="recap">
+          <li>💯 <b>אחוז</b> = מתוך 100 = <b>שם אחר למאית</b>. ${P(100)} = השלם.</li>
+          <li>➗ ${P(37)} = ${M(F(37, 100))} = ${M('0.37')} · ${P(7)} = ${M('0.07')} (לא ${M('0.7')}).</li>
+          <li>⭐ ${P(50)} = חצי · ${P(25)} = רבע · ${P(10)} = עשירית.</li>
+          <li>🔄 משבר לאחוז: מרחיבים למכנה 100. מעשרוני לאחוז: כמה מאיות?</li>
+        </ul><p class="center"><b>כל הכבוד! בכיתה ו' נמשיך: אחוז מכמות, איזה אחוז זה והנחה 🎉</b></p>`
       }
     ]
   }
@@ -13054,7 +13352,7 @@ function home() {
           </div>` : ''}
           ${champCard()}
           ${topicCatsHTML()}
-          <div class="practice-more">
+          <div class="practice-more"${catOpenNow ? ' hidden' : ''}>
             <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
             <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
             ${store.solved ? `<div class="muted">${ic('star')} עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
@@ -13196,6 +13494,17 @@ function home() {
             <span class="gc-nm">לוח מסמרים</span>
             <span class="gc-ds">משרטטים צורות על רשת נקודות – והאתר מחשב שטח והיקף. יש גם משימות!</span>
           </button>
+          ${T ? `<h3 class="games-sub">בכיתה – בקבוצות (מורה)</h3>
+          <button class="game-card" id="jeoGoG">
+            <span class="gc-ic" style="--gw:rgba(217,138,154,0.6)">${ic('grid')}</span>
+            <span class="gc-nm">ג'פרדי כיתתי</span>
+            <span class="gc-ds">משחק קבוצות לכל הכיתה, על כל הנושאים. מקרינים על הלוח.</span>
+          </button>
+          <button class="game-card" id="clsGamesG">
+            <span class="gc-ic" style="--gw:rgba(217,138,154,0.6)">${ic('grid')}</span>
+            <span class="gc-nm">עוד משחקים לכל הכיתה</span>
+            <span class="gc-ds">כיבוש שטחים, מיליונר קבוצתי, מלחמה, אמת או שקר ובינגו – בקבוצות.</span>
+          </button>` : ''}
         </section>
         ${T ? `<section class="panel" data-panel="teach" ${homeTab === 'teach' ? '' : 'hidden'}>
           <h2>אזור המורה</h2>
@@ -13324,6 +13633,8 @@ function home() {
     $('clsOpen').onclick = () => classSub('open');
     $('clsGames').onclick = () => classSub('games');
   }
+  if ($('jeoGoG')) $('jeoGoG').onclick = () => jeoHome();
+  if ($('clsGamesG')) $('clsGamesG').onclick = () => classSub('games');
   $('warGo1').onclick = () => warHome('solo');
   $('tfGo0').onclick = () => tfHome();
   $('calmBtn').onclick = () => {
@@ -13338,7 +13649,7 @@ function home() {
     store.roundLen = Number(b.dataset.len); saveStore(store);
     app.querySelectorAll('.seg button').forEach(x => x.classList.toggle('sel', x === b));
   });
-  app.querySelectorAll('.topic[data-t]').forEach(b => b.onclick = () => topicHome(b.dataset.t));
+  app.querySelectorAll('.topic[data-t], .xt-tile[data-t]').forEach(b => b.onclick = () => topicHome(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   // ---- חיפוש נושא: לימוד + תרגול + משחקים + מבחנים ----
   (() => {
@@ -13387,6 +13698,7 @@ function home() {
   if ($('quadGo')) $('quadGo').onclick = quadHome;
   if ($('drawGo')) $('drawGo').onclick = drawPracticeHome;
   ['pal', 'euler', 'cub', 'mag', 'grw'].forEach(k => { const b = $('x' + k + 'Go'); if (b) b.onclick = () => $(k + 'Go').click(); });
+  if ($('xsdkGo')) $('xsdkGo').onclick = () => { trackSend('מרכז הסודוקו', '', true); location.href = 'sudoku.html' + (GRADE ? '?grade=' + GRADE : ''); };
   if ($('champGo')) $('champGo').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('tframeGo')) $('tframeGo').onclick = tenFrame;
@@ -13461,12 +13773,13 @@ const CAT_OF = {
   dec: 'dec', placeDec: 'dec',
   frac: 'frac', mulfr: 'frac', divfr: 'frac',
   shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', solids: 'geo', solidsN: 'geo', solidsS: 'geo', solidsV: 'geo', drawGo: 'geo', quadGo: 'geo',
-  pct: 'pct',
+  pct: 'pct', pctWord: 'pct',
   data: 'data',
-  xpalGo: 'exc', xeulerGo: 'exc', xcubGo: 'exc', xmagGo: 'exc', xgrwGo: 'exc',
+  xpalGo: 'exc', xeulerGo: 'exc', xcubGo: 'exc', xmagGo: 'exc', xgrwGo: 'exc', xsdkGo: 'exc',
   wpm: 'word', wpGo: 'word'
 };
 const catOf = id => CAT_OF[id] || 'nat';
+let catOpenNow = ''; // הקטגוריה הפתוחה ברגע זה ('' = מסך כל הקטגוריות)
 function topicCatsHTML() {
   let n = 0;
   const topicBtn = t => { const s = store.topics[t.id], m = s ? s.mastery : 0; return `<button class="topic" style="--c:${t.color}" data-t="${t.id}">
@@ -13488,17 +13801,25 @@ function topicCatsHTML() {
       ['xeulerGo', '✏️ משיכת קולמוס אחת', 'אפשר לצייר את הצורה בקו אחד בלי להרים את העיפרון?'],
       ['xcubGo', '🧊 כמה קוביות?', 'סופרים קוביות במבנה משורטט – גם את המוסתרות'],
       ['xmagGo', '🔢 ריבועי קסם', 'כל שורה, טור ואלכסון – לאותו סכום'],
-      ['xgrwGo', '📈 תבניות גדילה', 'מגלים את הכלל ויודעים מה יהיה בשלב 10 ואפילו בשלב 100']].map(([id, nm, ds]) => ({ id, h: () => extra(id, '#6b3fa0', nm, ds) })) : [])
+      ['xgrwGo', '📈 תבניות גדילה', 'מגלים את הכלל ויודעים מה יהיה בשלב 10 ואפילו בשלב 100']].map(([id, nm, ds]) => ({ id, nm, ds, h: () => extra(id, '#6b3fa0', nm, ds) })) : []),
+    // מרכז הסודוקו – בכל הכיתות (לפי יכולת ולא לפי שכבה), דף נפרד sudoku.html
+    { id: 'xsdkGo', nm: '🧩 מרכז הסודוקו', ds: 'סודוקו בשלושה גדלים וגם סודוקו סכומים – עם רמזים חכמים, אתגר יומי וחוברות להדפסה', h: () => extra('xsdkGo', '#6b3fa0', '🧩 מרכז הסודוקו', 'סודוקו בשלושה גדלים וגם סודוקו סכומים – עם רמזים חכמים, אתגר יומי וחוברות להדפסה') }
   ];
   const groups = TOPIC_CATS.map(c => ({ c, topics: [...TOPICS, ...XTOPICS].filter(t => catOf(t.id) === c.id).sort((x, y) => (y.id === 'placeDec') - (x.id === 'placeDec')), // מבנה עשרוני – ראשון בעשרוניים
     extra: EXTRA.filter(e => catOf(e.id) === c.id), tools: TOOL_CARDS.filter(t => (t.cat || 'nat') === c.id) }))
     .filter(g => g.topics.length || g.extra.length);
   const tools = g => g.tools.length ? `<div class="tool-row"><span class="lbl2">🧰 כלי המחשה:</span>${g.tools.map(c => `<button type="button" class="tool-chip" id="${c.id}">${c.chip}</button>`).join('')}</div>` : '';
-  const body = g => `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`;
+  // מצוינות (27.11, איריס): הנושאים והפעילויות כאריחים – סמל גדול, שם, תיאור קצר ופס שליטה
+  const xTile = (id, attr, ic, nm, ds, m) => `<button type="button" class="xt-tile" style="--c:#6b3fa0" ${attr}><span class="xt-i" aria-hidden="true">${ic}</span><span class="xt-nm">${nm}</span><span class="xt-ds">${ds}</span>${m == null ? '' : `<span class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></span>`}</button>`;
+  const splitIc = nm => { const m = /^(\S+)\s+(.*)$/.exec(nm); return m && !/[א-ת]/.test(m[1]) ? [m[1], m[2]] : ['🧠', nm]; };
+  const excBody = g => `<div class="xt-tiles">${g.topics.map(t => { const st = store.topics[t.id]; return xTile(t.id, `data-t="${t.id}"`, t.icon || '🧠', t.name, t.desc, st ? st.mastery : 0); }).join('')}${g.extra.map(e => { const [ic, nm] = splitIc(e.nm || ''); return xTile(e.id, `id="${e.id}"`, ic, nm, e.ds || '', null); }).join('')}</div>${tools(g)}`;
+  // המספור מתחיל מ-1 בכל קטגוריה (27.11, איריס) – כל קטגוריה מוצגת לבד
+  const body = g => { n = 0; return g.c.id === 'exc' ? excBody(g) : `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`; };
   const cnt = g => g.topics.length + g.extra.length;
   const avg = g => g.topics.length ? Math.round(g.topics.reduce((a, t) => a + ((store.topics[t.id] || {}).mastery || 0), 0) / g.topics.length) : 0;
   let open = ''; try { open = sessionStorage.getItem('math-cat') || ''; } catch (e) {}
   if (!groups.some(g => g.c.id === open)) open = '';
+  catOpenNow = open;
   // אריחי קטגוריות → לחיצה פותחת רק את הקטגוריה
   return `<div class="tcat-tiles"${open ? ' hidden' : ''}>${groups.map(g => `<button type="button" class="tcat-tile" style="--c:${g.c.color}" onclick="catShow('${g.c.id}')">
             <span class="tt-i">${g.c.icon}</span><span class="tt-nm">${g.c.name}</span><span class="tt-n">${cnt(g)} נושאים${g.tools.length ? ` · ${g.tools.length} כלי המחשה` : ''}</span>
@@ -13514,6 +13835,8 @@ function catShow(id) {
   const tiles = document.querySelector('.tcat-tiles');
   if (tiles) tiles.hidden = !!id;
   document.querySelectorAll('.tcat-one').forEach(s => { s.hidden = s.dataset.cat !== id; });
+  // תרגול מעורב = שאלות מכל הנושאים – רק במסך כל הקטגוריות, לא בתוך קטגוריה אחת (27.11, איריס)
+  document.querySelectorAll('.practice-more').forEach(e => { e.hidden = !!id; });
   const tgt = id ? document.querySelector(`.tcat-one[data-cat="${id}"]`) : tiles;
   if (tgt) { const r = tgt.getBoundingClientRect(); if (r.top < 0 || r.top > innerHeight * 0.6) tgt.scrollIntoView({ block: 'start' }); }
 }
@@ -13528,6 +13851,11 @@ function topicHome(id) {
   const ls = topicLessons(id), tools = TOOL_CARDS.filter(c => c.topics.includes(id));
   let n = 0;
   const step = h => `<h2 class="tp-h"><span class="tp-n">${++n}</span>${h}</h2>`;
+  // רצף למידה (21.11): מה השלב הבא – הכרטיסייה הראשונה שלא הושלמה, אחר כך תרגול, ובסוף בדיקת שליטה
+  let nextL = null;
+  for (const l of ls) { const done = learnedSet(l), cs = cardsOf(l), k = cs.findIndex((_, i) => !done.has(i)); if (k >= 0) { nextL = { l, k, t: cs[k].title, all: cs.length }; break; } }
+  const nextHTML = nextL ? `📍 <b>השלב הבא:</b> כרטיסייה ${nextL.k + 1} מתוך ${nextL.all} – ${nextL.t} <button type="button" class="secondary" id="tpNext">להמשיך ←</button>`
+    : !s ? `📍 <b>השלב הבא:</b> תרגול ב${LEVEL_NAME[cur]}` : m < 80 ? `📍 <b>השלב הבא:</b> להמשיך לתרגל (${LEVEL_NAME[cur]})` : `📍 <b>השלב הבא:</b> בדיקת שליטה עצמאית`;
   app.innerHTML = `
     ${crumbs(id)}
     <div class="topbar">
@@ -13538,6 +13866,7 @@ function topicHome(id) {
       <div class="ds">${t.desc}</div>
       ${masteryMeter(m)}
       <div class="mbar" aria-label="שליטה ${m}%"><span style="width:${m}%"></span></div>
+      <div class="tp-next">${nextHTML}</div>
     </div>
     ${ls.length ? `<section class="card tp-step">${step('ללמוד – כרטיסיות הסבר')}
       <div class="tp-lessons">${ls.map(l => { const L = LESSONS[l], k = learnedSet(l).size, all = cardsOf(l).length; return `<button type="button" class="tp-lesson" data-tl="${l}"><b>📖 ${L.name}</b><span class="muted">${k ? `✔ ${k} מתוך ${all}` : `${all} כרטיסיות`}</span></button>`; }).join('')}</div>
@@ -13554,7 +13883,7 @@ function topicHome(id) {
       <label class="lockrow"><input type="checkbox" id="tpLock"> 🔒 להישאר ברמה שבחרתי לאורך כל הסבב (בלי עלייה או ירידה אוטומטית)</label>
     </section>
     <section class="card tp-step">${step('בודקים את עצמי')}
-      <button type="button" class="tp-check" id="tpCheck">✅ סבב בדיקה קצר<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, בלי שינוי רמה – רואים כמה כבר יודעים</span></button>
+      <button type="button" class="tp-check" id="tpCheck">✅ בדיקת שליטה עצמאית<span class="desc">5 שאלות ב${LEVEL_NAME[cur]}, לבד: בלי רמזים ובלי משוב בדרך. בסוף – התוצאה, הפתרונות וההסברים</span></button>
       ${catOf(id) === 'exc' ? `<button type="button" class="tp-check" id="tpExam">⏱️ מבחן לדוגמה<span class="desc">15 חידות מכל הסוגים, מהקל לקשה, 20 דקות, אפשר לדלג ולחזור – הציון וההסברים בסוף</span></button>` : ''}
       ${XTOPICS.some(t => t.id === id) && !EMBED ? `<button type="button" class="tp-check" id="tpLgPr">🖨️ דף חידות להדפסה<span class="desc">בוחרים רמה וכמות – דף חידות חדש בכל פעם, עם דף תשובות והסברים</span></button>` : ''}
     </section>
@@ -13570,7 +13899,8 @@ function topicHome(id) {
     tstat(id).level = level; saveStore(store);
     startPractice(id, { level, fixed: $('tpLock').checked });
   }));
-  $('tpCheck').onclick = go(() => startPractice(id, { level: cur, count: 5, fixed: true }));
+  $('tpCheck').onclick = go(() => startCheck(id, cur));
+  if ($('tpNext')) $('tpNext').onclick = go(() => startLesson(nextL.l, nextL.k));
   if ($('tpExam')) $('tpExam').onclick = go(logicExam);
   if ($('tpLgPr')) $('tpLgPr').onclick = () => { try { sessionStorage.setItem('math-lgpr', id); sessionStorage.setItem('math-pk', 'lgcard'); } catch (e) { /* לא חובה */ } location.href = location.pathname + '?print&grade=' + GRADE + '#lg'; };
   app.querySelectorAll('[data-tool]').forEach(b => b.onclick = go(TOOL_CARDS.find(c => c.id === b.dataset.tool).go));
@@ -13616,13 +13946,14 @@ function todaySuggestion() {
 /* ---------- בחירת רמה ---------- */
 const LEVEL_DESC6 = {
   place: ['ערך הספרה והרכבת מספרים', 'כמה מאות יש במספר, עיגול והשוואה', 'פי כמה גדל ערך הספרה, טווח עיגול'],
+  pctWord: ['אחוז מוכר מכמות, איזה אחוז (מתוך 100), משלים ל-100%, שבר מוכר → אחוז', 'אחוז כלשהו מכמות, איזה אחוז זה, הנחה, עשרוני → אחוז, מי יותר (שבר/אחוז/עשרוני)', 'מהחלק לשלם, הנחה ועודף, התייקרות, השוואת הנחות, שבר + עשרוני + אחוז בסיפור, תשובה עשרונית בכמות רציפה'],
   placeDec: ['ערך ספרה אחרי הנקודה: עשיריות, מאיות, אלפיות', 'פירוק מספר עשרוני לפי המקומות', 'פירוק והשוואה של מספרים עשרוניים'],
   ops: ['כפל וחילוק פשוטים, סדר פעולות בסיסי', 'כפל דו-ספרתי, סדר פעולות, מספר חסר, אומדן, ראשוניים ופריקים', 'בעיות מילוליות, ראשוניים ופריקים ותרגילים מאתגרים'],
   frac: ['הרחבה, צמצום, חיבור עם מכנה שווה', 'מדומה ↔ מעורב, חיבור וחיסור עם מכנים שונים', 'שברים מעורבים ובעיות מילוליות'],
   dec: ['שבר ↔ עשרוני, כפל ב-10 ו-100, יחידות מידה', 'ישר מספרים, סדרות, חיבור וחיסור, השוואה', 'כפל במספר שלם, שברים ועשרוניים יחד'],
   geo: ['מלבן וריבוע, תכונות של צורות', 'מקבילית, משולש, מציאת צלע חסרה', 'מצולעים מורכבים והשוואות'],
   data: ['קריאת דיאגרמה', 'הפרשים, סכום וממוצע', 'שינוי בממוצע, איבר חסר ודיאגרמה כפולה'],
-  pct: ['מה זה אחוז, אחוז ↔ שבר ועשרוני, 50%, 25% ו-10% מכמות', 'אחוז מכמות, איזה אחוז זה, הנחה', 'הנחה, מציאת השלם לפי אחוז'],
+  pct: ['מה זה אחוז, אחוז ↔ שבר ועשרוני, 50%, 25% ו-10% מכמות', 'אחוז כלשהו מכמות, איזה אחוז זה (הרחבה ל-100), הנחה', 'מהחלק לשלם, איזה אחוז כשהשלם גדול מ-100 · ⭐ העשרה: שתי הנחות ברצף'],
   mix: ['שאלות בסיסיות מכל הנושאים', 'שאלות ברמה בינונית מכל הנושאים', 'שאלות מאתגרות מכל הנושאים']
 };
 const LEVEL_DESC = GRADE === 1 ? LEVEL_DESC1 : GRADE === 2 ? LEVEL_DESC2 : GRADE === 3 ? LEVEL_DESC3 : GRADE === 4 ? LEVEL_DESC4 : GRADE === 5 ? LEVEL_DESC5 : LEVEL_DESC6;
@@ -13856,12 +14187,12 @@ function genLgSeries(lv) {
     if (ans <= 0 || ans > 999 || !Number.isInteger(ans)) continue;
     const L = t[N - 1], D = L - t[N - 2];
     const wr = lgNumOpts(ans, [L + D, L + 2 * D, L * 2, L + t[N - 2], ans + 1, ans - 1, L - D].filter(v => v !== ans));
-    // ציור: הסדרה בתיבות, מימין לשמאל
+    // ציור: הסדרה בתיבות, משמאל לימין – כמו שכותבים סדרת מספרים; ה-? אחרי האיבר האחרון (27.11, איריס)
     const W = 62, gap = 6, tot = (N + 1) * (W + gap);
     let s = '';
-    [...t, null].forEach((v, i) => { const x = tot - (i + 1) * (W + gap) + gap / 2; s += lgBox(x, 4, W, 52, v == null ? LG_Q(x + W / 2, 43) : lgTxt(x + W / 2, 40, v, v > 99 ? 22 : 26), v == null); });
+    [...t, null].forEach((v, i) => { const x = i * (W + gap) + gap / 2; s += lgBox(x, 4, W, 52, v == null ? LG_Q(x + W / 2, 43) : lgTxt(x + W / 2, 40, v, v > 99 ? 22 : 26), v == null); });
     return choiceQ({ type: 'choice', text: 'איזה מספר בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} 60" width="${tot}" height="60" role="img">${s}</svg>`,
-      hint: 'קוראים מימין לשמאל ובודקים: כמה מוסיפים או כופלים בכל צעד? אם ההפרש משתנה – בודקים איך הוא משתנה.',
+      hint: 'קוראים משמאל לימין ובודקים: כמה מוסיפים או כופלים בכל צעד? אם ההפרש משתנה – בודקים איך הוא משתנה.',
       exp: `${ex}<br>לכן המספר החסר: <b>${ans}</b>.`, lgKind: 'series', lgT: t }, ans, wr);
   }
 }
@@ -13914,7 +14245,7 @@ function genLgFigSeq(lv) {
     wr.forEach(o => pickW.length < 4 && !pickW.includes(o) && pickW.push(o));
     const C = 76, gap = 8, tot = (N + 1) * (C + gap);
     let s = '';
-    [...shown, null].forEach((o, i) => { const x = tot - (i + 1) * (C + gap) + gap / 2; s += o ? `<g transform="translate(${x} 4) scale(${C / 100})">${lgFig(o)}</g>` : lgBox(x, 4, C, C, LG_Q(x + C / 2, 4 + C / 2 + 12), true); });
+    [...shown, null].forEach((o, i) => { const x = i * (C + gap) + gap / 2; s += o ? `<g transform="translate(${x} 4) scale(${C / 100})">${lgFig(o)}</g>` : lgBox(x, 4, C, C, LG_Q(x + C / 2, 4 + C / 2 + 12), true); });
     const dirA = da <= 4 ? 'עם כיוון השעון' : 'נגד כיוון השעון', stA = LG_STEP[da <= 4 ? da : 8 - da];
     const ex = [];
     if (useA) ex.push(sa === 'grow' ? '<b>החץ:</b> מסתובב עם כיוון השעון, ובכל צעד בזווית גדולה יותר: 45°, 90°, 135°… – הצעד הבא 180°.' : `<b>החץ:</b> מסתובב ${stA} ${dirA} בכל צעד.`);
@@ -14218,31 +14549,55 @@ function genLgCenter(lv) {
   }
 }
 // ---------- מצוינות: עוד סוגים (22.11) ----------
-// 7. סדרות אותיות (א–ת, בלי סופיות)
-const LG_ABC = 'אבגדהוזחטיכלמנסעפצקרשת'.split('');
-function genLgLetters(lv) {
+// 7. סדרות שעונים (27.11 – במקום סדרות האותיות, לבקשת איריס): השעה מתקדמת (או חוזרת) לפי כלל
+function lgClock(m) {
+  m = ((m % 720) + 720) % 720;
+  const mm = m % 60, ha = (m / 720) * 360, ma = mm * 6;
+  let s = '<circle cx="50" cy="50" r="45" fill="#fff" stroke="#23264a" stroke-width="3"/>';
+  for (let i = 0; i < 12; i++) { const a = i * 30 * Math.PI / 180, r1 = i % 3 ? 39 : 35; s += `<line x1="${50 + r1 * Math.sin(a)}" y1="${50 - r1 * Math.cos(a)}" x2="${50 + 43 * Math.sin(a)}" y2="${50 - 43 * Math.cos(a)}" stroke="#23264a" stroke-width="${i % 3 ? 1.5 : 3}"/>`; }
+  [[12, 50, 28], [3, 75, 55], [6, 50, 80], [9, 25, 55]].forEach(([n, x, y]) => { s += `<text x="${x}" y="${y}" text-anchor="middle" font-size="13" font-weight="bold" fill="#5a6080" font-family="Arial">${n}</text>`; });
+  s += `<line x1="50" y1="50" x2="50" y2="24" stroke="#23264a" stroke-width="6" stroke-linecap="round" transform="rotate(${ha} 50 50)"/>`;
+  s += `<line x1="50" y1="50" x2="50" y2="12" stroke="#d94a8c" stroke-width="3" stroke-linecap="round" transform="rotate(${ma} 50 50)"/>`;
+  return s + '<circle cx="50" cy="50" r="3.5" fill="#23264a"/>';
+}
+const lgHM = m => { m = ((m % 720) + 720) % 720; const h = Math.floor(m / 60) || 12; return `${h}:${String(m % 60).padStart(2, '0')}`; };
+const lgDur = d => { const a = Math.abs(d), h = Math.floor(a / 60), m = a % 60; return (h ? (h === 1 ? 'שעה' : h === 2 ? 'שעתיים' : `${h} שעות`) : '') + (h && m ? ' ו-' : '') + (m ? `${m} דקות` : ''); };
+function genLgClock(lv) {
   lv = lv || 1;
   for (;;) {
-    const N = lv === 1 ? 4 : 5; let pos = [], ex;
-    if (lv === 1) { const d = pick([1, 2, 3, -1, -2]), s0 = d > 0 ? R(0, 21 - d * N) : R(-d * N, 21); pos = [...Array(N)].map((_, i) => s0 + d * i); ex = d > 0 ? `כל פעם מדלגים ${d === 1 ? 'לאות הבאה' : `${d} אותיות קדימה`}.` : `כל פעם חוזרים ${-d === 1 ? 'אות אחת' : `${-d} אותיות`} אחורה.`; }
-    else if (lv === 2) { const s0 = R(0, 4), k = pick([0, 1]); let v = s0; pos = [v]; for (let i = 1; i < N; i++) { v += i + k; pos.push(v); } ex = `הקפיצות גדלות: ${pos.slice(1).map((v, i) => '+' + (v - pos[i])).join(', ')} – והבאה +${N + k}.`; }
-    else { const a = R(0, 6), b = R(14, 21), da = pick([1, 2]), db = -pick([1, 2]); pos = [...Array(N)].map((_, i) => i % 2 ? b + db * ((i - 1) / 2) : a + da * (i / 2)); ex = `שתי סדרות שזורות: אחת מתקדמת מתחילת האלף-בית (${pos.filter((_, i) => !(i % 2)).map(p => LG_ABC[p]).join(', ')}) ואחת חוזרת מהסוף (${pos.filter((_, i) => i % 2).map(p => LG_ABC[p]).join(', ')}). עכשיו תור הסדרה ${N % 2 ? 'השנייה' : 'הראשונה'}.`; }
-    const t = pos.map(p => p + 1);
-    if (pos.some(p => p < 0 || p > 21)) continue;
-    const outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
-    if (outs.size !== 1) continue;
-    const ap = [...outs][0] - 1;
-    if (ap < 0 || ap > 21) continue;
-    const near = [ap - 1, ap + 1, ap - 2, ap + 2, pos[N - 1], ap + 3, ap - 3].filter(p => p >= 0 && p <= 21 && p !== ap);
-    const wr = shuffle([...new Set(near)]).slice(0, 4);
+    const N = lv === 1 ? 4 : 5, m0 = R(0, 143) * 5; let st = [], ex;
+    if (lv === 1) { const d = pick([10, 15, 20, 30, 45, 60]); st = Array(N).fill(d); ex = `בכל פעם השעון מתקדם ב-${lgDur(d)}.`; }
+    else if (lv === 2) {
+      const kind = pick(['grow', 'alt', 'back']);
+      if (kind === 'grow') { const d = pick([5, 10, 15]), k = pick([5, 10]); st = [...Array(N)].map((_, i) => d + k * i); ex = `הזמן שעובר בין השעונים גדל ב-${k} דקות בכל פעם: ${st.slice(0, N - 1).map(lgDur).join(', ')} – ועכשיו ${lgDur(st[N - 1])}.`; }
+      else if (kind === 'alt') { const [a, b] = shuffle([10, 15, 20, 30, 45, 60]).slice(0, 2); st = [...Array(N)].map((_, i) => i % 2 ? b : a); ex = `שתי קפיצות לסירוגין: ${lgDur(a)} קדימה, ואז ${lgDur(b)} קדימה, וחוזר חלילה. עכשיו תור הקפיצה של ${lgDur(st[N - 1])}.`; }
+      else { const d = pick([10, 15, 20, 30, 45]); st = Array(N).fill(-d); ex = `השעון חוזר אחורה: בכל פעם ${lgDur(d)} פחות.`; }
+    } else {
+      const kind = pick(['dbl', 'growBack', 'mix']);
+      if (kind === 'dbl') { const d = pick([5, 10]); st = [...Array(N)].map((_, i) => d * 2 ** i); ex = `הזמן שעובר מוכפל בכל פעם: ${st.slice(0, N - 1).map(lgDur).join(', ')} – ועכשיו ${lgDur(st[N - 1])}.`; }
+      else if (kind === 'growBack') { const d = pick([5, 10]), k = pick([5, 10]); st = [...Array(N)].map((_, i) => -(d + k * i)); ex = `השעון חוזר אחורה, וכל פעם יותר: ${st.slice(0, N - 1).map(lgDur).join(', ')} אחורה – ועכשיו ${lgDur(st[N - 1])} אחורה.`; }
+      else { const a = pick([30, 40, 45, 60]), b = pick([10, 15, 20]); st = [...Array(N)].map((_, i) => i % 2 ? -b : a); ex = `לסירוגין: ${lgDur(a)} קדימה, ואז ${lgDur(b)} אחורה. עכשיו תור ${st[N - 1] > 0 ? `${lgDur(a)} קדימה` : `${lgDur(b)} אחורה`}.`; }
+    }
+    const ms = [m0]; st.forEach(d => ms.push(ms[ms.length - 1] + d));
+    const shown = ms.slice(0, N), ans = ms[N];
+    // חד-משמעיות: כל משפחות הכללים (על הזמן "הפרוש", בלי לחזור ל-12) נותנות אותו המשך
+    const t = shown.map(v => v + 3000), outs = new Set(Object.values(LG_SER).map(f => f(t)).filter(v => v !== null));
+    if (outs.size !== 1 || [...outs][0] !== ans + 3000) continue;
+    // כל השעונים שמוצגים שונים זה מזה
+    const K = v => ((v % 720) + 720) % 720;
+    if (new Set(ms.map(K)).size !== ms.length) continue;
+    const A = K(ans), far = v => { const d = Math.abs(K(v) - A); return Math.min(d, 720 - d) >= 10; };
+    const hh = Math.floor(A / 60) % 12, mi = A % 60, swap = (Math.round(mi / 5) % 12) * 60 + hh * 5; // מחוגים הפוכים
+    const cand = [shown[N - 1] + st[N - 2], ans + 60, ans - 60, ans + (st[N - 1] > 0 ? 15 : -15), ans - (st[N - 1] > 0 ? 10 : -10), swap, ans + 30, shown[N - 1] - st[N - 1]];
+    const wr = [];
+    cand.forEach(v => { if (wr.length < 4 && far(v) && !wr.some(w => K(w) === K(v))) wr.push(v); });
     if (wr.length < 4) continue;
-    const W = 54, gap = 6, tot = (N + 1) * (W + gap);
-    let sv = '';
-    [...pos, null].forEach((p, i) => { const x = tot - (i + 1) * (W + gap) + gap / 2; sv += lgBox(x, 4, W, 52, p == null ? LG_Q(x + W / 2, 43) : lgTxt(x + W / 2, 42, LG_ABC[p], 30), p == null); });
-    const big = c => `<span class="lgletter" data-raw>${c}</span>`;
-    return choiceQ({ type: 'choice', text: 'איזו אות באה במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} 60" width="${tot}" height="60" role="img" data-raw>${sv}</svg>`,
-      hint: 'כתבו ליד כל אות את המקום שלה באלף-בית (א = 1, ב = 2, ג = 3…). עכשיו זו סדרת מספרים!',
-      exp: `המקומות באלף-בית: ${pos.map(p => `${LG_ABC[p]} = ${p + 1}`).join(', ')}.<br>${ex}<br>המקום הבא: ${ap + 1} – האות <b>${LG_ABC[ap]}</b>.`, lgKind: 'letters', lgPos: pos }, big(LG_ABC[ap]), wr.map(p => big(LG_ABC[p])));
+    const C = 76, gap = 8, tot = (N + 1) * (C + gap);
+    let s = '';
+    [...shown, null].forEach((v, i) => { const x = i * (C + gap) + gap / 2; s += v == null ? lgBox(x, 4, C, C, LG_Q(x + C / 2, 4 + C / 2 + 12), true) : `<g transform="translate(${x} 4) scale(${C / 100})">${lgClock(v)}</g>`; });
+    return choiceQ({ type: 'choice', text: 'איזה שעון בא במקום <b>?</b> בסדרה?', fig: `<svg class="fig lgfig lgwide" viewBox="0 0 ${tot} ${C + 8}" width="${tot}" height="${C + 8}" role="img" data-raw>${s}</svg>`,
+      hint: 'קראו כל שעון וכתבו את השעה. כמה זמן עבר משעון לשעון? האם זה תמיד אותו זמן? קדימה או אחורה?',
+      exp: `השעונים מראים: ${shown.map(v => M(lgHM(v))).join(' ← ')}.<br>${ex}<br>לכן השעון הבא מראה <b>${M(lgHM(ans))}</b>.`, lgKind: 'clock', lgT: shown }, lgOpt(lgClock(ans)), wr.map(v => lgOpt(lgClock(v))));
   }
 }
 
@@ -14344,21 +14699,207 @@ function genLgOps(lv) {
       ex(ops), others.map(ex));
   }
 }
+// 11. קיפולי נייר (אוריגמי): מקפלים, מנקבים/גוזרים, ופותחים. דף 8×8 יחידות; כל קיפול לחצי.
+const FD = { S: 8, R: 0.42, P: '#ff8a6b', PB: '#ffd9cc', E: '#c2492b', H: '#7a3320', A: '#2f5bd3' };
+const FD_NAME = { L: 'שמאל על ימין', R: 'ימין על שמאל', T: 'למעלה על למטה', B: 'למטה על למעלה', D: 'באלכסון', A: 'באלכסון' };
+const fdPoly = r => r.k === 'r' ? [[r.x0, r.y0], [r.x1, r.y0], [r.x1, r.y1], [r.x0, r.y1]] : r.pts;
+const fdCen = p => [p.reduce((s, q) => s + q[0], 0) / p.length, p.reduce((s, q) => s + q[1], 0) / p.length];
+function fdFold(r, c) {
+  const { x0, y0, x1, y1 } = r, xm = (x0 + x1) / 2, ym = (y0 + y1) / 2, Q = (a, b, c, d) => ({ k: 'r', x0: a, y0: b, x1: c, y1: d });
+  if (c === 'L') return { ln: { t: 'x', a: xm }, keep: Q(xm, y0, x1, y1), flap: Q(x0, y0, xm, y1) };
+  if (c === 'R') return { ln: { t: 'x', a: xm }, keep: Q(x0, y0, xm, y1), flap: Q(xm, y0, x1, y1) };
+  if (c === 'T') return { ln: { t: 'y', a: ym }, keep: Q(x0, ym, x1, y1), flap: Q(x0, y0, x1, ym) };
+  if (c === 'B') return { ln: { t: 'y', a: ym }, keep: Q(x0, y0, x1, ym), flap: Q(x0, ym, x1, y1) };
+  if (c === 'D') return { ln: { t: 'd', x0, y0 }, keep: { k: 't', pts: [[x0, y0], [x1, y1], [x0, y1]] }, flap: { k: 't', pts: [[x0, y0], [x1, y0], [x1, y1]] } };
+  return { ln: { t: 'a', c: x1 + y0 }, keep: { k: 't', pts: [[x1, y0], [x1, y1], [x0, y1]] }, flap: { k: 't', pts: [[x0, y0], [x1, y0], [x0, y1]] } };
+}
+function fdRefl(p, ln) { const [x, y] = p; return ln.t === 'x' ? [2 * ln.a - x, y] : ln.t === 'y' ? [x, 2 * ln.a - y] : ln.t === 'd' ? [ln.x0 + y - ln.y0, ln.y0 + x - ln.x0] : [ln.c - y, ln.c - x]; }
+function fdFlip(p, ln, t) { const q = fdRefl(p, ln), k = (1 - Math.cos(Math.PI * t)) / 2; return [p[0] + (q[0] - p[0]) * k, p[1] + (q[1] - p[1]) * k]; }
+const fdMap = (s, f) => s.t === 'c' ? { t: 'c', p: f(s.p) } : { t: 'p', pts: s.pts.map(f) };
+function fdBuild(seq) { const regs = [{ k: 'r', x0: 0, y0: 0, x1: FD.S, y1: FD.S }], infos = []; for (const c of seq) { const f = fdFold(regs[regs.length - 1], c); infos.push(f); regs.push(f.keep); } return { seq, regs, infos }; }
+// פתיחה: מהקיפול האחרון לראשון. modes[i]: 'm' מראה (נכון) · 's' שוכחים לפתוח · 't' הזזה במקום מראה · 'w' מראה על הציר הלא נכון
+function fdUnfold(P, holes, modes) {
+  let H = holes.slice();
+  for (let i = P.infos.length - 1; i >= 0; i--) {
+    const f = P.infos[i], m = (modes && modes[i]) || 'm'; let g;
+    if (m === 's') continue;
+    if (m === 'm') g = p => fdRefl(p, f.ln);
+    if (m === 't') { const a = fdCen(fdPoly(f.keep)), b = fdCen(fdPoly(f.flap)); g = p => [p[0] + b[0] - a[0], p[1] + b[1] - a[1]]; }
+    if (m === 'w') { const r = P.regs[i]; if (f.ln.t === 'x') g = p => [p[0], r.y0 + r.y1 - p[1]]; else if (f.ln.t === 'y') g = p => [r.x0 + r.x1 - p[0], p[1]]; else return null; }
+    H = H.concat(H.map(s => fdMap(s, g)));
+  }
+  return H;
+}
+const fdKp = p => Math.round(p[0] * 4) + ',' + Math.round(p[1] * 4);
+const fdShK = s => s.t === 'c' ? 'c' + fdKp(s.p) : 'p' + s.pts.map(fdKp).sort().join(';');
+const fdKey = H => H ? [...new Set(H.map(fdShK))].sort().join('|') : '';
+const fdIn = H => H && H.every(s => (s.t === 'c' ? [s.p] : s.pts).every(([x, y]) => x > -1e-6 && y > -1e-6 && x < FD.S + 1e-6 && y < FD.S + 1e-6));
+const fdUniq = H => { const m = new Map(); H.forEach(s => m.set(fdShK(s), s)); return [...m.values()]; };
+function fdInTri(p, [a, b, c], m) { const s = (p1, p2) => ((p2[0] - p1[0]) * (p[1] - p1[1]) - (p2[1] - p1[1]) * (p[0] - p1[0])) / Math.hypot(p2[0] - p1[0], p2[1] - p1[1]); const d = [s(a, b), s(b, c), s(c, a)]; return d.every(v => v > m) || d.every(v => v < -m); }
+function fdSpots(r, all) { // מרכזי משבצות בתוך האזור המקופל; עדיפות למשבצות שלא צמודות לקו קיפול (שהחורים לא יידבקו)
+  const S = FD.S, out = [];
+  for (let x = 0; x < S; x++) for (let y = 0; y < S; y++) { const c = [x + .5, y + .5]; if (r.k === 'r' ? c[0] > r.x0 && c[0] < r.x1 && c[1] > r.y0 && c[1] < r.y1 : fdInTri(c, r.pts, .6)) out.push(c); }
+  if (!all && r.k === 'r') { const far = out.filter(([x, y]) => (r.x0 === 0 || x - r.x0 > 1) && (r.x1 === S || r.x1 - x > 1) && (r.y0 === 0 || y - r.y0 > 1) && (r.y1 === S || r.y1 - y > 1)); if (far.length) return far; }
+  return out;
+}
+function fdCutTri(r) { // משולש ישר-זווית (לא סימטרי) בתא שנוגע בקו קיפול
+  const S = FD.S, g = Math.min(2, (r.x1 - r.x0) / 2, (r.y1 - r.y0) / 2), cells = [];
+  for (let x = r.x0; x < r.x1 - 1e-6; x += g) for (let y = r.y0; y < r.y1 - 1e-6; y += g)
+    if ((x === r.x0 && r.x0 > 0) || (x + g === r.x1 && r.x1 < S) || (y === r.y0 && r.y0 > 0) || (y + g === r.y1 && r.y1 < S)) cells.push([x, y]);
+  const [x, y] = pick(cells), C = [[x, y], [x + g, y], [x + g, y + g], [x, y + g]], k = R(0, 3);
+  return { t: 'p', pts: [C[(k + 3) % 4], C[k], C[(k + 1) % 4]] };
+}
+const fdV = () => pick(['L', 'R']), fdH = () => pick(['T', 'B']), fdD = () => pick(['D', 'A']), fd1 = () => pick(['L', 'R', 'T', 'B']);
+// ציור
+const fdPts = a => a.map(p => (+p[0].toFixed(3)) + ',' + (+p[1].toFixed(3))).join(' ');
+const fdSh = (s, ex) => s.t === 'c' ? `<circle cx="${s.p[0]}" cy="${s.p[1]}" r="${FD.R}" fill="#fff" stroke="${FD.H}" stroke-width=".12" ${ex || ''}/>` : `<polygon points="${fdPts(s.pts)}" fill="#fff" stroke="${FD.H}" stroke-width=".1" stroke-linejoin="round" ${ex || ''}/>`;
+const fdSheet = (r, fill) => `<polygon points="${fdPts(fdPoly(r))}" fill="${fill || FD.P}" stroke="${FD.E}" stroke-width=".12" stroke-linejoin="round"/>`;
+const fdGhost = `<rect x="0" y="0" width="8" height="8" fill="none" stroke="#c9cede" stroke-width=".1" stroke-dasharray=".3 .25"/>`;
+const fdG = (x, inner) => `<g transform="translate(${x + 10} 10) scale(10)">${inner}</g>`; // לוח 100×100, הדף 80×80
+const FD_FULL = { k: 'r', x0: 0, y0: 0, x1: 8, y1: 8 };
+function fdStep(P, i) { // לפני קיפול i: קו מקווקו, הצד שמתקפל מוצלל, חץ
+  const f = P.infos[i], a = fdPoly(f.flap), b = fdPoly(f.keep), seg = a.filter(p => b.some(q => Math.abs(p[0] - q[0]) < 1e-6 && Math.abs(p[1] - q[1]) < 1e-6));
+  const c0 = fdCen(a), c1 = fdRefl(c0, f.ln), dx = c1[0] - c0[0], dy = c1[1] - c0[1], L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+  const ctl = [(c0[0] + c1[0]) / 2 - uy * 1.3, (c0[1] + c1[1]) / 2 + ux * 1.3], e = [c1[0] - ux * .2, c1[1] - uy * .2];
+  const tx = c1[0] - ctl[0], ty = c1[1] - ctl[1], tl = Math.hypot(tx, ty), hx = tx / tl, hy = ty / tl;
+  const head = [[c1[0], c1[1]], [c1[0] - hx * .8 - hy * .45, c1[1] - hy * .8 + hx * .45], [c1[0] - hx * .8 + hy * .45, c1[1] - hy * .8 - hx * .45]];
+  return fdGhost + fdSheet(P.regs[i]) + `<polygon points="${fdPts(a)}" fill="${FD.H}" opacity=".28"/>`
+    + `<line x1="${seg[0][0]}" y1="${seg[0][1]}" x2="${seg[1][0]}" y2="${seg[1][1]}" stroke="#23264a" stroke-width=".18" stroke-dasharray=".45 .3"/>`
+    + `<path d="M${fdPts([c0])} Q${fdPts([ctl])} ${fdPts([e])}" fill="none" stroke="${FD.A}" stroke-width=".26"/><polygon points="${fdPts(head)}" fill="${FD.A}"/>`;
+}
+const fdFinal = (P, holes) => fdGhost + fdSheet(P.regs[P.regs.length - 1]) + holes.map(s => fdSh(s)).join('');
+const fdOpen = H => fdSheet(FD_FULL) + H.map(s => fdSh(s)).join('');
+// רצועת השלבים (השלב הראשון מימין). last: 'hole' | 'cut' | null | {open: H}
+function fdStrip(P, holes, last) {
+  const n = P.seq.length, panels = P.seq.map((c, i) => [fdStep(P, i), `${i + 1}. ${FD_NAME[c]}`]);
+  if (last === 'hole' || last === 'cut') panels.push([fdFinal(P, holes), `${n + 1}. ${last === 'cut' ? 'גזירה' : 'ניקוב'}`]);
+  if (last && last.open) panels.push([fdOpen(last.open), 'הדף הפתוח']);
+  const N = panels.length, W = N * 112 - 12;
+  return `<svg class="fig lgfig lgwide" viewBox="0 0 ${W} 122" width="${W}" height="122" role="img" data-raw>${panels.map(([g, lab], i) => { const x = (N - 1 - i) * 112; return `<rect x="${x}" y="0" width="100" height="100" rx="8" fill="#fff" stroke="#dfe3ec" stroke-width="1.5"/>${fdG(x, g)}<text x="${x + 50}" y="117" text-anchor="middle" font-size="12.5" fill="#4a5068" font-family="Arial">${lab}</text>`; }).join('')}</svg>`;
+}
+const fdOpt = inner => lgOpt(`<g transform="translate(8 8) scale(10.5)">${inner}</g>`);
+// הסבר עם המחשה: הדף הפתוח + כפתור אנימציה (מופעלת לבד אחרי תשובה – showFb)
+const fdAnimBox = (P, holes, H) => `<div class="lgfold" data-raw data-fd='${JSON.stringify({ s: P.seq.join(''), h: holes })}'><svg viewBox="-0.8 -0.8 9.6 9.6" width="200" height="200">${fdOpen(H)}</svg><div class="lgfcap muted small"></div><button type="button" class="btn ghost small" onclick="fdPlay(this.parentNode)">▶ לראות את הקיפול והפתיחה</button></div>`;
+function fdPlay(box) {
+  if (!box || !box.dataset.fd) return;
+  const d = JSON.parse(box.dataset.fd), P = fdBuild(d.s.split('')), holes = d.h, n = P.seq.length, svg = box.querySelector('svg'), cap = box.querySelector('.lgfcap');
+  const tok = box._tok = (box._tok || 0) + 1, live = () => box._tok === tok && box.isConnected;
+  const set = h => { if (live()) svg.innerHTML = h; }, say = s => { if (live()) cap.textContent = s; };
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const tween = (ms, fn) => new Promise(res => { if (RM) { fn(1); return setTimeout(res, 300); } const t0 = performance.now(); const tick = now => { if (!live()) return res(); const t = Math.min(1, (now - t0) / ms); fn(t); t < 1 ? requestAnimationFrame(tick) : res(); }; requestAnimationFrame(tick); });
+  const flap = (f, t, hs) => { const back = Math.cos(Math.PI * t) < 0; return `<polygon points="${fdPts(fdPoly(f.flap).map(p => fdFlip(p, f.ln, t)))}" fill="${back ? FD.PB : FD.P}" stroke="${FD.E}" stroke-width=".12" stroke-linejoin="round"/>` + (hs || []).map(s => fdSh(fdMap(s, p => fdFlip(p, f.ln, t)))).join(''); };
+  const cut = holes[0] && holes[0].t === 'p';
+  (async () => {
+    set(fdGhost + fdSheet(FD_FULL)); say('דף מרובע'); await wait(600);
+    for (let i = 0; i < n && live(); i++) { const f = P.infos[i]; say(`קיפול ${i + 1}: ${FD_NAME[P.seq[i]]}`); await tween(900, t => set(fdGhost + fdSheet(f.keep) + flap(f, t))); await wait(300); }
+    if (!live()) return;
+    if (holes.length) { say(cut ? 'גוזרים דרך כל השכבות' : 'מנקבים דרך כל השכבות'); await tween(500, t => set(fdGhost + fdSheet(P.regs[n]) + holes.map(s => fdSh(s, `opacity="${t.toFixed(2)}"`)).join(''))); await wait(700); }
+    let H = holes.slice();
+    for (let i = n - 1; i >= 0 && live(); i--) {
+      const f = P.infos[i], FH = H.map(s => fdMap(s, p => fdRefl(p, f.ln))); say(`פותחים את קיפול ${i + 1}`);
+      await tween(900, t => set(fdGhost + fdSheet(f.keep) + H.map(s => fdSh(s)).join('') + flap(f, 1 - t, FH)));
+      H = fdUniq(H.concat(FH)); await wait(250);
+    }
+    set(fdOpen(H)); say(holes.length ? `הדף הפתוח: ${cut ? 'הגזירה הופיעה' : 'החור הופיע'} ${H.length === 1 ? 'פעם אחת' : H.length + ' פעמים'}` : 'הדף הפתוח');
+  })();
+}
+window.fdPlay = fdPlay;
+function fdPickOpts(ans, cands) {
+  const seen = new Set([fdKey(ans)]), out = [];
+  for (const c of shuffle(cands)) { if (!c || !fdIn(c)) continue; const k = fdKey(c); if (!k || seen.has(k)) continue; seen.add(k); out.push(fdUniq(c)); if (out.length === 4) break; }
+  return out.length === 4 ? out : null;
+}
+function fdVariants(P, holes) {
+  const n = P.seq.length, c = [holes.slice()];
+  for (let i = 0; i < n; i++) for (const m of ['s', 't', 'w']) { const md = Array(n).fill('m'); md[i] = m; c.push(fdUnfold(P, holes, md)); }
+  return c;
+}
+const fdNudge = H => H.flatMap((s, i) => s.t !== 'c' ? [] : [[1, 0], [-1, 0], [0, 1], [0, -1]].map(([dx, dy]) => H.map((t, j) => j === i ? { t: 'c', p: [t.p[0] + dx, t.p[1] + dy] } : t)));
+const fdTimes = n => n === 1 ? 'פעם אחת' : `${n} פעמים`;
+const FD_HINT = 'פותחים בדמיון מהקיפול האחרון אל הראשון. בכל פתיחה כל חור מקבל "בן זוג" בתמונת מראה, מעבר לקו הקיפול.';
+// א. קיפול וחור
+function genLgFoldHole(lv) {
+  lv = lv || 1;
+  for (;;) {
+    let seq, nh = 1;
+    if (lv === 1) seq = [fd1()];
+    else if (lv === 2) seq = Math.random() < .65 ? shuffle([fdV(), fdH()]) : [fdD()];
+    else { const r = Math.random(); seq = r < .4 ? [fdV(), fdH(), fdD()] : r < .7 ? shuffle([fdV(), fdH(), pick([fdV(), fdH()])]) : shuffle([fdV(), fdH()]); if (seq.length === 2) nh = 2; }
+    const P = fdBuild(seq), sp = shuffle(fdSpots(P.regs[seq.length])); if (sp.length < nh) continue;
+    const holes = sp.slice(0, nh).map(p => ({ t: 'c', p })), ans = fdUniq(fdUnfold(P, holes));
+    const wr = fdPickOpts(ans, fdVariants(P, holes).concat(fdNudge(ans))); if (!wr) continue;
+    return choiceQ({ type: 'choice', text: `מקפלים דף מרובע ${fdTimes(seq.length)} ו${nh > 1 ? 'מנקבים <b>שני חורים</b>' : 'מנקבים <b>חור אחד</b>'} דרך כל השכבות. איך ייראה הדף <b>כשפותחים אותו</b>?`,
+      fig: fdStrip(P, holes, 'hole'), hint: FD_HINT,
+      exp: `פותחים מהקיפול האחרון אל הראשון: בכל פתיחה כל חור מקבל בן זוג בתמונת מראה מעבר לקו הקיפול, ולכן מספר החורים מוכפל. ${seq.length === 1 ? 'קיפול אחד' : seq.length + ' קיפולים'} ו${nh > 1 ? 'שני חורים' : 'חור אחד'} → <b>${ans.length} חורים</b>, במקומות שבציור.${fdAnimBox(P, holes, ans)}`,
+      lgKind: 'foldHole', lgFd: fdKey(ans) }, fdOpt(fdOpen(ans)), wr.map(H => fdOpt(fdOpen(H))));
+  }
+}
+// ב. קיפול וגזירה – המשולש לא סימטרי, אז שמים לב גם לכיוון
+function genLgFoldCut(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const seq = lv === 1 ? [fd1()] : lv === 2 ? shuffle([fdV(), fdH()]) : shuffle([fdV(), fdH(), pick([fdV(), fdH()])]);
+    const P = fdBuild(seq), h = fdCutTri(P.regs[seq.length]), holes = [h], ans = fdUniq(fdUnfold(P, holes));
+    const [a, b, c] = h.pts, rot = { t: 'p', pts: [b, c, [a[0] + c[0] - b[0], a[1] + c[1] - b[1]]] };
+    const wr = fdPickOpts(ans, fdVariants(P, holes).concat([fdUnfold(P, [rot])])); if (!wr) continue;
+    return choiceQ({ type: 'choice', text: `מקפלים דף מרובע ${fdTimes(seq.length)} וגוזרים <b>משולש</b> (האזור הלבן). איך ייראה הדף <b>כשפותחים אותו</b>?`,
+      fig: fdStrip(P, holes, 'cut'), hint: FD_HINT + ' שימו לב לכיוון המשולש: במראה הוא מתהפך.',
+      exp: `בכל פתיחה הגזירה מופיעה שוב כתמונת מראה מעבר לקו הקיפול – המשולש <b>מתהפך</b>, הוא לא רק זז. גזירה שנוגעת בקו הקיפול נפתחת לצורה אחת גדולה (משולש + תמונת המראה שלו).${fdAnimBox(P, holes, ans)}`,
+      lgKind: 'foldCut', lgFd: fdKey(ans) }, fdOpt(fdOpen(ans)), wr.map(H => fdOpt(fdOpen(H))));
+  }
+}
+// ג. איפה לנקב? – רואים את הקיפולים ואת הדף הפתוח, ובוחרים את מקום החור בדף המקופל
+function genLgFoldWhere(lv) {
+  lv = lv || 1;
+  for (;;) {
+    const seq = lv === 1 ? [fd1()] : lv === 2 ? (Math.random() < .7 ? shuffle([fdV(), fdH()]) : [fdD()]) : (Math.random() < .5 ? [fdV(), fdH(), fdD()] : shuffle([fdV(), fdH(), pick([fdV(), fdH()])]));
+    const P = fdBuild(seq), last = P.regs[seq.length], all = fdSpots(last, true); if (all.length < 5) continue;
+    const p = pick(fdSpots(last)), holes = [{ t: 'c', p }], ans = fdUniq(fdUnfold(P, holes));
+    // מסיחים: המקום המשתקף בתוך הדף המקופל (טעות ימין/שמאל), שכנים, ואחרים
+    const lr = P.regs[seq.length], near = all.filter(q => (q[0] !== p[0] || q[1] !== p[1]));
+    const mir = last.k === 'r' ? [[lr.x0 + lr.x1 - p[0], p[1]], [p[0], lr.y0 + lr.y1 - p[1]], [lr.x0 + lr.x1 - p[0], lr.y0 + lr.y1 - p[1]]] : [];
+    const cands = [...mir.filter(q => near.some(z => z[0] === q[0] && z[1] === q[1])), ...shuffle(near)], wr = [];
+    cands.forEach(q => { if (wr.length < 4 && !wr.some(z => z[0] === q[0] && z[1] === q[1]) && (q[0] !== p[0] || q[1] !== p[1])) wr.push(q); });
+    if (wr.length < 4) continue;
+    const bx = fdPoly(last), mnx = Math.min(...bx.map(q => q[0])), mny = Math.min(...bx.map(q => q[1])), w = Math.max(...bx.map(q => q[0])) - mnx, h = Math.max(...bx.map(q => q[1])) - mny, sc = Math.min(84 / w, 84 / h, 21);
+    const opt = q => lgOpt(`<g transform="translate(${50 - w * sc / 2 - mnx * sc} ${50 - h * sc / 2 - mny * sc}) scale(${sc})">${fdSheet(last)}<circle cx="${q[0]}" cy="${q[1]}" r=".3" fill="#fff" stroke="${FD.H}" stroke-width=".08"/></g>`); // הדף המקופל מוגדל לכל המשבצת
+    return choiceQ({ type: 'choice', text: `קיפלו דף מרובע כמו בציור, ניקבו <b>חור אחד</b> ופתחו – וקיבלו את הדף משמאל. <b>איפה ניקבו</b> בדף המקופל?`,
+      fig: fdStrip(P, holes, { open: ans }), hint: 'נסו כל אפשרות: פתחו בדמיון קיפול אחרי קיפול (מהאחרון לראשון) ובדקו אם יוצאים בדיוק החורים שבדף הפתוח.',
+      exp: `בדף המקופל רק החור שבאפשרות הנכונה נפתח בדיוק לחורים שבדף. אפשר גם לחשוב הפוך: כל החורים בדף הפתוח נערמים זה על זה כשמקפלים – ומגיעים למקום אחד בדף המקופל.${fdAnimBox(P, holes, ans)}`,
+      lgKind: 'foldWhere', lgFd: fdKey(ans) }, opt(p), wr.map(opt));
+  }
+}
+// ד. כמה חורים? – חשיבה בלי ציור התוצאה: כל קיפול לחצי מכפיל את השכבות
+function genLgFoldCount(lv) {
+  lv = lv || 1;
+  const n = lv === 1 ? 2 : lv === 2 ? 3 : pick([3, 4]), nh = lv === 3 ? 2 : 1, seq = [];
+  for (let i = 0; i < n; i++) seq.push(i % 2 ? fdH() : fdV());
+  const P = fdBuild(seq), holes = shuffle(fdSpots(P.regs[n], nh > 1)).slice(0, nh).map(p => ({ t: 'c', p })), ans = nh * 2 ** n, H = fdUniq(fdUnfold(P, holes));
+  const wr = lgNumOpts(ans, [nh * 2 * n, nh * n + 1, nh * 2 ** (n - 1), ans + nh * 2, ans * 2, nh * (n + 1)]);
+  return choiceQ({ type: 'choice', text: `מקפלים דף מרובע ${n} פעמים, בכל פעם לחצי, ו${nh > 1 ? 'מנקבים <b>שני חורים</b>' : 'מנקבים <b>חור אחד</b>'} דרך כל השכבות. <b>כמה חורים</b> יהיו בדף הפתוח?`,
+    fig: fdStrip(P, holes, null), hint: 'כמה שכבות נייר יש אחרי קיפול אחד? ואחרי שניים? כל חור עובר דרך כל השכבות.',
+    exp: `כל קיפול לחצי מכפיל את מספר השכבות: ${[...Array(n)].map((_, i) => 2 ** (i + 1)).join(' ← ')}. ${nh > 1 ? `שני חורים עוברים דרך ${2 ** n} שכבות: ${M(`2 × ${2 ** n} = ${ans}`)}` : `חור אחד עובר דרך ${ans} שכבות`} → <b>${ans} חורים</b>.${fdAnimBox(P, holes, H)}`,
+    lgKind: 'foldCount', lgFd: n + '/' + nh }, ans, wr);
+}
 const LG_TIPS = ['קוראים מימין לשמאל.', 'בודקים כל תכונה לחוד: צורה, צבע, כמות, כיוון.', 'מצאתם כלל? בדקו אותו בכל הדוגמאות לפני שבוחרים.'];
 const LG_T = (id, name, icon, desc, gens, ld) => ({ id, name, icon, color: '#6b3fa0', desc, tips: LG_TIPS, lgLD: ld,
   levels: { 1: gens.map(g => () => g(1)), 2: gens.map(g => () => g(2)), 3: gens.map(g => () => g(3)) } });
 const XTOPICS = GRADE >= 5 && GRADE <= 6 ? [
   LG_T('logic', 'חידות מטריצה', '🧠', 'משלימים את התא החסר: עיגולים מסתובבים, צורות ומספרים', [genLogicPie, genLogicShapes, genLogicNum],
     ['כלל אחד בכל שורה (סיבוב, צורה, חיבור וחיסור)', 'שני כללים יחד, כיוונים שונים, כפל וחילוק', 'הרכבת ציורים, כלל לפי שורה, פעולה ועוד צעד קטן']),
-  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות של מספרים, ציורים ואותיות: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq, genLgLetters],
-    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב, דילוג באלף-בית', 'הפרשים שגדלים, שתי קפיצות או שתי פעולות לסירוגין, חץ ונקודה יחד', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד']),
+  LG_T('lgSeq', 'סדרות – מה בא אחר כך?', '🔜', 'סדרות של מספרים, ציורים ושעונים: מגלים את החוקיות וממשיכים', [genLgSeries, genLgFigSeq, genLgClock],
+    ['קפיצה קבועה, כפל קבוע, חץ שמסתובב, שעון שמתקדם בקפיצות שוות', 'הפרשים שגדלים, שתי קפיצות או שתי פעולות לסירוגין, חץ ונקודה יחד, שעון בקפיצות שגדלות או אחורה', 'סדרות שזורות, סכום שני הקודמים, שלושה כללים יחד, שעון בקפיצות שמוכפלות או קדימה ואחורה']),
   LG_T('lgAna', 'אנלוגיות, מראה ויוצא דופן', '🔀', 'מכונת מספרים, "א ל-ב כמו ג ל-?", תמונת מראה ומי לא שייך לקבוצה', [genLgAnalogy, genLgOdd, genLgMirror],
     ['כלל של צעד אחד, הפיכה אחת, תכונה פשוטה, מראה של עיגול', 'כלל של שני צעדים, שתי הפיכות, מתחלקים ב..., מראה של חץ ונקודה', 'שני צעדים, ראשוניים, תמונת מראה, השתקפות במים']),
   LG_T('lgNum', 'חידות מספרים: מאזניים, פירמידות וסימנים', '⚖️', 'כמה שוקלת כל צורה? מה המספר במרכז? מה חסר בפירמידה? אילו סימנים חסרים?', [genLgBalance, genLgCenter, genLgPyramid, genLgOps],
     ['החלפה פשוטה, סכום הפינות, פירמידה מלמטה למעלה, + ו-−', 'שני שלבים, כפל וחיבור בפינות, לבנה חסרה, גם ×', 'הצבה במאזניים, כללים מורכבים, פירמידה של 4 שורות, כל ארבע הפעולות'])
+,
+  LG_T('lgFold', 'קיפולי נייר', '🧻', 'מקפלים דף, מנקבים או גוזרים – ומדמיינים איך הוא נראה כשפותחים אותו', [genLgFoldHole, genLgFoldCut, genLgFoldWhere, genLgFoldCount],
+    ['קיפול אחד וחור אחד, קיפול אחד וגזירה, כמה חורים אחרי 2 קיפולים', 'שני קיפולים או קיפול באלכסון, 3 קיפולים', 'שלושה קיפולים, אלכסון אחרי שני קיפולים, שני חורים, עד 4 קיפולים'])
 ] : [];
-// כל סוגי החידות – מעורב (13 סוגים)
-if (XTOPICS.length) XTOPICS.push({ id: 'lgAll', name: 'כל סוגי החידות – מעורב', icon: '🔀', color: '#6b3fa0', desc: 'כל 13 סוגי החידות לסירוגין – תרגול ארוך בלי חזרות', tips: LG_TIPS, lgLD: ['רמה קלה מכל הסוגים', 'רמה בינונית מכל הסוגים', 'רמה מאתגרת מכל הסוגים'], mixAll: true,
+// כל סוגי החידות – מעורב (17 סוגים)
+if (XTOPICS.length) XTOPICS.push({ id: 'lgAll', name: 'כל סוגי החידות – מעורב', icon: '🎲', color: '#6b3fa0', desc: 'כל 17 סוגי החידות לסירוגין – תרגול ארוך בלי חזרות', tips: LG_TIPS, lgLD: ['רמה קלה מכל הסוגים', 'רמה בינונית מכל הסוגים', 'רמה מאתגרת מכל הסוגים'], mixAll: true,
   levels: Object.fromEntries([1, 2, 3].map(lv => [lv, XTOPICS.flatMap(t => t.levels[lv])])) });
 const LG_LEVELS = XTOPICS.length ? XTOPICS[0].levels : {};
 XTOPICS.forEach(t => { TOPIC[t.id] = t; CAT_OF[t.id] = 'exc'; LEVEL_DESC[t.id] = t.lgLD; });
@@ -14450,6 +14991,17 @@ function startPreset() {
 
 function masterySnapshot() {
   return Object.fromEntries(TOPICS.map(t => [t.id, (store.topics[t.id] || {}).mastery || 0]));
+}
+
+// בדיקת שליטה עצמאית (21.11): אותן שאלות של הרמה, אבל במצב מבדק – ניסיון אחד, בלי רמז/דוגמה/משוב עד הסוף
+function startCheck(id, lv) {
+  state = { mode: 'practice', topicId: id, level: lv, count: 5, fixed: true, qs: [], i: 0, results: [], prevGen: null, mixOrder: [] };
+  const qs = [];
+  for (let i = 0; i < 5; i++) { state.i = i; const q = makeQuestion(); qs.push(q); state.qs[i] = q; }
+  navPush('view');
+  state = { mode: 'test', topicId: 'test', qs, count: qs.length, i: 0, results: [], score: 0, chk: { id, lv }, label: `בדיקת שליטה – ${TOPIC[id].name}` };
+  track('בדיקת שליטה', `${TOPIC[id].name} · ${LEVEL_NAME[lv]}`);
+  renderQ();
 }
 
 function startPractice(topicId, opt = {}) {
@@ -14847,6 +15399,7 @@ function renderQ() {
         ${practice && catOf(state.topicId) === 'exc' ? '<button class="secondary" id="dkBtn">🤷 לא יודע/ת</button>' : ''}
         <button class="hidden" id="next">${state.i + 1 === total ? 'לסיכום 🏁' : 'לשאלה הבאה ←'}</button>
       </div>
+      ${teacherOn() && !state.sim ? `<div class="actions noprint tskip">${state.i > 0 ? '<button type="button" class="secondary" id="tPrevQ">→ שאלה קודמת (מורה)</button>' : ''}<button type="button" class="secondary" id="tSolQ">👁️ הצגת הפתרון (מורה)</button><button type="button" class="secondary" id="tSkipQ">${state.i + 1 === total ? 'לסיכום ← (מורה)' : 'דילוג לשאלה הבאה ← (מורה)'}</button></div>` : ''}
       </div><div class="qcol-b">${q.fig || ''}
       <div class="fb" id="fb" aria-live="polite"></div>
       <div id="guide" aria-live="polite"></div>
@@ -14875,6 +15428,10 @@ function renderQ() {
   if (GRADE === 1 && !state.sim && $('speakBtn') && canSpeak && (loadVoices(), heVoice) && navigator.userActivation && navigator.userActivation.hasBeenActive) setTimeout(() => { if ($('speakBtn')) $('speakBtn').click(); }, 350);
   if ($('go')) $('go').onclick = submit;
   // תלמיד שלא יודע: ממשיך לשאלה הבאה בלי להיתקע (נרשם כ"לא ענה")
+  // מורה: מעבר בין שאלות בלי לפתור (לא נספר בציון)
+  if ($('tSkipQ')) $('tSkipQ').onclick = () => { stopSpeak(); nextQ(); };
+  if ($('tPrevQ')) $('tPrevQ').onclick = () => { stopSpeak(); state.i--; renderQ(); window.scrollTo(0, 0); };
+  if ($('tSolQ')) $('tSolQ').onclick = () => { showFb('info', `<div class="head">👩‍🏫 התשובה: ${correctHTML(q)}</div>${q.steps && q.steps.length ? `<ol class="exsteps">${q.steps.map(x => `<li>${stepAns(x.p, x.a)}</li>`).join('')}</ol>` : ''}`); };
   if ($('skipQ')) $('skipQ').onclick = () => { if (state.done) return; state.results.push({ q, a: readAnswer(q), ok: false, outcome: 'shown', skipped: true }); nextQ(); };
   if ($('hintBtn')) $('hintBtn').onclick = showHint;
   if ($('exBtn')) $('exBtn').onclick = showExample;
@@ -14904,6 +15461,7 @@ function showFb(kind, html) {
   if (state && state.mode === 'practice' && ['bad', 'info', 'hint'].includes(kind)) html += learnLink(state.qs[state.i]);
   fb.className = `fb show ${kind}`;
   fb.innerHTML = html;
+  fb.querySelectorAll('.lgfold').forEach(fdPlay);
 }
 
 function lockMain() {
@@ -15127,7 +15685,7 @@ function nextQ() {
 function summary() {
   const s = state, n = s.results.length;
   if (s.tpKind) tpClear(s.tpKind, s.tpPart);
-  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
+  track(s.mode === 'test' ? (s.exit ? 'כרטיס יציאה – סיום' : s.chk ? 'בדיקת שליטה – סיום' : 'מבחן – סיום') : 'תרגול – סיום', s.exit && staffOn() ? titleText() : `${titleText()} · ${s.results.filter(r => r.outcome === 'first' || r.outcome === 'second').length}/${n}`);
   const name = store.name || '';
   const date = new Date().toLocaleDateString('he-IL');
   const label = titleText();
@@ -15148,7 +15706,7 @@ function summary() {
     }
     ts.last = { correct, n };
   }
-  if (s.mode === 'test' && !s.exit) store.tests = (store.tests || []).concat({ date, score: correct, total: n }).slice(-10);
+  if (s.mode === 'test' && !s.exit && !s.chk) store.tests = (store.tests || []).concat({ date, score: correct, total: n }).slice(-10);
   // אתגר אלופים: נפתח אחרי תרגול/מבחן עם 80% ומעלה; ניצחון באתגר עצמו נספר
   const isChamp = s.topicId === 'champ', earned = !isChamp && !s.exit && !s.sim && n >= 5 && ratio >= 0.8;
   const champNew = earned && !store.champ;
@@ -15202,7 +15760,7 @@ function summary() {
 
   const buildResult = () => `${(store.name || '').trim() ? (store.name || '').trim() + ' | ' : ''}${label} | נכון: ${correct} מתוך ${n}${s.mode === 'practice' ? ` (${first} בניסיון ראשון, ${guided} בעזרת פתרון מודרך)` : ''} | ${date}`;
   const resultText = buildResult();
-  const askTestName = s.mode === 'test' && !s.exit && !teacherOn() && !(store.name || '').trim();
+  const askTestName = s.mode === 'test' && !s.exit && !s.chk && !teacherOn() && !(store.name || '').trim();
 
   app.innerHTML = `
     <div class="card center">
@@ -15233,10 +15791,11 @@ function summary() {
     </div>
     ${review}`;
 
-  if ($('retryBtn')) $('retryBtn').onclick = () => startPractice(s.topicId === 'test' ? 'mix' : s.topicId, { retry: shuffle(missed) });
+  if ($('retryBtn')) $('retryBtn').onclick = () => startPractice(s.chk ? s.chk.id : s.topicId === 'test' ? 'mix' : s.topicId, { retry: shuffle(missed) });
   $('again').onclick = () => {
     if (s.exit) return exitHome();
     if (s.sim) return startSim(s.sim.mins);
+    if (s.chk) return startCheck(s.chk.id, s.chk.lv);
     if (s.mode === 'test') return startTest(false);
     if (s.list) return startTest(true);
     if (s.lessonId) return startLessonPractice(s.lessonId);
