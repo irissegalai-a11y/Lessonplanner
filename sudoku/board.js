@@ -86,5 +86,7 @@
     return s + '</svg>';
   }
 
-  root.SBD = { anchor, cageSegs, cageLayer, boardSVG };
+  // תרגיל בתוך משפט בעברית: עוטפים ברצף משמאל לימין כדי שלא יתהפך (7 − 3 = 4 ולא 4 = 3 − 7). מקבל HTML מוגן
+  const eqWrap = html => String(html).replace(/\d+(?:\s*[−+×:=]\s*\d+)+/g, m => `<span dir="ltr" class="eq">${m}</span>`);
+  root.SBD = { anchor, cageSegs, cageLayer, boardSVG, eqWrap };
 })(typeof self !== 'undefined' ? self : this);
