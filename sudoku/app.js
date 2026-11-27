@@ -200,6 +200,12 @@
     return Math.round(Math.max(280, Math.min(w, Math.max(h, 320))));
   }
 
+  // כלל המשחק במשפט אחד, לפי גודל הלוח (בראש כל משחק – גם למי שרגיל לסודוקו 9×9)
+  function ruleLine(P) {
+    const box = P.n === 6 ? 'מלבן מודגש' : 'ריבוע מודגש';
+    return `מלאו את הספרות 1 עד ${P.n} כך שכל ספרה תופיע פעם אחת בלבד בכל שורה, בכל עמודה ובכל ${box}.` +
+      (P.cages ? ' בנוסף, בכל מסגרת מקווקוות: סכום הספרות שווה למספר הקטן שבפינה, וספרה לא חוזרת.' : '');
+  }
   let BV = null; // תצוגת הלוח הנוכחי
   function gameScreen() {
     const P = G.puz, n = P.n, bw = bwFor(n);
@@ -207,6 +213,7 @@
     app.innerHTML = `<div class="game" style="--bw:${bw}px">
       <div class="gbar"><button class="back" id="gBack" aria-label="חזרה">→</button><span class="gt">${title} <span class="small muted" aria-label="רמה ${P.level} מתוך 4">${STARS(P.level)}</span></span>
         <button class="icob" id="gMenu" aria-haspopup="true" aria-label="תפריט">⋯</button></div>
+      <p class="rule1">${ruleLine(P)}</p>
       <div class="bdw" id="bdw"></div>
       <div id="gMsg"></div>
       <div id="hintp"></div>
