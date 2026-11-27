@@ -9573,6 +9573,8 @@ function ftPick(pool, out, sk) {
 }
 // ---------- בניית דף: שלושה סוגי דף, עצמאיים מהרמה – practice תרגול · think חשיבה · mixed משולב ----------
 // o = { type, order: 'alt' לסירוגין | 'block' גוש לכל מיומנות, est – משימת סבירות אחת, nWord – שאלות מילוליות נוספות }
+// תרגול במסך: תשובה קטנה מ-1 – בלי תיבת "שלם" (איריס 27.11). דפי ההדפסה נשארים לפי q.noWhole
+const fracNoW = q => !!(q.noWhole || (q.ans && q.ans.d > 0 && q.ans.n > 0 && q.ans.n < q.ans.d));
 const FS_SCORE = q => (q.lv || 1) * 100 + (q.meta.sc || 0) + (q.word ? 50 : 0) + (q.type === 'frac' && !q.noWhole ? 3 : 0);
 // שטח כתיבה למשימה פתוחה: short · med · long · two (שתי דרכים, זו לצד זו) · draw (מקום לציור) · list
 const fsSpace = (kind, lines) => kind === 'compare' ? 'two' : lines <= 2 ? 'short' : lines <= 4 ? 'med' : 'long';
@@ -13062,7 +13064,7 @@ function readAnswer(q) {
     return { raw, val: parseNum(raw) };
   }
   if (q.type === 'frac') {
-    const w = q.noWhole ? null : parseInt0(document.getElementById('fw').value);
+    const w = fracNoW(q) ? null : parseInt0(document.getElementById('fw').value);
     const n = parseInt0(document.getElementById('fn').value);
     const d = parseInt0(document.getElementById('fd').value);
     return { val: { w, n, d } };
@@ -15428,14 +15430,14 @@ function inputHTML(q) {
   if (q.type === 'frac') return `
     <span class="lbl">תשובה:</span>
     <span class="fracin">
-      ${q.noWhole ? '' : '<input id="fw" class="w" inputmode="numeric" aria-label="שלם" placeholder="שלם">'}
+      ${fracNoW(q) ? '' : '<input id="fw" class="w" inputmode="numeric" aria-label="שלם" placeholder="שלם">'}
       <span class="stack">
         <input id="fn" inputmode="numeric" aria-label="מונה" placeholder="מונה">
         <span class="bar"></span>
         <input id="fd" inputmode="numeric" aria-label="מכנה" placeholder="מכנה">
       </span>
     </span>
-    <span class="fracin-note">${q.noWhole ? 'כתבו מונה ומכנה.' : 'אם התשובה גדולה מ-1, כתבו אותה כשבר מעורב (שלם + שבר). אם התשובה מספר שלם – כתבו רק בתיבה "שלם".'}</span>`;
+    <span class="fracin-note">${fracNoW(q) ? 'כתבו מונה ומכנה.' : 'אם התשובה גדולה מ-1, כתבו אותה כשבר מעורב (שלם + שבר). אם התשובה מספר שלם – כתבו רק בתיבה "שלם".'}</span>`;
   const emo = q.choices.every(c => /^\p{Extended_Pictographic}+$/u.test(String(c)));
   return `<div class="choices${chPics(q.choices) ? ' pics' : ''}${emo ? ' emo' : ''}">${q.choices.map((c, i) => `<button data-c="${i}">${chLet(i)} <span class="cht">${c}</span></button>`).join('')}</div>`;
 }
