@@ -2413,6 +2413,39 @@ html.embed body { padding-top: 0; }
     .tcat-tile .mbar { justify-self: stretch; }
     @media (max-width: 640px) { .tcat-tile .tt-nm { font-size: 1.05rem; } }
   }
+  /* =========================================================
+     שדרוג עיצוב – שלב 3 (27.11): פסי התקדמות אחידים. רק במסך.
+     פס = מסילה בגוון בהיר של צבע הנושא עם קו מתאר דק (רואים מה נשאר) + מילוי בצבע הנושא.
+     ========================================================= */
+  @media screen {
+    .mbar, .progress {
+      display: block; height: 10px; border-radius: 99px; overflow: hidden; border: 0;
+      background: color-mix(in srgb, var(--c, var(--ok)) 15%, #fffdf8);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c, var(--ok)) 45%, transparent);
+    }
+    .mbar > span, .progress > div { background: var(--c, var(--ok)); border-radius: 99px; }
+    .progress { height: 12px; }
+    .tp-head .mbar { height: 12px; margin-top: 8px; }
+    .tcat-tile { grid-template-areas: "i" "nm" "n" "bar" "pt"; }
+    .tcat-tile .tt-pt { grid-area: pt; font-size: 0.85rem; line-height: 1.3; color: var(--muted); margin-top: 4px; }
+    .tp-lesson .tl-bar { width: 100%; height: 8px; margin-top: 6px; }
+    /* ליטושי דף הבית (איריס 27.11): בכותרות האלה מ' בכתב יד נראתה כמו א' – גופן נקי. הלוגו נשאר בכתב יד */
+    .panel > h2, .today-t, .hdr .sig { font-family: var(--ui); font-weight: 800; }
+    .hdr .sig { font-weight: 700; }
+    /* "מה עושים היום?" – שורה אחת קומפקטית */
+    .card.today.cont { flex-wrap: nowrap; gap: 12px; padding: 10px 16px; margin: 0 0 14px; }
+    .cont > div:first-child { display: flex; align-items: baseline; gap: 4px 10px; flex-wrap: wrap; min-width: 0; }
+    .cont .today-k { font-size: 0.95rem; white-space: nowrap; }
+    .cont .today-k::after { content: ':'; }
+    .cont .today-t { font-size: 1.15rem; margin: 0; }
+    .cont .today-d { font-size: 0.95rem; }
+    .cont .today-d:not(:empty)::before { content: '· '; }
+    @media (max-width: 640px) { .cont .today-d:not(:empty)::before { content: none; } .cont .today-d { flex-basis: 100%; } }
+    .cont button { font-size: 1rem; padding: 7px 16px; flex: 0 0 auto; white-space: nowrap; }
+    /* שדה השם – הדגשה עדינה כל עוד הוא ריק */
+    .name-mini input:placeholder-shown { background: #fff4d1; border-color: #d9a520; box-shadow: 0 0 0 3px rgba(217, 165, 32, 0.22); }
+  }
+  @media print { .tt-pt, .tl-bar { display: none !important; } }
   /* בהדפסה של דף הבית – אותו סדר כמו קודם (כלי התצוגה מעל הלוגו) */
   @media print { .hdr { display: flex; flex-direction: column-reverse; } }
 
@@ -13944,13 +13977,17 @@ function topicCatsHTML() {
   const body = g => { n = 0; return g.c.id === 'exc' ? excBody(g) : g.c.id === 'geo' && GRADE === 6 ? geoBody6(g) : `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`; };
   const cnt = g => g.topics.length + g.extra.length;
   const avg = g => g.topics.length ? Math.round(g.topics.reduce((a, t) => a + ((store.topics[t.id] || {}).mastery || 0), 0) / g.topics.length) : 0;
+  // שדרוג עיצוב שלב 3 (27.11): משפט קצר מתחת לפס – רק ממה שכבר שמור (נושא שתורגל / שליטה 80+ = אלופים)
+  const tileNote = g => { const n = g.topics.length, st = g.topics.filter(t => store.topics[t.id]).length, top = g.topics.filter(t => ((store.topics[t.id] || {}).mastery || 0) >= 80).length;
+    if (!n || !st) return '';
+    return `<span class="tt-pt">${top === n ? `🏆 כל הכבוד! ${n === 1 ? 'הנושא' : `כל ${n} הנושאים`} ברמת אלופים` : `התחלתם ${st} מתוך ${n} ${n === 1 ? 'נושא' : 'נושאים'}`}</span>`; };
   let open = ''; try { open = sessionStorage.getItem('math-cat') || ''; } catch (e) {}
   if (!groups.some(g => g.c.id === open)) open = '';
   catOpenNow = open;
   // אריחי קטגוריות → לחיצה פותחת רק את הקטגוריה
   return `<div class="tcat-tiles"${open ? ' hidden' : ''}>${groups.map(g => `<button type="button" class="tcat-tile" style="--c:${g.c.color}" onclick="catShow('${g.c.id}')">
             <span class="tt-i">${g.c.icon}</span><span class="tt-nm">${g.c.name}</span><span class="tt-n">${cnt(g)} נושאים${g.tools.length ? ` · ${g.tools.length} כלי המחשה` : ''}</span>
-            <span class="mbar"><span style="width:${avg(g)}%"></span></span></button>`).join('')}</div>
+            <span class="mbar"><span style="width:${avg(g)}%"></span></span>${tileNote(g)}</button>`).join('')}</div>
           ${groups.map(g => `<section class="tcat tcat-one" data-cat="${g.c.id}" style="--c:${g.c.color}"${g.c.id === open ? '' : ' hidden'}>
             <div class="tcat-top"><button type="button" class="secondary tcat-back" onclick="catShow('')">→ כל הקטגוריות</button></div>
             <h3 class="tcat-h"><span class="tcat-i">${g.c.icon}</span>${g.c.name}</h3>
@@ -13996,7 +14033,7 @@ function topicHome(id) {
       <div class="tp-next">${nextHTML}</div>
     </div>
     ${ls.length ? `<section class="card tp-step">${step('ללמוד – כרטיסיות הסבר')}
-      <div class="tp-lessons">${ls.map(l => { const L = LESSONS[l], k = learnedSet(l).size, all = cardsOf(l).length; return `<button type="button" class="tp-lesson" data-tl="${l}"><b>📖 ${L.name}</b><span class="muted">${k ? `✔ ${k} מתוך ${all}` : `${all} כרטיסיות`}</span></button>`; }).join('')}</div>
+      <div class="tp-lessons">${ls.map(l => { const L = LESSONS[l], k = learnedSet(l).size, all = cardsOf(l).length; return `<button type="button" class="tp-lesson" data-tl="${l}" style="--c:${t.color}"><b>📖 ${L.name}</b><span class="muted">${all && k >= all ? `✔ כל הכבוד! סיימתם את כל ${all} הכרטיסיות` : k ? `✔ ${k} מתוך ${all} כרטיסיות` : `${all} כרטיסיות`}</span>${k ? `<span class="mbar tl-bar" aria-hidden="true"><span style="width:${Math.round(Math.min(k, all) / all * 100)}%"></span></span>` : ''}</button>`; }).join('')}</div>
     </section>` : ''}
     <section class="card tp-step">${step('לתרגל – בחרו רמה')}
       <div class="lvlchoices">
@@ -15496,7 +15533,7 @@ function renderQ() {
         <button class="ghost navhome" id="quit">${ic('home')} לדף הבית</button>
       </span>
     </div>
-    <div class="progress"><div style="width:${state.i / total * 100}%"></div></div>
+    <div class="progress" role="img" aria-label="שאלה ${state.i + 1} מתוך ${total}"${TOPIC[state.topicId] ? ` style="--c:${TOPIC[state.topicId].color}"` : ''}><div style="width:${state.i / total * 100}%"></div></div>
     ${state.sim ? `<div class="simnav" aria-label="מעבר בין שאלות">${state.qs.map((x, i) => `<button data-go="${i}" class="${simAnswered(i) ? 'done' : ''}${i === state.i ? ' cur' : ''}" aria-label="שאלה ${i + 1}">${i + 1}</button>`).join('')}</div>
     <div class="simnote">כחול = יש תשובה · אפשר ללחוץ על מספר כדי לעבור לשאלה</div>` : ''}
     ${practice ? `<div class="statusrow">
