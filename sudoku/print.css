@@ -51,8 +51,8 @@ table.trk th { background: var(--soft, #eee); }
 .pv-wrap { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
 .pv-wrap .pg { zoom: .42; box-shadow: 0 2px 12px rgba(0, 0, 0, .18); border: 1px solid #ccc; }
 @media print {
-  html.printing body > *:not(#print) { display: none !important; }
-  html.printing #print { display: block !important; }
+  html.printing body > *:not(#print), body:has(> #print > .pg) > *:not(#print) { display: none !important; }
+  html.printing #print, #print:has(> .pg) { display: block !important; }
   html.printing body { background: #fff; margin: 0; }
   .pg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
