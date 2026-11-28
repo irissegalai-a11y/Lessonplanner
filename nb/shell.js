@@ -37,7 +37,7 @@
     if (isSite && /[?&]print/.test(W.location.search)) return; // דפי הדפסה – בלי שינוי (מדידת העמודים)
     if (!isSite && !isCoach) return;
     const f = D.createElement('link'); f.rel = 'stylesheet'; f.href = 'https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap'; D.head.appendChild(f);
-    if (isSite) { const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = 'nb/skin.css?v=281128b'; D.head.appendChild(l); }
+    if (isSite) { const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = 'nb/skin.css?v=281128c'; D.head.appendChild(l); }
     else { const st = D.createElement('style'); st.textContent = SKIN_COACH; D.head.appendChild(st); }
     D.documentElement.classList.add('nbskin');
   }
