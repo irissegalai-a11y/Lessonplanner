@@ -227,6 +227,9 @@ details.tocbox[open] > summary .ico.tg { transform: rotate(180deg); }
   .top { padding: 6px 12px; gap: 8px; min-height: 54px; }
   .brand .lg { font-size: 1.25rem; }
   .brand .by { font-size: 0.72rem; }
+  /* שורת הכותרת בטלפון בגודל קבוע – גם כשמגדילים את הכתב היא נשארת בשורה אחת ובתוך המסך */
+  .top .brand .lg { font-size: 20px; } .top .brand .by { font-size: 11.5px; white-space: nowrap; }
+  .top .pill { font-size: 14px; min-height: 40px; }
   .top .search { display: none; position: absolute; top: 54px; right: 8px; left: 8px; max-width: none; z-index: 35; }
   .top.searching .search { display: block; }
   .top .acts { margin-inline-start: auto; gap: 6px; }

@@ -6,23 +6,23 @@
 <meta name="color-scheme" content="only light">
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="Cache-Control" content="no-cache">
-<title>MathInClass – ספריית מחברות (גרסת ניסיון, כיתה ו')</title>
+<title>MathInClass – ספריית המחברות</title>
 <link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="nb/design.css?v=281128k">
-<link rel="stylesheet" href="nb/shell.css?v=281128k">
+<link rel="stylesheet" href="nb/design.css?v=281128m">
+<link rel="stylesheet" href="nb/shell.css?v=281128m">
 <script>try { if (localStorage.getItem('math-calm') === '1') document.documentElement.classList.add('calm'); } catch (e) {}
-// בלי כיתה בכתובת – הכיתה שנבחרה במסך הבחירה, ואם עוד לא נבחרה – למסך בחירת הכיתה
-(function () { var q = new URLSearchParams(location.search), g = null; if (/^[1-6]$/.test(q.get('grade') || '')) { try { localStorage.setItem('nb-grade', q.get('grade')); } catch (e) {} return; } try { g = localStorage.getItem('nb-grade'); } catch (e) {}
-  if (g && /^[1-6]$/.test(g)) { q.set('grade', g); history.replaceState(null, '', '?' + q + location.hash); } else location.replace('nbchoose.html'); })();</script>
+// בלי כיתה בכתובת – הכיתה שנבחרה במסך הבחירה, ואם עוד לא נבחרה – למסך בחירת הכיתה (math.html)
+(function () { var q = new URLSearchParams(location.search), g = null; if (/^[1-6]$/.test(q.get('grade') || '')) { try { localStorage.setItem('nb-grade', q.get('grade')); } catch (e) {} return; } try { g = localStorage.getItem('nb-grade') || localStorage.getItem('math-grade'); } catch (e) {}
+  if (g && /^[1-6]$/.test(g)) { q.set('grade', g); history.replaceState(null, '', '?' + q + location.hash); } else location.replace('math.html?choose'); })();</script>
 </head>
 <body>
 <a class="sr-only" href="#view">דילוג לתוכן</a>
 <div class="app">
   <header class="top" id="top">
-    <a class="brand" href="#" id="brand" aria-label="MathInClass – לדף הבית"><span class="lg">Math<i>In</i>Class</span><span class="by">מאת איריס סגל · <b>גרסת ניסיון</b></span></a>
+    <a class="brand" href="#" id="brand" aria-label="MathInClass – לדף הבית"><span class="lg">Math<i>In</i>Class</span><span class="by">מאת איריס סגל</span></a>
     <div class="search" role="search">
       <svg class="ico s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
       <input id="q" type="search" placeholder="חיפוש נושא, שיעור, משחק או קורס" autocomplete="off" aria-label="חיפוש נושא" aria-controls="qres">
@@ -55,8 +55,8 @@
 <script src="coach/courses/fmul.js"></script>
 <script src="coach/courses/fdiv.js"></script>
 <script src="coach/courses/pct.js"></script>
-<script src="nb/art.js?v=281128k"></script>
-<script src="nb/gart.js?v=281128k"></script>
-<script src="nb/shell.js?v=281128k"></script>
+<script src="nb/art.js?v=281128m"></script>
+<script src="nb/gart.js?v=281128m"></script>
+<script src="nb/shell.js?v=281128m"></script>
 </body>
 </html>

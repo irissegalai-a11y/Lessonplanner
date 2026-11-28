@@ -33,7 +33,7 @@
   /* ---------------- המסגרת: האתר הקיים ---------------- */
   let W = null, D = null, isSite = false, isCoach = false, data = null, quietUntil = 0;
   const run = code => { try { return W.eval(code); } catch (e) { console.warn('[nb]', e); return null; } };
-  const SKIN_V = '281128k';
+  const SKIN_V = '281128m';
   function skin() {
     if (!D || !D.head || D.documentElement.classList.contains('nbskin')) return;
     if (isSite && /[?&]print/.test(W.location.search)) return; // דפי הדפסה – בלי שינוי (מדידת העמודים)
@@ -256,7 +256,7 @@
     if (kind === 'search') { $('#top').classList.add('searching'); $('#q').focus(); return; }
     const el = document.createElement('div'); el.className = 'pop'; el.dataset.k = kind; el.setAttribute('role', 'dialog');
     const calm = document.documentElement.classList.contains('calm');
-    if (kind === 'grade') el.innerHTML = `<h3>כיתה ${GL}</h3><p>גרסת הניסיון של העיצוב החדש.</p><div class="row"><a class="btn sec s" href="nbchoose.html" target="_top">החלפת כיתה</a></div>`;
+    if (kind === 'grade') el.innerHTML = `<h3>כיתה ${GL}</h3><p>גרסת הניסיון של העיצוב החדש.</p><div class="row"><a class="btn sec s" href="math.html?choose" target="_top">החלפת כיתה</a></div>`;
     if (kind === 'name') el.innerHTML = `<h3>השם שלי</h3><p>השם נשמר רק במכשיר הזה, כמו באתר.</p><input id="nmIn" value="${esc(data && data.name)}" placeholder="כתבו את השם שלכם" autocomplete="off"><div class="row"><button class="btn s" id="nmSave">שמירה</button></div>`;
     if (kind === 'a11y') el.innerHTML = `<h3>נגישות</h3><div class="row"><button class="btn sec s" id="calmT" aria-pressed="${calm}">${ic('eye', 's')} ${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="btn sec s" id="fontT">${ic('type', 's')} א+ גודל כתב</button></div><p>גודל הכתב מתחלף בין 3 גדלים, כמו באתר.</p>`;
     if (kind === 'role') el.innerHTML = `<h3>${data.teacher ? 'את/ה בתצוגת מורה' : 'את/ה רואה את האתר כמו תלמיד/ה'}</h3><div class="row"><button class="btn s" id="roleT">${data.teacher ? 'מעבר לתצוגת תלמיד' : 'חזרה לתצוגת מורה'}</button>${data.teacher ? '<button class="btn sec s" id="guideT">מדריך למורה</button>' : ''}</div>`;

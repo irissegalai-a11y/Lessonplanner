@@ -22,6 +22,14 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="theme-color" content="#fbf8f1">
 <script>
+  // לאן נכנסים: העיצוב החדש (nb6.html). קישור ישיר עם פרמטרים נוספים (משחק, מבדק, הדפסה, # …) – לאתר כמו קודם (math6.html)
+  window.siteFor = function (g, p, hash) {
+    var q = new URLSearchParams(p.toString()); q.delete('grade'); q.delete('choose'); q.delete('role');
+    if (!q.toString() && !hash) { try { localStorage.setItem('nb-grade', g); } catch (e) {} return 'nb6.html?grade=' + g; }
+    if (g !== '6') q.set('grade', g);
+    var s = q.toString().replace(/=(&|$)/g, '$1');
+    return 'math6.html' + (s ? '?' + s : '') + (hash || '');
+  };
   // אתר אחד לכל הכיתות: מי שכבר בחר כיתה – עובר אליה ישר (אלא אם ביקש להחליף)
   (function () {
     var p = new URLSearchParams(location.search), g = null, ok = false;
@@ -35,16 +43,12 @@
     // ?role – תמיד מציגים את הבחירה: תלמיד/הורה או מורה
     if (p.has('role')) ok = false;
     window.ROLE_OK = ok;
-    if (ok && !p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) {
-      if (g !== '6') p.set('grade', g);
-      var s = p.toString().replace(/=(&|$)/g, '$1');
-      location.replace('math6.html' + (s ? '?' + s : '') + location.hash);
-    }
+    if (ok && !p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) location.replace(siteFor(g, p, location.hash));
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@400;600;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew:wght@400;600;700&family=Assistant:wght@400;600;700&family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100vh; }
@@ -99,6 +103,30 @@
   .rq-box { margin-top: 14px; padding-top: 10px; border-top: 2px dashed #d8d0bf; font-size: 0.92rem; color: #3d3a33; }
   .role-sw { font: inherit; font-size: 0.85rem; background: none; border: none; color: #5f5a50; text-decoration: underline; cursor: pointer; margin-top: 10px; }
   .pv-link { font: inherit; background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; }
+  /* ===== העיצוב החדש (28.11) – אותה שפה כמו המחברות: Heebo, רקע לבן ומשבצות עדינות, כרטיסים בקו דק ===== */
+  body { font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; color: #253B49; background-color: #fff;
+    background-image: linear-gradient(#F3F5F7 1px, transparent 1px), linear-gradient(90deg, #F3F5F7 1px, transparent 1px); background-size: 24px 24px; }
+  .hero::before, .grades b::before { display: none; }
+  h1, .sig, h2, .grades a { font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; }
+  h1 { font-weight: 800; letter-spacing: -.01em; }
+  .sig { color: #4A5D6A; }
+  h2 { font-size: 1.35rem; font-weight: 700; }
+  .grades a { background: #fff; border: 1.5px solid #DCE2E6; border-radius: 18px; color: #253B49; box-shadow: 0 1px 2px rgba(37,59,73,.06), 0 4px 14px rgba(37,59,73,.06); }
+  .grades a:hover, .grades a:focus-visible { box-shadow: 0 0 0 2px #2F5670; transform: none; }
+  .grades b { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; font-size: 1.6rem; font-weight: 800; background: color-mix(in srgb, var(--c) 30%, #fff); }
+  .grades span { font-weight: 600; }
+  .note, .credit { color: #4A5D6A; }
+  .ct-btn, .pv-btn, .ct-acts a, .ct-acts button { border: 1.5px solid #DCE2E6; border-radius: 999px; background: #fff; color: #253B49; box-shadow: none; }
+  .ct-btn:hover, .ct-btn:focus-visible, .pv-btn:hover, .pv-btn:focus-visible { box-shadow: 0 0 0 2px #2F5670; }
+  .ct-acts .ct-main { background: #2F5670; color: #fff; border-color: #2F5670; }
+  .ct-ov { background: rgba(37, 59, 73, .45); }
+  .ct-box { background: #fff; color: #253B49; border: 1px solid #DCE2E6; border-radius: 18px; box-shadow: 0 10px 30px rgba(37,59,73,.18); }
+  .ct-box h2 { font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; }
+  .roles button { font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; background: #fff; color: #253B49; border: 1.5px solid #DCE2E6; border-radius: 18px; box-shadow: 0 1px 2px rgba(37,59,73,.06), 0 4px 14px rgba(37,59,73,.06); }
+  .roles button:hover, .roles button:focus-visible { box-shadow: 0 0 0 2px #2F5670; transform: none; }
+  .rl-in { border: 1.5px solid #9FB0BC; border-radius: 12px; }
+  .rq-box { border-top: 1px solid #DCE2E6; color: #253B49; }
+  .role-sw { color: #4A5D6A; }
 </style>
 </head>
 <body>
@@ -140,12 +168,7 @@
   function next() {
     var g = null; try { g = localStorage.getItem('math-grade'); } catch (e) {}
     var p = new URLSearchParams(location.search); p.delete('role');
-    if (!p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) {
-      if (g !== '6') p.set('grade', g);
-      var s = p.toString().replace(/=(&|$)/g, '$1');
-      location.replace('math6.html' + (s ? '?' + s : ''));
-      return;
-    }
+    if (!p.has('choose') && ['1', '2', '3', '4', '5', '6'].indexOf(g) >= 0) { location.replace(siteFor(g, p, '')); return; }
     roleStep.hidden = true; gradeStep.hidden = false;
   }
   function modal(html, wire) {
@@ -224,10 +247,7 @@
     a.addEventListener('click', function (e) {
       e.preventDefault();
       try { localStorage.setItem('math-grade', a.dataset.g); } catch (err) {}
-      var p = new URLSearchParams(extra.toString());
-      if (a.dataset.g !== '6') p.set('grade', a.dataset.g);
-      var s = p.toString().replace(/=(&|$)/g, '$1');
-      location.href = 'math6.html' + (s ? '?' + s : '') + location.hash;
+      location.href = siteFor(a.dataset.g, extra, location.hash);
     });
   });
 </script>
