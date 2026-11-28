@@ -164,6 +164,14 @@
   .qfig .rot-b { position: absolute; top: 6px; left: 6px; min-height: 32px; font-size: .85rem; }
   .qhead { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 8px; }
   .lvtag { font-size: .8rem; font-weight: 800; background: #f0ece2; padding: 1px 8px; border-radius: 99px; }
+  .lvtag.mix { background: #e6f0e0; }
+  .ptab .pmin { display: block; font-size: .72em; font-weight: 600; opacity: .7; }
+  .ask { background: #fffaf0; border: 1.5px dashed #e0c98a; border-radius: 14px; padding: 8px 14px; margin: 12px 0; }
+  .ask h3 { margin: 4px 0; } .ask-l { margin: 4px 0 8px; padding-inline-start: 1.4em; } .ask-l li { margin: 4px 0; }
+  details.hands summary { cursor: pointer; font-weight: 800; }
+  .worked { margin: 10px 0; } .wsteps { padding-inline-start: 1.4em; } .wsteps li { margin: 6px 0; } .wsteps .wfin { list-style: none; background: #eef7ee; border-radius: 10px; padding: 6px 10px; margin-inline-start: -1.4em; }
+  .oral { background: #f5f2ff; }
+  .games-l { margin: 10px 0; }
   .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .opts.few { grid-template-columns: 1fr; }
   .opt { display: flex; align-items: center; gap: 10px; text-align: right; min-height: 50px; padding: 8px 12px; border: 2px solid #d8dbea; border-radius: 14px; background: #fff; font-weight: 600; }
@@ -299,11 +307,12 @@
 <body>
 <div id="app"><div class="wrap"><p class="muted">טוען…</p></div></div>
 <div id="printout"></div>
-<footer class="credit">mathinclass · מאת איריס סגל · <span class="ver">גרסה 1.0</span></footer>
+<footer class="credit">mathinclass · מאת איריס סגל · <span class="ver">גרסה 2.0</span></footer>
 <noscript><p style="text-align:center">כדי להשתמש בדף צריך להפעיל JavaScript.</p></noscript>
 <script src="geo6/solid3d.js"></script>
 <script src="geo6/prism-a.js"></script>
 <script src="geo6/prism-b.js"></script>
+<script src="geo6/prism-c.js"></script>
 <script src="geo6/app.js"></script>
 </body>
 </html>
