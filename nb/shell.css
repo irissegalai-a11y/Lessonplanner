@@ -276,3 +276,110 @@ details.tocbox[open] > summary .ico.tg { transform: rotate(180deg); }
   .tabbar .nv { min-height: 54px; padding: 5px 2px; font-size: 0.75rem; }
 }
 @media (min-width: 700px) { .top .acts .phone { display: none; } }
+
+/* ===================== שערים – כל שער "אפליקציה" משלו (רקע לבן, איור לכל פעילות) ===================== */
+.g-art { display: grid; place-items: center; background: var(--ac); color: #1E2F3B; border-radius: 22%; overflow: hidden; flex: none; }
+.g-art svg { width: 84%; height: 84%; }
+.g-sec { margin-top: 22px; }
+.g-h { font-size: var(--fs-l); font-weight: 800; margin: 0 2px 10px; }
+
+/* אתגר אלופים – שורה קומפקטית */
+.champ-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 10px 8px 14px; border-radius: 14px; background: linear-gradient(100deg, #F7EBC8, #FBF5E4); border: 1px solid #E8D59E; max-width: 640px; }
+.champ-row .cr-ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(160deg, #E8C66A, #C99A38); color: #3B2C08; flex: none; }
+.champ-row b { font-size: var(--fs-m); }
+.champ-row .cr-lock { display: inline-flex; align-items: center; gap: 6px; color: #6B5520; font-size: var(--fs-s); margin-inline-start: auto; }
+.champ-row .btn { margin-inline-start: auto; }
+
+/* משחקים – חנות אפליקציות */
+.gapps { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); column-gap: 28px; }
+.gapp { display: flex; align-items: center; gap: 14px; padding: 12px 2px; border: 0; border-bottom: 1px solid var(--rule); background: none; text-align: right; min-height: 96px; border-radius: 0; }
+.gapp .g-art { width: 76px; height: 76px; box-shadow: 0 1px 2px rgba(30,47,59,.12), inset 0 0 0 1px rgba(30,47,59,.06); }
+.gapp-tx { flex: 1 1 auto; min-width: 0; }
+.gapp-tx b { display: block; font-size: var(--fs-m); font-weight: 700; }
+.gapp-tx span { display: block; font-size: var(--fs-s); color: var(--ink-2); margin-top: 2px; }
+.gapp-get { flex: none; padding: 5px 16px; border-radius: 999px; background: #EEF2F6; color: #2F5F8F; font-weight: 800; font-size: var(--fs-s); }
+.gapp:hover .gapp-get { background: #2F6FB0; color: #fff; }
+.gapp:hover .g-art { filter: brightness(1.04); }
+
+/* מבדקים – תיקייה עם מסמכים */
+.files-bar { display: flex; align-items: center; gap: 10px; padding: 10px 2px 12px; border-bottom: 1px solid var(--rule); margin-top: 6px; }
+.files-bar h1 { font-size: var(--fs-xxl); }
+.fb-ic svg { width: 34px; height: 34px; fill: #8DB4E2; stroke: #4C7CB3; stroke-width: 1.2; }
+.fb-n { color: var(--ink-3); font-size: var(--fs-s); margin-inline-start: auto; }
+.files { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 26px 22px; padding-top: 22px; }
+.file { display: flex; flex-direction: column; align-items: center; gap: 4px; border: 0; background: none; text-align: center; padding: 8px; border-radius: 14px; }
+.file:hover { background: #F2F5F8; }
+.file .g-art { width: 130px; height: 150px; border-radius: 10px; margin-bottom: 8px; background: color-mix(in srgb, var(--ac) 30%, #fff); box-shadow: 0 2px 8px rgba(30,47,59,.12); }
+.file .g-art svg { width: 92%; height: 92%; }
+.file b { font-size: var(--fs-m); }
+.file span { font-size: var(--fs-xs); color: var(--ink-2); max-width: 220px; }
+
+/* אימון כפל וחילוק – שני כרטיסים גדולים עם איור */
+.kf2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 900px; margin-top: 10px; }
+.kfc { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: 0 0 18px; border: 1px solid var(--rule); border-radius: 22px; background: #fff; text-align: right; overflow: hidden; box-shadow: var(--sh-1); }
+.kfc:hover { box-shadow: var(--sh-2); }
+.kfc .g-art { width: 100%; height: 190px; border-radius: 0; }
+.kfc .g-art svg { width: 60%; height: 90%; }
+.kfc-tx { padding: 0 20px; }
+.kfc-tx b { display: block; font-size: var(--fs-xl); font-weight: 800; }
+.kfc-tx span { display: block; color: var(--ink-2); margin-top: 4px; }
+.kfc .btn { align-self: flex-start; margin: 0 20px; pointer-events: none; }
+
+/* אזור המורה – סביבת עבודה: עמודה לכל שלב בשיעור */
+.ws { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; align-items: start; margin-top: 6px; }
+.ws-col { border: 1px solid var(--rule); border-radius: 16px; background: #fff; overflow: hidden; }
+.ws-col h2 { font-size: var(--fs-m); font-weight: 800; padding: 12px 16px; border-top: 5px solid var(--wc); background: color-mix(in srgb, var(--wc) 10%, #fff); border-bottom: 1px solid var(--rule); }
+.ws-it { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border: 0; border-bottom: 1px solid var(--rule); background: none; text-align: right; min-height: 72px; }
+.ws-it:last-child { border-bottom: 0; }
+.ws-it:hover { background: #F5F8FA; }
+.ws-it .g-art { width: 52px; height: 52px; border-radius: 13px; }
+.ws-tx { flex: 1 1 auto; min-width: 0; }
+.ws-tx b { display: block; }
+.ws-tx span { display: block; font-size: var(--fs-xs); color: var(--ink-2); }
+.ws-it > .ico { color: var(--ink-3); }
+
+/* כלי המחשה – ספריית כלים */
+.tools-lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; margin-top: 8px; }
+.tl { display: flex; flex-direction: column; align-items: stretch; border: 1px solid var(--rule); border-radius: 18px; background: #fff; padding: 0; overflow: hidden; text-align: right; }
+.tl:hover { box-shadow: var(--sh-2); }
+.tl .g-art { width: 100%; height: 140px; border-radius: 0; }
+.tl .g-art svg { width: 70%; height: 92%; }
+.tl-tx { padding: 12px 14px 14px; }
+.tl-tx b { display: block; font-size: var(--fs-m); }
+.tl-cat { display: inline-block; margin-top: 6px; font-size: var(--fs-xs); padding: 2px 10px; border-radius: 999px; background: color-mix(in srgb, var(--tc) 22%, #fff); color: var(--ink); }
+
+/* מצוינות – ספריית חידות */
+.pzs { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 22px 18px; }
+.pz { display: flex; flex-direction: column; align-items: stretch; gap: 4px; border: 0; background: none; padding: 0; text-align: right; }
+.pz .g-art { width: 100%; aspect-ratio: 1; border-radius: 20px; margin-bottom: 6px; background: color-mix(in srgb, var(--ac) 62%, #263848); color: #fff; box-shadow: 0 2px 10px rgba(30,47,59,.14); }
+.pz .g-art svg { width: 70%; height: 70%; }
+.pz .g-art svg [fill="#fff"] { fill: rgba(255,255,255,.18); }
+.pz:hover .g-art { box-shadow: 0 4px 16px rgba(30,47,59,.22); }
+.pz b { font-size: var(--fs-m); line-height: 1.3; }
+.pz-d { font-size: var(--fs-xs); color: var(--ink-2); }
+.pz-m { display: block; height: 5px; border-radius: 99px; background: rgba(37,59,73,.1); overflow: hidden; margin-top: 4px; }
+.pz-m i { display: block; height: 100%; background: var(--ok); }
+
+@media (max-width: 700px) {
+  .champ-row { padding: 6px 8px 6px 10px; gap: 8px; }
+  .champ-row .cr-lock { flex-basis: 100%; margin: 0; font-size: var(--fs-xs); }
+  .gapps { grid-template-columns: 1fr; }
+  .gapp { min-height: 80px; gap: 12px; padding: 10px 0; }
+  .gapp .g-art { width: 62px; height: 62px; }
+  .gapp-get { padding: 4px 12px; }
+  .files { grid-template-columns: 1fr 1fr; gap: 16px 10px; padding-top: 14px; }
+  .file .g-art { width: 104px; height: 122px; }
+  .files-bar h1 { font-size: var(--fs-xl); }
+  .kf2 { grid-template-columns: 1fr; gap: 14px; }
+  .kfc { flex-direction: row; flex-wrap: wrap; align-items: center; padding: 0; gap: 0; }
+  .kfc .g-art { width: 110px; height: 110px; }
+  .kfc-tx { flex: 1 1 0; padding: 10px 14px; }
+  .kfc-tx b { font-size: var(--fs-l); }
+  .kfc .btn { display: none; }
+  .ws { gap: 12px; }
+  .ws-it { min-height: 64px; padding: 10px 12px; }
+  .ws-it .g-art { width: 44px; height: 44px; }
+  .tools-lib { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tl .g-art { height: 100px; }
+  .pzs { grid-template-columns: 1fr 1fr; gap: 16px 12px; }
+}

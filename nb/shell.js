@@ -11,10 +11,11 @@
   const GRADE = 6;
   const SITE = 'math6.html?grade=' + GRADE;
   const { ic, ART } = window.NB_ART;
+  const GART = window.NB_GART;
   const $ = s => document.querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const J = JSON.stringify;
-  const clean = s => String(s || '').replace(/\s+/g, ' ').replace(/^[^\p{L}\p{N}(]+/u, '').trim(); // בלי אימוג'י בתחילת השם
+  const clean = s => String(s || '').replace(/[\u200E\u200F\u2066-\u2069]/g, '').replace(/\s+/g, ' ').replace(/^[^\p{L}\p{N}(]+/u, '').trim(); // בלי אימוג'י בתחילת השם
   const view = $('#view'), stage = $('#stage'), F = $('#site'), toc = $('#toc'), shead = $('#shead');
 
   // צבע קבוע לכל משפחת נושאים
@@ -37,7 +38,7 @@
     if (isSite && /[?&]print/.test(W.location.search)) return; // דפי הדפסה – בלי שינוי (מדידת העמודים)
     if (!isSite && !isCoach) return;
     const f = D.createElement('link'); f.rel = 'stylesheet'; f.href = 'https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap'; D.head.appendChild(f);
-    if (isSite) { const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = 'nb/skin.css?v=281128c'; D.head.appendChild(l); }
+    if (isSite) { const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = 'nb/skin.css?v=281128d'; D.head.appendChild(l); }
     else { const st = D.createElement('style'); st.textContent = SKIN_COACH; D.head.appendChild(st); }
     D.documentElement.classList.add('nbskin');
   }
@@ -95,8 +96,22 @@
     const cont = A.querySelector('.card.cont');
     const tabs = [...A.querySelectorAll('.nb > .tabs .tab')].map(b => ({ id: b.dataset.tab || b.id, label: clean(b.textContent), go: !b.dataset.tab }));
     const lsAll = run('[...TOPICS, ...XTOPICS].map(t => [t.id, topicLessons(t.id).map(l => ({ id: l, name: LESSONS[l].name, k: learnedSet(l).size, all: cardsOf(l).length }))])') || [];
+    // השערים (משחקים, מבדקים, אימון כפל, אזור המורה): הכפתורים המקוריים של האתר, לפי הסדר והכותרות שלו
+    const gate = id => {
+      const pn = A.querySelector(`[data-panel="${id}"]`); if (!pn) return null;
+      const secs = [{ t: '', items: [] }];
+      pn.querySelectorAll('h3.games-sub, button[id]').forEach(e => {
+        if (e.matches('h3')) return secs.push({ t: clean(e.textContent), items: [] });
+        if (e.closest('.champ-card, .champ-lock') || e.id === 'champGo') return;
+        const nm = e.querySelector('.gc-nm, .kf-o-t'), ds = e.querySelector('.gc-ds, .desc, .kf-o-d');
+        const name = clean(nm ? nm.textContent : [...e.childNodes].filter(x => x.nodeType === 3).map(x => x.textContent).join(' '));
+        secs[secs.length - 1].items.push({ id: e.id, name: name.replace(/[\p{Extended_Pictographic}\uFE0F]/gu, '').trim(), desc: ds ? String(ds.textContent).replace(/[\u200E\u200F\u2066-\u2069]/g, '').replace(/\s+/g, ' ').trim() : '' });
+      });
+      return secs.filter(x => x.items.length);
+    };
+    const gates = {}; ['games', 'tests', 'kefel', 'teach'].forEach(id => { const g = gate(id); if (g) gates[id] = g; });
     data = {
-      tiles, items, tabs,
+      tiles, items, tabs, gates,
       lessons: Object.fromEntries(lsAll),
       allLessons: run('LESSON_ORDER.map(id => ({ id, name: LESSONS[id].name, t: lessonTopic(LESSONS[id]), cat: catOf(lessonTopic(LESSONS[id])) }))') || [],
       cont: cont && D.getElementById('contGo') ? { k: clean((cont.querySelector('.today-k') || {}).textContent), t: clean((cont.querySelector('.today-t') || {}).textContent), d: clean((cont.querySelector('.today-d') || {}).textContent), btn: clean(D.getElementById('contGo').textContent).replace(/[←\s]+$/, '') } : null,
@@ -120,11 +135,12 @@
     if (push) { try { history.pushState({ nb: 1 }, '', '#' + routeKey(m)); } catch (e) { /* לא חובה */ } }
     render();
   }
-  const routeKey = m => m.v === 'notebook' ? 'nb-' + m.cat : ['library', 'topics', 'courses'].includes(m.v) ? (m.v === 'library' ? '' : m.v) : '';
+  const routeKey = m => m.v === 'gate' ? 'g-' + m.g : m.v === 'notebook' ? 'nb-' + m.cat : ['library', 'topics', 'courses'].includes(m.v) ? (m.v === 'library' ? '' : m.v) : '';
   function route() {
     const h = location.hash.slice(1);
     if (h.startsWith('nb-') && CAT[h.slice(3)]) mode = { v: 'notebook', cat: h.slice(3) };
     else if (h === 'topics' || h === 'courses') mode = { v: h };
+    else if (h.startsWith('g-')) mode = { v: 'gate', g: h.slice(2) };
     else mode = { v: 'library' };
     render();
   }
@@ -138,8 +154,8 @@
     // הנתונים נקראים מחדש בכל כניסה למסך ספרייה (התקדמות, אתגר אלופים, שם)
     if (isSite && data && Date.now() - lastScrape > 300) scrape();
     if (!data) { view.innerHTML = '<div class="view-in"><p class="muted">טוענים את הספרייה…</p></div>'; return; }
-    view.classList.toggle('lib', mode.v === 'library');
-    view.innerHTML = '<div class="view-in">' + (mode.v === 'notebook' ? notebookHTML(mode.cat) : mode.v === 'topics' ? topicsHTML() : mode.v === 'courses' ? coursesHTML() : libraryHTML()) + '</div>';
+    view.classList.toggle('lib', mode.v === 'library' || mode.v === 'gate' || (mode.v === 'notebook' && mode.cat === 'exc'));
+    view.innerHTML = '<div class="view-in">' + (mode.v === 'gate' ? gateHTML(mode.g) : mode.v === 'notebook' ? (mode.cat === 'exc' && data.items.exc ? excHTML() : notebookHTML(mode.cat)) : mode.v === 'topics' ? topicsHTML() : mode.v === 'courses' ? coursesHTML() : libraryHTML()) + '</div>';
     view.scrollTop = 0;
     bindView();
   }
@@ -165,6 +181,7 @@
       { id: 'games', label: 'משחקים', icon: 'game', main: 1, on: !!t('games') },
       { id: 'tests', label: 'מבדקים', icon: 'check', main: 1, on: !!t('tests') },
       { id: 'exc', label: 'מצוינות', icon: 'spark', on: !!(data && data.items.exc) },
+      { id: 'tools', label: 'כלי המחשה', icon: 'tool', on: !!(data && allTools().length) },
       { sep: 1 },
       { id: 'kefel', label: 'אימון כפל', icon: 'times', on: !!t('kefel') },
       { id: 'hiluk', label: 'אימון חילוק', icon: 'divide', on: !!t('hiluk') },
@@ -174,7 +191,7 @@
     ].filter(x => x.on !== false);
   };
   const activeNav = () => mode.v === 'library' ? 'home' : mode.v === 'topics' ? 'topics' : ['courses', 'course'].includes(mode.v) ? 'courses'
-    : mode.v === 'area' ? (mode.tab === 'wp' ? 'home' : mode.tab) : (mode.cat === 'exc' ? 'exc' : 'home');
+    : mode.v === 'gate' ? mode.g : mode.v === 'area' ? (mode.gate || (mode.tab === 'wp' ? 'home' : mode.tab)) : (mode.cat === 'exc' ? 'exc' : 'home');
   const nvBtn = (n, cur) => `<button type="button" class="nv" data-nav="${n.id}"${n.id === cur ? ' aria-current="page"' : ''}>${ic(n.icon)}<span>${n.label}</span></button>`;
   function renderChrome() {
     const nav = NAV(), cur = activeNav();
@@ -197,6 +214,7 @@
     if (id === 'topics') return go({ v: 'topics' });
     if (id === 'courses') return go({ v: 'courses' });
     if (id === 'exc') return go({ v: 'notebook', cat: 'exc' });
+    if (id === 'tools' || (data && data.gates[id])) return go({ v: 'gate', g: id });
     openArea(id);
   }
   document.addEventListener('click', e => {
@@ -259,8 +277,8 @@
       out.push({ n: it.name, d: it.desc, k: it.k === 'tool' ? 'כלי המחשה' : it.k === 'topic' ? 'נושא' : 'פעילות', c: catColor(cat), f: () => openItem(it, cat) });
     }));
     data.allLessons.forEach(l => out.push({ n: l.name, k: 'לומדים', c: catColor(l.cat), f: () => openTopic(l.t, l.cat, `[data-tl="${l.id}"]`) }));
-    data.games.forEach(g => out.push({ n: g.name, k: 'משחק', c: '#C9D3DA', f: () => openArea('games', '#' + g.id) }));
-    data.tests.forEach(t => out.push({ n: t.name, k: 'מבדק', c: '#C9D3DA', f: () => openArea('tests', '#' + t.id) }));
+    data.games.forEach(g => out.push({ n: g.name, k: 'משחק', c: '#C9D3DA', f: () => openArea('games', '#' + g.id, 'games') }));
+    data.tests.forEach(t => out.push({ n: t.name, k: 'מבדק', c: '#C9D3DA', f: () => openArea('tests', '#' + t.id, 'tests') }));
     courses().forEach(c => out.push({ n: c.title, d: c.sub, k: 'קורס', c: catColor(c.cat), f: () => openCourse(c) }));
     return out;
   }
@@ -312,15 +330,8 @@
       meta: open ? '' : '<div class="bm-note">נפתח אחרי סבב תרגול עם 80% ומעלה</div>' });
   }
   function libraryHTML() {
-    const q = (id, icon, b, d, col) => `<button type="button" class="qk" data-nav="${id}"><span class="qi" style="--qc:${col}">${ic(icon)}</span><span><b>${b}</b><span class="d">${d}</span></span></button>`;
     return `<div class="vhead"><h1>${ic('library')} ספריית המחברות שלי</h1></div>
-      <div class="books">${data.tiles.map(coverHTML).join('')}${champHTML()}</div>
-      <div class="quick">
-        ${q('courses', 'cap', 'קורסים', 'לומדים לבד, יחידה אחרי יחידה', '#E7DCC6')}
-        ${data.tabs.some(t => t.id === 'games') ? q('games', 'game', 'משחקים', 'לומדים דרך משחק', '#DDE7DF') : ''}
-        ${data.tabs.some(t => t.id === 'tests') ? q('tests', 'check', 'מבדקים', 'מבדק ואימון לקראתו', '#DFE6EE') : ''}
-        ${data.tabs.some(t => t.id === 'print') ? q('print', 'printer', 'הדפסה', 'דפי עבודה וחוברות', '#ECE2DA') : ''}
-      </div>`;
+      <div class="books">${data.tiles.map(coverHTML).join('')}${champHTML()}</div>`;
   }
 
   /* ---------------- מסך 2: מחברת פתוחה ---------------- */
@@ -371,6 +382,74 @@
           </details>
         </section>
       </div>`;
+  }
+
+  /* ---------------- שערים: כל שער – "אפליקציה" משלו ---------------- */
+  const GATE_T = { games: 'משחקים', tests: 'מבדקים', kefel: 'אימון כפל וחילוק', teach: 'אזור המורה', tools: 'כלי המחשה', exc: 'מצוינות' };
+  const gateName = (g, id) => { for (const s of (data.gates[g] || [])) for (const it of s.items) if (it.id === id) return it.name; return ''; };
+  // משפט קצר מהתיאור של האתר: עד סוף המשפט הראשון (בלי לקטוע באמצע)
+  function short(d) {
+    d = String(d || '').trim();
+    const re = /[.!?](?=\s)|(?<=\S): | – /g; let m, out = d;
+    while ((m = re.exec(d))) { const cut = d.slice(0, m.index + (m[0] === '?' ? 1 : 0)); if (cut.trim().length >= 14) { out = cut; break; } }
+    return out.replace(/[.\s–:]+$/, '');
+  }
+  // תרגיל בתוך משפט בעברית – תמיד משמאל לימין
+  const mathLTR = h => h.replace(/\d[\d.,]*(?:\s*[:×=+−-]\s*[\d?][\d.,]*)+/g, x => `<bdi dir="ltr">${x}</bdi>`);
+  const crumbs = name => `<nav class="crumbs" aria-label="איפה אני"><button type="button" class="home" data-nav="home">${ic('home', 's')} דף הבית</button><span class="sep">›</span><b>${esc(name)}</b></nav>`;
+  const gArt = (id, i) => `<span class="g-art" style="--ac:${GART.color(id, i)}" aria-hidden="true">${GART.art(id)}</span>`;
+  function allTools() {
+    if (!data) return [];
+    const out = [];
+    Object.entries(data.items).forEach(([cat, list]) => list.forEach(it => { if (it.k === 'tool') out.push({ it, cat }); }));
+    return out;
+  }
+  // אתגר אלופים – שורה קומפקטית; אותו תנאי פתיחה של האתר (champOpen)
+  function champRow() {
+    const open = data.champ.open;
+    return `<div class="champ-row${open ? '' : ' locked'}"><span class="cr-ic" aria-hidden="true">${ic('trophy')}</span><b>אתגר אלופים</b>
+      ${open ? `<button type="button" class="btn s" data-champ="1">פתיחה ${ic('fwd', 's')}</button>` : `<span class="cr-lock">${ic('lock', 's')} נפתח אחרי סבב תרגול עם 80% ומעלה</span>`}</div>`;
+  }
+  function gamesHTML(G) {
+    return `${crumbs('משחקים')}<div class="vhead"><h1>${ic('game')} משחקים</h1></div>${champRow()}
+      ${G.map(s => `<section class="g-sec">${s.t ? `<h2 class="g-h">${esc(s.t)}</h2>` : ''}<div class="gapps">${s.items.map((it, i) =>
+        `<button type="button" class="gapp" data-gopen="games:${it.id}" title="${esc(it.desc)}">${gArt(it.id, i)}<span class="gapp-tx"><b>${esc(it.name)}</b><span>${esc(short(it.desc))}</span></span><span class="gapp-get" aria-hidden="true">פתיחה</span></button>`).join('')}</div></section>`).join('')}`;
+  }
+  function testsHTML(G) {
+    const all = G.flatMap(s => s.items);
+    return `${crumbs('מבדקים')}<div class="files-bar"><span class="fb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2h8.5A1.5 1.5 0 0 1 21 8.5V18a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18z"/></svg></span><h1>מבדקים</h1><span class="fb-n">${all.length} פריטים</span></div>
+      <div class="files">${all.map((it, i) => `<button type="button" class="file" data-gopen="tests:${it.id}">${gArt(it.id, i)}<b>${esc(it.name)}</b><span>${esc(it.desc)}</span></button>`).join('')}</div>`;
+  }
+  function kefelHTML(G) {
+    const all = G.flatMap(s => s.items);
+    return `${crumbs('אימון כפל וחילוק')}<div class="vhead"><h1>${ic('times')} אימון כפל וחילוק</h1></div>
+      <div class="kf2">${all.map((it, i) => `<button type="button" class="kfc" data-gopen="kefel:${it.id}">${gArt(it.id, i)}<span class="kfc-tx"><b>${esc(it.name)}</b><span>${mathLTR(esc(it.desc))}</span></span><span class="btn s" aria-hidden="true">מתחילים ${ic('fwd', 's')}</span></button>`).join('')}</div>`;
+  }
+  function teachHTML(G) {
+    return `${crumbs('אזור המורה')}<div class="vhead"><h1>${ic('brief')} אזור המורה</h1></div>
+      <div class="ws">${G.map((s, k) => `<section class="ws-col" style="--wc:${['#6E8FC4', '#4FA3A5', '#D88A6A', '#8C8FB8'][k % 4]}"><h2>${esc(s.t || 'כלים')}</h2>
+        ${s.items.map((it, i) => `<button type="button" class="ws-it" data-gopen="teach:${it.id}" title="${esc(it.desc)}">${gArt(it.id, i)}<span class="ws-tx"><b>${esc(it.name)}</b><span>${esc(short(it.desc))}</span></span>${ic('chevL', 's')}</button>`).join('')}</section>`).join('')}</div>`;
+  }
+  function toolsHTML() {
+    return `${crumbs('כלי המחשה')}<div class="vhead"><h1>${ic('tool')} כלי המחשה</h1></div>
+      <div class="tools-lib">${allTools().map((t, i) => { const tn = (data.tiles.find(x => x.id === t.cat) || {}).name || '';
+        return `<button type="button" class="tl" data-tool="${i}" title="${esc(t.it.desc)}">${gArt(t.it.id, i)}<span class="tl-tx"><b>${esc(t.it.name)}</b><span class="tl-cat" style="--tc:${catColor(t.cat)}">${esc(tn)}</span></span></button>`; }).join('')}</div>`;
+  }
+  // מצוינות – ספריית חידות ואתגרים
+  function excHTML() {
+    const list = data.items.exc; list.forEach((it, i) => { it.idx = i; });
+    const tile = it => `<button type="button" class="pz" data-item="${it.idx}" title="${esc(it.desc)}">${gArt(it.id, it.idx)}<b>${esc(it.name)}</b><span class="pz-d">${esc(short(it.desc))}</span>${it.m > 0 ? `<span class="pz-m" aria-label="שליטה ${Math.round(it.m)}%"><i style="width:${it.m}%"></i></span>` : ''}</button>`;
+    const pz = list.filter(it => it.k === 'topic'), more = list.filter(it => it.k !== 'topic' && it.k !== 'sub');
+    const t = data.tiles.find(x => x.id === 'exc');
+    return `${crumbs(t ? t.name : 'מצוינות')}<div class="vhead"><h1>${ic('spark')} ${esc(t ? t.name : 'מצוינות')}</h1></div>
+      ${pz.length ? `<section class="g-sec"><h2 class="g-h">חידות</h2><div class="pzs">${pz.map(tile).join('')}</div></section>` : ''}
+      ${more.length ? `<section class="g-sec"><h2 class="g-h">אתגרים ומשחקי חשיבה</h2><div class="pzs">${more.map(tile).join('')}</div></section>` : ''}`;
+  }
+  function gateHTML(g) {
+    if (g === 'tools') return toolsHTML();
+    const G = data.gates[g];
+    if (!G) return libraryHTML();
+    return g === 'games' ? gamesHTML(G) : g === 'tests' ? testsHTML(G) : g === 'kefel' ? kefelHTML(G) : teachHTML(G);
   }
 
   /* ---------------- "נושאים": תוכן העניינים של כל הספרייה ---------------- */
@@ -476,14 +555,14 @@
     }, { v: 'topic', id, cat: cat || run(`catOf(${J(id)})`) });
   }
   function clickHome(sel) { run("topicBack = null; homeTab = 'practice'; home();"); const b = D.querySelector(sel); if (b) b.click(); return !!b; }
-  function openItem(it, cat) {
+  function openItem(it, cat, from) {
     if (it.k === 'topic') return openTopic(it.id, cat);
-    if (it.k === 'link') { mode = { v: 'ext', cat, name: it.name }; F.src = it.href; isSite = false; return render(); }
-    if (it.id === 'xsdkGo') { mode = { v: 'ext', cat, name: it.name }; F.src = 'sudoku.html?grade=' + GRADE; isSite = false; return render(); }
+    if (it.k === 'link') { mode = { v: 'ext', cat, name: it.name, from }; F.src = it.href; isSite = false; return render(); }
+    if (it.id === 'xsdkGo') { mode = { v: 'ext', cat, name: it.name, from }; F.src = 'sudoku.html?grade=' + GRADE; isSite = false; return render(); }
     if (it.id === 'wpGo') return forward(() => clickHome('#wpGo'), { v: 'area', tab: 'wp', cat, name: it.name });
-    forward(() => clickHome('#' + it.id), { v: 'act', cat, name: it.name });
+    forward(() => clickHome('#' + it.id), { v: 'act', cat, name: it.name, from });
   }
-  function openArea(tab, after) {
+  function openArea(tab, after, gate) {
     const t = data && data.tabs.find(x => x.id === tab);
     const name = t ? t.label : tab;
     forward(() => {
@@ -491,7 +570,7 @@
       const b = t && t.go ? D.getElementById(tab) : D.querySelector(`.nb > .tabs .tab[data-tab="${tab}"]`);
       if (b) b.click();
       if (after) { const a = D.querySelector(after); if (a) a.click(); }
-    }, { v: 'area', tab, name });
+    }, { v: 'area', tab, name: gate && after ? gateName(gate, after.slice(1)) || name : name, gate });
   }
 
   /* ---------------- מסך 4: לומדים ומתרגלים בתוך המחברת ---------------- */
@@ -528,10 +607,12 @@
     // נתיב ניווט
     const parts = [`<button type="button" class="home" data-nav="home">${ic('home', 's')} דף הבית</button>`];
     if (mode.v === 'course') parts.push(`<button type="button" data-nav="courses">קורסים</button>`, `<b>${esc(mode.name)}</b>`);
+    else if (mode.v === 'area' && mode.gate) parts.push(`<button type="button" data-nav="${mode.gate}">${esc(GATE_T[mode.gate] || '')}</button>`, `<b>${esc(mode.name)}</b>`);
     else if (mode.v === 'area' && !cat) parts.push(`<b>${esc(mode.name)}</b>`);
     else if (mode.id === 'champ') parts.push('<b>אתגר אלופים</b>');
     else {
-      if (catT) parts.push(`<button type="button" data-cat="${cat}">${esc(catT.name)}</button>`);
+      if (mode.from) parts.push(`<button type="button" data-nav="${mode.from}">${esc(GATE_T[mode.from] || '')}</button>`);
+      else if (catT) parts.push(`<button type="button" data-cat="${cat}">${esc(catT.name)}</button>`);
       const nm = info ? info.name : mode.name;
       let step = '';
       if (info) {
@@ -589,6 +670,8 @@
     if (mode.v === 'course') { mode = { v: 'courses' }; F.src = SITE; isSite = false; $('#loading').hidden = false; ensure('site').then(() => { scrape(); if (mode.v === 'courses') render(); }); crsCache = null; return render(); }
     const cat = mode.cat;
     if (!leaveStage(true)) return;
+    if (mode.v === 'area' && mode.gate) return go({ v: 'gate', g: mode.gate });
+    if (mode.from) { if (mode.v === 'ext') { F.src = SITE; isSite = false; } return go({ v: 'gate', g: mode.from }); }
     if (mode.v === 'ext') { F.src = SITE; isSite = false; }
     go(cat && CAT[cat] ? { v: 'notebook', cat } : { v: 'library' });
   }
@@ -642,7 +725,9 @@
       if (hiddenStage || Date.now() < quietUntil) { if (!hiddenStage) updateStage(); return; }
       if (isCoach && D.querySelector('#main .ccard') && mode.v === 'course') { crsCache = null; mode = { v: 'courses' }; return render(); }
       if (isSite && atHome()) {
+        if (mode.v === 'area' && mode.gate && !ov) { scrape(); return go({ v: 'gate', g: mode.gate }); }
         const tab = run('homeTab');
+        if (mode.v === 'act' && mode.from) { scrape(); return go({ v: 'gate', g: mode.from }); }
         if (mode.v === 'topic' || mode.v === 'act') { scrape(); return go(mode.cat && CAT[mode.cat] ? { v: 'notebook', cat: mode.cat } : { v: 'library' }); }
         if (mode.v === 'area' && tab !== mode.tab) {
           if (tab === 'practice' || tab === 'wp' && mode.tab !== 'wp') { scrape(); return go(mode.cat ? { v: 'notebook', cat: mode.cat } : { v: 'library' }); }
@@ -662,6 +747,8 @@
     view.querySelectorAll('[data-item]').forEach(b => b.onclick = () => {
       const list = data.items[mode.cat] || [], it = list.find(x => x.idx === +b.dataset.item); if (it) openItem(it, mode.cat);
     });
+    view.querySelectorAll('[data-gopen]').forEach(b => b.onclick = () => { const [tab, id] = b.dataset.gopen.split(':'); openArea(tab, '#' + id, mode.g || tab); });
+    view.querySelectorAll('[data-tool]').forEach(b => b.onclick = () => { const t = allTools()[+b.dataset.tool]; if (t) openItem(t.it, t.cat, 'tools'); });
     view.querySelectorAll('[data-ti]').forEach(b => b.onclick = () => { const [c, k] = b.dataset.ti.split(':'); openItem(data.items[c][+k], c); });
     view.querySelectorAll('[data-next]').forEach(b => b.onclick = () => openTopic(b.dataset.next, mode.cat, `[data-tl="${b.dataset.l}"]`));
     view.querySelectorAll('[data-focus-toc]').forEach(b => b.onclick = () => { const t = $('#tocbox'); t.open = true; t.scrollIntoView({ behavior: 'smooth', block: 'start' }); const f = t.querySelector('.it'); if (f) f.focus({ preventScroll: true }); });
