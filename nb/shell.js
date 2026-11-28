@@ -135,6 +135,7 @@
     // הנתונים נקראים מחדש בכל כניסה למסך ספרייה (התקדמות, אתגר אלופים, שם)
     if (isSite && data && Date.now() - lastScrape > 300) scrape();
     if (!data) { view.innerHTML = '<div class="view-in"><p class="muted">טוענים את הספרייה…</p></div>'; return; }
+    view.classList.toggle('lib', mode.v === 'library');
     view.innerHTML = '<div class="view-in">' + (mode.v === 'notebook' ? notebookHTML(mode.cat) : mode.v === 'topics' ? topicsHTML() : mode.v === 'courses' ? coursesHTML() : libraryHTML()) + '</div>';
     view.scrollTop = 0;
     bindView();
@@ -277,28 +278,42 @@
   });
 
   /* ---------------- מסך 1: ספריית המחברות ---------------- */
+  // כריכת מחברת (Goodnotes): כריכה אנכית 3:4 עם שדרה בימין ודפים בשוליים; תווית שם למעלה, איור במרכז.
+  // כל המידע (כמה נושאים, כלים, התקדמות) – מתחת לכריכה, לא עליה.
+  function bookHTML({ attr, cls, color, name, art, aria, meta, lock }) {
+    return `<div class="book${cls ? ' ' + cls : ''}">
+      <${attr ? 'button type="button" ' + attr : 'div role="img"'} class="nbook" style="--cv:${color}" aria-label="${esc(aria)}">
+        <span class="nbook-pages" aria-hidden="true"></span>
+        <span class="nbook-cover" aria-hidden="true">
+          <span class="nbook-spine"></span>
+          <span class="nbook-label">${esc(name)}</span>
+          <span class="nbook-art">${art}</span>
+          ${lock ? `<span class="nbook-lock">${ic('lock')}</span>` : ''}
+        </span>
+      </${attr ? 'button' : 'div'}>
+      <div class="book-meta">${meta}</div>
+    </div>`;
+  }
   function coverHTML(t) {
-    const cv = CAT[t.id] || CAT.nat;
-    const meter = t.avg > 0 ? `<div class="meter"><span>שליטה ממוצעת</span><span class="bar"><i style="width:${t.avg}%"></i></span><b>${Math.round(t.avg)}%</b></div>` : `<div class="meter"><span>עוד לא התחלתם לתרגל</span></div>`;
-    return `<button type="button" class="cover${cv.dark ? ' dark' : ''}" style="--cv:${cv.c}" data-cat="${t.id}" aria-label="מחברת ${esc(t.name)} – ${esc(t.cnt)}">
-      <span class="cv-title">${esc(t.name)}</span>
-      <span class="cv-art">${(ART[t.id] || ART.nat)()}</span>
-      <span class="cv-label"><span class="cv-meta">${esc(t.cnt)}</span>${meter}</span></button>`;
+    const prog = t.avg > 0
+      ? `<div class="meter" aria-label="שליטה ממוצעת ${Math.round(t.avg)}%"><span class="bar"><i style="width:${t.avg}%"></i></span><b>${Math.round(t.avg)}%</b></div>`
+      : '<div class="bm-note">עוד לא התחלתם</div>';
+    return bookHTML({ attr: `data-cat="${t.id}"`, cls: (CAT[t.id] || {}).dark ? 'dark' : '', color: catColor(t.id), name: t.name, art: (ART[t.id] || ART.nat)(),
+      aria: `מחברת ${t.name} – ${t.cnt}${t.avg > 0 ? ` – שליטה ממוצעת ${Math.round(t.avg)}%` : ''}`,
+      meta: `<div class="bm-cnt">${esc(t.cnt)}</div>${prog}` });
   }
   function champHTML() {
     const c = data.champ, open = c.open;
-    return `<${open ? 'button type="button" data-champ="1"' : 'div role="group" aria-disabled="true"'} class="cover gold${open ? '' : ' locked'}" aria-label="אתגר אלופים – ${open ? 'פתוח' : 'נעול'}">
-      <span class="cv-title">אתגר אלופים</span>
-      <span class="cv-art">${ART.champ(open)}</span>
-      <span class="cv-label">${open ? `<span class="cv-meta">${ic('unlock', 's')} פתוח</span><span class="champ-note">${esc(c.desc || 'חידות וחשיבה למי שכבר שולט/ת בחומר')}</span>` : `<span class="cv-meta">${ic('lock', 's')} נעול</span><span class="champ-note">נפתח כשמסיימים סבב תרגול עם 80% ומעלה</span>`}</span>
-    </${open ? 'button' : 'div'}>`;
+    return bookHTML({ attr: open ? 'data-champ="1"' : '', cls: 'gold' + (open ? '' : ' locked'), color: 'var(--c-gold)', name: 'אתגר אלופים', art: ART.champ(true), lock: !open,
+      aria: `אתגר אלופים – ${open ? 'פתוח' : 'נעול. נפתח כשמסיימים סבב תרגול עם 80% ומעלה'}`,
+      meta: `<div class="bm-cnt">${open ? esc(c.desc || 'חידות וחשיבה למי שכבר שולט/ת בחומר') : 'נפתח כשמסיימים סבב תרגול עם 80% ומעלה'}</div>` });
   }
   function libraryHTML() {
     const c = data.cont;
     const q = (id, icon, b, d, col) => `<button type="button" class="qk" data-nav="${id}"><span class="qi" style="--qc:${col}">${ic(icon)}</span><span><b>${b}</b><span class="d">${d}</span></span></button>`;
     return `<div class="vhead"><h1>${ic('library')} ספריית המחברות שלי</h1><div class="sub">כל נושאי כיתה ו'. בוחרים מחברת – ובפנים: הסברים, תרגול ובדיקה עצמית.</div></div>
       ${c ? `<div class="paper cont"><div><div class="ck">${esc(c.k)}</div><div class="ct">${esc(c.t)}</div>${c.d ? `<div class="cd">${esc(c.d)}</div>` : ''}</div><button type="button" class="btn" id="contGo2">${esc(c.btn || 'להמשיך')} ${ic('fwd', 's')}</button></div>` : ''}
-      <div class="shelf">${data.tiles.map(coverHTML).join('')}${champHTML()}</div>
+      <div class="books">${data.tiles.map(coverHTML).join('')}${champHTML()}</div>
       <div class="quick">
         ${q('courses', 'cap', 'קורסים', 'לומדים לבד, יחידה אחרי יחידה', '#E7DCC6')}
         ${data.tabs.some(t => t.id === 'games') ? q('games', 'game', 'משחקים', 'לומדים דרך משחק', '#DDE7DF') : ''}

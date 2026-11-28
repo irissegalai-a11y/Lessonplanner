@@ -56,8 +56,9 @@ body { overflow: hidden; background: #E9EDF0; }
 .backbtn { display: inline-flex; align-items: center; gap: 6px; }
 
 /* ---------- ספריית המחברות ---------- */
+.view.lib { background: var(--paper); }
 .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px 18px; }
-.shelf .cover { min-height: 228px; }
+.books { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 36px 32px; padding: 8px 6px 4px 10px; }
 .cont { display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; padding: 8px 10px 8px 16px; margin-bottom: 16px; border-right: 6px solid var(--c-blue); }
 .cont > div { display: flex; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; }
 .cont .ck { font-size: var(--fs-xs); color: var(--ink-2); font-weight: 600; }
@@ -219,11 +220,9 @@ details.tocbox[open] > summary .ico.tg { transform: rotate(180deg); }
   .top .acts .phone { display: inline-flex; }
   .view { padding: 12px 14px 28px; }
   .vhead h1 { font-size: var(--fs-xl); }
-  .shelf { grid-template-columns: 1fr 1fr; gap: 14px 12px; }
-  .shelf .cover { min-height: 196px; padding: 12px 24px 10px 10px; }
-  .shelf .cover .cv-title { font-size: var(--fs-m); }
-  .shelf .cover .cv-label { padding: 6px 8px; }
-  .shelf .cover .cv-art { min-height: 64px; }
+  .books { grid-template-columns: 1fr 1fr; gap: 26px 20px; padding: 4px 4px 0 8px; }
+  .nbook-label { font-size: var(--fs-s); padding: 6px 8px; margin: 12% 16px 0 14px; }
+  .book-meta { padding: 0 2px; }
   .quick { grid-template-columns: 1fr 1fr; gap: 8px; }
   .qk { padding: 10px; gap: 8px; }
   .qk .qi { width: 34px; height: 34px; }
