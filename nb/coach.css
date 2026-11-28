@@ -1,0 +1,132 @@
+/* =========================================================
+   עור "מחברת דיגיטלית" לקורסים (coach.html) – נטען רק בתוך
+   גרסת הניסיון (nb6.html), מוזרק למסגרת. הקורסים הפעילים לא משתנים.
+   רק מראה וסידור: גופן, צבעים, מסגרות, ריווח. בלי לגעת בלוגיקה.
+   רק במסך – דפי עבודה ומבדקים להדפסה לא משתנים.
+   --cv = צבע התחום של הקורס (כמו צבע החוצץ), נקבע מהמעטפת.
+   ========================================================= */
+@media screen {
+  html.nbskin {
+    --cv: #6E8FC4;
+    --cvs: color-mix(in srgb, var(--cv) 14%, #fff);
+    --cvm: color-mix(in srgb, var(--cv) 32%, #fff);
+    --cvd: color-mix(in srgb, var(--cv) 60%, #1E2F3B);
+    --bg: #FFFFFF; --card: #FFFFFF; --ink: #253B49; --muted: #3F5361; --line: #DCE2E6;
+    --brand: #2F5670; --brand-dark: #24465C; --brand-soft: var(--cvs);
+    --ok: #3F7A5C; --ok-bg: #E7F0EA; --bad: #9A4B2C; --bad-bg: #F6E8E1; --hint-bg: #FBF3DC; --info-bg: #EEF3F8; --rule-bg: var(--cvs);
+    --hand: 'Heebo', 'Segoe UI', Arial, sans-serif; --ui: 'Heebo', 'Segoe UI', Arial, sans-serif;
+    --sk1: 16px; --sk2: 16px; --shadow: 0 1px 2px rgba(37,59,73,.06), 0 4px 14px rgba(37,59,73,.06);
+  }
+  html.nbskin, html.nbskin body {
+    font-family: 'Heebo', 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+    background-color: #fff;
+    background-image: linear-gradient(#F3F5F7 1px, transparent 1px), linear-gradient(90deg, #F3F5F7 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  html.nbskin.calm, html.nbskin.calm body { background-image: none; }
+  html.nbskin body::before { display: none !important; }
+
+  /* הסרגל העליון של הקורס מאוחד עם שורת הניווט של המעטפת (חזרה, "סיימתי להיום", גודל כתב) */
+  html.nbskin .top, html.nbskin footer { display: none !important; }
+  /* "לתוכנית הקורס" בראש השיעור – כפתור החזרה של המעטפת עושה אותו דבר */
+  html.nbskin #ucard .lhead > #back { display: none !important; }
+  html.nbskin .wrap { max-width: 1120px; padding: 16px 18px 40px; }
+  html.nbskin .layout > *, html.nbskin #main, html.nbskin .card { min-width: 0; max-width: 100%; }
+  html.nbskin .ulist li { flex-wrap: wrap; }
+
+  /* טיפוגרפיה – גופן אחד נקי; כותרות לפי משקל וגודל */
+  html.nbskin h1, html.nbskin h2, html.nbskin h3, html.nbskin .crumb, html.nbskin .coachline .who, html.nbskin .coach .chead, html.nbskin .ring > span,
+  html.nbskin .badge, html.nbskin .chip, html.nbskin .pill, html.nbskin button, html.nbskin .btn, html.nbskin .opt, html.nbskin .coachtoggle { font-family: var(--ui) !important; letter-spacing: 0; }
+  html.nbskin h1 { background: none !important; padding-bottom: 0; font-weight: 800; color: var(--ink); }
+  html.nbskin h2 { font-weight: 800; color: var(--ink); }
+  html.nbskin #ucard .lhead h2 { color: var(--cvd); }
+  html.nbskin .crumb { color: var(--muted); font-weight: 600; }
+
+  /* כרטיסים – דף לבן, קו עדין, צל רך */
+  html.nbskin .card, html.nbskin .coach, html.nbskin .mod, html.nbskin .cert, html.nbskin .site { background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+  html.nbskin #ucard { border-top: 5px solid var(--cv); }
+  html.nbskin .modal { background: #fff; background-image: none; border: 1px solid var(--line); border-radius: 18px; }
+  html.nbskin .overlay { background: rgba(37, 59, 73, .45); }
+
+  /* כפתורים: ראשי כחול כהה, משני לבן עם קו דק, שקוף לפעולות קטנות */
+  html.nbskin button, html.nbskin .btn { background: var(--brand); color: #fff; border: 1.5px solid var(--brand); border-radius: 999px; box-shadow: none; font-weight: 700; transform: none; }
+  html.nbskin button:hover, html.nbskin .btn:hover { background: var(--brand-dark); box-shadow: none; transform: none; }
+  html.nbskin button:active, html.nbskin .btn:active { transform: none; box-shadow: none; }
+  html.nbskin button.sec, html.nbskin .btn.sec { background: #fff; color: var(--ink); border: 1.5px solid var(--line); border-radius: 999px; box-shadow: none; }
+  html.nbskin button.sec:hover, html.nbskin .btn.sec:hover { background: #F7F9FA; border-color: #9FB0BC; box-shadow: none; }
+  html.nbskin button.ghost { background: transparent; color: var(--ink); border-color: transparent; }
+  html.nbskin button.ghost:hover { background: rgba(37,59,73,.06); }
+
+  /* שדות ואפשרויות בחירה */
+  html.nbskin input.tx, html.nbskin input.slot, html.nbskin input.nin, html.nbskin .card input[type="text"] { background: #fff; border: 1.5px solid #9FB0BC; border-radius: 12px; color: var(--ink); }
+  html.nbskin input.tx:focus, html.nbskin input.slot:focus, html.nbskin input.nin:focus { outline: 3px solid rgba(47,111,176,.25); border-color: #2F6FB0; }
+  html.nbskin .qbox { border-color: var(--ink); }
+  html.nbskin .opt { background: #fff; color: var(--ink); border: 1.5px solid var(--line); border-radius: 14px; box-shadow: none; font-weight: 600; }
+  html.nbskin .opt:hover { background: #F7F9FA; border-color: #9FB0BC; box-shadow: none; }
+  html.nbskin .opt.sel { background: var(--cvs); border-color: var(--cv); box-shadow: inset 0 0 0 1px var(--cv); }
+  html.nbskin .opt.right { background: var(--ok-bg); border-color: var(--ok); }
+  html.nbskin .opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
+
+  /* משוב, כללים והסברים – תיבות רכות בצבע התפקיד */
+  html.nbskin .fb { border: 1px solid var(--line); border-inline-start-width: 4px; border-radius: 14px; }
+  html.nbskin .fb.ok { background: var(--ok-bg); border-color: #A9C8B5; border-inline-start-color: var(--ok); }
+  html.nbskin .fb.bad { background: var(--bad-bg); border-color: #DDBBA8; border-inline-start-color: var(--bad); }
+  html.nbskin .fb.hint { background: var(--hint-bg); border-color: #E6D39C; border-inline-start-color: #C99A38; }
+  html.nbskin .fb.info { background: var(--info-bg); border-color: #BDCEDE; border-inline-start-color: #2F6FB0; }
+  html.nbskin .rulebox { background: var(--cvs); border: 1px solid var(--cvm); border-inline-start: 4px solid var(--cv); border-radius: 14px; }
+  html.nbskin .warnbox { background: var(--bad-bg); border: 1px solid #DDBBA8; border-inline-start: 4px solid var(--bad); border-radius: 14px; }
+  html.nbskin .tcard, html.nbskin .titem, html.nbskin .revbox { border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+  html.nbskin .code { background: #fff; border: 1.5px dashed #9FB0BC; border-radius: 14px; color: var(--ink); }
+
+  /* המאמן – בועה נקייה במקום כתם צבעי מים */
+  html.nbskin .avatar { background: var(--cvd); color: #fff; }
+  html.nbskin .avatar::before, html.nbskin .coachline::before, html.nbskin .ccard h2::before { display: none !important; }
+  html.nbskin .coachline { background: var(--cvs); border: 1px solid var(--cvm); border-radius: 16px; }
+  html.nbskin .coachline .who { color: var(--cvd); font-weight: 800; }
+  html.nbskin .bubble { background: #F4F7F9; border: 1px solid var(--line); border-radius: 4px 14px 14px 14px; }
+  html.nbskin .coach .hb button.teacher { background: #FBF3DC; color: var(--ink); border-color: #E6D39C; }
+  html.nbskin .coachtoggle, html.nbskin .coachtoggle:hover { background: #fff; color: var(--ink); border: 0; border-bottom: 1px solid var(--line); box-shadow: none; }
+
+  /* שלבי השיעור – השלב הנוכחי בולט בצבע התחום */
+  html.nbskin .pills { gap: 6px; margin: 12px 0 18px; }
+  html.nbskin .pill { color: var(--muted); border-top: 5px solid var(--line); font-size: .85rem; font-weight: 600; }
+  html.nbskin .pill.on { color: var(--ink); border-color: var(--cv); font-weight: 800; }
+  html.nbskin .pill.done { color: var(--ok); border-color: #8FBBA3; }
+  html.nbskin .stages li, html.nbskin .lvtag { background: var(--cvs); color: var(--cvd); }
+
+  /* תוכנית הקורס */
+  html.nbskin .prog { background: var(--cvs); border: 0; border-radius: 99px; height: 10px; }
+  html.nbskin .mod > h3 { background: var(--cvs) !important; border-bottom: 1px solid var(--cvm) !important; color: var(--ink); }
+  html.nbskin .ulist li { border-bottom: 1px solid #EEF1F3; }
+  html.nbskin .ulist li.active { background: color-mix(in srgb, var(--cv) 9%, #fff); box-shadow: inset -4px 0 0 var(--cv); }
+  html.nbskin .ulist .ic { border: 1.5px solid var(--line); background: #fff; color: var(--ink); }
+  html.nbskin .ulist li.done .ic { background: var(--ok); border-color: var(--ok); color: #fff; }
+  html.nbskin .ulist li.active .ic { background: var(--cvd); border-color: var(--cvd); color: #fff; }
+  html.nbskin .chip, html.nbskin .tag { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+  html.nbskin .chip.ok { background: var(--ok-bg); border-color: #A9C8B5; }
+  html.nbskin .chip.now { background: var(--cvd); border-color: var(--cvd); color: #fff; }
+  html.nbskin .badge { background: #FBF3DC; border: 1px solid #E6D39C; }
+  html.nbskin .ring > span { background: #fff; }
+  html.nbskin .cats .ccard { border: 1px solid var(--line); border-top: 5px solid var(--cv); box-shadow: var(--shadow); }
+  html.nbskin .ccard.soon { border-style: dashed; box-shadow: none; }
+  html.nbskin table.mt td.h { background: var(--cvs); }
+
+  /* תצוגת מורה – שורה אחת קומפקטית ושקטה */
+  html.nbskin .tview { background: #FFF8E6; border: 1px solid #E8D9A8; border-radius: 12px; padding: 6px 12px; font-size: .88rem; color: #4A3F1E; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-bottom: 10px; }
+  html.nbskin .tnav { margin: 0; gap: 4px; }
+  html.nbskin .tview button, html.nbskin .tnav button { background: #fff; color: var(--ink); border: 1px solid #E8D9A8; min-height: 32px; padding: 2px 10px; font-size: .85rem; font-weight: 600; }
+  html.nbskin .tview button:hover { background: #FFF2CC; }
+  html.nbskin .tview button[disabled] { opacity: .45; }
+
+  /* טלפון: התוכן מקבל את כל הרוחב; תצוגת המורה בשורה אחת שגוללת לצדדים */
+  @media (max-width: 699px) {
+    html.nbskin .wrap { padding: 8px 8px 96px; }
+    html.nbskin .card { padding: 14px 12px; border-radius: 16px; }
+    html.nbskin .tview { font-size: .82rem; padding: 6px 8px; }
+    html.nbskin .tnav { flex-wrap: wrap; }
+    html.nbskin .pill { font-size: .72rem; line-height: 1.25; }
+    html.nbskin .lhead h2 { font-size: 1.3rem; }
+    html.nbskin .coach { border-radius: 18px 18px 0 0; border-bottom: 0; box-shadow: 0 -4px 16px rgba(37,59,73,.12); }
+    html.nbskin .coachtoggle { min-height: 52px; }
+  }
+}

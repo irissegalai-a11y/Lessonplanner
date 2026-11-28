@@ -43,14 +43,17 @@
   html.nbskin .card.today, html.nbskin .banner { border: 1px solid #C9D6E0 !important; background: #F3F7FA; }
 
   /* כפתורים: ראשי כחול כהה, משני לבן עם קו דק */
-  html.nbskin button { border-radius: 999px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; box-shadow: none; font-weight: 600; }
-  html.nbskin button:hover { background: var(--accent-dark); transform: none; box-shadow: none; }
+  /* כפתור בלי מחלקה – ראשי כחול כהה. כפתור עם מחלקה של האתר (אפשרות במשחק, אריח, שבב) – אותו בסיס בלי משקל,
+     כך שהצבע הבהיר של האתר נשמר ולא כל אפשרות הופכת לכפתור כהה */
+  html.nbskin button:not([class]), :where(html.nbskin) button:where([class]) { border-radius: 999px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; box-shadow: none; font-weight: 600; }
+  html.nbskin button:not([class]):hover, :where(html.nbskin) button:where([class]):hover { background: var(--accent-dark); }
+  html.nbskin button, html.nbskin button:hover { transform: none; box-shadow: none; }
   html.nbskin button:active { transform: none; box-shadow: none; }
   html.nbskin button.secondary, html.nbskin .choices button, html.nbskin button.lvlchoice, html.nbskin button.tp-lesson, html.nbskin button.tp-check,
-  html.nbskin button.game-card, html.nbskin button.b10-card, html.nbskin button.topic, html.nbskin .xt-tile, html.nbskin .tool-chip {
+  html.nbskin button.game-card, html.nbskin button.b10-card, html.nbskin button.topic, html.nbskin .xt-tile, html.nbskin .tool-chip, html.nbskin button.kf-opt, html.nbskin button.lvl {
     background: #fff; color: var(--ink); border: 1.5px solid var(--line); border-radius: 14px; box-shadow: none; }
   html.nbskin button.secondary:hover, html.nbskin .choices button:hover, html.nbskin button.lvlchoice:hover, html.nbskin button.tp-lesson:hover, html.nbskin button.tp-check:hover,
-  html.nbskin button.game-card:hover, html.nbskin button.b10-card:hover, html.nbskin button.topic:hover, html.nbskin .xt-tile:hover, html.nbskin .tool-chip:hover {
+  html.nbskin button.game-card:hover, html.nbskin button.b10-card:hover, html.nbskin button.topic:hover, html.nbskin .xt-tile:hover, html.nbskin .tool-chip:hover, html.nbskin button.kf-opt:hover, html.nbskin button.lvl:hover {
     background: #F7F9FA; border-color: #9FB0BC; box-shadow: 0 2px 8px rgba(37,59,73,.08); }
   html.nbskin button.ghost, html.nbskin button.linkish { background: transparent; color: var(--ink); border-color: transparent; }
   html.nbskin button.ghost:hover { background: rgba(37,59,73,.06); }
@@ -90,8 +93,146 @@
   html.nbskin .champ-card { background: linear-gradient(160deg, #E3CB8C, #C9A658); color: var(--ink); border: 0; }
   html.nbskin .champ-lock { background: #F6EFD9; border: 1px solid #E2D3A6; border-radius: 14px; }
   /* צבעי האתר הישנים (אדום, סגול) – מעומעמים לפלטה המעושנת */
-  html.nbskin .game-card .gc-ic { background: #EEF3F6 !important; }
+  html.nbskin button.kf-opt { color: var(--ink); text-align: start; }
+  html.nbskin .kf-opt .kf-o-d { color: var(--muted); }
+
+  /* ===== שערים (שלב 2) – רק מראה וסידור ===== */
+  /* אייקון במשבצת מעוגלת בצבע המשחק במקום כתם צבע */
+  html.nbskin .gc-ic { border-radius: 14px; }
+  html.nbskin .gc-ic::before { filter: none; border-radius: 14px; }
+  html.nbskin .gc-ic svg { stroke: var(--ink); }
+  html.nbskin .games-sub { color: var(--muted); font-size: .95rem; font-weight: 700; margin: 22px 0 10px; }
+
+  /* משחקים – ספריית אריחים */
+  html.nbskin [data-panel="games"]:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; align-items: stretch; }
+  html.nbskin [data-panel="games"] > :not(.game-card) { grid-column: 1 / -1; }
+  html.nbskin [data-panel="games"] > .game-card { margin: 0; grid-template-columns: 1fr; grid-template-areas: "ic" "nm" "ds" "st"; align-content: start; gap: 6px; padding: 16px; border-radius: 18px; }
+  html.nbskin [data-panel="games"] .gc-ic { width: 100%; height: 86px; margin-bottom: 6px; }
+  html.nbskin [data-panel="games"] .gc-ic svg, html.nbskin [data-panel="games"] .gc-ic .nbi svg { width: 40px; height: 40px; }
+  html.nbskin [data-panel="games"] .gc-nm { font-size: 1.08rem; font-weight: 800; }
+  html.nbskin [data-panel="games"] .gc-ds { font-size: .9rem; color: var(--muted); }
+  html.nbskin [data-panel="games"] > .champ-lock { margin: 0; }
+  @media (max-width: 560px) {
+    html.nbskin [data-panel="games"]:not([hidden]) { grid-template-columns: 1fr 1fr; gap: 10px; }
+    html.nbskin [data-panel="games"] > .game-card { padding: 12px; }
+    html.nbskin [data-panel="games"] .gc-ic { height: 64px; }
+    html.nbskin [data-panel="games"] .gc-ic svg, html.nbskin [data-panel="games"] .gc-ic .nbi svg { width: 32px; height: 32px; }
+    html.nbskin [data-panel="games"] .gc-nm { font-size: 1rem; }
+    html.nbskin [data-panel="games"] .gc-ds { font-size: .84rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  }
+
+  /* מבדקים – תיקיית מסמכים */
+  html.nbskin [data-panel="tests"] .big-actions { gap: 22px; margin-top: 26px; }
+  html.nbskin [data-panel="tests"] .big-actions button { position: relative; text-align: start; padding: 22px 20px 20px; min-height: 120px; border-radius: 4px 16px 16px 16px;
+    background: #fff; color: var(--ink); border: 1.5px solid var(--line); box-shadow: 0 1px 2px rgba(37,59,73,.06), 0 6px 16px rgba(37,59,73,.07); font-size: 1.15rem; font-weight: 800; }
+  html.nbskin [data-panel="tests"] .big-actions button::before { content: ''; position: absolute; top: -12px; inset-inline-start: -1.5px; width: 42%; height: 13px; border-radius: 10px 10px 0 0;
+    background: var(--ftab, #9DB3CC); border: 1.5px solid var(--line); border-bottom: 0; }
+  html.nbskin [data-panel="tests"] .big-actions button::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 6px; border-radius: 4px 16px 0 0; background: var(--ftab, #9DB3CC); }
+  html.nbskin [data-panel="tests"] .big-actions button + button { --ftab: #D88A6A; }
+  html.nbskin [data-panel="tests"] .big-actions button:hover { background: #F7F9FA; border-color: #9FB0BC; }
+  html.nbskin [data-panel="tests"] .big-actions .desc { color: var(--muted); opacity: 1; font-weight: 400; margin-top: 8px; }
+
+  /* אימון כפל וחילוק – שני כרטיסים גדולים */
+  html.nbskin .kf-pick { gap: 18px; margin-top: 18px; }
+  html.nbskin button.kf-opt { padding: 22px 20px; min-height: 120px; border-radius: 18px; border-top: 6px solid #E2B65C; justify-content: center; }
+  html.nbskin button.kf-opt + button.kf-opt { border-top-color: #4FA3A5; }
+  html.nbskin .kf-opt .kf-o-t { font-size: 1.3rem; }
+
+  /* אזור המורה – סביבת עבודה: כותרות כחוצצים, כרטיסים בשורות */
+  html.nbskin [data-panel="teach"]:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px 14px; align-items: stretch; }
+  html.nbskin [data-panel="teach"] > :not(.game-card) { grid-column: 1 / -1; }
+  html.nbskin [data-panel="teach"] > .games-sub { margin: 18px 0 2px; padding: 0 0 6px; border-bottom: 1.5px solid var(--line); color: var(--ink); font-size: 1rem; }
+  html.nbskin [data-panel="teach"] > .games-sub::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: #2F6FB0; margin-inline-end: 8px; }
+  html.nbskin [data-panel="teach"] > .game-card { margin: 0; grid-template-columns: 46px 1fr; gap: 2px 12px; padding: 12px 14px; border-radius: 14px; }
+  html.nbskin [data-panel="teach"] .gc-ic { width: 46px; height: 46px; }
+  html.nbskin [data-panel="teach"] .gc-ic::before { background: #EAF1F7 !important; }
+  html.nbskin [data-panel="teach"] .gc-ic svg, html.nbskin [data-panel="teach"] .gc-ic .nbi svg { width: 24px; height: 24px; stroke: #2F5F8F; }
+  html.nbskin [data-panel="teach"] .gc-nm { font-weight: 800; }
+  html.nbskin [data-panel="teach"] .gc-ds { font-size: .9rem; color: var(--muted); }
+  @media (max-width: 560px) { html.nbskin [data-panel="teach"]:not([hidden]) { grid-template-columns: 1fr; } }
+  /* אייקונים קוויים במקום אימוג'ים (מוזרקים מהמעטפת) */
+  html.nbskin .nbi { display: inline-flex; vertical-align: -0.16em; margin-inline: 0 .3em; }
+  html.nbskin .nbi svg { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  html.nbskin .lvlchoice .nbi, html.nbskin .lvl .nbi { margin: 0; color: #B8892B; }
+  html.nbskin .lvlchoice .nbi svg, html.nbskin .lvl .nbi svg { fill: #E9C46A; stroke: #A9781F; }
+  html.nbskin .gc-ic .nbi svg { width: 26px; height: 26px; }
+  html.nbskin .gc-ic .nbi { margin: 0; color: var(--ink); }
+}
+
+/* ===================== איחוד המסכים הפנימיים (28.11) – רק במסך, רק בגרסת הניסיון ===================== */
+@media screen {
+  html.nbskin { --muted: #3F5361; --soft: #5A6C78; --cvs: color-mix(in srgb, var(--cv, #6E8FC4) 16%, #fff); --cvd: color-mix(in srgb, var(--cv, #6E8FC4) 62%, #1E2F3B); }
+  /* משבצות עדינות מאוד – רקע, לא מפריע לקריאה; התוכן על כרטיס לבן */
+  html.nbskin, html.nbskin body { background-image: linear-gradient(#F3F5F7 1px, transparent 1px), linear-gradient(90deg, #F3F5F7 1px, transparent 1px); background-size: 24px 24px; }
+  html.nbskin .tp-head .ds, html.nbskin .topic .ds, html.nbskin .lvlchoice .ds, html.nbskin .muted, html.nbskin small { color: var(--muted); }
+
+  /* בתוך מחברת של נושא: המעטפת מציגה כבר את שם הנושא, החזרה וגודל הכתב – בלי כפילות בתוך הדף */
+  html.nbskin.nb-topic .navhome, html.nbskin.nb-topic .topbar [data-font], html.nbskin.nb-topic .topbar #fontBtn, html.nbskin.nb-topic .topbar .title { display: none !important; }
+  html.nbskin.nb-topic .topbar { justify-content: flex-start; min-height: 0; margin-bottom: 8px; color: var(--muted); font-weight: 600; font-size: .95rem; }
+  html.nbskin.nb-topic .topbar:not(:has(> :not(.title, .navhome))) { display: none; }
+
+  /* צבע התחום (כמו החוצץ) – בכותרת הכרטיס, בהתקדמות, בבחירה ובשלב הנוכחי */
+  html.nbskin.nb-topic .lcard, html.nbskin.nb-topic .tp-head { border-top: 5px solid var(--cv) !important; }
+  html.nbskin.nb-topic .tp-head h2, html.nbskin.nb-topic .ltitle { color: var(--cvd); }
+  html.nbskin.nb-topic .tp-h .tp-n, html.nbskin.nb-topic .qnum { background: var(--cvs) !important; color: var(--cvd) !important; }
+  html.nbskin.nb-topic .progress { background: var(--cvs); height: 10px; }
+  html.nbskin.nb-topic .progress > div { background: var(--cv); }
+  html.nbskin.nb-topic .mbar { background: var(--cvs); }
+  html.nbskin.nb-topic .mbar > span, html.nbskin.nb-topic .tp-head .mbar span { background: var(--cv); }
+  html.nbskin.nb-topic .lvlchoice.cur { border-color: var(--cv) !important; box-shadow: inset 0 0 0 1px var(--cv) !important; background: var(--cvs); }
+  html.nbskin.nb-topic .choices button.sel { background: var(--cvs); border-color: var(--cv); }
+  html.nbskin.nb-topic details.tips { background: color-mix(in srgb, var(--cv) 7%, #fff); }
+
+  /* רצועת מספרי הכרטיסיות – שורה אחת קומפקטית, גלילה לצדדים במקום שבירה לשורות */
+  html.nbskin .dots { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: 6px; padding: 2px 2px 6px; margin-bottom: 10px; }
+  html.nbskin .dots::-webkit-scrollbar { display: none; }
+  html.nbskin .dot { flex: none; width: 34px; height: 34px; min-height: 34px; border: 1.5px solid var(--line); background: #fff; color: var(--muted); font-weight: 700; font-size: .9rem; }
+  html.nbskin .dot.ok { background: var(--ok-bg); border-color: #A9C8B5; color: var(--ok); }
+  html.nbskin .dot.cur { background: var(--cv, var(--accent)); border-color: var(--cv, var(--accent)); color: #1E2F3B; box-shadow: 0 0 0 3px var(--cvs); }
+
+
+  /* טלפון: התוכן מקבל את כל הרוחב */
+  @media (max-width: 699px) {
+    html.nbskin .wrap { padding: 10px 10px 24px !important; }
+    html.nbskin .card { padding: 14px 12px; }
+    html.nbskin.nb-topic .topbar { margin-bottom: 6px; }
+    html.nbskin .dots { gap: 4px; }
+    /* פחות רווח אנכי בתרגול ובכרטיסיות – הכתב וההמחשות באותו גודל */
+    html.nbskin .wrap { padding-top: 6px !important; }
+    html.nbskin.nb-topic .card { margin-top: 0; margin-bottom: 10px; }
+    html.nbskin.nb-topic .topbar { margin: 0 0 4px; gap: 6px; }
+    html.nbskin.nb-topic .progress { margin: 2px 0 8px; }
+    html.nbskin.nb-topic .dots { margin-bottom: 6px; padding-bottom: 4px; }
+    html.nbskin.nb-topic details.tips { margin: 6px 0 8px; }
+    html.nbskin.nb-topic .lcard .qhead, html.nbskin.nb-topic .qhead { margin-bottom: 6px; }
+    html.nbskin.nb-topic .lvlpick, html.nbskin.nb-topic .lvl { margin-bottom: 6px; }
+    html.nbskin .dot { width: 30px; height: 30px; min-height: 30px; font-size: .85rem; }
+  }
 }
 /* חלון קופץ של האתר (למשל "מי נכנס/ת?") כשהמסגרת מוסתרת – רק החלון מוצג מעל הספרייה */
 html.nb-modal-only, html.nb-modal-only body { background: transparent !important; }
 html.nb-modal-only #app, html.nb-modal-only footer { visibility: hidden; }
+/* כפתורי "לדף הבית / חזרה" של האתר בתוך פעילות – המעטפת מציגה כפתור חזרה אחד (מסומנים ב-markDup) */
+@media screen { html.nbskin.nb-stage .nb-dup { display: none !important; } }
+
+/* ===================== השלמת העיצוב – המסכים הפנימיים של משחקים, מבדקים, כלים ואזור המורה (28.11) =====================
+   רק מראה, רק במסך. הרשימות נאספו מה-CSS של האתר ו-cgames: צל "דיו" קשה, קו שחור עבה ובחירה בצהוב.
+   :where – בלי משקל, כדי שמצבים של האתר (נבחר, נכון, שגוי) ימשיכו לגבור */
+@media screen {
+  /* צל קשה ← צל רך */
+  html.nbskin :where(.b10-btn, .b10-card, .cg-mode.sel, .champ-card, .champ-pop, .choices button, .cq-cell.can, .ct-btn, .dfg-opt, .do-pick .do-t, .fc-card, .fc-type.on, .game-card, .gbar .gswitch, .gswitch, .guide-card, .jeo-cell, .jeo-team.on, .kf-opt, .mc-back, .mcard .mc-back, .mil-lf, .mil-opt, .mm-st.cur, .mt-tm, .pv-btn, .pvw-btn, .race-track, .race-track.sel, .race-turn .rt-team, .sc-slot.on, .tab, .tab.on, .tf-pad button, .tf-vote button, .topic-search > input, .tp-lesson, .ts-results, .war-pl.on, .wc-back, .wc-face, button.secondary) { box-shadow: 0 1px 2px rgba(37,59,73,.06), 0 3px 10px rgba(37,59,73,.07) !important; }
+  /* מצב נבחר שסומן בצל – טבעת בצבע הראשי */
+  html.nbskin :where(.topic.sc-cur, .race-track.sel, .jeo-team.on, .sc-slot.on, .fc-type.on, .cg-mode.sel, .war-pl.on, .mm-st.cur, .tab.on) { box-shadow: 0 0 0 2px var(--accent) !important; }
+  /* קו שחור עבה ← קו עדין (בלי לגעת בקווי שבר ובשדות תשובה) */
+  html.nbskin :where(.b10-btn, .b10-card, .b10-op, .bg-chk > div, .bg-nums span, .bn-sheet, .box, .ch-eq > div, .ch-magic, .ch-magic span, .champ-card, .champ-pop, .choices button, .compare2 > div, .cq-goal, .cq-legend, .cq-lg-can, .ct-acts a, .ct-acts button, .ct-box, .ct-btn, .do-t, .dot, .er-cd, .er-lk, .fc-card, .fc-entry, .fc-type, .game-card, .gb-svg, .grw-tb td, .grw-tb th, .gswitch, .guide-card, .jeo-ans, .jeo-cell, .jeo-choices li, .jeo-resume, .kf-opt, .kf-stats div, .lp-step, .lvl, .mc-back, .mc-face, .mcard-demo, .mg-c, .mil-final, .mil-ladder, .mil-lf, .mil-opt, .mil-poll, .mp-bar, .mpair, .mt-bar, .mt-board, .mt-hbar, .numtip, .op-a, .op-angs > div, .op-nums span, .op-pair span, .op-seq span, .path-map, .pl-cell, .pl-ch, .pl-pill, .pv-btn, .pvw-bar, .pvw-btn, .race-track, .race-wrong .m, .rule.big, .sc-cb, .sc-chip, .sc-dots span, .sc-hint, .sc-slot, .seg button, .simnav button, .step.cur, .tab, .tab.on, .tf-pad button, .tf-verdict, .tf-vote button, .tf-vote span, .tg-nums span, .timer, .tool-row .tool-chip, .tp-lesson, .wc-back, .wc-face, .wh-sel, a.btnlink) { border-color: #AEBDC8; }
+  /* פינות "ציור יד" ← פינות מעוגלות אחידות */
+  html.nbskin :where(.game-card, .race-track, .cq-goal, .war-pl, .jeo-team, .gswitch) { border-radius: 14px !important; }
+  html.nbskin .race-track { border-width: 1.5px; }
+  html.nbskin .race-track .best { color: var(--muted); }
+  /* מיליונר – אפשרויות בקו דק ופינות אחידות */
+  html.nbskin .mil-opt { border-width: 1.5px; border-radius: 14px; }
+  html.nbskin .mil-opt.sel { background: #E4EDF4; border-color: var(--accent); }
+  html.nbskin .gb-svg { border-width: 1.5px; }
+  /* בחירה בצהוב ← כחול בהיר עם קו בצבע הראשי */
+  html.nbskin :where(#plLet.on, .fc-entry, .fc-timer, .fc-type.on, .lp-step.on, .pl-pill.on, .sc-cb.sel, .sc-chip.on, .sc-dots span.now) { background: #E4EDF4 !important; border-color: var(--accent) !important; color: var(--ink) !important; }
+}
