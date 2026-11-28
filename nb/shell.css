@@ -58,7 +58,7 @@ body { overflow: hidden; background: #E9EDF0; }
 /* ---------- ספריית המחברות ---------- */
 .view.lib { background: #FFFFFF; }
 .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px 18px; }
-.books { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 26px 32px; padding: 4px 6px 4px 10px; }
+.books { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 26px 32px; padding: 14px 6px 4px 10px; }
 .cont { display: flex; align-items: center; gap: 6px 14px; flex-wrap: wrap; padding: 8px 10px 8px 16px; margin-bottom: 16px; border-right: 6px solid var(--c-blue); }
 .cont > div { display: flex; align-items: baseline; gap: 4px 12px; flex-wrap: wrap; }
 .cont .ck { font-size: var(--fs-xs); color: var(--ink-2); font-weight: 600; }
