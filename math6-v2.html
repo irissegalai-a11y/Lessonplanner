@@ -2465,13 +2465,76 @@ html.embed body { padding-top: 0; }
   /* בהדפסה של דף הבית – אותו סדר כמו קודם (כלי התצוגה מעל הלוגו) */
   @media print { .hdr { display: flex; flex-direction: column-reverse; } }
 
+  /* =========================================================
+     ניקוי עומס חזותי (28.11, איריס): כל מסך מציג רק את מה שצריך עכשיו. רק במסך.
+     ========================================================= */
+  @media screen {
+    /* חלונות קופצים – הכותרות בגופן הנקי של הכרטיסיות (לא בכתב יד) */
+    .overlay .modal :is(h1, h2, h3), .overlay .modal .ltitle, .overlay .modal .mtitle { font-family: var(--ui); font-weight: 800; }
+    /* "כניסת מורה" – קטן וברור, ליד כלי התצוגה */
+    .hdr .tools .tch-in { color: var(--muted); }
+    /* בתוך קטגוריה – הכותרת והנושאים מיד למעלה */
+    #app.in-cat :is([data-panel="practice"] > h2, .card.today.cont, .champ-note),
+    #app.in-cat:has([data-panel="practice"]:not([hidden])) .topic-search { display: none; }
+    #app.in-cat .tcat-top { margin-top: 0; }
+    /* הודעה קטנה בדף הבית כשאתגר האלופים נפתח */
+    .champ-note { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 0 0 14px; padding: 8px 14px; border: 1.5px solid #c9a227; border-radius: 12px; background: #fffbea; color: #4a4030; }
+    .champ-note button { min-height: 38px; padding: 4px 14px; font-size: 0.98rem; }
+    /* אתגר נעול בלשונית המשחקים – שורת הסבר שקטה */
+    [data-panel="games"] .champ-lock { border-width: 1.5px; font-size: 0.98rem; }
+    /* תרגול מעורב – כפתור משני ושקט, לא מתחרה באריחי הנושאים */
+    .practice-more { margin-top: 6px; gap: 8px; }
+    .practice-more > button.mix-link { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; min-height: 40px; font-size: 1rem; font-weight: 700; background: transparent; color: var(--ink); border: 1.5px solid var(--edge, #bdb4a3); box-shadow: none; text-align: start; }
+    .practice-more > button.mix-link:hover { background: rgba(0, 0, 0, 0.04); transform: none; }
+    .practice-more > button.mix-link .desc { display: inline; margin: 0; font-weight: 400; color: var(--muted); font-size: 0.92rem; }
+    .practice-more > button.mix-link .desc::before { content: '· '; }
+    .practice-more > .muted { font-size: 0.92rem; }
+    .mix-len { justify-content: center; margin: 10px 0 4px; }
+    /* אימון כפל וחילוק – שתי אפשרויות בתוך הלשונית */
+    .kf-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 10px; }
+    .kf-opt { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px 16px; text-align: start; background: var(--card, #fffdf8); color: var(--ink); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); border-radius: 14px; }
+    .kf-opt:hover { background: #fff6dc; }
+    .kf-opt .kf-o-t { display: inline-flex; align-items: center; gap: 8px; font-size: 1.2rem; font-weight: 800; }
+    .kf-opt .kf-o-d { font-size: 0.98rem; font-weight: 400; color: var(--muted); }
+    .kf-intro { margin: 0; }
+    /* כיתה ו' – 9 אריחים: 3×3 סימטרי במחשב ובטאבלט */
+    .tcat-tiles.tcat-9 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media screen and (min-width: 701px) { .tabs { width: 178px; } }
+  @media screen and (max-width: 640px) {
+    /* ראש הדף בטלפון – שתי שורות כלים קטנות ליד הלוגו */
+    .hdr .tools .toollinks { flex-direction: row; flex-wrap: wrap; justify-content: flex-end; align-items: center; max-width: 175px; gap: 0 2px; }
+    .hdr .tools .fb-l { display: none; }
+    /* "מה עושים היום?" – רצועה אחת קטנה */
+    .card.today.cont { padding: 8px 12px; gap: 8px; }
+    .cont .today-k { font-size: 0.85rem; }
+    .cont .today-t { font-size: 1.02rem; }
+    .cont .today-d { display: none; }
+    .cont button { padding: 6px 12px; min-height: 40px; }
+    /* כותרת הלשונית "נושאים" – רק לקוראי מסך (הלשונית בסרגל התחתון כבר מסומנת) */
+    [data-panel="practice"] > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  }
+  /* בטלפון – 3 עמודות כשיש מקום (אריח קומפקטי: סמל, שם, פס), ו-2 במסך צר מאוד. בלי גלילה לרוחב */
+  @media screen and (max-width: 640px) {
+    .tcat-tiles.tcat-9 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+    .tcat-9 .tcat-tile { padding: 8px 4px 8px; row-gap: 1px; }
+    .tcat-9 .tcat-tile .tt-i { font-size: 1.6rem; line-height: 1.15; }
+    .tcat-9 .tcat-tile .tt-nm { font-size: 0.98rem; line-height: 1.2; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+    .tcat-9 .tcat-tile .tt-n { display: none; }
+    .tcat-9 .tcat-tile .tt-pt { display: none; }
+    .tcat-9 .tcat-tile .mbar { margin-top: 5px; }
+  }
+  @media screen and (max-width: 359px) {
+    .tcat-tiles.tcat-9 { grid-template-columns: 1fr 1fr; }
+  }
+
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="wcwash" x="-25%" y="-25%" width="150%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4"></feTurbulence><feDisplacementMap in="SourceGraphic" scale="14"></feDisplacementMap><feGaussianBlur stdDeviation="0.8"></feGaussianBlur></filter></defs></svg>
 <div class="wrap" id="app"></div>
 <div class="pwm" aria-hidden="true" data-raw><div class="pwm-foot"><img class="pwm-logo" alt="" src="data:image/png;base64,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"><b>mathinclass</b> · © 2026 איריס סגל · כל הזכויות שמורות · אין להעתיק, לשכפל או להפיץ ללא אישור</div></div>
-<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 שכב</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
+<footer class="credit noprint">© איריס סגל <span class="ver" data-raw>· גרסה 12.10 שכג</span><br><button type="button" class="ct-btn">✉️ יצירת קשר</button> <button type="button" class="pv-btn">🔒 פרטיות</button></footer>
 <script>
 // כפתור "יצירת קשר": הכתובת מופיעה רק בחלון שנפתח בלחיצה
 (() => {
@@ -10638,9 +10701,11 @@ const CH_POOL = GRADE === 1 ? { 1: [() => chBalance(1), () => chBack(1), () => c
 TOPIC.champ = { id: 'champ', name: 'אתגר אלופים', icon: '🏆', color: '#c9a227', desc: 'חידות וחשיבה', levels: CH_POOL,
   tips: ['קוראים לאט, ומסמנים מה יודעים ומה שואלים.', 'אפשר לנסות מספר, לבדוק – ולתקן.', 'עובדים מסודר, כדי לא לפספס אפשרויות.', 'אין דרך אחת נכונה – כל דרך שמגיעה לתשובה ויודעים להסביר אותה, טובה!'] };
 const champOpen = () => !!store.champ || teacherOn();
-function champStart() { startPractice('champ', { count: 6 }); }
+function champStart() { if (!store.champSeen) { store.champSeen = 1; saveStore(store); } startPractice('champ', { count: 6 }); }
+// ניקוי עומס (28.11, איריס): האתגר מוצג רק בלשונית המשחקים. הנעול – עם הסבר קצר על תנאי הפתיחה (המנגנון לא השתנה:
+// סבב של 5 שאלות ומעלה עם 80% נכונות). בדף הבית – רק הודעה קטנה כשהאתגר נפתח, עד שנכנסים אליו בפעם הראשונה (champNote).
 function champCard() {
-  if (!champOpen()) return '<div class="champ-lock">🔒 <b>אתגר אלופים</b> – נפתח כשמסיימים תרגול עם 80% ומעלה</div>';
+  if (!champOpen()) return '<div class="champ-lock">🔒 <b>אתגר אלופים</b> – חידות וחשיבה. נפתח כשמסיימים סבב תרגול או מבחן (5 שאלות ומעלה) עם 80% תשובות נכונות ומעלה.</div>';
   return `<button type="button" class="champ-card" id="champGo"><span class="cc-t">🏆 אתגר אלופים</span><span class="cc-d">חידות וחשיבה למי שכבר שולט/ת בחומר${teacherOn() && !store.champ ? ' · לתלמידים נפתח אחרי תרגול עם 80% ומעלה' : ''}${store.champWins ? ` · 🏅 ניצחת ב-${store.champWins} אתגרים` : ''}</span><span class="cc-go">התחילו ←</span></button>`;
 }
 const TEST_PLAN = GRADE === 1 ? { count: 5, add10: 6, add20: 4, shapes: 3, measure: 2 } : GRADE === 2 ? { place: 5, addsub: 6, muldiv: 4, evenodd: 1, geo: 3, data: 1 } : GRADE === 3 ? { place: 3, addsub: 4, muldiv: 4, divis: 2, frac: 3, geo: 3, data: 1 } : GRADE === 4 ? { place: 3, divis: 2, ops: 4, frac: 3, geo: 3, units: 3, data: 2 } : GRADE === 5 ? { divis: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 } : { place: 3, ops: 4, frac: 4, dec: 4, geo: 3, data: 2 };
@@ -13456,26 +13521,28 @@ function home() {
   stopSpeak();
   if (topicBack) { const id = topicBack; topicBack = null; return topicHome(id); }
   const name = store.name || '';
-  const len = store.roundLen || 10;
   const calm = document.documentElement.classList.contains('calm');
   // תפריט הצד – בשלוש קטגוריות: לומדים ומתרגלים · משחקים ומבחנים · למורה
   const T = teacherOn();
   const tabs = [
     ...(GRADE >= 2 ? [{ id: 'coach', label: 'קורסים', icon: 'bulb', wash: 'rgba(224,122,165,0.28)', go: 'coachTab', grp: 'לומדים ומתרגלים' }] : []),
     { id: 'practice', label: 'נושאים', icon: 'book', wash: 'rgba(127,168,214,0.32)', ...(GRADE >= 2 ? {} : { grp: 'לומדים ומתרגלים' }) },
-    ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל', icon: 'times', wash: 'rgba(226,179,87,0.32)' }, { id: 'hiluk', label: 'אימון חילוק', icon: 'divide', wash: 'rgba(122,79,181,0.22)' }] : []),
+    // ניקוי עומס (28.11, איריס): לשונית אחת לכפל ולחילוק – בוחרים את סוג האימון אחרי הכניסה
+    ...(GRADE >= 3 ? [{ id: 'kefel', label: 'אימון כפל וחילוק', icon: 'times', wash: 'rgba(226,179,87,0.32)' }] : []),
     ...(GRADE <= 2 ? [{ id: 'fc', label: 'כרטיסי הברקה', icon: 'cards', wash: 'rgba(240,170,90,0.30)', go: 'fcTab' }] : []),
     // מצוינות (21.11): עברה לקטגוריה באריחים – הלשונית הוסרה. הפאנל נשאר מוסתר (הכפתורים שלו מופעלים מהקטגוריה)
     { id: 'games', label: 'משחקים', icon: 'flag', wash: 'rgba(239,201,106,0.38)', grp: 'משחקים ומבחנים' },
     { id: 'tests', label: GRADE === 6 ? 'מבדקים' : 'מבחנים', icon: 'clipboard', wash: 'rgba(164,140,201,0.30)' },
     ...(T ? [] : [{ id: 'exit', label: 'כרטיס יציאה', icon: 'note', wash: 'rgba(150,190,220,0.32)', go: 'exitTab' }]),
-    { id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' },
+    // הדפסה – רק במצב מורה (28.11, איריס). דף ההדפסה עצמו (?print) לא השתנה
+    ...(T ? [{ id: 'print', label: 'הדפסה', icon: 'printer', wash: 'rgba(157,178,122,0.32)' }] : []),
     ...(T ? [
       { id: 'teach', label: 'אזור המורה', icon: 'bulb', wash: 'rgba(127,190,170,0.34)', grp: 'למורה' }
     ] : [])
   ];
   // במצב מורה "בכיתה" נמצא בתוך אזור המורה (גם לכפתורי "חזרה" ישנים). "הדפסה" – לשונית ישירה לכולם
   if (T && homeTab === 'class') homeTab = 'teach';
+  if (homeTab === 'hiluk') homeTab = 'kefel'; // הלשונית הישנה "אימון חילוק" – עכשיו חלק מ"אימון כפל וחילוק"
   const cont = !PRESET && !T ? contCard() : null;
   const BN_MAIN = ['practice', 'games', 'tests', 'teach'];
   const bnMain = tabs.filter(t => BN_MAIN.includes(t.id)), bnMore = tabs.filter(t => !BN_MAIN.includes(t.id));
@@ -13490,7 +13557,7 @@ function home() {
       <svg class="doodle-line" aria-hidden="true" width="300" height="14" viewBox="0 0 300 14"><path d="M4 9 C 55 3, 110 13, 165 7 S 265 4, 296 8" fill="none" stroke="#1f1e1c" stroke-width="2.4" stroke-linecap="round"></path></svg>
       <div class="sig">${ic('pen')}<span>מאת <b>איריס סגל</b></span></div>
     </div>
-    <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב">א+ גודל כתב</button></span></div>
+    <div class="tools"><span></span><span class="toollinks"><button class="ghost" id="calmBtn" aria-pressed="${calm}">${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="ghost" id="fontBtn" title="שינוי גודל הכתב" aria-label="שינוי גודל הכתב">א+<span class="fb-l"> גודל כתב</span></button>${teacherCred() ? '' : '<button class="ghost tch-in" id="tchIn">כניסת מורה</button>'}</span></div>
     </header>
     ${NEUTRAL ? `<div class="subtitle">${SUBTITLE}</div>` : ''}
     ${NEUTRAL ? '' : `<div class="gbar"><span class="gname"><b>${GRADE_NAME[GRADE]}</b></span><a class="gswitch" href="math.html?choose">${ic('retry')}<span>החלפת כיתה</span></a>${SEM_ON ? `<span class="semsw" role="group" aria-label="מחצית הלימוד">מחצית: <button type="button" class="semx${SEM === 1 ? ' on' : ''}" data-sem="1">א׳</button><button type="button" class="semx${SEM === 2 ? ' on' : ''}" data-sem="2">ב׳</button></span>` : ''}${nameRow}${name ? `<button type="button" class="gme" id="nmEdit" title="שינוי השם">👋 ${esc(name)} ✎</button>` : ''}${teacherOn() ? '<span class="tch-btns"><button type="button" class="pvw-btn" id="guideBtn">❓ איך משתמשים?</button><button type="button" class="pvw-btn" id="pvwOn">👀 מעבר לתצוגת תלמיד</button></span>' : teacherCred() ? '<div class="pvw-bar">👀 את/ה רואה את האתר כמו תלמיד/ה <button type="button" class="pvw-btn" id="pvwOff">חזרה לתצוגת מורה</button></div>' : ''}</div>`}
@@ -13514,29 +13581,20 @@ function home() {
             <div><div class="today-k">${cont.k}</div><div class="today-t">${cont.t}</div><div class="today-d">${cont.d}</div></div>
             <button type="button" id="contGo">${cont.btn} ←</button>
           </div>` : ''}
-          ${champCard()}
+          ${store.champ && !store.champSeen && !teacherOn() ? `<div class="champ-note"><span>🏆 <b>אתגר אלופים נפתח!</b> חידות וחשיבה מחכות לך</span><button type="button" class="secondary" id="champGoH">לאתגר ←</button></div>` : ''}
           ${topicCatsHTML()}
           <div class="practice-more"${catOpenNow ? ' hidden' : ''}>
-            <button id="mix">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים, עם משוב מיידי</span></button>
-            <div class="name-row"><span class="lbl2">כמה שאלות בכל סבב?</span><span class="seg">${[5, 10, 15].map(n => `<button data-len="${n}" class="${n === len ? 'sel' : ''}">${n}</button>`).join('')}</span></div>
+            <button type="button" id="mix" class="mix-link">${ic('shuffle')} תרגול מעורב<span class="desc">שאלות מכל הנושאים</span></button>
             ${store.solved ? `<div class="muted">${ic('star')} עד היום פתרת <b>${store.solved}</b> שאלות. כל הכבוד על ההתמדה!</div>` : ''}
           </div>
         </section>
         ${GRADE >= 3 ? `<section class="panel" data-panel="kefel" ${homeTab === 'kefel' ? '' : 'hidden'}>
-          <h2>אימון לוח הכפל</h2>
-          <div class="card kf-banner banner">
-            <div>5 דקות ביום. ${kfPeek('mul').placed ? `בשליטה: <b>${kfPeek('mul').m}</b> מתוך 36 עובדות.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
-            <button id="kfGoHome">לאימון ←</button>
+          <h2>אימון כפל וחילוק</h2>
+          <p class="muted kf-intro">5 דקות ביום: מפה אישית, אימון קצר עם טריקים ואתגר דקה מול השיא שלכם. במה מתאמנים היום?</p>
+          <div class="kf-pick">
+            <button type="button" class="kf-opt" id="kfGoHome"><span class="kf-o-t">${ic('times')} אימון לוח הכפל</span><span class="kf-o-d">${kfPeek('mul').placed ? `בשליטה: <b>${kfPeek('mul').m}</b> מתוך 36 עובדות` : 'מתחילים בבדיקת פתיחה קצרה'}</span></button>
+            <button type="button" class="kf-opt" id="kdGoHome"><span class="kf-o-t">${ic('divide')} אימון חילוק</span><span class="kf-o-d">${kfPeek('div').placed ? `בשליטה: <b>${kfPeek('div').m}</b> מתוך 36 משפחות חילוק` : `"כפל הפוך": ${M('56 : 8 = ?')} – 8 כפול מה זה 56?`}</span></button>
           </div>
-          <p class="muted">באימון: מפה אישית של לוח הכפל, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
-        </section>
-        <section class="panel" data-panel="hiluk" ${homeTab === 'hiluk' ? '' : 'hidden'}>
-          <h2>אימון חילוק</h2>
-          <div class="card kf-banner banner">
-            <div>5 דקות ביום. ${kfPeek('div').placed ? `בשליטה: <b>${kfPeek('div').m}</b> מתוך 36 משפחות חילוק.` : 'מתחילים בבדיקת פתיחה קצרה.'}</div>
-            <button id="kdGoHome">לאימון ←</button>
-          </div>
-          <p class="muted">חילוק הוא "כפל הפוך": ${M('56 : 8 = ?')} שואלים – <b>8 כפול מה זה 56?</b> באימון: מפה אישית של עובדות החילוק, אימון יומי קצר עם טריקים, ואתגר דקה מול השיא שלכם.</p>
         </section>` : ''}
         ${wpPanelHTML()}
         ${GRADE >= 4 ? `<section class="panel" data-panel="excel" hidden>
@@ -13580,6 +13638,7 @@ function home() {
         </section>
         <section class="panel" data-panel="games" ${homeTab === 'games' ? '' : 'hidden'}>
           <h2>משחקים</h2>
+          ${champCard()}
           <h3 class="games-sub">לבד – במחשב או בטלפון</h3>
           <button class="game-card" id="raceGo">
             <span class="gc-ic">${ic('flag')}</span>
@@ -13807,12 +13866,9 @@ function home() {
     home();
   };
   $('fontBtn').onclick = cycleFont;
+  if ($('tchIn')) $('tchIn').onclick = () => askTeacher(() => {});
   if ($('nmEdit')) $('nmEdit').onclick = () => { const r = app.querySelector('.name-mini'); r.hidden = false; $('nmEdit').hidden = true; $('nm').focus(); };
   $('nm').addEventListener('input', e => { store.name = e.target.value.trim(); saveStore(store); });
-  app.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
-    store.roundLen = Number(b.dataset.len); saveStore(store);
-    app.querySelectorAll('.seg button').forEach(x => x.classList.toggle('sel', x === b));
-  });
   app.querySelectorAll('.topic[data-t], .xt-tile[data-t]').forEach(b => b.onclick = () => topicHome(b.dataset.t));
   app.querySelectorAll('[data-lesson]').forEach(b => b.onclick = () => startLesson(b.dataset.lesson));
   // ---- חיפוש נושא: לימוד + תרגול + משחקים + מבחנים ----
@@ -13864,6 +13920,7 @@ function home() {
   ['pal', 'euler', 'cub', 'mag', 'grw'].forEach(k => { const b = $('x' + k + 'Go'); if (b) b.onclick = () => $(k + 'Go').click(); });
   if ($('xsdkGo')) $('xsdkGo').onclick = () => { trackSend('מרכז הסודוקו', '', true); location.href = 'sudoku.html' + (GRADE ? '?grade=' + GRADE : ''); };
   if ($('champGo')) $('champGo').onclick = champStart;
+  if ($('champGoH')) $('champGoH').onclick = champStart;
   if ($('b10labGo')) $('b10labGo').onclick = b10Lab;
   if ($('tframeGo')) $('tframeGo').onclick = tenFrame;
   if ($('tframeT')) $('tframeT').onclick = tenFrame;
@@ -13883,6 +13940,7 @@ function home() {
   if ($('pathGo2')) $('pathGo2').onclick = () => pathHome();
   if (PRESET) $('presetGo').onclick = startPreset;
   if (cont) $('contGo').onclick = cont.go;
+  app.classList.toggle('in-cat', !!catOpenNow);
 }
 // פירורי לחם: "כיתה ד' › נושא › רמה" – כל חלק (פרט לאחרון) לחיץ
 function crumbs(topicId, last) {
@@ -13926,7 +13984,9 @@ const TOPIC_CATS = [
   { id: 'nat', name: 'מספרים טבעיים', icon: '🔢', color: '#4c5fd5' },
   { id: 'dec', name: 'מספרים עשרוניים', icon: '📏', color: '#1e8a8a' },
   { id: 'frac', name: 'שברים', icon: '🍕', color: '#d94a8c' },
-  { id: 'geo', name: 'גאומטריה', icon: '📐', color: '#2f8f55' },
+  { id: 'geo', name: GRADE === 6 ? 'גאומטריה במישור' : 'גאומטריה', icon: '📐', color: '#2f8f55' },
+  // כיתה ו' (28.11, איריס): "גופים ומעגל" – קטגוריה נפרדת (9 אריחים, 3×3). מזהי הנושאים והסדר ב-TOPICS לא השתנו
+  ...(GRADE === 6 ? [{ id: 'sol', name: 'גופים ומעגל', icon: '🧊', color: '#2f6fb0' }] : []),
   { id: 'pct', name: 'אחוזים', icon: '💯', color: '#c0392b' },
   { id: 'data', name: 'חקר נתונים', icon: '📊', color: '#8a5cd1' },
   { id: 'word', name: 'שאלות מילוליות', icon: '💬', color: '#3d7a6e' },
@@ -13936,7 +13996,8 @@ const TOPIC_CATS = [
 const CAT_OF = {
   dec: 'dec', placeDec: 'dec',
   frac: 'frac', mulfr: 'frac', divfr: 'frac',
-  shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', solids: 'geo', solidsN: 'geo', solidsS: 'geo', solidsV: 'geo', drawGo: 'geo', quadGo: 'geo',
+  shapes: 'geo', measure: 'geo', geo: 'geo', units: 'geo', drawGo: 'geo', quadGo: 'geo',
+  ...Object.fromEntries(['solids', 'solidsN', 'solidsS', 'solidsV'].map(id => [id, GRADE === 6 ? 'sol' : 'geo'])),
   pct: 'pct', pctWord: 'pct',
   data: 'data',
   xpalGo: 'exc', xeulerGo: 'exc', xcubGo: 'exc', xmagGo: 'exc', xgrwGo: 'exc', xsdkGo: 'exc',
@@ -13978,21 +14039,16 @@ function topicCatsHTML() {
   const splitIc = nm => { const m = /^(\S+)\s+(.*)$/.exec(nm); return m && !/[א-ת]/.test(m[1]) ? [m[1], m[2]] : ['🧠', nm]; };
   const excBody = g => `<div class="xt-tiles">${g.topics.map(t => { const st = store.topics[t.id]; return xTile(t.id, `data-t="${t.id}"`, t.icon || '🧠', t.name, t.desc, st ? st.mastery : 0); }).join('')}${g.extra.map(e => { const [ic, nm] = splitIc(e.nm || ''); return xTile(e.id, `id="${e.id}"`, ic, nm, e.ds || '', null); }).join('')}</div>${tools(g)}`;
   // המספור מתחיל מ-1 בכל קטגוריה (27.11, איריס) – כל קטגוריה מוצגת לבד
-  // כיתה ו' (27.11, איריס): גאומטריה בשני אזורים – "גאומטריה במישור" ו"גופים ומעגל" (7 פרקים לפי סדר שבילים פלוס, דף נפרד geo6.html).
-  // מזהי הנושאים הישנים (solids*) נשארים כמו שהם – קודי החוברות תלויים בסדר TOPICS.
-  const SOLID_IDS = ['solids', 'solidsN', 'solidsS', 'solidsV'];
-  const geoBody6 = g => {
-    const plane = g.topics.filter(t => !SOLID_IDS.includes(t.id)), sol = g.topics.filter(t => SOLID_IDS.includes(t.id));
+  // כיתה ו': "גופים ומעגל" – קטגוריה נפרדת (28.11; קודם תת-אזור בגאומטריה). פרקי הספר (7 פרקים, דף נפרד geo6.html) ואחריהם
+  // הנושאים הישנים (solids*) – המזהים נשארים כמו שהם, קודי החוברות תלויים בסדר TOPICS.
+  const solBody6 = g => {
     const chap = (href, ic, nm, ds) => `<a class="topic geo6-card" style="--c:#2f6fb0" href="${href}"><span class="ic" aria-hidden="true">${ic}</span><span class="nm">${nm}</span><span class="ds">${ds}</span></a>`;
-    const h1 = `<h4 class="geo-sub">📐 גאומטריה במישור</h4><div class="topics">${plane.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>`;
-    n = 0;
-    const h2 = `<h4 class="geo-sub">🧊 גופים ומעגל</h4><div class="topics">${chap('geo6.html?grade=6&ch=prism', '🏛️', 'פרק 1 – מנסרה (כולל קובייה ותיבה)', '9 שיעורים: מצולעים וגופים, מנסרה, פאות ומקצועות, פריסות, נפח, נפח מנסרות, יחידות נפח, שטח פנים, נפח מול שטח פנים – כל שיעור בחמישה שלבים, עם גופים שמסובבים ומקפלים, תרגול ב-3 רמות וכרטיס יציאה')}${chap('geo6.html?grade=6', '📚', 'כל פרקי הגופים והמעגל', '7 פרקים לפי סדר הספר: מנסרה, פירמידה, מעגל ועיגול, גליל, חרוט, כדור, גופים משוכללים')}</div>
-      ${sol.length ? `<p class="geo-sub2">תרגול נוסף בגופים:</p><div class="topics">${sol.map(topicBtn).join('')}</div>` : ''}`;
-    n = 0;
-    return h1 + h2 + tools(g);
+    const h2 = `<div class="topics">${chap('geo6.html?grade=6&ch=prism', '🏛️', 'פרק 1 – מנסרה (כולל קובייה ותיבה)', '9 שיעורים: מצולעים וגופים, מנסרה, פאות ומקצועות, פריסות, נפח, נפח מנסרות, יחידות נפח, שטח פנים, נפח מול שטח פנים – כל שיעור בחמישה שלבים, עם גופים שמסובבים ומקפלים, תרגול ב-3 רמות וכרטיס יציאה')}${chap('geo6.html?grade=6', '📚', 'כל פרקי הגופים והמעגל', '7 פרקים לפי סדר הספר: מנסרה, פירמידה, מעגל ועיגול, גליל, חרוט, כדור, גופים משוכללים')}</div>
+      ${g.topics.length ? `<p class="geo-sub2">תרגול נוסף בגופים:</p><div class="topics">${g.topics.map(topicBtn).join('')}</div>` : ''}`;
+    return h2 + tools(g);
   };
-  const body = g => { n = 0; return g.c.id === 'exc' ? excBody(g) : g.c.id === 'geo' && GRADE === 6 ? geoBody6(g) : `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`; };
-  const cnt = g => g.topics.length + g.extra.length;
+  const body = g => { n = 0; return g.c.id === 'exc' ? excBody(g) : g.c.id === 'sol' ? solBody6(g) : `<div class="topics">${g.topics.map(topicBtn).join('')}${g.extra.map(e => e.h()).join('')}</div>${tools(g)}`; };
+  const cnt = g => g.topics.length + g.extra.length + (g.c.id === 'sol' ? 2 : 0);
   const avg = g => g.topics.length ? Math.round(g.topics.reduce((a, t) => a + ((store.topics[t.id] || {}).mastery || 0), 0) / g.topics.length) : 0;
   // שדרוג עיצוב שלב 3 (27.11): משפט קצר מתחת לפס – רק ממה שכבר שמור (נושא שתורגל / שליטה 80+ = אלופים)
   const tileNote = g => { const n = g.topics.length, st = g.topics.filter(t => store.topics[t.id]).length, top = g.topics.filter(t => ((store.topics[t.id] || {}).mastery || 0) >= 80).length;
@@ -14002,7 +14058,7 @@ function topicCatsHTML() {
   if (!groups.some(g => g.c.id === open)) open = '';
   catOpenNow = open;
   // אריחי קטגוריות → לחיצה פותחת רק את הקטגוריה
-  return `<div class="tcat-tiles"${open ? ' hidden' : ''}>${groups.map(g => `<button type="button" class="tcat-tile" style="--c:${g.c.color}" onclick="catShow('${g.c.id}')">
+  return `<div class="tcat-tiles${groups.length === 9 ? ' tcat-9' : ''}"${open ? ' hidden' : ''}>${groups.map(g => `<button type="button" class="tcat-tile" style="--c:${g.c.color}" onclick="catShow('${g.c.id}')">
             <span class="tt-i">${g.c.icon}</span><span class="tt-nm">${g.c.name}</span><span class="tt-n">${cnt(g)} נושאים${g.tools.length ? ` · ${g.tools.length} כלי המחשה` : ''}</span>
             <span class="mbar"><span style="width:${avg(g)}%"></span></span>${tileNote(g)}</button>`).join('')}</div>
           ${groups.map(g => `<section class="tcat tcat-one" data-cat="${g.c.id}" style="--c:${g.c.color}"${g.c.id === open ? '' : ' hidden'}>
@@ -14018,6 +14074,8 @@ function catShow(id) {
   document.querySelectorAll('.tcat-one').forEach(s => { s.hidden = s.dataset.cat !== id; });
   // תרגול מעורב = שאלות מכל הנושאים – רק במסך כל הקטגוריות, לא בתוך קטגוריה אחת (27.11, איריס)
   document.querySelectorAll('.practice-more').forEach(e => { e.hidden = !!id; });
+  // ניקוי עומס (28.11): בתוך קטגוריה – מיד הכותרת והתוכן (בלי "מה עושים היום?", הודעות, כותרת הלשונית וחיפוש)
+  app.classList.toggle('in-cat', !!id);
   const tgt = id ? document.querySelector(`.tcat-one[data-cat="${id}"]`) : tiles;
   if (tgt) { const r = tgt.getBoundingClientRect(); if (r.top < 0 || r.top > innerHeight * 0.6) tgt.scrollIntoView({ block: 'start' }); }
 }
@@ -15129,6 +15187,7 @@ function showLevelPicker(topicId) {
         ${n === cur ? `<span class="ltag">${known ? '📍 הרמה שלך' : '👍 מומלץ להתחלה'}</span>` : ''}
       </button>`).join('')}
     </div>
+    ${topicId === 'mix' ? `<div class="name-row mix-len"><span class="lbl2">כמה שאלות בסבב?</span><span class="seg" role="group" aria-label="כמה שאלות בסבב">${[5, 10, 15].map(n => `<button type="button" data-len="${n}" class="${n === (store.roundLen || 10) ? 'sel' : ''}" aria-pressed="${n === (store.roundLen || 10)}">${n}</button>`).join('')}</span></div>` : ''}
     <label class="lockrow"><input type="checkbox" data-lock> 🔒 להישאר ברמה שבחרתי לאורך כל הסבב (בלי עלייה או ירידה אוטומטית)</label>
     <p class="muted center small">בלי הסימון – האפליקציה תעלה אתכם רמה כשתצליחו, ותוריד כשיהיה קשה.</p>
   </div>`;
@@ -15136,6 +15195,11 @@ function showLevelPicker(topicId) {
   const close = () => ov.remove();
   ov.querySelector('[data-close]').onclick = close;
   ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  // מספר השאלות בסבב (עבר מדף הבית למסך הזה, 28.11) – אותה הגדרה כמו קודם (store.roundLen)
+  ov.querySelectorAll('[data-len]').forEach(b => b.onclick = () => {
+    store.roundLen = Number(b.dataset.len); saveStore(store);
+    ov.querySelectorAll('[data-len]').forEach(x => { x.classList.toggle('sel', x === b); x.setAttribute('aria-pressed', x === b); });
+  });
   ov.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => {
     const level = Number(b.dataset.pick), lock = ov.querySelector('[data-lock]').checked;
     close();
@@ -29236,7 +29300,7 @@ function askTeacher(done) {
     ov.remove(); done();
     if (document.querySelector('[data-panel]')) home();
   };
-  ov.querySelector('#tchBack').onclick = () => { ov.remove(); askRole(done); };
+  ov.querySelector('#tchBack').onclick = () => ov.remove(); // ניקוי עומס (28.11): חוזרים לאתר במצב תלמיד, בלי חלון "מי נכנס/ת?"
   const MAIL = ['iris.segal.ai', 'gmail.com'].join('@');
   const showMail = note => { const m = ov.querySelector('#tchMail'); m.textContent = MAIL; m.hidden = false; ov.querySelector('#tchNote').textContent = note; };
   ov.querySelector('#tchReq').onclick = () => {
@@ -29284,13 +29348,13 @@ function askName(done, tch) {
   try { first = !sessionStorage.getItem('math-vis'); if (first) sessionStorage.setItem('math-vis', '1'); } catch (e) { /* לא חובה */ }
   if (URLP.has('teacher') || EXIT_OPEN || EMBED) return;
   const logVisit = () => { if (first && !URLP.has('print')) track('כניסה לאתר', GRADE_NAME[GRADE] || ''); };
-  let noName = false;
-  try { noName = !!sessionStorage.getItem('math-noname'); } catch (e) { /* לא חובה */ }
-  if (!roleOk() && !URLP.has('kefel') && !URLP.has('hiluk')) { setTimeout(() => askRole(logVisit), 300); return; }
+  // ניקוי עומס (28.11, איריס): בלי חלון "מי נכנס/ת?" ובלי חלון שם בכניסה. ברירת המחדל – תלמיד;
+  // מורה נכנסת בכפתור "כניסת מורה" בראש הדף. שם מתבקש רק כשצריך (לפני מבדק – startTest), בשדה "השם שלי" למעלה.
+  if (!roleOk()) { try { localStorage.setItem('math-role', 's'); } catch (e) { /* לא חובה */ } }
   if (!first) return;
   const noFull = !store.name || store.name.trim().split(/\s+/).length < 2;
   if (staffOn() && !irisOk() && noFull) setTimeout(() => askName(logVisit, true), 300); // מורה עם קוד המורות – שם חובה, פעם אחת
-  else if (!teacherCred() && !noName && noFull && !URLP.has('kefel') && !URLP.has('hiluk')) setTimeout(() => askName(logVisit), 300); else logVisit();
+  else logVisit();
 })();
 if (teacherCred()) document.documentElement.classList.add('tch');
 if (URLP.has('lp') && lpDec(URLP.get('lp') || '')) { try { sessionStorage.setItem(LP_PEND, URLP.get('lp')); } catch (e) { const x = lpDec(URLP.get('lp')); if (x && teacherOn()) lp = x; } }

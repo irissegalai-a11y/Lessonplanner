@@ -707,7 +707,7 @@
   G6.SETUPS = SETUPS; // לבדיקות
 
   /* ---------- כניסה ---------- */
-  try { sessionStorage.setItem('math-cat', 'geo'); } catch (e) { /* לא חובה */ } // חזרה לאתר → קטגוריית הגאומטריה
+  try { sessionStorage.setItem('math-cat', 'sol'); } catch (e) { /* לא חובה */ } // חזרה לאתר → קטגוריית "גופים ומעגל" (28.11 – קטגוריה נפרדת)
   const l0 = URLP.get('l'), p0 = URLP.get('p'), v0 = URLP.get('v');
   NAV = l0 && unitById(l0) ? { v: 'lesson', l: unitById(l0).id, p: PARTS.some(x => x[0] === p0) ? p0 : p0 === 'nb' ? 'sum' : 'open' } : v0 === 'exit' ? { v: 'exit' } : v0 === 'review' ? { v: 'review' } : URLP.get('ch') === 'prism' || !URLP.has('ch') ? { v: URLP.has('ch') ? 'chapter' : 'home' } : { v: 'home' };
   try { history.replaceState(NAV, ''); } catch (e) { /* לא חובה */ }
