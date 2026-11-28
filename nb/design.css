@@ -112,7 +112,7 @@ html.calm .cover { background: var(--cv); }
 html.calm .cover.gold { background: #DCC283; }
 
 /* ---------- מחברת בספרייה (Goodnotes): כריכה אנכית 3:4, שדרה בימין, דפים בשוליים ---------- */
-.book { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.book { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .nbook { --cv: var(--c-blue); position: relative; display: block; width: 100%; aspect-ratio: 3 / 4; padding: 0; margin: 0; border: 0; background: none; color: var(--ink); font: inherit; text-align: right; cursor: pointer; border-radius: 10px 3px 3px 10px; transition: transform .18s ease; }
 .nbook:hover { transform: translateY(-3px); }
 .nbook:focus-visible { outline: 3px solid var(--focus); outline-offset: 5px; }
@@ -130,17 +130,17 @@ html.calm .cover.gold { background: #DCC283; }
   box-shadow: inset 0 0 0 1px rgba(37, 59, 73, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.35), 1px 2px 3px rgba(37, 59, 73, 0.14); }
 .nbook-spine { position: absolute; top: 0; bottom: 0; right: 0; width: 17px; pointer-events: none;
   background: linear-gradient(to left, rgba(37, 59, 73, 0.16), rgba(37, 59, 73, 0.07) 62%, rgba(255, 255, 255, 0.30) 70%, rgba(37, 59, 73, 0.12) 80%, rgba(37, 59, 73, 0) 100%); }
-.nbook-label { position: relative; margin: 13% 28px 0 18px; padding: 9px 10px; text-align: center; font-size: var(--fs-m); font-weight: 700; line-height: 1.25; color: var(--ink);
+.nbook-label { position: relative; margin: 12% 28px 0 18px; padding: 6px 10px; min-height: calc(2.5em + 12px); display: flex; align-items: center; justify-content: center; text-align: center; font-size: var(--fs-m); font-weight: 700; line-height: 1.25; color: var(--ink);
   background: rgba(255, 255, 255, 0.93); border-radius: 7px; outline: 1px solid rgba(37, 59, 73, 0.16); outline-offset: -4px; box-shadow: 0 1px 2px rgba(37, 59, 73, 0.14); }
-.nbook-art { flex: 1; display: flex; align-items: center; justify-content: center; padding: 6% 30px 16% 20px; color: var(--ink); min-height: 0; }
-.nbook-art svg { width: 100%; max-width: 150px; height: auto; max-height: 100%; }
+.nbook-art { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4% 26px 12% 16px; color: var(--ink); min-height: 0; }
+.nbook-art svg { width: 100%; max-width: 184px; height: auto; max-height: 100%; }
 .nbook-lock { position: absolute; left: 12px; bottom: 12px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.9); color: var(--ink); }
 .nbook-lock .ico { width: 16px; height: 16px; }
 .book.dark .nbook-art { color: #fff; }
 .book.gold .nbook-cover { background:
     linear-gradient(to left, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.14) 62%, rgba(110, 80, 20, 0.10)),
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 5px),
-    linear-gradient(160deg, #E2CB8E, #C6A355); }
+    linear-gradient(160deg, #F2D57F, #D9A93F); }
 .book.locked .nbook { cursor: default; }
 .book.locked .nbook:hover { transform: none; }
 .book.locked .nbook-cover { filter: saturate(.75); }
@@ -150,7 +150,8 @@ html.calm .cover.gold { background: #DCC283; }
 .book-meta .bm-name { font-weight: 700; font-size: var(--fs-m); line-height: 1.25; display: flex; align-items: center; gap: 4px; }
 .book-meta .bm-cnt { font-size: var(--fs-s); color: var(--ink-2); font-weight: 500; line-height: 1.35; }
 .book-meta .bm-note { font-size: var(--fs-xs); color: var(--ink-3); }
-.book-meta .meter { margin-top: 4px; }
+.book-meta .meter { margin-top: 0; }
+.book-meta .meter .bar { height: 5px; }
 html.calm .nbook-cover { background: var(--cv); }
 html.calm .book.gold .nbook-cover { background: #DCC283; }
 html.calm .nbook, html.calm .nbook-pages { transition: none; }

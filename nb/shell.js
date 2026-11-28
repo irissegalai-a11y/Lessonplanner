@@ -23,6 +23,9 @@
     pct: { c: 'var(--c-clay)' }, data: { c: 'var(--c-stone)' }, word: { c: 'var(--c-wheat)' }, exc: { c: '#56707F', dark: true }
   };
   const catColor = id => (CAT[id] || CAT.nat).c;
+  // צבעי הכריכות בספרייה בלבד (איריס 28.11: חיים יותר – תכלת, טורקיז, ירוק, צהוב חם, אפרסק, זהב)
+  const COVER = { nat: '#EEC56B', dec: '#5FBDB6', frac: '#86BCE6', geo: '#8DC795', pct: '#F4AE8D', data: '#79C7D9', word: '#F6CF8E', exc: '#3D8291' };
+  const coverColor = id => COVER[id] || catColor(id);
 
   /* ---------------- המסגרת: האתר הקיים ---------------- */
   let W = null, D = null, isSite = false, isCoach = false, data = null, quietUntil = 0;
@@ -282,7 +285,7 @@
   // כל המידע (כמה נושאים, כלים, התקדמות) – מתחת לכריכה, לא עליה.
   function bookHTML({ attr, cls, color, name, art, aria, meta, lock }) {
     return `<div class="book${cls ? ' ' + cls : ''}">
-      <${attr ? 'button type="button" ' + attr : 'div role="img"'} class="nbook" style="--cv:${color}" aria-label="${esc(aria)}">
+      <${attr ? 'button type="button" ' + attr : 'div role="img"'} class="nbook" style="--cv:${color}" aria-label="${esc(aria)}" title="${esc(aria)}">
         <span class="nbook-pages" aria-hidden="true"></span>
         <span class="nbook-cover" aria-hidden="true">
           <span class="nbook-spine"></span>
@@ -291,28 +294,25 @@
           ${lock ? `<span class="nbook-lock">${ic('lock')}</span>` : ''}
         </span>
       </${attr ? 'button' : 'div'}>
-      <div class="book-meta">${meta}</div>
+      ${meta ? `<div class="book-meta">${meta}</div>` : ''}
     </div>`;
   }
   function coverHTML(t) {
     const prog = t.avg > 0
       ? `<div class="meter" aria-label="שליטה ממוצעת ${Math.round(t.avg)}%"><span class="bar"><i style="width:${t.avg}%"></i></span><b>${Math.round(t.avg)}%</b></div>`
-      : '<div class="bm-note">עוד לא התחלתם</div>';
-    return bookHTML({ attr: `data-cat="${t.id}"`, cls: (CAT[t.id] || {}).dark ? 'dark' : '', color: catColor(t.id), name: t.name, art: (ART[t.id] || ART.nat)(),
+      : '';
+    return bookHTML({ attr: `data-cat="${t.id}"`, cls: (CAT[t.id] || {}).dark ? 'dark' : '', color: coverColor(t.id), name: t.name, art: (ART[t.id] || ART.nat)(),
       aria: `מחברת ${t.name} – ${t.cnt}${t.avg > 0 ? ` – שליטה ממוצעת ${Math.round(t.avg)}%` : ''}`,
-      meta: `<div class="bm-cnt">${esc(t.cnt)}</div>${prog}` });
+      meta: prog });
   }
   function champHTML() {
     const c = data.champ, open = c.open;
-    return bookHTML({ attr: open ? 'data-champ="1"' : '', cls: 'gold' + (open ? '' : ' locked'), color: 'var(--c-gold)', name: 'אתגר אלופים', art: ART.champ(true), lock: !open,
-      aria: `אתגר אלופים – ${open ? 'פתוח' : 'נעול. נפתח כשמסיימים סבב תרגול עם 80% ומעלה'}`,
-      meta: `<div class="bm-cnt">${open ? esc(c.desc || 'חידות וחשיבה למי שכבר שולט/ת בחומר') : 'נפתח כשמסיימים סבב תרגול עם 80% ומעלה'}</div>` });
+    return bookHTML({ attr: open ? 'data-champ="1"' : '', cls: 'gold' + (open ? '' : ' locked'), color: '#E0B653', name: 'אתגר אלופים', art: ART.champ(true), lock: !open,
+      aria: `אתגר אלופים – ${open ? 'פתוח' : 'נעול. נפתח כשמסיימים סבב תרגול עם 80% ומעלה'}` });
   }
   function libraryHTML() {
-    const c = data.cont;
     const q = (id, icon, b, d, col) => `<button type="button" class="qk" data-nav="${id}"><span class="qi" style="--qc:${col}">${ic(icon)}</span><span><b>${b}</b><span class="d">${d}</span></span></button>`;
-    return `<div class="vhead"><h1>${ic('library')} ספריית המחברות שלי</h1><div class="sub">כל נושאי כיתה ו'. בוחרים מחברת – ובפנים: הסברים, תרגול ובדיקה עצמית.</div></div>
-      ${c ? `<div class="paper cont"><div><div class="ck">${esc(c.k)}</div><div class="ct">${esc(c.t)}</div>${c.d ? `<div class="cd">${esc(c.d)}</div>` : ''}</div><button type="button" class="btn" id="contGo2">${esc(c.btn || 'להמשיך')} ${ic('fwd', 's')}</button></div>` : ''}
+    return `<div class="vhead"><h1>${ic('library')} ספריית המחברות שלי</h1></div>
       <div class="books">${data.tiles.map(coverHTML).join('')}${champHTML()}</div>
       <div class="quick">
         ${q('courses', 'cap', 'קורסים', 'לומדים לבד, יחידה אחרי יחידה', '#E7DCC6')}
