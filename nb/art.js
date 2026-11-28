@@ -39,6 +39,8 @@
     ticket: '<path d="M3 8a2 2 0 0 0 0 4 2 2 0 0 1 0 4v2h18v-2a2 2 0 0 1 0-4 2 2 0 0 0 0-4V6H3z" transform="translate(0 -1)"/><path d="M14 6v12" stroke-dasharray="2 2"/>',
     cards: '<rect x="3" y="6" width="13" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/>',
     play: '<path d="M7 5v14l12-7z"/>',
+    medal: '<circle cx="12" cy="15" r="5.5"/><path d="M8.6 10.7 6 3h4l2 4.5L14 3h4l-2.6 7.7"/>',
+    bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
     star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>'
   };
   const ic = (n, cls) => `<svg class="ico${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${P[n] || ''}</svg>`;
@@ -60,8 +62,12 @@
     frac: () => `<svg viewBox="0 0 180 100" aria-hidden="true"><defs>${hatch('hf')}</defs>${frac(36, 40, '3', '4', 22)}
       <rect x="72" y="34" width="72" height="34" fill="url(#hf)"/><rect x="144" y="34" width="24" height="34" fill="rgba(255,255,255,.8)"/><rect x="72" y="34" width="96" height="34" ${S}/>${[1, 2, 3].map(i => `<path d="M${72 + i * 24} 34v34" stroke="currentColor" stroke-width="1.6"/>`).join('')}</svg>`,
     // משולש עם גובה וזווית ישרה + תיבה
+    // גאומטריה במישור: משולש ומקבילית, כל אחד עם גובה וזווית ישרה
     geo: () => `<svg viewBox="0 0 180 100" aria-hidden="true"><defs>${hatch('hg')}</defs><path d="M10 86 64 22l40 64z" fill="url(#hg)"/><path d="M10 86 64 22l40 64z" ${S}/><path d="M64 22v64" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M64 78h8v8" stroke="currentColor" stroke-width="1.5" fill="none"/>
-      <path d="M118 44h40v42h-40zM118 44l14-14h40l-14 14M158 86l14-14V30" ${S}/><path d="M118 86l14-14h40M132 72V30" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 3" fill="none"/></svg>`,
+      <path d="M116 86l18-52h40l-18 52z" ${S}/><path d="M134 34v52" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M134 78h8v8" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>`,
+    // גופים ומעגל: תיבה (מקצועות נסתרים מקווקווים) ומעגל עם מרכז ורדיוס
+    sol: () => `<svg viewBox="0 0 180 100" aria-hidden="true"><path d="M12 42h46v46H12zM12 42l18-18h46L58 42M58 88l18-18V24" ${S}/><path d="M12 88l18-18h46M30 70V24" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 3" fill="none"/>
+      <circle cx="134" cy="54" r="34" fill="rgba(255,255,255,.45)"/><circle cx="134" cy="54" r="34" ${S}/><circle cx="134" cy="54" r="3" fill="currentColor"/><path d="M134 54h34" stroke="currentColor" stroke-width="1.8"/>${T(151, 48, 'r', 14, 600)}</svg>`,
     // עיגול עם גזרה של 25%
     pct: () => `<svg viewBox="0 0 180 100" aria-hidden="true"><defs>${hatch('hp')}</defs><circle cx="118" cy="52" r="38" fill="rgba(255,255,255,.55)"/><path d="M118 52V14a38 38 0 0 1 38 38z" fill="url(#hp)"/><circle cx="118" cy="52" r="38" ${S}/><path d="M118 14v38h38" ${S}/>${T(48, 66, '%', 46, 500)}${T(118, 78, '25%', 13)}</svg>`,
     // דיאגרמת עמודות עם צירים

@@ -47,10 +47,10 @@
   html.nbskin button:hover { background: var(--accent-dark); transform: none; box-shadow: none; }
   html.nbskin button:active { transform: none; box-shadow: none; }
   html.nbskin button.secondary, html.nbskin .choices button, html.nbskin button.lvlchoice, html.nbskin button.tp-lesson, html.nbskin button.tp-check,
-  html.nbskin button.game-card, html.nbskin button.b10-card, html.nbskin button.topic, html.nbskin .xt-tile, html.nbskin .tool-chip {
+  html.nbskin button.game-card, html.nbskin button.b10-card, html.nbskin button.topic, html.nbskin .xt-tile, html.nbskin .tool-chip, html.nbskin button.kf-opt, html.nbskin button.lvl {
     background: #fff; color: var(--ink); border: 1.5px solid var(--line); border-radius: 14px; box-shadow: none; }
   html.nbskin button.secondary:hover, html.nbskin .choices button:hover, html.nbskin button.lvlchoice:hover, html.nbskin button.tp-lesson:hover, html.nbskin button.tp-check:hover,
-  html.nbskin button.game-card:hover, html.nbskin button.b10-card:hover, html.nbskin button.topic:hover, html.nbskin .xt-tile:hover, html.nbskin .tool-chip:hover {
+  html.nbskin button.game-card:hover, html.nbskin button.b10-card:hover, html.nbskin button.topic:hover, html.nbskin .xt-tile:hover, html.nbskin .tool-chip:hover, html.nbskin button.kf-opt:hover, html.nbskin button.lvl:hover {
     background: #F7F9FA; border-color: #9FB0BC; box-shadow: 0 2px 8px rgba(37,59,73,.08); }
   html.nbskin button.ghost, html.nbskin button.linkish { background: transparent; color: var(--ink); border-color: transparent; }
   html.nbskin button.ghost:hover { background: rgba(37,59,73,.06); }
@@ -91,6 +91,15 @@
   html.nbskin .champ-lock { background: #F6EFD9; border: 1px solid #E2D3A6; border-radius: 14px; }
   /* צבעי האתר הישנים (אדום, סגול) – מעומעמים לפלטה המעושנת */
   html.nbskin .game-card .gc-ic { background: #EEF3F6 !important; }
+  html.nbskin button.kf-opt { color: var(--ink); text-align: start; }
+  html.nbskin .kf-opt .kf-o-d { color: var(--muted); }
+  /* אייקונים קוויים במקום אימוג'ים (מוזרקים מהמעטפת) */
+  html.nbskin .nbi { display: inline-flex; vertical-align: -0.16em; margin-inline: 0 .3em; }
+  html.nbskin .nbi svg { width: 1.1em; height: 1.1em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  html.nbskin .lvlchoice .nbi, html.nbskin .lvl .nbi { margin: 0; color: #B8892B; }
+  html.nbskin .lvlchoice .nbi svg, html.nbskin .lvl .nbi svg { fill: #E9C46A; stroke: #A9781F; }
+  html.nbskin .gc-ic .nbi svg { width: 26px; height: 26px; }
+  html.nbskin .gc-ic .nbi { margin: 0; color: var(--ink); }
 }
 /* חלון קופץ של האתר (למשל "מי נכנס/ת?") כשהמסגרת מוסתרת – רק החלון מוצג מעל הספרייה */
 html.nb-modal-only, html.nb-modal-only body { background: transparent !important; }

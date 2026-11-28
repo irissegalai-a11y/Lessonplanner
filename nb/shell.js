@@ -18,14 +18,13 @@
   const view = $('#view'), stage = $('#stage'), F = $('#site'), toc = $('#toc'), shead = $('#shead');
 
   // צבע קבוע לכל משפחת נושאים
+  // "צבעי אייפד" (איריס 28.11) – אותו צבע לכריכה, לחוצצים ולמחברת הפתוחה של הנושא
   const CAT = {
-    nat: { c: 'var(--c-sand)' }, dec: { c: 'var(--c-teal)' }, frac: { c: 'var(--c-blue)' }, geo: { c: 'var(--c-sage)' },
-    pct: { c: 'var(--c-clay)' }, data: { c: 'var(--c-stone)' }, word: { c: 'var(--c-wheat)' }, exc: { c: '#56707F', dark: true }
+    nat: { c: '#E2B65C' }, dec: { c: '#4FA3A5' }, frac: { c: '#6E8FC4' }, geo: { c: '#79A88A' }, sol: { c: '#9DB660' },
+    pct: { c: '#D88A6A' }, data: { c: '#8C8FB8' }, word: { c: '#C98FA8' }, exc: { c: '#34495E', dark: true }
   };
   const catColor = id => (CAT[id] || CAT.nat).c;
-  // צבעי הכריכות בספרייה בלבד (איריס 28.11 בחרה "צבעי אייפד"; האיורים בלבן)
-  const COVER = { nat: '#E2B65C', dec: '#4FA3A5', frac: '#6E8FC4', geo: '#79A88A', pct: '#D88A6A', data: '#8C8FB8', word: '#C98FA8', exc: '#34495E' };
-  const coverColor = id => COVER[id] || catColor(id);
+  const coverColor = catColor;
 
   /* ---------------- המסגרת: האתר הקיים ---------------- */
   let W = null, D = null, isSite = false, isCoach = false, data = null, quietUntil = 0;
@@ -38,7 +37,7 @@
     if (isSite && /[?&]print/.test(W.location.search)) return; // דפי הדפסה – בלי שינוי (מדידת העמודים)
     if (!isSite && !isCoach) return;
     const f = D.createElement('link'); f.rel = 'stylesheet'; f.href = 'https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap'; D.head.appendChild(f);
-    if (isSite) { const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = 'nb/skin.css?v=281128'; D.head.appendChild(l); }
+    if (isSite) { const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = 'nb/skin.css?v=281128b'; D.head.appendChild(l); }
     else { const st = D.createElement('style'); st.textContent = SKIN_COACH; D.head.appendChild(st); }
     D.documentElement.classList.add('nbskin');
   }
@@ -101,7 +100,8 @@
       lessons: Object.fromEntries(lsAll),
       allLessons: run('LESSON_ORDER.map(id => ({ id, name: LESSONS[id].name, t: lessonTopic(LESSONS[id]), cat: catOf(lessonTopic(LESSONS[id])) }))') || [],
       cont: cont && D.getElementById('contGo') ? { k: clean((cont.querySelector('.today-k') || {}).textContent), t: clean((cont.querySelector('.today-t') || {}).textContent), d: clean((cont.querySelector('.today-d') || {}).textContent), btn: clean(D.getElementById('contGo').textContent).replace(/[←\s]+$/, '') } : null,
-      champ: { open: !!D.getElementById('champGo'), lock: clean((A.querySelector('.champ-lock') || {}).textContent), desc: clean((A.querySelector('#champGo .cc-d') || {}).textContent) },
+      // אתגר אלופים – תנאי הפתיחה של האתר עצמו (champOpen: אחרי סבב של 5 שאלות ומעלה עם 80% ומעלה; מורה – תמיד), בלי שינוי
+      champ: { open: !!run('champOpen()') },
       games: [...A.querySelectorAll('[data-panel="games"] .game-card[id]')].map(b => ({ id: b.id, name: clean((b.querySelector('.gc-nm') || b).textContent) })),
       teacher: !!run('teacherOn()'), cred: !!run('teacherCred()'),
       name: run('store.name') || '',
@@ -308,7 +308,8 @@
   function champHTML() {
     const c = data.champ, open = c.open;
     return bookHTML({ attr: open ? 'data-champ="1"' : '', cls: 'gold' + (open ? '' : ' locked'), color: '#D4AA4A', name: 'אתגר אלופים', art: ART.champ(true), lock: !open,
-      aria: `אתגר אלופים – ${open ? 'פתוח' : 'נעול. נפתח כשמסיימים סבב תרגול עם 80% ומעלה'}` });
+      aria: `אתגר אלופים – ${open ? 'פתוח' : 'נעול. נפתח כשמסיימים סבב תרגול או מבחן (5 שאלות ומעלה) עם 80% תשובות נכונות ומעלה'}`,
+      meta: open ? '' : '<div class="bm-note">נפתח אחרי סבב תרגול עם 80% ומעלה</div>' });
   }
   function libraryHTML() {
     const q = (id, icon, b, d, col) => `<button type="button" class="qk" data-nav="${id}"><span class="qi" style="--qc:${col}">${ic(icon)}</span><span><b>${b}</b><span class="d">${d}</span></span></button>`;
@@ -351,7 +352,7 @@
     const act = (attr, icon, b, d) => `<button type="button" class="act" ${attr}><span class="ai">${ic(icon)}</span><span><b>${b}</b><span class="d">${d}</span></span></button>`;
     return `<nav class="crumbs" aria-label="איפה אני"><button type="button" class="home" data-nav="home">${ic('home', 's')} דף הבית</button><span class="sep">›</span><b>${esc(t.name)}</b></nav>
       <div class="spread" style="--cv:${cv.c}">
-        <div class="tabs-edge" role="navigation" aria-label="מחברות אחרות">${data.tiles.map(x => `<button type="button" data-cat="${x.id}" style="--tc:${catColor(x.id)}"${x.id === cat ? ' aria-current="true"' : ''}>${esc(x.name)}</button>`).join('')}</div>
+        <div class="tabs-edge" role="navigation" aria-label="מחברות אחרות">${data.tiles.map(x => `<button type="button" data-cat="${x.id}" class="${(CAT[x.id] || {}).dark ? 'dark' : ''}" style="--tc:${catColor(x.id)}"${x.id === cat ? ' aria-current="true"' : ''}>${esc(x.name)}</button>`).join('')}</div>
         <section class="pg r">
           <div class="nbhead"><div class="nbt"><span class="sw" aria-hidden="true"></span><div><h1>${esc(t.name)}</h1><div class="nbt-sub">${esc(t.cnt)}${t.avg > 0 ? ` · שליטה ממוצעת ${Math.round(t.avg)}%` : ''}</div></div></div>
           <div class="nb-art">${(ART[cat] || ART.nat)()}</div></div>
@@ -421,7 +422,7 @@
     const meter = c.prog ? `<div class="meter"><span>ההתקדמות שלי</span><span class="bar"><i style="width:${c.prog.pct}%"></i></span><b>${c.prog.pct}%</b></div><div class="champ-note">${c.prog.done} מתוך ${c.prog.all} שיעורים במסלול שלך</div>` : c.active ? '<div class="champ-note">בתהליך למידה</div>' : '';
     const g = c.grades ? (c.grades[0] === c.grades[1] ? `כיתה ${'אבגדהו'[c.grades[0] - 1]}'` : `כיתות ${'אבגדהו'[c.grades[0] - 1]}'–${'אבגדהו'[c.grades[1] - 1]}'`) : '';
     return `<article class="crs${c.ok ? '' : ' soon'}">
-      <div class="cover${cv.dark ? ' dark' : ''}" style="--cv:${cv.c}" aria-hidden="true">${c.active ? '<span class="bookmark"></span>' : ''}<span class="cv-art">${(ART[c.cat] || ART.nat)()}</span><span class="cv-label">${esc(c.title)}</span></div>
+      <div class="book mini${cv.dark ? ' dark' : ''}" aria-hidden="true"><div class="nbook" style="--cv:${cv.c}"><span class="nbook-pages"></span><span class="nbook-cover"><span class="nbook-spine"></span><span class="nbook-art">${(ART[c.cat] || ART.nat)()}</span>${c.active ? '<span class="bookmark"></span>' : ''}</span></div></div>
       <div><h2>${esc(c.title)}</h2><p class="cs">${esc(c.sub)}</p><div class="cm">${c.ok ? `<span class="tag">${c.mods} פרקים · ${c.units} שיעורים</span>` : ''}${g ? `<span class="tag">${g}</span>` : ''}${c.active ? `<span class="tag" style="background:#E4EDF4">${ic('book', 's')} בתהליך</span>` : ''}${c.draft ? '<span class="tag">טיוטה – רק מורים רואים</span>' : ''}</div></div>
       <div class="side">${meter}${btn}</div></article>`;
   }
@@ -562,6 +563,20 @@
           ${info.tools.length ? `<li class="grp">כלי המחשה</li>${info.tools.map(t => `<li><button type="button" data-step="tool:${t.id}"><span class="st">${ic('tool', 's')}</span>${esc(clean(t.chip))}</button></li>`).join('')}` : ''}
         </ol>`;
     } else toc.innerHTML = '';
+    // חוצצים בשולי המחברת – רק מה שיש בנושא הזה; מובילים לאותם שלבים שבתוכן העניינים
+    const divs = $('#divs');
+    if (info) {
+      const a = fi.active, crs = (courses() || []).find(c => c.ok && c.fits && c.cat === cat);
+      const firstL = info.ls.find(l => l.k < l.all) || info.ls[0];
+      const D2 = [
+        info.ls.length && { k: 'learn', step: 'l:' + firstL.id, on: a.startsWith('l:'), icon: 'book', t: 'לומדים' },
+        { k: 'prac', step: 'lv' + info.cur, on: /^lv/.test(a), icon: 'pencil', t: 'מתרגלים' },
+        info.tools.length && { k: 'tool', step: 'tool:' + info.tools[0].id, on: false, icon: 'tool', t: 'כלי המחשה' },
+        { k: 'chk', step: 'check', on: a === 'check' || a === 'sim', icon: 'check', t: 'מבדקים' },
+        crs && { k: 'crs', crs: crs.id, on: false, icon: 'cap', t: 'קורס' }
+      ].filter(Boolean);
+      divs.innerHTML = D2.map((d, i) => `<button type="button" class="dv" style="--dl:${72 - i * 9}%" ${d.crs ? `data-dcourse="${d.crs}"` : `data-step="${d.step}"`}${d.on ? ' aria-current="true"' : ''}>${ic(d.icon, 's')}<span>${d.t}</span></button>`).join('');
+    } else divs.innerHTML = '';
   }
   function doStep(s) {
     stage.classList.remove('tocopen');
@@ -581,6 +596,7 @@
     if (e.target.closest('#stBack')) return stageBack();
     if (e.target.closest('#tocBtn')) { const o = stage.classList.toggle('tocopen'); e.target.closest('#tocBtn').setAttribute('aria-expanded', o); return; }
     const s = e.target.closest('[data-step]'); if (s) return doStep(s.dataset.step);
+    const dc = e.target.closest('[data-dcourse]'); if (dc) { const c = courses().find(x => x.id === dc.dataset.dcourse), cat = mode.cat; if (c && leaveStage(true)) { openCourse(c); mode.cat = cat; updateStage(); } return; }
     const c = e.target.closest('[data-cat]'); if (c) { if (!leaveStage(true)) return; return go({ v: 'notebook', cat: c.dataset.cat }); }
     if (e.target.closest('[data-nav]')) return; // מטופל למעלה
     if (stage.classList.contains('tocopen') && !e.target.closest('.side-toc')) stage.classList.remove('tocopen');
@@ -588,10 +604,37 @@
 
   // שינוי בתוך המסגרת: חלון קופץ, חזרה לדף הבית של האתר, מעבר בין שלבים
   let frameT = 0;
+  // אימוג'ים בממשק של המסכים הפנימיים → אייקונים קוויים (רק מראה: כפתורים, כותרות, תגיות; לא בתוך תוכן שיעור או שאלה)
+  const EMO_IC = { '⭐': 'star', '🌟': 'star', '🔒': 'lock', '🔓': 'unlock', '🔐': 'lock', '✅': 'done', '✔': 'done', '📖': 'book', '📚': 'book', '📘': 'book', '🧰': 'tool', '🛠': 'tool', '🔧': 'tool',
+    '📍': 'target', '🎯': 'target', '🏆': 'trophy', '🥇': 'medal', '🥈': 'medal', '🥉': 'medal', '🏅': 'medal', '➗': 'divide', '✖': 'times', '🖨': 'printer', '🎮': 'game', '🧩': 'cards', '🃏': 'cards',
+    '💡': 'bulb', '👁': 'eye', '⏱': 'check', '📝': 'pencil', '✏': 'pencil', '📋': 'list', '👩‍🏫': 'users', '👥': 'users', '🔍': 'search', '🎓': 'cap', '📐': 'tool', '🧊': 'tool' };
+  const EMO_SEL = '.topbar, .mmeter, .tp-next, .tp-lesson, .lvlchoice, .lockrow, .tp-check, .tp-exam, .tp-h, .game-card, .champ-lock, .champ-card, .lvl, .tab, .panel > h2, .tools button, .gbar button, .tcat-tile, .tcat-back, .card > h2, .card > h3, button.secondary, button.linkish, .xt-tile, .tool-chip';
+  const EMO_SKIP = '.lessonbox, .lbody, .q, .choices, .fb, .qbox, .ltitle, [data-raw], .overlay .modal .lbody';
+  const EMO_RE = /(\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic})*️?)\s?/gu;
+  function deEmoji() {
+    if (!D || !D.body || !isSite) return;
+    D.querySelectorAll(EMO_SEL).forEach(host => {
+      if (host.closest(EMO_SKIP)) return;
+      const w = D.createTreeWalker(host, NodeFilter.SHOW_TEXT), nodes = [];
+      let n; while ((n = w.nextNode())) if (/\p{Extended_Pictographic}/u.test(n.nodeValue) && !n.parentElement.closest(EMO_SKIP)) nodes.push(n);
+      nodes.forEach(t => {
+        const frag = D.createDocumentFragment(); let last = 0, m, txt = t.nodeValue; EMO_RE.lastIndex = 0;
+        while ((m = EMO_RE.exec(txt))) {
+          if (m.index > last) frag.appendChild(D.createTextNode(txt.slice(last, m.index)));
+          const base = m[1].replace(/️/g, ''), name = EMO_IC[base] || EMO_IC[base[0]] || (t.parentElement.closest('.gc-ic, .game-card') ? 'game' : '');
+          if (name) { const sp = D.createElement('span'); sp.className = 'nbi'; sp.setAttribute('aria-hidden', 'true'); sp.innerHTML = ic(name); frag.appendChild(sp); }
+          last = m.index + m[0].length;
+        }
+        if (last < txt.length) frag.appendChild(D.createTextNode(txt.slice(last)));
+        t.parentNode.replaceChild(frag, t);
+      });
+    });
+  }
   function onFrame() {
     clearTimeout(frameT);
     frameT = setTimeout(() => {
       if (!D || !D.body) return;
+      try { deEmoji(); } catch (e) { /* מראה בלבד */ }
       const ov = [...D.body.children].some(e => e.classList && e.classList.contains('overlay') && !e.hidden);
       const hiddenStage = !stageModes.includes(mode.v);
       stage.classList.toggle('modal', ov && hiddenStage);
@@ -614,7 +657,7 @@
   /* ---------------- אירועים בתצוגות ---------------- */
   function bindView() {
     view.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => go({ v: 'notebook', cat: b.dataset.cat }));
-    view.querySelectorAll('[data-champ]').forEach(b => b.onclick = () => forward(() => { clickHome('#champGo'); }, { v: 'topic', id: 'champ', cat: null }));
+    view.querySelectorAll('[data-champ]').forEach(b => b.onclick = () => forward(() => { if (run('champOpen()')) run('champStart()'); }, { v: 'topic', id: 'champ', cat: null }));
     if ($('#contGo2')) $('#contGo2').onclick = () => forward(() => clickHome('#contGo'), { v: 'topic', id: null, cat: null });
     view.querySelectorAll('[data-item]').forEach(b => b.onclick = () => {
       const list = data.items[mode.cat] || [], it = list.find(x => x.idx === +b.dataset.item); if (it) openItem(it, mode.cat);
