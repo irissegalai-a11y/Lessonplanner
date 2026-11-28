@@ -136,11 +136,11 @@ html.calm .cover.gold { background: #DCC283; }
 .nbook-art svg { width: 100%; max-width: 184px; height: auto; max-height: 100%; }
 .nbook-lock { position: absolute; left: 12px; bottom: 12px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, 0.9); color: var(--ink); }
 .nbook-lock .ico { width: 16px; height: 16px; }
-.book.dark .nbook-art { color: #fff; }
+.book.dark .nbook-art, .books .book:not(.gold) .nbook-art { color: #fff; }
 .book.gold .nbook-cover { background:
     linear-gradient(to left, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.14) 62%, rgba(110, 80, 20, 0.10)),
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0 2px, rgba(255, 255, 255, 0) 2px 5px),
-    linear-gradient(160deg, #F2D57F, #D9A93F); }
+    linear-gradient(160deg, #E8C66A, #C99A38); }
 .book.locked .nbook { cursor: default; }
 .book.locked .nbook:hover { transform: none; }
 .book.locked .nbook-cover { filter: saturate(.75); }

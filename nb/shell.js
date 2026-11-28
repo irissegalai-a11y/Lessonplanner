@@ -23,8 +23,8 @@
     pct: { c: 'var(--c-clay)' }, data: { c: 'var(--c-stone)' }, word: { c: 'var(--c-wheat)' }, exc: { c: '#56707F', dark: true }
   };
   const catColor = id => (CAT[id] || CAT.nat).c;
-  // צבעי הכריכות בספרייה בלבד (איריס 28.11: חיים יותר – תכלת, טורקיז, ירוק, צהוב חם, אפרסק, זהב)
-  const COVER = { nat: '#EEC56B', dec: '#5FBDB6', frac: '#86BCE6', geo: '#8DC795', pct: '#F4AE8D', data: '#79C7D9', word: '#F6CF8E', exc: '#3D8291' };
+  // צבעי הכריכות בספרייה בלבד (איריס 28.11 בחרה "צבעי אייפד"; האיורים בלבן)
+  const COVER = { nat: '#E2B65C', dec: '#4FA3A5', frac: '#6E8FC4', geo: '#79A88A', pct: '#D88A6A', data: '#8C8FB8', word: '#C98FA8', exc: '#34495E' };
   const coverColor = id => COVER[id] || catColor(id);
 
   /* ---------------- המסגרת: האתר הקיים ---------------- */
@@ -307,7 +307,7 @@
   }
   function champHTML() {
     const c = data.champ, open = c.open;
-    return bookHTML({ attr: open ? 'data-champ="1"' : '', cls: 'gold' + (open ? '' : ' locked'), color: '#E0B653', name: 'אתגר אלופים', art: ART.champ(true), lock: !open,
+    return bookHTML({ attr: open ? 'data-champ="1"' : '', cls: 'gold' + (open ? '' : ' locked'), color: '#D4AA4A', name: 'אתגר אלופים', art: ART.champ(true), lock: !open,
       aria: `אתגר אלופים – ${open ? 'פתוח' : 'נעול. נפתח כשמסיימים סבב תרגול עם 80% ומעלה'}` });
   }
   function libraryHTML() {
