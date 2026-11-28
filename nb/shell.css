@@ -383,3 +383,51 @@ details.tocbox[open] > summary .ico.tg { transform: rotate(180deg); }
   .tl .g-art { height: 100px; }
   .pzs { grid-template-columns: 1fr 1fr; gap: 16px 12px; }
 }
+
+/* ===================== סבב ליטוש 3 (28.11) ===================== */
+/* לשוניות בסגנון iPad (בקר מפולח) */
+.seg-tabs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 12px; background: #EEF1F4; margin: 2px 0 14px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.seg-tabs button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; padding: 8px 16px; border-radius: 9px; font-weight: 600; color: var(--ink-2); white-space: nowrap; min-height: 40px; }
+.seg-tabs button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(30,47,59,.14); }
+/* משחקים – שם גדול יותר, טקסט משני קריא, תווית מצב */
+.gapp-tx b { font-size: var(--fs-l); }
+.gapp-tx > span { font-size: var(--fs-m); color: #4A5A66; }
+.gapp-tx .gapp-tag { display: inline-block; margin-top: 5px; font-size: var(--fs-xs); font-weight: 700; padding: 1px 9px; border-radius: 999px; background: #E3F1EE; color: #1F6E64; }
+.gapp-get { padding: 6px 18px; }
+/* אתגר אלופים – רכיב זהב קומפקטי (נעול: בסוף הרשימה, עם מנעול ותנאי הפתיחה) */
+.champ-row { margin: 4px 0 6px; }
+.champ-row .cr-tx { display: flex; flex-direction: column; }
+.champ-row .cr-tx span { font-size: var(--fs-s); color: #6B5520; }
+.champ-row.locked { margin-top: 18px; background: linear-gradient(100deg, #FBF3DA, #FDF9EE); }
+.champ-row.locked .cr-ic { background: #F1DFA6; color: #7A5B12; }
+/* אזור המורה – כותרת בולטת עם אייקון וצבע לכל קטגוריה */
+.ws-col h2 { display: flex; align-items: center; gap: 10px; font-size: var(--fs-l); padding: 12px 14px; border-top-width: 6px; background: color-mix(in srgb, var(--wc) 9%, #fff); }
+.ws-hi { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--wc); color: #fff; flex: none; }
+.ws-hi .ico { width: 20px; height: 20px; }
+.ws-tx b { font-size: var(--fs-m); font-weight: 800; }
+.ws-tx span { font-size: var(--fs-s); }
+/* קריאות בשאר השערים */
+.file span, .pz-d { font-size: var(--fs-s); }
+.tl-tx b { font-size: var(--fs-l); }
+/* קורסים – כרטיסים נמוכים יותר, יותר קורסים במסך */
+.clist { gap: 8px; }
+.crs { grid-template-columns: 50px 1fr auto; gap: 12px; padding: 8px 14px 8px 10px; box-shadow: none; }
+.crs .book.mini { width: 50px; flex-basis: 50px; }
+.crs .cs { margin: 2px 0 4px; }
+.crs .cm .tag { padding: 1px 8px; }
+@media (max-width: 700px) {
+  .seg-tabs { display: flex; width: 100%; }
+  .seg-tabs button { flex: 1 1 0; justify-content: center; padding: 8px 8px; font-size: var(--fs-s); }
+  .seg-tabs button .ico { display: none; }
+  .gapp-tx b { font-size: var(--fs-m); }
+  .gapp-tx > span { font-size: var(--fs-s); }
+  .ws-col h2 { font-size: var(--fs-m); }
+  .crs { grid-template-columns: 42px 1fr; }
+  .crs .book.mini { width: 42px; flex-basis: 42px; }
+  .crs .side { grid-column: 2; justify-self: start; }
+  .crs .side .btn { min-height: 36px; padding: 4px 14px; font-size: var(--fs-s); }
+  .crs .cs { font-size: var(--fs-xs); }
+  .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .filters .chip { flex: none; }
+  .filters .search2 { flex: 1 0 160px; }
+}

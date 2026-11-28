@@ -58,6 +58,28 @@
     // לוח ג'פרדי
     jeoGoG: () => svg(`${range(12).map(i => { const c = i % 3, r = Math.floor(i / 3); return `<rect x="${10 + c * 28}" y="${10 + r * 21}" width="24" height="17" rx="3" ${r === 2 && c === 1 ? 'fill="currentColor"' : WF}/>${r === 2 && c === 1 ? '' : T(22 + c * 28, 22 + r * 21, String((r + 1) * 100), 8, 700)}`; }).join('')}`),
     clsGamesG: team,
+    /* ---------- משחקים כיתתיים ---------- */
+    jeoGo: () => GA.jeoGoG(),
+    warGo2: () => GA.warGo1(),
+    mtGo0: () => GA.milGo(),
+    dlTeamGo: blocks,
+    tfTeamGo: () => GA.tfGo0(),
+    // כיבוש שטחים: מפה של משבצות בשלושה צבעי קבוצות
+    cqGo0: () => svg(`${range(16).map(i => { const c = i % 4, r = Math.floor(i / 4), o = [0, 1, 4, 5].includes(i) ? 'currentColor' : [10, 11, 14, 15].includes(i) ? 'rgba(255,255,255,.95)' : 'none'; return `<rect x="${12 + c * 19}" y="${12 + r * 19}" width="17" height="17" rx="3" fill="${o}" ${o === 'currentColor' ? '' : k}/>`; }).join('')}<path d="M50 50l12 0" ${K}/>`),
+    // בינגו: לוח 3×3 עם סימונים בשורה
+    bingoGo: () => svg(`<rect x="14" y="14" width="72" height="72" rx="6" ${WF}/><path d="M38 14v72M62 14v72M14 38h72M14 62h72" ${k}/>${[12, 35, 7, 48, 20, 9, 16, 30, 42].map((d, i) => T(26 + (i % 3) * 24, 31 + Math.floor(i / 3) * 24, d, 11)).join('')}<path d="M18 50h64" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".45"/>`),
+    // פיצוחים: לוח משושים
+    hxGo: () => svg(`${[[30, 30], [54, 30], [42, 51], [66, 51], [30, 72], [54, 72]].map(([x, y], i) => `<path d="M${x} ${y - 12}l10.4 6v12L${x} ${y + 12}l-10.4-6v-12z" ${i === 2 ? 'fill="currentColor"' : i === 3 ? LF : WF}/>`).join('')}`),
+    // בלשי הטעויות: זכוכית מגדלת על תרגיל
+    mdGo: () => svg(`<rect x="10" y="14" width="56" height="44" rx="6" ${WF}/>${T(38, 34, '2/3+1/4', 10)}${T(38, 50, '=3/7', 11)}<circle cx="62" cy="58" r="18" ${LF}/><path d="M75 71l14 14" ${K}/>`),
+    // כמה זה בערך: ≈ וישר מספרים
+    esGo: () => svg(`${T(50, 44, '49×21 ≈', 15)}<path d="M10 70h80" ${K}/>${[0, 1, 2, 3, 4].map(i => `<path d="M${14 + i * 18} 64v12" ${k}/>`).join('')}<circle cx="68" cy="70" r="6" fill="currentColor"/>${T(68, 92, '1000', 10)}`),
+    // מספר המטרה
+    tgGo: () => svg(`<circle cx="50" cy="40" r="26" ${WF}/><circle cx="50" cy="40" r="15" ${k}/>${T(50, 46, '24', 15)}${[3, 8, 2, 6].map((d, i) => `<rect x="${10 + i * 21}" y="74" width="17" height="17" rx="4" ${LF}/>${T(18.5 + i * 21, 87, d, 11)}`).join('')}`),
+    // מה לא שייך: ארבעה פריטים, אחד שונה
+    odGo: () => svg(`${[[14, 14, 'c'], [54, 14, 'c'], [14, 54, 's'], [54, 54, 'c']].map(([x, y, t]) => `<rect x="${x}" y="${y}" width="32" height="32" rx="7" ${t === 's' ? `${k} stroke-dasharray="4 3"` : WF}/>${t === 's' ? `<path d="M${x + 9} ${y + 23}l7-14 7 14z" ${k}/>` : `<circle cx="${x + 16}" cy="${y + 16}" r="8" ${k}/>`}`).join('')}`),
+    // דומינו: שני אריחים מחוברים
+    doGo: () => svg(`<rect x="8" y="30" width="40" height="40" rx="6" ${WF}/><rect x="52" y="30" width="40" height="40" rx="6" ${WF}/><path d="M28 34v32M72 34v32" ${k}/>${T(18, 55, '½', 13)}${T(38, 55, '¾', 13)}${T(62, 55, '0.75', 9)}${T(82, 55, '¼', 13)}<path d="M48 50h4" ${K}/>`),
     /* ---------- אזור המורה ---------- */
     // מערך שיעור: ציר זמן בחלקים
     lpTop: () => svg(`<rect x="12" y="12" width="76" height="76" rx="8" ${WF}/>${[[18, 28, 14], [18, 42, 30], [18, 56, 44], [18, 70, 22]].map(([x, y, w], i) => `<rect x="${x + (i ? [0, 14, 44, 14][i] : 0)}" y="${y}" width="${w}" height="9" rx="4.5" ${i === 2 ? 'fill="currentColor"' : LF}/>`).join('')}<path d="M18 22h64" ${k} opacity=".5"/>`),
@@ -89,6 +111,10 @@
     xmagGo: () => svg(`<rect x="14" y="14" width="72" height="72" rx="6" ${WF}/><path d="M38 14v72M62 14v72M14 38h72M14 62h72" ${k}/>${[2, 7, 6, 9, 5, 1, 4, 3, 8].map((d, i) => T(26 + (i % 3) * 24, 32 + Math.floor(i / 3) * 24, d, 13)).join('')}`),
     xgrwGo: () => svg(`${[1, 2, 3].map((n, s) => { const x0 = 8 + [0, 18, 44][s]; return range(2 * n - 1).map(j => { const x = j < n ? x0 + j * 9 : x0, y = j < n ? 80 : 80 - (j - n + 1) * 9; return `<rect x="${x}" y="${y}" width="8" height="8" ${s === 2 ? 'fill="currentColor"' : WF}/>`; }).join(''); }).join('')}${T(86, 86, '…', 16)}${T(50, 30, '1, 3, 5', 13)}`),
     xsdkGo: () => svg(`<rect x="14" y="14" width="72" height="72" rx="4" ${WF}/><path d="M32 14v72M68 14v72M14 32h72M14 68h72" stroke="currentColor" stroke-width="1" opacity=".6"/><path d="M50 14v72M14 50h72" ${K}/>${[[0, 0, '1'], [1, 2, '3'], [2, 1, '4'], [3, 3, '2'], [0, 3, '4'], [3, 0, '3']].map(([r, c, d]) => T(23 + c * 18, 29 + r * 18, d, 11)).join('')}`),
+    // מדפסת ודף שיוצא ממנה
+    printC: () => svg(`<path d="M28 34V10h44v24" ${WF}/><path d="M36 18h28M36 26h20" ${k}/><rect x="12" y="34" width="76" height="34" rx="8" ${LF}/><circle cx="76" cy="46" r="3" fill="currentColor"/><path d="M28 58h44v32H28z" ${WF}/><path d="M36 68h28M36 76h22M36 84h16" ${k}/>`),
+    // ספריית כלים: ישר מספרים, אבני בסיס ומלבן כפל
+    toolsLib: () => svg(`<rect x="10" y="14" width="36" height="30" ${WF}/><path d="M34 14v30M10 34h36" ${k}/><rect x="56" y="12" width="8" height="34" ${LF}/><rect x="68" y="12" width="8" height="34" ${LF}/><rect x="80" y="38" width="8" height="8" ${WF}/><path d="M8 72h84" ${K}/>${range(5).map(i => `<path d="M${12 + i * 19} 66v12" ${k}/>`).join('')}<path d="M13 66q9-14 18 0q9-14 18 0" ${k}/>`),
     /* ---------- כלי המחשה ---------- */
     dfGo: hub,
     mulAreaGo: () => svg(`<rect x="12" y="20" width="76" height="60" ${WF}/><path d="M62 20v60M12 58h76" ${k}/><rect x="62" y="58" width="26" height="22" fill="currentColor" opacity=".18"/>${T(37, 14, '20', 10)}${T(75, 14, '3', 10)}${T(37, 44, '200', 11)}${T(75, 44, '30', 10)}${T(37, 73, '80', 11)}${T(75, 73, '12', 10)}`),
@@ -100,7 +126,7 @@
   const PAL = ['#E2B65C', '#4FA3A5', '#6E8FC4', '#79A88A', '#D88A6A', '#8C8FB8', '#C98FA8', '#9DB660'];
   const GC = { raceGo: 0, dfgGo: 1, memGo: 2, erGo0: 5, whGo0: 4, tfGo0: 3, pathGo2: 0, milGo: 6, warGo1: 2, dlGo: 1, fjGo: 2, fdGo: 5, cityGo: 3, gbGo: 7, jeoGoG: 4, clsGamesG: 1,
     lpTop: 2, clsOpen: 1, clsGames: 4, dfT: 0, succTab: 3, exitTab: 6, testPick: 2, mkGo: 4, testLink: 1, kfGoHome: 0, kdGoHome: 1,
-    logic: 2, lgSeq: 1, lgAna: 6, lgNum: 0, lgFold: 4, lgAll: 5, xpalGo: 3, xeulerGo: 7, xcubGo: 2, xmagGo: 0, xgrwGo: 1, xsdkGo: 5, dfGo: 0, mulAreaGo: 4, dlTool: 1, fjTool: 2, fdTool: 5 };
+    logic: 2, lgSeq: 1, lgAna: 6, lgNum: 0, lgFold: 4, lgAll: 5, xpalGo: 3, xeulerGo: 7, xcubGo: 2, xmagGo: 0, xgrwGo: 1, xsdkGo: 5, dfGo: 0, mulAreaGo: 4, printC: 2, toolsLib: 1, jeoGo: 4, warGo2: 2, mtGo0: 6, dlTeamGo: 1, tfTeamGo: 3, cqGo0: 7, bingoGo: 0, hxGo: 2, mdGo: 4, esGo: 3, tgGo: 0, odGo: 5, doGo: 6, dlTool: 1, fjTool: 2, fdTool: 5 };
   const art = id => (GA[id] || GA.lgAll)();
   const color = (id, i) => PAL[GC[id] != null ? GC[id] : (i || 0) % PAL.length];
   window.NB_GART = { art, color, has: id => !!GA[id] };
