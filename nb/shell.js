@@ -30,17 +30,23 @@
   /* ---------------- המסגרת: האתר הקיים ---------------- */
   let W = null, D = null, isSite = false, isCoach = false, data = null, quietUntil = 0;
   const run = code => { try { return W.eval(code); } catch (e) { console.warn('[nb]', e); return null; } };
-  const SKIN_COACH = `html,body{font-family:'Heebo','Segoe UI',Arial,sans-serif!important;background:#fff linear-gradient(#EDF0F2 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,#EDF0F2 1px,transparent 1px) 0 0/22px 22px!important}
-    :root{--brand:#2F5670;--brand-dark:#24465C;--brand-soft:#E4EDF4;--ink:#253B49;--muted:#4A5D6A;--line:#DCE2E6;--bg:#fff}
-    .top{background:rgba(255,255,255,.92)!important}.top .brand .avatar{display:none}button,.btn{border-radius:999px}.card{border-radius:16px}`;
+  const SKIN_V = '281128h';
   function skin() {
     if (!D || !D.head || D.documentElement.classList.contains('nbskin')) return;
     if (isSite && /[?&]print/.test(W.location.search)) return; // דפי הדפסה – בלי שינוי (מדידת העמודים)
     if (!isSite && !isCoach) return;
     const f = D.createElement('link'); f.rel = 'stylesheet'; f.href = 'https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap'; D.head.appendChild(f);
-    if (isSite) { const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = 'nb/skin.css?v=281128g'; D.head.appendChild(l); }
-    else { const st = D.createElement('style'); st.textContent = SKIN_COACH; D.head.appendChild(st); }
+    const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = (isSite ? 'nb/skin.css' : 'nb/coach.css') + '?v=' + SKIN_V; D.head.appendChild(l);
     D.documentElement.classList.add('nbskin');
+    frameTone();
+  }
+  // צבע התחום (כמו צבע החוצץ) ומצב המסך – על שורש המסגרת, כדי שהעור יצבע כותרות, התקדמות ובחירה בצבע התחום
+  function frameTone() {
+    if (!D || !D.documentElement) return;
+    const r = D.documentElement, cat = mode.v === 'course' ? mode.ccat : mode.cat;
+    r.style.setProperty('--cv', catColor(cat || 'frac'));
+    r.classList.toggle('nb-topic', mode.v === 'topic');
+    r.classList.toggle('nb-stage', stageModes.includes(mode.v));
   }
   let loadWait = [];
   F.addEventListener('load', () => {
@@ -258,7 +264,7 @@
     on('nmSave', () => { const v = el.querySelector('#nmIn').value.trim(); ensure('site').then(() => { run(`store.name = ${J(v)}; saveStore(store);`); data.name = v; closePop(); renderChrome(); }); });
     const nmIn = el.querySelector('#nmIn'); if (nmIn) nmIn.onkeydown = e => { if (e.key === 'Enter') el.querySelector('#nmSave').click(); };
     on('calmT', () => { const v = !document.documentElement.classList.contains('calm'); document.documentElement.classList.toggle('calm', v); try { localStorage.setItem('math-calm', v ? '1' : '0'); } catch (e) { /* לא חובה */ } if (D) D.documentElement.classList.toggle('calm', v); closePop(); openPop('a11y', btn); });
-    on('fontT', () => ensure('site').then(() => { run('cycleFont()'); syncFont(); }));
+    on('fontT', () => { if (isCoach && D) { const b = D.getElementById('bigBtn'); if (b) b.click(); return; } ensure('site').then(() => { run('cycleFont()'); syncFont(); }); });
     on('roleT', () => ensure('site').then(() => { if (stageModes.includes(mode.v) && !leaveStage(true)) return; run(`setPreview(${data.teacher ? 'true' : 'false'})`); closePop(); scrape(); go({ v: 'library' }); }));
     on('guideT', () => { closePop(); forward(() => run('guideHome()'), { v: 'area', tab: 'guide', name: 'מדריך למורה' }); });
     on('ctT', () => { closePop(); ensure('site').then(() => { const b = D.querySelector('footer.credit .ct-btn'); if (b) { b.click(); onFrame(); } }); });
@@ -590,7 +596,7 @@
       if (!confirm(`הקורס "${cur ? cur.title : ''}" פתוח עכשיו. לעבור לקורס "${c.title}"?\nכדי לחזור אליו אחר כך – קוד ההמשך מהמחברת.`)) return;
       try { sessionStorage.removeItem('coach:state'); sessionStorage.removeItem('coach:equiv'); } catch (e) { /* לא חובה */ }
     }
-    mode = { v: 'course', id: c.id, name: c.title || 'קורסים' };
+    mode = { v: 'course', id: c.id, name: c.title || 'קורסים', ccat: c.cat };
     $('#loading').hidden = false;
     F.src = 'coach.html?grade=' + GRADE + (c.id ? '&course=' + c.id : '');
     isSite = false; data && (crsCache = crsCache);
@@ -670,7 +676,10 @@
     stage.style.setProperty('--cv', catColor(cat));
     // נתיב ניווט
     const parts = [`<button type="button" class="home" data-nav="home">${ic('home', 's')} דף הבית</button>`];
-    if (mode.v === 'course') parts.push(`<button type="button" data-nav="courses">קורסים</button>`, `<b>${esc(mode.name)}</b>`);
+    const inUnit = mode.v === 'course' && isCoach && D && D.getElementById('ucard') && D.getElementById('back');
+    const unitT = inUnit ? clean((D.querySelector('#ucard .lhead h2') || {}).textContent) : '';
+    let here = mode.name || '';
+    if (mode.v === 'course') { parts.push(`<button type="button" data-nav="courses">קורסים</button>`); if (unitT) { parts.push(`<button type="button" data-cplan="1">${esc(mode.name)}</button>`, `<b>${esc(unitT)}</b>`); here = unitT; } else parts.push(`<b>${esc(mode.name)}</b>`); }
     else if (mode.v === 'area' && mode.gate) parts.push(backCrumb(mode.gate), `<b>${esc(mode.name)}</b>`);
     else if (mode.v === 'area' && !cat) parts.push(`<b>${esc(mode.name)}</b>`);
     else if (mode.id === 'champ') parts.push('<b>אתגר אלופים</b>');
@@ -686,16 +695,24 @@
       } else if (mode.v === 'act' && fi.title && fi.title !== nm && !atHome()) step = fi.title;
       parts.push(step ? `<button type="button" data-step="ov">${esc(nm)}</button>` : `<b>${esc(nm)}</b>`);
       if (step) parts.push(`<b>${esc(step)}</b>`);
+      here = step ? `${nm} · ${step}` : nm;
     }
-    const backTo = mode.v === 'course' ? 'לספריית הקורסים' : cat && catT ? `למחברת ${catT.name}` : 'לדף הבית';
-    shead.innerHTML = `<button type="button" class="btn sec s backbtn" id="stBack">${ic('back', 's')} ${esc(backTo)}</button>
+    // כפתור חזרה אחד – תמיד רמה אחת למעלה (שיעור → תוכנית הקורס → ספריית הקורסים; תרגול/כרטיסיות → דף הנושא → המחברת)
+    const upK = mode.v === 'course' ? (inUnit ? 'plan' : 'up') : info && fi.active && fi.active !== 'ov' ? 'ov' : 'up';
+    const backTo = upK === 'plan' ? 'לתוכנית הקורס' : upK === 'ov' ? 'לדף הנושא' : mode.v === 'course' ? 'לספריית הקורסים' : cat && catT ? `למחברת ${catT.name}` : 'לדף הבית';
+    const endB = mode.v === 'course' && isCoach && D && D.getElementById('endBtn');
+    shead.innerHTML = `<button type="button" class="btn sec s backbtn" id="stBack" data-k="${upK}">${ic('back', 's')} <span>${esc(backTo)}</span></button>
       <nav class="crumbs" aria-label="איפה אני">${parts.join('<span class="sep" aria-hidden="true">›</span>')}</nav>
-      ${info ? `<button type="button" class="btn sec s tocbtn" id="tocBtn" aria-expanded="false">${ic('list', 's')} שלבי הנושא</button>` : ''}`;
+      <b class="here" aria-hidden="true">${esc(here)}</b>
+      ${endB && !endB.hidden ? `<button type="button" class="btn sec s endbtn" id="stEnd">${ic('done', 's')} סיימתי להיום</button>` : ''}
+      ${info ? `<button type="button" class="btn sec s tocbtn" id="tocBtn" aria-expanded="false">${ic('list', 's')} <span>שלבי הנושא</span></button>` : ''}`;
+    stage.classList.toggle('tocmin', !!info && tocMin);
+    frameTone();
     // תוכן העניינים של הנושא (עמוד ימין)
     if (info) {
       const a = fi.active, cur = x => a === x ? ' aria-current="step"' : '';
       const stI = (ok, on) => on ? ic('dot', 's') : ok ? ic('done', 's') : ic('circle', 's');
-      toc.innerHTML = `<div class="tt"><span class="sw"></span><h2>${esc(info.name)}</h2></div><div class="tsub">${esc(info.desc)}</div>
+      toc.innerHTML = `<button type="button" class="tocfold" id="tocFold" aria-label="כיווץ תוכן העניינים" title="כיווץ תוכן העניינים">${ic('back', 's')}</button><div class="tt"><span class="sw"></span><h2>${esc(info.name)}</h2></div><div class="tsub">${esc(info.desc)}</div>
         <div class="meter" style="margin-bottom:6px"><span>שליטה</span><span class="bar"><i style="width:${info.m}%"></i></span><b>${info.m}%</b></div><div class="tsub">${esc(clean(info.lbl))}</div>
         <ol class="steps">
           <li><button type="button" data-step="ov"${cur('ov')}><span class="st">${ic('home', 's')}</span>דף הנושא – מה הצעד הבא</button></li>
@@ -723,6 +740,14 @@
       divs.innerHTML = D2.map((d, i) => `<button type="button" class="dv" style="--dl:${72 - i * 9}%" ${d.crs ? `data-dcourse="${d.crs}"` : `data-step="${d.step}"`}${d.on ? ' aria-current="true"' : ''}>${ic(d.icon, 's')}<span>${d.t}</span></button>`).join('');
     } else divs.innerHTML = '';
   }
+  // תוכן העניינים בצד – אפשר לכווץ במחשב ולתת לתוכן את כל הרוחב (נשמר במכשיר)
+  const wide = () => matchMedia('(min-width: 700px)').matches;
+  let tocMin = false; try { tocMin = localStorage.getItem('nb-tocmin') === '1'; } catch (e) { /* לא חובה */ }
+  function setTocMin(v) {
+    tocMin = v; try { localStorage.setItem('nb-tocmin', v ? '1' : '0'); } catch (e) { /* לא חובה */ }
+    stage.classList.toggle('tocmin', v && !stage.classList.contains('full'));
+    const b = $('#tocBtn'); if (b) b.focus(); else if (!v) { const f = $('#tocFold'); if (f) f.focus(); }
+  }
   function doStep(s) {
     stage.classList.remove('tocopen');
     if (mode.v !== 'topic') return;
@@ -730,7 +755,9 @@
     if (isSite && run('state && state.mode') && !confirm('לצאת מהסבב? ההתקדמות בסבב הזה לא תישמר.')) return;
     openTopic(mode.id, mode.cat, sel);
   }
-  function stageBack() {
+  function stageBack(k) {
+    if (k === 'ov') return doStep('ov');
+    if (k === 'plan' && isCoach && D) { const b = D.getElementById('back'); if (b) { b.click(); return; } }
     if (mode.v === 'course') { mode = { v: 'courses' }; F.src = SITE; isSite = false; $('#loading').hidden = false; ensure('site').then(() => { scrape(); if (mode.v === 'courses') render(); }); crsCache = null; return render(); }
     const cat = mode.cat;
     if (!leaveStage(true)) return;
@@ -740,8 +767,13 @@
     go(cat && CAT[cat] ? { v: 'notebook', cat } : { v: 'library' });
   }
   stage.addEventListener('click', e => {
-    if (e.target.closest('#stBack')) return stageBack();
-    if (e.target.closest('#tocBtn')) { const o = stage.classList.toggle('tocopen'); e.target.closest('#tocBtn').setAttribute('aria-expanded', o); return; }
+    const sb = e.target.closest('#stBack'); if (sb) return stageBack(sb.dataset.k);
+    if (e.target.closest('#stEnd')) { const b = D && D.getElementById('endBtn'); if (b) b.click(); return; }
+    if (e.target.closest('[data-cplan]')) { const b = D && D.getElementById('back'); if (b) b.click(); return; }
+    if (e.target.closest('#tocFold')) return setTocMin(true);
+    if (e.target.closest('#tocBtn')) {
+      if (wide() && tocMin) return setTocMin(false);
+      const o = stage.classList.toggle('tocopen'); e.target.closest('#tocBtn').setAttribute('aria-expanded', o); return; }
     const s = e.target.closest('[data-step]'); if (s) return doStep(s.dataset.step);
     const dc = e.target.closest('[data-dcourse]'); if (dc) { const c = courses().find(x => x.id === dc.dataset.dcourse), cat = mode.cat; if (c && leaveStage(true)) { openCourse(c); mode.cat = cat; updateStage(); } return; }
     const c = e.target.closest('[data-cat]'); if (c) { if (!leaveStage(true)) return; return go({ v: 'notebook', cat: c.dataset.cat }); }

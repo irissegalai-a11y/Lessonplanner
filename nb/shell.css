@@ -431,3 +431,44 @@ details.tocbox[open] > summary .ico.tg { transform: rotate(180deg); }
   .filters .chip { flex: none; }
   .filters .search2 { flex: 1 0 160px; }
 }
+
+/* ===================== איחוד המסכים הפנימיים (28.11) ===================== */
+/* שורת ניווט אחת: חזרה רמה אחת למעלה · איפה אני · פעולה משנית */
+.shead { flex-wrap: nowrap; gap: 8px 12px; }
+.shead .crumbs { min-width: 0; flex-wrap: nowrap; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.shead .crumbs b { color: color-mix(in srgb, var(--cv) 30%, var(--ink)); font-weight: 700; }
+.shead .here { display: none; }
+.shead .backbtn, .shead .tocbtn, .shead .endbtn { flex: none; }
+.shead .backbtn { border-color: color-mix(in srgb, var(--cv) 55%, var(--rule)); }
+/* תוכן העניינים בצד – מתכווץ במחשב */
+.tocfold { position: absolute; top: 12px; left: 12px; width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--rule); border-radius: 10px; background: var(--page); color: var(--ink-2); z-index: 2; }
+.tocfold:hover { color: var(--ink); background: #F3F6F8; }
+.side-toc .tt { padding-left: 40px; }
+.steps button[aria-current="step"] { background: color-mix(in srgb, var(--cv) 26%, #fff); box-shadow: inset -4px 0 0 var(--cv); }
+.steps button .x { color: var(--ink-2); font-weight: 600; }
+.steps .grp { color: color-mix(in srgb, var(--cv) 35%, var(--ink-2)); }
+@media (min-width: 700px) {
+  .stage.tocmin { grid-template-columns: 0 0 1fr 76px; }
+  .stage.tocmin .side-toc { display: none; }
+  .stage.tocmin:not(.full)::before { grid-area: 2 / 3 / 3 / 4; }
+  .stage.tocmin:not(.full)::after { display: none; }
+  .stage.tocmin .fpage { border-radius: 12px; }
+  .stage.tocmin .shead .tocbtn { display: inline-flex; }
+}
+/* טלפון: שורה אחת בלבד – חזרה, שם המסך, שלבי הנושא (תפריט נפתח) */
+@media (max-width: 699px) {
+  .shead { flex-wrap: nowrap; padding: 0 0 6px; gap: 6px; }
+  .shead .crumbs { display: none; }
+  .shead .here { display: block; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-s); font-weight: 700; color: var(--ink); }
+  .shead .backbtn { max-width: 46%; min-height: 44px; padding-inline: 10px; }
+  .shead .backbtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .shead .tocbtn, .shead .endbtn { min-height: 44px; padding-inline: 10px; }
+  .shead .tocbtn { margin-inline-start: 0; }
+  .side-toc .tt { padding-left: 0; }
+  .tocfold { display: none; }
+}
+@media (max-width: 699px) {
+  /* החוצצים גוללים בתוך השורה – לא מרחיבים את המסך */
+  .stage, .stage.full { grid-template-columns: minmax(0, 1fr); }
+  .divs, .fpage, .shead { min-width: 0; }
+}

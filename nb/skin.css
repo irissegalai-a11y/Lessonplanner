@@ -155,6 +155,48 @@
   html.nbskin .gc-ic .nbi svg { width: 26px; height: 26px; }
   html.nbskin .gc-ic .nbi { margin: 0; color: var(--ink); }
 }
+
+/* ===================== איחוד המסכים הפנימיים (28.11) – רק במסך, רק בגרסת הניסיון ===================== */
+@media screen {
+  html.nbskin { --muted: #3F5361; --soft: #5A6C78; --cvs: color-mix(in srgb, var(--cv, #6E8FC4) 16%, #fff); --cvd: color-mix(in srgb, var(--cv, #6E8FC4) 62%, #1E2F3B); }
+  /* משבצות עדינות מאוד – רקע, לא מפריע לקריאה; התוכן על כרטיס לבן */
+  html.nbskin, html.nbskin body { background-image: linear-gradient(#F3F5F7 1px, transparent 1px), linear-gradient(90deg, #F3F5F7 1px, transparent 1px); background-size: 24px 24px; }
+  html.nbskin .tp-head .ds, html.nbskin .topic .ds, html.nbskin .lvlchoice .ds, html.nbskin .muted, html.nbskin small { color: var(--muted); }
+
+  /* בתוך מחברת של נושא: המעטפת מציגה כבר את שם הנושא, החזרה וגודל הכתב – בלי כפילות בתוך הדף */
+  html.nbskin.nb-topic .navhome, html.nbskin.nb-topic .topbar [data-font], html.nbskin.nb-topic .topbar #fontBtn, html.nbskin.nb-topic .topbar .title { display: none !important; }
+  html.nbskin.nb-topic .topbar { justify-content: flex-start; min-height: 0; margin-bottom: 8px; color: var(--muted); font-weight: 600; font-size: .95rem; }
+  html.nbskin.nb-topic .topbar:not(:has(> :not(.title, .navhome))) { display: none; }
+
+  /* צבע התחום (כמו החוצץ) – בכותרת הכרטיס, בהתקדמות, בבחירה ובשלב הנוכחי */
+  html.nbskin.nb-topic .lcard, html.nbskin.nb-topic .tp-head { border-top: 5px solid var(--cv) !important; }
+  html.nbskin.nb-topic .tp-head h2, html.nbskin.nb-topic .ltitle { color: var(--cvd); }
+  html.nbskin.nb-topic .tp-h .tp-n, html.nbskin.nb-topic .qnum { background: var(--cvs) !important; color: var(--cvd) !important; }
+  html.nbskin.nb-topic .progress { background: var(--cvs); height: 10px; }
+  html.nbskin.nb-topic .progress > div { background: var(--cv); }
+  html.nbskin.nb-topic .mbar { background: var(--cvs); }
+  html.nbskin.nb-topic .mbar > span, html.nbskin.nb-topic .tp-head .mbar span { background: var(--cv); }
+  html.nbskin.nb-topic .lvlchoice.cur { border-color: var(--cv) !important; box-shadow: inset 0 0 0 1px var(--cv) !important; background: var(--cvs); }
+  html.nbskin.nb-topic .choices button.sel { background: var(--cvs); border-color: var(--cv); }
+  html.nbskin.nb-topic details.tips { background: color-mix(in srgb, var(--cv) 7%, #fff); }
+
+  /* רצועת מספרי הכרטיסיות – שורה אחת קומפקטית, גלילה לצדדים במקום שבירה לשורות */
+  html.nbskin .dots { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: 6px; padding: 2px 2px 6px; margin-bottom: 10px; }
+  html.nbskin .dots::-webkit-scrollbar { display: none; }
+  html.nbskin .dot { flex: none; width: 34px; height: 34px; min-height: 34px; border: 1.5px solid var(--line); background: #fff; color: var(--muted); font-weight: 700; font-size: .9rem; }
+  html.nbskin .dot.ok { background: var(--ok-bg); border-color: #A9C8B5; color: var(--ok); }
+  html.nbskin .dot.cur { background: var(--cv, var(--accent)); border-color: var(--cv, var(--accent)); color: #1E2F3B; box-shadow: 0 0 0 3px var(--cvs); }
+
+
+  /* טלפון: התוכן מקבל את כל הרוחב */
+  @media (max-width: 699px) {
+    html.nbskin .wrap { padding: 10px 10px 24px !important; }
+    html.nbskin .card { padding: 14px 12px; }
+    html.nbskin.nb-topic .topbar { margin-bottom: 6px; }
+    html.nbskin .dots { gap: 4px; }
+    html.nbskin .dot { width: 30px; height: 30px; min-height: 30px; font-size: .85rem; }
+  }
+}
 /* חלון קופץ של האתר (למשל "מי נכנס/ת?") כשהמסגרת מוסתרת – רק החלון מוצג מעל הספרייה */
 html.nb-modal-only, html.nb-modal-only body { background: transparent !important; }
 html.nb-modal-only #app, html.nb-modal-only footer { visibility: hidden; }
