@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-cache">
+<title>MathInClass – מרכז ההדפסה (גרסת ניסיון, כיתה ו')</title>
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nb/design.css?v=281128">
+<link rel="stylesheet" href="nb/pc.css?v=281128">
+<script>try { if (localStorage.getItem('math-calm') === '1') document.documentElement.classList.add('calm'); } catch (e) {}</script>
+</head>
+<body>
+<div class="pc">
+  <header class="pc-top">
+    <h1 id="pcTitle">מרכז ההדפסה</h1>
+    <span class="pc-gr">כיתה ו׳ · גרסת ניסיון</span>
+    <a class="pill" id="pcBack" href="nb6.html">ספריית המחברות</a>
+  </header>
+  <main class="pc-main">
+    <aside class="pc-set" id="set" aria-label="הגדרות הדף"></aside>
+    <section class="pc-prev" id="prev" aria-label="תצוגה מקדימה">
+      <div class="pc-bar">
+        <span class="pc-pages" id="pages">מכינה את מנוע ההדפסה…</span>
+        <span class="grow"></span>
+        <button type="button" class="btn sec s" id="again">גרסה חדשה</button>
+        <button type="button" class="btn s" id="print">הדפסה / PDF</button>
+      </div>
+      <div class="pc-tpl" id="tpl" hidden></div>
+      <div class="pc-msg" id="msg" role="status" aria-live="polite"></div>
+      <div class="pc-stage" id="stage">
+        <div class="pc-busy" id="busy">מכינה את הדפים…</div>
+        <iframe id="eng" title="תצוגה מקדימה של הדפים"></iframe>
+      </div>
+    </section>
+  </main>
+  <div class="pc-mbar"><button type="button" class="btn sec" id="mPrev">לתצוגה המקדימה</button><button type="button" class="btn" id="mPrint">הדפסה / PDF</button></div>
+</div>
+<script src="nb/art.js?v=281128"></script>
+<script src="nb/pc.js?v=281128"></script>
+</body>
+</html>
