@@ -8,7 +8,10 @@
    ========================================================= */
 (function () {
   'use strict';
-  const GRADE = 6;
+  // התשתית משותפת לכל הכיתות: הכיתה נקראת מהכתובת (nb6.html?grade=4), ברירת מחדל ו'
+  const GRADE = (g => g >= 1 && g <= 6 ? g : 6)(parseInt(new URLSearchParams(location.search).get('grade'), 10));
+  const GL = "אבגדהו"[GRADE - 1] + "'";
+  document.documentElement.dataset.grade = GRADE;
   const SITE = 'math6.html?grade=' + GRADE;
   const { ic, ART } = window.NB_ART;
   const GART = window.NB_GART;
@@ -30,7 +33,7 @@
   /* ---------------- המסגרת: האתר הקיים ---------------- */
   let W = null, D = null, isSite = false, isCoach = false, data = null, quietUntil = 0;
   const run = code => { try { return W.eval(code); } catch (e) { console.warn('[nb]', e); return null; } };
-  const SKIN_V = '281128h';
+  const SKIN_V = '281128i';
   function skin() {
     if (!D || !D.head || D.documentElement.classList.contains('nbskin')) return;
     if (isSite && /[?&]print/.test(W.location.search)) return; // דפי הדפסה – בלי שינוי (מדידת העמודים)
@@ -45,6 +48,7 @@
     if (!D || !D.documentElement) return;
     const r = D.documentElement, cat = mode.v === 'course' ? mode.ccat : mode.cat;
     r.style.setProperty('--cv', catColor(cat || 'frac'));
+    r.dataset.grade = GRADE;
     r.classList.toggle('nb-topic', mode.v === 'topic');
     r.classList.toggle('nb-stage', stageModes.includes(mode.v));
   }
@@ -204,7 +208,8 @@
     ].filter(x => x.on !== false);
   };
   const activeNav = () => mode.v === 'library' ? 'home' : mode.v === 'topics' ? 'topics' : ['courses', 'course'].includes(mode.v) ? 'courses'
-    : mode.v === 'gate' ? mode.g : mode.v === 'area' ? (mode.gate || (mode.tab === 'wp' ? 'home' : mode.tab)) : (mode.cat === 'exc' ? 'exc' : 'home');
+    : mode.v === 'gate' ? mode.g : mode.v === 'area' ? (mode.gate || (mode.tab === 'wp' ? 'home' : mode.tab))
+    : mode.from && !String(mode.from).startsWith('nb:') ? mode.from : (mode.cat === 'exc' ? 'exc' : 'home');
   const nvBtn = (n, cur) => `<button type="button" class="nv" data-nav="${n.id}"${n.id === cur ? ' aria-current="page"' : ''}>${ic(n.icon)}<span>${n.label}</span></button>`;
   function renderChrome() {
     const nav = NAV(), cur = activeNav();
@@ -214,7 +219,7 @@
     const nm = data && data.name;
     $('#acts').innerHTML = `
       <button type="button" class="pill icon phone" data-pop="search" aria-label="חיפוש">${ic('search', 's')}</button>
-      <button type="button" class="pill" data-pop="grade" aria-label="כיתה ו' – החלפת כיתה">כיתה ו' ${ic('chevD', 's')}</button>
+      <button type="button" class="pill" data-pop="grade" aria-label="כיתה ${GL} – החלפת כיתה">כיתה ${GL} ${ic('chevD', 's')}</button>
       ${data && data.cred ? `<button type="button" class="pill role wide" data-pop="role">${ic(data.teacher ? 'brief' : 'users', 's')} ${data.teacher ? 'תצוגת מורה' : 'תצוגת תלמיד'}</button>` : ''}
       <button type="button" class="pill" data-pop="name" aria-label="השם שלי">${ic('user', 's')}<span class="wide">${nm ? esc(nm) : 'השם שלי'}</span></button>
       <button type="button" class="pill icon" data-pop="a11y" aria-label="נגישות וגודל כתב">${ic('type', 's')}</button>
@@ -248,7 +253,7 @@
     if (kind === 'search') { $('#top').classList.add('searching'); $('#q').focus(); return; }
     const el = document.createElement('div'); el.className = 'pop'; el.dataset.k = kind; el.setAttribute('role', 'dialog');
     const calm = document.documentElement.classList.contains('calm');
-    if (kind === 'grade') el.innerHTML = `<h3>כיתה ו'</h3><p>גרסת הניסיון של העיצוב החדש בנויה לכיתה ו' בלבד.</p><div class="row"><a class="btn sec s" href="math.html?choose" target="_top">החלפת כיתה (באתר הרגיל)</a></div>`;
+    if (kind === 'grade') el.innerHTML = `<h3>כיתה ${GL}</h3><p>גרסת הניסיון של העיצוב החדש.</p><div class="row"><a class="btn sec s" href="math.html?choose" target="_top">החלפת כיתה (באתר הרגיל)</a></div>`;
     if (kind === 'name') el.innerHTML = `<h3>השם שלי</h3><p>השם נשמר רק במכשיר הזה, כמו באתר.</p><input id="nmIn" value="${esc(data && data.name)}" placeholder="כתבו את השם שלכם" autocomplete="off"><div class="row"><button class="btn s" id="nmSave">שמירה</button></div>`;
     if (kind === 'a11y') el.innerHTML = `<h3>נגישות</h3><div class="row"><button class="btn sec s" id="calmT" aria-pressed="${calm}">${ic('eye', 's')} ${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="btn sec s" id="fontT">${ic('type', 's')} א+ גודל כתב</button></div><p>גודל הכתב מתחלף בין 3 גדלים, כמו באתר.</p>`;
     if (kind === 'role') el.innerHTML = `<h3>${data.teacher ? 'את/ה בתצוגת מורה' : 'את/ה רואה את האתר כמו תלמיד/ה'}</h3><div class="row"><button class="btn s" id="roleT">${data.teacher ? 'מעבר לתצוגת תלמיד' : 'חזרה לתצוגת מורה'}</button>${data.teacher ? '<button class="btn sec s" id="guideT">מדריך למורה</button>' : ''}</div>`;
@@ -712,7 +717,7 @@
     if (info) {
       const a = fi.active, cur = x => a === x ? ' aria-current="step"' : '';
       const stI = (ok, on) => on ? ic('dot', 's') : ok ? ic('done', 's') : ic('circle', 's');
-      toc.innerHTML = `<button type="button" class="tocfold" id="tocFold" aria-label="כיווץ תוכן העניינים" title="כיווץ תוכן העניינים">${ic('back', 's')}</button><div class="tt"><span class="sw"></span><h2>${esc(info.name)}</h2></div><div class="tsub">${esc(info.desc)}</div>
+      toc.innerHTML = `<button type="button" class="tocclose" id="tocClose" aria-label="סגירת שלבי הנושא">${ic('x', 's')} סגירה</button><button type="button" class="tocfold" id="tocFold" aria-label="כיווץ תוכן העניינים" title="כיווץ תוכן העניינים">${ic('back', 's')}</button><div class="tt"><span class="sw"></span><h2>${esc(info.name)}</h2></div><div class="tsub">${esc(info.desc)}</div>
         <div class="meter" style="margin-bottom:6px"><span>שליטה</span><span class="bar"><i style="width:${info.m}%"></i></span><b>${info.m}%</b></div><div class="tsub">${esc(clean(info.lbl))}</div>
         <ol class="steps">
           <li><button type="button" data-step="ov"${cur('ov')}><span class="st">${ic('home', 's')}</span>דף הנושא – מה הצעד הבא</button></li>
@@ -771,6 +776,7 @@
     if (e.target.closest('#stEnd')) { const b = D && D.getElementById('endBtn'); if (b) b.click(); return; }
     if (e.target.closest('[data-cplan]')) { const b = D && D.getElementById('back'); if (b) b.click(); return; }
     if (e.target.closest('#tocFold')) return setTocMin(true);
+    if (e.target.closest('#tocClose')) { stage.classList.remove('tocopen'); const b = $('#tocBtn'); if (b) { b.setAttribute('aria-expanded', 'false'); b.focus(); } return; }
     if (e.target.closest('#tocBtn')) {
       if (wide() && tocMin) return setTocMin(false);
       const o = stage.classList.toggle('tocopen'); e.target.closest('#tocBtn').setAttribute('aria-expanded', o); return; }

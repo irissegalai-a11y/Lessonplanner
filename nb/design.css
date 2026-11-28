@@ -171,3 +171,6 @@ html.calm .nbook, html.calm .nbook-pages { transition: none; }
 .bookmark { position: absolute; top: -3px; left: 18px; width: 16px; height: 28px; background: var(--accent); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 76%, 0 100%); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* גודל טקסט לפי גיל – אותה תשתית לכל הכיתות (nb6.html?grade=) */
+html[data-grade="1"], html[data-grade="2"], html[data-grade="3"] { --fs-xs: 0.875rem; --fs-s: 1rem; --fs-m: 1.0625rem; --fs-l: 1.25rem; }

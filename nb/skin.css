@@ -194,6 +194,15 @@
     html.nbskin .card { padding: 14px 12px; }
     html.nbskin.nb-topic .topbar { margin-bottom: 6px; }
     html.nbskin .dots { gap: 4px; }
+    /* פחות רווח אנכי בתרגול ובכרטיסיות – הכתב וההמחשות באותו גודל */
+    html.nbskin .wrap { padding-top: 6px !important; }
+    html.nbskin.nb-topic .card { margin-top: 0; margin-bottom: 10px; }
+    html.nbskin.nb-topic .topbar { margin: 0 0 4px; gap: 6px; }
+    html.nbskin.nb-topic .progress { margin: 2px 0 8px; }
+    html.nbskin.nb-topic .dots { margin-bottom: 6px; padding-bottom: 4px; }
+    html.nbskin.nb-topic details.tips { margin: 6px 0 8px; }
+    html.nbskin.nb-topic .lcard .qhead, html.nbskin.nb-topic .qhead { margin-bottom: 6px; }
+    html.nbskin.nb-topic .lvlpick, html.nbskin.nb-topic .lvl { margin-bottom: 6px; }
     html.nbskin .dot { width: 30px; height: 30px; min-height: 30px; font-size: .85rem; }
   }
 }

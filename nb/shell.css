@@ -472,3 +472,19 @@ details.tocbox[open] > summary .ico.tg { transform: rotate(180deg); }
   .stage, .stage.full { grid-template-columns: minmax(0, 1fr); }
   .divs, .fpage, .shead { min-width: 0; }
 }
+
+/* ===================== ליטושים נקודתיים (28.11) ===================== */
+.tocclose { display: none; }
+@media (max-width: 699px) {
+  /* שם המסך – עד שתי שורות, בלי חיתוך */
+  .shead { align-items: center; }
+  .shead .here { white-space: normal; overflow: visible; text-overflow: clip; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.2; font-size: var(--fs-xs); overflow: hidden; }
+  .shead .backbtn { max-width: 40%; }
+  /* החוצצים – כולם בשורה, בשלמותם, עם מרווח מהקצוות */
+  .divs { overflow: visible; padding: 6px 8px 0; gap: 4px; }
+  .divs .dv { flex: 1 1 0; min-width: 0; flex-direction: column; gap: 2px; padding: 5px 2px; min-height: 46px; font-size: 0.72rem; line-height: 1.15; text-align: center; white-space: nowrap; }
+  .divs .dv span { overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .divs .dv .ico { width: 16px; height: 16px; }
+  /* תפריט "שלבי הנושא" – כפתור סגירה ברור */
+  .tocclose { display: inline-flex; align-items: center; gap: 6px; position: sticky; top: -18px; float: left; margin: -6px -4px 6px 0; min-height: 44px; padding: 6px 14px; border: 1.5px solid var(--rule); border-radius: 999px; background: var(--page); font-weight: 700; color: var(--ink); z-index: 3; }
+}
