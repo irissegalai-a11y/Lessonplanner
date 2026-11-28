@@ -39,17 +39,16 @@
     { id: 'sphere', no: 6, title: 'כדור', icon: '⚽' },
     { id: 'reg', no: 7, title: 'גופים משוכללים + סיכום ואתגר', icon: '💎' }
   ];
-  const LESSONS = [...G6.LESSONS_A, ...G6.LESSONS_B];
-  const UNITS = LESSONS.flatMap(L => L.subs ? L.subs : [L]); // יחידות עם תוכן (שיעור 4 = 6 תת-יחידות)
-  const unitById = id => UNITS.find(u => u.id === id);
-  const parentOf = u => LESSONS.find(L => L.subs && L.subs.includes(u));
+  // 9 שיעורים במבנה של שיעור כיתתי (prism-c.js). קישורים ישנים (l1…l5, l4a…) מועברים לשיעור החדש
+  const LESSONS = G6.LESSONS, UNITS = LESSONS;
+  const unitById = id => UNITS.find(u => u.id === id) || UNITS.find(u => u.id === (G6.OLD_ID || {})[id]);
   const siteHref = t => `math6.html?grade=6&topic=${t}`;
 
   /* ---------- התקדמות (רק במכשיר) ---------- */
   let PROG = ls.get('geo6-prog', {});
-  const P = id => (PROG[id] = PROG[id] || { teach: 0, rule: 0, lv: {}, nb: 0 });
+  const P = id => (PROG[id] = PROG[id] || { open: 0, teach: 0, rule: 0, lv: {}, nb: 0 });
   const saveP = () => ls.set('geo6-prog', PROG);
-  const partsDone = id => { const p = PROG[id] || {}; return [!!p.teach, !!p.rule, Object.values(p.lv || {}).some(v => v >= 70), !!p.nb]; };
+  const partsDone = id => { const p = PROG[id] || {}; return [!!p.open, !!p.teach, !!p.rule, Object.values(p.lv || {}).some(v => v >= 70), !!p.nb]; };
   const unitDone = id => partsDone(id).every(Boolean);
 
   /* ---------- מצב: הקרנה בכיתה / לומדים לבד ---------- */
@@ -68,7 +67,7 @@
   function route() {
     stopAll();
     if (NAV.v === 'home') return homeView();
-    if (NAV.v === 'lesson' && unitById(NAV.l)) return lessonView(unitById(NAV.l), NAV.p || 'teach');
+    if (NAV.v === 'lesson' && unitById(NAV.l)) return lessonView(unitById(NAV.l), NAV.p || 'open');
     if (NAV.v === 'exit') return exitView();
     if (NAV.v === 'review') return reviewView();
     if (NAV.v === 'chapters') return homeView();
@@ -81,23 +80,24 @@
   function homeView() {
     app.innerHTML = `<div class="wrap"><div class="crumbs"><a href="math6.html?grade=6">mathinclass</a> › גאומטריה › גופים ומעגל</div>
       <h1>גופים ומעגל – כיתה ו'</h1><p class="muted">שבעה פרקים, לפי סדר הפרקים בספר "שבילים פלוס – גאומטריה לכיתה ו'". כרגע בנוי פרק 1; הפרקים האחרים בבנייה – בינתיים יש תרגול באתר.</p>
-      <div class="chap-list">${CHAPTERS.map(c => `<div class="chap${c.ready ? '' : ' soon'}"><span class="chap-no">${c.no}</span><span class="chap-i" aria-hidden="true">${c.icon}</span><div class="chap-b"><b>${c.title}</b>${c.ready ? `<span class="muted"> · 5 שיעורים</span>` : '<span class="tag">בקרוב</span>'}
+      <div class="chap-list">${CHAPTERS.map(c => `<div class="chap${c.ready ? '' : ' soon'}"><span class="chap-no">${c.no}</span><span class="chap-i" aria-hidden="true">${c.icon}</span><div class="chap-b"><b>${c.title}</b>${c.ready ? `<span class="muted"> · ${LESSONS.length} שיעורים</span>` : '<span class="tag">בקרוב</span>'}
         ${c.site ? `<div class="chap-site">בינתיים באתר: ${c.site.map(([n, t]) => `<a href="${siteHref(t)}">${n}</a>`).join(' · ')}</div>` : ''}</div>${c.ready ? `<button type="button" class="btn" data-ch="${c.id}">לפרק ←</button>` : ''}</div>`).join('')}</div></div>`;
     app.querySelectorAll('[data-ch]').forEach(b => b.onclick = () => go({ v: 'chapter' }));
   }
 
   /* ---------- מסך הפרק: רשימת השיעורים עם סימון התקדמות ---------- */
-  const PARTS = [['teach', 'לומדים'], ['rule', 'מה גילינו?'], ['prac', 'תרגול'], ['nb', 'מחברת']];
-  const dots = id => { const d = partsDone(id); return `<span class="dots" aria-label="${d.filter(Boolean).length} מתוך 4 חלקים">${PARTS.map((p, i) => `<span class="dot${d[i] ? ' on' : ''}" title="${p[1]}${d[i] ? ' ✓' : ''}"></span>`).join('')}</span>`; };
+  // חמשת שלבי השיעור (45 דקות) – הזמנים הם הצעה למורה
+  const PARTS = [['open', 'פתיחה', 5], ['teach', 'לומדים', 15], ['rule', 'מה גילינו?', 5], ['prac', 'תרגול', 15], ['sum', 'סיכום ומחברת', 5]];
+  const dots = id => { const d = partsDone(id); return `<span class="dots" aria-label="${d.filter(Boolean).length} מתוך ${PARTS.length} שלבים">${PARTS.map((p, i) => `<span class="dot${d[i] ? ' on' : ''}" title="${p[1]}${d[i] ? ' ✓' : ''}"></span>`).join('')}</span>`; };
   function chapterView() {
-    const row = (u, sub) => `<div class="lrow${sub ? ' sub' : ''}${unitDone(u.id) ? ' done' : ''}"><button type="button" class="lgo" data-l="${u.id}"><span class="lno">${u.no}</span><span class="li" aria-hidden="true">${u.icon}</span><span class="lt"><b>${u.title}</b><span class="muted small">${u.goal}</span></span>${dots(u.id)}${unitDone(u.id) ? '<span class="ok-badge">✓ הושלם</span>' : ''}</button>
+    const row = u => `<div class="lrow${unitDone(u.id) ? ' done' : ''}"><button type="button" class="lgo" data-l="${u.id}"><span class="lno">${u.no}</span><span class="li" aria-hidden="true">${u.icon}</span><span class="lt"><b>${u.title}</b><span class="muted small">${u.goal}</span></span>${dots(u.id)}${unitDone(u.id) ? '<span class="ok-badge">✓ הושלם</span>' : ''}</button>
       <div class="lparts">${PARTS.map(([p, n]) => `<button type="button" class="chip" data-l="${u.id}" data-p="${p}">${n}</button>`).join('')}<button type="button" class="chip ghost" data-print="${u.id}">🖨️ דף עבודה</button></div></div>`;
     const done = UNITS.filter(u => unitDone(u.id)).length;
     app.innerHTML = `<div class="wrap"><div class="crumbs"><a href="math6.html?grade=6">mathinclass</a> › <a href="#" data-home>גופים ומעגל</a> › פרק 1</div>
-      <div class="ch-head"><div><h1>פרק 1 – מנסרה</h1><p class="muted">כולל קובייה ותיבה · 5 שיעורים · בוחרים כל שיעור וכל חלק בחופשיות – בלי אבחון ובלי נעילה.</p></div>${modeBar()}</div>
-      <div class="prog"><span class="mbar"><span style="width:${Math.round(done / UNITS.length * 100)}%"></span></span><span class="small muted">${done} מתוך ${UNITS.length} יחידות הושלמו</span></div>
-      <p class="legend small muted">בכל שיעור 4 חלקים: <span class="dot on"></span> לומדים · מה גילינו? · תרגול · מחברת</p>
-      <div class="lessons">${LESSONS.map(L => L.subs ? `<div class="lgroup"><div class="lgh"><span class="lno">${L.no}</span><span class="li">${L.icon}</span><b>${L.title}</b><span class="muted small"> – ${L.goal}</span></div>${L.subs.map(u => row(u, true)).join('')}</div>` : row(L)).join('')}</div>
+      <div class="ch-head"><div><h1>פרק 1 – מנסרה</h1><p class="muted">כולל קובייה ותיבה · ${LESSONS.length} שיעורים של 45 דקות · נכנסים לכל שיעור ולכל שלב בחופשיות – בלי אבחון ובלי נעילה.</p></div>${modeBar()}</div>
+      <div class="prog"><span class="mbar"><span style="width:${Math.round(done / UNITS.length * 100)}%"></span></span><span class="small muted">${done} מתוך ${UNITS.length} שיעורים הושלמו</span></div>
+      <p class="legend small muted">בכל שיעור ${PARTS.length} שלבים: <span class="dot on"></span> ${PARTS.map(p => `${p[1]} (${p[2]} דק')`).join(' · ')}</p>
+      <div class="lessons">${LESSONS.map(L => row(L)).join('')}</div>
       <div class="end-row"><button type="button" class="btn sec" data-review>🔁 תרגול סיכום הפרק</button><button type="button" class="btn" data-exit>🎫 כרטיס יציאה לפרק</button>${teacher() ? '<button type="button" class="btn ghost" data-exitp>🖨️ כרטיס יציאה וטבלת מעקב להדפסה</button>' : ''}</div>
       <p class="small muted src-note">התאמה: לפי סדר ונושאי הפרק "מנסרה" בספר שבילים פלוס (לפי תוכן העניינים – לא לפי דפי הספר) ותכנית הלימודים לכיתה ו' (עמ' 136–140). בכיתה ו' לומדים גופים ישרים בלבד.</p></div>`;
     bindModes(app);
@@ -112,23 +112,40 @@
 
   /* ---------- מסך שיעור ---------- */
   function lessonView(u, part) {
-    const i = UNITS.indexOf(u), prev = UNITS[i - 1], next = UNITS[i + 1], par = parentOf(u);
-    app.innerHTML = `<div class="wrap lesson"><div class="crumbs"><a href="#" data-ch>פרק 1 – מנסרה</a> › ${par ? `שיעור ${par.no} › ` : ''}${u.no}</div>
+    const i = UNITS.indexOf(u), prev = UNITS[i - 1], next = UNITS[i + 1];
+    app.innerHTML = `<div class="wrap lesson"><div class="crumbs"><a href="#" data-ch>פרק 1 – מנסרה</a> › שיעור ${u.no}</div>
       <div class="ch-head"><h1><span class="lno big">${u.no}</span> ${u.title}</h1>${modeBar()}</div>
       <p class="goal">🎯 ${u.goal}</p>
-      <nav class="ptabs" role="tablist">${PARTS.map(([p, n], k) => `<button type="button" role="tab" class="ptab${p === part ? ' on' : ''}" aria-selected="${p === part}" data-p="${p}"><span class="pl">${'אבגד'[k]}</span> ${n}${partsDone(u.id)[k] ? ' ✓' : ''}</button>`).join('')}</nav>
+      <nav class="ptabs" role="tablist">${PARTS.map(([p, n, mn], k) => `<button type="button" role="tab" class="ptab${p === part ? ' on' : ''}" aria-selected="${p === part}" data-p="${p}"><span class="pl">${'אבגדה'[k]}</span> ${n}${partsDone(u.id)[k] ? ' ✓' : ''}<span class="pmin">${mn} דק'</span></button>`).join('')}</nav>
       <section id="pbody"></section>
-      <div class="lnav">${prev ? `<button type="button" class="btn ghost" data-go="${prev.id}">→ ${prev.no}. ${prev.title}</button>` : '<span></span>'}${next ? `<button type="button" class="btn ghost" data-go="${next.id}">${next.no}. ${next.title} ←</button>` : `<button type="button" class="btn ghost" data-exit>🎫 לכרטיס היציאה ←</button>`}</div></div>`;
+      <div class="lnav">${prev ? `<button type="button" class="btn ghost" data-go="${prev.id}">→ שיעור ${prev.no}</button>` : '<span></span>'}${next ? `<button type="button" class="btn ghost" data-go="${next.id}">שיעור ${next.no}: ${next.title} ←</button>` : `<button type="button" class="btn ghost" data-exit>🎫 לכרטיס היציאה ←</button>`}</div></div>`;
     bindModes(app);
     app.querySelector('[data-ch]').onclick = e => { e.preventDefault(); go({ v: 'chapter' }); };
     app.querySelectorAll('.ptab').forEach(b => b.onclick = () => go({ v: 'lesson', l: u.id, p: b.dataset.p }));
-    app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go({ v: 'lesson', l: b.dataset.go, p: 'teach' }));
+    app.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go({ v: 'lesson', l: b.dataset.go, p: 'open' }));
     const ex = app.querySelector('[data-exit]'); if (ex) ex.onclick = () => go({ v: 'exit' });
     const body = $('pbody');
-    if (part === 'teach') teachPart(u, body);
+    if (part === 'open') openPart(u, body);
+    else if (part === 'teach') teachPart(u, body);
     else if (part === 'rule') rulePart(u, body);
     else if (part === 'prac') pracPart(u, body);
-    else nbPart(u, body);
+    else sumPart(u, body);
+  }
+  const gamesHTML = u => (u.games && u.games.length) || u.site ? `<p class="small games-l">${(u.games || []).map(([n, h]) => `<a class="chip" href="${h}">${n}</a>`).join(' ')}${u.site ? ` עוד תרגול באתר: ${u.site.map(([n, t]) => `<a href="${siteHref(t)}">${n}</a>`).join(' · ')}` : ''}</p>` : '';
+
+  /* ----- א. פתיחה: תופעה או שאלה – בלי לתת את הכלל ----- */
+  function openPart(u, body) {
+    const o = u.open || { html: '' };
+    body.innerHTML = `<article class="card open-card"><h2>🚪 פתיחה</h2><div class="thtml">${o.html}</div>
+      ${o.ask && o.ask.length ? `<div class="ask"><h3>🗣️ שאלות לדיון</h3><ol class="ask-l">${o.ask.map((a, i) => `<li${isClass() && i ? ' hidden' : ''}>${a}</li>`).join('')}</ol>${isClass() && o.ask.length > 1 ? '<button type="button" class="btn ghost sm" data-ask>השאלה הבאה ←</button>' : ''}</div>` : ''}
+      <p class="small muted">${isClass() ? 'עדיין לא נותנים את הכלל: אוספים השערות על הלוח, ונבדוק אותן בשלב "לומדים".' : 'כתבו במחברת השערה – ונבדוק אותה בשלב "לומדים".'}</p></article>
+      ${u.hands ? `<details class="card hands"${isClass() ? ' open' : ''}><summary>🧰 התנסות בכיתה (חומרים מוחשיים)</summary><p>${u.hands}</p></details>` : ''}
+      <div class="snav"><span></span><button type="button" class="btn" data-next>ללומדים ←</button></div>`;
+    if (o.setup) SETUPS[o.setup](body.querySelector('.thtml'), o, u);
+    const ab = body.querySelector('[data-ask]');
+    if (ab) ab.onclick = () => { const h = body.querySelector('.ask-l li[hidden]'); if (h) h.hidden = false; if (!body.querySelector('.ask-l li[hidden]')) ab.hidden = true; };
+    P(u.id).open = 1; saveP();
+    body.querySelector('[data-next]').onclick = () => go({ v: 'lesson', l: u.id, p: 'teach' });
   }
 
   /* ----- א. לומדים (הקניה צעד-צעד) ----- */
@@ -139,13 +156,13 @@
       body.innerHTML = `<div class="steps-bar">${u.teach.map((s, j) => `<button type="button" class="sdot${j === k ? ' on' : ''}${j < k ? ' past' : ''}" data-k="${j}" aria-label="שלב ${j + 1}: ${esc(s.t)}">${j + 1}</button>`).join('')}</div>
         <article class="tstep card"><h2>${st.t}</h2><div class="thtml">${st.html}</div><div class="tq"></div>
         ${st.reveal ? `<div class="reveal"><button type="button" class="btn sec rv-b">💡 מה גילינו?</button><div class="rv-t note" hidden>${st.reveal}</div></div>` : ''}</article>
-        <div class="snav"><button type="button" class="btn ghost" data-prev ${k ? '' : 'disabled'}>→ הקודם</button><span class="muted small">שלב ${k + 1} מתוך ${u.teach.length}</span>${k < u.teach.length - 1 ? '<button type="button" class="btn" data-next>הבא ←</button>' : '<button type="button" class="btn" data-fin>לסיכום: מה גילינו? ←</button>'}</div>`;
+        <div class="snav"><button type="button" class="btn ghost" data-prev ${k ? '' : 'disabled'}>→ הקודם</button><span class="muted small">צעד ${k + 1} מתוך ${u.teach.length}</span>${k < u.teach.length - 1 ? '<button type="button" class="btn" data-next>הבא ←</button>' : '<button type="button" class="btn" data-fin>לסיכום: מה גילינו? ←</button>'}</div>`;
       body.querySelectorAll('.sdot').forEach(b => b.onclick = () => { k = +b.dataset.k; show(); });
       const pv = body.querySelector('[data-prev]'); if (pv) pv.onclick = () => { k--; show(); };
       const nx = body.querySelector('[data-next]'); if (nx) nx.onclick = () => { k++; show(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
       const fn = body.querySelector('[data-fin]'); if (fn) fn.onclick = () => { P(u.id).teach = 1; saveP(); track('לומדים', `מנסרה ${u.no}`); go({ v: 'lesson', l: u.id, p: 'rule' }); };
       const rb = body.querySelector('.rv-b'); if (rb) rb.onclick = () => { body.querySelector('.rv-t').hidden = false; rb.hidden = true; };
-      if (st.q) mountQ(body.querySelector('.tq'), st.q, { teach: true, onDone: ok => { if (!isClass() && rb) { body.querySelector('.rv-t').hidden = false; rb.hidden = true; } } });
+      if (st.q) mountQ(body.querySelector('.tq'), st.q, { teach: true, noHelp: true, onDone: ok => { if (!isClass() && rb) { body.querySelector('.rv-t').hidden = false; rb.hidden = true; } } });
       if (st.setup) SETUPS[st.setup](body.querySelector('.thtml'), st, u);
       if (k === u.teach.length - 1) { P(u.id).teach = 1; saveP(); }
     };
@@ -164,14 +181,14 @@
   }
 
   /* ----- ג. תרגול: 3 רמות, 10 שאלות בסבב, משוב לפי סוג הטעות ----- */
-  const LV_DESC = { 1: 'רמה 1 – עיקרון אחד, עם ציור', 2: 'רמה 2 – קשרים, חושבים הפוך, שאלות מילוליות', 3: 'רמה 3 – בדיקת טענה, ניתוח טעות, ניבוי והנמקה' };
+  const LV_DESC = { 1: 'הבנה – עיקרון אחד, עם ציור', 2: 'יישום – קשרים, חושבים הפוך, שאלות מילוליות', 3: 'העמקה – בדיקת טענה, ניתוח טעות, ניבוי והנמקה' };
   const ROUND = 10;
   function pracPart(u, body) {
     const best = (P(u.id).lv || {});
-    body.innerHTML = `<article class="card"><h2>🎯 בוחרים רמה</h2><p class="muted">כל סבב – ${ROUND} שאלות רק על הנושא של השיעור. אפשר להתחיל מכל רמה.</p>
-      <div class="lv-pick">${[1, 2, 3].map(l => `<button type="button" class="lvb" data-lv="${l}"><b>${'⭐'.repeat(l)} רמה ${l}</b><span>${LV_DESC[l].split(' – ')[1]}</span>${best[l] != null ? `<span class="best">הכי טוב: ${best[l]}%</span>` : ''}</button>`).join('')}
+    body.innerHTML = `<article class="card"><h2>🎯 בוחרים רמה</h2><p class="muted">כל סבב – ${ROUND} שאלות, רק על מה שכבר נלמד. ${isClass() ? 'המורה בוחרת את הרמה לכיתה.' : 'אפשר להתחיל מכל רמה.'}</p>
+      <div class="lv-pick">${[1, 2, 3].map(l => `<button type="button" class="lvb" data-lv="${l}"><b>${'⭐'.repeat(l)} רמה ${l} – ${LV_DESC[l].split(' – ')[0]}</b><span>${LV_DESC[l].split(' – ')[1]}</span>${best[l] != null ? `<span class="best">הכי טוב: ${best[l]}%</span>` : ''}</button>`).join('')}
       <button type="button" class="lvb mixed" data-lv="0"><b>📶 מדורג</b><span>3 שאלות ברמה 1, 4 ברמה 2, 3 ברמה 3</span></button></div>
-      ${u.site ? `<p class="small muted">עוד תרגול באתר: ${u.site.map(([n, t]) => `<a href="${siteHref(t)}">${n}</a>`).join(' · ')}</p>` : ''}</article>`;
+      ${gamesHTML(u)}</article>`;
     body.querySelectorAll('[data-lv]').forEach(b => b.onclick = () => runRound(u, body, +b.dataset.lv));
   }
   // בניית סבב: מסבבים בין המחוללים של הרמה, בלי שאלה זהה פעמיים
@@ -190,7 +207,7 @@
     let k = 0;
     const show = () => {
       const q = qs[k];
-      body.innerHTML = `<div class="qhead"><span class="muted">${opts.title || (lv ? 'רמה ' + lv : 'מדורג')} · שאלה ${k + 1} מתוך ${qs.length}</span><span class="qbar"><span style="width:${k / qs.length * 100}%"></span></span>${q.lv ? `<span class="lvtag">רמה ${q.lv}</span>` : ''}</div><div class="qbox card"></div>`;
+      body.innerHTML = `<div class="qhead"><span class="muted">${opts.title || (lv ? 'רמה ' + lv : 'מדורג')} · שאלה ${k + 1} מתוך ${qs.length}</span><span class="qbar"><span style="width:${k / qs.length * 100}%"></span></span>${q.mixFrom ? `<span class="lvtag mix">משיעור ${q.mixFrom}</span>` : ''}${q.lv ? `<span class="lvtag">רמה ${q.lv}</span>` : ''}</div><div class="qbox card"></div>`;
       mountQ(body.querySelector('.qbox'), q, Object.assign({}, opts, { onNext: r => { res.push(r); k++; if (k < qs.length) show(); else finish(); } }));
     };
     const finish = () => {
@@ -201,11 +218,11 @@
       body.innerHTML = `<article class="card done-card"><h2>${pct >= 80 ? '🌟 מצוין!' : pct >= 60 ? '👍 יפה!' : '💪 ממשיכים להתאמן'}</h2>
         <p class="big-num">${first} / ${qs.length}</p><p class="muted">נכון בניסיון הראשון${res.some(r => r.helped) ? ` · נעזרתם בהסבר נוסף ב-${res.filter(r => r.helped).length} שאלות` : ''}</p>
         ${Object.keys(kinds).length ? `<div class="note"><b>שימו לב לטעויות שחזרו:</b><ul>${Object.entries(kinds).slice(0, 3).map(([w]) => `<li>${w}</li>`).join('')}</ul></div>` : ''}
-        <div class="end-row"><button type="button" class="btn" data-again>סבב נוסף ברמה הזו</button>${lv && lv < 3 ? `<button type="button" class="btn sec" data-up>לרמה ${lv + 1} ←</button>` : ''}<button type="button" class="btn ghost" data-lvs>בחירת רמה</button>${u ? '<button type="button" class="btn ghost" data-nb>✏️ למשימת המחברת</button>' : ''}</div></article>`;
+        <div class="end-row"><button type="button" class="btn" data-again>סבב נוסף ברמה הזו</button>${lv && lv < 3 ? `<button type="button" class="btn sec" data-up>לרמה ${lv + 1} ←</button>` : ''}<button type="button" class="btn ghost" data-lvs>בחירת רמה</button>${u ? '<button type="button" class="btn ghost" data-nb>✏️ לסיכום ולמשימת המחברת</button>' : ''}</div></article>`;
       body.querySelector('[data-again]').onclick = () => runRound(u, body, lv);
       const up = body.querySelector('[data-up]'); if (up) up.onclick = () => runRound(u, body, lv + 1);
       body.querySelector('[data-lvs]').onclick = () => pracPart(u, body);
-      const nb = body.querySelector('[data-nb]'); if (nb) nb.onclick = () => go({ v: 'lesson', l: u.id, p: 'nb' });
+      const nb = body.querySelector('[data-nb]'); if (nb) nb.onclick = () => go({ v: 'lesson', l: u.id, p: 'sum' });
     };
     show();
   }
@@ -217,13 +234,16 @@
   }
   const parseNum = s => { const t = String(s).replace(/[,\s]/g, '').replace('٫', '.'); return t === '' || isNaN(+t) ? null : +t; };
   function mountQ(el, q, o = {}) {
+    q = Object.assign({}, q); // שאלות ההקניה והסיכום – בלי רמז/הסבר משלהן
+    if (!q.hint) q.hint = 'חזרו להמחשה ולמה שגיליתם בשיעור, ונסו שוב.';
+    if (!q.exp) q.exp = '';
     let tries = 0, helped = false, finished = false, lastWhy = '';
     const cls = isClass() && !o.exam;
     el.innerHTML = `<div class="qtext">${q.text}</div>${figHTML(q)}
       <div class="qans">${q.type === 'choice' ? `<div class="opts${q.choices.length > 3 ? '' : ' few'}">${q.choices.map((c, i) => `<button type="button" class="opt" data-i="${i}"><span class="ol">${'אבגדהו'[i]}</span> <span>${c.t}</span></button>`).join('')}</div>`
         : `<div class="numrow"><input class="numin" inputmode="decimal" autocomplete="off" aria-label="תשובה" dir="ltr"><span class="unit">${q.unit || ''}</span>${cls ? '' : '<button type="button" class="btn" data-chk>בדיקה</button>'}</div>`}</div>
       <div class="fb" aria-live="polite"></div>
-      <div class="qtools">${o.exam ? '' : `${cls ? '<button type="button" class="btn sec" data-reveal>👁️ חשיפת התשובה</button><button type="button" class="btn ghost" data-hint>💡 רמז</button>' : ''}<button type="button" class="btn ghost" data-help>🧭 צריכים הסבר נוסף?</button>`}${(o.onNext && (cls || o.teach)) ? '' : ''}</div>
+      <div class="qtools">${o.exam ? '' : `${cls ? '<button type="button" class="btn sec" data-reveal>👁️ חשיפת התשובה</button><button type="button" class="btn ghost" data-hint>💡 רמז</button>' : ''}${o.noHelp ? '' : '<button type="button" class="btn ghost" data-help>🧭 צריכים הסבר נוסף?</button>'}`}${(o.onNext && (cls || o.teach)) ? '' : ''}</div>
       <div class="help" hidden></div><div class="qnext"></div>`;
     const fb = el.querySelector('.fb'), helpEl = el.querySelector('.help'), nextEl = el.querySelector('.qnext');
     const rot = el.querySelector('.rot-b');
@@ -315,7 +335,7 @@
       if (k === 'vis') { bodyEl.innerHTML = `<div class="note">${H.say || 'התבוננו בהמחשה – אפשר לסובב, לקפל ולשנות.'}</div><div class="hvis"></div><button type="button" class="btn ghost" data-more>לדוגמה דומה ←</button>`; mountVis(bodyEl.querySelector('.hvis'), q); }
       if (k === 'ex') {
         let ex = null; if (q.again) for (let t = 0; t < 12; t++) { const c = q.again(); if (c.text !== q.text || (c.fig && q.fig && c.fig.svg !== q.fig.svg)) { ex = c; if (c.text !== q.text) break; } }
-        bodyEl.innerHTML = ex ? `<div class="ex-box"><div class="muted small">דוגמה דומה – עם פתרון:</div><div class="wq">${ex.text}</div>${figHTML(Object.assign({}, ex, { noRot: true, fig3: null, fig: ex.fig && { svg: ex.fig.svg } }))}<div class="note"><b>פתרון:</b> ${ex.type === 'num' ? fmt(ex.ans) + ' ' + (ex.unit || '') : ex.choices.find(c => c.ok).t}<br>${ex.exp}</div><p class="small">עכשיו חזרו לשאלה שלכם ופתרו באותה דרך.</p></div>` : `<div class="note">חזרו לכלל של השיעור (חלק ב') ופתרו לפיו.</div>`;
+        bodyEl.innerHTML = ex ? `<div class="ex-box"><div class="muted small">דוגמה דומה – עם פתרון:</div><div class="wq">${ex.text}</div>${figHTML(Object.assign({}, ex, { noRot: true, fig3: null, fig: ex.fig && { svg: ex.fig.svg } }))}<div class="note"><b>פתרון:</b> ${ex.type === 'num' ? fmt(ex.ans) + ' ' + (ex.unit || '') : ex.choices.find(c => c.ok).t}<br>${ex.exp}</div><p class="small">עכשיו חזרו לשאלה שלכם ופתרו באותה דרך.</p></div>` : `<div class="note">חזרו לשלב "מה גילינו?" של השיעור ופתרו לפי הכלל.</div>`;
         if (steps[3]) bodyEl.innerHTML += '<button type="button" class="btn ghost" data-more>לפתור יחד צעד-צעד ←</button>';
       }
       if (k === 'walk') walk(bodyEl, q);
@@ -349,7 +369,14 @@
     const u = unitById(q.skill); el.innerHTML = `<div class="rule-mini">${u ? u.rule : ''}</div>`;
   }
 
-  /* ----- ד. משימת מחברת ----- */
+  /* ----- ה. סיכום: שאלת בדיקה קצרה · סיכום בעל פה · משימת מחברת ----- */
+  function sumPart(u, body) {
+    const s = u.sum || {};
+    body.innerHTML = `${s.check ? `<article class="card"><h2>✅ שאלת בדיקה קצרה</h2><div class="sq"></div></article>` : ''}
+      ${s.oral ? `<article class="card oral"><h2>🗣️ סיכום בעל פה</h2><p>${s.oral}</p></article>` : ''}<div class="nbh"></div>${gamesHTML(u)}`;
+    if (s.check) mountQ(body.querySelector('.sq'), Object.assign({ skill: u.id }, s.check), { teach: true });
+    nbPart(u, body.querySelector('.nbh'));
+  }
   function nbPart(u, body) {
     const nb = u.nb;
     body.innerHTML = `<article class="card nb-card"><h2>✏️ משימת מחברת</h2><div class="nb-task">${nb.task}</div>
@@ -359,14 +386,14 @@
       <details class="nb-model-d"><summary>👀 פתרון לדוגמה</summary>${nb.model()}</details>
       <p class="small muted">חסר משהו? תקנו במחברת בצבע אחר – זה חלק מהלמידה.</p><button type="button" class="btn" data-fin>✓ סיימתי את המשימה</button></div></article>`;
     body.querySelector('[data-done]').onclick = e => { e.target.hidden = true; body.querySelector('.nb-check').hidden = false; };
-    body.querySelector('[data-fin]').onclick = () => { const n = body.querySelectorAll('[data-c]:checked').length; P(u.id).nb = 1; saveP(); track('מחברת', `מנסרה ${u.no} · ${n}/${nb.check.length}`); body.querySelector('[data-fin]').outerHTML = `<div class="fb-ok">✓ נשמר. ${unitDone(u.id) ? 'סיימתם את כל ארבעת החלקים של השיעור! 🌟' : ''}</div>`; };
+    body.querySelector('[data-fin]').onclick = () => { const n = body.querySelectorAll('[data-c]:checked').length; P(u.id).nb = 1; saveP(); track('מחברת', `מנסרה ${u.no} · ${n}/${nb.check.length}`); body.querySelector('[data-fin]').outerHTML = `<div class="fb-ok">✓ נשמר. ${unitDone(u.id) ? 'סיימתם את כל שלבי השיעור! 🌟' : ''}</div>`; };
   }
 
   /* ---------- תרגול סיכום הפרק ---------- */
   function reviewView() {
-    app.innerHTML = `<div class="wrap"><div class="crumbs"><a href="#" data-ch>פרק 1 – מנסרה</a> › תרגול סיכום</div><div class="ch-head"><h1>🔁 תרגול סיכום הפרק</h1>${modeBar()}</div><p class="muted">שאלה מכל שיעור – רמות 1–2. עם עזרה ומשוב.</p><section id="pbody"></section></div>`;
+    app.innerHTML = `<div class="wrap"><div class="crumbs"><a href="#" data-ch>פרק 1 – מנסרה</a> › תרגול סיכום</div><div class="ch-head"><h1>🔁 תרגול סיכום הפרק</h1>${modeBar()}</div><p class="muted">שאלה מכל שיעור ועוד אחת – רמות 1–2. עם עזרה ומשוב.</p><section id="pbody"></section></div>`;
     bindModes(app); app.querySelector('[data-ch]').onclick = e => { e.preventDefault(); go({ v: 'chapter' }); };
-    const qs = shuffle(UNITS).slice(0, 10).map(u => { const l = Math.random() < 0.5 ? 1 : 2, g = G6.pick(u.gens[l]), q = g(); q.lv = l; return q; });
+    const qs = [...shuffle(UNITS), G6.pick(UNITS)].map(u => { const l = Math.random() < 0.5 ? 1 : 2, g = G6.pick(u.gens[l]), q = g(); q.lv = l; return q; });
     runRound(null, $('pbody'), 0, qs, { title: 'סיכום', onFinish: (res, list, body) => { const n = res.filter(r => r.first).length; body.innerHTML = `<article class="card done-card"><h2>סיימתם את הסיכום</h2><p class="big-num">${n} / ${list.length}</p><div class="end-row"><button type="button" class="btn" data-exit>🎫 לכרטיס היציאה</button><button type="button" class="btn ghost" data-ch2>לרשימת השיעורים</button></div></article>`; body.querySelector('[data-exit]').onclick = () => go({ v: 'exit' }); body.querySelector('[data-ch2]').onclick = () => go({ v: 'chapter' }); } });
   }
 
@@ -374,7 +401,7 @@
   function exitQs() { return G6.EXIT_SLOTS.map(([id, l]) => { const u = unitById(id), q = G6.pick(u.gens[l])(); q.lv = l; return q; }); }
   function exitView() {
     app.innerHTML = `<div class="wrap"><div class="crumbs"><a href="#" data-ch>פרק 1 – מנסרה</a> › כרטיס יציאה</div><h1>🎫 כרטיס יציאה – מנסרה</h1>
-      <article class="card"><p>8 שאלות מכל שיעורי הפרק. <b>ניסיון אחד לכל שאלה, בלי רמזים.</b> בסוף תראו מה כדאי לחזור עליו${teacher() ? '' : ', והתוצאה תישלח למורה'}.</p>
+      <article class="card"><p>${G6.EXIT_SLOTS.length} שאלות מכל שיעורי הפרק. <b>ניסיון אחד לכל שאלה, בלי רמזים.</b> בסוף תראו מה כדאי לחזור עליו${teacher() ? '' : ', והתוצאה תישלח למורה'}.</p>
       <label class="nm-l">שם מלא: <input id="exNm" value="${esc(NAME)}" autocomplete="off" maxlength="40"></label><button type="button" class="btn" data-start>מתחילים ←</button></article></div>`;
     app.querySelector('[data-ch]').onclick = e => { e.preventDefault(); go({ v: 'chapter' }); };
     app.querySelector('[data-start]').onclick = () => {
@@ -385,7 +412,7 @@
         const n = res.filter(r => r.first).length, miss = [...new Set(qs.filter((q, i) => !res[i].first).map(q => unitById(q.skill).no))];
         track('כרטיס יציאה', `מנסרה · ${n}/${qs.length}${miss.length ? ' · לחזרה: ' + miss.join(', ') : ''}`);
         const b = $('pbody');
-        b.innerHTML = `<article class="card done-card"><h2>${n >= 7 ? '🌟 שולטים בפרק!' : n >= 5 ? '👍 כמעט שם' : '💪 כדאי לחזור על כמה שיעורים'}</h2><p class="big-num">${n} / ${qs.length}</p>
+        b.innerHTML = `<article class="card done-card"><h2>${n >= qs.length - 1 ? '🌟 שולטים בפרק!' : n >= qs.length * 0.6 ? '👍 כמעט שם' : '💪 כדאי לחזור על כמה שיעורים'}</h2><p class="big-num">${n} / ${qs.length}</p>
           <ol class="ex-res">${qs.map((q, i) => `<li class="${res[i].first ? 'r' : 'w'}">${res[i].first ? '✓' : '✗'} <span class="muted small">שיעור ${unitById(q.skill).no}</span> – ${q.text.replace(/<[^>]+>/g, '').slice(0, 70)}…${res[i].first ? '' : `<div class="small"><b>התשובה:</b> ${q.type === 'num' ? fmt(q.ans) + ' ' + (q.unit || '') : q.choices.find(c => c.ok).t}. ${res[i].why || ''}</div>`}</li>`).join('')}</ol>
           ${miss.length ? `<div class="note">כדאי לחזור על: ${miss.map(no => { const u = UNITS.find(x => x.no === no); return `<button type="button" class="chip" data-l="${u.id}">${no}. ${u.title}</button>`; }).join(' ')}</div>` : ''}
           <div class="end-row"><button type="button" class="btn ghost" data-ch2>לרשימת השיעורים</button></div></article>`;
@@ -633,6 +660,48 @@
       el.innerHTML = `<div class="u-sort">${items.map(([t, k]) => `<div class="u-card" data-k="${k}"><b>${t}</b><span><button type="button" class="chip" data-v="sa">שטח פנים</button><button type="button" class="chip" data-v="v">נפח</button></span><span class="ufb"></span></div>`).join('')}</div>${isClass() ? '<button type="button" class="btn sec" data-rv>👁️ חשיפה</button>' : ''}`;
       el.querySelectorAll('.u-card').forEach(c => c.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { c.querySelectorAll('[data-v]').forEach(x => x.classList.toggle('on', x === b)); if (!isClass()) c.querySelector('.ufb').innerHTML = b.dataset.v === c.dataset.k ? '✓' : (c.dataset.k === 'sa' ? '✗ מכסים מבחוץ – שטח פנים' : '✗ ממלאים מבפנים – נפח'); }));
       const rv = el.querySelector('[data-rv]'); if (rv) rv.onclick = () => el.querySelectorAll('.u-card').forEach(c => { c.querySelector('.ufb').innerHTML = '→ ' + (c.dataset.k === 'sa' ? 'שטח פנים' : 'נפח'); });
+    },
+    /* ----- שלבי פתיחה והמחשות של המבנה החדש (prism-c.js) ----- */
+    openCube(root) { const f = root.querySelector('[data-v]'); f.innerHTML = '<div></div><figcaption>קוביית משחק – אפשר לסובב</figcaption>'; S3.viewer(f.firstChild, S3.cube(2), { W: 200, H: 170, tools: ['rot'], fill: () => COL.l }); },
+    openHex(root) { S3.viewer(root.querySelector('[data-v]'), S3.regPrism(6, 0.9, 1.6), { W: 170, H: 150, tools: ['rot'] }); },
+    openCyl(root) { S3.viewer(root.querySelector('[data-v]'), S3.cylinder(0.9, 1.8), { tools: ['rot', 'views', 'see'] }); },
+    openTent(root) { S3.viewer(root.querySelector('[data-v]'), S3.lay(S3.regPrism(3, 1.8, 2.6)), { tools: ['rot', 'views', 'see'], yaw: -40, pitch: 20 }); },
+    openThree(root) {
+      const L = [['v1', S3.regPrism(6, 0.45, 2.6), 'עיפרון משושה'], ['v2', S3.lay(S3.regPrism(3, 1.8, 2.4)), 'אוהל'], ['v3', S3.box(2.4, 1.6, 1.2), 'קופסת קרטון']];
+      L.forEach(([k, m, t]) => { const f = root.querySelector(`[data-${k}]`); if (!f) return; f.innerHTML = '<div></div><figcaption>' + t + '</figcaption>'; S3.viewer(f.firstChild, m, { W: 190, H: 160, tools: ['rot'], yaw: k === 'v2' ? -40 : -32, pitch: k === 'v2' ? 20 : 28 }); });
+    },
+    openNet(root) { S3.netPlayer(root.querySelector('[data-np]'), G6.boxNet(3, 2, 1.4), { t: 1, onT: t => t < 0.03 ? 'הקופסה נפתחה ונפרשה: <b>6 מלבנים מחוברים</b> – זו פריסה.' : t > 0.97 ? 'קופסה סגורה. הזיזו את המחוון כדי לפתוח אותה.' : '' }); },
+    // שיעור 1 – מיון לפאונים ולא-פאונים
+    sortPoly(root, st) {
+      const host = root.querySelector('[data-sortp]'), ids = st.sort, ans = {}, POLY = G6.POLY;
+      const why = id => G6.POLY_WHY[id] || `כל הפאות של ה${G6.SOLIDS[id].nm.replace(/ \(.*\)/, '')} הן מצולעים שטוחים.`;
+      host.innerHTML = `<div class="sort-grid">${ids.map(id => `<div class="sort-card" data-id="${id}"><div class="sc-fig">${S3.render(G6.SOLIDS[id].m(), { W: 150, H: 120, fill: NEUF, pad: 10, yaw: G6.SOLIDS[id].yaw ?? -32 })}</div><div class="sc-b"><button type="button" class="chip" data-v="1">פאון</button><button type="button" class="chip" data-v="0">לא פאון</button></div><div class="sc-fb small"></div></div>`).join('')}</div>
+        <div class="s3-tools"><button type="button" class="btn sec" data-show>👁️ ${isClass() ? 'חשיפת התשובות' : 'בדיקה'}</button></div><p class="say" data-sum></p>`;
+      const check = (card, reveal) => { const id = card.dataset.id, ok0 = !!POLY[id], v = ans[id], fb = card.querySelector('.sc-fb'); card.classList.remove('r', 'w'); if (v == null && !reveal) return; if (v != null) card.classList.add(v === ok0 ? 'r' : 'w'); fb.innerHTML = `<b>${G6.SOLIDS[id].nm}</b> – ${ok0 ? 'פאון' : 'לא פאון'}. ${why(id)}`; };
+      host.querySelectorAll('.sort-card').forEach(card => card.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { ans[card.dataset.id] = b.dataset.v === '1'; card.querySelectorAll('[data-v]').forEach(x => x.classList.toggle('on', x === b)); if (!isClass()) check(card); }));
+      host.querySelector('[data-show]').onclick = () => { host.querySelectorAll('.sort-card').forEach(c => check(c, true)); const n = ids.filter(id => ans[id] === !!POLY[id]).length; host.querySelector('[data-sum]').innerHTML = `${Object.keys(ans).length ? `מיינתם נכון ${n} מתוך ${ids.length}. ` : ''}פאונים: ${ids.filter(id => POLY[id]).length} · לא פאונים: ${ids.filter(id => !POLY[id]).length}. מה משותף לכל הלא-פאונים? משטח עקום.`; };
+    },
+    // שיעור 9 – אותו נפח, שטח פנים שונה
+    sameVol(root) {
+      const el = root.querySelector('[data-samevol]'), L = G6.sameVolBoxes(24), seen = new Set();
+      el.innerHTML = `<div class="pair-btns">${L.map((d, i) => `<button type="button" class="tb" data-i="${i}" dir="ltr">${d.join(' × ')}</button>`).join('')}</div><div class="lb-fig"></div>
+        <div class="tscroll"><table class="inv"><tr><th>תיבה</th><th>נפח (סמ"ק)</th><th>שטח פנים (סמ"ר)</th></tr>${L.map((d, i) => `<tr data-r="${i}" hidden><td>${M(d.join(' × '))}</td><td>24</td><td class="sa">${isClass() ? '<button type="button" class="chip" data-sh>👁️</button>' : ''}</td></tr>`).join('')}</table></div><p class="say small">${isClass() ? 'לפני החשיפה – הכיתה מחשבת או סופרת את הריבועים החשופים.' : ''}</p>`;
+      const fig = el.querySelector('.lb-fig');
+      const set = i => { const [a, b, c] = L[i]; el.querySelectorAll('[data-i]').forEach(x => x.classList.toggle('on', +x.dataset.i === i)); fig.innerHTML = S3.cubesSVG(S3.boxCubes(a, b, c), { W: 300, H: 200, maxS: 26 }); const tr = el.querySelector(`tr[data-r="${i}"]`); tr.hidden = false; if (!isClass()) tr.querySelector('.sa').textContent = G6.SA(a, b, c); seen.add(i); };
+      el.querySelectorAll('[data-i]').forEach(b => b.onclick = () => set(+b.dataset.i));
+      el.querySelectorAll('[data-sh]').forEach(b => b.onclick = () => { const d = L[+b.closest('tr').dataset.r]; b.parentNode.innerHTML = `${M(`2 × (${d[0] * d[1]} + ${d[0] * d[2]} + ${d[1] * d[2]}) = ${G6.SA(...d)}`)}`; });
+      set(0);
+    },
+    // דוגמאות מודרכות: המורה חושפת צעד אחרי צעד (בלי התקדמות אוטומטית)
+    worked(root, st, u) {
+      const el = root.querySelector('[data-worked]'), gl = st.gl || [1], used = new Set();
+      const pickQ = l => { let q = null; for (let t = 0; t < 40; t++) { const c = G6.pick(u.gens[l])(); if (used.has(c.text)) continue; if (!q || (c.steps && c.steps.length > 1 && !(q.steps && q.steps.length > 1))) q = c; if (q.steps && q.steps.length > 1) break; } used.add(q.text); return q; };
+      const qs = [pickQ(gl[0]), pickQ(gl[1 % gl.length])];
+      const ansT = q => q.type === 'num' ? `${fmt(q.ans)} ${q.unit || ''}` : q.choices.find(c => c.ok).t;
+      el.innerHTML = qs.map((q, j) => `<div class="worked card"><h3>דוגמה ${j + 1}</h3><div class="wq">${q.text.replace(/<span class="think">[^<]*<\/span>/, '')}</div>${figHTML(Object.assign({}, q, { noRot: true }))}
+        <ol class="wsteps">${(q.steps || []).map(s => `<li hidden>${s.p} <b>${fmt(s.a)}</b></li>`).join('')}<li hidden class="wfin"><b>תשובה:</b> ${ansT(q)}<div class="small">${q.exp}</div></li></ol>
+        <button type="button" class="btn sec sm" data-ws>👣 הצעד הבא</button></div>`).join('');
+      el.querySelectorAll('.worked').forEach(w => { const b = w.querySelector('[data-ws]'); b.onclick = () => { const h = w.querySelector('.wsteps li[hidden]'); if (h) h.hidden = false; if (!w.querySelector('.wsteps li[hidden]')) b.hidden = true; }; });
     }
   };
   G6.SETUPS = SETUPS; // לבדיקות
@@ -640,7 +709,7 @@
   /* ---------- כניסה ---------- */
   try { sessionStorage.setItem('math-cat', 'geo'); } catch (e) { /* לא חובה */ } // חזרה לאתר → קטגוריית הגאומטריה
   const l0 = URLP.get('l'), p0 = URLP.get('p'), v0 = URLP.get('v');
-  NAV = l0 && unitById(l0) ? { v: 'lesson', l: l0, p: PARTS.some(x => x[0] === p0) ? p0 : 'teach' } : v0 === 'exit' ? { v: 'exit' } : v0 === 'review' ? { v: 'review' } : URLP.get('ch') === 'prism' || !URLP.has('ch') ? { v: URLP.has('ch') ? 'chapter' : 'home' } : { v: 'home' };
+  NAV = l0 && unitById(l0) ? { v: 'lesson', l: unitById(l0).id, p: PARTS.some(x => x[0] === p0) ? p0 : p0 === 'nb' ? 'sum' : 'open' } : v0 === 'exit' ? { v: 'exit' } : v0 === 'review' ? { v: 'review' } : URLP.get('ch') === 'prism' || !URLP.has('ch') ? { v: URLP.has('ch') ? 'chapter' : 'home' } : { v: 'home' };
   try { history.replaceState(NAV, ''); } catch (e) { /* לא חובה */ }
   route();
   window.G6APP = { go, setMode, mountQ, buildRound, UNITS, P: () => PROG };
