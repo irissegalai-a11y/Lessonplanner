@@ -312,7 +312,7 @@
   }
   function libraryHTML() {
     const q = (id, icon, b, d, col) => `<button type="button" class="qk" data-nav="${id}"><span class="qi" style="--qc:${col}">${ic(icon)}</span><span><b>${b}</b><span class="d">${d}</span></span></button>`;
-    return `<h1 class="sr-only">ספריית המחברות שלי</h1>
+    return `<div class="vhead"><h1>${ic('library')} ספריית המחברות שלי</h1></div>
       <div class="books">${data.tiles.map(coverHTML).join('')}${champHTML()}</div>
       <div class="quick">
         ${q('courses', 'cap', 'קורסים', 'לומדים לבד, יחידה אחרי יחידה', '#E7DCC6')}
