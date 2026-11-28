@@ -488,3 +488,8 @@ details.tocbox[open] > summary .ico.tg { transform: rotate(180deg); }
   /* תפריט "שלבי הנושא" – כפתור סגירה ברור */
   .tocclose { display: inline-flex; align-items: center; gap: 6px; position: sticky; top: -18px; float: left; margin: -6px -4px 6px 0; min-height: 44px; padding: 6px 14px; border: 1.5px solid var(--rule); border-radius: 999px; background: var(--page); font-weight: 700; color: var(--ink); z-index: 3; }
 }
+/* כיתות א'–ג' בטלפון: הכתב הגדול לא נכנס לשורת הכותרת – הכותרת בגודל הרגיל, התוכן נשאר גדול */
+@media (max-width: 699px) {
+  html[data-grade="1"] .top, html[data-grade="2"] .top, html[data-grade="3"] .top { --fs-xs: 0.8125rem; --fs-s: 0.9375rem; --fs-m: 1rem; }
+}
+@media (max-width: 400px) { .top { padding-inline: 8px; } .top .acts { gap: 4px; } }

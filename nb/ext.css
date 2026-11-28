@@ -1,0 +1,42 @@
+/* =========================================================
+   עור "מחברת דיגיטלית" לדפים הנפרדים – סודוקו, גופים ומעגל, אוילר.
+   נטען רק בתוך גרסת הניסיון (מוזרק למסגרת). רק במסך – ההדפסה (חוברות, דפי עבודה) לא משתנה.
+   רק מראה: גופן, רקע, צבע ראשי, קווים וצללים. צבעי התוכן (תאי הסודוקו, צבעי הגופים) נשארים.
+   הניווט העליון של כל דף מוצג במעטפת – כאן מסתירים רק את הכפילות.
+   ========================================================= */
+@media screen {
+  html.nbext {
+    --nbx-ink: #253B49; --nbx-muted: #4A5D6A; --nbx-line: #DCE2E6; --nbx-acc: #2F5670; --nbx-acc-d: #24465C; --nbx-acc-s: #E4EDF4;
+    --hand: 'Heebo', 'Segoe UI', Arial, sans-serif; --ui: 'Heebo', 'Segoe UI', Arial, sans-serif;
+  }
+  html.nbext, html.nbext body {
+    font-family: 'Heebo', 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+    background-color: #fff;
+    background-image: linear-gradient(#F3F5F7 1px, transparent 1px), linear-gradient(90deg, #F3F5F7 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  html.nbext h1, html.nbext h2, html.nbext h3, html.nbext button { font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; letter-spacing: 0; }
+  html.nbext h1, html.nbext h2 { font-weight: 700; }
+
+  /* ---------- סודוקו ---------- */
+  html.nbext.pg-sudoku {
+    --bg: #fff; --ink: #253B49; --muted: #4A5D6A; --line: #DCE2E6;
+    --brand: #2F5670; --brand-dark: #24465C; --brand-soft: #E4EDF4;
+    --sel: #D3E1EC; --peer: #EEF3F7; --same: #BFD3E3; --user: #2F5670; --box-line: #2F3E4A;
+  }
+  html.nbext.pg-sudoku .top { display: none !important; } /* mathinclass + שם הדף – כבר בכותרת המעטפת */
+  html.nbext.pg-sudoku footer.credit { display: none; }
+
+  /* ---------- גופים ומעגל ---------- */
+  html.nbext.pg-geo6 { --bg: #fff; --grid: #F3F5F7; --ink: #253B49; --muted: #4A5D6A; --line: #DCE2E6; --accent: #2F5670; --accent-dark: #24465C; --accent-soft: #E4EDF4; }
+  html.nbext.pg-geo6 .crumbs a:first-child { font-family: inherit; }
+
+  /* ---------- אוילר ---------- */
+  html.nbext.pg-euler { --bg: #fff; --ink: #253B49; --muted: #4A5D6A; --pri: #2F5670; --pri2: #E4EDF4; }
+  html.nbext.pg-euler header { background: none; color: var(--nbx-ink); padding: 14px 16px 6px; }
+  html.nbext.pg-euler header .back { display: none; } /* "לאתר התרגול" – החזרה של המעטפת */
+  html.nbext.pg-euler header p { opacity: 1; color: var(--nbx-muted); }
+  html.nbext.pg-euler nav.tabs { margin: 6px auto 0; gap: 6px; }
+  html.nbext.pg-euler nav.tabs button { border: 1.5px solid var(--nbx-line); border-radius: 14px; background: #fff; padding: 9px 6px; }
+  html.nbext.pg-euler nav.tabs button.on { background: var(--nbx-acc); border-color: var(--nbx-acc); color: #fff; }
+}

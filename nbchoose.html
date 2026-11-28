@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex, nofollow">
+<title>MathInClass – בחירת כיתה (גרסת ניסיון)</title>
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nb/design.css?v=281128k">
+<style>
+  /* מסך בחירת הכיתה בעיצוב החדש – אותו תפקיד כמו math.html (שנשאר בלי שינוי באתר הפעיל) */
+  body { margin: 0; background: #fff; color: var(--ink, #253B49); font-family: 'Heebo', 'Segoe UI', Arial, sans-serif; }
+  .ch { max-width: 760px; margin: 0 auto; padding: 48px 16px 32px; text-align: center; }
+  .lg { font-size: 2.2rem; font-weight: 800; letter-spacing: -.01em; color: #253B49; }
+  .lg i { font-style: normal; color: #5C7F99; }
+  .by { color: #4A5D6A; margin: 2px 0 36px; }
+  h1 { font-size: 1.35rem; font-weight: 700; margin: 0 0 18px; }
+  .grades { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .grades a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 22px 8px 18px; border: 1.5px solid #DCE2E6; border-radius: 18px;
+    background: #fff; color: #253B49; text-decoration: none; box-shadow: 0 1px 2px rgba(37,59,73,.06), 0 4px 14px rgba(37,59,73,.06); }
+  .grades a b { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--c); font-size: 1.6rem; font-weight: 800; }
+  .grades a span { font-weight: 600; }
+  .grades a:hover { border-color: #9FB0BC; }
+  .grades a:focus-visible { outline: 3px solid #2F6FB0; outline-offset: 2px; }
+  .grades a[aria-current] { border-color: #2F5670; box-shadow: 0 0 0 2px #2F5670; }
+  .note { color: #4A5D6A; margin: 22px 0 0; }
+  .foot { margin-top: 36px; font-size: .9rem; color: #6B7C88; }
+  .foot a { color: #4A5D6A; }
+  @media (max-width: 480px) { .ch { padding-top: 28px; } .grades { grid-template-columns: repeat(2, 1fr); gap: 10px; } .by { margin-bottom: 24px; } }
+</style>
+</head>
+<body>
+<main class="ch">
+  <div class="lg">Math<i>In</i>Class</div>
+  <div class="by">מאת איריס סגל · <b>גרסת ניסיון</b></div>
+  <h1>איזו רמת כיתה אתם מתרגלים?</h1>
+  <nav class="grades" aria-label="בחירת כיתה" id="grades"></nav>
+  <p class="note">האתר יזכור את הבחירה. אפשר להחליף כיתה בכל רגע – בראש הדף, ליד שם הכיתה.</p>
+  <div class="foot">© איריס סגל · <a href="privacy.html">פרטיות</a></div>
+</main>
+<script>
+(function () {
+  var C = ['--c-clay', '--c-sand', '--c-sage', '--c-teal', '--c-blue', '--c-stone'], L = "אבגדהו", cur = null;
+  try { cur = localStorage.getItem('nb-grade'); } catch (e) {}
+  document.getElementById('grades').innerHTML = [1, 2, 3, 4, 5, 6].map(function (g) {
+    return '<a href="nb6.html?grade=' + g + '" data-g="' + g + '" style="--c:var(' + C[g - 1] + ')"' + (String(g) === cur ? ' aria-current="true"' : '') +
+      '><b>' + L[g - 1] + "'</b><span>כיתה " + L[g - 1] + "'</span></a>";
+  }).join('');
+  document.getElementById('grades').addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-g]'); if (!a) return;
+    try { localStorage.setItem('nb-grade', a.dataset.g); } catch (err) {}
+  });
+})();
+</script>
+</body>
+</html>

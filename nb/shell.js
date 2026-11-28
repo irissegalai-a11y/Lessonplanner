@@ -33,13 +33,16 @@
   /* ---------------- המסגרת: האתר הקיים ---------------- */
   let W = null, D = null, isSite = false, isCoach = false, data = null, quietUntil = 0;
   const run = code => { try { return W.eval(code); } catch (e) { console.warn('[nb]', e); return null; } };
-  const SKIN_V = '281128i';
+  const SKIN_V = '281128k';
   function skin() {
     if (!D || !D.head || D.documentElement.classList.contains('nbskin')) return;
     if (isSite && /[?&]print/.test(W.location.search)) return; // דפי הדפסה – בלי שינוי (מדידת העמודים)
-    if (!isSite && !isCoach) return;
+    // הדפים הנפרדים (סודוקו, גופים, אוילר) – עור משלהם, רק במסך
+    const ext = !isSite && !isCoach && (W.location.pathname.match(/\/(sudoku|geo6|euler)\.html$/) || [])[1];
+    if (!isSite && !isCoach && !ext) return;
+    if (ext) D.documentElement.classList.add('nbext', 'pg-' + ext);
     const f = D.createElement('link'); f.rel = 'stylesheet'; f.href = 'https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap'; D.head.appendChild(f);
-    const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = (isSite ? 'nb/skin.css' : 'nb/coach.css') + '?v=' + SKIN_V; D.head.appendChild(l);
+    const l = D.createElement('link'); l.rel = 'stylesheet'; l.href = (isSite ? 'nb/skin.css' : isCoach ? 'nb/coach.css' : 'nb/ext.css') + '?v=' + SKIN_V; D.head.appendChild(l);
     D.documentElement.classList.add('nbskin');
     frameTone();
   }
@@ -253,7 +256,7 @@
     if (kind === 'search') { $('#top').classList.add('searching'); $('#q').focus(); return; }
     const el = document.createElement('div'); el.className = 'pop'; el.dataset.k = kind; el.setAttribute('role', 'dialog');
     const calm = document.documentElement.classList.contains('calm');
-    if (kind === 'grade') el.innerHTML = `<h3>כיתה ${GL}</h3><p>גרסת הניסיון של העיצוב החדש.</p><div class="row"><a class="btn sec s" href="math.html?choose" target="_top">החלפת כיתה (באתר הרגיל)</a></div>`;
+    if (kind === 'grade') el.innerHTML = `<h3>כיתה ${GL}</h3><p>גרסת הניסיון של העיצוב החדש.</p><div class="row"><a class="btn sec s" href="nbchoose.html" target="_top">החלפת כיתה</a></div>`;
     if (kind === 'name') el.innerHTML = `<h3>השם שלי</h3><p>השם נשמר רק במכשיר הזה, כמו באתר.</p><input id="nmIn" value="${esc(data && data.name)}" placeholder="כתבו את השם שלכם" autocomplete="off"><div class="row"><button class="btn s" id="nmSave">שמירה</button></div>`;
     if (kind === 'a11y') el.innerHTML = `<h3>נגישות</h3><div class="row"><button class="btn sec s" id="calmT" aria-pressed="${calm}">${ic('eye', 's')} ${calm ? 'תצוגה רגילה' : 'תצוגה נגישה'}</button><button class="btn sec s" id="fontT">${ic('type', 's')} א+ גודל כתב</button></div><p>גודל הכתב מתחלף בין 3 גדלים, כמו באתר.</p>`;
     if (kind === 'role') el.innerHTML = `<h3>${data.teacher ? 'את/ה בתצוגת מורה' : 'את/ה רואה את האתר כמו תלמיד/ה'}</h3><div class="row"><button class="btn s" id="roleT">${data.teacher ? 'מעבר לתצוגת תלמיד' : 'חזרה לתצוגת מורה'}</button>${data.teacher ? '<button class="btn sec s" id="guideT">מדריך למורה</button>' : ''}</div>`;
@@ -413,6 +416,16 @@
   const backCrumb = g => g.startsWith('nb:') ? `<button type="button" data-cat="${g.slice(3)}">${esc((data.tiles.find(t => t.id === g.slice(3)) || {}).name || '')}</button>` : `<button type="button" data-nav="${g}">${esc(GATE_T[g] || '')}</button>`;
   // מרכז ההדפסה – נקודת כניסה אחת לכל המקומות (התפריט, אזור המורה, מחברת). topics – נושאים שיסומנו מראש
   function openPrint(topics, from) {
+    // כיתה ו' – מרכז ההדפסה החדש (print6.html, דף נפרד עם חזרה לספרייה); שאר הכיתות – דף ההדפסה הקיים
+    if (GRADE === 6) {
+      const q = new URLSearchParams();
+      if (topics && topics.length) q.set('topic', topics.join(','));
+      if (from && from.startsWith('nb:')) q.set('cat', from.slice(3));
+      if (from === 'teach') q.set('from', 'teacher');
+      if (stageModes.includes(mode.v) && !leaveStage(true)) return;
+      location.href = 'print6.html' + (q.toString() ? '?' + q : '');
+      return;
+    }
     if (stageModes.includes(mode.v) && !leaveStage(true)) return;
     mode = { v: 'ext', name: 'הדפסה', from, cat: null };
     $('#loading').hidden = false;
@@ -704,7 +717,9 @@
     }
     // כפתור חזרה אחד – תמיד רמה אחת למעלה (שיעור → תוכנית הקורס → ספריית הקורסים; תרגול/כרטיסיות → דף הנושא → המחברת)
     const upK = mode.v === 'course' ? (inUnit ? 'plan' : 'up') : info && fi.active && fi.active !== 'ov' ? 'ov' : 'up';
-    const backTo = upK === 'plan' ? 'לתוכנית הקורס' : upK === 'ov' ? 'לדף הנושא' : mode.v === 'course' ? 'לספריית הקורסים' : cat && catT ? `למחברת ${catT.name}` : 'לדף הבית';
+    const upG = mode.v === 'area' && mode.gate ? mode.gate : mode.from || '';
+    const backTo = upK === 'plan' ? 'לתוכנית הקורס' : upK === 'ov' ? 'לדף הנושא' : mode.v === 'course' ? 'לספריית הקורסים'
+      : upG && !upG.startsWith('nb:') && GATE_T[upG] ? 'ל' + GATE_T[upG] : cat && catT ? `למחברת ${catT.name}` : 'לדף הבית';
     const endB = mode.v === 'course' && isCoach && D && D.getElementById('endBtn');
     shead.innerHTML = `<button type="button" class="btn sec s backbtn" id="stBack" data-k="${upK}">${ic('back', 's')} <span>${esc(backTo)}</span></button>
       <nav class="crumbs" aria-label="איפה אני">${parts.join('<span class="sep" aria-hidden="true">›</span>')}</nav>
@@ -815,11 +830,21 @@
       });
     });
   }
+  // כפתורי "לדף הבית / חזרה" של האתר בתוך משחק, מבדק או כלי – החזרה של המעטפת כבר עושה את זה (כפתור אחד בלבד).
+  // רק מסומנים ומוסתרים; הלחיצה של המעטפת עדיין יכולה להפעיל אותם
+  function markDup() {
+    if (!isSite || !D.body) return;
+    D.querySelectorAll('button:not(.nb-dup)').forEach(b => {
+      if (b.closest('.overlay')) return;
+      const t = b.textContent.replace(/[\u0591-\u05C7]/g, '').replace(/\s+/g, ' ').trim(); // בלי ניקוד (כיתות א'–ב')
+      if (/^(לדף הבית|לכל הנושאים|חזרה)$/.test(t) && b.querySelector('svg.ico')) b.classList.add('nb-dup');
+    });
+  }
   function onFrame() {
     clearTimeout(frameT);
     frameT = setTimeout(() => {
       if (!D || !D.body) return;
-      try { deEmoji(); } catch (e) { /* מראה בלבד */ }
+      try { deEmoji(); markDup(); } catch (e) { /* מראה בלבד */ }
       const ov = [...D.body.children].some(e => e.classList && e.classList.contains('overlay') && !e.hidden);
       const hiddenStage = !stageModes.includes(mode.v);
       stage.classList.toggle('modal', ov && hiddenStage);

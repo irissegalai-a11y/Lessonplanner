@@ -43,8 +43,11 @@
   html.nbskin .card.today, html.nbskin .banner { border: 1px solid #C9D6E0 !important; background: #F3F7FA; }
 
   /* כפתורים: ראשי כחול כהה, משני לבן עם קו דק */
-  html.nbskin button { border-radius: 999px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; box-shadow: none; font-weight: 600; }
-  html.nbskin button:hover { background: var(--accent-dark); transform: none; box-shadow: none; }
+  /* כפתור בלי מחלקה – ראשי כחול כהה. כפתור עם מחלקה של האתר (אפשרות במשחק, אריח, שבב) – אותו בסיס בלי משקל,
+     כך שהצבע הבהיר של האתר נשמר ולא כל אפשרות הופכת לכפתור כהה */
+  html.nbskin button:not([class]), :where(html.nbskin) button:where([class]) { border-radius: 999px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; box-shadow: none; font-weight: 600; }
+  html.nbskin button:not([class]):hover, :where(html.nbskin) button:where([class]):hover { background: var(--accent-dark); }
+  html.nbskin button, html.nbskin button:hover { transform: none; box-shadow: none; }
   html.nbskin button:active { transform: none; box-shadow: none; }
   html.nbskin button.secondary, html.nbskin .choices button, html.nbskin button.lvlchoice, html.nbskin button.tp-lesson, html.nbskin button.tp-check,
   html.nbskin button.game-card, html.nbskin button.b10-card, html.nbskin button.topic, html.nbskin .xt-tile, html.nbskin .tool-chip, html.nbskin button.kf-opt, html.nbskin button.lvl {
@@ -209,3 +212,27 @@
 /* חלון קופץ של האתר (למשל "מי נכנס/ת?") כשהמסגרת מוסתרת – רק החלון מוצג מעל הספרייה */
 html.nb-modal-only, html.nb-modal-only body { background: transparent !important; }
 html.nb-modal-only #app, html.nb-modal-only footer { visibility: hidden; }
+/* כפתורי "לדף הבית / חזרה" של האתר בתוך פעילות – המעטפת מציגה כפתור חזרה אחד (מסומנים ב-markDup) */
+@media screen { html.nbskin.nb-stage .nb-dup { display: none !important; } }
+
+/* ===================== השלמת העיצוב – המסכים הפנימיים של משחקים, מבדקים, כלים ואזור המורה (28.11) =====================
+   רק מראה, רק במסך. הרשימות נאספו מה-CSS של האתר ו-cgames: צל "דיו" קשה, קו שחור עבה ובחירה בצהוב.
+   :where – בלי משקל, כדי שמצבים של האתר (נבחר, נכון, שגוי) ימשיכו לגבור */
+@media screen {
+  /* צל קשה ← צל רך */
+  html.nbskin :where(.b10-btn, .b10-card, .cg-mode.sel, .champ-card, .champ-pop, .choices button, .cq-cell.can, .ct-btn, .dfg-opt, .do-pick .do-t, .fc-card, .fc-type.on, .game-card, .gbar .gswitch, .gswitch, .guide-card, .jeo-cell, .jeo-team.on, .kf-opt, .mc-back, .mcard .mc-back, .mil-lf, .mil-opt, .mm-st.cur, .mt-tm, .pv-btn, .pvw-btn, .race-track, .race-track.sel, .race-turn .rt-team, .sc-slot.on, .tab, .tab.on, .tf-pad button, .tf-vote button, .topic-search > input, .tp-lesson, .ts-results, .war-pl.on, .wc-back, .wc-face, button.secondary) { box-shadow: 0 1px 2px rgba(37,59,73,.06), 0 3px 10px rgba(37,59,73,.07) !important; }
+  /* מצב נבחר שסומן בצל – טבעת בצבע הראשי */
+  html.nbskin :where(.topic.sc-cur, .race-track.sel, .jeo-team.on, .sc-slot.on, .fc-type.on, .cg-mode.sel, .war-pl.on, .mm-st.cur, .tab.on) { box-shadow: 0 0 0 2px var(--accent) !important; }
+  /* קו שחור עבה ← קו עדין (בלי לגעת בקווי שבר ובשדות תשובה) */
+  html.nbskin :where(.b10-btn, .b10-card, .b10-op, .bg-chk > div, .bg-nums span, .bn-sheet, .box, .ch-eq > div, .ch-magic, .ch-magic span, .champ-card, .champ-pop, .choices button, .compare2 > div, .cq-goal, .cq-legend, .cq-lg-can, .ct-acts a, .ct-acts button, .ct-box, .ct-btn, .do-t, .dot, .er-cd, .er-lk, .fc-card, .fc-entry, .fc-type, .game-card, .gb-svg, .grw-tb td, .grw-tb th, .gswitch, .guide-card, .jeo-ans, .jeo-cell, .jeo-choices li, .jeo-resume, .kf-opt, .kf-stats div, .lp-step, .lvl, .mc-back, .mc-face, .mcard-demo, .mg-c, .mil-final, .mil-ladder, .mil-lf, .mil-opt, .mil-poll, .mp-bar, .mpair, .mt-bar, .mt-board, .mt-hbar, .numtip, .op-a, .op-angs > div, .op-nums span, .op-pair span, .op-seq span, .path-map, .pl-cell, .pl-ch, .pl-pill, .pv-btn, .pvw-bar, .pvw-btn, .race-track, .race-wrong .m, .rule.big, .sc-cb, .sc-chip, .sc-dots span, .sc-hint, .sc-slot, .seg button, .simnav button, .step.cur, .tab, .tab.on, .tf-pad button, .tf-verdict, .tf-vote button, .tf-vote span, .tg-nums span, .timer, .tool-row .tool-chip, .tp-lesson, .wc-back, .wc-face, .wh-sel, a.btnlink) { border-color: #AEBDC8; }
+  /* פינות "ציור יד" ← פינות מעוגלות אחידות */
+  html.nbskin :where(.game-card, .race-track, .cq-goal, .war-pl, .jeo-team, .gswitch) { border-radius: 14px !important; }
+  html.nbskin .race-track { border-width: 1.5px; }
+  html.nbskin .race-track .best { color: var(--muted); }
+  /* מיליונר – אפשרויות בקו דק ופינות אחידות */
+  html.nbskin .mil-opt { border-width: 1.5px; border-radius: 14px; }
+  html.nbskin .mil-opt.sel { background: #E4EDF4; border-color: var(--accent); }
+  html.nbskin .gb-svg { border-width: 1.5px; }
+  /* בחירה בצהוב ← כחול בהיר עם קו בצבע הראשי */
+  html.nbskin :where(#plLet.on, .fc-entry, .fc-timer, .fc-type.on, .lp-step.on, .pl-pill.on, .sc-cb.sel, .sc-chip.on, .sc-dots span.now) { background: #E4EDF4 !important; border-color: var(--accent) !important; color: var(--ink) !important; }
+}
